@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-=======
 
 Sentissi Ghaly
 
-Théo
+Théo G Eq7
 Romain 
 
->>>>>>> branch 'main' of https://github.com/theoo33/CACAO-2023-Eq7.git
