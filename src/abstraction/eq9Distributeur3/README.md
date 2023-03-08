@@ -1,1 +1,1 @@
-sami 
+sami amestas
