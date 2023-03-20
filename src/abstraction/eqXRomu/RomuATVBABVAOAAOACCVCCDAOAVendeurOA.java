@@ -29,7 +29,7 @@ public class RomuATVBABVAOAAOACCVCCDAOAVendeurOA extends RomuATVBABVAOAAOACCVCCD
 		this.stockChocoMarque.put(propositionRetenue.getChocolatDeMarque(), nouveauStock);
 	}
 
-	public void notifierPropositionNonRetenueAO(PropositionVenteOA propositionRefusee) {
+	public void notifierPropositionNonRetenueOA(PropositionVenteOA propositionRefusee) {
 	}
 
 }
