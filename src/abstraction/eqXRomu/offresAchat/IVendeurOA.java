@@ -28,5 +28,5 @@ public interface IVendeurOA extends IActeur {
 	 * Methode appelee pour avertir le vendeur que sa proposition de vente n'a pas ete retenue 
 	 * @param propositionRefusee, la proposition qui avait ete faite mais qui n'a pas ete retenue
 	 */
-	public void notifierPropositionNonRetenueAO(PropositionVenteOA propositionRefusee);
+	public void notifierPropositionNonRetenueOA(PropositionVenteOA propositionRefusee);
 }

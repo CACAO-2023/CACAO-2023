@@ -98,7 +98,7 @@ public class SuperviseurVentesOA implements IActeur, IAssermente {
 						// on avertit les autres acheteurs que leur proposition n'a pas ete retenue
 						for (PropositionVenteOA p : propositions) {
 							if (!p.equals(retenue)) {
-								p.getVendeur().notifierPropositionNonRetenueAO(p);
+								p.getVendeur().notifierPropositionNonRetenueOA(p);
 							}
 						}
 					}
@@ -106,7 +106,7 @@ public class SuperviseurVentesOA implements IActeur, IAssermente {
 					journal.ajouter( Journal.texteColore(acheteur, acheteur.getNom()+" ne retient aucune des propositions "));
 					// Aucune proposition retenue --> on avertit tous les acheteurs qui ont fait une proposition
 					for (PropositionVenteOA p : propositions) {
-						p.getVendeur().notifierPropositionNonRetenueAO(p);
+						p.getVendeur().notifierPropositionNonRetenueOA(p);
 					}
 				}
 				return retenue;
