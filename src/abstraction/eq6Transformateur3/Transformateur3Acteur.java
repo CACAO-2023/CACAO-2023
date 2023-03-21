@@ -2,18 +2,27 @@ package abstraction.eq6Transformateur3;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.Chocolat;
+import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Feve;
 
 public class Transformateur3Acteur implements IActeur {
 	
+	private List<ChocolatDeMarque> ListeProduits;
+	protected HashMap<Feve, Double> stockFeves;
+	protected HashMap<Chocolat, Double> stockChoco;
 	protected int cryptogramme;
 
 	public Transformateur3Acteur() {
+		this.ListeProduits = new LinkedList<ChocolatDeMarque>();
 	}
 	
 	public void initialiser() {
