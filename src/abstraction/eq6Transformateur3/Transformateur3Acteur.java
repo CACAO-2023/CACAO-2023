@@ -19,11 +19,11 @@ public class Transformateur3Acteur implements IActeur {
 	protected int cryptogramme;
 /** Nathan Claeys*/
 	protected Journal journal;
-	private Variable pourcentageCacaoBG ;
-	private Variable pourcentageCacaoMG ;
-	private Variable pourcentageCacaoMGL ;
-	private Variable pourcentageCacaoHG ;
-	private Variable pourcentageRSE ;
+	protected Variable pourcentageCacaoBG ;
+	protected Variable pourcentageCacaoMG ;
+	protected Variable pourcentageCacaoMGL ;
+	protected Variable pourcentageCacaoHG ;
+	protected Variable pourcentageRSE ;
 	protected Variable totalStocksFeves;   
 	protected Variable totalStocksChoco; 
 	
