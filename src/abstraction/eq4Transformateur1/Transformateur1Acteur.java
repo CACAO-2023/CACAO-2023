@@ -51,7 +51,7 @@ public class Transformateur1Acteur implements IActeur {
 	protected Variable totalStocksChocoHQ;
 	protected Variable totalStocksChocoMarque;  // La qualite totale de stock de chocolat de marque 
 	protected List<Feve> lesFeves;
-	private Integer cryptogramme;
+	protected Integer cryptogramme;
 
 	public Transformateur1Acteur() {
 		this.qualiteHaute   = new VariableReadOnly("qualite haute", "<html>Qualite du chocolat<br>de gamme haute</html>",this, 0.0, 10.0, 3.0);
