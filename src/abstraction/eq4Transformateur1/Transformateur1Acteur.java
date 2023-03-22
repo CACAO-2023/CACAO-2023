@@ -38,8 +38,14 @@ public class Transformateur1Acteur implements IActeur {
 	private Variable partRSEQualitePercue;//L'impact de pourcentageRSEmax% du prix consacres aux RSE dans la qualite percue du chocolat
 	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
 
-	protected Variable totalStocksFeves;  // La qualite totale de stock de feves 
-	protected Variable totalStocksChoco;  // La qualite totale de stock de chocolat 
+	protected Variable totalStocksFevesBQ;
+	protected Variable totalStocksFevesMQ;
+	protected Variable totalStocksFevesMQ_BE;
+	protected Variable totalStocksFevesHQ;
+	protected Variable totalStocksChocoBQ;
+	protected Variable totalStocksChocoMQ;
+	protected Variable totalStocksChocoMQ_BE;
+	protected Variable totalStocksChocoHQ;
 	protected Variable totalStocksChocoMarque;  // La qualite totale de stock de chocolat de marque 
 	protected List<Feve> lesFeves;
 
@@ -61,8 +67,14 @@ public class Transformateur1Acteur implements IActeur {
 
 		this.coutStockageProducteur = new VariableReadOnly("cout moyen stockage producteur", "<html>Le cout moyen du stockage d'une Tomme de produit chez un producteur</html>",this, 0.0, 3.0, 1.5);
 		this.journal = new Journal("Journal "+this.getNom(), this);
-		this.totalStocksFeves = new VariablePrivee("EqXStockFeves", "<html>Quantite totale de feves en stock</html>",this, 0.0, 1000000.0, 0.0);
-		this.totalStocksChoco = new VariablePrivee("EqXStockChoco", "<html>Quantite totale de chocolat en stock</html>",this, 0.0, 1000000.0, 0.0);
+		this.totalStocksFevesBQ = new VariablePrivee("Eq4StockFeves", "<html>Quantite totale de feves Basse Qualite en stock</html>",this, 0.0, 1000000.0, 0.0);
+		this.totalStocksFevesMQ = new VariablePrivee("Eq4StockFeves", "<html>Quantite totale de feves Moyenne Qualite en stock</html>",this, 0.0, 1000000.0, 0.0);
+		this.totalStocksFevesMQ_BE = new VariablePrivee("Eq4StockFeves", "<html>Quantite totale de feves Moyenne Qualite Bioequitable en stock</html>",this, 0.0, 1000000.0, 0.0);
+		this.totalStocksFevesHQ = new VariablePrivee("Eq4StockFeves", "<html>Quantite totale de feves Haute Qualite en stock</html>",this, 0.0, 1000000.0, 0.0);
+		this.totalStocksChocoBQ = new VariablePrivee("Eq4StockChoco", "<html>Quantite totale de chocolat Basse Qualite en stock</html>",this, 0.0, 1000000.0, 0.0);
+		this.totalStocksChocoMQ = new VariablePrivee("Eq4StockChoco", "<html>Quantite totale de chocolat Moyenne Qualiteen stock</html>",this, 0.0, 1000000.0, 0.0);
+		this.totalStocksChocoMQ_BE = new VariablePrivee("Eq4StockChoco", "<html>Quantite totale de chocolat Moyenne Qualite Bioequitable en stock</html>",this, 0.0, 1000000.0, 0.0);
+		this.totalStocksChocoHQ = new VariablePrivee("Eq4StockChoco", "<html>Quantite totale de chocolat en Haute Qualite stock</html>",this, 0.0, 1000000.0, 0.0);
 		this.totalStocksChocoMarque = new VariablePrivee("EqXStockChocoMarque", "<html>Quantite totale de chocolat de marque en stock</html>",this, 0.0, 1000000.0, 0.0);
 	}
 	
@@ -85,8 +97,8 @@ public class Transformateur1Acteur implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Pour les produits bas de gamme vendus sous marque distributeur, notre objectif est de maximiser les ventes en proposant des prix compétitifs. Nous comparons les prix proposés par tous les producteurs et la bourse afin d'acheter le cacao au meilleur prix. Les producteurs sont sélectionnés par contrat cadre ainsi que les distributeurs. Nous envisageons également des principes de solde et de promotion pour écouler les stocks plus rapidement, à choisir entre la période des fêtes ou non.\r\n"
-				+ "Pour les produits haut de gamme, nous souhaitons vendre directement sous notre marque en tant que transfo-distributeur responsable en matière de RSE. Nous signons des contrats cadres avec les producteurs sélectionnés pour garantir la qualité de notre cacao. Nous prenons également en compte l'avis des clients pour décider si nous optons pour une approche haut de gamme ou moyenne gamme en matière de RSE. En cas de surplus de stock, nous pouvons envisager de vendre à la bourse. Notre objectif n'est pas de faire de grosses marges, mais de vendre en quantité suffisante pour maintenir notre entreprise durable et responsable.";
+		return "Pour les produits bas de gamme vendus sous marque distributeur, notre objectif est de maximiser les ventes en proposant des prix compï¿½titifs. Nous comparons les prix proposï¿½s par tous les producteurs et la bourse afin d'acheter le cacao au meilleur prix. Les producteurs sont sï¿½lectionnï¿½s par contrat cadre ainsi que les distributeurs. Nous envisageons ï¿½galement des principes de solde et de promotion pour ï¿½couler les stocks plus rapidement, ï¿½ choisir entre la pï¿½riode des fï¿½tes ou non.\r\n"
+				+ "Pour les produits haut de gamme, nous souhaitons vendre directement sous notre marque en tant que transfo-distributeur responsable en matiï¿½re de RSE. Nous signons des contrats cadres avec les producteurs sï¿½lectionnï¿½s pour garantir la qualitï¿½ de notre cacao. Nous prenons ï¿½galement en compte l'avis des clients pour dï¿½cider si nous optons pour une approche haut de gamme ou moyenne gamme en matiï¿½re de RSE. En cas de surplus de stock, nous pouvons envisager de vendre ï¿½ la bourse. Notre objectif n'est pas de faire de grosses marges, mais de vendre en quantitï¿½ suffisante pour maintenir notre entreprise durable et responsable.";
 	}
 
 	// Renvoie les indicateurs
