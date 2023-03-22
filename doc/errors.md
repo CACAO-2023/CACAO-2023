@@ -7,6 +7,7 @@
 4. Commit and push.
 
 # Errors on Pull
+
 ## Checkout conflict
 You have a local change that you did not commit. 
 You can 1) commit without pushing you local change or 2) delete your local change by replacing the changed files/folders with a previous version.
