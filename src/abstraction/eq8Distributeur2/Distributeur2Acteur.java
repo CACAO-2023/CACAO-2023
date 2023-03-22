@@ -117,16 +117,16 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	// Apres chaque operation sur votre compte bancaire, cette
 	// operation est appelee pour vous en informer
 	public void notificationOperationBancaire(double montant) {
-		List<Journal> res = getJournaux();
+	
 		
 		if (montant<0) {
 			double m=montant*(-1);
 			String ch="retrait de "+m;
-			res.get(1).ajouter(ch);
+			this.journal_operationsbancaires.ajouter(ch);
 		}
 		if (montant>0) {
 			String ch= "dépot de "+montant;
-			res.get(1).ajouter(ch);
+			this.journal_operationsbancaires.ajouter(ch);
 		}
 	}
 	
