@@ -29,8 +29,38 @@ public class Producteur3 extends Producteur3Acteur  {
 	 * @author Dubus-Chanson Victor
 	 */
 	public void addCoutHectaresUtilises() {
-		Integer coutEmployes = HectaresUtilises * 220;
+		Integer coutEmployes = this.HectaresUtilises * 220;
 		this.CoutStep = this.CoutStep + coutEmployes;
 	}
 	
+
+	/*Calcule le nombre d'Hectares (uniquement positif ou nul) que l'on a besoin de rajouter a la partie cultivee (seulement tous les 6 mois)*/
+	/*A modifier, a besoin des quantites de feves echangees (via stock)*/
+	public Integer variationBesoinHectares() {
+		Integer NbHectares = 0;
+		return NbHectares;
+	}
+	
+	public void achatHectares(Integer HectaresAAcheter) {
+		Integer coutAchatHectares = HectaresAAcheter * 3250;
+		this.CoutStep = this.CoutStep + coutAchatHectares;
+	}
+	
+	/*Modifie les variables de couts et d'hectares en fonction des resultats de variationBesoinHectares*/
+	public void changeHectaresAndCoutsLies(Integer ajoutHectares, Integer HectaresLiberes) {
+		this.HectaresUtilises = this.HectaresUtilises + ajoutHectares;
+		this.HectaresLibres = this.HectaresLibres + HectaresLiberes;
+		Integer HectaresAAcheter = this.HectaresLibres - ajoutHectares;
+		if (HectaresAAcheter > 0) {
+			this.achatHectares(HectaresAAcheter);
+		}
+		this.HectaresUtilises = this.HectaresUtilises + HectaresAAcheter;
+		this.HectaresLibres = this.HectaresLibres - ajoutHectares;
+		if (this.HectaresLibres < 0) {
+			this.HectaresLibres = 0;
+		}
+	}
+	
+	
+
 }
