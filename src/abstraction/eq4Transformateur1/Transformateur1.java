@@ -1,6 +1,7 @@
 package abstraction.eq4Transformateur1;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,6 +29,6 @@ public class Transformateur1 extends Transformateur1Acteur implements IFabricant
 	@Override
 	public List<ChocolatDeMarque> getChocolatsProduits() {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<ChocolatDeMarque>();
 	}
 }
