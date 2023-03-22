@@ -18,14 +18,10 @@ public class Transformateur3Acteur implements IActeur {
 	
 	protected int cryptogramme;
 /** Nathan Claeys*/
-	private List<ChocolatDeMarque> ListeProduits;
-	protected HashMap<Feve, Double> stockFeves;
-	protected HashMap<Chocolat, Double> stockProduit;
 	protected Journal journal;
 
 /** Nathan Claeys*/
 	public Transformateur3Acteur() {
-		this.ListeProduits = new LinkedList<ChocolatDeMarque>();
 		this.journal = new Journal("Journal"+this.getNom(),this);
 	}
 	
@@ -48,7 +44,7 @@ public class Transformateur3Acteur implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Bla bla bla";
+		return "Eco Choco, le choco est un cadeau !";
 	}
 
 	// Renvoie les indicateurs
@@ -109,9 +105,6 @@ public class Transformateur3Acteur implements IActeur {
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
 	}
-/** Nathan Claeys */
-	public List<ChocolatDeMarque> getListeProduits() {
-		return ListeProduits;
-	}
+
 
 }
