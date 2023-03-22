@@ -5,16 +5,22 @@ package abstraction.eq1Producteur1;
 public class Feve {
 	private int nb_steps_depuis_récolte ; //compte le nb de steps depuis la récolte
 	private boolean séché ; //booléen qui indique si la fève a séché
-	private String qualité ; // indique la qualité de la fève
+	private String qualite ; // indique la qualité de la fève
+	private double quantite; // quantite de la recolte en tonne
 	
-	public Feve() {
+	public Feve(String qualite, double quantite) {
 		this.nb_steps_depuis_récolte = 0;
 		this.séché = false ;
-		this.qualité = "Bas" ; //à changer pour prendre en compte la qualité associée au champ d'où la fève vient
+		this.qualite = qualite ;
+		this.quantite = quantite;
 	}
 	
 	public void setNbStepsDepuisRecolte(int nb_steps) {
 		this.nb_steps_depuis_récolte = nb_steps ;
+	}
+	
+	public void setSeche(boolean bool) {
+		this.séché = bool ;
 	}
 	
 	public int getNbStepsDepuisRecolte() {
@@ -26,7 +32,10 @@ public class Feve {
 	}
 	
 	public String getQualite() {
-		return this.qualité ;
+		return this.qualite ;
+	}
+	public double getQuantite() {
+		return this.quantite;
 	}
 
 }

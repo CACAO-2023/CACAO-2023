@@ -32,13 +32,24 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		
 		//debut gab
 		
-		stockFeve stockFève = this.getStock() ;
+		stockFeve stockFeve = this.getStock() ;
+		int m = stockFeve.nbFeve() ;
+		for (int i=0; i<n; i++) {
+			Feve feve = stockFeve.getFeve(i) ;
+			feve.setNbStepsDepuisRecolte(feve.getNbStepsDepuisRecolte()+1) ;
+			
+			if (feve.getNbStepsDepuisRecolte() == 12) {
+				// péremption fève au bout de 6mois
+				//condition pour basse qualité, si moyenne à changer
+				stockFeve.suppFeve(i) ;
+			}
+			
+			if (feve.getSeche()==true && feve.getNbStepsDepuisRecolte()>=1) {
+				
+			}
+		}
 		
-	// int n
-	for (int i=0; i<n; i++) {
-		//Feve fève = stockFève.getF
-		//fève.set
-	}
+		//fin gab
 		
 		
 		
