@@ -102,25 +102,6 @@ public class Transformateur1 extends Transformateur1Acteur implements IFabricant
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cb+")->"+this.stockChoco.get(cb));
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cm+")->"+this.stockChocoMarque.get(cm));
 		}
-		Feve fh = Feve.F_HQ_BE;
-		Chocolat ch = Chocolat.C_HQ_BQ;
-		int transfo = (int) (Math.min(this.stockFeves.get(fb), Math.random()*30));
-		if (transfo>0) {
-			this.stockFeves.put(fb, this.stockFeves.get(fb)-transfo);
-			this.totalStocksFeves.retirer(this, transfo, this.cryptogramme);
-			// La moitie sera stockee sous forme de chocolat, l'autre moitie directement etiquetee "Villors"
-			this.stockChoco.put(cb, this.stockChoco.get(cb)+((transfo/2.0)*this.pourcentageTransfo.get(fb).get(cb)));
-			int pourcentageCacao =  (int) (Filiere.LA_FILIERE.getParametre("pourcentage min cacao "+cb.getGamme()).getValeur());
-			ChocolatDeMarque cm= new ChocolatDeMarque(cb, "Villors", pourcentageCacao, 0);
-			double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;
-			this.stockChocoMarque.put(cm, scm+((transfo/2.0)*this.pourcentageTransfo.get(fb).get(cb)));
-			this.totalStocksChocoMarque.ajouter(this, ((transfo/2.0)*this.pourcentageTransfo.get(fb).get(cb)), this.cryptogramme);
-			this.totalStocksChoco.ajouter(this, ((transfo/2.0)*this.pourcentageTransfo.get(fb).get(cb)), this.cryptogramme);
-			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfo<10?" "+transfo:transfo)+" T de "+fb+" en "+Journal.doubleSur(transfo*this.pourcentageTransfo.get(fb).get(cb),3,2)+" T de "+cb);
-			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fb+")->"+this.stockFeves.get(fb));
-			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cb+")->"+this.stockChoco.get(cb));
-			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cm+")->"+this.stockChocoMarque.get(cm));
-		}
 	}
 }
 	

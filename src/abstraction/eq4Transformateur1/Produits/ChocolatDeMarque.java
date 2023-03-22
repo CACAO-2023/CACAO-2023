@@ -1,5 +1,6 @@
 package abstraction.eq4Transformateur1.Produits;
 
+import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.IProduit;
 
 public class ChocolatDeMarque implements IProduit {
