@@ -5,6 +5,9 @@ import java.util.HashMap;
 public class Champs {
 	private HashMap<String, HashMap<Integer, Integer>> Champs; /*String H ou M (clé) et Hashmap des champs. Champs contient tous les champs*/
 	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	public Champs() {
 		HashMap<String, HashMap<Integer, Integer>> Champs = new HashMap<String, HashMap<Integer, Integer>>();
 		Integer NombreHectaresM = 22500;
