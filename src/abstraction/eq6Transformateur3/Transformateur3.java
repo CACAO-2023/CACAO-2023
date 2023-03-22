@@ -16,7 +16,7 @@ public class Transformateur3 extends Transformateur3Acteur  {
 	protected HashMap<Chocolat, Double> stockChoco;
 
 	public Transformateur3() {
-		super();
+		super();		
 		this.ListeProduits = new LinkedList<ChocolatDeMarque>();
 	}
 
