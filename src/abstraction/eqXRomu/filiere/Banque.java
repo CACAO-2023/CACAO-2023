@@ -157,7 +157,7 @@ public class Banque implements IActeur, IAssermente {
 		if ((Filiere.LA_FILIERE==null || Filiere.LA_FILIERE.getEtape()==0) && (appelantOk)) {
 			ArrayList<Variable> listeComptes = new ArrayList<Variable>();
 			for (Variable v : this.comptes.values()) {
-				if (v.getCreateur()!=this && !v.getCreateur().getNom().equals("EQ8") && faillites.get(v.getCreateur()).equals(false)) {// on ne met pas le compte bancaire de la banque et du createur des autres acteurs de la filiere (Eq7=romu)
+				if (v.getCreateur()!=this && !v.getCreateur().getNom().equals("EQX") && faillites.get(v.getCreateur()).equals(false)) {// on ne met pas le compte bancaire de la banque et du createur des autres acteurs de la filiere (Eq7=romu)
 					listeComptes.add(v);
 				}
 			}
