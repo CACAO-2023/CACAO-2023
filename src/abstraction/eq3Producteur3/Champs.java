@@ -169,9 +169,7 @@ public class Champs {
 		return q;
 	}
 
-	public void destructionVieuxHectares(int CurrentStep) {
-
-  public Integer destructionVieuxHectares(int CurrentStep) {
+  	public Integer destructionVieuxHectares(int CurrentStep) {
 		HashMap<Integer, Integer> ChampsH = Champs.get("H");
 		HashMap<Integer, Integer> ChampsM = Champs.get("M");
 		Integer HectaresLiberes = 0;
