@@ -10,13 +10,30 @@ import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.general.VariablePrivee;
+import abstraction.eqXRomu.produits.Feve;
 
 public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 	
 	protected int cryptogramme;
+	protected Journal journal;
+	
+	protected Variable totalStocksFeves;  // La qualite totale de stock de feves 
+	protected Variable totalStocksChoco;  // La qualite totale de stock de chocolat 
+	protected Variable totalStocksChocoMarque;  // La qualite totale de stock de chocolat de marque 
+	protected List<Feve> lesFeves;
+
 
 	public Transformateur2Acteur() {
+<<<<<<< HEAD
 		
+=======
+		this.journal = new Journal("Journal "+this.getNom(), this);
+		this.totalStocksFeves = new VariablePrivee("EqXStockFeves", "<html>Quantite totale de feves en stock</html>",this, 0.0, 1000000.0, 0.0);
+		this.totalStocksChoco = new VariablePrivee("EqXStockChoco", "<html>Quantite totale de chocolat en stock</html>",this, 0.0, 1000000.0, 0.0);
+		this.totalStocksChocoMarque = new VariablePrivee("EqXStockChocoMarque", "<html>Quantite totale de chocolat de marque en stock</html>",this, 0.0, 1000000.0, 0.0);
+
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023.git
 	}
 	
 	public void initialiser() {
