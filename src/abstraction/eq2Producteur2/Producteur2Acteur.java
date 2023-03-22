@@ -1,5 +1,7 @@
 package abstraction.eq2Producteur2;
 
+//Code écrit par Nathan
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,25 +10,35 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.general.VariablePrivee;
 
 public class Producteur2Acteur implements IActeur {
 	
 	protected int cryptogramme;
+	protected Journal journal;
 	
 	protected Variable nbHecBasse;
 	protected Variable nbHecMoy;
 	protected Variable nbHecMoyBE;
-	protected Variable nbHecHaute;
+	protected Variable nbHecHauteBE;
 	protected Variable prodHec;
 	protected Variable stockTotBasse;
 	protected Variable stockTotMoy;
 	protected Variable stockTotMoyBE;
-	protected Variable stockTotHaute;
+	protected Variable stockTotHauteBE;
 
 	public Producteur2Acteur() {
 	}
 	
 	public void initialiser() {
+		this.journal = new Journal("Journal " + this.getNom(), this);
+		
+		this.nbHecBasse = new VariablePrivee("nbHecBasse", "Le nombre d'hectare de fèves de basse qualité", this, 100);
+		this.nbHecMoy = new VariablePrivee("nbHecMoy", "Le nombre d'hectare de fèves de moyenne qualité", this, 100);
+		this.nbHecMoyBE = new VariablePrivee("nbHecMoyBE", "Le nombre d'hectare de fèves de moyenne qualité bio-équitable", this, 100);
+		this.nbHecHauteBE = new VariablePrivee("nbHecHaute", "Le nombre d'hectare de fèves de basse qualité", this, 100);
+		
+		this.prodHec = new Variable("prodHec", "La production moyenne de feve en tonne par hectare par récolte", this, 0.56);
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -54,11 +66,11 @@ public class Producteur2Acteur implements IActeur {
 		res.add(this.nbHecBasse);
 		res.add(this.nbHecMoy);
 		res.add(this.nbHecMoyBE);
-		res.add(this.nbHecHaute);
+		res.add(this.nbHecHauteBE);
 		res.add(this.stockTotBasse);
 		res.add(this.stockTotMoy);
 		res.add(this.stockTotMoyBE);
-		res.add(this.stockTotHaute);
+		res.add(this.stockTotHauteBE);
 		return res;
 	}
 
