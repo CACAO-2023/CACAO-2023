@@ -16,4 +16,13 @@ public class champ {
 	public hectar getHectare(int i) {
 		return this.getHectares().get(i);
 	}
+	public int nbhectare() {
+		return this.getHectares().size();
+	}
+	public void supphectare(int i) {
+		this.getHectares().remove(i);
+	}
+	public void supphectare(hectar h) {
+		this.getHectares().remove(h);
+	}
 }

@@ -17,5 +17,11 @@ public class hectar {
 			this.nb_step = 0;
 			this.nb_recolte = 0;
 		}
+		public void setNb_step(int n) {
+			this.nb_step = n;
+		}
+		public void setNb_recolte(int n) {
+			this.nb_recolte = n;
+		}
 }
 
