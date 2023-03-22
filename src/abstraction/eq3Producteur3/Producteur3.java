@@ -100,5 +100,15 @@ public class Producteur3 extends Producteur3Acteur  {
 		this.CoutStep = this.CoutStep + coutEmployes;
 	}
 	
+	/*Calcule le nombre d'Hectares (negatif ou positif) que l'on a besoin de rajouter (seulement tous les 6 mois)*/
+	public Integer variationBesoinHectares() {
+		return 0;
+	}
+	
+	/*Modifie les variables de couts et d'hectares en fonction des resultats de variationBesoinHectares*/
+	public void addHectaresAndCoutsLies() {
+		
+	}
+	
 	
 }
