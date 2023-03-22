@@ -2,7 +2,7 @@ package abstraction.eq9Distributeur3;
 
 import java.util.HashMap;
 
-
+import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 public class Stock {
@@ -41,5 +41,11 @@ public class Stock {
 		}
 		this.QteStock.put(c, qte);
 		
+	}
+	// fonction coût du stock 
+	// Mathilde Soun
+	public double CoutdeStock () {
+		double cout = Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*this.QteStockTOT();
+		return cout;
 	}
 }
