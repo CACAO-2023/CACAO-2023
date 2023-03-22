@@ -13,7 +13,7 @@ public class Stock {
 	}
 	// Renvoie la qté de stock total 
 	// Mathilde Soun 
-	public double QteStockTOT () {
+	public double qteStockTOT () {
 		double tot = 0.0;
 		for (Double qte : QteStock.values()) {
 	           tot += qte;
@@ -33,7 +33,7 @@ public class Stock {
 	}
 	// ajout d'une qte de chocolat (ou soustraction de chocolat)
 	// Mathilde Soun 
-	public void AjoutQte(ChocolatDeMarque c, double ajout){
+	public void ajoutQte(ChocolatDeMarque c, double ajout){
 		double qte = this.QteStock.get(c);
 		qte = qte + ajout;
 		if (qte<0) {
@@ -44,8 +44,8 @@ public class Stock {
 	}
 	// fonction coût du stock 
 	// Mathilde Soun
-	public double CoutDeStock () {
-		double cout = Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*this.QteStockTOT();
+	public double coutDeStock () {
+		double cout = Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*this.qteStockTOT();
 		return cout;
 	}
 }
