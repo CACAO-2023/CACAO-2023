@@ -14,4 +14,5 @@ public class champ {
 		this.getHectares().add(h);
 	}
 
+
 }
