@@ -2,14 +2,16 @@ package abstraction.eq5Transformateur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 
-public class Transformateur2Acteur implements IActeur {
+public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 	
 	protected int cryptogramme;
 
@@ -35,7 +37,7 @@ public class Transformateur2Acteur implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Bla bla bla";
+		return ("Transformateur ayant deux marques : ChocoPop et Maison Doutre");
 	}
 
 	// Renvoie les indicateurs
@@ -70,6 +72,11 @@ public class Transformateur2Acteur implements IActeur {
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
+		if (this==acteur) {
+			System.out.println("Il en est fini de nous");
+		} else {
+			System.out.println("L'acteur "+acteur.getNom()+" a fait faillite ");
+		}
 	}
 
 	// Apres chaque operation sur votre compte bancaire, cette
@@ -95,6 +102,13 @@ public class Transformateur2Acteur implements IActeur {
 	// Renvoie une instance d'une filiere d'apres son nom
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
+	}
+	
+	public List<String> getMarquesChocolat() {
+		LinkedList<String> marques = new LinkedList<String>();
+		marques.add("ChocoPop");
+		marques.add("Maison Doutre");
+		return marques;
 	}
 
 }
