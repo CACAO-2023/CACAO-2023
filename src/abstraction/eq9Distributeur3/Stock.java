@@ -44,7 +44,7 @@ public class Stock {
 	}
 	// fonction coût du stock 
 	// Mathilde Soun
-	public double CoutdeStock () {
+	public double CoutDeStock () {
 		double cout = Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*this.QteStockTOT();
 		return cout;
 	}
