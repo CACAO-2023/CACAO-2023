@@ -1,1 +1,2 @@
-Théo : implement IDistributeurChocolatDeMarque dans Distributeur1
+Théo  : implements IDistributeurChocolatDeMarque dans Distributeur1
+Ghaly : implemented notificationFaillite

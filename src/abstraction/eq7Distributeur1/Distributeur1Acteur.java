@@ -70,6 +70,11 @@ public class Distributeur1Acteur implements IActeur {
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
+		if (this==acteur) {
+			System.out.println("They killed Chocorama... ");
+		} else {
+			System.out.println("try again "+acteur.getNom()+"... We will not miss you. "+this.getNom());
+		}
 	}
 
 	// Apres chaque operation sur votre compte bancaire, cette
