@@ -19,8 +19,19 @@ public class Distributeur2Acteur implements IActeur {
     protected HashMap<String, Double> pourcentagesGamme;
 
 	public Distributeur2Acteur() {
+		prixDeVente = new HashMap<>();
+        stocks = new HashMap<>();
+        prixDAchat = new HashMap<>();
+        pourcentagesGamme = new HashMap<>();
+        initialiserGamme();
 	}
 	
+	private void initialiserGamme() {
+		 pourcentagesGamme.put("bas", 0.55);
+	     pourcentagesGamme.put("moyen", 0.40);
+	     pourcentagesGamme.put("haut", 0.05);
+	}
+
 	public void initialiser() {
 	}
 
