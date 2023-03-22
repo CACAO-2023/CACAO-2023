@@ -33,7 +33,7 @@ public class Producteur3 extends Producteur3Acteur  {
 		HashMap<String,HashMap> ChampsInitiale = new HashMap<String,HashMap>();
 		ChampsInitiale.put( "H",ChampsInitialeH);
 		ChampsInitiale.put( "M",ChampsInitialeM);
-		this.Champs=ChampsInitiale;	
+		this.Champs=ChampsInitiale;
 	}
 	public Producteur3(HashMap<String,HashMap> m) {
 		this.Champs=m;
