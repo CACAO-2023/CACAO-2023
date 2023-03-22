@@ -16,4 +16,5 @@ public class Transformateur1 extends Transformateur1Acteur implements IFabricant
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 }
