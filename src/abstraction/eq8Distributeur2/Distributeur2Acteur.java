@@ -2,6 +2,7 @@ package abstraction.eq8Distributeur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
@@ -12,6 +13,10 @@ import abstraction.eqXRomu.general.Variable;
 public class Distributeur2Acteur implements IActeur {
 	
 	protected int cryptogramme;
+	protected HashMap<String, Double> prixDeVente;
+    protected HashMap<String, Double> stocks;
+    protected HashMap<String, Double> prixDAchat;
+    protected HashMap<String, Double> pourcentagesGamme;
 
 	public Distributeur2Acteur() {
 	}
