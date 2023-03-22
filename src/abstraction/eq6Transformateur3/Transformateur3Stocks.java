@@ -19,10 +19,12 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	private double niveauStockage ; 
 	
 	public void ajoutStockFeve(Feve feve, Double nbreStock) {
-		this.stockFeves.put(feve, nbreStock) ;
+		/** ajouter au stock */
+		Double stockInstantT=this.stockFeves.get(feve) ;
+		this.stockFeves.put(feve, stockInstantT+nbreStock) ;
 	}
 	public void ajoutStockChocolat(Chocolat choco, Double nbreChoco) {
-		this.stockChoco.put(choco, nbreChoco) ;
+		
 	}
 	
 	public Transformateur3Stocks() {
