@@ -31,11 +31,11 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 */
 	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
 		// recopie de l'exemple de romu
-		if (stockChocoMarque7.keySet().contains(choco)) {
-			double qStock = stockChocoMarque7.get(choco);
-			return qStock/2.0;
-		} else {
-			return 0.0;
+//		if (stockChocoMarque7.keySet().contains(choco)) {
+//			double qStock = stockChocoMarque7.get(choco);
+//			return qStock/2.0;
+//		} else {
+		return 0.0;
 		}
 	}
 	
