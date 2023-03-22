@@ -39,10 +39,10 @@ public class Distributeur1Acteur implements IActeur {
 	protected Variable totalStocksCH;  // La qualite totale de stock de chocolat haute gamme
 	protected Variable totalStocks;  // La qualite totale de stock de chocolat
 	
-	protected Variable coutCB; //Cout d'1kg de chocolat basse gamme
-	protected Variable coutCML; //Cout d'1kg de chocolat moyenne gamme labellise
-	protected Variable coutCMNL; //Cout d'1kg de chocolat moyenne gamme non labellise
-	protected Variable coutCH; //Cout d'1kg de chocolat haute gamme labellise
+	protected double coutCB; //Cout d'1kg de chocolat basse gamme
+	protected double coutCML; //Cout d'1kg de chocolat moyenne gamme labellise
+	protected double coutCMNL; //Cout d'1kg de chocolat moyenne gamme non labellise
+	protected double coutCH; //Cout d'1kg de chocolat haute gamme labellise
 	
 	protected List<Feve> lesFeves;
 	
@@ -53,9 +53,14 @@ public class Distributeur1Acteur implements IActeur {
 	protected int cryptogramme;
 
 	public Distributeur1Acteur() {
+		this.coutCB = 0;
+		this.coutCH = 0;
+		this.coutCML = 0;
+		this.coutCMNL = 0;
 	}
 	
 	public void initialiser() {
+		
 	}
 
 	public String getNom() {// NE PAS MODIFIER
