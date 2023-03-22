@@ -85,7 +85,8 @@ public class Transformateur1Acteur implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Bla bla bla";
+		return "Pour les produits bas de gamme vendus sous marque distributeur, notre objectif est de maximiser les ventes en proposant des prix compétitifs. Nous comparons les prix proposés par tous les producteurs et la bourse afin d'acheter le cacao au meilleur prix. Les producteurs sont sélectionnés par contrat cadre ainsi que les distributeurs. Nous envisageons également des principes de solde et de promotion pour écouler les stocks plus rapidement, à choisir entre la période des fêtes ou non.\r\n"
+				+ "Pour les produits haut de gamme, nous souhaitons vendre directement sous notre marque en tant que transfo-distributeur responsable en matière de RSE. Nous signons des contrats cadres avec les producteurs sélectionnés pour garantir la qualité de notre cacao. Nous prenons également en compte l'avis des clients pour décider si nous optons pour une approche haut de gamme ou moyenne gamme en matière de RSE. En cas de surplus de stock, nous pouvons envisager de vendre à la bourse. Notre objectif n'est pas de faire de grosses marges, mais de vendre en quantité suffisante pour maintenir notre entreprise durable et responsable.";
 	}
 
 	// Renvoie les indicateurs
