@@ -107,7 +107,7 @@ public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 	public List<String> getMarquesChocolat() {
 		LinkedList<String> marques = new LinkedList<String>();
 		marques.add("ChocoPop");
-		// marques.add("Maison Doutre");
+		marques.add("Maison Doutre");
 		return marques;
 	}
 
