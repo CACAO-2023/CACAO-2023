@@ -129,7 +129,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+//-----------------------------------------------
 	@Override
 	public double prix(ChocolatDeMarque choco) {
 		// TODO Auto-generated method stub
