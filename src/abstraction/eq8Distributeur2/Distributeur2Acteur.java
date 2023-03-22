@@ -9,27 +9,28 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Gamme;
+import abstraction.eqXRomu.produits.IProduit;
 
 public class Distributeur2Acteur implements IActeur {
 	
 	protected int cryptogramme;
-	protected HashMap<String, Double> prixDeVente;
-    protected HashMap<String, Double> stocks;
-    protected HashMap<String, Double> prixDAchat;
-    protected HashMap<String, Double> pourcentagesGamme;
+	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
+    protected HashMap<ChocolatDeMarque, Double> stocks;
+    protected HashMap<Gamme, Double> pourcentagesGamme;
 
 	public Distributeur2Acteur() {
 		prixDeVente = new HashMap<>();
         stocks = new HashMap<>();
-        prixDAchat = new HashMap<>();
         pourcentagesGamme = new HashMap<>();
         initialiserGamme();
 	}
 	
 	private void initialiserGamme() {
-		 pourcentagesGamme.put("bas", 0.55);
-	     pourcentagesGamme.put("moyen", 0.40);
-	     pourcentagesGamme.put("haut", 0.05);
+		 pourcentagesGamme.put(Gamme.BQ, 0.55);
+	     pourcentagesGamme.put(Gamme.MQ, 0.40);
+	     pourcentagesGamme.put(Gamme.HQ, 0.05);
 	}
 
 	public void initialiser() {
