@@ -21,9 +21,12 @@ public class Transformateur3Acteur implements IActeur {
 	private List<ChocolatDeMarque> ListeProduits;
 	protected HashMap<Feve, Double> stockFeves;
 	protected HashMap<Chocolat, Double> stockProduit;
+	protected Journal journal;
 
+/** Nathan Claeys*/
 	public Transformateur3Acteur() {
 		this.ListeProduits = new LinkedList<ChocolatDeMarque>();
+		this.journal = new Journal("Journal"+this.getNom(),this);
 	}
 	
 	public void initialiser() {
