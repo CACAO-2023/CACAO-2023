@@ -91,6 +91,12 @@ public class Producteur3 extends Producteur3Acteur  {
 		return null;
 	}
 	
-	
+	/*
+	 * @author Dubus-Chanson Victor
+	 */
+	public void addCoutHectaresUtilises() {
+		Integer coutEmployes = HectaresUtilises * 220;
+		this.CoutStep = this.CoutStep + coutEmployes;
+	}
 	
 }
