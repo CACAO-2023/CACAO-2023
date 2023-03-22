@@ -18,5 +18,12 @@ public class Stock {
 			}
 		return tot;
 		}
-	
+	public double getStock(ChocolatDeMarque c) {
+		double res = this.QteStock.get(c);
+		if (res == 0.0) {
+			return 0.0;
+		}
+		return res;
+		
+	}
 }

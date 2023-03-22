@@ -30,12 +30,58 @@ public class Distributeur3Acteur implements IActeur {
 	public void next() {
 	}
 
+	
+	
+	public void etat_ventes(){
+		// regarder les stocks de chaque gamme (moyen, moyen BE, haut), 
+		// regarder nos ventes et les ventes du marché pour savoir ce 
+		// qu'il faut acheter par ordre de priorité
+
+		// variables dont j'ai besoin : 
+		// 1. stocks L = [10000,20000,12000] par exemple
+		// 2. ventes L = [x,y,z] et ventes du marche à calculer L = [x_eq1 + x_eq_2 + ...,y,z]
+
+		
+	}
+	public void achat_stock(){
+
+		// en fonction de lookat_results(), l�acteur devra réaliser des contrats
+		// cadres ou des appels d'offres ou accepter des offres pour certaines 
+		// gammes bas� sur leur priorité.
+
+
+	}
+	public void contrat_cadre(){}
+	public void appels_offres(){}
+	public void offres(){}
+	public void calcul_prix_de_vente() {
+		// pour chaque gamme, renvoie une hashmap <marque, prix>       
+		// (prendre en compte la rentabilité, le positionnement des autres marques)
+
+	}
+	public void repartition_tete_gondole() {
+		//renvoie une hashmap <marque, quatité>
+	}
+	public void cout_stock() {
+				//, calcul le coût de stockage.
+
+	}
+	public void quantite_rayon() {
+
+				//déterminer quel part du stock est mise en rayon
+
+	}
+	public void cout_masse_salariale() {}
+
+	
+
+
 	public Color getColor() {// NE PAS MODIFIER
 		return new Color(245, 155, 185); 
 	}
 
 	public String getDescription() {
-		return "Des ingr�dients d'exception pour un chocolat unique";
+		return "Des ingr�dients d'exception pour un chocolat unique";
 	}
 
 	// Renvoie les indicateurs
