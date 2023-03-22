@@ -17,13 +17,11 @@ public class Transformateur3Vente extends Transformateur3Transformation implemen
 
 @Override
 public PropositionAchatAO choisir(List<PropositionAchatAO> propositions) {
-	if (propositions.size()>0) {
 	PropositionAchatAO p= propositions.get(0);
 	for (int i=1;i<propositions.size();i++) {
 		if (p.compareTo(propositions.get(i))<0) {
 			p=propositions.get(i);
 		}
 	}
-	return p;
-}} 
+	return p;} 
 }
