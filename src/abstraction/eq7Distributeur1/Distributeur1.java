@@ -25,14 +25,13 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 * au moins cette quantite en stock)
 	 */
 	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
-		return 10;
-		/** if (stockChocoMarque.keySet().contains(choco)) {
-			double qStock = stockChocoMarque.get(choco);
+		// recopie de l'exemple de romu
+		if (stockChocoMarque7.keySet().contains(choco)) {
+			double qStock = stockChocoMarque7.get(choco);
 			return qStock/2.0;
 		} else {
 			return 0.0;
 		}
-		*/
 	}
 	
 	/**
@@ -44,7 +43,13 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 * pas depasser 10% de la somme totale des quantites mises en vente. 
 	 */
 	public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
-		return 10;
+		//recopie de l'exemple de romu
+		if (stockChocoMarque7.keySet().contains(choco)) {
+			double qStock = stockChocoMarque7.get(choco);
+			return qStock/20.0;
+		} else {
+			return 0.0;
+		}
 	}
 	
 	/**
@@ -59,7 +64,8 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 * @param montant, le montant correspondant a la transaction que le client a deja verse sur le compte du distributeur
 	 */
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
-	
+		stockChocoMarque7.put(choco, stockChocoMarque7.get(choco)-quantite);
+		StockTotal.setValeur(this, StockTotal.getValeur(cryptogramme)-quantite, cryptogramme);
 	}
 	
 	/**

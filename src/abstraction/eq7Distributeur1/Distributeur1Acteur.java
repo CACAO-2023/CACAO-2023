@@ -2,14 +2,19 @@ package abstraction.eq7Distributeur1;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 public class Distributeur1Acteur implements IActeur {
+	
+	protected HashMap<ChocolatDeMarque, Double> stockChocoMarque7;
+	protected Variable StockTotal;
 	
 	protected int cryptogramme;
 
