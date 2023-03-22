@@ -15,6 +15,7 @@ Then you will be able to pull. This will maybe result in a conflict, if your col
 After resolving the conflict, commit all changed files and push.
 
 # Problems of Pull Requests
+
 ## Changes outside of package
 You are changing files outside of your java package. You can see the files that you are changing in the "Files changed" tab of your pull request on the github website. This list must contain only files in your package.
 
