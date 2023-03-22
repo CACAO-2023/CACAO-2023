@@ -42,6 +42,7 @@ public class Producteur3 extends Producteur3Acteur  {
 		ChampsInitiale.put( "M",ChampsInitialeM);
 		this.Champs=ChampsInitiale;
 		Integer HectaresLibres = 0;
+		Integer HectaresUtilises = 950000;
 		Integer CoutStep = 0;
 	}
 	public Producteur3(HashMap<String,HashMap> m) {
@@ -98,5 +99,6 @@ public class Producteur3 extends Producteur3Acteur  {
 		Integer coutEmployes = HectaresUtilises * 220;
 		this.CoutStep = this.CoutStep + coutEmployes;
 	}
+	
 	
 }
