@@ -15,12 +15,12 @@ public class Producteur2Acteur implements IActeur {
 	
 	protected Variable nbHecBasse;
 	protected Variable nbHecMoy;
-	protected Variable nbHecMoyEq;
+	protected Variable nbHecMoyBE;
 	protected Variable nbHecHaute;
 	protected Variable prodHec;
 	protected Variable stockTotBasse;
 	protected Variable stockTotMoy;
-	protected Variable stockTotMoyEq;
+	protected Variable stockTotMoyBE;
 	protected Variable stockTotHaute;
 
 	public Producteur2Acteur() {
@@ -53,8 +53,12 @@ public class Producteur2Acteur implements IActeur {
 		List<Variable> res = new ArrayList<Variable>();
 		res.add(this.nbHecBasse);
 		res.add(this.nbHecMoy);
-		res.add(this.nbHecMoyEq);
+		res.add(this.nbHecMoyBE);
 		res.add(this.nbHecHaute);
+		res.add(this.stockTotBasse);
+		res.add(this.stockTotMoy);
+		res.add(this.stockTotMoyBE);
+		res.add(this.stockTotHaute);
 		return res;
 	}
 
