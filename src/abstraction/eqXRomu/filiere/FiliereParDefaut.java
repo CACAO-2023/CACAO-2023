@@ -16,6 +16,7 @@ import abstraction.eqXRomu.appelsOffres.SuperviseurVentesAO;
 import abstraction.eqXRomu.bourseCacao.BourseCacao;
 import abstraction.eqXRomu.clients.ClientFinal;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
+import abstraction.eqXRomu.offresAchat.SuperviseurVentesOA;
 import abstraction.eqXRomu.produits.Chocolat;
 
 
@@ -34,6 +35,7 @@ public class FiliereParDefaut extends Filiere {
 	private SuperviseurVentesContratCadre superviseurCC;
 	private BourseCacao bourse;
 	private SuperviseurVentesAO superviseurAO;
+	private SuperviseurVentesOA superviseurOA;
 
 
 	public FiliereParDefaut() {
@@ -80,6 +82,8 @@ public class FiliereParDefaut extends Filiere {
 		this.ajouterActeur(this.bourse);
 		this.superviseurAO=new SuperviseurVentesAO();
 		this.ajouterActeur(this.superviseurAO);
+		this.superviseurOA=new SuperviseurVentesOA();
+		this.ajouterActeur(this.superviseurOA);
 
 	}
 	/**
