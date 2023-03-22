@@ -22,6 +22,9 @@ public class Producteur3 extends Producteur3Acteur  {
 	 */
 	private HashMap<String,HashMap> Champs;
 	
+	
+	private Integer HectaresPossedes; /*Repertorie le nombre d'hectares que l'on possede*/
+	
 	/*
 	 * Je n'ai pas trouve le type du champs donc j'ai choisit String. A CHANGER
 	 * Il faudra aussi penser a se mettre d'accord sur les tailles des champs initiaux.
@@ -80,5 +83,13 @@ public class Producteur3 extends Producteur3Acteur  {
 		}
 		//PARTIE RÉCOLTE-->Lot
 		return null;
+	}
+	
+	public Integer getHectaresOccupes() {
+		Integer Sum = 0;
+		HashMap<Integer, Integer> ChampsM = Champs.get("M");
+		HashMap<Integer, Integer> ChampsH = Champs.get("H");
+		
+		
 	}
 }
