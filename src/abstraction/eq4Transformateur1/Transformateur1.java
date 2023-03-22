@@ -81,7 +81,7 @@ public class Transformateur1 extends Transformateur1Acteur implements IFabricant
 			for (ChocolatDeMarque cm : this.stockChocoMarque.keySet()) {
 				this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(cm+"", 15)+" = "+this.stockChocoMarque.get(cm));
 			}
-		}
+		} //caca//
 		for (Feve f : this.pourcentageTransfo.keySet()) {
 			for (Chocolat c : this.pourcentageTransfo.get(f).keySet()) {
 				int transfo = (int) (Math.min(this.stockFeves.get(f), Math.random()*30));
