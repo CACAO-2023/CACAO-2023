@@ -13,6 +13,7 @@ public class champ {
 	public void add(hectar h) {
 		this.getHectares().add(h);
 	}
-
-
+	public hectar getHectare(int i) {
+		return this.getHectares().get(i);
+	}
 }
