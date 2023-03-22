@@ -29,7 +29,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 		super();		
 		this.ListeProduits = new LinkedList<ChocolatDeMarque>();
 	}
-
+	
 	public List<ChocolatDeMarque> getListeProduits() {
 		return ListeProduits;
 	}
