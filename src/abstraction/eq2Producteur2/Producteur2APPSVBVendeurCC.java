@@ -6,7 +6,7 @@ import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Producteur2APPVBVendeurCC extends Producteur2APPVendeurBourse implements IVendeurContratCadre{
+public class Producteur2APPSVBVendeurCC extends Producteur2APPSVendeurBourse implements IVendeurContratCadre{
 
 	@Override
 	public boolean vend(IProduit produit) {
