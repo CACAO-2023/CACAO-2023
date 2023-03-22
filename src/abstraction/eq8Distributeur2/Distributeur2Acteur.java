@@ -156,10 +156,20 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		return null;
 	}
 //-----------------------------------------------
+	//La fonction prix() permet de connaître le prix actuel 
+	//d'un kg de chocolat de marque choco. Elle recherche dans 
+	//la HashMap prixDeVente si le chocolat de marque choco est vendu par le distributeur.
+	//Si c'est le cas, la fonction renvoie le prix correspondant à ce 
+	//chocolat de marque. Sinon, la fonction renvoie 0. 
+	
+	
 	@Override
 	public double prix(ChocolatDeMarque choco) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(prixDeVente.containsKey(choco)) {
+			return prixDeVente.get(choco);
+		}else {
+			return 0;
+		}
 	}
 
 	@Override
