@@ -17,5 +17,7 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 	           
 	*/
 	
+	public void transformation{
+	
 	
 }
