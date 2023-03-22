@@ -4,6 +4,9 @@ import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 import java.util.LinkedList;
@@ -117,9 +120,10 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 * 
 	 * @param lot
 	 * @param contrat
+	 * => ajouter ce produit arrivé dans le stock 
 	 */
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
+		super.ajoutStockFeve((Feve) contrat.getProduit(), contrat.getQuantiteLivree().getQuantite(Filiere.LA_FILIERE.getEtape()));
 		
 	}
 	public List<ExemplaireContratCadre> getListeContratEnCours() {
