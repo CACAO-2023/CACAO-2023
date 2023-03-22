@@ -11,7 +11,7 @@ import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.general.VariablePrivee;
-import abstraction.eqXRomu.produits.Feve;
+
 
 public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 	
@@ -21,7 +21,6 @@ public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 	protected Variable totalStocksFeves;  // La qualite totale de stock de feves 
 	protected Variable totalStocksChoco;  // La qualite totale de stock de chocolat 
 	protected Variable totalStocksChocoMarque;  // La qualite totale de stock de chocolat de marque 
-	protected List<Feve> lesFeves;
 
 
 	public Transformateur2Acteur() {

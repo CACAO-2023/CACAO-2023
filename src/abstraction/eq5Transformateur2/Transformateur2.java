@@ -2,6 +2,11 @@ package abstraction.eq5Transformateur2;
 
 import java.util.List;
 
+<<<<<<< HEAD
+=======
+
+import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
