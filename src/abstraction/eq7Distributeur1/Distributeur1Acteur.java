@@ -2,12 +2,14 @@ package abstraction.eq7Distributeur1;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 
 public class Distributeur1Acteur implements IActeur {
@@ -35,11 +37,13 @@ public class Distributeur1Acteur implements IActeur {
 	protected Variable totalStocksCML;  // La qualite totale de stock de chocolat moyenne gamme labéllisé
 	protected Variable totalStocksCMNL;  // La qualite totale de stock de chocolat moyenne gamme non labéllisé
 	protected Variable totalStocksCH;  // La qualite totale de stock de chocolat haute gamme
-	protected Variable totalStocks;  // La qualite totale de stock de chocolat haute gamme
+	protected Variable totalStocks;  // La qualite totale de stock de chocolat
 
 	protected List<Feve> lesFeves;
 	
 	////////////////////////////////////////
+	
+	protected HashMap<ChocolatDeMarque, Double> stockChocoMarque7;
 	
 	protected int cryptogramme;
 
