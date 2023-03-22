@@ -29,4 +29,21 @@ public class Champs {
 	public HashMap<String, HashMap<Integer, Integer>> getChamps() {
 		return Champs;
 	}
+	
+	public void destructionVieuxHectares(int CurrentStep) {
+		HashMap<Integer, Integer> ChampsH = Champs.get("H");
+		HashMap<Integer, Integer> ChampsM = Champs.get("M");
+		for (Integer i : ChampsH.keySet()) {
+			if (CurrentStep - i == 960) {
+				ChampsH.remove(i);
+				break;
+			}
+		}
+		for (Integer i : ChampsM.keySet()) {
+			if (CurrentStep - i == 960) {
+				ChampsM.remove(i);
+				break;
+			}
+		}
+	}
 }
