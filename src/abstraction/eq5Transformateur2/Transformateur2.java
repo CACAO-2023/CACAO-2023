@@ -5,7 +5,7 @@ import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
-public class Transformateur2 extends Transformateur2AcheteurCC  {
+public class Transformateur2 extends Transformateur2AcheteurCC implements IFabricantChocolatDeMarque  {
 	
 	private List<ChocolatDeMarque>chocosProduits;
 
