@@ -35,7 +35,7 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		stockFeve stockFeve = this.getStock() ;
 		int m = stockFeve.nbFeve() ;
 		for (int i=0; i<n; i++) {
-			Feve feve = stockFeve.getFeve(i) ;
+			Feve1 feve = stockFeve.getFeve(i) ;
 			feve.setNbStepsDepuisRecolte(feve.getNbStepsDepuisRecolte()+1) ;
 			
 			if (feve.getNbStepsDepuisRecolte() == 12) {
@@ -45,7 +45,8 @@ public class Producteur1Plantation extends Producteur1Acteur {
 			}
 			
 			if (feve.getSeche()==true && feve.getNbStepsDepuisRecolte()>=1) {
-				
+				//mise à jour du séchage des fèves après 1 step
+				feve.setSeche(true);
 			}
 		}
 		
