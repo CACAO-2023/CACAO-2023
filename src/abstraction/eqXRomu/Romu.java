@@ -3,7 +3,7 @@ import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
-public class Romu extends RomuATVBABVAOAAOACCVCCDistributeur//RomuATVBABVAOAAOACCVendeurCC 
+public class Romu extends RomuATVBABVAOAAOACCVCCDAOAVendeurOA 
 implements  IAcheteurContratCadre  {
 
 	public void next() {
