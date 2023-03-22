@@ -24,16 +24,26 @@ import abstraction.eqXRomu.produits.Lot;
 public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarque, IMarqueChocolat,IAcheteurContratCadre {
 	
 	protected int cryptogramme;
+	protected String nom;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
     protected HashMap<ChocolatDeMarque, Double> stocks;
     protected HashMap<Gamme, Double> pourcentagesGamme;
-    protected Journal journal;
+    protected Journal journal_operationsbancaires;
+    protected Journal journal_ventes;
+    protected Journal journal_achats;
+    protected Journal journal_activitegenerale;
+    
 
 	public Distributeur2Acteur() {
+		nom="équipe 8";
 		prixDeVente = new HashMap<>();
         stocks = new HashMap<>();
+        journal_operationsbancaires=new Journal("Journal des Opérations bancaires de l'"+nom,this);
+        journal_ventes=new Journal("Journal des Ventes de l'"+nom,this);
+        journal_achats=new Journal("Journal des Achats de l'"+nom,this);
+        journal_activitegenerale=new Journal("Journal général de l'"+nom,this);
         pourcentagesGamme = new HashMap<>();
-        journal=new Journal("Journal équipe 8",this);
+        
         initialiserGamme();
 	}
 	
