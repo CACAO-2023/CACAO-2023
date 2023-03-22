@@ -2,7 +2,7 @@
 ## Rejected - non-fast-forward 
 
 1. Commit your changes.
-2. Pull the changes from your repository.
+2. Pull the changes from your team repository.
 3. Resolve conflicts if needed.
 4. Commit and push.
 
