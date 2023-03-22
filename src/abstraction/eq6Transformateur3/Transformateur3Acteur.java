@@ -25,10 +25,51 @@ public class Transformateur3Acteur implements IActeur {
 	private Variable pourcentageCacaoHG ;
 	private Variable pourcentageRSE ;
 	
+	/**Nathan Claeys*/
 	protected Transformateur3Acteur() {
 		this.journal = new Journal("Journal"+this.getNom(),this);
+		this.pourcentageCacaoBG = new Variable ("pourcentageCacaoBG","pourcentage de cacao dans le produit BG fini",this,0.4,0.60,0.5);
+		this.pourcentageCacaoMG = new Variable ("pourcentageCacaoMG","pourcentage de cacao dans le produit MG non labélisé fini",this,0.6,0.80,0.65);
+		this.pourcentageCacaoMGL = new Variable ("pourcentageCacaoMGL","pourcentage de cacao dans le produit MG labélisé fini",this,0.6,0.80,0.75);
+		this.pourcentageCacaoHG = new Variable ("pourcentageCacaoHG","pourcentage de cacao dans le produit HG labélisé fini",this,0.8,0.95,0.85);
+		this.pourcentageRSE = new Variable ("pourcentageRSE", "défini le pourcentage RSE sur les recettes",this,0.05,0.15,0.05);
 	}
 	
+	/**
+	 * @return the pourcentageCacaoBG
+	 */
+	public Variable getPourcentageCacaoBG() {
+		return pourcentageCacaoBG;
+	}
+
+	/**
+	 * @return the pourcentageCacaoMG
+	 */
+	public Variable getPourcentageCacaoMG() {
+		return pourcentageCacaoMG;
+	}
+
+	/**
+	 * @return the pourcentageCacaoMGL
+	 */
+	public Variable getPourcentageCacaoMGL() {
+		return pourcentageCacaoMGL;
+	}
+
+	/**
+	 * @return the pourcentageCacaoHG
+	 */
+	public Variable getPourcentageCacaoHG() {
+		return pourcentageCacaoHG;
+	}
+
+	/**
+	 * @return the pourcentageRSE
+	 */
+	public Variable getPourcentageRSE() {
+		return pourcentageRSE;
+	}
+
 	public void initialiser() {
 	}
 
