@@ -1,5 +1,6 @@
 package abstraction.eq5Transformateur2;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eqXRomu.produits.Chocolat;
@@ -11,6 +12,7 @@ public class Transformateur2 extends Transformateur2Acteur  {
 
 	public Transformateur2() {
 		super();
+		this.chocosProduits = new LinkedList<ChocolatDeMarque>();
 	}
 	
 	public List<ChocolatDeMarque> getChocolatsProduits() {
