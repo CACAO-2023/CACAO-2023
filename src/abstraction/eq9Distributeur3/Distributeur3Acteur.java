@@ -41,7 +41,7 @@ public class Distributeur3Acteur implements IActeur {
 	public void achat_stock(){
 		// en fonction de lookat_results(), l�acteur devra réaliser des contrats
 		// cadres ou des appels d'offres ou accepter des offres pour certaines 
-		// gammes bas� sur leur priorité
+		// gammes bas� sur leur priorité.
 
 	}
 	public void contrat_cadre(){}
