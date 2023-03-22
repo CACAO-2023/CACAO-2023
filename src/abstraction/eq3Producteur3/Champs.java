@@ -31,8 +31,7 @@ public class Champs {
 	public HashMap<String, HashMap<Integer, Integer>> getChamps() {
 		return Champs;
 	}
-	
-.
+
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
@@ -163,11 +162,12 @@ public class Champs {
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
-	//Cette fonction nous donne les quantit�s produites lors de CurrentStep
-	public LinkedList<Integer> Harvest(int CurrentStep){
+	//Cette fonction nous donne les quantits produites lors de CurrentStep
+	public LinkedList<Integer> Harvest(int CurrentStep)	{
 		HashMap<String, LinkedList<Integer>> Keys = this.HarvestKeys(CurrentStep);
 		LinkedList<Integer> q = this.HarvestQuantity(CurrentStep, Keys);
 		return q;
+	}
 
 	public void destructionVieuxHectares(int CurrentStep) {
 		HashMap<Integer, Integer> ChampsH = Champs.get("H");
