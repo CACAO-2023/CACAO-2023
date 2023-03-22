@@ -2,7 +2,6 @@ package abstraction.eq1Producteur1;
 
 import java.util.LinkedList;
 
-
 //classe écrite par Elouan
 
 public class champ {
