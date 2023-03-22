@@ -32,6 +32,7 @@ public class Champs {
 		return Champs;
 	}
 	
+.
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
@@ -162,10 +163,27 @@ public class Champs {
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
-	//Cette fonction nous donne les quantités produites lors de CurrentStep
+	//Cette fonction nous donne les quantitï¿½s produites lors de CurrentStep
 	public LinkedList<Integer> Harvest(int CurrentStep){
 		HashMap<String, LinkedList<Integer>> Keys = this.HarvestKeys(CurrentStep);
 		LinkedList<Integer> q = this.HarvestQuantity(CurrentStep, Keys);
 		return q;
+
+	public void destructionVieuxHectares(int CurrentStep) {
+		HashMap<Integer, Integer> ChampsH = Champs.get("H");
+		HashMap<Integer, Integer> ChampsM = Champs.get("M");
+		for (Integer i : ChampsH.keySet()) {
+			if (CurrentStep - i == 960) {
+				ChampsH.remove(i);
+				break;
+			}
+		}
+		for (Integer i : ChampsM.keySet()) {
+			if (CurrentStep - i == 960) {
+				ChampsM.remove(i);
+				break;
+			}
+		}
+
 	}
 }
