@@ -13,6 +13,10 @@ public class Feve {
 		this.qualité = "Bas" ; //à changer pour prendre en compte la qualité associée au champ d'où la fève vient
 	}
 	
+	public void setNbStepsDepuisRecolte(int nb_steps) {
+		this.nb_steps_depuis_récolte = nb_steps ;
+	}
+	
 	public int getNbStepsDepuisRecolte() {
 		return this.nb_steps_depuis_récolte ;
 	}

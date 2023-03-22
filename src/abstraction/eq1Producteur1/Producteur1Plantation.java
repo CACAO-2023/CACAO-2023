@@ -2,9 +2,14 @@ package abstraction.eq1Producteur1;
 
 public class Producteur1Plantation extends Producteur1Acteur {
 	private champ champ;
+	private stockFeve stockFeve;
 	
 	public champ getChamp() {
 		return this.champ;
+	}
+	
+	public stockFeve getStock() {
+		return this.stockFeve ;
 	}
 	
 	public void next() {
@@ -27,7 +32,14 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		
 		//debut gab
 		
-		//stock stockFève = this.getStock ;
+		stockFeve stockFève = this.getStock() ;
+		
+	// int n
+	for (int i=0; i<n; i++) {
+		//Feve fève = stockFève.getF
+		//fève.set
+	}
+		
 		
 		
 	}
