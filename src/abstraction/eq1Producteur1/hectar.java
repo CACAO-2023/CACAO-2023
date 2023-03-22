@@ -6,7 +6,7 @@ public class hectar {
 	
 		private int nb_step; //compte le nb de step entre 2 récoltes
 		private int nb_recolte; //utile pour voir la durée de vie
-		private String qualite; //les feves recoltees dans cet hectare seront de cette qualite
+		private String qualite; //les feves recoltees dans cet hectare seront de cette qualite : B ou M
 		
 		public int getNombreSep() {
 			return this.nb_step;
