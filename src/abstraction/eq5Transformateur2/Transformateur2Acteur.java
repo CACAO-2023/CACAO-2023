@@ -16,6 +16,7 @@ public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 	protected int cryptogramme;
 
 	public Transformateur2Acteur() {
+		
 	}
 	
 	public void initialiser() {
