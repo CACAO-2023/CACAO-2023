@@ -28,7 +28,23 @@ public class Distributeur3Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		
 	}
+	
+	
+	
+	public void etat_ventes(){}
+	
+	public void achat_stock(){}
+	
+	
+	public void contrat_cadre(){}
+
+	public void appels_offres(){}
+
+	public void offres(){}
+
+	
 
 	public Color getColor() {// NE PAS MODIFIER
 		return new Color(245, 155, 185); 
