@@ -43,6 +43,10 @@ public class Producteur1Plantation extends Producteur1Acteur {
 				//condition pour basse qualité, si moyenne à changer
 				stockFeve.suppFeve(i) ;
 			}
+			
+			if (feve.getSeche()==true && feve.getNbStepsDepuisRecolte()>=1) {
+				
+			}
 		}
 		
 		//fin gab

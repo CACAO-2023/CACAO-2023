@@ -17,6 +17,10 @@ public class Feve {
 		this.nb_steps_depuis_récolte = nb_steps ;
 	}
 	
+	public void setSeche(boolean bool) {
+		this.séché = bool ;
+	}
+	
 	public int getNbStepsDepuisRecolte() {
 		return this.nb_steps_depuis_récolte ;
 	}
