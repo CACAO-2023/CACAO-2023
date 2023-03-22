@@ -18,7 +18,7 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	public double prix(ChocolatDeMarque choco) {
 		Gamme gamme = choco.getGamme();
 		boolean bioeq = choco.isBioEquitable();
-		
+		double qualite = choco.qualitePercue();
 		
 		return 10;
 	}
