@@ -48,7 +48,7 @@ public class Transformateur3Acteur implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Eco choco, le choco est un cadeau!";
+		return "Eco choco, le choco est un cadeau !";
 	}
 
 	// Renvoie les indicateurs
