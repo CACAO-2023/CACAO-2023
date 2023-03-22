@@ -36,12 +36,19 @@ public class Distributeur3Acteur implements IActeur {
 		// regarder les stocks de chaque gamme (moyen, moyen BE, haut), 
 		// regarder nos ventes et les ventes du marché pour savoir ce 
 		// qu'il faut acheter par ordre de priorité
+
+		// variables dont j'ai besoin : 
+		// 1. stocks L = [10000,20000,12000] par exemple
+		// 2. ventes L = [x,y,z] et ventes du marche à calculer L = [x_eq1 + x_eq_2 + ...,y,z]
+
 		
 	}
 	public void achat_stock(){
+
 		// en fonction de lookat_results(), l�acteur devra réaliser des contrats
 		// cadres ou des appels d'offres ou accepter des offres pour certaines 
 		// gammes bas� sur leur priorité.
+
 
 	}
 	public void contrat_cadre(){}
@@ -57,9 +64,12 @@ public class Distributeur3Acteur implements IActeur {
 	}
 	public void cout_stock() {
 				//, calcul le coût de stockage.
+
 	}
 	public void quantite_rayon() {
+
 				//déterminer quel part du stock est mise en rayon
+
 	}
 	public void cout_masse_salariale() {}
 
