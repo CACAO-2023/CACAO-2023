@@ -51,7 +51,7 @@ public class Distributeur2Acteur implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Bla bla bla";
+		return "Notre acteur, Royal Roast, est un distributeur de chocolat de toutes les gammes qui s'engage à prendre en compte les enjeux de la filière du cacao pour distribuer un produit final qui respecte les normes et répond aux besoins des clients.";
 	}
 
 	// Renvoie les indicateurs
@@ -86,11 +86,23 @@ public class Distributeur2Acteur implements IActeur {
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
+		
 	}
 
 	// Apres chaque operation sur votre compte bancaire, cette
 	// operation est appelee pour vous en informer
 	public void notificationOperationBancaire(double montant) {
+		List<Journal> res = getJournaux();
+		
+		if (montant<0) {
+			double m=montant*(-1);
+			String ch="retrait de "+m;
+			res.get(1).ajouter(ch);
+		}
+		if (montant>0) {
+			String ch= "dépot de "+montant;
+			res.get(1).ajouter(ch);
+		}
 	}
 	
 	// Renvoie le solde actuel de l'acteur
