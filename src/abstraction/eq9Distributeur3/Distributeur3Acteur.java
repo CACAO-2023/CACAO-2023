@@ -35,21 +35,29 @@ public class Distributeur3Acteur implements IActeur {
 	
 	
 	public void etat_ventes(){
-		// regarder les stocks de chaque gamme (moyen, moyen BE, haut), 
-		// regarder nos ventes et les ventes du marché pour savoir ce 
-		// qu'il faut acheter par ordre de priorité
+		/*
+		Ils peuvent par contre connaître les volumes de ventes passés. En effet, pour tout chocolat de
+		marque choco, Filiere.LA_FILIERE.getVentes(choco, etape) retourne la quantité totale (tous
+		distributeurs cumulés) des ventes de choco à l’étape etape (avec etape dans [-24,
+		Filire.LA_FILIERE.getEtape()
+		regarder les stocks de chaque gamme (moyen, moyen BE, haut), 
+		regarder nos ventes et les ventes du marché pour savoir ce 
+		qu'il faut acheter par ordre de priorité
 
-		// variables dont j'ai besoin : 
-		// 1. stocks L = [10000,20000,12000] par exemple
-		// 2. ventes L = [x,y,z] et ventes du marche à calculer L = [x_eq1 + x_eq_2 + ...,y,z]
-
-		
+		William
+		*/
 	}
 	public void achat_stock(){
 
-		// en fonction de lookat_results(), l�acteur devra réaliser des contrats
-		// cadres ou des appels d'offres ou accepter des offres pour certaines 
-		// gammes bas� sur leur priorité.
+		/* 
+		 en fonction de lookat_results(), l�acteur devra réaliser des contrats
+		 
+		cadres ou des appels d'offres ou accepter des offres pour certaines 
+		gammes bas� sur leur priorité.
+		
+		William
+		
+		*/
 
 
 	}

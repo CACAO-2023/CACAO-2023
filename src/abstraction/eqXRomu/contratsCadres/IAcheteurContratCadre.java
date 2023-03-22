@@ -16,6 +16,7 @@ public interface IAcheteurContratCadre extends IActeur {
 	 *         negocier un contrat cadre pour ce type de produit).
 	 */
 	public boolean achete(IProduit produit);
+	
 
     /**
      * Appelee suite au demarrage des negociations par le vendeur d'un contrat de feves labelisee 
