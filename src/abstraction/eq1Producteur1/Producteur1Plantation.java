@@ -20,9 +20,15 @@ public class Producteur1Plantation extends Producteur1Acteur {
 				h.setNb_recolte(h.getNombreRecolte()+1);}
 			if (h.getNombreRecolte()==96) { //supprime l'hectar quand il produit plus
 				c.supphectare(h);
+				// supprime l'hectare ou replante direct en fct de la qualité qu'on veut + coût replantation
 			}
 			}
 		//fin Elouan
+		
+		//debut gab
+		
+		//stock stockFève = this.getStock ;
+		
 		
 	}
 

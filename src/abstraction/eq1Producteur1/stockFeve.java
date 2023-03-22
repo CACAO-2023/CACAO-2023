@@ -6,6 +6,11 @@ import java.util.LinkedList;
 
 public class stockFeve {
 	private LinkedList<Feve> stock;
+	
+	//gab
+	public LinkedList<Feve> getStock() {
+		return this.stock ;
+	}
 
 	
 }
