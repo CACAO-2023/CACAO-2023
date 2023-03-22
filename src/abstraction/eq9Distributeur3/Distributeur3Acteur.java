@@ -34,32 +34,32 @@ public class Distributeur3Acteur implements IActeur {
 	
 	public void etat_ventes(){
 		// regarder les stocks de chaque gamme (moyen, moyen BE, haut), 
-		// regarder nos ventes et les ventes du marché pour savoir ce 
-		// qu’il faut acheter par ordre de priorité 
+		// regarder nos ventes et les ventes du marchÃ© pour savoir ce 
+		// qu'il faut acheter par ordre de prioritÃ©
 		
 	}
 	public void achat_stock(){
-		// en fonction de lookat_results(), l’acteur devra réaliser des contrats
-		// cadres ou des appels d’offres ou accepter des offres pour certaines 
-		// gammes basé sur leur priorité
+		// en fonction de lookat_results(), lï¿½acteur devra rÃ©aliser des contrats
+		// cadres ou des appels d'offres ou accepter des offres pour certaines 
+		// gammes basï¿½ sur leur prioritÃ©
 
 	}
 	public void contrat_cadre(){}
 	public void appels_offres(){}
 	public void offres(){}
 	public void calcul_prix_de_vente() {
-		// pour chaque gamme, return une liste avec les prix           
-		// (ex : L = [3, 4.4, 8] ) (prendre en compte la rentabilité, le positionnement des autres marques)
+		// pour chaque gamme, renvoie une hashmap <marque, prix>       
+		// (prendre en compte la rentabilitÃ©, le positionnement des autres marques)
 
 	}
 	public void repartition_tete_gondole() {
-		//, return une liste avec les proportions de chaque gamme (ex : L = [0, 0.6, 0.4 ] )
+		//renvoie une hashmap <marque, quatitÃ©>
 	}
 	public void cout_stock() {
-				//, calcul le coût de stockage.
+				//, calcul le coÃ»t de stockage.
 	}
 	public void quantite_rayon() {
-				//déterminer quel part du stock est mise en rayon
+				//dÃ©terminer quel part du stock est mise en rayon
 	}
 	public void cout_masse_salariale() {}
 
