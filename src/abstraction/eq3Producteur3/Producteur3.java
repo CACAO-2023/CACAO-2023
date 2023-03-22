@@ -20,6 +20,13 @@ public class Producteur3 extends Producteur3Acteur  {
 	 */
 	private HashMap<String,HashMap> Champs;
 	
+	
+	private Integer HectaresLibres; /*Repertorie le nombre d'hectares que l'on possede*/
+	
+	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
+	
+	private Integer CoutStep; /* Tout nos couts du step, reinitialises a zero au debut de chaque step et payes a la fin du step*/
+	
 	/*
 	 * Je n'ai pas trouve le type du champs donc j'ai choisit String. A CHANGER
 	 * Il faudra aussi penser a se mettre d'accord sur les tailles des champs initiaux.
@@ -32,6 +39,9 @@ public class Producteur3 extends Producteur3Acteur  {
 		ChampsInitiale.put( "H",ChampsInitialeH);
 		ChampsInitiale.put( "M",ChampsInitialeM);
 		this.Champs=ChampsInitiale;
+		Integer HectaresLibres = 0;
+		Integer HectaresUtilises = 950000;
+		Integer CoutStep = 0;
 	}
 	public Producteur3(HashMap<String,HashMap> m) {
 		this.Champs=m;
@@ -155,4 +165,14 @@ public class Producteur3 extends Producteur3Acteur  {
 
 
 	}
+	
+	/*
+	 * @author Dubus-Chanson Victor
+	 */
+	public void addCoutHectaresUtilises() {
+		Integer coutEmployes = HectaresUtilises * 220;
+		this.CoutStep = this.CoutStep + coutEmployes;
+	}
+	
+	
 }
