@@ -8,14 +8,14 @@ import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 
-public class Transformateur3 extends Transformateur3Acteur  {
+public class Transformateur3Stocks extends Transformateur3Acteur  {
 
 /** Nathan Claeys*/ 
 	private List<ChocolatDeMarque> ListeProduits;
 	protected HashMap<Feve, Double> stockFeves;
 	protected HashMap<Chocolat, Double> stockChoco;
 
-	public Transformateur3() {
+	public Transformateur3Stocks() {
 		super();		
 		this.ListeProduits = new LinkedList<ChocolatDeMarque>();
 	}
