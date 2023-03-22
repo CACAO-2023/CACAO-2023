@@ -3,6 +3,7 @@ package abstraction.eq7Distributeur1;
 import abstraction.eqXRomu.clients.ClientFinal;
 import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Gamme;
 
 public class Distributeur1 extends Distributeur1Acteur implements IDistributeurChocolatDeMarque {
 	
@@ -15,6 +16,10 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 * IMPORTANT : durant une meme etape, la fonction doit toujours retourner la meme valeur pour un chocolat donne.
 	 */
 	public double prix(ChocolatDeMarque choco) {
+		Gamme gamme = choco.getGamme();
+		boolean bioeq = choco.isBioEquitable();
+		
+		
 		return 10;
 	}
 	

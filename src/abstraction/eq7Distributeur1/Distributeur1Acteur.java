@@ -38,7 +38,12 @@ public class Distributeur1Acteur implements IActeur {
 	protected Variable totalStocksCMNL;  // La qualite totale de stock de chocolat moyenne gamme non labéllisé
 	protected Variable totalStocksCH;  // La qualite totale de stock de chocolat haute gamme
 	protected Variable totalStocks;  // La qualite totale de stock de chocolat
-
+	
+	protected Variable coutCB; //Cout d'1kg de chocolat basse gamme
+	protected Variable coutCML; //Cout d'1kg de chocolat moyenne gamme labellisé
+	protected Variable coutCMNL; //Cout d'1kg de chocolat moyenne gamme non labellisé
+	protected Variable coutCH; //Cout d'1kg de chocolat haute gamme labellisé
+	
 	protected List<Feve> lesFeves;
 	
 	////////////////////////////////////////
