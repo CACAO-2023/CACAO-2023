@@ -21,7 +21,7 @@ public class Distributeur1Acteur implements IActeur {
 	public static Color COLOR_LPURPLE= new Color(155, 89,182);
 	public static Color COLOR_GREEN  = new Color(  6,162, 37);
 	public static Color COLOR_LGREEN = new Color(  6,255, 37);
-	public static Color COLOR_LBLUE = new Color(  6,130,230);
+	public static Color COLOR_LBLUE  = new Color(  6,130,230);
 
 	
 	protected Journal journal;
