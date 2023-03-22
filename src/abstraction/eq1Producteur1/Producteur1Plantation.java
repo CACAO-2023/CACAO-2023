@@ -34,6 +34,12 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		
 		stockFeve stockFève = this.getStock() ;
 		
+	// int n
+	for (int i=0; i<n; i++) {
+		//Feve fève = stockFève.getF
+		//fève.set
+	}
+		
 		
 		
 	}
