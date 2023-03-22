@@ -1,10 +1,11 @@
-package abstraction.eqXRomu.contratsCadres;
+package abstraction.eq9Distributeur3;
 
 import abstraction.eqXRomu.filiere.*;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 public interface IAcheteurContratCadre extends IActeur {
+	
 
 	/**
 	 * Methode appelee par le superviseur afin de savoir si l'acheteur est pret a
