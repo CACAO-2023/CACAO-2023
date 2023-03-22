@@ -17,9 +17,11 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable nbHecMoy;
 	protected Variable nbHecMoyEq;
 	protected Variable nbHecHaute;
-	protected static double prodHec = 0.56;
-	protected Variable mainOeuvreNonEq;
-	protected Variable mainOeuvreEq;
+	protected Variable prodHec;
+	protected Variable stockTotBasse;
+	protected Variable stockTotMoy;
+	protected Variable stockTotMoyEq;
+	protected Variable stockTotHaute;
 
 	public Producteur2Acteur() {
 	}
