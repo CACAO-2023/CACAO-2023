@@ -3,10 +3,11 @@ package abstraction.eq5Transformateur2;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
-public class Transformateur2 extends Transformateur2Acteur  {
+public class Transformateur2 extends Transformateur2Acteur implements IFabricantChocolatDeMarque{
 	
 	private List<ChocolatDeMarque>chocosProduits;
 
@@ -14,7 +15,7 @@ public class Transformateur2 extends Transformateur2Acteur  {
 		super();
 		this.chocosProduits = new LinkedList<ChocolatDeMarque>();
 	}
-	
+
 	public List<ChocolatDeMarque> getChocolatsProduits() {
 		if (this.chocosProduits.size()==0) {
 				Chocolat c1 = Chocolat.C_MQ;
