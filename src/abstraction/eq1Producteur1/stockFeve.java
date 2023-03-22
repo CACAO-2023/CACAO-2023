@@ -6,11 +6,6 @@ import java.util.LinkedList;
  
 public class stockFeve {
 	private LinkedList<Feve> stock;
-	
-	//gab
-	public LinkedList<Feve> getStock() {
-		return this.stock ;
-	}
 
 	public LinkedList<Feve> getStock(){
 		return this.stock;
@@ -30,4 +25,5 @@ public class stockFeve {
 	public void suppFeve(int i) {
 		this.getStock().remove(i);
 	}
+	
 }
