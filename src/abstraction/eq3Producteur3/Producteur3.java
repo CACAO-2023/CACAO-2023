@@ -23,7 +23,7 @@ public class Producteur3 extends Producteur3Acteur  {
 	private HashMap<String,HashMap> Champs;
 	
 	
-	private Integer HectaresPossedes; /*Repertorie le nombre d'hectares que l'on possede*/
+	private Integer HectaresLibres; /*Repertorie le nombre d'hectares que l'on possede*/
 	
 	/*
 	 * Je n'ai pas trouve le type du champs donc j'ai choisit String. A CHANGER
@@ -37,6 +37,7 @@ public class Producteur3 extends Producteur3Acteur  {
 		ChampsInitiale.put( "H",ChampsInitialeH);
 		ChampsInitiale.put( "M",ChampsInitialeM);
 		this.Champs=ChampsInitiale;
+		Integer HectaresLibres = 0;
 	}
 	public Producteur3(HashMap<String,HashMap> m) {
 		this.Champs=m;
@@ -85,11 +86,5 @@ public class Producteur3 extends Producteur3Acteur  {
 		return null;
 	}
 	
-	public Integer getHectaresOccupes() {
-		Integer Sum = 0;
-		HashMap<Integer, Integer> ChampsM = Champs.get("M");
-		HashMap<Integer, Integer> ChampsH = Champs.get("H");
-		
-		
-	}
+	
 }
