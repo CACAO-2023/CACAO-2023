@@ -14,7 +14,7 @@ import abstraction.eqXRomu.produits.Feve;
 
 public class Distributeur1Acteur implements IActeur {
 	////////////////////////////////////////////////
-	//déclaration des variables
+	//declaration des variables
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
 	public static Color COLOR_BROWN  = new Color(141,100,  7);
 	public static Color COLOR_PURPLE = new Color(100, 10,115);
@@ -34,15 +34,15 @@ public class Distributeur1Acteur implements IActeur {
 	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
 
 	protected Variable totalStocksCB;  // La qualite totale de stock de chocolat bas de gamme 
-	protected Variable totalStocksCML;  // La qualite totale de stock de chocolat moyenne gamme labéllisé
-	protected Variable totalStocksCMNL;  // La qualite totale de stock de chocolat moyenne gamme non labéllisé
+	protected Variable totalStocksCML;  // La qualite totale de stock de chocolat moyenne gamme labellise
+	protected Variable totalStocksCMNL;  // La qualite totale de stock de chocolat moyenne gamme non labellise
 	protected Variable totalStocksCH;  // La qualite totale de stock de chocolat haute gamme
 	protected Variable totalStocks;  // La qualite totale de stock de chocolat
 	
 	protected Variable coutCB; //Cout d'1kg de chocolat basse gamme
-	protected Variable coutCML; //Cout d'1kg de chocolat moyenne gamme labellisé
-	protected Variable coutCMNL; //Cout d'1kg de chocolat moyenne gamme non labellisé
-	protected Variable coutCH; //Cout d'1kg de chocolat haute gamme labellisé
+	protected Variable coutCML; //Cout d'1kg de chocolat moyenne gamme labellise
+	protected Variable coutCMNL; //Cout d'1kg de chocolat moyenne gamme non labellise
+	protected Variable coutCH; //Cout d'1kg de chocolat haute gamme labellise
 	
 	protected List<Feve> lesFeves;
 	
@@ -80,11 +80,11 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
-		res.add(this.totalStocksCB);
-		res.add(this.totalStocksCH);
-		res.add(this.totalStocksCML);
-		res.add(this.totalStocksCMNL);
-		res.add(this.totalStocks);
+//		res.add(this.totalStocksCB);
+//		res.add(this.totalStocksCH);
+//		res.add(this.totalStocksCML);
+//		res.add(this.totalStocksCMNL);
+//		res.add(this.totalStocks);
 
 		return res;
 	}
@@ -98,7 +98,7 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
-		res.add(this.journal);
+//		res.add(this.journal);
 		return res;
 	}
 
