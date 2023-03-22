@@ -2,14 +2,16 @@ package abstraction.eq5Transformateur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 
-public class Transformateur2Acteur implements IActeur {
+public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 	
 	protected int cryptogramme;
 
@@ -95,6 +97,13 @@ public class Transformateur2Acteur implements IActeur {
 	// Renvoie une instance d'une filiere d'apres son nom
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
+	}
+	
+	public List<String> getMarquesChocolat() {
+		LinkedList<String> marques = new LinkedList<String>();
+		marques.add("ChocoPop");
+		marques.add("Maison Doutre");
+		return marques;
 	}
 
 }
