@@ -17,6 +17,14 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	/** Mouhamed Sow*/ 
 	private double coutStockage ;
 	private double niveauStockage ; 
+	
+	public void ajoutStockFeve(Feve feve, Double nbreStock) {
+		this.stockFeves.put(feve, nbreStock) ;
+	}
+	public void ajoutStockChocolat(Chocolat choco, Double nbreChoco) {
+		this.stockChoco.put(choco, nbreChoco) ;
+	}
+	
 	public Transformateur3Stocks() {
 		super();		
 		this.ListeProduits = new LinkedList<ChocolatDeMarque>();
@@ -25,4 +33,6 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	public List<ChocolatDeMarque> getListeProduits() {
 		return ListeProduits;
 	}
+
+
 }
