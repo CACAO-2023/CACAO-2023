@@ -24,7 +24,6 @@ public class Producteur1Plantation extends Producteur1Acteur {
 			}
 		//fin Elouan
 		
-		
 	}
 
 }

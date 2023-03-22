@@ -25,4 +25,5 @@ public class champ {
 	public void supphectare(hectar h) {
 		this.getHectares().remove(h);
 	}
+	
 }

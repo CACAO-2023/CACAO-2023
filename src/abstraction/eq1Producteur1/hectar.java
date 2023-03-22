@@ -23,5 +23,6 @@ public class hectar {
 		public void setNb_recolte(int n) {
 			this.nb_recolte = n;
 		}
+		
 }
 
