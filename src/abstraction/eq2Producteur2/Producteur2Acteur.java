@@ -35,7 +35,7 @@ public class Producteur2Acteur implements IActeur {
 	}
 
 	public String getDescription() {
-		return "La filière CACAindO représente la beauté du savoir-faire indonésien et des richesses de la culture du cacao dans la région. Entre cacao à prix abordable et fève d'origine volcanique, il y en a pour tous les goûts.";
+		return "La filiere CACAindO represente la beaute du savoir-faire indonï¿½sien et des richesses de la culture du cacao dans la region. Entre cacao a un prix abordable et feve d'origine volcanique, il y en a pour tous les gouts.";
 	}
 
 	// Renvoie les indicateurs
