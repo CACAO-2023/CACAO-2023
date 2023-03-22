@@ -1,6 +1,10 @@
 # Errors on Push 
 ## Rejected - non-fast-forward 
-You need to pull first.
+
+1. Commit your changes.
+2. Pull the changes from your repository.
+3. Resolve conflicts if needed.
+4. Commit and push.
 
 # Errors on Pull
 ## Checkout conflict
