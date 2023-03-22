@@ -37,7 +37,7 @@ public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 	}
 
 	public String getDescription() {
-		return "Bla bla bla";
+		return "Transformateur ayant deux marques : ChocoPop et Maison Doutre";
 	}
 
 	// Renvoie les indicateurs
@@ -72,6 +72,11 @@ public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
+		if (this==acteur) {
+			System.out.println("Il en est fini de nous");
+		} else {
+			System.out.println("L'acteur "+acteur.getNom()+" a fait faillite ");
+		}
 	}
 
 	// Apres chaque operation sur votre compte bancaire, cette
