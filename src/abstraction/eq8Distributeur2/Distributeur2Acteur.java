@@ -24,16 +24,26 @@ import abstraction.eqXRomu.produits.Lot;
 public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarque, IMarqueChocolat,IAcheteurContratCadre {
 	
 	protected int cryptogramme;
+	protected String nom;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
     protected HashMap<ChocolatDeMarque, Double> stocks;
     protected HashMap<Gamme, Double> pourcentagesGamme;
-    protected Journal journal;
+    protected Journal journal_operationsbancaires;
+    protected Journal journal_ventes;
+    protected Journal journal_achats;
+    protected Journal journal_activitegenerale;
+    
 
 	public Distributeur2Acteur() {
+		nom="équipe 8";
 		prixDeVente = new HashMap<>();
         stocks = new HashMap<>();
+        journal_operationsbancaires=new Journal("Journal des Opérations bancaires de l'"+nom,this);
+        journal_ventes=new Journal("Journal des Ventes de l'"+nom,this);
+        journal_achats=new Journal("Journal des Achats de l'"+nom,this);
+        journal_activitegenerale=new Journal("Journal général de l'"+nom,this);
         pourcentagesGamme = new HashMap<>();
-        journal=new Journal("Journal équipe 8",this);
+        
         initialiserGamme();
 	}
 	
@@ -62,7 +72,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	}
 
 	public String getDescription() {
-		return "Bla bla bla";
+		return "Notre acteur, Royal Roast, est un distributeur de chocolat de toutes les gammes qui s'engage à prendre en compte les enjeux de la filière du cacao pour distribuer un produit final qui respecte les normes et répond aux besoins des clients.";
 	}
 
 	// Renvoie les indicateurs
@@ -80,6 +90,10 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
+		res.add(journal_operationsbancaires);
+		res.add(journal_achats);
+		res.add(journal_ventes);
+		res.add(journal_activitegenerale);
 		return res;
 	}
 
@@ -97,11 +111,23 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
+		
 	}
 
 	// Apres chaque operation sur votre compte bancaire, cette
 	// operation est appelee pour vous en informer
 	public void notificationOperationBancaire(double montant) {
+		List<Journal> res = getJournaux();
+		
+		if (montant<0) {
+			double m=montant*(-1);
+			String ch="retrait de "+m;
+			res.get(1).ajouter(ch);
+		}
+		if (montant>0) {
+			String ch= "dépot de "+montant;
+			res.get(1).ajouter(ch);
+		}
 	}
 	
 	// Renvoie le solde actuel de l'acteur
