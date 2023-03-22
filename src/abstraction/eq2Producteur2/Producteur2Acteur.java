@@ -12,6 +12,14 @@ import abstraction.eqXRomu.general.Variable;
 public class Producteur2Acteur implements IActeur {
 	
 	protected int cryptogramme;
+	
+	protected Variable nbHecBasse;
+	protected Variable nbHecMoy;
+	protected Variable nbHecMoyEq;
+	protected Variable nbHecHaute;
+	protected static double prodHec = 0.56;
+	protected Variable mainOeuvreNonEq;
+	protected Variable mainOeuvreEq;
 
 	public Producteur2Acteur() {
 	}
@@ -41,6 +49,10 @@ public class Producteur2Acteur implements IActeur {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+		res.add(this.nbHecBasse);
+		res.add(this.nbHecMoy);
+		res.add(this.nbHecMoyEq);
+		res.add(this.nbHecHaute);
 		return res;
 	}
 
