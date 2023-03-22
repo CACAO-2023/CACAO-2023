@@ -19,11 +19,13 @@ public class Distributeur2Acteur implements IActeur {
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
     protected HashMap<ChocolatDeMarque, Double> stocks;
     protected HashMap<Gamme, Double> pourcentagesGamme;
+    protected Journal journal;
 
 	public Distributeur2Acteur() {
 		prixDeVente = new HashMap<>();
         stocks = new HashMap<>();
         pourcentagesGamme = new HashMap<>();
+        journal=new Journal("Journal équipe 8",this);
         initialiserGamme();
 	}
 	
