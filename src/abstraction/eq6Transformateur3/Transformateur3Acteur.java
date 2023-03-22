@@ -19,9 +19,13 @@ public class Transformateur3Acteur implements IActeur {
 	protected int cryptogramme;
 /** Nathan Claeys*/
 	protected Journal journal;
-
-/** Nathan Claeys*/
-	public Transformateur3Acteur() {
+	private Variable pourcentageCacaoBG ;
+	private Variable pourcentageCacaoMG ;
+	private Variable pourcentageCacaoMGL ;
+	private Variable pourcentageCacaoHG ;
+	private Variable pourcentageRSE ;
+	
+	protected Transformateur3Acteur() {
 		this.journal = new Journal("Journal"+this.getNom(),this);
 	}
 	
