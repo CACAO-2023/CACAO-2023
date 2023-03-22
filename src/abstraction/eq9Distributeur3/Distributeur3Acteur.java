@@ -42,14 +42,20 @@ public class Distributeur3Acteur implements IActeur {
 		regarder nos ventes et les ventes du marché pour savoir ce 
 		qu'il faut acheter par ordre de priorité
 
-
+		William
 		*/
 	}
 	public void achat_stock(){
 
-		// en fonction de lookat_results(), l�acteur devra réaliser des contrats
-		// cadres ou des appels d'offres ou accepter des offres pour certaines 
-		// gammes bas� sur leur priorité.
+		/* 
+		 en fonction de lookat_results(), l�acteur devra réaliser des contrats
+		 
+		cadres ou des appels d'offres ou accepter des offres pour certaines 
+		gammes bas� sur leur priorité.
+		
+		William
+		
+		*/
 
 
 	}
