@@ -13,6 +13,13 @@ import abstraction.eqXRomu.general.VariableReadOnly;
 import abstraction.eqXRomu.produits.Feve;
 
 public class Transformateur1Acteur implements IActeur {
+	public static Color COLOR_LLGRAY = new Color(238,238,238);
+	public static Color COLOR_BROWN  = new Color(141,100,  7);
+	public static Color COLOR_PURPLE = new Color(100, 10,115);
+	public static Color COLOR_LPURPLE= new Color(155, 89,182);
+	public static Color COLOR_GREEN  = new Color(  6,162, 37);
+	public static Color COLOR_LGREEN = new Color(  6,255, 37);
+	public static Color COLOR_LBLUE = new Color(  6,130,230);
 	
 	protected Integer cryptogramme;
 	protected Journal journal;
