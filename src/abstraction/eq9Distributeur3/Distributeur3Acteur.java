@@ -38,6 +38,7 @@ public class Distributeur3Acteur implements IActeur {
 		marque choco, Filiere.LA_FILIERE.getVentes(choco, etape) retourne la quantité totale (tous
 		distributeurs cumulés) des ventes de choco à l’étape etape (avec etape dans [-24,
 		Filire.LA_FILIERE.getEtape()
+		
 		regarder les stocks de chaque gamme (moyen, moyen BE, haut), 
 		regarder nos ventes et les ventes du marché pour savoir ce 
 		qu'il faut acheter par ordre de priorité
