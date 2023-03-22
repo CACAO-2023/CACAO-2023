@@ -2,9 +2,14 @@ package abstraction.eq1Producteur1;
 
 public class Producteur1Plantation extends Producteur1Acteur {
 	private champ champ;
+	private stockFeve stockFeve;
 	
 	public champ getChamp() {
 		return this.champ;
+	}
+	
+	public stockFeve getStock() {
+		return this.stockFeve ;
 	}
 	
 	public void next() {
@@ -20,9 +25,22 @@ public class Producteur1Plantation extends Producteur1Acteur {
 				h.setNb_recolte(h.getNombreRecolte()+1);}
 			if (h.getNombreRecolte()==96) { //supprime l'hectar quand il produit plus
 				c.supphectare(h);
+				// supprime l'hectare ou replante direct en fct de la qualité qu'on veut + coût replantation
 			}
 			}
 		//fin Elouan
+		
+		//debut gab
+		
+		stockFeve stockFève = this.getStock() ;
+		
+	// int n
+	for (int i=0; i<n; i++) {
+		//Feve fève = stockFève.getF
+		//fève.set
+	}
+		
+		
 		
 	}
 
