@@ -16,8 +16,13 @@ public class stockFeve {
 	public void ajouterFeve(Feve f) {
 		this.getStock().add(f);
 	}
-	public int nbFeve() {
-		return this.getStock().size();
+	public double nbFeve() {
+		int n = this.getStock().size();
+		double s = 0.0; 
+		for (int i=0; i<n; i++) {
+			s=s+this.getFeve(i).getQuantite();
+		}
+		return s;
 	}
 	public void suppFeve(Feve f) {
 		this.getStock().remove(f);
