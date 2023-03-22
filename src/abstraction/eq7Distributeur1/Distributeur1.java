@@ -65,7 +65,7 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 */
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 		stockChocoMarque7.put(choco, stockChocoMarque7.get(choco)-quantite);
-		StockTotal.setValeur(this, StockTotal.getValeur(cryptogramme)-quantite, cryptogramme);
+		totalStocks.setValeur(this, totalStocks.getValeur(cryptogramme)-quantite, cryptogramme);
 	}
 	
 	/**
