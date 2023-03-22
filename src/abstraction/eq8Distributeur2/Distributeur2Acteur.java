@@ -5,15 +5,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import abstraction.eqXRomu.clients.ClientFinal;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
+import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 
-public class Distributeur2Acteur implements IActeur {
+public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarque, IMarqueChocolat {
 	
 	protected int cryptogramme;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
@@ -114,6 +117,42 @@ public class Distributeur2Acteur implements IActeur {
 	// Renvoie une instance d'une filiere d'apres son nom
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
+	}
+
+	@Override
+	public List<String> getMarquesChocolat() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double prix(ChocolatDeMarque choco) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
