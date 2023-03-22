@@ -30,20 +30,25 @@ public class Champs {
 		return Champs;
 	}
 	
-	public void destructionVieuxHectares(int CurrentStep) {
+	public Integer destructionVieuxHectares(int CurrentStep) {
 		HashMap<Integer, Integer> ChampsH = Champs.get("H");
 		HashMap<Integer, Integer> ChampsM = Champs.get("M");
+		Integer HectaresLiberes = 0;
 		for (Integer i : ChampsH.keySet()) {
 			if (CurrentStep - i == 960) {
+				HectaresLiberes += ChampsH.get(i);
 				ChampsH.remove(i);
 				break;
 			}
 		}
 		for (Integer i : ChampsM.keySet()) {
 			if (CurrentStep - i == 960) {
+				HectaresLiberes += ChampsM.get(i);
 				ChampsM.remove(i);
 				break;
 			}
 		}
+		return HectaresLiberes;
 	}
+	
 }
