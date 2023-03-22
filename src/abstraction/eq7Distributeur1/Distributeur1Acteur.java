@@ -80,11 +80,11 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
-		res.add(this.totalStocksCB);
-		res.add(this.totalStocksCH);
-		res.add(this.totalStocksCML);
-		res.add(this.totalStocksCMNL);
-		res.add(this.totalStocks);
+//		res.add(this.totalStocksCB);
+//		res.add(this.totalStocksCH);
+//		res.add(this.totalStocksCML);
+//		res.add(this.totalStocksCMNL);
+//		res.add(this.totalStocks);
 
 		return res;
 	}
@@ -98,7 +98,7 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
-		res.add(this.journal);
+//		res.add(this.journal);
 		return res;
 	}
 
