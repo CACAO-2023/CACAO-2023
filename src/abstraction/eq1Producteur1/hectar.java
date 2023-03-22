@@ -4,8 +4,8 @@ public class hectar {
 
 //Elouan a fait cette classe
 	
-		private int nb_step; //compte le nb de step entre 2 récoltes
-		private int nb_recolte; //utile pour voir la durée de vie
+		private int nb_step; //compte le nb de step entre 2 rÃ©coltes
+		private int nb_recolte; //utile pour voir la durÃ©e de vie
 		
 		public int getNombreSep() {
 			return this.nb_step;
