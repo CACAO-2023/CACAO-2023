@@ -31,7 +31,7 @@ public class Champs {
 	public HashMap<String, HashMap<Integer, Integer>> getChamps() {
 		return Champs;
 	}
-	
+
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
@@ -163,6 +163,7 @@ public class Champs {
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
+
 	//Cette fonction nous donne les quantitites produites lors de CurrentStep
 	public LinkedList<Integer> HarvestHM(int CurrentStep){
 		HashMap<String, LinkedList<Integer>> Keys = this.HarvestKeys(CurrentStep);
@@ -173,21 +174,27 @@ public class Champs {
 	/**
 	 * @author Dubus-Chanson Victor
 	 */	
-	public void destructionVieuxHectares(int CurrentStep) {
+  	public Integer destructionVieuxHectares(int CurrentStep) {
 		HashMap<Integer, Integer> ChampsH = Champs.get("H");
 		HashMap<Integer, Integer> ChampsM = Champs.get("M");
+		Integer HectaresLiberes = 0;
 		for (Integer i : ChampsH.keySet()) {
 			if (CurrentStep - i == 960) {
+				HectaresLiberes += ChampsH.get(i);
 				ChampsH.remove(i);
 				break;
 			}
 		}
 		for (Integer i : ChampsM.keySet()) {
 			if (CurrentStep - i == 960) {
+				HectaresLiberes += ChampsM.get(i);
 				ChampsM.remove(i);
 				break;
 			}
 		}
 
+		return HectaresLiberes;
+
 	}
+	
 }
