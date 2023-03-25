@@ -28,6 +28,7 @@ You are changing some files or folders that are hidden in the Java perspective o
 To see the files, go to the Resource perspective of Eclipse. Right click on these files or folders -> Replace with -> Branch, Tag or Reference -> Remote tracking -> select the main repository -> Replace. Then commit and push to your repository. Don't close this pull request, it will be automatically updated.
 
 ## Additions outside of the package
+
 In the Resource perspective you can replace all folders and files (including hidden files). Since there is no .metadata folder in the main repository, you don't have anything to replace it with. You can simply delete it.
 
 ## Compilation error
