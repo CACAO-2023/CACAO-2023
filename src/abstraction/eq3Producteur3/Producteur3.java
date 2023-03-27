@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Set;
 
+import abstraction.eqXRomu.produits.Lot;
+
 public class Producteur3 extends Producteur3Acteur  {
 	/*
 	 * ChampsH est un dictionnaire qui contient les champs Haut de Gamme
@@ -38,7 +40,7 @@ public class Producteur3 extends Producteur3Acteur  {
 		Integer HectaresUtilises = 950000;
 		Integer CoutStep = 0;
 	}
-  
+
 	public Producteur3(HashMap<String,HashMap> m) {
 		this.Champs=m;
 	}
@@ -85,7 +87,7 @@ public class Producteur3 extends Producteur3Acteur  {
 		//PARTIE RCOLTE-->Lot
 		return null;
 	}
-  
+
 	/*
 	 * @author Dubus-Chanson Victor
 	 */
