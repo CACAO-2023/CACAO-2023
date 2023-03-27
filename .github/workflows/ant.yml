@@ -23,4 +23,6 @@ jobs:
         java-version: '18'
         distribution: 'temurin'
     - name: Build with Ant
-      run: ant -noinput -buildfile build.xml
+      uses: GabrielBB/xvfb-action@v1.0
+      with:
+        run: ant -noinput -buildfile build.xml
