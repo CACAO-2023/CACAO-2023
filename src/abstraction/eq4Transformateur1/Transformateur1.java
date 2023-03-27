@@ -18,10 +18,10 @@ public class Transformateur1 extends Transformateur1Acteur implements IFabricant
 
 	public List<ChocolatDeMarque> getChocolatsProduits() {
 		if (this.chocosProduits.size()==0) {
-			Chocolat c1 = Chocolat.C_BQ;
-			Chocolat c2 = Chocolat.C_HQ_BE;
-			this.chocosProduits.add(new ChocolatDeMarque(c1, "Yocttoootoa", 70, 0));
-			this.chocosProduits.add(new ChocolatDeMarque(c2, "Vccotioi", 90, 10));
+				Chocolat c1 = Chocolat.C_BQ;
+				Chocolat c2 = Chocolat.C_HQ_BE;
+				this.chocosProduits.add(new ChocolatDeMarque(c1, "Yocttoootoa", 70, 0));
+				this.chocosProduits.add(new ChocolatDeMarque(c2, "Vccotioi", 90, 10));
 		}
 		return this.chocosProduits;
 	}
