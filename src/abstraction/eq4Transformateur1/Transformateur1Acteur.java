@@ -158,4 +158,10 @@ public class Transformateur1Acteur implements IActeur {
 		return Filiere.LA_FILIERE;
 	}
 
+	public List<String> getMarquesChocolat() {
+		LinkedList<String> marques = new LinkedList<String>();
+		marques.add("Yocttoootoa");
+		marques.add("Vccotioi");
+		return marques;
+	}
 }
