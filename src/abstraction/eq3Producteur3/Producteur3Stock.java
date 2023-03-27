@@ -16,8 +16,8 @@ public class Producteur3Stock {
 	 * @author BOCQUET Gabriel, NAVEROS Marine
 	 */
 	public Producteur3Stock() {
-		IProduit FM = new Feve(Gamme.MQ, true); //Je ne sais pas comment utiliser les feves
-		IProduit HM = new Feve(Gamme.HQ, true); //Je ne sais pas comment utiliser les feves
+		//IProduit FM = new Feve(Gamme.MQ, true); //Je ne sais pas comment utiliser les feves
+		//IProduit HM = new Feve(Gamme.HQ, true); //Je ne sais pas comment utiliser les feves
 		Lot LotInitialM = new Lot(FM);
 		Lot LotInitialH = new Lot(HM);
 		LotInitialM.ajouter(0,1000000); //J'ai mis une quantite au pif a changer
