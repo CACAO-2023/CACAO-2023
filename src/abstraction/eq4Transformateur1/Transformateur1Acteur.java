@@ -7,13 +7,14 @@ import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.general.VariableReadOnly;
 import abstraction.eqXRomu.produits.Feve;
 
-public class Transformateur1Acteur implements IActeur {
+public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
 	public static Color COLOR_BROWN  = new Color(141,100,  7);
 	public static Color COLOR_PURPLE = new Color(100, 10,115);
@@ -158,4 +159,10 @@ public class Transformateur1Acteur implements IActeur {
 		return Filiere.LA_FILIERE;
 	}
 
+	public List<String> getMarquesChocolat() {
+		LinkedList<String> marques = new LinkedList<String>();
+		marques.add("Yocttoootoa");
+		marques.add("Vccotioi");
+		return marques;
+	}
 }
