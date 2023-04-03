@@ -42,21 +42,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
     public void ajouter(ChocolatDeMarque chocolat, double quantite) {
         produitsStockes.add(chocolat);
     }
-    public double getQuantiteFeve(Feve feve) {
-        if (fevesStocks.containsKey(feve)) {
-            return fevesStocks.get(feve);
-        } else {
-            return 0;
-        }
-    }
     
-    public double getQuantiteChocolat(Chocolat chocolat) {
-        if (chocolatStocks.containsKey(chocolat)) {
-            return chocolatStocks.get(chocolat);
-        } else {
-            return 0;
-        }
-    }
     
    
 
