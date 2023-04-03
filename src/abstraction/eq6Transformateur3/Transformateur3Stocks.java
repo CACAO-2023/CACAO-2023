@@ -1,9 +1,11 @@
 package abstraction.eq6Transformateur3;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
@@ -11,30 +13,51 @@ import abstraction.eqXRomu.produits.Feve;
 public class Transformateur3Stocks extends Transformateur3Acteur  {
 
 /** Nathan Claeys*/ 
-	private List<ChocolatDeMarque> ListeProduits;
-	protected HashMap<Feve, Double> stockFeves;
-	protected HashMap<Chocolat, Double> stockChoco;
+	private HashMap<Feve, Double> fevesStocks;
+    private HashMap<Chocolat, Double> chocolatStocks;
+    private List<ChocolatDeMarque> produitsStockes;
 	/** Mouhamed Sow*/ 
-	private double coutStockage ;
-	private double niveauStockage ; 
-	
-	public void ajoutStockFeve(Feve feve, Double nbreStock) {
-		/** ajouter au stock */
-		Double stockInstantT=this.stockFeves.get(feve) ;
-		this.stockFeves.put(feve, stockInstantT+nbreStock) ;
-	}
-	public void ajoutStockChocolat(Chocolat choco, Double nbreChoco) {
-		
-	}
-	
-	public Transformateur3Stocks() {
-		super();		
-		this.ListeProduits = new LinkedList<ChocolatDeMarque>();
-	}
-	
-	public List<ChocolatDeMarque> getListeProduits() {
-		return ListeProduits;
-	}
-
+    public Transformateur3Stocks() {
+        fevesStocks = new HashMap<Feve, Double>();
+        chocolatStocks = new HashMap<Chocolat, Double>();
+        produitsStockes = new ArrayList<ChocolatDeMarque>();
+    }
+    
+    public void ajouter(Feve feve, double quantite) {
+        if (fevesStocks.containsKey(feve)) {
+            fevesStocks.put(feve, fevesStocks.get(feve) + quantite);
+        } else {
+            fevesStocks.put(feve, quantite);
+        }
+    }
+    
+    public void ajouter(Chocolat chocolat, double quantite) {
+        if (chocolatStocks.containsKey(chocolat)) {
+            chocolatStocks.put(chocolat, chocolatStocks.get(chocolat) + quantite);
+        } else {
+            chocolatStocks.put(chocolat, quantite);
+        }
+    }
+    
+    public void ajouter(ChocolatDeMarque chocolat, double quantite) {
+        produitsStockes.add(chocolat);
+    }
+    public double getQuantiteFeve(Feve feve) {
+        if (fevesStocks.containsKey(feve)) {
+            return fevesStocks.get(feve);
+        } else {
+            return 0;
+        }
+    }
+    
+    public double getQuantiteChocolat(Chocolat chocolat) {
+        if (chocolatStocks.containsKey(chocolat)) {
+            return chocolatStocks.get(chocolat);
+        } else {
+            return 0;
+        }
+    }
+    
+   
 
 }
