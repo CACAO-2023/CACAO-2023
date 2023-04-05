@@ -112,6 +112,13 @@ public class Producteur3 extends Producteur3Acteur  {
 		this.CoutStep = this.CoutStep + coutAchatHectares;
 	}
 	
+	/*A faire a chaque step et tous les 6mois avant changeHectaresAndCoutsLies*/
+	public void updateHectaresLibres(Integer CurrentStep) {
+		Champs Champs = this.getFields();
+		Integer HectaresLiberes = Champs.destructionVieuxHectares(CurrentStep);
+		this.HectaresLibres += HectaresLiberes;
+	}
+	
 	/*Modifie les variables de couts et d'hectares en fonction des resultats de variationBesoinHectares*/
 	/*HectaresLiberes vient de la methode destructionVieuxHectares(int CurrentStep) de la classe Champs*/
 	public void changeHectaresAndCoutsLies(Integer ajoutHectares, Integer HectaresLiberes) {
