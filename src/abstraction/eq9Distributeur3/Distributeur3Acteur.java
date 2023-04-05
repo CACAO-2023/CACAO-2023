@@ -18,7 +18,10 @@ public class Distributeur3Acteur implements IActeur {
 	protected int numero;
 	protected Integer cryptogramme;
 	protected Stock stock;
-	protected Journal journal;
+	protected Journal journal_ventes;
+	protected Journal journal_achats;
+	protected Journal journal_operationsbancaires;
+	protected Journal journal_activitegenerale;
 	protected List<ChocolatDeMarque> chocolats;
 
 	public Distributeur3Acteur() {
@@ -32,12 +35,18 @@ public class Distributeur3Acteur implements IActeur {
 		// Ici pour tester on se créé un stock de chocolat à partir de rien (william)
 		// ChocolatDeMarque(Chocolat chocolat, String marque, int pourcentageCacao, int pourcentageRSE)
 		ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "marque", 50, 20);
+		Stock stock = new Stock();
+		this.stock = stock;
 		
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
 		this.chocolats.add(c1);
 		this.stock.ajoutQte(c1, 1000);
 		
-		this.journal = new Journal(this.getNom()+" activites", this);
+		this.journal_ventes = new Journal(this.getNom()+" ventes", this);
+		this.journal_achats = new Journal(this.getNom()+" achats", this);
+		this.journal_operationsbancaires = new Journal(this.getNom()+" operations", this);
+		this.journal_activitegenerale = new Journal(this.getNom()+" activites", this);
+
 		
 	}
 	
@@ -66,11 +75,11 @@ public class Distributeur3Acteur implements IActeur {
 		// il va falloir faire la comparaison de contrats cadres par rapport à un seuil puis choisir le plus interessant
 
 
-		journal.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
+		journal_activitegenerale.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
 			for (int i=0; i<this.chocolats.size(); i++) {
-			journal.ajouter("Le prix moyen du chocolat \""+chocolats.get(i).getNom()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyen(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-1));
-			journal.ajouter("Les ventes de chocolat \""+chocolats.get(i)+" il y a un an etaient de "+Filiere.LA_FILIERE.getVentes(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-24));
+		//	journal.ajouter("Le prix moyen du chocolat \""+chocolats.get(i).getNom()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyen(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-1));
+			//journal.ajouter("Les ventes de chocolat \""+chocolats.get(i)+" il y a un an etaient de "+Filiere.LA_FILIERE.getVentes(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-24));
 			
 			
 			}
@@ -165,7 +174,14 @@ public class Distributeur3Acteur implements IActeur {
 
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
+		
+		
 		List<Journal> res=new ArrayList<Journal>();
+		res.add(journal_ventes);
+		res.add(journal_achats);
+		res.add(journal_operationsbancaires);
+		res.add(journal_activitegenerale);
+		
 		return res;
 	}
 

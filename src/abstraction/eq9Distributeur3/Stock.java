@@ -46,6 +46,11 @@ public class Stock {
 	// Mathilde Soun 
 	
 	public void ajoutQte(ChocolatDeMarque c, double ajout){
+		if(this.QteStock.get(c) == null) {
+			this.QteStock.put(c, 0.0);
+		}
+		
+		
 		double qte = this.QteStock.get(c);
 		qte = qte + ajout;
 		if (qte<0) {

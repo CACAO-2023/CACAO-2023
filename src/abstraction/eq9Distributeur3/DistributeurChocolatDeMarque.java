@@ -63,7 +63,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
 
 		if (crypto != this.cryptogramme) {
-			journal.ajouter("On essaie de me pirater (RayonVide)");
+			journal_activitegenerale.ajouter("On essaie de me pirater (RayonVide)");
 			return 0;
 		} else {
 			HashMap<ChocolatDeMarque, Double> qtVente = this.quantiteTotale();
@@ -76,7 +76,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 	public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
 
 		if (crypto!=this.cryptogramme) {
-			journal.ajouter("Quelqu'un essaye de me pirater !");
+			journal_activitegenerale.ajouter("Quelqu'un essaye de me pirater !");
 			return 0.0;
 		} else {
 			int pos= (chocolats.indexOf(choco));
@@ -95,18 +95,18 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 
 		if (crypto != this.cryptogramme) {
-			journal.ajouter("On essaie de me pirater (RayonVide)");
+			journal_activitegenerale.ajouter("On essaie de me pirater (RayonVide)");
 		} else {
 			String qtte_string = "" + montant/this.prix(choco);
 			String montant_string = "" + montant;
-			journal.ajouter("Vente de " + qtte_string + "tonnes de " +  choco.getNom() + " pour " + montant_string + "€");
+			journal_ventes.ajouter("Vente de " + qtte_string + "tonnes de " +  choco.getNom() + " pour " + montant_string + "€");
 			
 			if( montant/this.prix(choco) >= this.stock.getStock(choco)) { // on vérifie qu'on ai le stock
 				this.stock.ajoutQte(choco, -(montant/this.prix(choco)));
 			}
 			else {
 				// si on a pas le stock
-				journal.ajouter("Vente annulée de " + choco.getNom());
+				journal_ventes.ajouter("Vente annulée de " + choco.getNom());
 
 			}
 			
@@ -119,13 +119,13 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 	@Override
 	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
 
-		journal.ajouter(" Aie... j'aurais du mettre davantage de "+choco.getNom()+" en vente");
+		journal_ventes.ajouter(" Aie... j'aurais du mettre davantage de "+choco.getNom()+" en vente");
 
 
 		if (crypto != this.cryptogramme) {
-			journal.ajouter("On essaie de me pirater (RayonVide)");
+			journal_activitegenerale.ajouter("On essaie de me pirater (RayonVide)");
 		} else {
-			journal.ajouter(" Aie... j'aurais du mettre davantage de "+choco.getNom()+" en vente");
+			journal_ventes.ajouter(" Aie... j'aurais du mettre davantage de "+choco.getNom()+" en vente");
 		}
 			
 
