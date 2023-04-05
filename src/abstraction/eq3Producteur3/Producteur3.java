@@ -61,6 +61,10 @@ public class Producteur3 extends Producteur3Acteur  {
 		this.CoutStep = this.CoutStep + coutEmployes;
 	}
 	
+	public String toString() {
+		return this.getNom();
+	}
+	
 
 	/**
 	 * @author BOCQUET Gabriel
