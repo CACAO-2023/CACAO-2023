@@ -51,6 +51,8 @@ public class Producteur2Acteur implements IActeur {
 	public void initialiser() {
 		this.journal = new Journal("Journal " + this.getNom(), this);
 		
+		this.prix = new LinkedList<Double>();
+		this.prixMin = new LinkedList<Double>();
 		this.getPrix().add(prixBQ);
 		this.getPrix().add(prixMQ);
 		this.getPrix().add(prixMQBE);
