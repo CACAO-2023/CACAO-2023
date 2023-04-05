@@ -26,27 +26,23 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 	 */
 	
 	public double stock_mis_en_bourse(Feve f) {
-		// cette fonction doit servir à déterminer la quantité de chaque fève mis en bourse: IL FAUT DET QUELLE PROPORTION DE CHAQUE STOCK VA ETRE MIS EN BOURSE
-		//là g mis des proportions aléatoires
 		if (f==Feve.F_BQ) {
-			return 0.5*this.stockTotBasse.getValeur();
+			return this.stockTotBasse.getValeur();
 		}
 		if (f==Feve.F_MQ) {
-			return 0.3*this.stockTotMoy.getValeur();
+			return this.stockTotMoy.getValeur();
 		}
 		if (f==Feve.F_MQ_BE) {
-			return 0.1*this.stockTotMoyBE.getValeur();
+			return this.stockTotMoyBE.getValeur();
 		}
 		if (f==Feve.F_HQ_BE) {
-			return 0.01*this.stockTotHauteBE.getValeur();
+			return this.stockTotHauteBE.getValeur();
 		}
 		return 0;
 	}
-	
-	
-	//FAIRE UNE FONCTION QUI DOIT AFFICHER QUEL STOCK EST MIS EN BOURSE ???
-	
-	
+		
+	// Cette fonction en-dessous doit servir à déterminer la quantité de chaque fève mis en bourse en fonction du cours de la bourse et des quantités disponible,
+	// attention à bien décrémenter le stock entre les étapes, notamment celui du contrat cadre.
 	
 	public double offre(Feve f, double cours_de_f) {
 		if (f==Feve.F_BQ) {
