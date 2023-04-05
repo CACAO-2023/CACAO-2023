@@ -42,9 +42,9 @@ public class Distributeur3Acteur implements IActeur {
 		this.chocolats.add(c1);
 		this.stock.ajoutQte(c1, 1000);
 		
-		this.journal_ventes = new Journal(this.getNom()+" activites", this);
-		this.journal_achats = new Journal(this.getNom()+" activites", this);
-		this.journal_operationsbancaires = new Journal(this.getNom()+" activites", this);
+		this.journal_ventes = new Journal(this.getNom()+" ventes", this);
+		this.journal_achats = new Journal(this.getNom()+" achats", this);
+		this.journal_operationsbancaires = new Journal(this.getNom()+" operations", this);
 		this.journal_activitegenerale = new Journal(this.getNom()+" activites", this);
 
 		
