@@ -170,7 +170,14 @@ public class Distributeur3Acteur implements IActeur {
 
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
+		
+		
 		List<Journal> res=new ArrayList<Journal>();
+		res.add(journal_ventes);
+		res.add(journal_achats);
+		res.add(journal_operationsbancaires);
+		res.add(journal_activitegenerale);
+		
 		return res;
 	}
 
