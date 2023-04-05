@@ -82,6 +82,7 @@ public class Champs {
 		KeysList.put("M",HarvestKeysM);
 		return KeysList;
 	}
+	
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
@@ -162,13 +163,17 @@ public class Champs {
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
-	//Cette fonction nous donne les quantits produites lors de CurrentStep
-	public LinkedList<Integer> Harvest(int CurrentStep)	{
+
+	//Cette fonction nous donne les quantitites produites lors de CurrentStep
+	public LinkedList<Integer> HarvestHM(int CurrentStep){
 		HashMap<String, LinkedList<Integer>> Keys = this.HarvestKeys(CurrentStep);
 		LinkedList<Integer> q = this.HarvestQuantity(CurrentStep, Keys);
 		return q;
 	}
-
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */	
   	public Integer destructionVieuxHectares(int CurrentStep) {
 		HashMap<Integer, Integer> ChampsH = Champs.get("H");
 		HashMap<Integer, Integer> ChampsM = Champs.get("M");
