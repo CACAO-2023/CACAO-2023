@@ -85,10 +85,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			this.stockFeves.put(fb, this.stockFeves.get(fb)-transfo);
 			this.totalStocksFeves.retirer(this, transfo, this.cryptogramme);
 			this.stockChoco.put(cb, this.stockChoco.get(cb)+(transfo)*this.pourcentageTransfo.get(fb).get(cb));
-<<<<<<< HEAD
-=======
 			int pourcentageCacao =  36;
->>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4/
 			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfo<10?" "+transfo:transfo)+" T de "+fb+" en "+Journal.doubleSur(transfo*this.pourcentageTransfo.get(fb).get(cb),3,2)+" T de "+cb);
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fb+")->"+this.stockFeves.get(fb));
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cb+")->"+this.stockChoco.get(cb));
