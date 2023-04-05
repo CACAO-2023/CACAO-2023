@@ -36,10 +36,10 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		if(echeancierAch.getStepDebut() > Filiere.LA_FILIERE.getEtape()) {
 			double testQuantite = 0.0;
 			for(int i = echeancierAch.getStepDebut(); i<=echeancierAch.getStepFin(); i++) {
-				if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.HQ) {
+				if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.HQ && ((Feve) contrat.getProduit()).isBioEquitable()) {
 					testQuantite = testQuantite + this.getNbHecHauteBE().getValeur()*this.getProdHec().getValeur() - echeancierAch.getQuantite(i);
 				}
-				if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.MQ) {
+				if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.MQ && ((Feve) contrat.getProduit()).isBioEquitable()) {
 					testQuantite = testQuantite + this.getNbHecHauteBE().getValeur()*this.getProdHec().getValeur() - echeancierAch.getQuantite(i);
 				}
 			}
