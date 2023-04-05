@@ -1,16 +1,29 @@
 package abstraction.eq4Transformateur1.Achat;
 
 import abstraction.eqXRomu.bourseCacao.BourseCacao;
+
 import abstraction.eqXRomu.bourseCacao.IAcheteurBourse;
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.Lot;
 
 public class AchatBourse extends CC_producteur implements IAcheteurBourse{
 
 	public double demande(Feve f, double cours) {
 		double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
-		double demande = Math.max(0, Math.min( Math.random()*50, solde)); //à modifier avec ordres d'achats
+		double quantite=0;
+		if (f.getGamme().equals(Gamme.BQ)) {
+			quantite=0; //quantite = venteBQ/ratioTransfo - Quant_CC_BQ
+			if (this.stockChoco.get(Chocolat.C_BQ)==0) {
+				quantite *= 1.2;
+			}
+			if (quantite*cours>solde) {
+				quantite=solde*0.9*0.7/cours;
+			}
+		}
+		double demande = quantite ;
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LPURPLE,"   BOURSEA: demande en bourse de "+demande+" de "+f);
 		return demande;
 	}
