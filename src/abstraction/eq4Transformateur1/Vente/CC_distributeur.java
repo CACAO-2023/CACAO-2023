@@ -3,7 +3,6 @@ package abstraction.eq4Transformateur1.Vente;
 import java.awt.Color;
 
 import abstraction.eq4Transformateur1.Stock;
-import abstraction.eq4Transformateur1.Transformateur1Transformateur;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
@@ -15,7 +14,7 @@ import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class CC_distributeur extends Transformateur1Transformateur implements IVendeurContratCadre {
+public class CC_distributeur extends Stock implements IVendeurContratCadre {
 
 	public boolean vend(IProduit produit) {
 		boolean res=false;
@@ -25,10 +24,7 @@ public class CC_distributeur extends Transformateur1Transformateur implements IV
 		} else if (produit instanceof Chocolat) {
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+(this.stockChoco.keySet().contains(produit)?" dans keySet "+this.stockChoco.get(produit):"pas dans keySet"));
 			res=this.stockChoco.keySet().contains(produit) && this.stockChoco.get(produit)>1000;
-		} else if (produit instanceof Feve) {
-			this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+(this.stockFeves.keySet().contains(produit)?" dans keySet "+this.stockFeves.get(produit):"pas dans keySet"));
-			res=this.stockFeves.keySet().contains(produit) && this.stockFeves.get(produit)>1000;
-		} 
+		}
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+res);
 		return res;
 	}
@@ -48,10 +44,6 @@ public class CC_distributeur extends Transformateur1Transformateur implements IV
 		} else if (produit instanceof Chocolat) {
 			if (this.stockChoco.keySet().contains(produit)) {
 				qtok= this.stockChoco.get(produit);
-			}
-		} else if (produit instanceof Feve) {
-			if (this.stockFeves.keySet().contains(produit)) {
-				qtok= this.stockFeves.get(produit);
 			}
 		} 
 		if (qtok<1000.0) {
@@ -82,13 +74,6 @@ public class CC_distributeur extends Transformateur1Transformateur implements IV
 			case C_MQ_BE   : prix=  7.0;break;
 			case C_MQ      : prix=  6.0;break;
 			case C_BQ      : prix=  5.0;break;
-			}
-		} else if (produit instanceof Feve) {
-			switch ((Feve)produit) {
-			case F_HQ_BE : prix= 3.5;break;
-			case F_MQ_BE    : prix= 2.7;break;
-			case F_MQ      : prix= 2.5;break;
-			case F_BQ : prix= 1.5;break;
 			}
 		}
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propose prix de "+prix+" pour "+produit);
@@ -126,15 +111,6 @@ public class CC_distributeur extends Transformateur1Transformateur implements IV
 					this.stockChoco.put((Chocolat)produit, this.stockChoco.get(produit)-livre);
 				}
 				lot=new Lot((Chocolat)produit);
-			}
-		} else if (produit instanceof Feve) {
-			if (this.stockFeves.keySet().contains(produit)) {
-				stock= this.stockFeves.get(produit);
-				livre = Math.min(stock, quantite);
-				if (livre>0) {
-					this.stockFeves.put((Feve)produit, this.stockFeves.get(produit)-livre);
-				}
-				lot=new Lot((Feve)produit);
 			}
 		} 
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : doit livrer "+quantite+" de "+produit+" --> livre "+livre);
