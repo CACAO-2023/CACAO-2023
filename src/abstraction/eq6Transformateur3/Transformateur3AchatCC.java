@@ -33,8 +33,17 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 * La réponse va dépendre de la valeur de la valeur du stock du produit et de si il y a un contrat sur ce produit
 	 */
 	public boolean achete(IProduit produit) {
-		
-
+		int step = Filiere.LA_FILIERE.getEtape();
+		if (produit instanceof Feve) {List besoin_prochain = new LinkedList();
+									  for (int i=1;i<5;i++) {
+										  besoin_prochain.add(super.BesoinStep(step + i,((Feve)produit))- this.getArrivageCCStep(step + i, ((Feve)produit)));}
+									  int b = 0;
+									  for (int i=0;i<4;i++) {
+										  if (((double)besoin_prochain.get(i))>0) {b= b+1;}	}
+									  if (b>2) {
+										  
+									  }
+									  ;}
 		return false;
 	}
 
