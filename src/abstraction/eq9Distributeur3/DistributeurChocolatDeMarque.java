@@ -12,6 +12,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 	private double capaciteDeVente;
 	private double[] prix;
 	private String[] marques;
+	
 	//william
 	public DistributeurChocolatDeMarque(ChocolatDeMarque[] chocos, double[] stocks, double capaciteDeVente, double[] prix, String[]marques) {
 		super(chocos, stocks);
@@ -79,15 +80,16 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 		return Arrays.asList(this.marques);
 	}
 
-	
-	public void notificationRayonVide(ChocolatDeMarque choco) {
-		journal.ajouter(" Aie... j'aurais du mettre davantage de "+choco.getNom()+" en vente");
-	}
 	@Override
 	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
 		journal.ajouter(" Aie... j'aurais du mettre davantage de "+choco.getNom()+" en vente");
-			
-		
 	}
+	
+	public void notificationRayonVide(ChocolatDeMarque choco) {
+		notificationRayonVide(choco, this.cryptogramme);
+	}
+	
+	
+	
 
 }
