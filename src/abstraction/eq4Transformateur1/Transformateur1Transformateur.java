@@ -96,7 +96,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		if (transfoh>0) {
 			this.stockFeves.put(fh, this.stockFeves.get(fh)-transfoh);
 			this.totalStocksFeves.retirer(this, transfoh, this.cryptogramme);
-			// Tous les chocolats sont directement etiquetes "Vccotioi"
+			// Tous les chocolats sont directement étiquetes "Vccotioi"
 			int pourcentageCacao =  90;
 			ChocolatDeMarque cm= new ChocolatDeMarque(ch, "Vccotioi", pourcentageCacao, 15);
 			double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;
