@@ -21,9 +21,6 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 		if (produit instanceof ChocolatDeMarque) {
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+(this.stockChocoMarque.keySet().contains(produit)?" dans keySet "+this.stockChocoMarque.get(produit):"pas dans keySet"));
 			res=this.stockChocoMarque.keySet().contains(produit) && this.stockChocoMarque.get(produit)>1000;
-		} else if (produit instanceof Chocolat) {
-			this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+(this.stockChoco.keySet().contains(produit)?" dans keySet "+this.stockChoco.get(produit):"pas dans keySet"));
-			res=this.stockChoco.keySet().contains(produit) && this.stockChoco.get(produit)>1000;
 		} else if (produit instanceof Feve) {
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+(this.stockFeves.keySet().contains(produit)?" dans keySet "+this.stockFeves.get(produit):"pas dans keySet"));
 			res=this.stockFeves.keySet().contains(produit) && this.stockFeves.get(produit)>1000;
@@ -43,10 +40,6 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 		if (produit instanceof ChocolatDeMarque) {
 			if (this.stockChocoMarque.keySet().contains(produit)) {
 				qtok= this.stockChocoMarque.get(produit);
-			}
-		} else if (produit instanceof Chocolat) {
-			if (this.stockChoco.keySet().contains(produit)) {
-				qtok= this.stockChoco.get(produit);
 			}
 		} else if (produit instanceof Feve) {
 			if (this.stockFeves.keySet().contains(produit)) {
@@ -74,14 +67,6 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 		Object produit = contrat.getProduit();
 		if (produit instanceof ChocolatDeMarque) {
 			produit = ((ChocolatDeMarque)produit).getChocolat();
-		}
-		if (produit instanceof Chocolat) {
-			switch ((Chocolat)produit) {
-			case C_HQ_BE   : prix= 11.0;break;
-			case C_MQ_BE   : prix=  7.0;break;
-			case C_MQ      : prix=  6.0;break;
-			case C_BQ      : prix=  5.0;break;
-			}
 		} else if (produit instanceof Feve) {
 			switch ((Feve)produit) {
 			case F_HQ_BE : prix= 3.5;break;
@@ -116,15 +101,6 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 					this.stockChocoMarque.put((ChocolatDeMarque)produit, this.stockChocoMarque.get(produit)-livre);
 				}
 				lot=new Lot((ChocolatDeMarque)produit);
-			}
-		} else if (produit instanceof Chocolat) {
-			if (this.stockChoco.keySet().contains(produit)) {
-				stock= this.stockChoco.get(produit);
-				livre = Math.min(stock, quantite);
-				if (livre>0) {
-					this.stockChoco.put((Chocolat)produit, this.stockChoco.get(produit)-livre);
-				}
-				lot=new Lot((Chocolat)produit);
 			}
 		} else if (produit instanceof Feve) {
 			if (this.stockFeves.keySet().contains(produit)) {
