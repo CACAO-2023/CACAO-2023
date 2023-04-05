@@ -13,7 +13,7 @@ public class Producteur1Acteur implements IActeur {
 	
 	protected int cryptogramme;
 	protected Journal journal;
-	private int step;
+	public int step;
 
 	public Producteur1Acteur() {
 		this.journal = new Journal("Journal "+this.getNom(), this);
