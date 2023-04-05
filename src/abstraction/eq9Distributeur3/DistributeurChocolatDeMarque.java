@@ -8,7 +8,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 	
 	
 	public DistributeurChocolatDeMarque() {
-		super();
+		super(null, null);
 		// TODO Auto-generated constructor stub
 	}
 
