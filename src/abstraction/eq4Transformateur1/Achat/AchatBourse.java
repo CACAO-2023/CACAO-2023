@@ -19,7 +19,8 @@ public class AchatBourse extends CC_producteur implements IAcheteurBourse{
 		double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
 		double quantite=0;
 		if (f.getGamme().equals(Gamme.BQ)) {
-			quantite=Filiere.LA_FILIERE.getVentes(this.chocosProduits.get(0), step); //quantite = venteBQ/ratioTransfo - Quant_CC_BQ
+			double quantCC = this.stockFeves.get(f);
+			quantite=Filiere.LA_FILIERE.getVentes(this.chocosProduits.get(0), step)/(this.pourcentageTransfo.get(this.chocosProduits.get(0)).get(this.chocosProduits.get(0)))-quantCC; //quantite = venteBQ/ratioTransfo - Quant_CC_BQ
 			if (this.stockChoco.get(Chocolat.C_BQ)==0) {
 				quantite *= 1.2;
 			}
