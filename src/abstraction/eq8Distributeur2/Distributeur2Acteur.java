@@ -205,7 +205,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	@Override
     public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
-        int pos = (choco.indexOf(chocolats, choco));
+        int pos = (chocolats.indexOf(choco));
         if (pos < 0) {
             return 0.0;
         } else {
@@ -223,7 +223,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	@Override
     public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
-        int pos = choco.indexOf(chocolats, choco);
+        int pos = chocolats.indexOf(choco);
         if (pos < 0) {
             return 0.0;
         } else {
@@ -236,7 +236,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	 @Override
 	    public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
-	        int pos = (choco).indexOf(chocolats, choco);
+	        int pos = chocolats.indexOf(choco);
 	        if (pos >= 0) {
 	            this.getStock(choco).retirer(this, quantite);
 	        }
