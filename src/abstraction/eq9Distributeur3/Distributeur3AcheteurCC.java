@@ -36,7 +36,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		
 	}
 	
-
+// Sami : version simpliste ou on accepte tous les chocolats
 	public boolean achete(IProduit produit) {
 		if (!(produit instanceof ChocolatDeMarque)) {
 			return false;
