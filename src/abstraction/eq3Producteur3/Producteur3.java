@@ -105,6 +105,7 @@ public class Producteur3 extends Producteur3Acteur  {
 	}
 	
 	/*Modifie les variables de couts et d'hectares en fonction des resultats de variationBesoinHectares*/
+	/*HectaresLiberes vient de la methode destructionVieuxHectares(int CurrentStep) de la classe Champs*/
 	public void changeHectaresAndCoutsLies(Integer ajoutHectares, Integer HectaresLiberes) {
 		this.HectaresUtilises = this.HectaresUtilises + ajoutHectares;
 		this.HectaresLibres = this.HectaresLibres + HectaresLiberes;
