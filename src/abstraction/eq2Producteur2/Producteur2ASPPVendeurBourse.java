@@ -16,12 +16,6 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 		super();
 	}
 
-	public Producteur2ASPPVendeurBourse(Variable stockFeve, Feve feve, Journal journal, LinkedList<Integer> employes,
-			LinkedList<Double> salaires, int surface_plantation) {
-		super(stockFeve, feve, journal, employes, salaires, surface_plantation);
-		// TODO Auto-generated constructor stub
-	}
-
 	/**
 	 * Retourne la quantite en tonnes de feves de type f que le vendeur 
 	 * souhaite vendre a cette etape sachant que le cours actuel de 
@@ -125,7 +119,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 	public Lot notificationVente(Feve f, double quantiteEnT, double coursEnEuroParT) {
 		Lot l = new Lot(f);
 		l.ajouter(Filiere.LA_FILIERE.getEtape(), quantiteEnT); 
-		this.stockFeve.setValeur(this, this.stockFeve.getValeur()-quantiteEnT);
+		//this.stockFeve.setValeur(this, this.stockFeve.getValeur()-quantiteEnT);
 		return l;
 	}
 

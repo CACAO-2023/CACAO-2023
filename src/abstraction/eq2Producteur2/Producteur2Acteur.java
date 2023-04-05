@@ -46,10 +46,10 @@ public class Producteur2Acteur implements IActeur {
 	protected Feve[] lesFeves = {Feve.F_BQ, Feve.F_MQ, Feve.F_MQ_BE, Feve.F_HQ_BE};
 
 	public Producteur2Acteur() {
+		this.journal = new Journal("Journal " + this.getNom(), this);
 	}
 	
 	public void initialiser() {
-		this.journal = new Journal("Journal " + this.getNom(), this);
 		
 		this.prix = new LinkedList<Double>();
 		this.prixMin = new LinkedList<Double>();
@@ -126,7 +126,6 @@ public class Producteur2Acteur implements IActeur {
 
 	public void next() {
 		this.getJournal().ajouter("Bonjour, nous sommes à l'étape " + Filiere.LA_FILIERE.getEtape() + "et nous n'avons pas encore fait faillite (enfin j'espère).");
-		System.out.print(this.journal.toString());
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -162,6 +161,7 @@ public class Producteur2Acteur implements IActeur {
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
+		res.add(this.getJournal());
 		return res;
 	}
 
