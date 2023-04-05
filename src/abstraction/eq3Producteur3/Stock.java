@@ -1,0 +1,186 @@
+package abstraction.eq3Producteur3;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+
+import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.produits.Lot;
+import abstraction.eqXRomu.produits.Feve;
+
+public class Stock {
+	private HashMap<Feve , Lot> stock;
+	
+	/**
+	 * Constructor of the class Stock, will create a stock with 1000 beans of each type at the beginning of the game
+	 * @author BOCQUET Gabriel, NAVEROS Marine, Corentin Caugant
+	*/
+	public Stock() {
+		// Calling the constructor with the number of beans of the beginning
+		this(1000);
+	}
+
+	/**
+	 * @param fevesDeDepart Number of beans at the beginning of the game (1000 by default) for each type of bean
+	 * @author Corentin Caugant
+	 */
+	public Stock(Integer fevesDeDepart) {
+		this.stock = new HashMap<Feve, Lot>();
+		for (Feve feve : Feve.values()) {
+			Lot lot = new Lot(feve);
+			lot.ajouter(0, fevesDeDepart);
+			this.stock.put(feve, lot);
+		}
+	}
+
+	/**
+	 * @author BOCQUET Gabriel, NAVEROS Marine, Corentin Caugant
+	 */
+	public HashMap<Feve , Lot> getStock() {
+		return this.stock;
+	}
+
+	/**
+	 * This method will return the number of beans of the type feve in the stock
+	 * @param feve Type of bean
+	 * @return The number of beans of the type feve in the stock
+	 * @author BOCQUET Gabriel, NAVEROS Marine, Corentin Caugant
+	 */
+	public double getQuantite(Feve feve) {
+		return this.stock.get(feve).getQuantiteTotale();
+	}
+
+	/**
+	 * This method will return the total number of beans in the stock
+	 * @return Total number of beans in the stock
+	 * @author Corentin CAUGANT
+	 */
+	public double getQuantite() {
+		double quantite = 0;
+		for (Feve feve : Feve.values()) {
+			quantite += this.getQuantite(feve);
+		}
+		return quantite;
+	}
+
+	/**
+	 * This method will set the lot of beans of the type feve in the stock
+	 * @param feve Type of bean
+	 * @param lot Lot of beans of the type feve to set in the stock
+	 * @author Corentin Caugant
+	 */
+	public void setLot(Feve feve, Lot lot) {
+		this.stock.put(feve, lot);
+	}
+
+	/**
+	 * This method will add beans to the stock
+	 * @param feve Type of bean
+	 * @param quantite Quantity of beans to add to the stock
+	 * @author Corentin Caugant
+	 */
+	public void ajouter(Feve feve, double quantite) {
+		this.stock.get(feve).ajouter(Filiere.LA_FILIERE.getEtape(), quantite);
+	}
+
+	/**
+	 * This method will add beans to the stock, without specifying the type of bean. It will consider that the beans are of the lowest quality
+	 * @param quantite Quantity of beans to add to the stock
+	 * @author Corentin Caugant
+	 */
+	public void ajouter(double quantite) {
+		this.ajouter(Feve.F_BQ, quantite);
+	}
+
+	/**
+	 * This method will tell if the stock is empty or not, for a given type of bean
+	 * @param feve Type of bean
+	 * @return True if the stock is empty, false otherwise
+	 * @author Corentin Caugant
+	 */
+	public boolean estVide(Feve feve) {
+		return this.getQuantite(feve) == 0;
+	}
+
+	/**
+	 * This method will tell if the stock is empty or not, for all types of beans
+	 * @return True if the stock is empty, false otherwise
+	 * @author Corentin Caugant
+	 */
+	public boolean estVide() {
+		return this.getQuantite() == 0;
+	}
+
+	/**
+	 * This method will remove beans of a given type from the stock
+	 * @param feve Type of bean
+	 * @param quantite Quantity of beans to remove from the stock
+	 * @return True if the operation was successful, false otherwise (not enough beans in the stock)
+	 * @author Corentin Caugant
+	 */
+	public boolean retirer(Feve feve, double quantite) {
+		if (this.getQuantite(feve) >= quantite) {
+			this.stock.get(feve).retirer(quantite);
+			return true;
+		}
+		return false;
+	}
+	
+	/** 
+	 * This method will at each next handles the beans that are too old
+	 * @param stock The stock to update
+	 * @return The updated stock
+	 */
+	public static Stock miseAJourStock(Stock stock) {
+		Stock newStock = new Stock(0);
+
+		// First we begin by creating the new lots that will be added to the stock
+		HashMap<Feve, Lot> newLots = new HashMap<Feve, Lot>();
+		for (Feve f : Feve.values()) {
+			newLots.put(f, new Lot(f));
+		}
+
+		// Then we loop through each bean type and we will change the quantities
+		for (var entry : stock.getStock().entrySet()) {
+			// We get the type of bean and the lot of beans of this type
+			Feve f = entry.getKey();
+			Lot lot = entry.getValue();
+			HashMap<Integer, Double> quantite = lot.getQuantites();
+
+			Lot newLot = newLots.get(f); // We will add to this lot the beans that are not too old
+			for (Integer creationStep : quantite.keySet()) {
+				Integer age = Filiere.LA_FILIERE.getEtape() - creationStep;
+
+				// We update the stock according to the age of these beans
+				switch (age) {
+					case 18: // If the beans are 18 steps old (9 months), we won't add them to the new lot
+						break;
+					case 12: // If the beans are 12 steps old (6 months), we lower their quality by one level
+						// What we do will depend of the quality of the beans :
+						switch (f) {
+							case F_BQ: // If the beans are of the lowest quality, we remove them completely
+								break;
+							case F_MQ: // If the beans are of the medium quality, we lower their quality to the lowest quality
+								newLots.get(Feve.F_BQ).ajouter(creationStep, quantite.get(creationStep)); // We add the beans to the lower quality stock
+								break;
+							case F_MQ_BE: // If the beans are of the medium quality, we lower their quality to the lowest quality
+								newLots.get(Feve.F_BQ).ajouter(creationStep, quantite.get(creationStep)); // We add the beans to the lower quality stock
+								break;
+							case F_HQ_BE: // If the beans are of the highest quality, we lower their quality to the medium quality
+								newLots.get(Feve.F_BQ).ajouter(creationStep, quantite.get(creationStep)); // We add the beans to the lower quality stock
+								break;
+						}
+						break;
+					default: // If the beans are less than 6 months old, we add them to the new lot
+						newLot.ajouter(creationStep, quantite.get(creationStep));
+						break;
+				}
+			}
+		}
+		
+		// Finally we add the new lots to the stock
+		for (Feve f : Feve.values()) {
+			newStock.setLot(f, newLots.get(f));
+		}
+		return newStock;
+	}	
+}
