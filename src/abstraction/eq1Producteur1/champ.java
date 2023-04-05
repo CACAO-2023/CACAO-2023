@@ -7,6 +7,10 @@ import java.util.LinkedList;
 public class champ {
 	private LinkedList<hectar> hectares;
 	
+	public champ() {
+		this.hectares = new LinkedList<hectar>();
+	}
+	
 	public LinkedList<hectar> getHectares(){
 		return this.hectares;
 	}
@@ -16,4 +20,14 @@ public class champ {
 	public hectar getHectare(int i) {
 		return this.getHectares().get(i);
 	}
+	public int nbhectare() {
+		return this.getHectares().size();
+	}
+	public void supphectare(int i) {
+		this.getHectares().remove(i);
+	}
+	public void supphectare(hectar h) {
+		this.getHectares().remove(h);
+	}
+	
 }
