@@ -14,9 +14,9 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 
-public class Transformateur1Transformateur extends AchatBourse implements IFabricantChocolatDeMarque  {
+public class Transformateur1Transformateur extends Stock implements IFabricantChocolatDeMarque  {
 	
-	private List<ChocolatDeMarque>chocosProduits;
+	protected List<ChocolatDeMarque>chocosProduits;
 	protected HashMap<Feve, Double> stockFeves;
 	protected HashMap<Chocolat, Double> stockChoco;
 	protected HashMap<ChocolatDeMarque, Double> stockChocoMarque;
