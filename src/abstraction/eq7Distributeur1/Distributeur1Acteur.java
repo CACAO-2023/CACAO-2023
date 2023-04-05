@@ -57,10 +57,10 @@ public class Distributeur1Acteur implements IActeur {
 		this.coutCH = 0;
 		this.coutCML = 0;
 		this.coutCMNL = 0;
+		this.journal = new Journal("Journal "+this.getNom(), this);
 	}
 	
 	public void initialiser() {
-		
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -70,13 +70,14 @@ public class Distributeur1Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 	//         En lien avec l'interface graphique         //
 	////////////////////////////////////////////////////////
-
+	public String toString() {
+		return this.getNom();
+		}
+	
 	public void next() {
-		this.journal.ajouter("=== STOCKS === ");
-		
-		Journal j = new Journal(this.getNom(), this);
-		j.ajouter("on a réussi le challenge");
-		System.out.println(j.toString());
+
+		this.journal.ajouter("on a réussi le challenge");
+
 		
 	}
 
@@ -109,8 +110,8 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
-		
-//		res.add(this.journal);
+
+		res.add(this.journal);
 		return res;
 	}
 
