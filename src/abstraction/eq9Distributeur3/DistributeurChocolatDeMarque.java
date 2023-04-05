@@ -23,7 +23,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 	public DistributeurChocolatDeMarque(ChocolatDeMarque[] chocos, double[] stocks, double capaciteDeVente, double[] prix, String[] marques) {
 
 
-		super(chocos, stocks);
+		
 		this.capaciteDeVente = capaciteDeVente;
 		this.prix = new HashMap<ChocolatDeMarque, Double> ();
 	}

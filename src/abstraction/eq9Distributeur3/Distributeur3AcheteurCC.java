@@ -27,7 +27,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	//faire une méthode qui connait le prix d'achat moyen d'un chocolat
 	
 	public Distributeur3AcheteurCC(ChocolatDeMarque[] chocos, double[] stocks) {
-		super(chocos, stocks);
+		
 		
 	}
 
