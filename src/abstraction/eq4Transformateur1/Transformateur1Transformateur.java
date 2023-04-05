@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eq4Transformateur1.Achat.AchatBourse;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
 import abstraction.eqXRomu.general.Journal;
@@ -12,7 +13,7 @@ import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 
-public class Transformateur1Transformateur extends Stock implements IFabricantChocolatDeMarque  {
+public class Transformateur1Transformateur extends AchatBourse implements IFabricantChocolatDeMarque  {
 	
 	private List<ChocolatDeMarque>chocosProduits;
 	protected HashMap<Feve, Double> stockFeves;
