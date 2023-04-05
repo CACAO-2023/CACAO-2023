@@ -27,6 +27,11 @@ public class Stock {
 		return tot;
 		}
 	
+	public HashMap<ChocolatDeMarque, Double> getQteStock() {
+		return QteStock;
+	}
+
+
 	// renvoie le stock de chaque chocolat
 	// Mathilde Soun 
 	public double getStock(ChocolatDeMarque c) {
@@ -51,18 +56,7 @@ public class Stock {
 		
 	}
 	
-	// william
-	public void retirerQte(ChocolatDeMarque c, double qtt){
-		double qte = this.QteStock.get(c);
-		qte = qte - qtt;
-		if (qte<0) {
-			
-			this.QteStock.put(c, null);
-		}
-		
-		this.QteStock.put(c, qte);
-		
-	}
+	
 	
 	
 	// fonction coût du stock 
