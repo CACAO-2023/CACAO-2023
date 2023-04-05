@@ -1,7 +1,6 @@
 package abstraction.eqXRomu.offresAchat;
 
 import abstraction.eqXRomu.filiere.IActeur;
-import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 public interface IVendeurOA extends IActeur {
 
