@@ -8,24 +8,29 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur1Acteur implements IActeur {
 	
 	protected int cryptogramme;
-	
-	
 	protected Journal journal;
+	protected Journal journal_stocks;
+	protected Journal journal_ventes;
 	protected int step;
 	protected champ champ;
+	protected Lot stockFeveBas;
+	protected Lot stockFeveMoy;
 
 	public Producteur1Acteur() {
 		this.journal = new Journal("Journal "+this.getNom(), this);
+		this.journal_stocks = new Journal("Journal : stocks"+this.getNom(), this);
+		this.journal_ventes = new Journal("Journal : ventes"+this.getNom(), this);
 	}
 	
 	public void initialiser() {
 		this.step = 0;
-		this.champ = new champ();
-		this.champ.add(new hectar("bas"));
+		this.champ = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
+		this.champ.add(new hectar("B"));
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -39,6 +44,9 @@ public class Producteur1Acteur implements IActeur {
 	public void next() {
 		this.step = this.step + 1;
 		this.journal.ajouter("step : "+step);
+		this.journal_stocks.ajouter("===== step : "+step+" =====");
+		this.journal_stocks.ajouter("Stock bas de gamme : "+this.stockFeveBas.getQuantiteTotale());
+		this.journal_stocks.ajouter("Stock moyenne gamme : "+this.stockFeveMoy.getQuantiteTotale());
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
