@@ -30,37 +30,35 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		return false;
 	}
 
-	@Override
+	//On renvoie toujours  un Echeancier constan tdans le temps dans la limite de nos cpaacités de production
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		Echeancier echeancierAch = contrat.getEcheancier();
 		if(echeancierAch.getStepDebut() > Filiere.LA_FILIERE.getEtape()) {
 			double testQuantite = 0.0;
-			double maxDeficit = 0.0;
 			for(int i = echeancierAch.getStepDebut(); i<=echeancierAch.getStepFin(); i++) {
-				if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.HQ) {
+				if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.HQ && ((Feve) contrat.getProduit()).isBioEquitable()) {
 					testQuantite = testQuantite + this.getNbHecHauteBE().getValeur()*this.getProdHec().getValeur() - echeancierAch.getQuantite(i);
 				}
-				if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.MQ) {
+				if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.MQ && ((Feve) contrat.getProduit()).isBioEquitable()) {
 					testQuantite = testQuantite + this.getNbHecHauteBE().getValeur()*this.getProdHec().getValeur() - echeancierAch.getQuantite(i);
 				}
-				if(testQuantite < 0.0) {
-					maxDeficit = Math.min(maxDeficit, testQuantite/(i - echeancierAch.getStepDebut()));
-				}
 			}
-			if(maxDeficit < 0) {
-				List<Double> quantites = new LinkedList<Double>();
-				for(int i = echeancierAch.getStepDebut(); i<=echeancierAch.getStepFin(); i++) {
-					quantites.add(echeancierAch.getQuantite(i));
-				}
-			}
+			if(testQuantite < 0.0) {
+				return new Echeancier(echeancierAch.getStepDebut(), echeancierAch.getStepFin(), (echeancierAch.getQuantiteTotale()+testQuantite)/echeancierAch.getNbEcheances());
+			} 
+			return echeancierAch;
 		}
 		return null;
 	}
 
-	@Override
 	public double propositionPrix(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.HQ) {
+			return contrat.getEcheancier().getQuantiteTotale()*this.getPrixHQ();
+		}
+		if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.MQ) {
+			return contrat.getEcheancier().getQuantiteTotale()*this.getPrixMQBE();
+		}
+		return 0.0;		
 	}
 
 	@Override
