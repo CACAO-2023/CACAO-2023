@@ -63,6 +63,7 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 		return 0.0;
 //		}
 	}
+	
 //	public void demande_contrat_cadre(IVendeurContratCadre vendeur) {
 //		qql = new demandeAcheteur(this,  vendeur, IProduit produit, Echeancier echeancier, int cryptogramme, boolean tg) {
 //		return 
