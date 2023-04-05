@@ -1,11 +1,16 @@
 package abstraction.eq1Producteur1;
 
 public class Producteur1Plantation extends Producteur1Acteur {
-	private champ champ;
+	private champ champ_moy;
+	private champ champ_bas;
 	private stockFeve stockFeve;
 	
-	public champ getChamp() {
-		return this.champ;
+	public champ getChampM() {
+		return this.champ_moy;
+	}
+	
+	public champ getChampB() {
+		return this.champ_bas;
 	}
 	
 	public stockFeve getStock() {
