@@ -8,15 +8,15 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 	/** Maxime Bedu*/
 	
 /** processus de transformation : 
-	           unité de temps de transformation : différent selon les fèves 
+	           unité de temps de transformation : différent selon les fèves (in progress) 
 	           prends dans le stock et remets dans le stock post-transfo, (OK)
 	  pareil différents types de stocks initiaux et finaux en fonction du type de fève (OK)
 	           implementer IChocolatdemarque ou autre truc de Romu (à voir)
-	           Type de produit à réaliser (dans v1 seulement plaque)
-	           Quantité de fèves à transformer dans les fonctions 
+	           Type de produit à réaliser (dans v1 seulement plaque) (donc useless)
+	           Quantité de fèves à transformer dans les fonctions  (ok)
 	           
 	           pour info temps de transfo : A déterminer, pour faire liste par produit de step avant qu'ils
-	           ne soient prêts
+	           ne soient prêts (in progress)
 	           
 	           Fonction besoin, en utilisant la fonction demande pour voir si il y a un manque ici, et pour 
 	           pouvoir informer qu'il faut augmenter les stocks pour répondre à la demande
@@ -26,7 +26,52 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 	           
 	*/
 	
-	public void transformationChoco(Feve f, double qte) {
+	private double MQStep1;
+	private double MQBEStep1;
+	private double HQBEStep1;
+	private double HQBEStep2;
+	
+	public Transformateur3Transformation() {
+		this.MQStep1=0;
+		this.MQBEStep1=0;
+		this.HQBEStep1=0;
+		this.HQBEStep2=0;
+	}
+	
+	public double getMQStep1() {
+		return MQStep1;
+	}
+	
+	public void setMQStep1(double a) {
+		this.MQStep1 = a;
+	}
+	
+	public double getMQBEStep1() {
+		return MQBEStep1;
+	}
+	
+	public void setMQBEStep1(double a) {
+		MQBEStep1 = a;
+	}
+	
+	public double getHQBEStep1() {
+		return HQBEStep1;
+	}
+	
+	public void setHQBEStep1(double a) {
+		HQBEStep1 = a;
+	}
+	
+	public double getHQBEStep2() {
+		return HQBEStep2;
+	}
+	
+	public void setHQBEStep2(double a) {
+		HQBEStep2 = a;
+	}
+
+	
+		public void transformationChoco(Feve f, double qte) {
 		if (f instanceof F_BQ) {
 			double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
 			double a=stockFeve.get(F_BQ);
@@ -60,6 +105,7 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 					}
 			}
 	}
-}
+
+
 
 protected double BesoinStep(int Step, Feve f) {
