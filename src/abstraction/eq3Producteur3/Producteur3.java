@@ -71,10 +71,10 @@ public class Producteur3 extends Producteur3Acteur  {
 		LinkedList<Integer> quantite = this.getFields().HarvestHM(step);
 		Stock Stock = this.getStock();
 		if(quantite.get(0) > 0) {
-		Stock.ajouterH(step, quantite.get(0));
+		Stock.ajouter(Feve.F_HQ_BE, quantite.get(0));
 		}
 		else if(quantite.get(1) > 0) {
-		Stock.ajouterM(step, quantite.get(1));
+		Stock.ajouter(Feve.F_MQ_BE, quantite.get(1));
 		}
 	}
 

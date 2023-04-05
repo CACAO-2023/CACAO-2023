@@ -63,6 +63,16 @@ public class Stock {
 	}
 
 	/**
+	 * This method will set the lot of beans of the type feve in the stock
+	 * @param feve Type of bean
+	 * @param lot Lot of beans of the type feve to set in the stock
+	 * @author Corentin Caugant
+	 */
+	public void setLot(Feve feve, Lot lot) {
+		this.stock.put(feve, lot);
+	}
+
+	/**
 	 * This method will add beans to the stock
 	 * @param feve Type of bean
 	 * @param quantite Quantity of beans to add to the stock
@@ -121,68 +131,56 @@ public class Stock {
 	 * @return The updated stock
 	 */
 	public static Stock miseAJourStock(Stock stock) {
-		// We begin by looping through each bean type
 		Stock newStock = new Stock(0);
-		return newStock;
-		/**
-		 HashMap<Feve, HashMap<Integer, Double>> quantites = new HashMap<Feve, HashMap<Integer, Double>>();
-		for (Feve f : Feve.values()) {
-			// We get the lot of beans of the type f
-			Lot lot = stock.getStock().get(f);
 
-			// We get the map of the quantities of beans of the type f
-			HashMap<Integer, Double> quantite = lot.getQuantites();
-			quantites.put(f, quantite); // We add the map to the list of maps, to be able to loop through it later
+		// First we begin by creating the new lots that will be added to the stock
+		HashMap<Feve, Lot> newLots = new HashMap<Feve, Lot>();
+		for (Feve f : Feve.values()) {
+			newLots.put(f, new Lot(f));
 		}
 
-		// We loop through the list of maps
-		for (var entry : quantites.entrySet()) {
-			// We get the type of bean and the map of quantities
+		// Then we loop through each bean type and we will change the quantities
+		for (var entry : stock.getStock().entrySet()) {
+			// We get the type of bean and the lot of beans of this type
 			Feve f = entry.getKey();
-			HashMap<Integer, Double> quantite = entry.getValue();
-			// We loop through the map of quantities
+			Lot lot = entry.getValue();
+			HashMap<Integer, Double> quantite = lot.getQuantites();
+
+			Lot newLot = newLots.get(f); // We will add to this lot the beans that are not too old
 			for (Integer creationStep : quantite.keySet()) {
 				Integer age = Filiere.LA_FILIERE.getEtape() - creationStep;
 
 				// We update the stock according to the age of these beans
 				switch (age) {
-					case 18: // If the beans are 18 steps old (9 months), we remove them completely
-						quantite.remove(creationStep);
+					case 18: // If the beans are 18 steps old (9 months), we won't add them to the new lot
 						break;
 					case 12: // If the beans are 12 steps old (6 months), we lower their quality by one level
 						// What we do will depend of the quality of the beans :
 						switch (f) {
 							case F_BQ: // If the beans are of the lowest quality, we remove them completely
-								quantite.remove(creationStep);
 								break;
 							case F_MQ: // If the beans are of the medium quality, we lower their quality to the lowest quality
-								quantite.remove(creationStep); // We remove the beans from the stock
-								Double newQuantity1 = quantite.get(creationStep) + quantites.get(Feve.F_BQ).get(creationStep); // We get the quantity of beans of the lower quality
-								quantites.get(Feve.F_BQ).put(creationStep, newQuantity1); // We add the beans to the lower quality stock
+								newLots.get(Feve.F_BQ).ajouter(creationStep, quantite.get(creationStep)); // We add the beans to the lower quality stock
 								break;
 							case F_MQ_BE: // If the beans are of the medium quality, we lower their quality to the lowest quality
-								quantite.remove(creationStep);
-								Double newQuantity2 = quantite.get(creationStep) + quantites.get(Feve.F_BQ).get(creationStep);
-								quantites.get(Feve.F_BQ).put(creationStep, newQuantity2);
+								newLots.get(Feve.F_BQ).ajouter(creationStep, quantite.get(creationStep)); // We add the beans to the lower quality stock
 								break;
 							case F_HQ_BE: // If the beans are of the highest quality, we lower their quality to the medium quality
-								quantite.remove(creationStep);
-								Double newQuantity3 = quantite.get(creationStep) + quantites.get(Feve.F_MQ_BE).get(creationStep);
-								quantites.get(Feve.F_MQ_BE).put(creationStep, newQuantity3);
+								newLots.get(Feve.F_BQ).ajouter(creationStep, quantite.get(creationStep)); // We add the beans to the lower quality stock
 								break;
 						}
+						break;
+					default: // If the beans are less than 6 months old, we add them to the new lot
+						newLot.ajouter(creationStep, quantite.get(creationStep));
+						break;
+				}
 			}
-			// We rebuild the correspond Lot object
-			Lot newLot = new Lot(f);
-			
 		}
-
-		// We update the stock
-
-
-		return newStock;
-	}
-		 */
 		
-	}
+		// Finally we add the new lots to the stock
+		for (Feve f : Feve.values()) {
+			newStock.setLot(f, newLots.get(f));
+		}
+		return newStock;
+	}	
 }
