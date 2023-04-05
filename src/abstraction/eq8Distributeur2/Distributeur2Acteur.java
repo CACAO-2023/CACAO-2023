@@ -2,6 +2,7 @@ package abstraction.eq8Distributeur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -176,10 +177,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	
 	
 	
-	@Override
 	public List<String> getMarquesChocolat() {
-		// TODO Auto-generated method stub
-		return null;
+		return Arrays.asList(this.marques);
 	}
 //-----------------------------------------------
 	//La fonction prix() permet de connaître le prix actuel 
