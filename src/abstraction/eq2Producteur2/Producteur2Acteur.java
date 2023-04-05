@@ -4,6 +4,7 @@ package abstraction.eq2Producteur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
@@ -32,10 +33,14 @@ public class Producteur2Acteur implements IActeur {
 	
 	public double prixMinBQ = 0.0; //provisoire
 	public double prixMinMQ = 0.0; //provisoire
+	public double prixMinMQBE = 0.0; //provisoire
 	public double prixMinHQ = 0.0; //provisoire
+	public LinkedList<Double> prixMin;
 	public double prixBQ = 1.0; //provisoire
 	public double prixMQ = 2.0; //provisoire
+	public double prixMQBE = 3.0; //provisoire
 	public double prixHQ = 4.0; //provisoire
+	public LinkedList<Double> prix;
 	
 	
 	protected Feve[] lesFeves = {Feve.F_BQ, Feve.F_MQ, Feve.F_MQ_BE, Feve.F_HQ_BE};
@@ -52,6 +57,16 @@ public class Producteur2Acteur implements IActeur {
 		this.nbHecHauteBE = new VariablePrivee("nbHecHaute", "Le nombre d'hectare de fèves de basse qualité", this, 100);
 		
 		this.prodHec = new Variable("prodHec", "La production moyenne de feve en tonne par hectare par récolte", this, 0.56);
+		
+		this.getPrix().add(prixBQ);
+		this.getPrix().add(prixMQ);
+		this.getPrix().add(prixMQBE);
+		this.getPrix().add(prixHQ);
+		this.getPrixMin().add(prixMinBQ);
+		this.getPrixMin().add(prixMinMQ);
+		this.getPrixMin().add(prixMinMQBE);
+		this.getPrixMin().add(prixMinHQ);
+		
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -86,8 +101,14 @@ public class Producteur2Acteur implements IActeur {
 	public double getPrixMinMQ() {
 		return this.prixMinMQ;
 	}
+	public double getPrixMinMQBE() {
+		return this.prixMinMQ;
+	}
 	public double getPrixMinHQ() {
 		return this.prixMinHQ;
+	}
+	public LinkedList<Double> getPrixMin(){
+		return this.prixMin;
 	}
 	public double getPrixBQ() {
 		return this.prixBQ;
@@ -95,8 +116,14 @@ public class Producteur2Acteur implements IActeur {
 	public double getPrixMQ() {
 		return this.prixMQ;
 	}
+	public double getPrixMQBE() {
+		return this.prixMQBE;
+	}
 	public double getPrixHQ() {
 		return this.prixHQ;
+	}
+	public LinkedList<Double> getPrix(){
+		return this.prix;
 	}
 	
 	////////////////////////////////////////////////////////
