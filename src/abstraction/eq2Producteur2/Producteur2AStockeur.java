@@ -45,6 +45,9 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	}
 	
 	private void majTot() {
+		/*
+		 * mets à jour les stocks totaux
+		 */
 		for (Feve f : this.lesFeves) {
 			this.stocksTot.get(f).setValeur(this, this.stocks.get(f).getQuantiteTotale(), this.cryptogramme);
 		}
@@ -75,6 +78,5 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	protected Variable getStockTot(Feve f) {
 		return this.stocksTot.get(f);
 	}
-	
 	
 }
