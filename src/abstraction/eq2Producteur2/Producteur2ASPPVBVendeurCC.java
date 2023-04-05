@@ -10,6 +10,11 @@ import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse implements IVendeurContratCadre{
 
+	public Producteur2ASPPVBVendeurCC(Feve feve, double stock) {
+		super(feve, stock);
+		// TODO Auto-generated constructor stub
+	}
+
 	public boolean peutVendre(IProduit produit) {
 		return produit instanceof Feve && (((Feve) produit).getGamme() != Gamme.MQ || ((Feve) produit).isBioEquitable() != false);
 	}
