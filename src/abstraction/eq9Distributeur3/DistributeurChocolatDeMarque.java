@@ -31,7 +31,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 		return 0.0;
 	}
 	
-
+	//baptiste
 	public HashMap<ChocolatDeMarque, Double> quantiteTotale() {
 		HashMap<ChocolatDeMarque, Double> qtVente = new HashMap<ChocolatDeMarque, Double> ();
 		HashMap<ChocolatDeMarque, Double> Stock = stock.getQteStock();
@@ -40,16 +40,24 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 			qtVente.put(chocolat.getKey(), (double) 0);
 		}
 		double quantiteEnVente = 0;
-		while (quantiteEnVente < this.capaciteDeVente) {
+		double quantiteEnVente_0 = 0;
+		boolean rupture = true;
+		
+		while (quantiteEnVente < this.capaciteDeVente && rupture) {
 			for (Entry<ChocolatDeMarque, Double> chocolat : Stock.entrySet()) {
 				qtVente.replace(chocolat.getKey(), Math.min(Math.min(this.capaciteDeVente/3, chocolat.getValue()), this.capaciteDeVente - quantiteEnVente));
+			}
+			if (quantiteEnVente == quantiteEnVente_0) {
+				rupture = false;
+			} else {
+				quantiteEnVente_0 = quantiteEnVente;
 			}
 		}
 		return qtVente;
 
 	}
 
-	@Override
+	//baptiste
 	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
 
 		if (crypto != this.cryptogramme) {
@@ -61,10 +69,8 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 
 		}
 	}
-	//william
-	// On met 10% de ce tout ce qu'on met en vente (on pourrait mettre l'accente sur
-	// un produit a promouvoir mais il s'agit ici d'un exemple simpliste
-	@Override
+	
+	//baptiste 
 	public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
 
 		if (crypto!=this.cryptogramme) {
