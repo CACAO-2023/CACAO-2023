@@ -2,18 +2,62 @@ package abstraction.eq7Distributeur1;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Feve;
 
 public class Distributeur1Acteur implements IActeur {
+	////////////////////////////////////////////////
+	//declaration des variables
+	public static Color COLOR_LLGRAY = new Color(238,238,238);
+	public static Color COLOR_BROWN  = new Color(141,100,  7);
+	public static Color COLOR_PURPLE = new Color(100, 10,115);
+	public static Color COLOR_LPURPLE= new Color(155, 89,182);
+	public static Color COLOR_GREEN  = new Color(  6,162, 37);
+	public static Color COLOR_LGREEN = new Color(  6,255, 37);
+	public static Color COLOR_LBLUE  = new Color(  6,130,230);
+
+	
+	protected Journal journal;
+
+	private Variable qualiteHaute;  // La qualite d'un chocolat de gamme haute 
+	private Variable qualiteMoyenne;// La qualite d'un chocolat de gamme moyenne  
+	private Variable qualiteBasse;  // La qualite d'un chocolat de gamme basse
+	private Variable pourcentageRSEmax;//Le pourcentage de reversion RSE pour un impact max sur la qualite percue
+	private Variable partRSEQualitePercue;//L'impact de pourcentageRSEmax% du prix consacres aux RSE dans la qualite percue du chocolat
+	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
+
+	protected Variable totalStocksCB;  // La quantité totale de stock de chocolat bas de gamme 
+	protected Variable totalStocksCML;  // La quantité totale de stock de chocolat moyenne gamme labellise
+	protected Variable totalStocksCMNL;  // La quantité totale de stock de chocolat moyenne gamme non labellise
+	protected Variable totalStocksCH;  // La quantité totale de stock de chocolat haute gamme
+	protected Variable totalStocks;  // La quantité totale de stock de chocolat
+	
+	protected double coutCB; //Cout d'1kg de chocolat basse gamme
+	protected double coutCML; //Cout d'1kg de chocolat moyenne gamme labellise
+	protected double coutCMNL; //Cout d'1kg de chocolat moyenne gamme non labellise
+	protected double coutCH; //Cout d'1kg de chocolat haute gamme labellise
+	
+	protected List<Feve> lesFeves;
+	
+	////////////////////////////////////////
+	
+	protected HashMap<ChocolatDeMarque, Double> stockChocoMarque7;
 	
 	protected int cryptogramme;
 
 	public Distributeur1Acteur() {
+		this.coutCB = 0;
+		this.coutCH = 0;
+		this.coutCML = 0;
+		this.coutCMNL = 0;
+		this.journal = new Journal("Journal "+this.getNom(), this);
 	}
 	
 	public void initialiser() {
@@ -26,8 +70,15 @@ public class Distributeur1Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 	//         En lien avec l'interface graphique         //
 	////////////////////////////////////////////////////////
-
+	public String toString() {
+		return this.getNom();
+		}
+	
 	public void next() {
+
+		this.journal.ajouter("on a réussi le challenge");
+
+		
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -41,6 +92,12 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+//		res.add(this.totalStocksCB);
+//		res.add(this.totalStocksCH);
+//		res.add(this.totalStocksCML);
+//		res.add(this.totalStocksCMNL);
+//		res.add(this.totalStocks);
+
 		return res;
 	}
 
@@ -53,6 +110,8 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
+
+		res.add(this.journal);
 		return res;
 	}
 
@@ -70,6 +129,11 @@ public class Distributeur1Acteur implements IActeur {
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
+		if (this==acteur) {
+			System.out.println("They killed Chocorama... ");
+		} else {
+			System.out.println("try again "+acteur.getNom()+"... We will not miss you. "+this.getNom());
+		}
 	}
 
 	// Apres chaque operation sur votre compte bancaire, cette
