@@ -45,16 +45,14 @@ public class Producteur3 extends Producteur3Acteur  {
 	}
 
 
-	public void initalise() {
-		super.initialiser();
-		new Producteur3();
-		
+	public void initaliser() {		
 		
 	}
+	
 	public Champs getFields() {
 		return this.fields;
 	}
-	private Stock getStock() {
+	protected Stock getStock() {
 		// TODO Auto-generated method stub
 		return this.Stock;
 	}
