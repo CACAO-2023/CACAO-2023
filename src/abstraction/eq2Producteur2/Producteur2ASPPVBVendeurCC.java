@@ -14,7 +14,7 @@ import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse implements IVendeurContratCadre{
 
-	public Producteur2ASPPVBVendeurCC(Feve feve, double stock) {
+	public Producteur2ASPPVBVendeurCC() {
 		super();
 	}
 
@@ -56,7 +56,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 			return contrat.getEcheancier().getQuantiteTotale()*this.getPrixHQ();
 		}
 		if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.MQ) {
-			return contrat.getEcheancier().getQuantiteTotale()*this.getPrixMQ();
+			return contrat.getEcheancier().getQuantiteTotale()*this.getPrixMQBE();
 		}
 		return 0.0;		
 	}
