@@ -1,6 +1,7 @@
 package abstraction.eq7Distributeur1;
 
 import abstraction.eqXRomu.clients.ClientFinal;
+import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
@@ -11,6 +12,13 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	public Distributeur1() {
 		super();
 	}
+	
+	private void strategie() {
+		
+	}
+	
+	
+	
 	/**
 	 * @param choco, choco!=null
 	 * @return Le prix actuel d'un Kg de chocolat choco
@@ -74,6 +82,7 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 //			double qStock = stockChocoMarque7.get(choco);
 //			return qStock/20.0;
 //		} else {
+		double seuil = Filiere.SEUIL_EN_TETE_DE_GONDOLE_POUR_IMPACT;
 		return 0.0;
 //		}
 	}
