@@ -33,11 +33,11 @@ public class Distributeur1Acteur implements IActeur {
 	private Variable partRSEQualitePercue;//L'impact de pourcentageRSEmax% du prix consacres aux RSE dans la qualite percue du chocolat
 	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
 
-	protected Variable totalStocksCB;  // La quantité totale de stock de chocolat bas de gamme 
-	protected Variable totalStocksCML;  // La quantité totale de stock de chocolat moyenne gamme labellise
-	protected Variable totalStocksCMNL;  // La quantité totale de stock de chocolat moyenne gamme non labellise
-	protected Variable totalStocksCH;  // La quantité totale de stock de chocolat haute gamme
-	protected Variable totalStocks;  // La quantité totale de stock de chocolat
+	protected int totalStocksCB;  // La quantité totale de stock de chocolat bas de gamme 
+	protected int totalStocksCML;  // La quantité totale de stock de chocolat moyenne gamme labellise
+	protected int totalStocksCMNL;  // La quantité totale de stock de chocolat moyenne gamme non labellise
+	protected int totalStocksCH;  // La quantité totale de stock de chocolat haute gamme
+	protected int totalStocks;  // La quantité totale de stock de chocolat
 	
 	protected double coutCB; //Cout d'1kg de chocolat basse gamme
 	protected double coutCML; //Cout d'1kg de chocolat moyenne gamme labellise
@@ -58,6 +58,12 @@ public class Distributeur1Acteur implements IActeur {
 		this.coutCH = 0;
 		this.coutCML = 0;
 		this.coutCMNL = 0;
+		this.totalStocksCB = 0;
+		this.totalStocksCH = 0;
+		this.totalStocksCML = 0;
+		this.coutCMNL = 0;
+		
+		
 		this.journal = new Journal("Journal "+this.getNom(), this);
 	}
 	
