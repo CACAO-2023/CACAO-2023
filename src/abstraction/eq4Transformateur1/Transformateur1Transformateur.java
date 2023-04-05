@@ -99,7 +99,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			// La moitie sera stockee sous forme de chocolat, l'autre moitie directement etiquetee "Vccotioi"
 			this.stockChoco.put(cb, this.stockChoco.get(cb)+((transfoh/2.0)*this.pourcentageTransfo.get(fb).get(cb)));
 			int pourcentageCacao =  90;
-			ChocolatDeMarque cm= new ChocolatDeMarque(cb, "Vccotioi", pourcentageCacao, 0);
+			ChocolatDeMarque cm= new ChocolatDeMarque(cb, "Vccotioi", pourcentageCacao, 15);
 			double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;
 			this.stockChocoMarque.put(cm, scm+((transfo/2.0)*this.pourcentageTransfo.get(fb).get(cb)));
 			this.totalStocksChocoMarque.ajouter(this, ((transfo/2.0)*this.pourcentageTransfo.get(fb).get(cb)), this.cryptogramme);
