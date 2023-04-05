@@ -13,9 +13,9 @@ import abstraction.eqXRomu.produits.Feve;
 public class Transformateur3Stocks extends Transformateur3Acteur  {
 
 /** Nathan Claeys*/ 
-	private HashMap<Feve, Double> stockFeve;
-    private HashMap<Chocolat, Double> stockChocolat;   /** Stock par type de chocolat*/
-    private List<ChocolatDeMarque> stockProduit;    /** Nom des produits */
+	protected HashMap<Feve, Double> stockFeve;
+    protected HashMap<Chocolat, Double> stockChocolat;   /** Stock par type de chocolat*/
+    protected List<ChocolatDeMarque> stockProduit;    /** Nom des produits */
 	/** Mouhamed Sow*/ 
     public Transformateur3Stocks() {
         stockFeve = new HashMap<Feve, Double>();
