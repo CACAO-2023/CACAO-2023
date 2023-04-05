@@ -42,8 +42,13 @@ public class Producteur3Acteur implements IActeur {
 	protected Journal getJGeneral() {
 		return this.journal_activitegenerale;
 	}
+	
+	protected Journal getJStock() {
+		return this.journal_Stock;
+	}
+	
 	public void next() {
-		this.getJGeneral().ajouter("Le step ajoutée est : " +Filiere.LA_FILIERE.getEtape());
+		;
 	}
 
 	public Color getColor() {// NE PAS MODIFIER

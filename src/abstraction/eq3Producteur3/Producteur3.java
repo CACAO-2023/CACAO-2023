@@ -1,9 +1,11 @@
 package abstraction.eq3Producteur3;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Set;
 
+import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Lot;
 
@@ -37,13 +39,18 @@ public class Producteur3 extends Producteur3Acteur  {
 		super();
 		this.fields = new Champs();
 		this.Stock = new Stock();
-		Integer HectaresLibres = 0;
-		Integer HectaresUtilises = 950000;
-		Integer CoutStep = 0;
+		this.CoutStep = 0;
+		this.HectaresLibres= 0;
+		this.HectaresUtilises=950000;
 	}
 
 
-	
+	public void initalise() {
+		super.initialiser();
+		new Producteur3();
+		
+		
+	}
 	public Champs getFields() {
 		return this.fields;
 	}
@@ -52,7 +59,13 @@ public class Producteur3 extends Producteur3Acteur  {
 		return this.Stock;
 	}
   
-	
+	public void next() {
+		super.next();
+		HarvestToStock(Filiere.LA_FILIERE.getEtape());
+		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
+				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs : "+ this.HectaresUtilises+", Nombre d'employe : Pas encore calculé"+ "Resultat du step : Pas encore Calcule");
+		
+	}
 	/*
 
 	 * @author Dubus-Chanson Victor
@@ -74,9 +87,13 @@ public class Producteur3 extends Producteur3Acteur  {
 		if(quantite.get(0) > 0) {
 		Stock.ajouter(Feve.F_HQ_BE, quantite.get(0));
 		}
-		else if(quantite.get(1) > 0) {
+		if(quantite.get(1) > 0) {
 		Stock.ajouter(Feve.F_MQ_BE, quantite.get(1));
 		}
+		this.getJStock().ajouter(Color.GREEN, Color.BLACK,"On a ajoute "+ quantite.get(1) +" tonnes au stock de Moyenne Gamme le step n°"  +Filiere.LA_FILIERE.getEtape());
+		this.getJStock().ajouter(Color.GREEN, Color.BLACK,"A l'étape "  +Filiere.LA_FILIERE.getEtape() + " les stocks de Moyenne Gamme sont de " + this.getStock().getQuantite(Feve.F_MQ_BE));
+		this.getJStock().ajouter(Color.LIGHT_GRAY, Color.BLACK,"On a ajoute "+ quantite.get(0) +"tonnes au stock de Haute Gamme le step n°"  +Filiere.LA_FILIERE.getEtape());
+		this.getJStock().ajouter(Color.LIGHT_GRAY, Color.BLACK,"A l'étape "  +Filiere.LA_FILIERE.getEtape() + " les stocks de Haute Gamme sont de " + this.getStock().getQuantite(Feve.F_HQ_BE));
 	}
 
 
