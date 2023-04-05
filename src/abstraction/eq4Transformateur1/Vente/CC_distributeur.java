@@ -68,8 +68,8 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 		}
 		if (produit instanceof Chocolat) {
 			switch ((Chocolat)produit) {
-			case C_HQ_BE   : prix= 11.0;break;
-			case C_BQ      : prix=  5.0;break;
+			case C_HQ_BE   : prix= 11.55;break;
+			case C_BQ      : prix=  5.25;break;
 			}
 		}
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propose prix de "+prix+" pour "+produit);
@@ -79,7 +79,7 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
 		double prixInit=contrat.getListePrix().get(0);
 		double prix = contrat.getPrix();
-		if (prix>0.0 && (prixInit-prix)/prixInit<=0.05) {
+		if (prix>0.0 && (prixInit-prix)/prixInit<=0.49) {
 			return prix;
 		} else {
 			return prixInit;
