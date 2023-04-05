@@ -12,7 +12,6 @@ import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
-import abstraction.eqXRomu.produits.Gamme;
 
 public class Transformateur1Transformateur extends AchatBourse implements IFabricantChocolatDeMarque  {
 	
