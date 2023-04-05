@@ -1,7 +1,6 @@
 package abstraction.eq5Transformateur2;
 
 import abstraction.eqXRomu.bourseCacao.BourseCacao;
-import abstraction.eqXRomu.bourseCacao.ExempleAbsVendeurBourseCacao;
 import abstraction.eqXRomu.bourseCacao.IVendeurBourse;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
