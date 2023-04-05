@@ -3,11 +3,16 @@ package abstraction.eq2Producteur2;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse implements IVendeurContratCadre{
 
+	public boolean peutVendre(IProduit produit) {
+		return produit instanceof Feve;
+	}
+	
 	@Override
 	public boolean vend(IProduit produit) {
 		// TODO Auto-generated method stub
@@ -44,4 +49,6 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		return null;
 	}
 
+	/*Creer une fonction qui renvoie les quantités à livrer au prochain step/aux prochains steps (proposition)
+	*/
 }
