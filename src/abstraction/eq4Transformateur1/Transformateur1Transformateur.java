@@ -34,7 +34,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		if (this.chocosProduits.size()==0) {
 			for (Chocolat c : Chocolat.values()) {
 				int pourcentageCacao =  (int) (Filiere.LA_FILIERE.getParametre("pourcentage min cacao "+c.getGamme()).getValeur());
-				this.chocosProduits.add(new ChocolatDeMarque(c, "AAAAAAAAAAA", pourcentageCacao, 0));
+				this.chocosProduits.add(new ChocolatDeMarque(c, "Vccotioi", pourcentageCacao, 0));
 			}
 		}
 		return this.chocosProduits;
