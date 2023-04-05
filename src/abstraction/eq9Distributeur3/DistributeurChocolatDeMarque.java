@@ -95,7 +95,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 			String montant_string = "" + montant;
 			journal.ajouter("Vente de " + qtte_string + "tonnes de " +  choco.getNom() + " pour " + montant_string + "€");
 			
-			if(montant >= this.stock.getStock(choco)) { // on vérifie qu'on ai le stock
+			if( montant/this.prix(choco) >= this.stock.getStock(choco)) { // on vérifie qu'on ai le stock
 				this.stock.ajoutQte(choco, -(montant/this.prix(choco)));
 			}
 			else {
