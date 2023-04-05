@@ -85,7 +85,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			this.stockFeves.put(fb, this.stockFeves.get(fb)-transfo);
 			this.totalStocksFeves.retirer(this, transfo, this.cryptogramme);
 			this.stockChoco.put(cb, this.stockChoco.get(cb)+(transfo)*this.pourcentageTransfo.get(fb).get(cb));
-			int pourcentageCacao =  (int) (Filiere.LA_FILIERE.getParametre("pourcentage min cacao "+cb.getGamme()).getValeur());
+			int pourcentageCacao =  36;
 			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfo<10?" "+transfo:transfo)+" T de "+fb+" en "+Journal.doubleSur(transfo*this.pourcentageTransfo.get(fb).get(cb),3,2)+" T de "+cb);
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fb+")->"+this.stockFeves.get(fb));
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cb+")->"+this.stockChoco.get(cb));
@@ -98,7 +98,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			this.totalStocksFeves.retirer(this, transfoh, this.cryptogramme);
 			// La moitie sera stockee sous forme de chocolat, l'autre moitie directement etiquetee "Vccotioi"
 			this.stockChoco.put(cb, this.stockChoco.get(cb)+((transfoh/2.0)*this.pourcentageTransfo.get(fb).get(cb)));
-			int pourcentageCacao =  (int) (Filiere.LA_FILIERE.getParametre("pourcentage min cacao "+cb.getGamme()).getValeur());
+			int pourcentageCacao =  90;
 			ChocolatDeMarque cm= new ChocolatDeMarque(cb, "Vccotioi", pourcentageCacao, 0);
 			double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;
 			this.stockChocoMarque.put(cm, scm+((transfo/2.0)*this.pourcentageTransfo.get(fb).get(cb)));
