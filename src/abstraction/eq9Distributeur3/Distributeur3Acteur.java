@@ -51,6 +51,15 @@ public class Distributeur3Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
+
+
+		// lancer un contrat seuil et repondre 
+
+		
+		
+		// il va falloir faire la comparaison de contrats cadres par rapport à un seuil puis choisir le plus interessant
+
+
 		journal.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
 			for (int i=0; i<this.chocolats.size(); i++) {
@@ -60,6 +69,7 @@ public class Distributeur3Acteur implements IActeur {
 			
 			}
 		}
+
 	}
 
 	
@@ -122,8 +132,10 @@ public class Distributeur3Acteur implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Des ingredients d'exception pour un chocolat unique";
+		
+		return "Des ingrédients d'exception pour un chocolat unique";
 	}
+
 
 	
 	
