@@ -9,6 +9,7 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 
@@ -32,7 +33,7 @@ public class Distributeur1Acteur implements IActeur {
 	private Variable pourcentageRSEmax;//Le pourcentage de reversion RSE pour un impact max sur la qualite percue
 	private Variable partRSEQualitePercue;//L'impact de pourcentageRSEmax% du prix consacres aux RSE dans la qualite percue du chocolat
 	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
-
+	
 	protected int totalStocksCB;  // La quantité totale de stock de chocolat bas de gamme 
 	protected int totalStocksCML;  // La quantité totale de stock de chocolat moyenne gamme labellise
 	protected int totalStocksCMNL;  // La quantité totale de stock de chocolat moyenne gamme non labellise
@@ -47,9 +48,8 @@ public class Distributeur1Acteur implements IActeur {
 	protected List<Feve> lesFeves;
 	
 	////////////////////////////////////////
-	
-	protected HashMap<ChocolatDeMarque, Double> stockChocoMarque7;
-	
+	protected HashMap<Chocolat, Double> stockChoco;
+		
 	protected int cryptogramme;
 
 	public Distributeur1Acteur() {
