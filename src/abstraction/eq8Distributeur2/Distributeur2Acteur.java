@@ -29,15 +29,16 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	protected String nom;
 	protected ArrayList<ChocolatDeMarque> chocolats;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
-    protected HashMap<ChocolatDeMarque, Variable> stocks;
+    protected StockGeneral stocks ; 
     protected HashMap<Gamme, Double> pourcentagesGamme;
     private double[] prix;
     private String[] marques;
     private IProduit produit;
+    private Map<IProduit, Integer> produitsEnStock;
    
-	private Stock stockBasDeGamme;
-	private Stock stockMoyenDeGamme;
-	private Stock stockHautDeGamme;
+//	private Stock stockBasDeGamme;
+//	private Stock stockMoyenDeGamme;
+//	private Stock stockHautDeGamme;
     protected Journal journal_operationsbancaires;
     protected Journal journal_ventes;
     protected Journal journal_achats;
@@ -50,13 +51,14 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	    nom = "équipe 8";
 	    chocolats =  new ArrayList<ChocolatDeMarque>();
 	    prixDeVente = new HashMap<>();
-	    stocks = new HashMap<>();
+	    stocks = new HashMap<ChocolatDeMarque, Stock>();
+	    
 	    pourcentagesGamme = new HashMap<>();
 	    prix = new double[]{0, 0, 0}; // valeurs par défaut à modifier
 	    marques = new String[]{"marque 1", "marque 2", "marque 3"}; // valeurs par défaut à modifier
-	    stockBasDeGamme = 0.0; // valeur par défaut à modifier
-	    stockMoyenDeGamme = 0.0; // valeur par défaut à modifier
-	    stockHautDeGamme = 0.0; // valeur par défaut à modifier
+//	    stockBasDeGamme = new Stock(0.0);//0.0; // valeur par défaut à modifier
+//	    stockMoyenDeGamme =  new Stock(0.0);//0.0; // valeur par défaut à modifier
+///	    stockHautDeGamme =  new Stock(0.0);//0.0; // valeur par défaut à modifier
 	    journal_operationsbancaires = new Journal("Journal des Opérations bancaires de l'" + nom, this);
 	    journal_ventes = new Journal("Journal des Ventes de l'" + nom, this);
 	    journal_achats = new Journal("Journal des Achats de l'" + nom, this);
@@ -212,11 +214,11 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
         } else {
             double stockGamme;
             if (choco.getGamme() == Gamme.BQ) {
-                stockGamme = stockBasDeGamme;
+                stockGamme = this.stockBasDeGamme.getQuantite();
             } else if (choco.getGamme() == Gamme.MQ) {
-                stockGamme = stockMoyenDeGamme;
+                stockGamme = stockMoyenDeGamme.getQuantite();
             } else {
-                stockGamme = stockHautDeGamme;
+                stockGamme = stockHautDeGamme.getQuantite();
             }
             return Math.min(stockGamme, this.getStock(choco).getValeur());
         }
@@ -229,7 +231,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
             return 0.0;
         } else {
             if (choco.getGamme() == Gamme.BQ) {
-                return Math.min(stockBasDeGamme, this.getStock(choco).getValeur()) / 10.0;
+                return Math.min(stockBasDeGamme.getQuantite(), this.getStock(choco).getValeur()) / 10.0;
             } else {
                 return 0.0;
             }}
@@ -265,7 +267,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	@Override
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit().equals(produit)) {
-			if (contrat.getEcheancier().getQuantiteTotale()<this.stgetQuantite().getValeur()) {
+			if (contrat.getEcheancier().getQuantiteTotale()<this.stock().getValeur()) {
 				if (Math.random()<0.1) {
 				return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
 				} else {//dans 90% des cas on fait une contreproposition pour l'echeancier
