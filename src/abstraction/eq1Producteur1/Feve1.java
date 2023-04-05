@@ -1,10 +1,11 @@
 package abstraction.eq1Producteur1;
 
+import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 //gab et charles
 
-public class Feve1 {
+public class Feve1 implements IProduit{
 	private Feve feve;
 	private int nb_steps_depuis_récolte ; //compte le nb de steps depuis la récolte
 	private boolean séché ; //booléen qui indique si la fève a séché
@@ -32,6 +33,9 @@ public class Feve1 {
 	
 	public Gamme getQualite() {
 		return this.feve.getGamme();
+	}
+	public String getType() {
+		return "Feve";
 	}
 
 }
