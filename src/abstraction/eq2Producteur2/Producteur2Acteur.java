@@ -59,7 +59,6 @@ public class Producteur2Acteur implements IActeur {
 		this.getPrixMin().add(prixMinMQ);
 		this.getPrixMin().add(prixMinMQBE);
 		this.getPrixMin().add(prixMinHQ);
-
 	}
 
 	public String getNom() {// NE PAS MODIFIER

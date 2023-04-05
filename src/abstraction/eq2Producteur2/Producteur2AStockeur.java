@@ -72,4 +72,9 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		majTot();
 	}
 	
+	protected Variable getStockTot(Feve f) {
+		return this.stocksTot.get(f);
+	}
+	
+	
 }
