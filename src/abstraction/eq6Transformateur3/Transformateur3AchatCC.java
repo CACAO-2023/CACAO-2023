@@ -33,7 +33,17 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 * La réponse va dépendre de la valeur de la valeur du stock du produit et de si il y a un contrat sur ce produit
 	 */
 	public boolean achete(IProduit produit) {
-		// TODO Auto-generated method stub
+		int step = Filiere.LA_FILIERE.getEtape();
+		if (produit instanceof Feve) {List besoin_prochain = new LinkedList();
+									  for (int i=1;i<5;i++) {
+										  besoin_prochain.add(super.BesoinStep(step + i,((Feve)produit))- this.getArrivageCCStep(step + i, ((Feve)produit)));}
+									  int b = 0;
+									  for (int i=0;i<4;i++) {
+										  if (((double)besoin_prochain.get(i))>0) {b= b+1;}	}
+									  if (b>2) {
+										  
+									  }
+									  ;}
 		return false;
 	}
 
@@ -91,7 +101,13 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 */
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
-		return 0;
+		double dernier_prix = contrat.getPrix();
+		if (contrat.getListePrix().size()==1) {return 0.9*dernier_prix;}
+		else {double mon_dernier_prix = contrat.getListePrix().get(contrat.getListePrix().size()-2);
+			  if (dernier_prix <= 1.1*mon_dernier_prix) {return dernier_prix;}
+			  else {double proposition =(mon_dernier_prix + (dernier_prix - mon_dernier_prix)/4);
+			  		if (super.getSolde()<proposition) {return super.getSolde();}
+			  		else {return proposition;}}}
 	}
 
 	/**
@@ -123,11 +139,25 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 * => ajouter ce produit arrivé dans le stock 
 	 */
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-		super.ajouterFeve(contrat.getProduit(), contrat.getQuantiteLivree().getQuantite(Filiere.LA_FILIERE.getEtape()));
-		
+		Object produit = contrat.getProduit();
+		if (produit instanceof Feve) {super.ajouterFeve(((Feve)produit), contrat.getQuantiteLivree().getQuantite(Filiere.LA_FILIERE.getEtape()));}		
 	}
 	public List<ExemplaireContratCadre> getListeContratEnCours() {
 		return ListeContratEnCours;
 	}
-
+	/**Cette fonction donne la quantité de feves qui doit arriver par contrat à un step suivant
+	 * Elle doit permettre d'évaluer si un contrat cadre est nécessaire
+	 * @param step
+	 * @return
+	 */
+	private double getArrivageCCStep(int step,Feve f) {
+		double res = 0;
+		for (ExemplaireContratCadre contrat: this.getListeContratEnCours()) {
+			if (contrat.getProduit() instanceof Feve 
+					&& ((Feve)contrat.getProduit()).getGamme().equals(f.getGamme()) 
+					&& ((Feve)contrat.getProduit()).isBioEquitable()==(f.isBioEquitable())) {
+			res = res + contrat.getEcheancier().getQuantite(step);}
+		}
+		return res;
+	}
 }

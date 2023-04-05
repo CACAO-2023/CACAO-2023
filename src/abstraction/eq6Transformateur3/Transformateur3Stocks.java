@@ -22,15 +22,22 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
     protected Lot stockChocolatMGL; // Chocolat moyenne gamme labélisée
     protected Lot stockChocolatHGL; // Chocolat haute gamme labélisée
     protected List<ChocolatDeMarque> stockProduit;
-	/** Mouhamed Sow*/ 
-    public Transformateur3Stocks() {
-        stockFeve = new HashMap<Feve, Lot>();
-        stockChocolat = new HashMap<Chocolat, Double>();
-        stockProduit = new ArrayList<ChocolatDeMarque>();
-        
-    }
     
-  public void ajouterFeve(Feve feve, Double quantité) {
+    
+  public Transformateur3Stocks(Lot stockFeveBG, Lot stockFeveMG, Lot stockFeveMGL, Lot stockFeveHGL,
+			Lot stockChocolatBG, Lot stockChocolatMG, Lot stockChocolatMGL, Lot stockChocolatHGL,
+			List<ChocolatDeMarque> stockProduit) {
+		this.stockFeveBG = stockFeveBG;
+		this.stockFeveMG = stockFeveMG;
+		this.stockFeveMGL = stockFeveMGL;
+		this.stockFeveHGL = stockFeveHGL;
+		this.stockChocolatBG = stockChocolatBG;
+		this.stockChocolatMG = stockChocolatMG;
+		this.stockChocolatMGL = stockChocolatMGL;
+		this.stockChocolatHGL = stockChocolatHGL;
+		this.stockProduit = stockProduit;
+	}
+public void ajouterFeve(Feve feve, Double quantité) {
 	  
   }
   public void ajouterChocolat(Chocolat chocolat, Double quantité) {
