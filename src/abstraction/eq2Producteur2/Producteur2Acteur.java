@@ -50,6 +50,8 @@ public class Producteur2Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		this.journal.ajouter("Bonjour, nous sommes à l'étape " + Filiere.LA_FILIERE.getEtape() + "et nous n'avons pas encore fait faillite (enfin j'espère).");
+		System.out.print(this.journal.toString());
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -57,7 +59,7 @@ public class Producteur2Acteur implements IActeur {
 	}
 
 	public String getDescription() {
-		return "La filiere CACAindO represente la beaute du savoir-faire indon�sien et des richesses de la culture du cacao dans la region. Entre cacao a un prix abordable et feve d'origine volcanique, il y en a pour tous les gouts.";
+		return "La filiere CACAindO represente la beaute du savoir-faire indonesien et des richesses de la culture du cacao dans la region. Entre cacao a un prix abordable et feve d'origine volcanique, il y en a pour tous les gouts.";
 	}
 
 	// Renvoie les indicateurs
@@ -125,6 +127,10 @@ public class Producteur2Acteur implements IActeur {
 	// Renvoie une instance d'une filiere d'apres son nom
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
+	}
+	
+	public String toString() {
+		return this.getNom();
 	}
 
 }
