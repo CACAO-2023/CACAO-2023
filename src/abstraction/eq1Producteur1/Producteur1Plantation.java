@@ -1,24 +1,27 @@
 package abstraction.eq1Producteur1;
 
+import abstraction.eqXRomu.produits.Lot;
+
 public class Producteur1Plantation extends Producteur1Acteur {
-	private champ champ_moy;
-	private champ champ_bas;
-	private stockFeve stockFeve;
+	private champ champ;
+	private Lot stockFeveBas;
+	private Lot stockFeveMoy;
 	
-	public champ getChampM() {
-		return this.champ_moy;
+	public champ getChamp() {
+		return this.champ;
 	}
 	
-	public champ getChampB() {
-		return this.champ_bas;
+	public Lot getStockBas() {
+		return this.stockFeveBas ;
 	}
 	
-	public stockFeve getStock() {
-		return this.stockFeve ;
+	public Lot getStockMoy() {
+		return this.stockFeveMoy ;
 	}
 	
 	public void next() {
 		//début Elouan
+		super.next();
 		champ c = this.getChamp();
 		int n = c.nbhectare();
 		for (int i=0; i<n; i++) {
