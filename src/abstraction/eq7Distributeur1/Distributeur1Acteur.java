@@ -43,6 +43,7 @@ public class Distributeur1Acteur implements IActeur {
 	protected double coutCML; //Cout d'1kg de chocolat moyenne gamme labellise
 	protected double coutCMNL; //Cout d'1kg de chocolat moyenne gamme non labellise
 	protected double coutCH; //Cout d'1kg de chocolat haute gamme labellise
+	protected int temps; //Nb de semaines ecoulees depuis debut simulation
 	
 	protected List<Feve> lesFeves;
 	
@@ -72,6 +73,8 @@ public class Distributeur1Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		temps++;
+		
 	}
 
 	public Color getColor() {// NE PAS MODIFIER

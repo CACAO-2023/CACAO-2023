@@ -18,19 +18,30 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 */
 	public double prix(ChocolatDeMarque choco) {
 		double qualite = choco.qualitePercue();
+		double coef = 1-(((10/3)*qualite)/100)+0.1;
 		if (choco.getChocolat()==Chocolat.C_BQ) {
-			return coutCB/0.9;
+			return coutCB/coef;
 		}
 		else if (choco.getChocolat()==Chocolat.C_MQ) {
-			return coutCMNL/0.85;
+			return coutCMNL/coef;
 		}
 		else if (choco.getChocolat()==Chocolat.C_MQ_BE) {
-			return coutCML/0.85;
+			return coutCML/coef;
 		}
 		else if (choco.getChocolat()==Chocolat.C_HQ_BE) {
 			return coutCH/0.8;
 		}
-		return 10;
+		return 2;
+	}
+	
+	public double prixPromotion(ChocolatDeMarque choco) {
+		double p = prix(choco);
+		if (((temps%4)==0)&&(choco.getChocolat()!=Chocolat.C_BQ)) {
+			return p*0.9;
+		}
+		else {
+			return p;
+		}
 	}
 	
 	/**
