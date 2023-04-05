@@ -26,6 +26,7 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 
 	protected Journal journal;
 	protected Journal journal_BOURSE;
+	protected int step; // tour du jeu 
 
 	private Variable qualiteHaute;  // La qualite d'un chocolat de gamme haute 
 	private Variable qualiteMoyenne;// La qualite d'un chocolat de gamme moyenne  
@@ -40,7 +41,6 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	private Variable pourcentageRSEmax;//Le pourcentage de reversion RSE pour un impact max sur la qualite percue
 	private Variable partRSEQualitePercue;//L'impact de pourcentageRSEmax% du prix consacres aux RSE dans la qualite percue du chocolat
 	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
-	private int step; // tour du jeu 
 
 	protected Variable totalStocksFeves;
 	protected Variable totalStocksChoco;

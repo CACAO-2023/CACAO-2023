@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.util.List;
 
 import abstraction.eq4Transformateur1.Transformateur1Acteur;
+import abstraction.eq4Transformateur1.Transformateur1Transformateur;
 import abstraction.eq4Transformateur1.Stock;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
@@ -27,7 +28,7 @@ import abstraction.eqXRomu.produits.Lot;
  * @author franc
  *
  */
-public class CC_producteur extends Stock implements IAcheteurContratCadre{
+public class CC_producteur extends Transformateur1Transformateur implements IAcheteurContratCadre{
 	public boolean achete(IProduit produit) {
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme acheter le produit "+produit);
 		return true;
