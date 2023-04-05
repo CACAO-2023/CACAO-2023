@@ -18,8 +18,10 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 
 	
 	
+	
 
 	public DistributeurChocolatDeMarque(ChocolatDeMarque[] chocos, double[] stocks, double capaciteDeVente, double[] prix, String[] marques) {
+
 
 		super(chocos, stocks);
 		this.capaciteDeVente = capaciteDeVente;
@@ -95,20 +97,30 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 		if (crypto != this.cryptogramme) {
 			journal.ajouter("On essaie de me pirater (RayonVide)");
 		} else {
-			journal.ajouter("On a plus de " + choco.getNom());
-			this.stock.ajoutQte(choco, -(montant/this.prix(choco)));
+			String qtte_string = "" + montant/this.prix(choco);
+			String montant_string = "" + montant;
+			journal.ajouter("Vente de " + qtte_string + "tonnes de " +  choco.getNom() + " pour " + montant_string + "€");
+			
+			if( montant/this.prix(choco) >= this.stock.getStock(choco)) { // on vérifie qu'on ai le stock
+				this.stock.ajoutQte(choco, -(montant/this.prix(choco)));
+			}
+			else {
+				// si on a pas le stock
+				journal.ajouter("Vente annulée de " + choco.getNom());
+
+			}
+			
 		}
 		
 		
 
 	}
 
-	
-	public void notificationRayonVide(ChocolatDeMarque choco) {
-		journal.ajouter(" Aie... j'aurais du mettre davantage de "+choco.getNom()+" en vente");
-	}
 	@Override
 	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
+
+		journal.ajouter(" Aie... j'aurais du mettre davantage de "+choco.getNom()+" en vente");
+
 
 		if (crypto != this.cryptogramme) {
 			journal.ajouter("On essaie de me pirater (RayonVide)");
@@ -117,7 +129,14 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 		}
 			
 
-		
+
 	}
+	
+	public void notificationRayonVide(ChocolatDeMarque choco) {
+		notificationRayonVide(choco, this.cryptogramme);
+	}
+	
+	
+	
 
 }
