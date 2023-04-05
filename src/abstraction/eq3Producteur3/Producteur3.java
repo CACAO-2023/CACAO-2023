@@ -53,8 +53,7 @@ public class Producteur3 extends Producteur3Acteur  {
 	}
   
 	
-	/*
-
+	/**
 	 * @author Dubus-Chanson Victor
 	 */
 	public void addCoutHectaresUtilises() {
@@ -80,12 +79,24 @@ public class Producteur3 extends Producteur3Acteur  {
 	}
 
 
-
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
+	
 	/*Calcule le nombre d'Hectares (uniquement positif ou nul) que l'on a besoin de rajouter a la partie cultivee (seulement tous les 6 mois)*/
 	/*A modifier, a besoin des quantites de feves echangees (via stock)*/
 	public Integer variationBesoinHectares() {
-		Integer NbHectares = 0;
-		return NbHectares;
+		Integer Besoin = 0;
+		Stock Stock = this.getStock();
+		Double Quantite_HQ_BE= Stock.getQuantite(Feve.F_HQ_BE);
+		Double Quantite_MQ_BE= Stock.getQuantite(Feve.F_MQ_BE);
+		if (Quantite_HQ_BE < 100) {
+			Besoin += 100; /*56 tonnes de plus par an à partir de 5ans*/
+		}
+		if (Quantite_MQ_BE < 100) {
+			Besoin += 100; /*56 tonnes de plus par an à partir de 5ans*/
+		}
+		return Besoin;
 	}
 	
 	public void achatHectares(Integer HectaresAAcheter) {
@@ -97,12 +108,11 @@ public class Producteur3 extends Producteur3Acteur  {
 	public void changeHectaresAndCoutsLies(Integer ajoutHectares, Integer HectaresLiberes) {
 		this.HectaresUtilises = this.HectaresUtilises + ajoutHectares;
 		this.HectaresLibres = this.HectaresLibres + HectaresLiberes;
-		Integer HectaresAAcheter = this.HectaresLibres - ajoutHectares;
+		Integer HectaresAAcheter = ajoutHectares - this.HectaresLibres;
 		if (HectaresAAcheter > 0) {
 			this.achatHectares(HectaresAAcheter);
 		}
-		this.HectaresUtilises = this.HectaresUtilises + HectaresAAcheter;
-		this.HectaresLibres = this.HectaresLibres - ajoutHectares;
+		this.HectaresLibres = ajoutHectares - this.HectaresLibres;
 		if (this.HectaresLibres < 0) {
 			this.HectaresLibres = 0;
 		}
