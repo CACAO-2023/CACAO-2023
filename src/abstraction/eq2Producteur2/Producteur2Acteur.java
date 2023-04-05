@@ -4,6 +4,7 @@ package abstraction.eq2Producteur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
@@ -18,17 +19,29 @@ public class Producteur2Acteur implements IActeur {
 	protected int cryptogramme;
 	protected Journal journal;
 	
-	protected Variable nbHecBasse;
-	protected Variable nbHecMoy;
-	protected Variable nbHecMoyBE;
-	protected Variable nbHecHauteBE;
-	protected Variable prodHec;
-	protected Variable stockTotBasse;
-	protected Variable stockTotMoy;
-	protected Variable stockTotMoyBE;
-	protected Variable stockTotHauteBE;
-	protected Variable tempsDegradationFeve;
-	protected Variable tempsPerimationFeve;
+	protected Variable nbHecBasse = new VariablePrivee("nbHecBasse", "Le nombre d'hectare de fèves de basse qualité", this, 100);
+	protected Variable nbHecMoy = new VariablePrivee("nbHecMoy", "Le nombre d'hectare de fèves de moyenne qualité", this, 100);
+	protected Variable nbHecMoyBE = new VariablePrivee("nbHecMoyBE", "Le nombre d'hectare de fèves de moyenne qualité bio-équitable", this, 100);
+	protected Variable nbHecHauteBE = new VariablePrivee("nbHecHaute", "Le nombre d'hectare de fèves de basse qualité", this, 100);
+	protected Variable prodHec = new VariablePrivee("prodHec", "La production moyenne de feve en tonne par hectare par récolte", this, 0.56);
+	protected Variable stockTotBasse = new VariablePrivee("stockTotBasse", "Stock total de fèves de basse qualité", this, 0);
+	protected Variable stockTotMoy = new VariablePrivee("stockTotMoy", "Stock total de fèves de moyenne qualité", this, 0);
+	protected Variable stockTotMoyBE = new VariablePrivee("stockTotMoyBE", "stock Total de fèves de moyenne qualité bio-équitable", this, 0);
+	protected Variable stockTotHauteBE = new VariablePrivee("stockTotHauteBE", "stock Total de fèves de haute qualité bio-équitable", this, 0);
+	protected Variable tempsDegradationFeve = new VariablePrivee("tempsDegradationFeve", "Temps (en nombre d'étapes) avant qu'une Feve ne perdent de la qualité", this, 12);
+	protected Variable tempsPerimationFeve = new VariablePrivee("tempsPerimationFeve", "Temps (en nombre d'étapes) avant qu'une Feve ne se périme totalement  après avoir perdu une gamme", this, 6);
+	
+	public double prixMinBQ = 0.0; //provisoire
+	public double prixMinMQ = 0.0; //provisoire
+	public double prixMinMQBE = 0.0; //provisoire
+	public double prixMinHQ = 0.0; //provisoire
+	public LinkedList<Double> prixMin;
+	public double prixBQ = 1.0; //provisoire
+	public double prixMQ = 2.0; //provisoire
+	public double prixMQBE = 3.0; //provisoire
+	public double prixHQ = 4.0; //provisoire
+	public LinkedList<Double> prix;
+	
 	
 	protected Feve[] lesFeves = {Feve.F_BQ, Feve.F_MQ, Feve.F_MQ_BE, Feve.F_HQ_BE};
 
@@ -38,12 +51,15 @@ public class Producteur2Acteur implements IActeur {
 	public void initialiser() {
 		this.journal = new Journal("Journal " + this.getNom(), this);
 		
-		this.nbHecBasse = new VariablePrivee("nbHecBasse", "Le nombre d'hectare de fèves de basse qualité", this, 100);
-		this.nbHecMoy = new VariablePrivee("nbHecMoy", "Le nombre d'hectare de fèves de moyenne qualité", this, 100);
-		this.nbHecMoyBE = new VariablePrivee("nbHecMoyBE", "Le nombre d'hectare de fèves de moyenne qualité bio-équitable", this, 100);
-		this.nbHecHauteBE = new VariablePrivee("nbHecHaute", "Le nombre d'hectare de fèves de basse qualité", this, 100);
-		
-		this.prodHec = new Variable("prodHec", "La production moyenne de feve en tonne par hectare par récolte", this, 0.56);
+		this.getPrix().add(prixBQ);
+		this.getPrix().add(prixMQ);
+		this.getPrix().add(prixMQBE);
+		this.getPrix().add(prixHQ);
+		this.getPrixMin().add(prixMinBQ);
+		this.getPrixMin().add(prixMinMQ);
+		this.getPrixMin().add(prixMinMQBE);
+		this.getPrixMin().add(prixMinHQ);
+
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -71,6 +87,36 @@ public class Producteur2Acteur implements IActeur {
 	}
 	protected Variable getProdHec() {
 		return this.prodHec;
+	}
+	public double getPrixMinBQ() {
+		return this.prixMinBQ;
+	}
+	public double getPrixMinMQ() {
+		return this.prixMinMQ;
+	}
+	public double getPrixMinMQBE() {
+		return this.prixMinMQ;
+	}
+	public double getPrixMinHQ() {
+		return this.prixMinHQ;
+	}
+	public LinkedList<Double> getPrixMin(){
+		return this.prixMin;
+	}
+	public double getPrixBQ() {
+		return this.prixBQ;
+	}
+	public double getPrixMQ() {
+		return this.prixMQ;
+	}
+	public double getPrixMQBE() {
+		return this.prixMQBE;
+	}
+	public double getPrixHQ() {
+		return this.prixHQ;
+	}
+	public LinkedList<Double> getPrix(){
+		return this.prix;
 	}
 	
 	////////////////////////////////////////////////////////

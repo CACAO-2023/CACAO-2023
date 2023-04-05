@@ -12,11 +12,8 @@ import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteur implements IVendeurBourse{
 
-	
-
 	public Producteur2ASPPVendeurBourse() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Producteur2ASPPVendeurBourse(Variable stockFeve, Feve feve, Journal journal, LinkedList<Integer> employes,
