@@ -3,7 +3,6 @@ package abstraction.eq1Producteur1;
 import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur1Plantation extends Producteur1Acteur {
-	private champ champ;
 	private Lot stockFeveBas;
 	private Lot stockFeveMoy;
 	
