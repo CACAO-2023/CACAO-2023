@@ -26,6 +26,11 @@ public class Stock {
 		return tot;
 		}
 	
+	public HashMap<ChocolatDeMarque, Double> getQteStock() {
+		return QteStock;
+	}
+
+
 	// renvoie le stock de chaque chocolat
 	// Mathilde Soun 
 	public double getStock(ChocolatDeMarque c) {
