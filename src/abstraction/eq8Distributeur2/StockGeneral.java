@@ -5,8 +5,29 @@ import java.util.HashMap;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 public class StockGeneral {
-	protected HashMap<ChocolatDeMarque, Stock> stocks;
-	new HashMap<ChocolatDeMarque, Stock>();
-	if //pour chaque produit qui est appelé, si le produit existe, on retourne la valeur avec les getters, sinon on crée la variable 
-}
+    protected HashMap<ChocolatDeMarque, Stock> stocks;
 
+    public StockGeneral() {
+        stocks = new HashMap<ChocolatDeMarque, Stock>();
+    }
+
+    public Stock getStock(ChocolatDeMarque produit) {
+        Stock stock = stocks.get(produit);
+        if (stock == null) {
+            stock = new Stock(0); // On crée un nouveau stock avec une quantité initiale de 0
+            stocks.put(produit, stock);
+        }
+        return stock;
+    }
+
+    // Autres méthodes pour gérer le stock général (ajouter, retirer, etc.)
+    public void ajouterAuStock(ChocolatDeMarque produit, double quantiteAjoutee) {
+        Stock stock = getStock(produit);
+        stock.ajouter(quantiteAjoutee);
+    }
+
+    public boolean retirerDuStock(ChocolatDeMarque produit, double quantiteRetiree) {
+        Stock stock = getStock(produit);
+        return stock.retirer(quantiteRetiree);
+    }
+}
