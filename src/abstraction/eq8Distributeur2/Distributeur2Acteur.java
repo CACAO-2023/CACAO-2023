@@ -33,6 +33,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
     protected HashMap<Gamme, Double> pourcentagesGamme;
     private double[] prix;
     private String[] marques;
+    private IProduit produit;
    
 	private double stockBasDeGamme;
 	private double stockMoyenDeGamme;
@@ -263,7 +264,21 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	@Override
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
+		if (contrat.getProduit().equals(produit)) {
+			if (contrat.getEcheancier().getQuantiteTotale()<stock.getValeur()) {
+				if (Math.random()<0.1) {
+				return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
+				} else {//dans 90% des cas on fait une contreproposition pour l'echeancier
+					Echeancier e = contrat.getEcheancier();
+					e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut())/2.0);// on souhaite livrer deux fois moins lors de la 1ere livraison... un choix arbitraire, juste pour l'exemple...
+					return e;
+				}
+			} else {
+				return null; // on est frileux : on ne s'engage dans un contrat cadre que si on a toute la quantite en stock (on pourrait accepter meme si nous n'avons pas tout car nous pouvons produire/acheter pour tenir les engagements) 
+			}
+		} else {
+			return null;// on ne vend pas de ce produit
+		}
 		return null;
 	}
 
