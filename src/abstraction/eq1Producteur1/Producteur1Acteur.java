@@ -96,5 +96,8 @@ public class Producteur1Acteur implements IActeur {
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
 	}
+	public String toString() {
+		return this.getNom();
+	}
 
 }
