@@ -20,8 +20,8 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
     public Transformateur3Stocks() {
         stockFeve = new HashMap<Feve, Double>();
         stockChocolat = new HashMap<Chocolat, Double>();
-        stockProduit = new ArrayList<ChocolatDeMarque>(); 
-    }
+        stockProduit = new ArrayList<ChocolatDeMarque>();} 
+    
     
   public void ajouterFeve(Feve feve, Double quantit�) {
 	  if(this.stockFeve.containsKey(feve)) {
@@ -30,7 +30,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 		  this.stockFeve.put(feve, quantit�) ;
 	  }
   }
-
+}
     
     
    
