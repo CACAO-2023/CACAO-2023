@@ -10,13 +10,7 @@ import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteur implements IVendeurBourse{
 
-	public Producteur2ASPPVendeurBourse(Feve feve, double stock) {
-		if (feve==null ||stock<=0) {
-			throw new IllegalArgumentException("creation d'une instance de ExempleAbsVendeurBourseCacao avec des arguments non valides");
-		}
-		this.stockFeve=new Variable(this.getNom()+"Stock"+feve, this, 0.0, 1000000.0,stock);
-		this.feve = feve;
-		this.journal = new Journal(this.getNom()+" activites", this);
+	public Producteur2ASPPVendeurBourse() {
 	}
 
 	@Override

@@ -18,17 +18,17 @@ public class Producteur2Acteur implements IActeur {
 	protected int cryptogramme;
 	protected Journal journal;
 	
-	protected Variable nbHecBasse;
-	protected Variable nbHecMoy;
-	protected Variable nbHecMoyBE;
-	protected Variable nbHecHauteBE;
-	protected Variable prodHec;
-	protected Variable stockTotBasse;
-	protected Variable stockTotMoy;
-	protected Variable stockTotMoyBE;
-	protected Variable stockTotHauteBE;
-	protected Variable tempsDegradationFeve;
-	protected Variable tempsPerimationFeve;
+	protected Variable nbHecBasse = new VariablePrivee("nbHecBasse", "Le nombre d'hectare de fèves de basse qualité", this, 100);
+	protected Variable nbHecMoy = new VariablePrivee("nbHecMoy", "Le nombre d'hectare de fèves de moyenne qualité", this, 100);
+	protected Variable nbHecMoyBE = new VariablePrivee("nbHecMoyBE", "Le nombre d'hectare de fèves de moyenne qualité bio-équitable", this, 100);
+	protected Variable nbHecHauteBE = new VariablePrivee("nbHecHaute", "Le nombre d'hectare de fèves de basse qualité", this, 100);
+	protected Variable prodHec = new VariablePrivee("prodHec", "La production moyenne de feve en tonne par hectare par récolte", this, 0.56);
+	protected Variable stockTotBasse = new VariablePrivee("stockTotBasse", "Stock total de fèves de basse qualité", this, 0);
+	protected Variable stockTotMoy = new VariablePrivee("stockTotMoy", "Stock total de fèves de moyenne qualité", this, 0);
+	protected Variable stockTotMoyBE = new VariablePrivee("stockTotMoyBE", "stock Total de fèves de moyenne qualité bio-équitable", this, 0);
+	protected Variable stockTotHauteBE = new VariablePrivee("stockTotHauteBE", "stock Total de fèves de haute qualité bio-équitable", this, 0);
+	protected Variable tempsDegradationFeve = new VariablePrivee("tempsDegradationFeve", "Temps (en nombre d'étapes) avant qu'une Feve ne perdent de la qualité", this, 12);
+	protected Variable tempsPerimationFeve = new VariablePrivee("tempsPerimationFeve", "Temps (en nombre d'étapes) avant qu'une Feve ne se périme totalement  après avoir perdu une gamme", this, 6);
 	
 	protected Feve[] lesFeves = {Feve.F_BQ, Feve.F_MQ, Feve.F_MQ_BE, Feve.F_HQ_BE};
 
@@ -37,13 +37,6 @@ public class Producteur2Acteur implements IActeur {
 	
 	public void initialiser() {
 		this.journal = new Journal("Journal " + this.getNom(), this);
-		
-		this.nbHecBasse = new VariablePrivee("nbHecBasse", "Le nombre d'hectare de fèves de basse qualité", this, 100);
-		this.nbHecMoy = new VariablePrivee("nbHecMoy", "Le nombre d'hectare de fèves de moyenne qualité", this, 100);
-		this.nbHecMoyBE = new VariablePrivee("nbHecMoyBE", "Le nombre d'hectare de fèves de moyenne qualité bio-équitable", this, 100);
-		this.nbHecHauteBE = new VariablePrivee("nbHecHaute", "Le nombre d'hectare de fèves de basse qualité", this, 100);
-		
-		this.prodHec = new Variable("prodHec", "La production moyenne de feve en tonne par hectare par récolte", this, 0.56);
 	}
 
 	public String getNom() {// NE PAS MODIFIER
