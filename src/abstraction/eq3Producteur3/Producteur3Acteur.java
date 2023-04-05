@@ -12,11 +12,21 @@ import abstraction.eqXRomu.general.Variable;
 public class Producteur3Acteur implements IActeur {
 	
 	protected int cryptogramme;
-
+	protected Journal journal_operationsbancaires;
+    protected Journal journal_ventes;
+    protected Journal journal_achats;
+    protected Journal journal_activitegenerale;
+    
 	public Producteur3Acteur() {
+	String nom = "Equipe 3";
+	journal_operationsbancaires=new Journal("Journal des Opérations bancaires de l'"+nom,this);
+    journal_ventes=new Journal("Journal des Ventes de l'"+nom,this);
+    journal_achats=new Journal("Journal des Achats de l'"+nom,this);
+    journal_activitegenerale=new Journal("Journal général de l'"+nom,this);
 	}
 	
 	public void initialiser() {
+		
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -28,6 +38,7 @@ public class Producteur3Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		System.out.print(Filiere.LA_FILIERE.getEtape() + "");
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -53,6 +64,10 @@ public class Producteur3Acteur implements IActeur {
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
+		res.add(journal_activitegenerale);
+		res.add(journal_operationsbancaires);
+		res.add(journal_ventes);
+		res.add(journal_achats);
 		return res;
 	}
 
