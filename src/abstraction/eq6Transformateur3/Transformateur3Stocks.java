@@ -37,28 +37,30 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 		this.stockChocolatHGL = stockChocolatHGL;
 		this.stockProduit = stockProduit;
 	}
-public void ajouterFeve(Feve feve, Double quantit�) {
+public void ajouterFeve(Feve feve, Double quantite) {
 	  
   }
-  public void ajouterChocolat(Chocolat chocolat, Double quantit�) {
+  public void ajouterChocolat(Chocolat chocolat, Double quantite) {
 	
   }
-  public boolean estPerimeFeve(Date datePeremption) {
-	  return Filiere.LA_FILIERE.getDate().isAfter(datePeremption);
+  public boolean estPerimeFeve(int datePeremption) {
+	  return Filiere.LA_FILIERE.getEtape()>(datePeremption);
   }
   public void retirerFeve(Feve feve, double quantite)  {
 	    
 	}
+
 	    
 	    
 	    
 	    
 	    
   
-  public void retirerChocolat(Chocolat chocolat, Double quantit�) {
+  public void retirerChocolat(Chocolat chocolat, Double quantite) {
 	  
 
   }
+
 }
     
     
