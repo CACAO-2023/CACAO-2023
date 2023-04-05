@@ -97,7 +97,7 @@ public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 		if (this==acteur) {
 			System.out.println("Il en est fini de nous");
 		} else {
-			System.out.println("L'acteur "+acteur.getNom()+" a fait faillite ");
+			System.out.println("L'acteur "+acteur.getNom()+" a fait faillite, bien fait ! ");
 		}
 	}
 
