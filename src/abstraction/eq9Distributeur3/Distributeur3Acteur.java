@@ -2,19 +2,36 @@ package abstraction.eq9Distributeur3;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 public class Distributeur3Acteur implements IActeur {
+	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
+	protected int numero;
+	protected Integer cryptogramme;
 	protected Stock stock;
-	protected int cryptogramme;
 	protected Journal journal;
+	protected List<ChocolatDeMarque> chocolats;
 
-	public Distributeur3Acteur() {
+	public Distributeur3Acteur(ChocolatDeMarque[] chocos, double[] stocks) {
+		if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
+			throw new IllegalArgumentException("creation d'une instance de ExempleAbsDistributeurChocolatMarqe avec des arguments non valides");
+		}		
+		NB_INSTANCES++;
+		this.numero=NB_INSTANCES;
+		
+		this.chocolats = new LinkedList<ChocolatDeMarque>();
+		for (int i=0; i<chocos.length; i++) {
+			this.chocolats.add(chocos[i]);
+			this.stock.ajoutQte(chocos[i], stocks[i]);
+		}
+		this.journal = new Journal(this.getNom()+" activites", this);
 		
 	}
 	
@@ -30,6 +47,8 @@ public class Distributeur3Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		
+		
 		// il va falloir faire la comparaison de contrats cadres par rapport à un seuil puis choisir le plus interessant
 	}
 
