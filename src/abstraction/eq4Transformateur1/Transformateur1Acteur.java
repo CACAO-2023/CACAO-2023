@@ -114,7 +114,8 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
-		List<Journal> res=new ArrayList<Journal>();
+		List<Journal> res = new LinkedList<Journal>();
+		res.add(this.journal);
 		return res;
 	}
 
