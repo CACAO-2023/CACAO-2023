@@ -182,5 +182,14 @@ public class Stock {
 			newStock.setLot(f, newLots.get(f));
 		}
 		return newStock;
-	}	
+	}
+	
+	/**
+	 * This method will return the age of the beans of a given type
+	 * @param feve Type of bean
+	 * @return The age of the beans of the given type
+	 */
+	public int getAge(Feve feve) {
+		return this.stock.get(feve).getQuantites().keySet().iterator().next();
+	}
 }
