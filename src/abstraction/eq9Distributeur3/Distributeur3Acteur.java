@@ -12,6 +12,8 @@ import abstraction.eqXRomu.general.Variable;
 public class Distributeur3Acteur implements IActeur {
 	
 	protected int cryptogramme;
+	protected Journal journal;
+	protected Stock stock;
 
 	public Distributeur3Acteur() {
 	}
