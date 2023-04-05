@@ -33,11 +33,11 @@ public class Distributeur1Acteur implements IActeur {
 	private Variable partRSEQualitePercue;//L'impact de pourcentageRSEmax% du prix consacres aux RSE dans la qualite percue du chocolat
 	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
 
-	protected Variable totalStocksCB;  // La qualite totale de stock de chocolat bas de gamme 
-	protected Variable totalStocksCML;  // La qualite totale de stock de chocolat moyenne gamme labellise
-	protected Variable totalStocksCMNL;  // La qualite totale de stock de chocolat moyenne gamme non labellise
-	protected Variable totalStocksCH;  // La qualite totale de stock de chocolat haute gamme
-	protected Variable totalStocks;  // La qualite totale de stock de chocolat
+	protected Variable totalStocksCB;  // La quantité totale de stock de chocolat bas de gamme 
+	protected Variable totalStocksCML;  // La quantité totale de stock de chocolat moyenne gamme labellise
+	protected Variable totalStocksCMNL;  // La quantité totale de stock de chocolat moyenne gamme non labellise
+	protected Variable totalStocksCH;  // La quantité totale de stock de chocolat haute gamme
+	protected Variable totalStocks;  // La quantité totale de stock de chocolat
 	
 	protected Variable coutCB; //Cout d'1kg de chocolat basse gamme
 	protected Variable coutCML; //Cout d'1kg de chocolat moyenne gamme labellise

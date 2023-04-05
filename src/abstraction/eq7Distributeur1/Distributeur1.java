@@ -1,9 +1,13 @@
 package abstraction.eq7Distributeur1;
 
 import abstraction.eqXRomu.clients.ClientFinal;
+import abstraction.eqXRomu.contratsCadres.Echeancier;
+import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
+import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
+import abstraction.eqXRomu.produits.IProduit;
 
 public class Distributeur1 extends Distributeur1Acteur implements IDistributeurChocolatDeMarque {
 	
@@ -38,6 +42,10 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 			return 0.0;
 		}
 	}
+//	public void demande_contrat_cadre(IVendeurContratCadre vendeur) {
+//		qql = new demandeAcheteur(this,  vendeur, IProduit produit, Echeancier echeancier, int cryptogramme, boolean tg) {
+//		return 
+//	}
 	
 	/**
 	 * @param choco, choco!=null
