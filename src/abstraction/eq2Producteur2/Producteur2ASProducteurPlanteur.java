@@ -2,13 +2,9 @@ package abstraction.eq2Producteur2;
 
 import java.util.LinkedList;
 
-import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
-import abstraction.eqXRomu.produits.Feve;
 
 public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
-	public Feve feve;
-	public Journal journal;
 	public LinkedList<Integer> employes;
 	public LinkedList<Double> salaires;
 	public int surface_plantation;
@@ -16,24 +12,10 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	public Variable stockFeve;
 	
 	
-	public Producteur2ASProducteurPlanteur(Variable stockFeve, Feve feve, Journal journal, LinkedList<Integer> employes, LinkedList<Double> salaires, int surface_plantation) {
-		super();
-		this.stockFeve = stockFeve;
-		this.feve = feve;
-		this.journal = journal;
-		this.employes = employes;
-		this.salaires = salaires;
-		this.surface_plantation = surface_plantation;
-		this.stockFeve = stockFeve;
-	}
-	
 	public Producteur2ASProducteurPlanteur() {
 		super();
 	}
 	
-	public Feve getFeve() {
-		return this.feve;
-	}
 	public LinkedList<Integer> getEmployes(){
 		return this.employes;
 	}
@@ -42,13 +24,6 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	}
 	public int getSurface(){
 		return this.surface_plantation;
-	}
-
-	public Journal getJournal() {
-		return this.journal;
-	}
-	public LinkedList<Double> getPrix(){
-		return this.getPrix();
 	}
 	
 	public void setEmploye(int employes_BQ, int employes_MQ, int employes_MQ_BE, int employes_HQ_BE) {

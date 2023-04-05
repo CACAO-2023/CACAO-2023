@@ -114,8 +114,7 @@ public class CC_producteur extends Stock implements IAcheteurContratCadre{
 
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
-		return 0; // --> j'afficherai un taux de RSE de 0% sur mes chocolats de marque produits
+		return 15; // --> j'afficherai un taux de RSE de 0% sur mes chocolats de marque produits
 	}
-
-
+	
 }
