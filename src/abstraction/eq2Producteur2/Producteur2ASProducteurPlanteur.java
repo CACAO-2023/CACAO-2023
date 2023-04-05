@@ -13,14 +13,16 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	public LinkedList<Double> salaires;
 	public int surface_plantation;
 	public LinkedList<Double> prix;
+	public Variable stockFeve;
 	
 	
-	public Producteur2ASProducteurPlanteur( Feve feve, Journal journal, LinkedList<Integer> employes, LinkedList<Double> salaires, int surface_plantation, LinkedList<Double> prix) {
+	public Producteur2ASProducteurPlanteur(Variable stockFeve, Feve feve, Journal journal, LinkedList<Integer> employes, LinkedList<Double> salaires, int surface_plantation) {
 		this.feve = feve;
 		this.journal = journal;
 		this.employes = employes;
 		this.salaires = salaires;
 		this.surface_plantation = surface_plantation;
+		this.stockFeve = stockFeve;
 	}
 	
 	public Producteur2ASProducteurPlanteur() {
