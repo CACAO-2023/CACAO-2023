@@ -30,10 +30,10 @@ public class Transformateur5VendeurCC extends Transformateur2Acteur implements I
 	@Override
 	public boolean vend(IProduit produit) {
 		if (this.stocks.containsKey(produit) && this.stocks.get(produit) > 0) {
-			// Le transformateur a suffisamment de stock pour vendre le produit demandé
+			// Le transformateur a suffisamment de stock pour vendre le produit demand
 			return true;
 		}
-		// Sinon, le transformateur ne peut pas vendre le produit demandé
+		// Sinon, le transformateur ne peut pas vendre le produit demand
 		return false;
 	
 	
