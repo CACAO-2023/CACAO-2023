@@ -14,13 +14,13 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 
 /** Nathan Claeys*/ 
 	private HashMap<Feve, Double> stockFeve;
-    private HashMap<Chocolat, Double> stockChocolat;
-    private List<ChocolatDeMarque> stockProduit;
+    private HashMap<Chocolat, Double> stockChocolat;   /** Stock par type de chocolat*/
+    private List<ChocolatDeMarque> stockProduit;    /** Nom des produits */
 	/** Mouhamed Sow*/ 
     public Transformateur3Stocks() {
         stockFeve = new HashMap<Feve, Double>();
         stockChocolat = new HashMap<Chocolat, Double>();
-        stockProduit = new ArrayList<ChocolatDeMarque>();
+        stockProduit = new ArrayList<ChocolatDeMarque>(); 
     }
     
   public void ajouterFeve(Feve feve, Double quantité) {
