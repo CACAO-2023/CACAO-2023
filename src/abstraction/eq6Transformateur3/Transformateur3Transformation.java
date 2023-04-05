@@ -8,14 +8,20 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 	/** Maxime Bedu*/
 	
 /** processus de transformation : 
-	           unité de temps de transformation : différent selon les fèves
-	           prends dans le stock et remets dans le stock post-transfo,
-	  pareil différents types de stocks initiaux et finaux en fonction du type de fève
-	           implementer IChocolatdemarque ou autre truc de Romu 
+	           unité de temps de transformation : différent selon les fèves 
+	           prends dans le stock et remets dans le stock post-transfo, (OK)
+	  pareil différents types de stocks initiaux et finaux en fonction du type de fève (OK)
+	           implementer IChocolatdemarque ou autre truc de Romu (à voir)
 	           Type de produit à réaliser (dans v1 seulement plaque)
 	           Quantité de fèves à transformer dans les fonctions 
 	           
-	           pour info temps de transfo : 
+	           pour info temps de transfo : A déterminer, pour faire liste par produit de step avant qu'ils
+	           ne soient prêts
+	           
+	           Fonction besoin, en utilisant la fonction demande pour voir si il y a un manque ici, et pour 
+	           pouvoir informer qu'il faut augmenter les stocks pour répondre à la demande
+	           -peut aussi permettre de jouer sur "qte", la quantité de transformation qu'on veut faire
+	           à chaque step
 	           
 	           
 	*/
@@ -51,3 +57,9 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 							}
 	
 }
+					}
+			}
+	}
+}
+
+protected double BesoinStep(int Step, Feve f) {
