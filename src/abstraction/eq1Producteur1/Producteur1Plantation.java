@@ -22,6 +22,9 @@ public class Producteur1Plantation extends Producteur1Acteur {
 			if (h.getNombreSep()==10) 
 				{h.setNb_step(0);
 				//rajt une ligne de code pour récolter les feves
+				
+				// debut gab
+				// ramassage, ajout dans stock et replantage
 				h.setNb_recolte(h.getNombreRecolte()+1);}
 			if (h.getNombreRecolte()==96) { //supprime l'hectar quand il produit plus
 				c.supphectare(h);
