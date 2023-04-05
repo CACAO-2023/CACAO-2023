@@ -8,7 +8,7 @@
 
 # Errors on Pull
 
-## Checkout conflict
+## Checkout conflict or DIRTY_WORKTREE
 You have a local change that you did not commit. 
 You can 1) commit without pushing you local change or 2) delete your local change by replacing the changed files/folders with a previous version.
 Then you will be able to pull. This will maybe result in a conflict, if your colleagues changed the same lines.
