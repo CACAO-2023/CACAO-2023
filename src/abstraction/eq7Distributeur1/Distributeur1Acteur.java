@@ -76,6 +76,10 @@ public class Distributeur1Acteur implements IActeur {
 		temps++;
 		this.journal.ajouter("=== STOCKS === ");
 		
+		Journal j = new Journal(this.getNom(), this);
+		j.ajouter("on a réussi le challenge");
+		System.out.println(j.toString());
+		
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -107,6 +111,7 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
+		
 //		res.add(this.journal);
 		return res;
 	}

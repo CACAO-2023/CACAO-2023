@@ -37,6 +37,7 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 		}
 	}
 	public void next() {
+		super.next();
 		// On enleve les contrats obsolete (nous pourrions vouloir les conserver pour "archive"...)
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.mesContratEnTantQuAcheteur) {
@@ -46,6 +47,8 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 		}
 		this.mesContratEnTantQuAcheteur.removeAll(contratsObsoletes);
 		
+		
+		
 		// Proposition d'un nouveau contrat a tous les vendeurs possibles
 		/*
 		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
@@ -53,6 +56,8 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 				Filiere.LA_FILIERE.getSuperviseurContratCadre().demande((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 5.0), cryptogramme);
 			}
 		}*/
+		
+		
 		// OU proposition d'un contrat a un des vendeurs choisi aleatoirement
 		journal.ajouter("Recherche d'un vendeur aupres de qui acheter");
 		List<IVendeurContratCadre> vendeurs = supCCadre.getVendeurs(produit);
@@ -70,23 +75,7 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 			ExemplaireContratCadre cc = supCCadre.demandeAcheteur((IAcheteurContratCadre)this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
 			journal.ajouter("-->aboutit au contrat "+cc);
 		}
-		// Proposition d'un contrat a un des achteur choisi aleatoirement
-		journal.ajouter("Recherche d'un acheteur aupres de qui vendre");
-		List<IAcheteurContratCadre> acheteurs = supCCadre.getAcheteurs(produit);
-		if (acheteurs.contains(this)) {
-			acheteurs.remove(this);
-		}
-		IAcheteurContratCadre acheteur = null;
-		if (acheteurs.size()==1) {
-			acheteur=acheteurs.get(0);
-		} else if (acheteurs.size()>1) {
-			acheteur = acheteurs.get((int)( Math.random()*acheteurs.size()));
-		}
-		if (acheteur!=null) {
-			journal.ajouter("Demande au superviseur de debuter les negociations pour un contrat cadre de "+produit+" avec l'acheteur "+acheteur);
-			ExemplaireContratCadre cc = supCCadre.demandeVendeur(acheteur, (IVendeurContratCadre)this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
-			journal.ajouter("-->aboutit au contrat "+cc);
-		}
+		
 	}
 
 	public void receptionner1(Lot lot, ExemplaireContratCadre contrat) {
