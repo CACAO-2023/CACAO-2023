@@ -19,6 +19,7 @@ public class Transformateur3Acteur implements IActeur {
 	protected int cryptogramme;
 /** Nathan Claeys*/
 	protected Journal journal;
+	protected List<Journal> ListJournal;
 	protected Variable pourcentageCacaoBG ;
 	protected Variable pourcentageCacaoMG ;
 	protected Variable pourcentageCacaoMGL ;
@@ -37,6 +38,8 @@ public class Transformateur3Acteur implements IActeur {
 		this.pourcentageRSE = new Variable ("pourcentageRSE", "défini le pourcentage RSE sur les recettes",this,0.05,0.15,0.05);
 		this.totalStocksFeves = new Variable ("totalStocksFeves","défini l'état total du stock de fèves",this,0.0,1000000.0,0.0);
 		this.totalStocksChoco = new Variable ("totalStocksChoco","défini l'état total du stock de produit fini",this,0.0,1000000.0,0.0);
+		this.ListJournal = new LinkedList<Journal>();
+		ListJournal.add(this.journal);
 	}
 	
 	/**
@@ -86,6 +89,8 @@ public class Transformateur3Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		this.journal = new Journal(Filiere.LA_FILIERE.getEtape()+"",this);
+		this.ListJournal.add(this.journal);
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -110,9 +115,7 @@ public class Transformateur3Acteur implements IActeur {
 
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
-		List<Journal> res = new LinkedList<Journal>();
-		res.add(this.journal);
-		return res;
+		return this.ListJournal;
 	}
 
 	////////////////////////////////////////////////////////
