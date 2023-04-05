@@ -16,6 +16,7 @@ public class Producteur3Acteur implements IActeur {
     protected Journal journal_ventes;
     protected Journal journal_achats;
     protected Journal journal_activitegenerale;
+    protected Journal journal_Stock;
     
 	public Producteur3Acteur() {
 	String nom = "Equipe 3";
@@ -23,6 +24,7 @@ public class Producteur3Acteur implements IActeur {
     journal_ventes=new Journal("Journal des Ventes de l'"+nom,this);
     journal_achats=new Journal("Journal des Achats de l'"+nom,this);
     journal_activitegenerale=new Journal("Journal général de l'"+nom,this);
+    journal_Stock = new Journal("Journal des Stocks de l'"+nom,this);
 	}
 	
 	public void initialiser() {
@@ -36,9 +38,12 @@ public class Producteur3Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 	//         En lien avec l'interface graphique         //
 	////////////////////////////////////////////////////////
-
+	
+	protected Journal getJGeneral() {
+		return this.journal_activitegenerale;
+	}
 	public void next() {
-		System.out.print(Filiere.LA_FILIERE.getEtape() + "");
+		this.getJGeneral().ajouter("Le step ajoutée est : " +Filiere.LA_FILIERE.getEtape());
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -68,6 +73,7 @@ public class Producteur3Acteur implements IActeur {
 		res.add(journal_operationsbancaires);
 		res.add(journal_ventes);
 		res.add(journal_achats);
+		res.add(journal_Stock);
 		return res;
 	}
 
