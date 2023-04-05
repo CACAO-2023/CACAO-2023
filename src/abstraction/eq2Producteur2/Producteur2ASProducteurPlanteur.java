@@ -17,6 +17,8 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	
 	
 	public Producteur2ASProducteurPlanteur(Variable stockFeve, Feve feve, Journal journal, LinkedList<Integer> employes, LinkedList<Double> salaires, int surface_plantation) {
+		super();
+		this.stockFeve = stockFeve;
 		this.feve = feve;
 		this.journal = journal;
 		this.employes = employes;
@@ -26,7 +28,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	}
 	
 	public Producteur2ASProducteurPlanteur() {
-		
+		super();
 	}
 	
 	public Feve getFeve() {
