@@ -19,7 +19,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	}
 
 	public boolean peutVendre(IProduit produit) {
-		return produit instanceof Feve && (((Feve) produit).getGamme() != Gamme.MQ || ((Feve) produit).isBioEquitable() != false);
+		return produit instanceof Feve && produit == Feve.F_BQ && produit == Feve.F_MQ && produit == Feve.F_MQ_BE && produit == Feve.F_HQ_BE; //Est-ce qu'on vend vraiment de tout ?
 	}
 	
 	public boolean vend(IProduit produit) {
@@ -30,7 +30,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		return false;
 	}
 
-	//On renvoie toujours  un Echeancier constan tdans le temps dans la limite de nos cpaacités de production
+	//On renvoie toujours  un Echeancier constant dans le temps dans la limite de nos cpaacités de production
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		Echeancier echeancierAch = contrat.getEcheancier();
 		if(echeancierAch.getStepDebut() > Filiere.LA_FILIERE.getEtape()) {
@@ -52,10 +52,10 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	}
 
 	public double propositionPrix(ExemplaireContratCadre contrat) {
-		if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.HQ) {
+		if(contrat.getProduit() == Feve.F_HQ_BE) {
 			return contrat.getEcheancier().getQuantiteTotale()*this.getPrixHQ();
 		}
-		if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.MQ) {
+		if(contrat.getProduit() == Feve.F_MQ_BE) {
 			return contrat.getEcheancier().getQuantiteTotale()*this.getPrixMQBE();
 		}
 		return 0.0;		
@@ -63,7 +63,9 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 
 	@Override
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
+		if(contrat.getPrix() >= 0.9) {
+			return 1;
+		}
 		return 0;
 	}
 
