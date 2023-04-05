@@ -49,5 +49,7 @@ public class Producteur2AProducteurPlanteur extends Producteur2Acteur{
 		employes.add(employes_MQ_BE);
 		employes.add(employes_HQ_BE);
 	}
-	public void setSalaires(double salaire_employes_BQ, double salaire_employes_MQ, double salaire_employes_MQ_BE, double salaire_employes_HQ_BE)
+	public void setSalaires(double salaire_employes_BQ, double salaire_employes_MQ, double salaire_employes_MQ_BE, double salaire_employes_HQ_BE) {
+		this.salaires = new Linkedlist <Interger>();
+	}
 }

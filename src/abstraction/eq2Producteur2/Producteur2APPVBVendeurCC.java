@@ -3,10 +3,16 @@ package abstraction.eq2Producteur2;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur2APPVBVendeurCC extends Producteur2APPVendeurBourse implements IVendeurContratCadre{
+
+	public Producteur2APPVBVendeurCC(Feve feve, double stock) {
+		super(feve, stock);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public boolean vend(IProduit produit) {
