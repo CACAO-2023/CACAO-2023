@@ -24,17 +24,19 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	
 	public Distributeur3AcheteurCC(ChocolatDeMarque[] chocos, double[] stocks) {
 		super(chocos, stocks);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public void next() {
 		super.next();
 		
 	}
+	
 
 	public boolean achete(IProduit produit) {
-		this.
-		journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme vouloir acheter le produit "+produit);
+		if (!(produit instanceof ChocolatDeMarque)) {
+			return false;
+		}
 		return true;
 	}
 
