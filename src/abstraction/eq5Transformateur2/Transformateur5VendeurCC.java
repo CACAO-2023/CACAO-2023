@@ -1,5 +1,8 @@
 package abstraction.eq5Transformateur2;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
@@ -7,6 +10,16 @@ import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
  
 public class Transformateur5VendeurCC extends Transformateur2Acteur implements IVendeurContratCadre {
+	
+	private Map<IProduit, Double> stocks;
+	
+	public Transformateur5VendeurCC() {
+		this.stocks = new HashMap<IProduit, Double>();
+		//initialisation des stocks avec des valeurs.
+		
+	}
+	
+	 
 	
 	public void next() {
 		super.next();
@@ -16,12 +29,24 @@ public class Transformateur5VendeurCC extends Transformateur2Acteur implements I
 	
 	@Override
 	public boolean vend(IProduit produit) {
-		// TODO Auto-generated method stub
+		if (this.stocks.containsKey(produit) && this.stocks.get(produit) > 0) {
+			// Le transformateur a suffisamment de stock pour vendre le produit demandé
+			return true;
+		}
+		// Sinon, le transformateur ne peut pas vendre le produit demandé
 		return false;
+	
+	
+		
+		
+		
+	
 	}
 
 	@Override
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
+		//if (contrat.getProduit().equals(produit)) {
+			//if (contrat.getEcheancier().getQuantiteTotale()<stock.getValeur()) {
 		// TODO Auto-generated method stub
 		return null;
 	}
