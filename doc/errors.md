@@ -19,13 +19,15 @@ After resolving the conflict, commit all changed files and push.
 ## Changes outside of package
 You are changing files outside of your java package. You can see the files that you are changing in the "Files changed" tab of your pull request on the github website. This list must contain only files in your package.
 
-You can replace them with the version from the main repository. To do that, right click on these files or folders -> Replace with -> Branch, Tag or Reference -> Remote tracking -> select the main repository -> Replace. If the files or folders do not exist in the main repository, you can simply delete them. Then commit and push to your repository. Don't close the pull request, it will be automatically updated.
+You can replace these files with the version from the main repository. To do that, right click on these files or folders -> Replace with -> Branch, Tag or Reference -> Remote tracking -> select the main repository (not your team repository) -> Replace. Then commit and push to your repository. Don't close the pull request, it will be automatically updated.
 
 ## Hidden changes outside of package
 
 You are changing some files or folders that are hidden in the Java perspective of Eclipse. You can see the files that you are changing in the "Files changed" tab of your pull request on the github website. This list must contain only files in your package.
 
-To see the files, go to the Resource perspective of Eclipse. Right click on these files or folders -> Replace with -> Branch, Tag or Reference -> Remote tracking -> select the main repository -> Replace. Then commit and push to your repository. Don't close this pull request, it will be automatically updated.
+To see the hidden files, go to the Resource perspective of Eclipse. 
+
+You can replace these files with the version from the main repository. To do that, right click on these files or folders -> Replace with -> Branch, Tag or Reference -> Remote tracking -> select the main repository (not your team repository) -> Replace. Then commit and push to your repository. Don't close the pull request, it will be automatically updated.
 
 ## Additions outside of the package
 
