@@ -24,11 +24,11 @@ public class Transformateur2AcheteurCC extends Transformateur2Acteur implements 
 	@Override
 	public boolean achete(IProduit produit) {
 		// TODO Auto-generated method stub
-		if (produit instanceof ChocolatDeMarque) {
-			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme vouloir acheter le produit "+produit);
+		if (produit.getType().equals("Feve")) {
+			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme vouloir acheter le produit "+produit);
 		return true;}
 		else {
-			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme ne pas vouloir acheter le produit "+produit);
+			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme ne pas vouloir acheter le produit "+produit);
 		return false;}
 		
 		
@@ -38,21 +38,18 @@ public class Transformateur2AcheteurCC extends Transformateur2Acteur implements 
 	@Override
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
-		if ((( ((ChocolatDeMarque) produit).getMarque())) == "Maison Doutre") {
-			return 10; }
-		else { 
+		//if ((( ((ChocolatDeMarque) produit).getMarque())) == "Maison Doutre") {
+			//return 10; }
+		//else { 
 			return 0; 
-			}
-	}
+			}//
+
 		// TODO Auto-generated method stub
 
 
 	@Override
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		if (contrat.getTeteGondole()) {
-			return null;
-		}
-		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
+		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
 		return contrat.getEcheancier();
 	}
 		
