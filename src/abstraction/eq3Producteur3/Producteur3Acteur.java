@@ -38,9 +38,12 @@ public class Producteur3Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 	//         En lien avec l'interface graphique         //
 	////////////////////////////////////////////////////////
-
+	
+	protected Journal getJGeneral() {
+		return this.journal_activitegenerale;
+	}
 	public void next() {
-		System.out.print(Filiere.LA_FILIERE.getEtape() + "");
+		this.getJGeneral().ajouter("Le step ajoutée est : " +Filiere.LA_FILIERE.getEtape());
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
