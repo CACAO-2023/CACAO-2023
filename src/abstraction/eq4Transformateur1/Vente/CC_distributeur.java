@@ -5,12 +5,10 @@ import java.awt.Color;
 import abstraction.eq4Transformateur1.Stock;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
-import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
-import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
@@ -71,8 +69,6 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 		if (produit instanceof Chocolat) {
 			switch ((Chocolat)produit) {
 			case C_HQ_BE   : prix= 11.0;break;
-			case C_MQ_BE   : prix=  7.0;break;
-			case C_MQ      : prix=  6.0;break;
 			case C_BQ      : prix=  5.0;break;
 			}
 		}
