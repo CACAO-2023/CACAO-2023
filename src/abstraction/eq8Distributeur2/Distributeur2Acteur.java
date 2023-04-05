@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import abstraction.eqXRomu.clients.ClientFinal;
+import abstraction.eqXRomu.clients.ExempleDistributeurChocolatMarque;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
@@ -39,6 +40,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
     protected Journal journal_operationsbancaires;
     protected Journal journal_ventes;
     protected Journal journal_achats;
+    protected Journal journal_stocks;
     protected Journal journal_activitegenerale;
     
 
@@ -58,6 +60,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	    journal_ventes = new Journal("Journal des Ventes de l'" + nom, this);
 	    journal_achats = new Journal("Journal des Achats de l'" + nom, this);
 	    journal_activitegenerale = new Journal("Journal général de l'" + nom, this);
+	    journal_stocks = new Journal("Journal des stocks" + nom, this);
         initialiserGamme();
 	}
 	
@@ -68,6 +71,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	}
 
 	public void initialiser() {
+		
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -79,6 +83,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		
 		journal_activitegenerale.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
 			for (int i=0; i<this.chocolats.size(); i++) {
@@ -231,7 +236,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	 @Override
 	    public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
-	        int pos = (((List<Variable>) choco).indexOf(choco));
+	        int pos = (choco).indexOf(chocolats, choco);
 	        if (pos >= 0) {
 	            this.getStock(choco).retirer(this, quantite);
 	        }
