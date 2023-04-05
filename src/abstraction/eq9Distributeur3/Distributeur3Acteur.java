@@ -10,7 +10,7 @@ import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 
 public class Distributeur3Acteur implements IActeur {
-	
+	protected Stock stock;
 	protected int cryptogramme;
 	protected Journal journal;
 	protected Stock stock;

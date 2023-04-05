@@ -4,19 +4,12 @@ import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
-import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
-import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAcheteurContratCadre{
 	
-	protected SuperviseurVentesContratCadre superviseurVentesCC;
-
-	public void initialiser() {
-		super.initialiser();
-		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
-	}
+	
 	
 	public void next() {
 		
