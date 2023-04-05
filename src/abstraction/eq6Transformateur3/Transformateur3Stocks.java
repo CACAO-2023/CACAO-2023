@@ -30,7 +30,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 		  this.stockFeve.put(feve, quantit�) ;
 	  }
   }
-}
+
     
     
    
