@@ -16,7 +16,6 @@ public class Producteur1Acteur implements IActeur {
 	protected int step;
 	protected champ champ;
 
-
 	public Producteur1Acteur() {
 		this.journal = new Journal("Journal "+this.getNom(), this);
 	}
