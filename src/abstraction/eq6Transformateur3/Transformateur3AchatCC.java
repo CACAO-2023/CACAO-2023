@@ -91,7 +91,13 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 */
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
-		return 0;
+		double dernier_prix = contrat.getPrix();
+		if (contrat.getListePrix().size()==1) {return 0.9*dernier_prix;}
+		else {double mon_dernier_prix = contrat.getListePrix().get(contrat.getListePrix().size()-2);
+			  if (dernier_prix <= 1.1*mon_dernier_prix) {return dernier_prix;}
+			  else {double proposition =(mon_dernier_prix + (dernier_prix - mon_dernier_prix)/4);
+			  		if (super.getSolde()<proposition) {return super.getSolde();}
+			  		else {return proposition;}}}
 	}
 
 	/**
@@ -123,8 +129,8 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 * => ajouter ce produit arrivé dans le stock 
 	 */
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-		super.ajouterFeve(contrat.getProduit(), contrat.getQuantiteLivree().getQuantite(Filiere.LA_FILIERE.getEtape()));
-		
+		Object produit = contrat.getProduit();
+		if (produit instanceof Feve) {super.ajouterFeve(((Feve)produit), contrat.getQuantiteLivree().getQuantite(Filiere.LA_FILIERE.getEtape()));}		
 	}
 	public List<ExemplaireContratCadre> getListeContratEnCours() {
 		return ListeContratEnCours;

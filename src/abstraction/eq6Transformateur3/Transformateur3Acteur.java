@@ -110,7 +110,8 @@ public class Transformateur3Acteur implements IActeur {
 
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
-		List<Journal> res=new ArrayList<Journal>();
+		List<Journal> res = new LinkedList<Journal>();
+		res.add(this.journal);
 		return res;
 	}
 
@@ -154,6 +155,8 @@ public class Transformateur3Acteur implements IActeur {
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
 	}
-
+	public String toString() {
+		return this.getNom();
+	}
 
 }
