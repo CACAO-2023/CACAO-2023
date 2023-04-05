@@ -20,7 +20,7 @@ public class stockFeve {
 		int n = this.getStock().size();
 		double s = 0.0; 
 		for (int i=0; i<n; i++) {
-			s=s+this.getFeve(i).getQuantite();
+		//	s=s+this.getFeve(i).getQuantite(); // faut changer en mettant le lot
 		}
 		return s;
 	}
