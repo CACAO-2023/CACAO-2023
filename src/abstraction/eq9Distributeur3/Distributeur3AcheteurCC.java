@@ -1,5 +1,6 @@
 package abstraction.eq9Distributeur3;
 
+import abstraction.eqXRomu.contratsCadres.ContratCadre;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
@@ -24,7 +25,9 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	@Override
 	public boolean achete(IProduit produit) {
 		// TODO Auto-generated method stub
-		return false;
+		
+		return true;
+	
 	}
 
 	@Override
@@ -37,13 +40,21 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	@Override
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
-		return null;
+		return contrat.getEcheancier();
 	}
 
 	@Override
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
-		return 0;
+		return contrat.getPrix();
+	}
+
+	
+
+	@Override
+	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -51,11 +62,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	
 
 }
