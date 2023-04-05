@@ -63,7 +63,7 @@ public class Transformateur2 extends Transformateur2Acteur implements IFabricant
 		super.next();
 		this.journal.ajouter("=== Step numéro "+ Filiere.LA_FILIERE.getEtape()+" ===");
 		
-		this.journal.ajouter("=== STOCKS === ");
+		this.journal.ajouter("=== STOCK === ");
 		for (Feve f : Feve.values()) {
 			this.journal.ajouter("Stock de "+Journal.texteSurUneLargeurDe(f+"", 15)+" = "+this.stockFeves.get(f));
 		}
