@@ -4,6 +4,8 @@ import java.util.LinkedList;
 
 //classe écrite par Elouan
 
+//faire avec hasmap : clef c la periode
+
 public class champ {
 	private LinkedList<hectar> hectares;
 	
