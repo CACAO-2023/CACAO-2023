@@ -27,7 +27,7 @@ public class Transformateur1 extends Transformateur1Acteur implements IFabricant
 				this.chocosProduits.add(new ChocolatDeMarque(c1, "Yocttoootoa", 70, 0));
 				this.chocosProduits.add(new ChocolatDeMarque(c2, "Vccotioi", 90, 10));
 		}
-	System.out.println(	Filiere.LA_FILIERE.getParametre("pourcentage min cacao BQ").getValeur());
+	//System.out.println(	Filiere.LA_FILIERE.getParametre("pourcentage min cacao BQ").getValeur());
 		
 		return this.chocosProduits;
 	}
