@@ -3,9 +3,16 @@ package abstraction.eq5Transformateur2;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+<<<<<<< HEAD
 import java.awt.Color;
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 
 import abstraction.eqXRomu.filiere.Filiere;
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.Chocolat;
