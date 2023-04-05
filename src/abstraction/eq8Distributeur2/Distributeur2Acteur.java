@@ -35,9 +35,9 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
     private String[] marques;
     private IProduit produit;
    
-	private double stockBasDeGamme;
-	private double stockMoyenDeGamme;
-	private double stockHautDeGamme;
+	private Stock stockBasDeGamme;
+	private Stock stockMoyenDeGamme;
+	private Stock stockHautDeGamme;
     protected Journal journal_operationsbancaires;
     protected Journal journal_ventes;
     protected Journal journal_achats;
@@ -265,7 +265,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	@Override
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit().equals(produit)) {
-			if (contrat.getEcheancier().getQuantiteTotale()<stock.getValeur()) {
+			if (contrat.getEcheancier().getQuantiteTotale()<this.stgetQuantite().getValeur()) {
 				if (Math.random()<0.1) {
 				return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
 				} else {//dans 90% des cas on fait une contreproposition pour l'echeancier
