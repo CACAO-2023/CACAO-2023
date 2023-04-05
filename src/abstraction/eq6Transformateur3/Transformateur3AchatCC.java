@@ -123,7 +123,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 * => ajouter ce produit arrivé dans le stock 
 	 */
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-		super.ajoutStockFeve((Feve) contrat.getProduit(), contrat.getQuantiteLivree().getQuantite(Filiere.LA_FILIERE.getEtape()));
+		super.ajouterFeve(contrat.getProduit(), contrat.getQuantiteLivree().getQuantite(Filiere.LA_FILIERE.getEtape()));
 		
 	}
 	public List<ExemplaireContratCadre> getListeContratEnCours() {
