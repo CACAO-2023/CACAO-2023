@@ -41,6 +41,7 @@ public class Producteur3 extends Producteur3Acteur  {
 		Integer CoutStep = 0;
 	}
 
+
 	
 	public Champs getFields() {
 		return this.fields;
@@ -50,9 +51,6 @@ public class Producteur3 extends Producteur3Acteur  {
 		return this.Stock;
 	}
   
-	public Producteur3(HashMap<String,HashMap> m) {
-		this.Champs=m;
-	}
 	
 	/*
 
