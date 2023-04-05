@@ -33,7 +33,8 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 * La réponse va dépendre de la valeur de la valeur du stock du produit et de si il y a un contrat sur ce produit
 	 */
 	public boolean achete(IProduit produit) {
-		// TODO Auto-generated method stub
+		
+
 		return false;
 	}
 
@@ -135,5 +136,19 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	public List<ExemplaireContratCadre> getListeContratEnCours() {
 		return ListeContratEnCours;
 	}
-
+	/**Cette fonction donne la quantité de feves qui doit arriver par contrat à un step suivant
+	 * Elle doit permettre d'évaluer si un contrat cadre est nécessaire
+	 * @param step
+	 * @return
+	 */
+	private double getArrivageCCStep(int step,Feve f) {
+		double res = 0;
+		for (ExemplaireContratCadre contrat: this.getListeContratEnCours()) {
+			if (contrat.getProduit() instanceof Feve 
+					&& ((Feve)contrat.getProduit()).getGamme().equals(f.getGamme()) 
+					&& ((Feve)contrat.getProduit()).isBioEquitable()==(f.isBioEquitable())) {
+			res = res + contrat.getEcheancier().getQuantite(step);}
+		}
+		return res;
+	}
 }
