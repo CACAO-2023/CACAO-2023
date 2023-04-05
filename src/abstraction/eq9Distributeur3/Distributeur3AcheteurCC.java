@@ -1,36 +1,50 @@
 package abstraction.eq9Distributeur3;
 
+
 import abstraction.eqXRomu.contratsCadres.ContratCadre;
+
+import java.awt.Color;
+
+
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+
+import abstraction.eqXRomu.general.Journal;
+
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
+
 public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAcheteurContratCadre{
+	public static Color COLOR_LLGRAY = new Color(238,238,238);
+	protected Integer cryptogramme;
+	protected Journal journal;
 	
 	//faire une méthode qui connait le prix d'achat moyen d'un chocolat
 	
 	public Distributeur3AcheteurCC(ChocolatDeMarque[] chocos, double[] stocks) {
 		super(chocos, stocks);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public void next() {
+		super.next();
 		
 	}
-
-	@Override
-	public boolean achete(IProduit produit) {
-		// TODO Auto-generated method stub
-		
-		return true;
 	
+
+	public boolean achete(IProduit produit) {
+		if (!(produit instanceof ChocolatDeMarque)) {
+			return false;
+		}
+		return true;
+
 	}
 
-	@Override
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
 		// TODO Auto-generated method stub

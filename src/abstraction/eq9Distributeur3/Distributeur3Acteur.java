@@ -37,6 +37,10 @@ public class Distributeur3Acteur implements IActeur {
 	
 	public void initialiser() {
 	}
+	
+	public String toString() {
+		return this.getNom();
+	}
 
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ9";
@@ -48,11 +52,21 @@ public class Distributeur3Acteur implements IActeur {
 
 	public void next() {
 
+
 		// lancer un contrat seuil et repondre 
 
 		
 		
 		// il va falloir faire la comparaison de contrats cadres par rapport à un seuil puis choisir le plus interessant
+
+
+		journal.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
+		if (Filiere.LA_FILIERE.getEtape()>=1) {
+			for (int i=0; i<this.chocolats.size(); i++) {
+			journal.ajouter("Le prix moyen du chocolat \""+chocolats.get(i).getNom()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyen(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-1));
+			journal.ajouter("Les ventes de chocolat \""+chocolats.get(i)+" il y a un an etaient de "+Filiere.LA_FILIERE.getVentes(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-24));
+			}
+		}
 
 	}
 
@@ -116,16 +130,23 @@ public class Distributeur3Acteur implements IActeur {
 	}
 
 	public String getDescription() {
+		
 		return "Des ingrédients d'exception pour un chocolat unique";
 	}
-	public String toString() {
-		return this.getNom();
-	}
 
-	// Renvoie les indicateurs
+
+	
+	
 	public List<Variable> getIndicateurs() {
-		List<Variable> res = new ArrayList<Variable>();
+		List<Variable> res=new ArrayList<Variable>();
+		/*
+		 * Ici il faut adapter la récupération de l'indicateur stock de l'exemple avec notre classe stock
+		 * 
+		for (int i=0; i<this.chocolats.size(); i++) {
+			res.add(stock.getStock(chocolats.get(i)));
+		}*/
 		return res;
+		
 	}
 
 	// Renvoie les parametres
@@ -180,5 +201,11 @@ public class Distributeur3Acteur implements IActeur {
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
 	}
+	
+	public double getStock(ChocolatDeMarque c) {
+		return this.stock.getStock(c);
+	}
+
+	
 
 }
