@@ -12,11 +12,23 @@ import abstraction.eqXRomu.general.Variable;
 public class Producteur3Acteur implements IActeur {
 	
 	protected int cryptogramme;
-
+	protected Journal journal_operationsbancaires;
+    protected Journal journal_ventes;
+    protected Journal journal_achats;
+    protected Journal journal_activitegenerale;
+    protected Journal journal_Stock;
+    
 	public Producteur3Acteur() {
+	String nom = "Equipe 3";
+	journal_operationsbancaires=new Journal("Journal des Opérations bancaires de l'"+nom,this);
+    journal_ventes=new Journal("Journal des Ventes de l'"+nom,this);
+    journal_achats=new Journal("Journal des Achats de l'"+nom,this);
+    journal_activitegenerale=new Journal("Journal général de l'"+nom,this);
+    journal_Stock = new Journal("Journal des Stocks de l'"+nom,this);
 	}
 	
 	public void initialiser() {
+		
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -26,8 +38,12 @@ public class Producteur3Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 	//         En lien avec l'interface graphique         //
 	////////////////////////////////////////////////////////
-
+	
+	protected Journal getJGeneral() {
+		return this.journal_activitegenerale;
+	}
 	public void next() {
+		this.getJGeneral().ajouter("Le step ajoutée est : " +Filiere.LA_FILIERE.getEtape());
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -53,6 +69,11 @@ public class Producteur3Acteur implements IActeur {
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
+		res.add(journal_activitegenerale);
+		res.add(journal_operationsbancaires);
+		res.add(journal_ventes);
+		res.add(journal_achats);
+		res.add(journal_Stock);
 		return res;
 	}
 
