@@ -59,13 +59,23 @@ public class Producteur3 extends Producteur3Acteur  {
 		return this.Stock;
 	}
   
-
+	
+	/**
+	 * @author BOCQUET Gabriel, Dubus-Chanson Victor
+	 */
 	public void next() {
 		super.next();
 		HarvestToStock(Filiere.LA_FILIERE.getEtape());
+		updateHectaresLibres(Filiere.LA_FILIERE.getEtape());
+		if (Filiere.LA_FILIERE.getEtape() % 12 == 0) {
+			changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
+		}
+		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep);
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
-				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs : "+ this.HectaresUtilises+", Nombre d'employe : Pas encore calculé"+ "Resultat du step : Pas encore Calcule");
-		
+				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ "Resultat du step : pas encore calculé");
+	
+	
+		this.CoutStep = 0;
 	}
 	/*
 
@@ -119,14 +129,14 @@ public class Producteur3 extends Producteur3Acteur  {
 		Stock Stock = this.getStock();
 		Double Quantite_HQ_BE= Stock.getQuantite(Feve.F_HQ_BE);
 		Double Quantite_MQ_BE= Stock.getQuantite(Feve.F_MQ_BE);
-		if (Quantite_HQ_BE < 100) {
-			BesoinHQ += 100; /*56 tonnes de plus par an à partir de 5ans*/
+		if (Quantite_HQ_BE < 50000) {
+			BesoinHQ += 1000; /*560 tonnes de plus par an à partir de 5ans*/
 			HashMap<Integer, Integer> ChampsH = this.fields.getChamps().get("H");
 			ChampsH.put(CurrentStep, BesoinHQ);
 			this.fields.getChamps().put("H", ChampsH);
 		}
-		if (Quantite_MQ_BE < 100) {
-			BesoinMQ += 100; /*56 tonnes de plus par an à partir de 5ans*/
+		if (Quantite_MQ_BE < 500000) {
+			BesoinMQ += 1000; /*560 tonnes de plus par an à partir de 5ans*/
 			HashMap<Integer, Integer> ChampsM = this.fields.getChamps().get("M");
 			ChampsM.put(CurrentStep, BesoinMQ);
 			this.fields.getChamps().put("M", ChampsM);
@@ -152,7 +162,7 @@ public class Producteur3 extends Producteur3Acteur  {
 	}
 	
 	/*Modifie les variables de couts et d'hectares en fonction des resultats de variationBesoinHectares*/
-	public void changeHectaresAndCoutsLies(Integer ajoutHectares, Integer HectaresLiberes) {
+	public void changeHectaresAndCoutsLies(Integer ajoutHectares) {
 		this.HectaresUtilises = this.HectaresUtilises + ajoutHectares;
 		Integer HectaresAAcheter = ajoutHectares - this.HectaresLibres;
 		if (HectaresAAcheter > 0) {
