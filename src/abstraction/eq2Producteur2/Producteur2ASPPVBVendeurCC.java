@@ -4,13 +4,14 @@ import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse implements IVendeurContratCadre{
 
 	public boolean peutVendre(IProduit produit) {
-		return produit instanceof Feve;
+		return produit instanceof Feve && (((Feve) produit).getGamme() != Gamme.MQ || ((Feve) produit).isBioEquitable() != false);
 	}
 	
 	@Override
