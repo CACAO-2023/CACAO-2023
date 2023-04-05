@@ -18,7 +18,10 @@ public class Distributeur3Acteur implements IActeur {
 	protected int numero;
 	protected Integer cryptogramme;
 	protected Stock stock;
-	protected Journal journal;
+	protected Journal journal_ventes;
+	protected Journal journal_achats;
+	protected Journal journal_operationsbancaires;
+	protected Journal journal_activitegenerale;
 	protected List<ChocolatDeMarque> chocolats;
 
 	public Distributeur3Acteur() {
@@ -39,7 +42,7 @@ public class Distributeur3Acteur implements IActeur {
 		this.chocolats.add(c1);
 		this.stock.ajoutQte(c1, 1000);
 		
-		this.journal = new Journal(this.getNom()+" activites", this);
+		this.journal_activitegenerale = new Journal(this.getNom()+" activites", this);
 		
 	}
 	
@@ -68,7 +71,7 @@ public class Distributeur3Acteur implements IActeur {
 		// il va falloir faire la comparaison de contrats cadres par rapport à un seuil puis choisir le plus interessant
 
 
-		journal.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
+		journal_activitegenerale.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
 			for (int i=0; i<this.chocolats.size(); i++) {
 		//	journal.ajouter("Le prix moyen du chocolat \""+chocolats.get(i).getNom()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyen(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-1));
