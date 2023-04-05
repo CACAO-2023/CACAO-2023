@@ -12,7 +12,7 @@ import abstraction.eqXRomu.produits.Lot;
 public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse implements IVendeurContratCadre{
 
 	public Producteur2ASPPVBVendeurCC(Feve feve, double stock) {
-		super(feve, stock);
+		super();
 	}
 
 	public boolean peutVendre(IProduit produit) {
