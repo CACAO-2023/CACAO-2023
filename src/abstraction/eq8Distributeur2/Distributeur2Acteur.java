@@ -26,6 +26,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	
 	protected int cryptogramme;
 	protected String nom;
+	protected List<ChocolatDeMarque> chocolats;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
     protected HashMap<ChocolatDeMarque, Variable> stocks;
     protected HashMap<Gamme, Double> pourcentagesGamme;
@@ -77,6 +78,13 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		journal_activitegenerale.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
+		if (Filiere.LA_FILIERE.getEtape()>=1) {
+			for (int i=0; i<this.chocolats.size(); i++) {
+				journal_activitegenerale.ajouter("Le prix moyen du chocolat \""+chocolats.get(i).getNom()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyen(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-1));
+				journal_activitegenerale.ajouter("Les ventes de chocolat \""+chocolats.get(i)+" il y a un an etaient de "+Filiere.LA_FILIERE.getVentes(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-24));
+			}
+		}
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -129,8 +137,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	// Apres chaque operation sur votre compte bancaire, cette
 	// operation est appelee pour vous en informer
 	public void notificationOperationBancaire(double montant) {
-	
-		
 		if (montant<0) {
 			double m=montant*(-1);
 			String ch="retrait de "+m;
@@ -171,14 +177,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	    }
 	}
 
-	
-	
-	
-	
-	
-	
 	public List<String> getMarquesChocolat() {
-		return Arrays.asList(this.marques);
+		return null;
 	}
 //-----------------------------------------------
 	//La fonction prix() permet de connaître le prix actuel 
