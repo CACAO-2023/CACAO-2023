@@ -78,7 +78,7 @@ public class Journal {
 	public static String texteColore(Color background, Color foreground, String s) {
 		return "<span style=\"font-family: Monospace; background-color:rgb("+background.getRed()+","+background.getGreen()+","+background.getBlue()+")\"><font color=\"rgb("+foreground.getRed()+","+foreground.getGreen()+","+foreground.getBlue()+")\">"+s+"<span style=\"font-family: Monospace; background-color:rgb(255,255,255)\"><font color=\"rgb(0,0,0)\">";
 	}
-
+ //JDJDJJD
 	public static String texteColore(IActeur acteur, String s) {
 		return texteColore(acteur.getColor(), Color.BLACK, s);
 	}
