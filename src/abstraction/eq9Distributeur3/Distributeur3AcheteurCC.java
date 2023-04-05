@@ -6,9 +6,14 @@ import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+
 import abstraction.eqXRomu.general.Journal;
+
+import abstraction.eqXRomu.produits.ChocolatDeMarque;
+
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
+
 
 public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAcheteurContratCadre{
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
@@ -17,6 +22,11 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	
 	
 	
+	public Distributeur3AcheteurCC(ChocolatDeMarque[] chocos, double[] stocks) {
+		super(chocos, stocks);
+		// TODO Auto-generated constructor stub
+	}
+
 	public void next() {
 		super.next();
 		
