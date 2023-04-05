@@ -115,7 +115,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 	public Lot notificationVente(Feve f, double quantiteEnT, double coursEnEuroParT) {
 		Lot l = new Lot(f);
 		l.ajouter(Filiere.LA_FILIERE.getEtape(), quantiteEnT); 
-		this.stockFeve.setValeur(this, this.stockFeve.getValeur()-quantiteEnT);
+		//this.stockFeve.setValeur(this, this.stockFeve.getValeur()-quantiteEnT);
 		return l;
 	}
 
