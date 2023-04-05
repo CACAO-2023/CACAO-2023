@@ -30,7 +30,7 @@ public class Distributeur3Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
-		// il va falloir faire la comparaison de contrats cadres par rapport à un seuil puis choisir le plus interessant
+		// lancer un contrat seuil et repondre 
 	}
 
 	
@@ -93,7 +93,10 @@ public class Distributeur3Acteur implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Des ingr�dients d'exception pour un chocolat unique";
+		return "Des ingrédients d'exception pour un chocolat unique";
+	}
+	public String toString() {
+		return this.getNom();
 	}
 
 	// Renvoie les indicateurs
