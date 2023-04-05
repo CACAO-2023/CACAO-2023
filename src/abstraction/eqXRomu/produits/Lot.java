@@ -13,8 +13,8 @@ import abstraction.eqXRomu.general.Journal;
  *
  */
 public class Lot {
-	private IProduit produit;
-	private HashMap<Integer, Double> quantites; // table des associations <stepRecolte, quantiteEnT>
+	protected IProduit produit;
+	protected HashMap<Integer, Double> quantites; // table des associations <stepRecolte, quantiteEnT>
 	// chaque association <S,Q> correspondant a une quantite de Q Tonnes de feves recoltees au step S. 
 
 	/**

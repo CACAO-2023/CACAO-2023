@@ -8,7 +8,7 @@
 
 # Errors on Pull
 
-## Checkout conflict
+## Checkout conflict or DIRTY_WORKTREE
 You have a local change that you did not commit. 
 You can 1) commit without pushing you local change or 2) delete your local change by replacing the changed files/folders with a previous version.
 Then you will be able to pull. This will maybe result in a conflict, if your colleagues changed the same lines.
@@ -16,16 +16,22 @@ After resolving the conflict, commit all changed files and push.
 
 # Problems of Pull Requests
 
+## "This branch is out-of-date with the base branch"
+
+Your team repository is not up-to-date with the changes that happened on the main repository. Please pull from the main repository and then push to the team repository.
+
 ## Changes outside of package
 You are changing files outside of your java package. You can see the files that you are changing in the "Files changed" tab of your pull request on the github website. This list must contain only files in your package.
 
-You can replace them with the version from the main repository. To do that, right click on these files or folders -> Replace with -> Branch, Tag or Reference -> Remote tracking -> select the main repository -> Replace. If the files or folders do not exist in the main repository, you can simply delete them. Then commit and push to your repository. Don't close the pull request, it will be automatically updated.
+You can replace these files with the version from the main repository. To do that, right click on these files or folders -> Replace with -> Branch, Tag or Reference -> Remote tracking -> select the main repository (not your team repository) -> Replace. Then commit and push to your repository. Don't close the pull request, it will be automatically updated.
 
 ## Hidden changes outside of package
 
 You are changing some files or folders that are hidden in the Java perspective of Eclipse. You can see the files that you are changing in the "Files changed" tab of your pull request on the github website. This list must contain only files in your package.
 
-To see the files, go to the Resource perspective of Eclipse. Right click on these files or folders -> Replace with -> Branch, Tag or Reference -> Remote tracking -> select the main repository -> Replace. Then commit and push to your repository. Don't close this pull request, it will be automatically updated.
+To see the hidden files, go to the Resource perspective of Eclipse. 
+
+You can replace these files with the version from the main repository. To do that, right click on these files or folders -> Replace with -> Branch, Tag or Reference -> Remote tracking -> select the main repository (not your team repository) -> Replace. Then commit and push to your repository. Don't close the pull request, it will be automatically updated.
 
 ## Additions outside of the package
 
