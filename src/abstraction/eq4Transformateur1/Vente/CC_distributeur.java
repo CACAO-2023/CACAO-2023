@@ -3,6 +3,7 @@ package abstraction.eq4Transformateur1.Vente;
 import java.awt.Color;
 
 import abstraction.eq4Transformateur1.Stock;
+import abstraction.eq4Transformateur1.Transformateur1Transformateur;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
@@ -14,7 +15,7 @@ import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class CC_distributeur extends Stock implements IVendeurContratCadre {
+public class CC_distributeur extends Transformateur1Transformateur implements IVendeurContratCadre {
 
 	public boolean vend(IProduit produit) {
 		boolean res=false;
