@@ -4,16 +4,16 @@ import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.produits.Feve;
-import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse implements IVendeurContratCadre{
+public class Producteur2APPVBVendeurCC extends Producteur2APPVendeurBourse implements IVendeurContratCadre{
 
-	public boolean peutVendre(IProduit produit) {
-		return produit instanceof Feve && (((Feve) produit).getGamme() != Gamme.MQ || ((Feve) produit).isBioEquitable() != false);
+	public Producteur2APPVBVendeurCC(Feve feve, double stock) {
+		super(feve, stock);
+		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	public boolean vend(IProduit produit) {
 		// TODO Auto-generated method stub
@@ -50,6 +50,4 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		return null;
 	}
 
-	/*Creer une fonction qui renvoie les quantités à livrer au prochain step/aux prochains steps (proposition)
-	*/
 }
