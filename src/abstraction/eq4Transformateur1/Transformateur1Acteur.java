@@ -22,14 +22,12 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	public static Color COLOR_GREEN  = new Color(  6,162, 37);
 	public static Color COLOR_LGREEN = new Color(  6,255, 37);
 	public static Color COLOR_LBLUE = new Color(  6,130,230);
-	
-
 	protected Journal journal;
 	protected Journal journal_BOURSE;
 	protected Journal journal_CC_PROD;
 	protected Journal journal_CC_DISTRI;
 	protected Journal journal_appel;
-
+	protected int step; // tour du jeu 
 	private Variable qualiteHaute;  // La qualite d'un chocolat de gamme haute 
 	private Variable qualiteMoyenne;// La qualite d'un chocolat de gamme moyenne  
 	private Variable qualiteBasse;  // La qualite d'un chocolat de gamme basse
@@ -43,7 +41,6 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	private Variable pourcentageRSEmax;//Le pourcentage de reversion RSE pour un impact max sur la qualite percue
 	private Variable partRSEQualitePercue;//L'impact de pourcentageRSEmax% du prix consacres aux RSE dans la qualite percue du chocolat
 	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
-	private int step; // tour du jeu 
 
 	protected Variable totalStocksFeves;
 	protected Variable totalStocksChoco;
