@@ -13,9 +13,9 @@ public class Distributeur3Acteur implements IActeur {
 	protected Stock stock;
 	protected int cryptogramme;
 	protected Journal journal;
-	protected Stock stock;
 
 	public Distributeur3Acteur() {
+		
 	}
 	
 	public void initialiser() {
@@ -30,7 +30,7 @@ public class Distributeur3Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
-		// il va falloir faire la comparaison de contrats cadres par rapport à un seuil 
+		// il va falloir faire la comparaison de contrats cadres par rapport à un seuil puis choisir le plus interessant
 	}
 
 	
