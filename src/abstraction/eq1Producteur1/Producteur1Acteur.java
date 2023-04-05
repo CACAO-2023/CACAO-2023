@@ -12,6 +12,8 @@ import abstraction.eqXRomu.general.Variable;
 public class Producteur1Acteur implements IActeur {
 	
 	protected int cryptogramme;
+	
+	
 	protected Journal journal;
 	protected int step;
 	protected champ champ;
