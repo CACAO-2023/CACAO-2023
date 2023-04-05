@@ -39,6 +39,7 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	private Variable pourcentageRSEmax;//Le pourcentage de reversion RSE pour un impact max sur la qualite percue
 	private Variable partRSEQualitePercue;//L'impact de pourcentageRSEmax% du prix consacres aux RSE dans la qualite percue du chocolat
 	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
+	private int step; // tour du jeu 
 
 	protected Variable totalStocksFeves;
 	protected Variable totalStocksChoco;
@@ -77,6 +78,7 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 			this.lesFeves.add(f);
 			this.journal.ajouter("   - "+f);
 		}
+		this.step = 0;
 	}
 	
 
@@ -89,6 +91,9 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		this.step += 1;
+		this.journal.ajouter("step:" + this.step);
+
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
