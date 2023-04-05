@@ -5,6 +5,7 @@ import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
+import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
@@ -20,11 +21,31 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 * IMPORTANT : durant une meme etape, la fonction doit toujours retourner la meme valeur pour un chocolat donne.
 	 */
 	public double prix(ChocolatDeMarque choco) {
-		Gamme gamme = choco.getGamme();
-		boolean bioeq = choco.isBioEquitable();
-		
-		
-		return 10;
+		double qualite = choco.qualitePercue();
+		double coef = 1-(((10/3)*qualite)/100)+0.1;
+		if (choco.getChocolat()==Chocolat.C_BQ) {
+			return coutCB/coef;
+		}
+		else if (choco.getChocolat()==Chocolat.C_MQ) {
+			return coutCMNL/coef;
+		}
+		else if (choco.getChocolat()==Chocolat.C_MQ_BE) {
+			return coutCML/coef;
+		}
+		else if (choco.getChocolat()==Chocolat.C_HQ_BE) {
+			return coutCH/0.8;
+		}
+		return 2;
+	}
+	
+	public double prixPromotion(ChocolatDeMarque choco) {
+		double p = prix(choco);
+		if (((temps%4)==0)&&(choco.getChocolat()!=Chocolat.C_BQ)) {
+			return p*0.9;
+		}
+		else {
+			return p;
+		}
 	}
 	
 	/**
@@ -35,12 +56,12 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 */
 	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
 		// recopie de l'exemple de romu
-		if (stockChocoMarque7.keySet().contains(choco)) {
-			double qStock = stockChocoMarque7.get(choco);
-			return qStock/2.0;
-		} else {
-			return 0.0;
-		}
+//		if (stockChocoMarque7.keySet().contains(choco)) {
+//			double qStock = stockChocoMarque7.get(choco);
+//			return qStock/2.0;
+//		} else {
+		return 0.0;
+//		}
 	}
 //	public void demande_contrat_cadre(IVendeurContratCadre vendeur) {
 //		qql = new demandeAcheteur(this,  vendeur, IProduit produit, Echeancier echeancier, int cryptogramme, boolean tg) {
@@ -57,12 +78,12 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 */
 	public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
 		//recopie de l'exemple de romu
-		if (stockChocoMarque7.keySet().contains(choco)) {
-			double qStock = stockChocoMarque7.get(choco);
-			return qStock/20.0;
-		} else {
-			return 0.0;
-		}
+//		if (stockChocoMarque7.keySet().contains(choco)) {
+//			double qStock = stockChocoMarque7.get(choco);
+//			return qStock/20.0;
+//		} else {
+		return 0.0;
+//		}
 	}
 	
 	/**
@@ -77,8 +98,8 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 * @param montant, le montant correspondant a la transaction que le client a deja verse sur le compte du distributeur
 	 */
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
-		stockChocoMarque7.put(choco, stockChocoMarque7.get(choco)-quantite);
-		totalStocks.setValeur(this, totalStocks.getValeur(cryptogramme)-quantite, cryptogramme);
+//		stockChocoMarque7.put(choco, stockChocoMarque7.get(choco)-quantite);
+//		totalStocks.setValeur(this, totalStocks.getValeur(cryptogramme)-quantite, cryptogramme);
 	}
 	
 	/**
