@@ -155,14 +155,16 @@ public class Distributeur3Acteur implements IActeur {
 	
 	
 	public List<Variable> getIndicateurs() {
-		List<Variable> res=new ArrayList<Variable>();
-		/*
-		 * Ici il faut adapter la récupération de l'indicateur stock de l'exemple avec notre classe stock
-		 * 
-		for (int i=0; i<this.chocolats.size(); i++) {
-			res.add(stock.getStock(chocolats.get(i)));
-		}*/
-		return res;
+		
+		ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "marque", 50, 20);
+
+		
+		Variable res= new Variable("Stock",this,stock.getStock(c1));
+		
+		List<Variable> d = null;
+		d.add(res);
+		
+		return d;
 		
 	}
 
