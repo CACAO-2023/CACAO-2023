@@ -3,6 +3,7 @@ package abstraction.eq4Transformateur1;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
@@ -26,6 +27,8 @@ public class Transformateur1 extends Transformateur1Acteur implements IFabricant
 				this.chocosProduits.add(new ChocolatDeMarque(c1, "Yocttoootoa", 55, 0));
 				this.chocosProduits.add(new ChocolatDeMarque(c2, "Vccotioi", 90, 10));
 		}
+	System.out.println(	Filiere.LA_FILIERE.getParametre("pourcentage min cacao BQ").getValeur());
+		
 		return this.chocosProduits;
 	}
 
