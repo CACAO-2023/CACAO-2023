@@ -9,7 +9,9 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Gamme;
 
 public class Distributeur3Acteur implements IActeur {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
@@ -19,18 +21,22 @@ public class Distributeur3Acteur implements IActeur {
 	protected Journal journal;
 	protected List<ChocolatDeMarque> chocolats;
 
-	public Distributeur3Acteur(ChocolatDeMarque[] chocos, double[] stocks) {
-		if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
+	public Distributeur3Acteur() {
+		/*if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
 			throw new IllegalArgumentException("creation d'une instance de ExempleAbsDistributeurChocolatMarqe avec des arguments non valides");
 		}		
 		NB_INSTANCES++;
-		this.numero=NB_INSTANCES;
+		this.numero=NB_INSTANCES;*/
+		
+		
+		// Ici pour tester on se créé un stock de chocolat à partir de rien (william)
+		// ChocolatDeMarque(Chocolat chocolat, String marque, int pourcentageCacao, int pourcentageRSE)
+		ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "marque", 50, 20);
 		
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
-		for (int i=0; i<chocos.length; i++) {
-			this.chocolats.add(chocos[i]);
-			this.stock.ajoutQte(chocos[i], stocks[i]);
-		}
+		this.chocolats.add(c1);
+		this.stock.ajoutQte(c1, 1000);
+		
 		this.journal = new Journal(this.getNom()+" activites", this);
 		
 	}
