@@ -16,7 +16,7 @@ import abstraction.eqXRomu.produits.Feve;
 public class Producteur2Acteur implements IActeur {
 	
 	protected int cryptogramme;
-	protected Journal journal;
+	protected Journal journal = new Journal("Journal " + this.getNom(), this);
 	
 	protected Variable nbHecBasse = new VariablePrivee("nbHecBasse", "Le nombre d'hectare de fèves de basse qualité", this, 100);
 	protected Variable nbHecMoy = new VariablePrivee("nbHecMoy", "Le nombre d'hectare de fèves de moyenne qualité", this, 100);
@@ -36,7 +36,6 @@ public class Producteur2Acteur implements IActeur {
 	}
 	
 	public void initialiser() {
-		this.journal = new Journal("Journal " + this.getNom(), this);
 	}
 
 	public String getNom() {// NE PAS MODIFIER
