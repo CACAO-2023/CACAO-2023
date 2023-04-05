@@ -20,11 +20,11 @@ public class Distributeur3Acteur implements IActeur {
 	protected List<ChocolatDeMarque> chocolats;
 
 	public Distributeur3Acteur(ChocolatDeMarque[] chocos, double[] stocks) {
-		if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
+		/*if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
 			throw new IllegalArgumentException("creation d'une instance de ExempleAbsDistributeurChocolatMarqe avec des arguments non valides");
 		}		
 		NB_INSTANCES++;
-		this.numero=NB_INSTANCES;
+		this.numero=NB_INSTANCES;*/
 		
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
 		for (int i=0; i<chocos.length; i++) {
