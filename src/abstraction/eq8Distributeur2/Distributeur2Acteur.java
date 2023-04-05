@@ -2,10 +2,12 @@ package abstraction.eq8Distributeur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import abstraction.eqXRomu.clients.ClientFinal;
+import abstraction.eqXRomu.clients.ExempleDistributeurChocolatMarque;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
@@ -25,25 +27,40 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	
 	protected int cryptogramme;
 	protected String nom;
+	protected ArrayList<ChocolatDeMarque> chocolats;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
-    protected HashMap<ChocolatDeMarque, Double> stocks;
+    protected HashMap<ChocolatDeMarque, Variable> stocks;
     protected HashMap<Gamme, Double> pourcentagesGamme;
+    private double[] prix;
+    private String[] marques;
+   
+	private double stockBasDeGamme;
+	private double stockMoyenDeGamme;
+	private double stockHautDeGamme;
     protected Journal journal_operationsbancaires;
     protected Journal journal_ventes;
     protected Journal journal_achats;
+    protected Journal journal_stocks;
     protected Journal journal_activitegenerale;
     
 
 	public Distributeur2Acteur() {
-		nom="équipe 8";
-		prixDeVente = new HashMap<>();
-        stocks = new HashMap<>();
-        journal_operationsbancaires=new Journal("Journal des Opérations bancaires de l'"+nom,this);
-        journal_ventes=new Journal("Journal des Ventes de l'"+nom,this);
-        journal_achats=new Journal("Journal des Achats de l'"+nom,this);
-        journal_activitegenerale=new Journal("Journal général de l'"+nom,this);
-        pourcentagesGamme = new HashMap<>();
-        
+		cryptogramme = 0; // valeur par défaut à modifier
+	    nom = "équipe 8";
+	    chocolats =  new ArrayList<ChocolatDeMarque>();
+	    prixDeVente = new HashMap<>();
+	    stocks = new HashMap<>();
+	    pourcentagesGamme = new HashMap<>();
+	    prix = new double[]{0, 0, 0}; // valeurs par défaut à modifier
+	    marques = new String[]{"marque 1", "marque 2", "marque 3"}; // valeurs par défaut à modifier
+	    stockBasDeGamme = 0.0; // valeur par défaut à modifier
+	    stockMoyenDeGamme = 0.0; // valeur par défaut à modifier
+	    stockHautDeGamme = 0.0; // valeur par défaut à modifier
+	    journal_operationsbancaires = new Journal("Journal des Opérations bancaires de l'" + nom, this);
+	    journal_ventes = new Journal("Journal des Ventes de l'" + nom, this);
+	    journal_achats = new Journal("Journal des Achats de l'" + nom, this);
+	    journal_activitegenerale = new Journal("Journal général de l'" + nom, this);
+	    journal_stocks = new Journal("Journal des stocks" + nom, this);
         initialiserGamme();
 	}
 	
@@ -54,6 +71,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	}
 
 	public void initialiser() {
+		
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -65,6 +83,14 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		
+		journal_activitegenerale.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
+		if (Filiere.LA_FILIERE.getEtape()>=1) {
+			for (int i=0; i<this.chocolats.size(); i++) {
+				journal_activitegenerale.ajouter("Le prix moyen du chocolat \""+chocolats.get(i).getNom()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyen(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-1));
+				journal_activitegenerale.ajouter("Les ventes de chocolat \""+chocolats.get(i)+" il y a un an etaient de "+Filiere.LA_FILIERE.getVentes(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-24));
+			}
+		}
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -117,8 +143,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	// Apres chaque operation sur votre compte bancaire, cette
 	// operation est appelee pour vous en informer
 	public void notificationOperationBancaire(double montant) {
-	
-		
 		if (montant<0) {
 			double m=montant*(-1);
 			String ch="retrait de "+m;
@@ -150,35 +174,73 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		return Filiere.LA_FILIERE;
 	}
 
-	@Override
+	public  Variable getStock(ChocolatDeMarque choco) {
+	    int pos = (((List<Variable>) choco).indexOf(choco));
+	    if (pos < 0) {
+	        return null;
+	    } else {
+	        return stocks.get(pos);
+	    }
+	}
+
 	public List<String> getMarquesChocolat() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
+//-----------------------------------------------
+	//La fonction prix() permet de connaître le prix actuel 
+	//d'un kg de chocolat de marque choco. Elle recherche dans 
+	//la HashMap prixDeVente si le chocolat de marque choco est vendu par le distributeur.
+	//Si c'est le cas, la fonction renvoie le prix correspondant à ce 
+	//chocolat de marque. Sinon, la fonction renvoie 0. 
+	
+	
 	@Override
 	public double prix(ChocolatDeMarque choco) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(prixDeVente.containsKey(choco)) {
+			return prixDeVente.get(choco);
+		}else {
+			return 0;
+		}
 	}
 
 	@Override
-	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
+        int pos = (chocolats.indexOf(choco));
+        if (pos < 0) {
+            return 0.0;
+        } else {
+            double stockGamme;
+            if (choco.getGamme() == Gamme.BQ) {
+                stockGamme = stockBasDeGamme;
+            } else if (choco.getGamme() == Gamme.MQ) {
+                stockGamme = stockMoyenDeGamme;
+            } else {
+                stockGamme = stockHautDeGamme;
+            }
+            return Math.min(stockGamme, this.getStock(choco).getValeur());
+        }
+    }
 
 	@Override
-	public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
+        int pos = chocolats.indexOf(choco);
+        if (pos < 0) {
+            return 0.0;
+        } else {
+            if (choco.getGamme() == Gamme.BQ) {
+                return Math.min(stockBasDeGamme, this.getStock(choco).getValeur()) / 10.0;
+            } else {
+                return 0.0;
+            }}
+        }
 
-	@Override
-	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
-		// TODO Auto-generated method stub
-		
-	}
+	 @Override
+	    public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
+	        int pos = chocolats.indexOf(choco);
+	        if (pos >= 0) {
+	            this.getStock(choco).retirer(this, quantite);
+	        }
+	    }
 
 	@Override
 	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
