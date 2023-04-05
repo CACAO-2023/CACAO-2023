@@ -50,7 +50,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+//Mathilde 
 	@Override
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
