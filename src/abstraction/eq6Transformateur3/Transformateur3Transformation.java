@@ -1,5 +1,8 @@
 package abstraction.eq6Transformateur3;
 
+import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.Feve;
+
 public class Transformateur3Transformation extends Transformateur3Stocks {
 
 	/** Maxime Bedu*/
@@ -17,7 +20,11 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 	           
 	*/
 	
-	public void transformation() {
+	public void transformationChoco(Feve f) {
+		if (f instanceof F_BQ) {
+			Variable pourcentageTransfo = this.getPourcentageCacaoBG();
+			stockFeve.replace(F_BQ, )
+		}
 		
 	}
 	
