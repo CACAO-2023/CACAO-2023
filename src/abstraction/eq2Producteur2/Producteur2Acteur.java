@@ -30,6 +30,14 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable tempsDegradationFeve;
 	protected Variable tempsPerimationFeve;
 	
+	public double prixMinBQ = 0.0; //provisoire
+	public double prixMinMQ = 0.0; //provisoire
+	public double prixMinHQ = 0.0; //provisoire
+	public double prixBQ = 1.0; //provisoire
+	public double prixMQ = 2.0; //provisoire
+	public double prixHQ = 4.0; //provisoire
+	
+	
 	protected Feve[] lesFeves = {Feve.F_BQ, Feve.F_MQ, Feve.F_MQ_BE, Feve.F_HQ_BE};
 
 	public Producteur2Acteur() {
@@ -71,6 +79,24 @@ public class Producteur2Acteur implements IActeur {
 	}
 	protected Variable getProdHec() {
 		return this.prodHec;
+	}
+	public double getPrixMinBQ() {
+		return this.prixMinBQ;
+	}
+	public double getPrixMinMQ() {
+		return this.prixMinMQ;
+	}
+	public double getPrixMinHQ() {
+		return this.prixMinHQ;
+	}
+	public double getPrixBQ() {
+		return this.prixBQ;
+	}
+	public double getPrixMQ() {
+		return this.prixMQ;
+	}
+	public double getPrixHQ() {
+		return this.prixHQ;
 	}
 	
 	////////////////////////////////////////////////////////
