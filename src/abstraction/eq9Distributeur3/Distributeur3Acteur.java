@@ -189,5 +189,11 @@ public class Distributeur3Acteur implements IActeur {
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
 	}
+	
+	public double getStock(ChocolatDeMarque c) {
+		return this.stock.getStock(c);
+	}
+
+	
 
 }

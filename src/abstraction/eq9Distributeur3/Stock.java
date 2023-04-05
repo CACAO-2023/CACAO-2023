@@ -38,6 +38,7 @@ public class Stock {
 	}
 	// ajout d'une qte de chocolat (ou soustraction de chocolat)
 	// Mathilde Soun 
+	// VALEUR NEGATIVE POUR RETIRER
 	public void ajoutQte(ChocolatDeMarque c, double ajout){
 		double qte = this.QteStock.get(c);
 		qte = qte + ajout;
