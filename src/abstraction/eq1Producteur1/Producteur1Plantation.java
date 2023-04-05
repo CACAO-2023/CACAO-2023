@@ -1,23 +1,39 @@
 package abstraction.eq1Producteur1;
 
+
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 import abstraction.eqXRomu.produits.Lot;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Feve;
-
 public class Producteur1Plantation extends Producteur1Acteur {
+
 	private champ champ;
 	private Lot lot_bas ;
-	//private Lot lot_moyen ;
+	private Lot lot_moyen ;
+
+	public champ getChamp() {
+		return this.champ;
+	}
 	
+	public Lot getStockBas() {
+		return this.lot_bas;
+	}
+	
+	public Lot getStockMoy() {
+		return this.lot_moyen ;
+	}
 
 	
 	public void next() {
 		HashMap<Integer, Double> stockFeve = lot_bas.getQuantites() ;
 		//début Elouan
+
 		int n = champ.nbhectare();
+
+		super.next();
+		champ c = this.getChamp();
 		for (int i=0; i<n; i++) {
 			hectar h = champ.getHectare(i);
 			h.setNb_step(h.getNombreSep()+1);

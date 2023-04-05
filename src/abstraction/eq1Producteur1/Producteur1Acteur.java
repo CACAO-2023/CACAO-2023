@@ -12,15 +12,21 @@ import abstraction.eqXRomu.general.Variable;
 public class Producteur1Acteur implements IActeur {
 	
 	protected int cryptogramme;
+	
+	
 	protected Journal journal;
-	public int step;
+	protected int step;
+	protected champ champ;
+
 
 	public Producteur1Acteur() {
 		this.journal = new Journal("Journal "+this.getNom(), this);
 	}
 	
 	public void initialiser() {
-		step = 0;
+		this.step = 0;
+		this.champ = new champ();
+		this.champ.add(new hectar("bas"));
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -32,7 +38,7 @@ public class Producteur1Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
-		step = step + 1;
+		this.step = this.step + 1;
 		this.journal.ajouter("step : "+step);
 	}
 
@@ -106,5 +112,4 @@ public class Producteur1Acteur implements IActeur {
 	public String toString() {
 		return this.getNom();
 	}
-
 }
