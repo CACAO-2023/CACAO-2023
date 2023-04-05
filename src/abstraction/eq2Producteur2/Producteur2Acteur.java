@@ -42,13 +42,36 @@ public class Producteur2Acteur implements IActeur {
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ2";
 	}
+	
+	////////////////////////////////////////////////////////
+	//               Getters et setters                   //
+	////////////////////////////////////////////////////////
 
+	public Journal getJournal() {
+		return this.journal;
+	}
+	protected Variable getNbHecBasse() {
+		return this.nbHecBasse;
+	}
+	protected Variable getNbHecMoy() {
+		return this.nbHecMoy;
+	}
+	protected Variable getNbHecMoyBE() {
+		return this.nbHecMoyBE;
+	}
+	protected Variable getNbHecHauteBE() {
+		return this.nbHecHauteBE;
+	}
+	protected Variable getProdHec() {
+		return this.prodHec;
+	}
+	
 	////////////////////////////////////////////////////////
 	//         En lien avec l'interface graphique         //
 	////////////////////////////////////////////////////////
 
 	public void next() {
-		this.journal.ajouter("Bonjour, nous sommes à l'étape " + Filiere.LA_FILIERE.getEtape() + "et nous n'avons pas encore fait faillite (enfin j'espère).");
+		this.getJournal().ajouter("Bonjour, nous sommes à l'étape " + Filiere.LA_FILIERE.getEtape() + "et nous n'avons pas encore fait faillite (enfin j'espère).");
 		System.out.print(this.journal.toString());
 	}
 
@@ -132,5 +155,4 @@ public class Producteur2Acteur implements IActeur {
 	public String toString() {
 		return this.getNom();
 	}
-
 }
