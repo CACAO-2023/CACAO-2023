@@ -26,7 +26,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	
 	protected int cryptogramme;
 	protected String nom;
-	protected List<ChocolatDeMarque> chocolats;
+	protected ArrayList<ChocolatDeMarque> chocolats;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
     protected HashMap<ChocolatDeMarque, Variable> stocks;
     protected HashMap<Gamme, Double> pourcentagesGamme;
@@ -45,6 +45,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	public Distributeur2Acteur() {
 		cryptogramme = 0; // valeur par défaut à modifier
 	    nom = "équipe 8";
+	    chocolats =  new ArrayList<ChocolatDeMarque>();
 	    prixDeVente = new HashMap<>();
 	    stocks = new HashMap<>();
 	    pourcentagesGamme = new HashMap<>();
@@ -199,7 +200,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	@Override
     public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
-        int pos = (((List<Variable>) choco).indexOf(choco));
+        int pos = (choco.indexOf(chocolats, choco));
         if (pos < 0) {
             return 0.0;
         } else {
@@ -217,7 +218,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	@Override
     public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
-        int pos = (((List<Variable>) choco).indexOf(choco));
+        int pos = choco.indexOf(chocolats, choco);
         if (pos < 0) {
             return 0.0;
         } else {
