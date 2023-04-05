@@ -26,8 +26,14 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	protected int cryptogramme;
 	protected String nom;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
-    protected HashMap<ChocolatDeMarque, Double> stocks;
+    protected HashMap<ChocolatDeMarque, Variable> stocks;
     protected HashMap<Gamme, Double> pourcentagesGamme;
+    private double[] prix;
+    private String[] marques;
+   
+	private double stockBasDeGamme;
+	private double stockMoyenDeGamme;
+	private double stockHautDeGamme;
     protected Journal journal_operationsbancaires;
     protected Journal journal_ventes;
     protected Journal journal_achats;
@@ -35,15 +41,20 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
     
 
 	public Distributeur2Acteur() {
-		nom="équipe 8";
-		prixDeVente = new HashMap<>();
-        stocks = new HashMap<>();
-        journal_operationsbancaires=new Journal("Journal des Opérations bancaires de l'"+nom,this);
-        journal_ventes=new Journal("Journal des Ventes de l'"+nom,this);
-        journal_achats=new Journal("Journal des Achats de l'"+nom,this);
-        journal_activitegenerale=new Journal("Journal général de l'"+nom,this);
-        pourcentagesGamme = new HashMap<>();
-        
+		cryptogramme = 0; // valeur par défaut à modifier
+	    nom = "équipe 8";
+	    prixDeVente = new HashMap<>();
+	    stocks = new HashMap<>();
+	    pourcentagesGamme = new HashMap<>();
+	    prix = new double[]{0, 0, 0}; // valeurs par défaut à modifier
+	    marques = new String[]{"marque 1", "marque 2", "marque 3"}; // valeurs par défaut à modifier
+	    stockBasDeGamme = 0.0; // valeur par défaut à modifier
+	    stockMoyenDeGamme = 0.0; // valeur par défaut à modifier
+	    stockHautDeGamme = 0.0; // valeur par défaut à modifier
+	    journal_operationsbancaires = new Journal("Journal des Opérations bancaires de l'" + nom, this);
+	    journal_ventes = new Journal("Journal des Ventes de l'" + nom, this);
+	    journal_achats = new Journal("Journal des Achats de l'" + nom, this);
+	    journal_activitegenerale = new Journal("Journal général de l'" + nom, this);
         initialiserGamme();
 	}
 	
@@ -150,6 +161,21 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		return Filiere.LA_FILIERE;
 	}
 
+	public  Variable getStock(ChocolatDeMarque choco) {
+	    int pos = (((List<Variable>) choco).indexOf(choco));
+	    if (pos < 0) {
+	        return null;
+	    } else {
+	        return stocks.get(pos);
+	    }
+	}
+
+	
+	
+	
+	
+	
+	
 	@Override
 	public List<String> getMarquesChocolat() {
 		// TODO Auto-generated method stub
@@ -173,22 +199,43 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	}
 
 	@Override
-	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
+        int pos = (((List<Variable>) choco).indexOf(choco));
+        if (pos < 0) {
+            return 0.0;
+        } else {
+            double stockGamme;
+            if (choco.getGamme() == Gamme.BQ) {
+                stockGamme = stockBasDeGamme;
+            } else if (choco.getGamme() == Gamme.MQ) {
+                stockGamme = stockMoyenDeGamme;
+            } else {
+                stockGamme = stockHautDeGamme;
+            }
+            return Math.min(stockGamme, this.getStock(choco).getValeur());
+        }
+    }
 
 	@Override
-	public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
+        int pos = (((List<Variable>) choco).indexOf(choco));
+        if (pos < 0) {
+            return 0.0;
+        } else {
+            if (choco.getGamme() == Gamme.BQ) {
+                return Math.min(stockBasDeGamme, this.getStock(choco).getValeur()) / 10.0;
+            } else {
+                return 0.0;
+            }}
+        }
 
-	@Override
-	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
-		// TODO Auto-generated method stub
-		
-	}
+	 @Override
+	    public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
+	        int pos = (((List<Variable>) choco).indexOf(choco));
+	        if (pos >= 0) {
+	            this.getStock(choco).retirer(this, quantite);
+	        }
+	    }
 
 	@Override
 	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
