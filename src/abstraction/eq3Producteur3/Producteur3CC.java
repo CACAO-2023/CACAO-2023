@@ -1,24 +1,29 @@
 package abstraction.eq3Producteur3;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
+import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
+import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Producteur3CC extends Producteur3Acteur implements IVendeurContratCadre {
+public class Producteur3CC extends Producteur3 implements IVendeurContratCadre {
     protected LinkedList<ExemplaireContratCadre> contracts;
-	protected Stock stock;
+    protected SuperviseurVentesContratCadre superviseur;
     
     /**
      * @author Corentin Caugant
      */
     public Producteur3CC(Stock stock) {
         super();
-        this.stock = stock;
         this.contracts = new LinkedList<ExemplaireContratCadre>();
+        this.superviseur = new SuperviseurVentesContratCadre();
     }
 
     /**
@@ -40,9 +45,9 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      * @author Corentin Caugant
      */
     public boolean vend(IProduit produit) {
-        LinkedList<String> produits = this.getStock().getProduits();
-        for (int i = 0; i < produits.size(); i++) {
-            if (produits.get(i).equals(produit.getType())) {
+        // We check if the product is in the list of products we can sell (i.e if it is a bean we have a stock of)
+        for (Feve f : Feve.values()) {
+            if (produit.getType().equals(f.getType()) && Stock.getQuantite((Feve)produit) > 0) {
                 return true;
             }
         }
@@ -56,12 +61,13 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
         Lot lot = new Lot(produit);
 
-        int oldestStep = this.getStock().getOldestStep();
+        int oldestStep = Stock.getAge((Feve)produit);
         double currentQuantite;
-        if (this.getStock().getQuantite() >= quantite) {
+        if (Stock.retirer((Feve)produit, quantite)) {
             currentQuantite = quantite;
         } else {
-            currentQuantite = this.getStock().getQuantite(); // ! Prepare for trouble, and make it double !
+            currentQuantite = Stock.getQuantite((Feve)produit); // ! Prepare for trouble, and make it double !
+            Stock.retirer((Feve)produit, currentQuantite);
         }
 
         lot.ajouter(oldestStep, currentQuantite);
@@ -83,8 +89,8 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         Echeancier echeancier = contrat.getEcheancier();
 
         // We rework the echeancier to fit the stock
-        if (echeancier.getQuantiteAPartirDe(contrat.getEcheancier().getStepDebut()) > this.getStock().getQuantite()) {
-            echeancier.ajouter(this.getStock().getQuantite()*echeancier.getNbEcheances());
+        if (echeancier.getQuantiteAPartirDe(contrat.getEcheancier().getStepDebut()) > Stock.getQuantite((Feve)contrat.getProduit())) {
+            echeancier.ajouter(Stock.getQuantite((Feve)contrat.getProduit()));
         }
 
         // We stop negociations if it lasts too long
@@ -107,7 +113,19 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         return this.contracts;
     }
 
-    private Stock getStock() {
-        return this.stock;
+    /**
+     * This method will try finding a contract for a given product
+     * @param produit The product we want to sell
+     * @return The contract if found, null otherwise
+     * @author Corentin Caugant
+     */
+    public ExemplaireContratCadre getContractForProduct(Feve produit) {
+        // First we need to select a buyer for the product
+        List<IAcheteurContratCadre> acheteurs = superviseur.getAcheteurs(produit);
+        IAcheteurContratCadre acheteur = acheteurs.get((int)(Math.random() * acheteurs.size()));
+
+        // Now making the contract
+        ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
+        return cc;
     }
 }
