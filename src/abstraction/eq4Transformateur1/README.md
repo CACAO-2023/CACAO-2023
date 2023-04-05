@@ -1,4 +1,4 @@
 BOTHOREL Alexian :AlexianBtrl
-GLAVATKII François : ProgRaizell
+GLAVATKII Francois : ProgRaizell
 RAHIM Amine: Aminee100
 LBAKALI Fouad : noobsensei92
