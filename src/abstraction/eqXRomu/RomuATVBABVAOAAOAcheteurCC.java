@@ -29,6 +29,7 @@ public class RomuATVBABVAOAAOAcheteurCC extends RomuATVBABVAOAcheteurAppelOffre 
 	//                  IAcheteurContratCadre
 	//========================================================
 	public boolean achete(IProduit produit) {
+		
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme acheter le produit "+produit);
 		return true;
 	}
