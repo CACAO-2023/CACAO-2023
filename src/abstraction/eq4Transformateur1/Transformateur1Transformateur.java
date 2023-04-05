@@ -91,21 +91,19 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		}
 		Feve fh = Feve.F_HQ_BE;
 		Chocolat ch = Chocolat.C_HQ_BE;
-		int transfoh = (int) (Math.min(this.stockFeves.get(fb), Math.random()*30));
+		int transfoh = (int) (Math.min(this.stockFeves.get(fh), Math.random()*30));
 		if (transfoh>0) {
-			this.stockFeves.put(fb, this.stockFeves.get(fb)-transfoh);
+			this.stockFeves.put(fh, this.stockFeves.get(fh)-transfoh);
 			this.totalStocksFeves.retirer(this, transfoh, this.cryptogramme);
-			// La moitie sera stockee sous forme de chocolat, l'autre moitie directement etiquetee "Vccotioi"
-			this.stockChoco.put(cb, this.stockChoco.get(cb)+((transfoh/2.0)*this.pourcentageTransfo.get(fb).get(cb)));
+			// Tous les chocolats sont directement etiquetes "Vccotioi"
 			int pourcentageCacao =  90;
-			ChocolatDeMarque cm= new ChocolatDeMarque(cb, "Vccotioi", pourcentageCacao, 15);
+			ChocolatDeMarque cm= new ChocolatDeMarque(ch, "Vccotioi", pourcentageCacao, 15);
 			double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;
-			this.stockChocoMarque.put(cm, scm+((transfo/2.0)*this.pourcentageTransfo.get(fb).get(cb)));
-			this.totalStocksChocoMarque.ajouter(this, ((transfo/2.0)*this.pourcentageTransfo.get(fb).get(cb)), this.cryptogramme);
-			this.totalStocksChoco.ajouter(this, ((transfo/2.0)*this.pourcentageTransfo.get(fb).get(cb)), this.cryptogramme);
-			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfo<10?" "+transfo:transfo)+" T de "+fb+" en "+Journal.doubleSur(transfo*this.pourcentageTransfo.get(fb).get(cb),3,2)+" T de "+cb);
-			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fb+")->"+this.stockFeves.get(fb));
-			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cb+")->"+this.stockChoco.get(cb));
+			this.stockChocoMarque.put(cm, scm+((transfo)*this.pourcentageTransfo.get(fh).get(ch)));
+			this.totalStocksChocoMarque.ajouter(this, ((transfo)*this.pourcentageTransfo.get(fh).get(ch)), this.cryptogramme);
+			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfo<10?" "+transfo:transfo)+" T de "+fh+" en "+Journal.doubleSur(transfo*this.pourcentageTransfo.get(fh).get(ch),3,2)+" T de "+ch);
+			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fh+")->"+this.stockFeves.get(fh));
+			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+ch+")->"+this.stockChoco.get(ch));
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cm+")->"+this.stockChocoMarque.get(cm));
 		}
 	}
