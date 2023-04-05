@@ -1,5 +1,8 @@
 package abstraction.eq2Producteur2;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
@@ -32,7 +35,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		Echeancier echeancierAch = contrat.getEcheancier();
 		if(echeancierAch.getStepDebut() > Filiere.LA_FILIERE.getEtape()) {
 			double testQuantite = 0.0;
-			boolean test = true;
+			double maxDeficit = 0.0;
 			for(int i = echeancierAch.getStepDebut(); i<=echeancierAch.getStepFin(); i++) {
 				if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.HQ) {
 					testQuantite = testQuantite + this.getNbHecHauteBE().getValeur()*this.getProdHec().getValeur() - echeancierAch.getQuantite(i);
@@ -41,10 +44,15 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 					testQuantite = testQuantite + this.getNbHecHauteBE().getValeur()*this.getProdHec().getValeur() - echeancierAch.getQuantite(i);
 				}
 				if(testQuantite < 0.0) {
-					test = false;
+					maxDeficit = Math.min(maxDeficit, testQuantite/(i - echeancierAch.getStepDebut()));
 				}
 			}
-			
+			if(maxDeficit < 0) {
+				List<Double> quantites = new LinkedList<Double>();
+				for(int i = echeancierAch.getStepDebut(); i<=echeancierAch.getStepFin(); i++) {
+					quantites.add(echeancierAch.getQuantite(i));
+				}
+			}
 		}
 		return null;
 	}
