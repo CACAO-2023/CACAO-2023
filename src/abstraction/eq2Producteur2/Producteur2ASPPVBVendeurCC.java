@@ -12,16 +12,17 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 
 	public Producteur2ASPPVBVendeurCC(Feve feve, double stock) {
 		super(feve, stock);
-		// TODO Auto-generated constructor stub
 	}
 
 	public boolean peutVendre(IProduit produit) {
 		return produit instanceof Feve && (((Feve) produit).getGamme() != Gamme.MQ || ((Feve) produit).isBioEquitable() != false);
 	}
 	
-	@Override
 	public boolean vend(IProduit produit) {
-		// TODO Auto-generated method stub
+		boolean testQuantite = true;  /*Implementer dans le IF une condition sur la quantite minimale produite chaque step*/
+		if(produit instanceof Feve && ((Feve) produit).isBioEquitable() && testQuantite) {
+			return true;			
+		}
 		return false;
 	}
 
