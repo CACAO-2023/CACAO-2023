@@ -13,35 +13,23 @@ import abstraction.eqXRomu.produits.Feve;
 public class Transformateur3Stocks extends Transformateur3Acteur  {
 
 /** Nathan Claeys*/ 
-	private HashMap<Feve, Double> fevesStocks;
-    private HashMap<Chocolat, Double> chocolatStocks;
-    private List<ChocolatDeMarque> produitsStockes;
+	private HashMap<Feve, Double> stockFeve;
+    private HashMap<Chocolat, Double> stockChocolat;
+    private List<ChocolatDeMarque> stockProduit;
 	/** Mouhamed Sow*/ 
     public Transformateur3Stocks() {
-        fevesStocks = new HashMap<Feve, Double>();
-        chocolatStocks = new HashMap<Chocolat, Double>();
-        produitsStockes = new ArrayList<ChocolatDeMarque>();
+        stockFeve = new HashMap<Feve, Double>();
+        stockChocolat = new HashMap<Chocolat, Double>();
+        stockProduit = new ArrayList<ChocolatDeMarque>();
     }
     
-    public void ajouter(Feve feve, double quantite) {
-        if (fevesStocks.containsKey(feve)) {
-            fevesStocks.put(feve, fevesStocks.get(feve) + quantite);
-        } else {
-            fevesStocks.put(feve, quantite);
-        }
-    }
-    
-    public void ajouter(Chocolat chocolat, double quantite) {
-        if (chocolatStocks.containsKey(chocolat)) {
-            chocolatStocks.put(chocolat, chocolatStocks.get(chocolat) + quantite);
-        } else {
-            chocolatStocks.put(chocolat, quantite);
-        }
-    }
-    
-    public void ajouter(ChocolatDeMarque chocolat, double quantite) {
-        produitsStockes.add(chocolat);
-    }
+  public void ajouterFeve(Feve feve, Double quantité) {
+	  if(this.stockFeve.containsKey(feve)) {
+		  this.stockFeve.put(feve, this.stockFeve.get(feve)+quantité) ;  
+	  }else {
+		  this.stockFeve.put(feve, quantité) ;
+	  }
+  }
     
     
    
