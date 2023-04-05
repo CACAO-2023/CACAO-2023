@@ -14,8 +14,7 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements IDistributeurChocolatDeMarque {
 	
 	private double capaciteDeVente;
-	private double[] prix;
-	private String[] marques;
+	private HashMap<ChocolatDeMarque, Double> prix;
 
 	
 	
@@ -24,18 +23,12 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 
 		super(chocos, stocks);
 		this.capaciteDeVente = capaciteDeVente;
-		this.prix = prix;
-		this.marques = marques;
+		this.prix = new HashMap<ChocolatDeMarque, Double> ();
 	}
 	//william
 	@Override
 	public double prix(ChocolatDeMarque choco) {
-		int pos= (chocolats.indexOf(choco));
-		if (pos<0) {
-			return 0.0;
-		} else {
-			return prix[pos];
-		}
+		return 0.0;
 	}
 	
 
@@ -82,7 +75,8 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 			if (pos<0) {
 				return 0.0;
 			} else {
-				return Math.min(capaciteDeVente, this.stock.getStock(choco))/10.0;
+				HashMap<ChocolatDeMarque, Double> qtVente = this.quantiteTotale();
+				return qtVente.get(choco)/10.0;
 			}
 
 		}
