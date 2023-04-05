@@ -1,7 +1,5 @@
 package abstraction.eqXRomu.produits;
 
-import java.util.List;
-
 import abstraction.eqXRomu.filiere.Filiere;
 
 public class ChocolatDeMarque implements IProduit {
@@ -127,25 +125,5 @@ public class ChocolatDeMarque implements IProduit {
 	public String toString() {
 		return this.chocolat.toString()+"_"+this.marque;
 	}
-	
-	
-//ette méthode recherche l'objet ChocolatDeMarque spécifié dans la liste listeChocolats 
-//et retourne l'index de la première occurrence trouvée.
-//	Si l'objet ChocolatDeMarque n'est pas trouvé ou si l'un des arguments est null, la méthode retourne -1.
-
-
-    public static int indexOf(List<ChocolatDeMarque> listeChocolats, ChocolatDeMarque chocoRecherche) {
-        if (listeChocolats == null || chocoRecherche == null) {
-            return -1;
-        }
-
-        for (int i = 0; i < listeChocolats.size(); i++) {
-            if (listeChocolats.get(i).equals(chocoRecherche)) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
 	
 }

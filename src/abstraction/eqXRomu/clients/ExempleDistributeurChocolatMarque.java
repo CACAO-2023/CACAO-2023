@@ -18,9 +18,6 @@ public class ExempleDistributeurChocolatMarque extends ExempleAbsDistributeurCho
 	private double capaciteDeVente;
 	private double[] prix;
 	private String[] marques;
-	private double stockBasDeGamme;
-	private double stockMoyenDeGamme;
-	private double stockHautDeGamme;
 
 	public ExempleDistributeurChocolatMarque(ChocolatDeMarque[] chocos, double[] stocks, double capaciteDeVente, double[] prix, String[]marques) {
 		super(chocos, stocks);
