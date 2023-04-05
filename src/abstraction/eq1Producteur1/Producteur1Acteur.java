@@ -13,12 +13,14 @@ public class Producteur1Acteur implements IActeur {
 	
 	protected int cryptogramme;
 	protected Journal journal;
+	private int step;
 
 	public Producteur1Acteur() {
 		this.journal = new Journal("Journal "+this.getNom(), this);
 	}
 	
 	public void initialiser() {
+		step = 0;
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -30,6 +32,8 @@ public class Producteur1Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		step = step + 1;
+		this.journal.ajouter("step : "+step);
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
