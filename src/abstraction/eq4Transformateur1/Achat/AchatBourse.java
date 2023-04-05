@@ -6,27 +6,23 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Lot;
 
-public class AchatBourse implements IAcheteurBourse{
-	private Feve f;
-	private double achatMaxParStep;
-	private double stockFeve;
+public class AchatBourse extends CC_producteur implements IAcheteurBourse{
 
-	@Override
 	public double demande(Feve f, double cours) {
-		return 0;
-			
+		double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
+		double demande = Math.max(0, Math.min( Math.random()*50, solde)); //à modifier avec ordres d'achats
+		this.journal.ajouter(COLOR_LLGRAY, COLOR_LPURPLE,"   BOURSEA: demande en bourse de "+demande+" de "+f);
+		return demande;
 	}
 
-	@Override
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
-		// TODO Auto-generated method stub
-		
+		Feve f = (Feve)(l.getProduit());
+		this.stockFeves.put(f,  this.stockFeves.get(f) + l.getQuantiteTotale());
+		this.totalStocksFeves.ajouter(this,  l.getQuantiteTotale(), this.cryptogramme);
+		this.journal.ajouter(COLOR_LLGRAY, COLOR_LPURPLE,"   BOURSEA: obtenu "+ l.getQuantiteTotale()+" T de "+f+" en bourse. Stock -> "+this.stockFeves.get(f));
 	}
 
-	@Override
 	public void notificationBlackList(int dureeEnStep) {
-		// TODO Auto-generated method stub
-		
+		this.journal.ajouter(" aie aie aie ... blackliste de la bourse pendant "+dureeEnStep+" tour");
 	}
-
 }
