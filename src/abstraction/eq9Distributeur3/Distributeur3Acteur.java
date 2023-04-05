@@ -28,6 +28,7 @@ public class Distributeur3Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		// il va falloir faire la comparaison de contrats cadres par rapport à un seuil 
 	}
 
 	

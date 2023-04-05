@@ -32,7 +32,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 	@Override
 	//baptiste
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
-		this.stock.ajoutQte(choco, -(montant/this.prix(choco)));
+//		this.stock.ajoutQte(choco, -(montant/this.prix(choco)));
 		
 	}
 
