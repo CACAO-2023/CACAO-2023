@@ -23,15 +23,15 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
         stockProduit = new ArrayList<ChocolatDeMarque>(); 
     }
     
-  public void ajouterFeve(Feve feve, Double quantité) {
+  public void ajouterFeve(Feve feve, Double quantitï¿½) {
 	  if(this.stockFeve.containsKey(feve)) {
-		  this.stockFeve.put(feve, this.stockFeve.get(feve)+quantité) ;  
+		  this.stockFeve.put(feve, this.stockFeve.get(feve)+quantitï¿½) ;  
 	  }else {
-		  this.stockFeve.put(feve, quantité) ;
+		  this.stockFeve.put(feve, quantitï¿½) ;
 	  }
   }
+}
     
     
    
 
-}

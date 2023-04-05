@@ -30,7 +30,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 * @return Retourne false si l'acheteur ne souhaite pas etablir de contrat a
 	 *         cette etape pour ce type de produit (retourne true si il est pret a
 	 *         negocier un contrat cadre pour ce type de produit).
-	 * La réponse va dépendre de la valeur de la valeur du stock du produit et de si il y a un contrat sur ce produit
+	 * La rï¿½ponse va dï¿½pendre de la valeur de la valeur du stock du produit et de si il y a un contrat sur ce produit
 	 */
 	public boolean achete(IProduit produit) {
 		int step = Filiere.LA_FILIERE.getEtape();
@@ -45,7 +45,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 									  }
 									  ;}
 		return false;
-	}
+	}   
 
     /**
      * Appelee suite au demarrage des negociations par le vendeur d'un contrat de feves labelisee 
@@ -59,7 +59,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
      * @param tg
      * @return Le pourcentage de rse qui sera effectif sur le chocolat de marque produit
      * a partir des feves de ce contrat cadre.
-     * => Il faut ajouter uns stratégié de modification 
+     * => Il faut ajouter uns stratï¿½giï¿½ de modification 
      */
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
@@ -136,7 +136,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 * 
 	 * @param lot
 	 * @param contrat
-	 * => ajouter ce produit arrivé dans le stock 
+	 * => ajouter ce produit arrivï¿½ dans le stock 
 	 */
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		Object produit = contrat.getProduit();
@@ -145,8 +145,8 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	public List<ExemplaireContratCadre> getListeContratEnCours() {
 		return ListeContratEnCours;
 	}
-	/**Cette fonction donne la quantité de feves qui doit arriver par contrat à un step suivant
-	 * Elle doit permettre d'évaluer si un contrat cadre est nécessaire
+	/**Cette fonction donne la quantitï¿½ de feves qui doit arriver par contrat ï¿½ un step suivant
+	 * Elle doit permettre d'ï¿½valuer si un contrat cadre est nï¿½cessaire
 	 * @param step
 	 * @return
 	 */
