@@ -16,6 +16,10 @@ After resolving the conflict, commit all changed files and push.
 
 # Problems of Pull Requests
 
+## "This branch is out-of-date with the base branch"
+
+Your team repository is not up-to-date with the changes that happened on the main repository. Please pull from the main repository and then push to the team repository.
+
 ## Changes outside of package
 You are changing files outside of your java package. You can see the files that you are changing in the "Files changed" tab of your pull request on the github website. This list must contain only files in your package.
 
