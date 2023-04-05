@@ -3,6 +3,7 @@ package abstraction.eq1Producteur1;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
@@ -78,14 +79,32 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
+		this.mescontrats.add(contrat);
 		
 	}
 
 	@Override
-	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return null;
+	public Lot livrer(IProduit produi, double quantite, ExemplaireContratCadre contrat) {
+	 switch ((Feve)produi) {
+	 
+	 case F_BQ:
+		double livre = Math.min(super.getStockBas().getQuantiteTotale(), quantite);
+		if (livre>0.0) {
+			super.getStockBas().retirer(livre);
+		}
+		Lot lot = new Lot(produi);
+		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); // cet exemple ne gere pas la peremption : la marchandise est consideree comme produite au step courant
+		return lot;
+	 case F_MQ:
+		 double livr = Math.min(super.getStockMoy().getQuantiteTotale(), quantite);
+			if (livr>0.0) {
+				super.getStockMoy().retirer(livr);
+			}
+			Lot lot2 = new Lot(produi);
+			lot2.ajouter(Filiere.LA_FILIERE.getEtape(), livr); // cet exemple ne gere pas la peremption : la marchandise est consideree comme produite au step courant
+			return lot2;
+	 	
+	 }
 	}
 
 	@Override
