@@ -10,28 +10,12 @@ import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
-import abstraction.eqXRomu.general.VariablePrivee;
-
 
 public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 	
 	protected int cryptogramme;
-	protected Journal journal;
-	protected Journal journalVentes;
-	protected Journal journalAchats;
-	protected Variable totalStocksFeves;  // La qualite totale de stock de feves 
-	protected Variable totalStocksChoco;  // La qualite totale de stock de chocolat 
-	protected Variable totalStocksChocoMarque;  // La qualite totale de stock de chocolat de marque 
-
 
 	public Transformateur2Acteur() {
-		this.journal = new Journal("Journal "+this.getNom(), this);
-		this.journalVentes = new Journal("Journal des ventes "+this.getNom(), this);
-		this.journalAchats = new Journal("Journal des achats "+this.getNom(), this);
-		this.totalStocksFeves = new VariablePrivee("Eq5StockFeves", "<html>Quantite totale de feves en stock</html>",this, 0.0, 1000000.0, 0.0);
-		this.totalStocksChoco = new VariablePrivee("Eq5StockChoco", "<html>Quantite totale de chocolat en stock</html>",this, 0.0, 1000000.0, 0.0);
-		this.totalStocksChocoMarque = new VariablePrivee("Eq5StockChocoMarque", "<html>Quantite totale de chocolat de marque en stock</html>",this, 0.0, 1000000.0, 0.0);
-
 	}
 	
 	public void initialiser() {
@@ -59,9 +43,6 @@ public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
-		res.add(this.totalStocksFeves);
-		res.add(this.totalStocksChoco);
-		res.add(this.totalStocksChocoMarque);
 		return res;
 	}
 
@@ -74,9 +55,6 @@ public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
-		res.add(journal);
-		res.add(journalVentes);
-		res.add(journalAchats);
 		return res;
 	}
 
@@ -97,7 +75,7 @@ public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 		if (this==acteur) {
 			System.out.println("Il en est fini de nous");
 		} else {
-			System.out.println("L'acteur "+acteur.getNom()+" a fait faillite, bien fait ! ");
+			System.out.println("L'acteur "+acteur.getNom()+" a fait faillite ");
 		}
 	}
 
