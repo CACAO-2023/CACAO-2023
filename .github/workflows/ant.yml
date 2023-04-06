@@ -27,3 +27,10 @@ jobs:
       uses: coactions/setup-xvfb@v1
       with:
         run: ant -noinput -buildfile build.xml
+    - name: Comment on error
+      if: failure()
+      uses: thollander/actions-comment-pull-request@v2
+      with:
+          message: |
+            Not accepting because the code does not pass the tests. You can read the error message by clicking on "Details" near to the failed test at the bottom of your pull request. You can run the same tests on your Eclipse, they are `test/abstraction/FiliereParDefaultTest.java` and `test/presentation/FenetrePrincipaleTest.java`. To run them right-click on "build.xml", Run As -> Ant Build. You will see the error message in the console. Please fix the error and commit+push again.
+
