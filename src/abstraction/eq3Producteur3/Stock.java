@@ -140,10 +140,10 @@ public class Stock {
 		}
 
 		// Then we loop through each bean type and we will change the quantities
-		for (var entry : stock.getStock().entrySet()) {
+		for (Map.Entry<Feve , Lot> entry : stock.getStock().entrySet()) {
 			// We get the type of bean and the lot of beans of this type
-			Feve f = entry.getKey();
-			Lot lot = entry.getValue();
+			Feve f = (Feve)entry.getKey();
+			Lot lot = (Lot)entry.getValue();
 			HashMap<Integer, Double> quantite = lot.getQuantites();
 
 			Lot newLot = newLots.get(f); // We will add to this lot the beans that are not too old
