@@ -27,11 +27,9 @@ You can replace these files with the version from the main repository. To do tha
 
 Note that if the files you changed are not Java files, they will be hidden in the Java perspective of Eclipse. To see and edit them, switch to the Resource perspective of Eclipse.
 
-## Compilation error
-Your code has a compilation error (red mark in Eclipse). You can read the error message by clicking on "Details" near to the failed test at the bottom of your pull request. Please fix it and commit+push again.
+## Compilation or execution error
 
-## Execution error
-Not accepting because the code does not pass the tests. You can run the same tests on your Eclipse, they are `test/abstraction/FiliereParDefaultTest.java` and `test/presentation/FenetrePrincipaleTest.java`. To run them right-click on "build.xml", Run As -> Ant Build. You will see the error message in the console.
+Not accepting because the code does not pass the tests. You can read the error message by clicking on "Details" near to the failed test at the bottom of your pull request. You can run the same tests on your Eclipse, they are `test/abstraction/FiliereParDefaultTest.java` and `test/presentation/FenetrePrincipaleTest.java`. To run them right-click on "build.xml", Run As -> Ant Build. You will see the error message in the console. Please fix the error and commit+push again.
 
 ## Correcting the pull request
 No need to close and reopen the pull request, you can just fix the problems and push to your repository.
