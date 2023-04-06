@@ -57,7 +57,7 @@ import presentation.secondaire.FenetreJournal;
  * 
  * @author Romuald Debruyne
  */
-public class FenetrePrincipale extends JFrame {
+public class FenetrePrincipale extends JFram {
 
 	public static FenetrePrincipale LA_FENETRE_PRINCIPALE;
 	private static ImageIcon UNCHECKED_IMAGE = new ImageIcon("unche18.gif");
