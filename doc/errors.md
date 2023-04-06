@@ -27,10 +27,6 @@ You can replace these files with the version from the main repository. To do tha
 
 Note that if the files you changed are not Java files, they will be hidden in the Java perspective of Eclipse. To see and edit them, switch to the Resource perspective of Eclipse.
 
-## Additions outside of the package
-
-In the Resource perspective you can replace all folders and files (including hidden files). Since there is no .metadata folder in the main repository, you don't have anything to replace it with. You can simply delete it.
-
 ## Compilation error
 Your code has a compilation error (red mark in Eclipse). You can read the error message by clicking on "Details" near to the failed test at the bottom of your pull request. Please fix it and commit+push again.
 
