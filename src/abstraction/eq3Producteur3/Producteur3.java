@@ -40,13 +40,6 @@ public class Producteur3 extends Producteur3Acteur  {
 		this.HectaresUtilises=950000;
 	}
 
-
-	public void initialiser() {
-		super.initialiser();
-		new Producteur3();
-		
-		
-	}
 	public Champs getFields() {
 		return this.fields;
 	}
@@ -54,7 +47,6 @@ public class Producteur3 extends Producteur3Acteur  {
 		// TODO Auto-generated method stub
 		return this.Stock;
 	}
-  
 
 	public void next() {
 		super.next();
