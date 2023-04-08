@@ -30,6 +30,7 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable stockTotHauteBE = new VariablePrivee("stockTotHauteBE", "stock Total de fèves de haute qualité bio-équitable", this, 0);
 	protected Variable tempsDegradationFeve = new VariablePrivee("tempsDegradationFeve", "Temps (en nombre d'étapes) avant qu'une Feve ne perdent de la qualité", this, 12);
 	protected Variable tempsPerimationFeve = new VariablePrivee("tempsPerimationFeve", "Temps (en nombre d'étapes) avant qu'une Feve ne se périme totalement  après avoir perdu une gamme", this, 6);
+	protected Variable coutMoyenStock = new VariablePrivee("cout moyen stockage", "Cout moyen du stockage d'une tonne de fève pour un step", this, 50);
 	
 	public double prixMinBQ = 0.0; //provisoire
 	public double prixMinMQ = 0.0; //provisoire
@@ -127,11 +128,13 @@ public class Producteur2Acteur implements IActeur {
 	public void next() {
 		this.getJournal().ajouter("Bonjour, nous sommes à l'étape " + Filiere.LA_FILIERE.getEtape() + "et nous n'avons pas encore fait faillite (enfin j'espère).");
 	}
-
+	
+	// Renvoie la couleur
 	public Color getColor() {// NE PAS MODIFIER
 		return new Color(244, 198, 156); 
 	}
-
+	
+	// Renvoie la description
 	public String getDescription() {
 		return "La filiere CACAindO represente la beaute du savoir-faire indonesien et des richesses de la culture du cacao dans la region. Entre cacao a un prix abordable et feve d'origine volcanique, il y en a pour tous les gouts.";
 	}
@@ -147,14 +150,15 @@ public class Producteur2Acteur implements IActeur {
 		res.add(this.stockTotMoy);
 		res.add(this.stockTotMoyBE);
 		res.add(this.stockTotHauteBE);
-		res.add(this.tempsDegradationFeve);
-		res.add(this.tempsPerimationFeve);
 		return res;
 	}
 
 	// Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
+		res.add(this.tempsDegradationFeve);
+		res.add(this.tempsPerimationFeve);
+		res.add(this.coutMoyenStock);
 		return res;
 	}
 
