@@ -95,7 +95,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	}
 	/** il faut ecrire une methode qui regarde le cours du marche de chaque feve et met à jour les valeurs 
 	 * de coursmax afin que les achats se passent bien**/
-	 */
+
 	
 
 }
