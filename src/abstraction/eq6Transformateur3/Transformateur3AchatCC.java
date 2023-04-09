@@ -38,14 +38,17 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 									  for (int i=1;i<5;i++) {
 										  besoin_prochain.add(super.BesoinStep(step + i,((Feve)produit))- this.getArrivageCCStep(step + i, ((Feve)produit)));}
 									  int b = 0;
+									  /**double max = 0;**/
 									  for (int i=0;i<4;i++) {
-										  if (((double)besoin_prochain.get(i))>0) {b= b+1;}	}
-									  if (b>2) {
+										  if (((double)besoin_prochain.get(i))>0) {b= b+1;
+										  											/**if (((double)besoin_prochain.get(i))>0) {max = ((double)besoin_prochain.get(i));}**/}	}
+									  if (b>2) {return true;}
+									  else {return false;}
 										  
 									  }
-									  ;}
-		return false;
-	}   
+		else {return false;}
+									  }
+  
 
     /**
      * Appelee suite au demarrage des negociations par le vendeur d'un contrat de feves labelisee 
