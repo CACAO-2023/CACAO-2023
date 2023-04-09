@@ -148,8 +148,8 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 * @param contrat
 	 */
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		
+			this.getListeContratEnCours().add(contrat);
+			super.journal.ajouter("Un nouveau contrat cadre a été passé : "+contrat.toString());
 	}
 
 	/**
@@ -186,5 +186,16 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 			res = res + contrat.getEcheancier().getQuantite(step);}
 		}
 		return res;
+	}
+	private void retirerCCFinis() {
+		for (ExemplaireContratCadre contrat : this.getListeContratEnCours()) {
+			if (contrat.getQuantiteRestantALivrer()==0) {this.getListeContratEnCours().remove(contrat);}
+		}
+	}
+	
+	
+	public void next() {
+		super.next();
+		this.retirerCCFinis();		
 	}
 }
