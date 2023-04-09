@@ -83,9 +83,19 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 *         du contrat (contrat.getEcheancier()) si l'acheteur est d'accord pour
 	 *         un tel echeancier. Sinon, retourne un nouvel echeancier que le
 	 *         superviseur soumettra au vendeur.
+	 * Il faut verifier que la duree nous convient et que chaque livraison proposée est sup à ce que l'on souhaite avoir
 	 */
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
+		Echeancier vendeurecheancier = contrat.getEcheancier();
+		int stepdebut = vendeurecheancier.getStepDebut();
+		int duree = vendeurecheancier.getNbEcheances();
+		int compt = 0; /**si il y a 3 step à la suite sans besoin on reduit le contrat**/
+		int notreduree = 0;
+		for (int i=stepdebut;i<stepdebut+duree;i++) {
+			if (true) {}
+			
+		}
 		return null;
 	}
 
