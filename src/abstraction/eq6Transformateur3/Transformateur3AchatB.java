@@ -77,7 +77,8 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 * n'a pas a s'occuper du paiement qui a deja ete effectue)
 	 */
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
-		// TODO Auto-generated method stub
+		super.ajouterFeve((Feve)l.getProduit(), coursEnEuroParT);
+		super.journal.ajouter("Stock de "+l.getQuantiteTotale()+""+"tonnes de feves"+((Feve)l.getProduit()).toString()+" acheté en bourse");
 		
 	}
 
@@ -92,6 +93,9 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		// TODO Auto-generated method stub
 		
 	}
+	/** il faut ecrire une methode qui regarde le cours du marche de chaque feve et met à jour les valeurs 
+	 * de coursmax afin que les achats se passent bien**/
+	 */
 	
 
 }
