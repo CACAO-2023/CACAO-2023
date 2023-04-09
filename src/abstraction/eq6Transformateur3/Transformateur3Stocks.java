@@ -37,6 +37,13 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 		this.stockChocolatHGL = stockChocolatHGL;
 		this.stockProduit = stockProduit;
 	}
+ /**Il faut ecrire la fonction constructeur sans param c'est celle là que Romu appelle *
+  * dans le code de la filière il faut donc construire les feves et les lots et ensuite 
+  * utiliser les constructeur avec le constructeur déjà ecrit
+  */
+  public Transformateur3Stocks() {
+	  
+  }
 public void ajouterFeve(Feve feve, Double quantite) {
 	  
   }

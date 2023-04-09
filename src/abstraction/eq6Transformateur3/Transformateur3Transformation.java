@@ -8,20 +8,20 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 	/** Maxime Bedu*/
 	
 /** processus de transformation : 
-	           unité de temps de transformation : différent selon les fèves (in progress) 
+	           unitï¿½ de temps de transformation : diffï¿½rent selon les fï¿½ves (in progress) 
 	           prends dans le stock et remets dans le stock post-transfo, (OK)
-	  pareil différents types de stocks initiaux et finaux en fonction du type de fève (OK)
-	           implementer IChocolatdemarque ou autre truc de Romu (à voir)
-	           Type de produit à réaliser (dans v1 seulement plaque) (donc useless)
-	           Quantité de fèves à transformer dans les fonctions  (ok)
+	  pareil diffï¿½rents types de stocks initiaux et finaux en fonction du type de fï¿½ve (OK)
+	           implementer IChocolatdemarque ou autre truc de Romu (ï¿½ voir)
+	           Type de produit ï¿½ rï¿½aliser (dans v1 seulement plaque) (donc useless)
+	           Quantitï¿½ de fï¿½ves ï¿½ transformer dans les fonctions  (ok)
 	           
-	           pour info temps de transfo : A déterminer, pour faire liste par produit de step avant qu'ils
-	           ne soient prêts (in progress)
+	           pour info temps de transfo : A dï¿½terminer, pour faire liste par produit de step avant qu'ils
+	           ne soient prï¿½ts (in progress)
 	           
 	           Fonction besoin, en utilisant la fonction demande pour voir si il y a un manque ici, et pour 
-	           pouvoir informer qu'il faut augmenter les stocks pour répondre à la demande
-	           -peut aussi permettre de jouer sur "qte", la quantité de transformation qu'on veut faire
-	           à chaque step
+	           pouvoir informer qu'il faut augmenter les stocks pour rï¿½pondre ï¿½ la demande
+	           -peut aussi permettre de jouer sur "qte", la quantitï¿½ de transformation qu'on veut faire
+	           ï¿½ chaque step
 	           
 	           
 	*/
@@ -71,7 +71,7 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 	}
 
 	
-		public void transformationChoco(Feve f, double qte) {
+/**		public void transformationChoco(Feve f, double qte) {
 		if (f instanceof F_BQ) {
 			double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
 			double a=stockFeve.get(F_BQ);
@@ -105,7 +105,10 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 					}
 			}
 	}
-
+**/
 
 
 protected double BesoinStep(int Step, Feve f) {
+	return 0.1;
+}
+}
