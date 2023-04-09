@@ -12,6 +12,5 @@ public interface IVendeurAO extends IActeur {
 	 * (retourne null si aucune des propositions de propositions ne satisfait le vendeur this)
 	 */
 	public PropositionAchatAO choisir(List<PropositionAchatAO> propositions);
-	
 
 }
