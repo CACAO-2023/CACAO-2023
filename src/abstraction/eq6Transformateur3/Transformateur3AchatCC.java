@@ -34,7 +34,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 */
 	public boolean achete(IProduit produit) {
 		int step = Filiere.LA_FILIERE.getEtape();
-		if (produit instanceof Feve) {List besoin_prochain = new LinkedList();
+		if (produit instanceof Feve) {List<Double> besoin_prochain = new LinkedList<Double>();
 									  for (int i=1;i<5;i++) {
 										  besoin_prochain.add(super.BesoinStep(step + i,((Feve)produit))- this.getArrivageCCStep(step + i, ((Feve)produit)));}
 									  int b = 0;
@@ -92,13 +92,27 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 		int duree = vendeurecheancier.getNbEcheances();
 		int compt = 0; /**si il y a 3 step à la suite sans besoin on reduit le contrat**/
 		int notreduree = 0;
-		for (int i=stepdebut;i<stepdebut+duree;i++) {
-			if (true) {}
-			
+		for (int i=stepdebut;i<stepdebut+duree && compt<3;i++) {
+			if (super.BesoinStep(i,((Feve)contrat.getProduit()))>0) {compt = 0;notreduree=i;}
+			else {compt = compt+1;}			
 		}
-		return null;
+		double commandemin = this.BesoinMaxEntre(stepdebut,notreduree,((Feve)contrat.getProduit()));
+		List<Double> res = new LinkedList<Double>();
+		for (int i =stepdebut;i<notreduree;i++) {
+			if (vendeurecheancier.getQuantite(i)>=commandemin) {res.add(vendeurecheancier.getQuantite(i));}
+			else {res.add(commandemin);}
+		}
+		return new Echeancier(stepdebut,res);
 	}
 
+	private double BesoinMaxEntre(int d, int f,Feve feve) {
+		double max =0;
+		for (int i= d;i<f;i++) {
+			double besoin = super.BesoinStep(i, feve);
+			if (besoin>max) {max = besoin;}
+		}
+		return max;
+	}
 	/**
 	 * Methode appelee par le SuperviseurVentesContratCadre lors des negociations
 	 * sur le prix au Kg afin de connaitre la contreproposition de l'acheteur.
