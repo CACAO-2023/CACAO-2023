@@ -1,23 +1,73 @@
 package abstraction.eq6Transformateur3;
 
 import abstraction.eqXRomu.bourseCacao.IAcheteurBourse;
+import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.Lot;
 
 public class Transformateur3AchatB extends Transformateur3AchatCC implements IAcheteurBourse{
 
+	protected Variable coursmaxBG;
+	protected Variable coursmaxMG;
+	protected Variable coursmaxMGL;
+	protected Variable coursmaxHGL;
+	
+	public Transformateur3AchatB () {
+		this.coursmaxBG = new Variable ("cours maximal BG","cours maximal que l'acteur va accepter pour les feves bas de gamme",this,0.0,100,1);
+		this.coursmaxMG = new Variable ("cours maximal MG","cours maximal que l'acteur va accepter pour les feves moyenne gamme",this,0.0,100,1);
+		this.coursmaxMGL = new Variable ("cours maximal MGL","cours maximal que l'acteur va accepter pour les feves moyenne gamme labelisees",this,0.0,100,1);
+		this.coursmaxHGL = new Variable ("cours maximal HGL","cours maximal que l'acteur va accepter pour les feves haut de gamme",this,0.0,100,1);
+	}
 	/**
 	 * Retourne la quantite en tonnes de feves de type f desiree par l'acheteur 
 	 * sachant que le cours actuel de la feve f est cours
 	 * @param f le type de feve
 	 * @param cours le cours actuel des feves de type f
 	 * @return la quantite en tonnes de feves de type f desiree 
+	 * 
 	 */
 	public double demande(Feve f, double cours) {
-		// TODO Auto-generated method stub
+		if (f.getGamme().compareTo(Gamme.BQ)==0) {if(cours<=this.getCoursmaxBG().getValeur()) {
+													return (super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f));}
+		}else {
+		if (f.getGamme().compareTo(Gamme.MQ)==0 && f.isBioEquitable()) {if(cours<=this.getCoursmaxMGL().getValeur()) {
+			return (super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f));}}
+			else {
+		if (f.getGamme().compareTo(Gamme.MQ)==0) {if(cours<=this.getCoursmaxMG().getValeur()) {
+			return (super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f));}}
+		else {
+		if (f.getGamme().compareTo(Gamme.BQ)==0 && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
+			return (super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f));}}
+		else {return 0;};};};};
 		return 0;
 	}
 
+	/**
+	 * @return the coursmaxBG
+	 */
+	public Variable getCoursmaxBG() {
+		return coursmaxBG;
+	}
+	/**
+	 * @return the coursmaxMG
+	 */
+	public Variable getCoursmaxMG() {
+		return coursmaxMG;
+	}
+	/**
+	 * @return the coursmaxMGL
+	 */
+	public Variable getCoursmaxMGL() {
+		return coursmaxMGL;
+	}
+	/**
+	 * @return the coursmaxHGL
+	 */
+	public Variable getCoursmaxHGL() {
+		return coursmaxHGL;
+	}
 	/**
 	 * Methode appelee par la bourse pour avertir l'acheteur qu'il vient d'acheter
 	 * quantiteEnT tonnes de feve f au prix de  coursEnEuroParT euros par tonne.

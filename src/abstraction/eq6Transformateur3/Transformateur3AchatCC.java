@@ -177,7 +177,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 * @param step
 	 * @return
 	 */
-	private double getArrivageCCStep(int step,Feve f) {
+	protected double getArrivageCCStep(int step,Feve f) {
 		double res = 0;
 		for (ExemplaireContratCadre contrat: this.getListeContratEnCours()) {
 			if (contrat.getProduit() instanceof Feve 
