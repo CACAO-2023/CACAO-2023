@@ -85,8 +85,8 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 				if (i <= etapePerim)
 					stock.remove(i);
 		}
-		/*this.ajouterStock(Feve.F_BQ, Filiere.LA_FILIERE.getEtape(), 1000);
 		System.out.println(this.stocks.get(Feve.F_BQ));
+		/*this.ajouterStock(Feve.F_BQ, Filiere.LA_FILIERE.getEtape(), 1000);
 		this.retirerStock(Feve.F_BQ, 500);
 		Lot lotHQ_BE = new Lot(Feve.F_HQ_BE);
 		lotHQ_BE.ajouter(0, 1000);
@@ -197,7 +197,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	}
 	
 	/**
-	 * Renvoie une cahîne de caractères décrivant le stock total de chaque type de fève
+	 * Renvoie une chaîne de caractères décrivant le stock total de chaque type de fève
 	 * @return la description des quantités stockées de chaque type de fève
 	 */
 	protected String stocksTotString() {
