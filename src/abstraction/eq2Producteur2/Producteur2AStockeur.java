@@ -85,7 +85,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 				if (i <= etapePerim)
 					stock.remove(i);
 		}
-		System.out.println(this.stocks.get(Feve.F_BQ));
+		//System.out.println(this.stocks.get(Feve.F_BQ));
 		/*this.ajouterStock(Feve.F_BQ, Filiere.LA_FILIERE.getEtape(), 1000);
 		this.retirerStock(Feve.F_BQ, 500);
 		Lot lotHQ_BE = new Lot(Feve.F_HQ_BE);

@@ -11,6 +11,6 @@ public class Producteur2 extends Producteur2ASPPVBVendeurCC  {
 	public void next() {
 		super.next();
 		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), this.coutStockage());
-		System.out.println(this.coutStockage());
+		//System.out.println(this.coutStockage());
 	}
 }
