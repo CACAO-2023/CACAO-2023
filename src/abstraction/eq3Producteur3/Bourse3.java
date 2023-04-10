@@ -40,7 +40,7 @@ public class Bourse3 extends Producteur3 implements IVendeurBourse {
 		l.ajouter(Filiere.LA_FILIERE.getEtape(), quantiteEnT);
 		Stock s = super.getStock();
 		s.retirerVielleFeve(f, quantiteEnT);
-		super.getJVentes().ajouter("La quantite " + quantiteEnT + " en tonnes de " + f.toString() + " a ete vendu "+coursEnEuroParT + "le step " + Filiere.LA_FILIERE.getEtape());
+		super.getJVente().ajouter("La quantite " + quantiteEnT + " en tonnes de " + f.toString() + " a ete vendu "+coursEnEuroParT + "le step " + Filiere.LA_FILIERE.getEtape());
 		return null;
 	}
 
