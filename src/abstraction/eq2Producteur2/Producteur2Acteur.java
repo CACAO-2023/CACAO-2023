@@ -68,6 +68,8 @@ public class Producteur2Acteur implements IActeur {
 		this.getPrixMin().add(prixMinMQ);
 		this.getPrixMin().add(prixMinMQBE);
 		this.getPrixMin().add(prixMinHQ);
+		
+		this.contrats = new LinkedList<ExemplaireContratCadre>();
 	}
 
 	public String getNom() {// NE PAS MODIFIER
