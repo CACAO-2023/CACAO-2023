@@ -17,7 +17,6 @@ public class Bourse3 extends Producteur3 implements IVendeurBourse {
 	 */
 	public double offre(Feve f, double cours) {
 		//On veut vendre que les fèves de moyenne quantite en bourse
-		//== fonctionne ?
 		int quantiteM =0;
 		Lot lotM = super.getStock().getStock().get(Feve.F_MQ_BE);
 		Set<Integer> KeyListM = lotM.getQuantites().keySet();
