@@ -44,7 +44,9 @@ public class Bourse3 extends Producteur3 implements IVendeurBourse {
 		return null;
 	}
 
-	@Override
+	/**
+	 * @author BOCQUET Gabriel
+	 */
 	public void notificationBlackList(int dureeEnStep) {
 		super.getJGeneral().ajouter("Livraison n'a pas pu etre honore");
 		
