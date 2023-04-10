@@ -13,8 +13,8 @@ import abstraction.eqXRomu.general.Journal;
  *
  */
 public class Lot {
-	private IProduit produit;
-	private HashMap<Integer, Double> quantites; // table des associations <stepRecolte, quantiteEnT>
+	protected IProduit produit;
+	protected HashMap<Integer, Double> quantites; // table des associations <stepRecolte, quantiteEnT>
 	// chaque association <S,Q> correspondant a une quantite de Q Tonnes de feves recoltees au step S. 
 
 	/**
@@ -104,7 +104,7 @@ public class Lot {
 			double reste = quantite;
 			for (Integer i : this.quantites.keySet()) {
 				if (reste>0) {
-					if (this.quantites.get(i)>=reste) {
+					if (this.quantites.get(i)>reste) {
 						res.ajouter(i,reste);
 						this.quantites.put(i,this.quantites.get(i)-reste);
 						reste=0;
