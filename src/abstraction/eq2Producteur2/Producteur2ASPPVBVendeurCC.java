@@ -72,8 +72,11 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		this.getContrats().add(contrat);
 	}
 
-	@Override
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
-		return null;
+		if(this.getStockTot((Feve) produit).getValeur() > quantite) {
+			return retirerStock((Feve) produit, quantite);
+		} else {
+			return retirerStock((Feve) produit, this.getStockTot((Feve) produit).getValeur());
+		}
 	}
 }
