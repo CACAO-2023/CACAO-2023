@@ -3,11 +3,9 @@ package abstraction.eq3Producteur3;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Set;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
-import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur3 extends Producteur3Acteur  {
 	/*
@@ -23,8 +21,6 @@ public class Producteur3 extends Producteur3Acteur  {
 	 *
 	 * On cree un dictionnaire qui associe  la clef H ou M le dico ChampsM ou ChapmsH
 	 */
-	private HashMap<String,HashMap> Champs;
-	
 
 	private Champs fields;
 	private Integer HectaresLibres; /*Repertorie le nombre d'hectares libres que l'on possede*/
@@ -45,7 +41,7 @@ public class Producteur3 extends Producteur3Acteur  {
 	}
 
 
-	public void initalise() {
+	public void initialiser() {
 		super.initialiser();
 		new Producteur3();
 		

@@ -28,7 +28,7 @@ public class Producteur3Acteur implements IActeur {
 	}
 	
 	public void initialiser() {
-		
+		;
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -45,6 +45,10 @@ public class Producteur3Acteur implements IActeur {
 	
 	protected Journal getJStock() {
 		return this.journal_Stock;
+	}
+
+	protected Journal getJVente() {
+		return this.journal_ventes;
 	}
 	
 	protected Journal getJAchats() {
