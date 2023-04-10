@@ -8,14 +8,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eqXRomu.contratsCadres.ContratCadre;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
+import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.produits.Feve;
-import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur2Acteur implements IActeur {
 	
@@ -46,19 +47,13 @@ public class Producteur2Acteur implements IActeur {
 	public double prixHQ = 4.0; //provisoire
 	public LinkedList<Double> prix;
 	
-	protected HashMap<Feve, Echeancier> echeances;
+	protected LinkedList<ExemplaireContratCadre> contrats;
 	
 	
 	protected Feve[] lesFeves = {Feve.F_BQ, Feve.F_MQ, Feve.F_MQ_BE, Feve.F_HQ_BE};
 
 	public Producteur2Acteur() {
 		this.journal = new Journal("Journal " + this.getNom(), this);
-		this.echeances = new HashMap<Feve, Echeancier>(); /*Il faut peut-etre m'etre un 0 dans la paranthese de newEchancier() en fonction des tests futurs*/
-		
-		this.echeances.put(Feve.F_BQ, new Echeancier());
-		this.echeances.put(Feve.F_MQ, new Echeancier());
-		this.echeances.put(Feve.F_MQ_BE, new Echeancier());
-		this.echeances.put(Feve.F_HQ_BE, new Echeancier());
 	}
 	
 	public void initialiser() {
@@ -130,6 +125,9 @@ public class Producteur2Acteur implements IActeur {
 	}
 	public LinkedList<Double> getPrix(){
 		return this.prix;
+	}
+	public LinkedList<ExemplaireContratCadre> getContrats(){
+		return this.contrats;
 	}
 	
 	////////////////////////////////////////////////////////
@@ -231,10 +229,19 @@ public class Producteur2Acteur implements IActeur {
 	
 	/*Quantité à livrer au step i pour les ventes par contrat cadre*/
 	public Double aLivrerStep(int step, Feve feve) {
-		return echeances.get(feve).getQuantite(step);
+		return aLivrer(feve).getQuantite(step);
 	}
 	/*Quantité à livrer aux différents steps pour les ventes par contrat cadre*/
 	public Echeancier aLivrer(Feve feve) {
-		return this.echeances.get(feve);
+		Echeancier ech = new Echeancier(); /*Il faut peut-etre m'etre un 0 dans la paranthese de newEchancier() en fonction des tests futurs*/
+		for(ExemplaireContratCadre conEx : this.contrats) {
+			Echeancier ech2 = conEx.getEcheancier();
+			if(conEx.getProduit() == feve) {
+				for(int i = ech2.getStepDebut(); i<ech2.getStepFin(); i++) {
+					ech.set(i, ech.getQuantite(i) + ech2.getQuantite(i));	
+				}
+			}
+		}
+		return ech;
 	}
 }

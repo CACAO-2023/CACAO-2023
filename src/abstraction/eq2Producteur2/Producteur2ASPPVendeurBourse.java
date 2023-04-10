@@ -1,12 +1,7 @@
 package abstraction.eq2Producteur2;
 
-import java.util.LinkedList;
-
-import abstraction.eqXRomu.bourseCacao.BourseCacao;
 import abstraction.eqXRomu.bourseCacao.IVendeurBourse;
 import abstraction.eqXRomu.filiere.Filiere;
-import abstraction.eqXRomu.general.Journal;
-import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Lot;
 

@@ -1,8 +1,5 @@
 package abstraction.eq2Producteur2;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
@@ -72,15 +69,11 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	}
 
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		Echeancier ech = contrat.getEcheancier();
-		for(int i = ech.getStepDebut(); i<ech.getStepFin(); i++) {
-			this.aLivrer((Feve) contrat.getProduit()).set(i, ech.getQuantite(i)+this.aLivrer((Feve) contrat.getProduit()).getQuantite(i));	
-		}
+		this.getContrats().add(contrat);
 	}
 
 	@Override
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }
