@@ -14,12 +14,19 @@ import abstraction.eqXRomu.produits.Lot;
 
 public class DistributeurContratCadreVendeurAcheteur extends DistributeurContratCadre implements IAcheteurContratCadre{
 	protected List<ExemplaireContratCadre> mesContratEnTantQuAcheteur;
+	private Echeancier echeancier_type;
+	
 	public DistributeurContratCadreVendeurAcheteur(IProduit produit) {
 		super(produit);
 		this.mesContratEnTantQuAcheteur=new LinkedList<ExemplaireContratCadre>();
 	}
 
-	public Echeancier contrePropositionDeLAcheteur1(ExemplaireContratCadre contrat) {
+	public Echeancier echeancier_strat(int stepDebut, int quantite, int nb_step) {
+		Echeancier e = new Echeancier(stepDebut, nb_step, quantite/nb_step);
+		return e;
+		
+	}
+	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		if (Math.random()<0.1) {
 			return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
 		} else {//dans 90% des cas on fait une contreproposition pour l'echeancier
@@ -29,7 +36,7 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 		}
 	}
 
-	public double contrePropositionPrixAcheteur1(ExemplaireContratCadre contrat) {
+	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		if (Math.random()<0.1) {
 			return contrat.getPrix(); // on ne cherche pas a negocier dans 10% des cas
 		} else {//dans 90% des cas on fait une contreproposition differente
@@ -46,7 +53,6 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 			}
 		}
 		this.mesContratEnTantQuAcheteur.removeAll(contratsObsoletes);
-		
 		
 		
 		// Proposition d'un nouveau contrat a tous les vendeurs possibles
@@ -78,7 +84,7 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 		
 	}
 
-	public void receptionner1(Lot lot, ExemplaireContratCadre contrat) {
+	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		stock.ajouter(this, lot.getQuantiteTotale()); // Cet exemple ne gere pas la peremption : il n'utilise pas la mention du step de production du produit
 	}
 
@@ -89,28 +95,9 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 		return this.getNom();
 	}
 
-	public int fixerPourcentageRSE1(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
-			Echeancier echeancier, long cryptogramme, boolean tg) {
-		return 5;
-	}
-
-	@Override
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return 0;
+		return 5;
 	}
 
 	@Override
@@ -119,11 +106,9 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 		
 	}
 
-	@Override
-	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		
-	}
+
+
+	
 
 
 
