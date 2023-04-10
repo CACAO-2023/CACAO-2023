@@ -49,6 +49,7 @@ public class Distributeur1Acteur implements IActeur {
 	
 	////////////////////////////////////////
 	protected HashMap<Chocolat, Double> stockChoco;
+	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque;
 		
 	protected int cryptogramme;
 

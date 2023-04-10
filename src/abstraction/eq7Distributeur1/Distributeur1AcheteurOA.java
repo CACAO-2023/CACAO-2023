@@ -34,7 +34,7 @@ public class Distributeur1AcheteurOA extends Distributeur1 implements IAcheteurO
 	
 	private Boolean besoin() { //Besoin ou non d'un appel d'offre
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (stockChocoMarque7.get(marque) < prevision(marque)) {
+			if (stockChocoMarque.get(marque) < prevision(marque)) {
 				return true;
 			}
 		}
@@ -45,8 +45,8 @@ public class Distributeur1AcheteurOA extends Distributeur1 implements IAcheteurO
 	private HashMap<ChocolatDeMarque,Double> besoinQte() { //Quelle qte a-t-on besoin
 		HashMap<ChocolatDeMarque,Double> qte = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (stockChocoMarque7.get(marque) < prevision(marque)) {
-				qte.put(marque,1.5*(prevision(marque)-stockChocoMarque7.get(marque)));
+			if (stockChocoMarque.get(marque) < prevision(marque)) {
+				qte.put(marque,1.5*(prevision(marque)-stockChocoMarque.get(marque)));
 			}
 		}
 		return qte;
@@ -55,7 +55,7 @@ public class Distributeur1AcheteurOA extends Distributeur1 implements IAcheteurO
 	private List<ChocolatDeMarque> besoinMarque() { //De quelle marque avons-nous besoin
 		List<ChocolatDeMarque> liste = new ArrayList<ChocolatDeMarque>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (stockChocoMarque7.get(marque) < prevision(marque)) {
+			if (stockChocoMarque.get(marque) < prevision(marque)) {
 				liste.add(marque);
 			}
 		}
@@ -74,10 +74,10 @@ public class Distributeur1AcheteurOA extends Distributeur1 implements IAcheteurO
 				PropositionVenteOA pRetenue = supOA.acheterParAO(this, cryptogramme,m.getChocolat(), m.getMarque(), qte.get(m), false); //acteur,crypto,choco,marque,qté,TG
 				if (pRetenue!=null) {
 					double nouveauStock = pRetenue.getOffre().getQuantiteT();
-					if (this.stockChocoMarque7.keySet().contains(pRetenue.getChocolatDeMarque())) {
-						nouveauStock+=this.stockChocoMarque7.get(pRetenue.getChocolatDeMarque());
+					if (this.stockChocoMarque.keySet().contains(pRetenue.getChocolatDeMarque())) {
+						nouveauStock+=this.stockChocoMarque.get(pRetenue.getChocolatDeMarque());
 					}
-					this.stockChocoMarque7.put(pRetenue.getChocolatDeMarque(), nouveauStock);
+					this.stockChocoMarque.put(pRetenue.getChocolatDeMarque(), nouveauStock);
 					this.journal.ajouter("   Achat par offre d'achat de "+pRetenue+" --> quantite en stock = "+nouveauStock);
 				}
 			}

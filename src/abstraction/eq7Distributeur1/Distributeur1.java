@@ -21,7 +21,7 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 		
 	}
 	
-	protected double prevision(ChocolatDeMarque marque) {
+	protected double prevision(ChocolatDeMarque marque) { //prevoit les qtes vendues au tour suivant
 		return 0;
 	}
 	
