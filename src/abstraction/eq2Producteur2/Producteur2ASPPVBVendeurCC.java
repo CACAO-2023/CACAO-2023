@@ -74,7 +74,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		Echeancier ech = contrat.getEcheancier();
 		for(int i = ech.getStepDebut(); i<ech.getStepFin(); i++) {
-			this.aLivrer().set(i, ech.getQuantite(i)+this.aLivrer().getQuantite(i));	
+			this.aLivrer((Feve) contrat.getProduit()).set(i, ech.getQuantite(i)+this.aLivrer((Feve) contrat.getProduit()).getQuantite(i));	
 		}
 	}
 
