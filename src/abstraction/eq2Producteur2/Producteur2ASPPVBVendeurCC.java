@@ -30,7 +30,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		return false;
 	}
 
-	//On renvoie toujours  un Echeancier constant dans le temps dans la limite de nos cpaacités de production
+	//On renvoie toujours  un Echeancier constant dans le temps dans la limite de nos capacités de production
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		Echeancier echeancierAch = contrat.getEcheancier();
 		if(echeancierAch.getStepDebut() > Filiere.LA_FILIERE.getEtape()) {
@@ -61,17 +61,18 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		return 0.0;		
 	}
 
-	@Override
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		if(contrat.getPrix() >= 0.9) {
-			return 1;
+		if(contrat.getPrix() >= 1) {
+			return contrat.getPrix();
 		}
-		return 0;
+		if(contrat.getPrix() >= 0.9) {
+			return contrat.getPrix()*0.25+contrat.getEcheancier().getQuantiteTotale()*this.getPrixHQ()*0.75; /*Négociation 1/4||3/4 pour tenter de tirer un prix convenable*/
+		}
+		return -2;
 	}
 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
 		
 	}
 
