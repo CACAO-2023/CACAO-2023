@@ -2,23 +2,52 @@ package abstraction.eq9Distributeur3;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.Chocolat;
+import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Gamme;
 
 public class Distributeur3Acteur implements IActeur {
+	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
+	protected int numero;
+	protected Integer cryptogramme;
 	protected Stock stock;
-	protected int cryptogramme;
 	protected Journal journal;
+	protected List<ChocolatDeMarque> chocolats;
 
 	public Distributeur3Acteur() {
+		/*if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
+			throw new IllegalArgumentException("creation d'une instance de ExempleAbsDistributeurChocolatMarqe avec des arguments non valides");
+		}		
+		NB_INSTANCES++;
+		this.numero=NB_INSTANCES;*/
+		
+		
+		// Ici pour tester on se créé un stock de chocolat à partir de rien (william)
+		// ChocolatDeMarque(Chocolat chocolat, String marque, int pourcentageCacao, int pourcentageRSE)
+		ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "marque", 50, 20);
+		Stock stock = new Stock();
+		this.stock = stock;
+		
+		this.chocolats = new LinkedList<ChocolatDeMarque>();
+		this.chocolats.add(c1);
+		this.stock.ajoutQte(c1, 1000);
+		
+		this.journal = new Journal(this.getNom()+" activites", this);
 		
 	}
 	
 	public void initialiser() {
+	}
+	
+	public String toString() {
+		return this.getNom();
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -30,7 +59,25 @@ public class Distributeur3Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
+
+
+		// lancer un contrat seuil et repondre 
+
+		
+		
 		// il va falloir faire la comparaison de contrats cadres par rapport à un seuil puis choisir le plus interessant
+
+
+		journal.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
+		if (Filiere.LA_FILIERE.getEtape()>=1) {
+			for (int i=0; i<this.chocolats.size(); i++) {
+		//	journal.ajouter("Le prix moyen du chocolat \""+chocolats.get(i).getNom()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyen(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-1));
+			//journal.ajouter("Les ventes de chocolat \""+chocolats.get(i)+" il y a un an etaient de "+Filiere.LA_FILIERE.getVentes(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-24));
+			
+			
+			}
+		}
+
 	}
 
 	
@@ -93,13 +140,23 @@ public class Distributeur3Acteur implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Des ingr�dients d'exception pour un chocolat unique";
+		
+		return "Des ingrédients d'exception pour un chocolat unique";
 	}
 
-	// Renvoie les indicateurs
+
+	
+	
 	public List<Variable> getIndicateurs() {
-		List<Variable> res = new ArrayList<Variable>();
+		List<Variable> res=new ArrayList<Variable>();
+		/*
+		 * Ici il faut adapter la récupération de l'indicateur stock de l'exemple avec notre classe stock
+		 * 
+		for (int i=0; i<this.chocolats.size(); i++) {
+			res.add(stock.getStock(chocolats.get(i)));
+		}*/
 		return res;
+		
 	}
 
 	// Renvoie les parametres
@@ -154,5 +211,11 @@ public class Distributeur3Acteur implements IActeur {
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
 	}
+	
+	public double getStock(ChocolatDeMarque c) {
+		return this.stock.getStock(c);
+	}
+
+	
 
 }
