@@ -182,10 +182,10 @@ public class Stock {
 		}
 
 		// Then we loop through each bean type and we will change the quantities
-		for (var entry : stock.getStock().entrySet()) {
+		for (Map.Entry<Feve , Lot> entry : stock.getStock().entrySet()) {
 			// We get the type of bean and the lot of beans of this type
-			Feve f = entry.getKey();
-			Lot lot = entry.getValue();
+			Feve f = (Feve)entry.getKey();
+			Lot lot = (Lot)entry.getValue();
 			HashMap<Integer, Double> quantite = lot.getQuantites();
 
 			Lot newLot = newLots.get(f); // We will add to this lot the beans that are not too old
@@ -224,5 +224,14 @@ public class Stock {
 			newStock.setLot(f, newLots.get(f));
 		}
 		return newStock;
-	}	
+	}
+	
+	/**
+	 * This method will return the age of the beans of a given type
+	 * @param feve Type of bean
+	 * @return The age of the beans of the given type
+	 */
+	public int getAge(Feve feve) {
+		return this.stock.get(feve).getQuantites().keySet().iterator().next();
+	}
 }
