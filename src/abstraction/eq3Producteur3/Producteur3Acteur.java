@@ -47,6 +47,7 @@ public class Producteur3Acteur implements IActeur {
 		return this.journal_Stock;
 	}
 
+
 	protected Journal getJVente() {
 		return this.journal_ventes;
 	}
