@@ -21,6 +21,10 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 		
 	}
 	
+	protected double prevision(ChocolatDeMarque marque) {
+		return 0;
+	}
+	
 	
 	
 	/**
@@ -48,7 +52,7 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	
 	public double prixPromotion(ChocolatDeMarque choco) {
 		double p = prix(choco);
-		if (((Filiere.LA_FILIERE.getEtape()%4)==0)&&(choco.getChocolat()!=Chocolat.C_BQ)) {
+		if (((Filiere.LA_FILIERE.getEtape()%2)==0)&&(choco.getChocolat()!=Chocolat.C_BQ)) {
 			return p*0.9;
 		}
 		else {
