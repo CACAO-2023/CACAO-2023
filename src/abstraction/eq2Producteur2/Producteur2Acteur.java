@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
@@ -43,11 +44,14 @@ public class Producteur2Acteur implements IActeur {
 	public double prixHQ = 4.0; //provisoire
 	public LinkedList<Double> prix;
 	
+	protected Echeancier echeance;
+	
 	
 	protected Feve[] lesFeves = {Feve.F_BQ, Feve.F_MQ, Feve.F_MQ_BE, Feve.F_HQ_BE};
 
 	public Producteur2Acteur() {
 		this.journal = new Journal("Journal " + this.getNom(), this);
+		this.echeance = new Echeancier(); /*Il faut peut-etre m'etre un 0 dans le paranthese en focntion des tests futurs*/
 	}
 	
 	public void initialiser() {
@@ -212,5 +216,18 @@ public class Producteur2Acteur implements IActeur {
 	
 	public String toString() {
 		return this.getNom();
+	}
+	
+	////////////////////////////////////////////////////////
+	//         Pour prévoir les ventes à venir            //
+	////////////////////////////////////////////////////////
+	
+	/*Quantité à livrer au step i pour les ventes par contrat cadre*/
+	public Double aLivrerStep(int step) {
+		return echeance.getQuantite(step);
+	}
+	/*Quantité à livrer aux différents steps pour les ventes par contrat cadre*/
+	public Echeancier aLivrer() {
+		return this.echeance;
 	}
 }

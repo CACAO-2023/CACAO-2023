@@ -71,9 +71,11 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		return -2;
 	}
 
-	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		
+		Echeancier ech = contrat.getEcheancier();
+		for(int i = ech.getStepDebut(); i<ech.getStepFin(); i++) {
+			this.aLivrer().set(i, ech.getQuantite(i)+this.aLivrer().getQuantite(i));	
+		}
 	}
 
 	@Override
@@ -81,7 +83,4 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	/*Creer une fonction qui renvoie les quantités à livrer au prochain step/aux prochains steps (proposition)
-	*/
 }
