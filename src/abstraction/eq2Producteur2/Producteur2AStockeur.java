@@ -104,9 +104,13 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	 * @return la variable de la quantité totale de fèves stockée du type f
 	 * @param f le type de fève
 	 */
-	protected Variable getStockTot(Feve f) {
+	protected double getStockTot(Feve f) {
+		return this.stocks.get(f).getQuantiteTotale();
+	}
+	protected Variable getStockTot2(Feve f) {
 		return this.stocksTot.get(f);
 	}
+	
 	
 	/**
 	 * Calcule la quantité totale de fève stockées, tout type confondu

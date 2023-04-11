@@ -73,6 +73,19 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	}
 
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
-		return retirerStock((Feve) produit, Math.min(this.getStockTot((Feve) produit).getValeur(), quantite));
+		System.out.println(Math.min(this.getStockTot((Feve) produit), quantite));
+		if(Math.min(this.getStockTot((Feve) produit), quantite) > 0.001) {
+			return retirerStock((Feve) produit, Math.min(this.getStockTot((Feve) produit), quantite));
+		} else {
+			return new Lot(produit);
+		}
+	}
+	public Lot livrer2(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
+		System.out.println(Math.min(this.getStockTot2((Feve) produit).getValeur(), quantite));
+		if(Math.min(this.getStockTot2((Feve) produit).getValeur(), quantite) > 0.001) {
+			return retirerStock((Feve) produit, Math.min(this.getStockTot2((Feve) produit).getValeur(), quantite));
+		} else {
+			return new Lot(produit);
+		}
 	}
 }
