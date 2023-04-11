@@ -1,35 +1,46 @@
 package abstraction.eq1Producteur1;
 
-import java.util.LinkedList;
-
 //classe écrite par Elouan
 
 //faire avec hasmap : clef c la periode
 
+import java.util.HashMap;
+import abstraction.eqXRomu.produits.Gamme;
+
 public class champ {
-	private LinkedList<hectar> hectares;
+	private Gamme qualite; //qualite : B ou M
+	private HashMap<Integer, Double> quantite; //integer : nb de step (key), double : nb d'hectar (value)
 	
-	public champ() {
-		this.hectares = new LinkedList<hectar>();
+	public champ(Gamme g) { //s = B ou M, pour la qualite
+		this.quantite = new HashMap<Integer, Double>();
+		this.qualite = g;
 	}
 	
-	public LinkedList<hectar> getHectares(){
-		return this.hectares;
+	public Gamme getQualite(){
+		return this.qualite;
 	}
-	public void add(hectar h) {
-		this.getHectares().add(h);
+	public HashMap<Integer, Double> getQuantite(){
+		return this.quantite;
 	}
-	public hectar getHectare(int i) {
-		return this.getHectares().get(i);
+	public void ajouter(int i, Double d) {
+		this.quantite.put(i, d);
 	}
-	public int nbhectare() {
-		return this.getHectares().size();
+	public double getNbHectare() {
+		double q=0;
+		for (Integer i : this.quantite.keySet()) {
+			q = q + this.quantite.get(i);
+		}
+		return q;
 	}
-	public void supphectare(int i) {
-		this.getHectares().remove(i);
+	public void supprimer(int i) {
+		this.getQuantite().remove(i);
 	}
-	public void supphectare(hectar h) {
-		this.getHectares().remove(h);
+	public String toString() {
+		String s = "qualite : ";
+		if (this.getQualite().equals(BQ)) {s=s+"Bas de gamme";} else {s=s+"Moyenne gamme";};
+		for (Integer i : this.getQuantite().keySet()) {
+			s=s+"On a "+this.getQuantite().get(i)+" hectares qui datent de "+i+" steps ("+(i*15)+"jours)";
+		}
 	}
 	
 }
