@@ -2,8 +2,8 @@ package abstraction.eq1Producteur1;
 
 
 import java.util.HashMap;
+import abstraction.eqXRomu.produits.Gamme;
 import java.util.concurrent.ThreadLocalRandom;
-
 import abstraction.eqXRomu.produits.Lot;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Feve;
