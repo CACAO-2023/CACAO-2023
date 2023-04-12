@@ -217,6 +217,7 @@ protected Journal journal_activitegenerale;
 			return 0;
 		}
 	}
+	
 	//Auteur : Ben Messaoud Karim et Maxime Azzi
     public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
     	 if (choco == null || this.stocks.getStock(choco) == 0.0) {
@@ -224,14 +225,8 @@ protected Journal journal_activitegenerale;
     		 } else {
     		 double stockGamme;
     		 double stockChoco = this.stocks.getStock(choco);
-    		 if (choco.getGamme() == Gamme.BQ) {
     		 stockGamme = this.stocks.getStock(choco);
-    		 } else if (choco.getGamme() == Gamme.MQ) {
-    		 stockGamme = this.stocks.getStock(choco);
-    		 } else {
-    		 stockGamme = this.stocks.getStock(choco);
-    		 }
-    		
+    		 
     		 return Math.min(stockGamme, stockChoco);
     		 }
     		}
@@ -253,7 +248,7 @@ protected Journal journal_activitegenerale;
 	    public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 	        int pos = chocolats.indexOf(choco);
 	        if (pos >= 0) {
-	            this.getStock(choco).retirer(this, quantite);
+	            this.stocks.retirerDuStock(choco, quantite);
 	        }
 	    }
 	//Auteur : Ben Messaoud Karim
