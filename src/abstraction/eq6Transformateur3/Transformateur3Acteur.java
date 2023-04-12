@@ -20,11 +20,11 @@ public class Transformateur3Acteur implements IActeur {
 /** Nathan Claeys*/
 	protected Journal journal;
 	protected List<Journal> ListJournal;
-	protected Variable pourcentageCacaoBG ;
-	protected Variable pourcentageCacaoMG ;
-	protected Variable pourcentageCacaoMGL ;
-	protected Variable pourcentageCacaoHG ;
-	protected Variable pourcentageRSE ;
+	protected int pourcentageCacaoBG ;
+	protected int pourcentageCacaoMG ;
+	protected int pourcentageCacaoMGL ;
+	protected int pourcentageCacaoHG ;
+	protected int pourcentageRSE ;
 	protected Variable totalStocksFeves;   
 	protected Variable totalStocksChoco; 
 	protected List<ChocolatDeMarque>chocosProduits;
@@ -32,11 +32,11 @@ public class Transformateur3Acteur implements IActeur {
 	/**Nathan Claeys*/
 	protected Transformateur3Acteur() {
 		this.journal = new Journal("Journal"+this.getNom(),this);
-		this.pourcentageCacaoBG = new Variable ("pourcentageCacaoBG","pourcentage de cacao dans le produit BG fini",this,0.4,0.60,0.5);
-		this.pourcentageCacaoMG = new Variable ("pourcentageCacaoMG","pourcentage de cacao dans le produit MG non labelise fini",this,0.6,0.80,0.65);
-		this.pourcentageCacaoMGL = new Variable ("pourcentageCacaoMGL","pourcentage de cacao dans le produit MG labelise fini",this,0.6,0.80,0.75);
-		this.pourcentageCacaoHG = new Variable ("pourcentageCacaoHG","pourcentage de cacao dans le produit HG labelise fini",this,0.8,0.95,0.85);
-		this.pourcentageRSE = new Variable ("pourcentageRSE", "defini le pourcentage RSE sur les recettes",this,0.05,0.15,0.05);
+		this.pourcentageCacaoBG = 50;
+		this.pourcentageCacaoMG = 65;
+		this.pourcentageCacaoMGL = 75;
+		this.pourcentageCacaoHG = 85;
+		this.pourcentageRSE = 10;
 		this.totalStocksFeves = new Variable ("totalStocksFeves","defini l'etat total du stock de feves",this,0.0,1000000.0,0.0);
 		this.totalStocksChoco = new Variable ("totalStocksChoco","defini l'etat total du stock de produit fini",this,0.0,1000000.0,0.0);
 		this.ListJournal = new LinkedList<Journal>();
@@ -47,39 +47,40 @@ public class Transformateur3Acteur implements IActeur {
 	/**
 	 * @return the pourcentageCacaoBG
 	 */
-	public Variable getPourcentageCacaoBG() {
+	public int getPourcentageCacaoBG() {
 		return pourcentageCacaoBG;
 	}
 
 	/**
 	 * @return the pourcentageCacaoMG
 	 */
-	public Variable getPourcentageCacaoMG() {
+	public int getPourcentageCacaoMG() {
 		return pourcentageCacaoMG;
 	}
 
 	/**
 	 * @return the pourcentageCacaoMGL
 	 */
-	public Variable getPourcentageCacaoMGL() {
+	public int getPourcentageCacaoMGL() {
 		return pourcentageCacaoMGL;
 	}
 
 	/**
 	 * @return the pourcentageCacaoHG
 	 */
-	public Variable getPourcentageCacaoHG() {
+	public int getPourcentageCacaoHG() {
 		return pourcentageCacaoHG;
 	}
 
 	/**
 	 * @return the pourcentageRSE
 	 */
-	public Variable getPourcentageRSE() {
+	public int getPourcentageRSE() {
 		return pourcentageRSE;
 	}
 
 	public void initialiser() {
+		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_BQ,"eco+ choco",this.pourcentageCacaoBG,this.pourcentageRSE));
 		
 	}
 
