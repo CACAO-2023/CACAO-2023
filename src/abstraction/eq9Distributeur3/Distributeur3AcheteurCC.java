@@ -2,7 +2,6 @@ package abstraction.eq9Distributeur3;
 
 
 import abstraction.eqXRomu.contratsCadres.ContratCadre;
-
 import java.awt.Color;
 import java.util.Map.Entry;
 
@@ -12,7 +11,7 @@ import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Journal;
-
+import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 import abstraction.eqXRomu.produits.IProduit;
@@ -60,7 +59,9 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	@Override
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
+		prix = contrat.getPrix()/contrat.getQuantiteTotale();
 		return contrat.getPrix();
+		
 	}
 
 	
@@ -68,6 +69,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	@Override
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		IProduit nt;
+		this.journal_achats = new Journal("On receptionne du chocolat : " + contrat.getProduit() + " en quantite : " + lot.getQuantiteTotale(), this);
 		stock.ajoutQte(((ChocolatDeMarque)(contrat.getProduit())), lot.getQuantiteTotale());
 	}
 

@@ -48,6 +48,7 @@ public class Stock extends Distributeur3Acteur{
 	// Mathilde Soun 
 	
 	public void ajoutQte(ChocolatDeMarque c, double ajout){
+		this.journal_stock.ajouter("On ajoute au stock de "+ c.getNom() + " une quantite de  " + ajout); 
 		if(this.QteStock.get(c) == null) {
 			this.QteStock.put(c, 0.0);
 		}
