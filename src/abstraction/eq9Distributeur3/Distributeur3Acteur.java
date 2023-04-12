@@ -26,6 +26,8 @@ public class Distributeur3Acteur implements IActeur {
 	protected Journal journal_stock;
 	protected List<ChocolatDeMarque> chocolats;
 	protected HashMap<ChocolatDeMarque, Double[]> prixMoyen;
+	protected boolean initialise = false;
+	protected double prix;
 
 	public Distributeur3Acteur() {
 		/*if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
@@ -37,9 +39,9 @@ public class Distributeur3Acteur implements IActeur {
 		
 		// Ici pour tester on se créé un stock de chocolat à partir de rien (william)
 		// ChocolatDeMarque(Chocolat chocolat, String marque, int pourcentageCacao, int pourcentageRSE)
-		//ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "marque", 50, 20);
-		
-		this.stock = new Stock();
+
+		// william
+
 		
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
 		//this.chocolats.add(c1);
@@ -65,6 +67,7 @@ public class Distributeur3Acteur implements IActeur {
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ9";
 	}
+	
 
 	////////////////////////////////////////////////////////
 	//         En lien avec l'interface graphique         //
@@ -72,6 +75,15 @@ public class Distributeur3Acteur implements IActeur {
 
 	public void next() {
 
+		if(initialise == true) {
+			initialise = false;
+			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "marque", 50, 20);
+			Stock stock = new Stock();
+			this.stock = stock;
+			this.chocolats.add(c1);
+			this.stock.ajoutQte(c1, 1000);
+		}
+		
 
 		// lancer un contrat seuil et repondre 
 
@@ -89,7 +101,7 @@ public class Distributeur3Acteur implements IActeur {
 	
 	
 	public void etat_ventes(){
-		
+		//william
 		journal_ventes.ajouter("Etat des ventes : "+"\n");
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
 			for (int i=0; i<this.chocolats.size(); i++) {
@@ -106,12 +118,14 @@ public class Distributeur3Acteur implements IActeur {
 		}
 	}
 	public void achat_stock(){
+		
+		
 
 		/* 
 		 en fonction de lookat_results(), l�acteur devra réaliser des contrats
 		 
 		cadres ou des appels d'offres ou accepter des offres pour certaines 
-		gammes bas� sur leur priorité.
+		gammes base sur leur priorité.
 		
 		William
 		
@@ -183,6 +197,7 @@ public class Distributeur3Acteur implements IActeur {
 		res.add(journal_achats);
 		res.add(journal_operationsbancaires);
 		res.add(journal_activitegenerale);
+		res.add(journal_stock);
 		
 		return res;
 	}
