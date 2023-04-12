@@ -8,7 +8,8 @@ import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.Lot;
 
 public class Transformateur3AchatB extends Transformateur3AchatCC implements IAcheteurBourse{
-
+/**ecrit par Nathan Claeys
+ */
 	protected Variable coursmaxBG;
 	protected Variable coursmaxMG;
 	protected Variable coursmaxMGL;

@@ -71,6 +71,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	}
 
 	/**
+	 * ecrit par Nathan Claeys
 	 * Methode appelee par le SuperviseurVentesContratCadre lors des negociations
 	 * sur l'echeancier afin de connaitre la contreproposition de l'acheteur. Les
 	 * precedentes propositions d'echeancier peuvent etre consultees via un appel a
@@ -114,6 +115,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 		return max;
 	}
 	/**
+	 * Ecrit par Nathan Claeys 
 	 * Methode appelee par le SuperviseurVentesContratCadre lors des negociations
 	 * sur le prix au Kg afin de connaitre la contreproposition de l'acheteur.
 	 * L'acheteur peut consulter les precedentes propositions via un appel a la
@@ -138,6 +140,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	}
 
 	/**
+	 * ecrit par Nathan Claeys
 	 * Methode appelee par le SuperviseurVentesContratCadre afin de notifier le
 	 * l'acheteur de la reussite des negociations sur le contrat precise en
 	 * parametre qui a ete initie par le vendeur. Le superviseur veillera a
@@ -153,6 +156,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	}
 
 	/**
+	 * Ecris par Nathan Claeys
 	 * Methode appelee par le SuperviseurVentesContratCadre afin de notifier
 	 * l'acheteur de la livraison du lot de produit precise en parametre
 	 * (dans le cadre du contrat contrat). Il se peut que la quantitee livree
@@ -167,7 +171,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 */
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		Object produit = contrat.getProduit();
-		if (produit instanceof Feve) {super.ajouterFeve(((Feve)produit), contrat.getQuantiteLivree().getQuantite(Filiere.LA_FILIERE.getEtape()));}		
+		if (produit instanceof Feve) {super.ajouterFeve(((Feve)produit), contrat.getQuantiteLivree().getQuantite(Filiere.LA_FILIERE.getEtape()),Filiere.LA_FILIERE.getEtape());}		
 	}
 	public List<ExemplaireContratCadre> getListeContratEnCours() {
 		return ListeContratEnCours;
