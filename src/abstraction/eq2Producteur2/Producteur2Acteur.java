@@ -35,18 +35,22 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable tempsDegradationFeve = new VariablePrivee("tempsDegradationFeve", "Temps (en nombre d'étapes) avant qu'une Feve ne perdent de la qualité", this, 12);
 	protected Variable tempsPerimationFeve = new VariablePrivee("tempsPerimationFeve", "Temps (en nombre d'étapes) avant qu'une Feve ne se périme totalement  après avoir perdu une gamme", this, 6);
 	protected Variable coutMoyenStock = new VariablePrivee("cout moyen stockage", "Cout moyen du stockage d'une tonne de fève pour un step", this, 1.5);
+	protected Variable BQquantiteVendueBourse = new VariablePrivee("BQquantiteVendueBourse","quantite de fèves Vendue en Bourse en BQ par step", this, 0);
+	protected Variable MQquantiteVendueBourse = new VariablePrivee("MQquantiteVendueBourse","quantite de fèves Vendue en Bourse en MQ par step", this, 0);
 	
-	public double prixMinBQ = 0.0; //provisoire
-	public double prixMinMQ = 0.0; //provisoire
-	public double prixMinMQBE = 0.0; //provisoire
-	public double prixMinHQ = 0.0; //provisoire
-	public public HashMap<Feve, Double> prixMin;
-	public double prixBQ = 1.0; //provisoire
-	public double prixMQ = 2.0; //provisoire
-	public double prixMQBE = 3.0; //provisoire
-	public double prixHQ = 4.0; //provisoire
-	public public HashMap<Feve, Double> prix;
-	
+
+	//Prix provisoires
+	public double prixMinBQ = 0.0;
+	public double prixMinMQ = 0.0;
+	public double prixMinMQBE = 0.0;
+	public double prixMinHQ = 0.0;
+	public HashMap<Feve, Double> prixMinCC;
+	public double prixBQ = 1.0;
+	public double prixMQ = 2.0;
+	public double prixMQBE = 3.0;
+	public double prixHQ = 4.0;
+	public HashMap<Feve, Double> prixCC;
+
 	protected LinkedList<ExemplaireContratCadre> contrats;
 	
 	
@@ -58,16 +62,18 @@ public class Producteur2Acteur implements IActeur {
 	
 	public void initialiser() {
 		
-		this.prix = new HashMap<Feve, Double>();
-		this.prixMin = new HashMap<Feve, Double>();
-		this.getPrix().put();
-		this.getPrix().add(prixMQ);
-		this.getPrix().add(prixMQBE);
-		this.getPrix().add(prixHQ);
-		this.getPrixMin().add(prixMinBQ);
-		this.getPrixMin().add(prixMinMQ);
-		this.getPrixMin().add(prixMinMQBE);
-		this.getPrixMin().add(prixMinHQ);
+		this.prixCC = new HashMap<Feve, Double>();
+		this.prixMinCC = new HashMap<Feve, Double>();
+		this.getPrixCC().put(Feve.F_BQ, prixBQ);
+		this.getPrixCC().put(Feve.F_MQ, prixMQ);
+		this.getPrixCC().put(Feve.F_MQ_BE, prixMQBE);
+		this.getPrixCC().put(Feve.F_HQ_BE, prixHQ);
+		this.getPrixMinCC().put(Feve.F_BQ, prixMinBQ);
+		this.getPrixMinCC().put(Feve.F_MQ, prixMinMQ);
+		this.getPrixMinCC().put(Feve.F_MQ_BE, prixMinMQBE);
+		this.getPrixMinCC().put(Feve.F_HQ_BE, prixMinHQ);
+		
+
 		this.contrats = new LinkedList<ExemplaireContratCadre>();
 	}
 
@@ -97,35 +103,19 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable getProdHec() {
 		return this.prodHec;
 	}
-	public double getPrixMinBQ() {
-		return this.prixMinBQ;
+	public HashMap<Feve, Double> getPrixMinCC(){
+		return this.prixMinCC;
 	}
-	public double getPrixMinMQ() {
-		return this.prixMinMQ;
+	public HashMap<Feve, Double> getPrixCC(){
+		return this.prixCC;
 	}
-	public double getPrixMinMQBE() {
-		return this.prixMinMQ;
+	public double getPrixMinCC(Feve f){
+		return this.prixMinCC.get(f);
 	}
-	public double getPrixMinHQ() {
-		return this.prixMinHQ;
-	}
-	public  HashMap<Feve, Double> getPrixMin(){
-		return this.prixMin;
-	}
-	public double getPrixBQ() {
-		return this.prixBQ;
-	}
-	public double getPrixMQ() {
-		return this.prixMQ;
-	}
-	public double getPrixMQBE() {
-		return this.prixMQBE;
-	}
-	public double getPrixHQ() {
-		return this.prixHQ;
-	}
-	public HashMap<Feve, Double> getPrix(){
-		return this.prix;
+
+	public double getPrixCC(Feve f){
+		return this.prixCC.get(f);
+
 	}
 	public LinkedList<ExemplaireContratCadre> getContrats(){
 		return this.contrats;
@@ -228,17 +218,17 @@ public class Producteur2Acteur implements IActeur {
 	//         Pour prévoir les ventes à venir            //
 	////////////////////////////////////////////////////////
 	
-	/*Quantité à livrer au step i pour les ventes par contrat cadre*/
+	/*Quantité à livrer au step i pour les ventes par contrat cadre pour la Feve feve*/
 	public Double aLivrerStep(int step, Feve feve) {
 		return aLivrer(feve).getQuantite(step);
 	}
-	/*Quantité à livrer aux différents steps pour les ventes par contrat cadre*/
+	/*Quantité à livrer aux différents steps pour les ventes par contrat cadre pour la Feve feve*/
 	public Echeancier aLivrer(Feve feve) {
 		Echeancier ech = new Echeancier(); /*Il faut peut-etre m'etre un 0 dans la paranthese de newEchancier() en fonction des tests futurs*/
 		for(ExemplaireContratCadre conEx : this.contrats) {
 			Echeancier ech2 = conEx.getEcheancier();
 			if(conEx.getProduit() == feve) {
-				for(int i = ech2.getStepDebut(); i<ech2.getStepFin(); i++) {
+				for(int i = Filiere.LA_FILIERE.getEtape(); i<ech2.getStepFin(); i++) {
 					ech.set(i, ech.getQuantite(i) + ech2.getQuantite(i));	
 				}
 			}
