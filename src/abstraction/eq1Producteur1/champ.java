@@ -3,19 +3,12 @@ package abstraction.eq1Producteur1;
 //classe écrite par Elouan
 
 import java.util.HashMap;
-import abstraction.eqXRomu.produits.Gamme;
 
 public class champ {
-	private Gamme qualite; //qualite : B ou M
 	private HashMap<Integer, Double> quantite; //integer : nb de step (key), double : nb d'hectar (value)
 	
-	public champ(Gamme g) { 
+	public champ() { 
 		this.quantite = new HashMap<Integer, Double>();
-		this.qualite = g;
-	}
-	
-	public Gamme getQualite(){
-		return this.qualite;
 	}
 	public HashMap<Integer, Double> getQuantite(){
 		return this.quantite;
