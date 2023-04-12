@@ -1,5 +1,6 @@
 package abstraction.eq6Transformateur3;
 
+import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
 
@@ -70,44 +71,36 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 		HQBEStep2 = a;
 	}
 
-	/**
+	
 	
 		public void transformationChoco(Feve f, double qte) {
-		if (f instanceof Feve.F_BQ) {
-			double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
-			double a=stockFeve.get(F_BQ);
-			stockFeve.replace(F_BQ, a-(pourcentageTransfo*qte));
-			double b=stockChocolat.get(C_BQ);
-			stockChocolat.replace(C_BQ,b+qte);
+		if (f == Feve.F_BQ) {
+			double pourcentageTransfo = this.getPourcentageCacaoBG();
+			stockFeveBG.retirer(pourcentageTransfo*qte);
+			stockChocolatBG.ajouter(Filiere.LA_FILIERE.getEtape(),qte);
 			} else {
-				if (f instanceof F_MQ) {
-					double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
-					double a=stockFeve.get(F_MQ);
+				if (f == Feve.F_MQ) {
+					double pourcentageTransfo = this.getPourcentageCacaoMG();
 					double c=getMQStep1();
 					setMQStep1(qte);
-					stockFeve.replace(F_MQ, a-(pourcentageTransfo*qte));
-					double b=stockChocolat.get(C_MQ);
-					stockChocolat.replace(C_MQ,b+c);
+					stockFeveMG.retirer(pourcentageTransfo*qte);
+					stockChocolatMG.ajouter(Filiere.LA_FILIERE.getEtape(),c);
 					} else {
-						if (f instanceof F_MQ_BE) {
-							double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
-							double a=stockFeve.get(F_MQ_BE);
+						if (f ==Feve.F_MQ_BE) {
+							double pourcentageTransfo = this.getPourcentageCacaoMG();
 							double c=getMQBEStep1();
 							setMQBEStep1(qte);
-							stockFeve.replace(F_MQ_BE, a-(pourcentageTransfo*qte));
-							double b=stockChocolat.get(C_MQ_BE);
-							stockChocolat.replace(C_MQ_BE,b+c);
+							stockFeveMGL.retirer(pourcentageTransfo*qte);
+							stockChocolatMGL.ajouter(Filiere.LA_FILIERE.getEtape(), c);
 							} else {
-								if (f instanceof F_HQ_BE) {
-									double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
-									double a=stockFeve.get(F_HQ_BE);
+								if (f == Feve.F_HQ_BE) {
+									double pourcentageTransfo = this.getPourcentageCacaoHG();
 									double c=getHQBEStep1();
 									setHQBEStep1(qte);
 									double d = getHQBEStep2();
 									setHQBEStep2(c);
-									stockFeve.replace(F_HQ_BE, a-(pourcentageTransfo*qte));
-									double b=stockChocolat.get(C_HQ_BE);
-									stockChocolat.replace(C_HQ_BE,b+d);
+									stockFeveHGL.retirer(pourcentageTransfo*qte);
+									stockChocolatHGL.ajouter(Filiere.LA_FILIERE.getEtape(), d);
 							}
 	
 }
@@ -116,7 +109,7 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 	}
 
 
- */
+ 
 protected double BesoinStep(int Step, Feve f) {
 
 			
