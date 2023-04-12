@@ -78,7 +78,7 @@ public class Producteur3 extends Bourse3  {
 	 * @author Dubus-Chanson Victor
 	 */
 	public void updateListeCout() {
-		this.ListeCout.addLast(0);
+		this.ListeCout.addLast(this.CoutStep);
 		this.ListeCout.removeFirst();
 	}
 	
