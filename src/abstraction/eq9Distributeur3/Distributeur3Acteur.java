@@ -44,7 +44,14 @@ public class Distributeur3Acteur implements IActeur, IMarqueChocolat {
 		// william
 
 
-		
+		if(initialise == true) {
+			initialise = false;
+			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
+			Stock stock = new Stock();
+			this.stock = stock;
+			this.chocolats.add(c1);
+			this.stock.ajoutQte(c1, 1000);
+		}
 		
 
 		
