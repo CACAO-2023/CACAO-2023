@@ -13,20 +13,17 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements IDistributeurChocolatDeMarque {
 	
-	private double capaciteDeVente;
+	private double capaciteDeVente = Double.MAX_VALUE;
 	private HashMap<ChocolatDeMarque, Double> prix;
 
 	
 	
 	
 
-	public DistributeurChocolatDeMarque(ChocolatDeMarque[] chocos, double[] stocks, double capaciteDeVente, double[] prix, String[] marques) {
-
-
-		
-		this.capaciteDeVente = capaciteDeVente;
+	public DistributeurChocolatDeMarque() {
 		this.prix = new HashMap<ChocolatDeMarque, Double> ();
 	}
+	
 	//william
 	@Override
 	public double prix(ChocolatDeMarque choco) {
@@ -36,7 +33,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 	//baptiste
 	public HashMap<ChocolatDeMarque, Double> quantiteTotale() {
 		HashMap<ChocolatDeMarque, Double> qtVente = new HashMap<ChocolatDeMarque, Double> ();
-		HashMap<ChocolatDeMarque, Double> Stock = stock.getQteStock();
+		HashMap<ChocolatDeMarque, Double> Stock = this.stock.getQteStock();
 		
 		for (Entry<ChocolatDeMarque, Double> chocolat : Stock.entrySet()) {
 			qtVente.put(chocolat.getKey(), (double) 0);
@@ -67,7 +64,13 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 			return 0;
 		} else {
 			HashMap<ChocolatDeMarque, Double> qtVente = this.quantiteTotale();
-			return qtVente.get(choco);
+			if (qtVente.containsKey(choco)) {
+				return qtVente.get(choco);
+			} else {
+				return 0;
+			}
+			
+			
 
 		}
 	}
@@ -79,12 +82,11 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 			journal_activitegenerale.ajouter("Quelqu'un essaye de me pirater !");
 			return 0.0;
 		} else {
-			int pos= (chocolats.indexOf(choco));
-			if (pos<0) {
-				return 0.0;
-			} else {
-				HashMap<ChocolatDeMarque, Double> qtVente = this.quantiteTotale();
+			HashMap<ChocolatDeMarque, Double> qtVente = this.quantiteTotale();
+			if (qtVente.containsKey(choco)) {
 				return qtVente.get(choco)/10.0;
+			} else {
+				return 0;
 			}
 
 		}

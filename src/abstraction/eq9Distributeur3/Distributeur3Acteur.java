@@ -9,13 +9,14 @@ import java.util.List;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
 
-public class Distributeur3Acteur implements IActeur {
+public class Distributeur3Acteur implements IActeur{
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	protected int numero;
 	protected Integer cryptogramme;
@@ -40,9 +41,17 @@ public class Distributeur3Acteur implements IActeur {
 		
 		// Ici pour tester on se créé un stock de chocolat à partir de rien (william)
 		// ChocolatDeMarque(Chocolat chocolat, String marque, int pourcentageCacao, int pourcentageRSE)
+
 		// william
+
+
 		
 		
+
+		
+
+		this.stock = new Stock();
+
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
 		//this.chocolats.add(c1);
 		//this.stock.ajoutQte(c1, 1000);
@@ -75,16 +84,20 @@ public class Distributeur3Acteur implements IActeur {
 
 	public void next() {
 
+		
+		this.stock = new Stock();
+		chocolats = new LinkedList<ChocolatDeMarque>();
+		
+		/*
 		if(initialise == true) {
 			initialise = false;
-			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "marque", 50, 20);
-			Stock stock = new Stock();
-			this.stock = stock;
+			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
+			
 			this.chocolats.add(c1);
 			this.stock.ajoutQte(c1, 1000);
 		}
+		*/
 		
-
 		// lancer un contrat seuil et repondre 
 		
 
@@ -249,5 +262,16 @@ public class Distributeur3Acteur implements IActeur {
 	}
 
 	
+	
+	 /*
+	, IMarqueChocolat
+	  @Override
+	public List<String> getMarquesChocolat() {
+		LinkedList<String> marques = new LinkedList<String>();
+		marques.add("Choc");
+		return marques;
+	}
+
+	*/
 
 }
