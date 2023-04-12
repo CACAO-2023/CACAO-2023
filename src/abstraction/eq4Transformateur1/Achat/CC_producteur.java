@@ -4,19 +4,17 @@
 package abstraction.eq4Transformateur1.Achat;
 
 import java.awt.Color;
-import java.util.List;
 
-import abstraction.eq4Transformateur1.Transformateur1Acteur;
+
+
 import abstraction.eq4Transformateur1.Transformateur1Transformateur;
-import abstraction.eq4Transformateur1.Stock;
+
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
-import abstraction.eqXRomu.produits.Chocolat;
-import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
