@@ -81,6 +81,15 @@ public class Distributeur3Acteur implements IActeur {
 
 		journal_activitegenerale.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		journal_activitegenerale.ajouter("Solde="+getSolde()+"€");
+		etat_ventes();
+
+	}
+
+	
+	
+	public void etat_ventes(){
+		
+		journal_ventes.ajouter("Etat des ventes : "+"\n");
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
 			for (int i=0; i<this.chocolats.size(); i++) {
 				if(Filiere.LA_FILIERE.getEtape()-1 > 1) 
@@ -94,24 +103,6 @@ public class Distributeur3Acteur implements IActeur {
 			
 			}
 		}
-
-	}
-
-	
-	
-	public void etat_ventes(){
-		/*
-		Ils peuvent par contre connaître les volumes de ventes passés. En effet, pour tout chocolat de
-		marque choco, Filiere.LA_FILIERE.getVentes(choco, etape) retourne la quantité totale (tous
-		distributeurs cumulés) des ventes de choco à l’étape etape (avec etape dans [-24,
-		Filire.LA_FILIERE.getEtape()
-		
-		regarder les stocks de chaque gamme (moyen, moyen BE, haut), 
-		regarder nos ventes et les ventes du marché pour savoir ce 
-		qu'il faut acheter par ordre de priorité
-
-		William
-		*/
 	}
 	public void achat_stock(){
 
