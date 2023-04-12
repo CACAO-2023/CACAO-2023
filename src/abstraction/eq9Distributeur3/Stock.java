@@ -6,6 +6,7 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
+
 public class Stock {
 	private HashMap<ChocolatDeMarque,Double> QteStock;
 	
@@ -26,6 +27,11 @@ public class Stock {
 		return tot;
 		}
 	
+	public HashMap<ChocolatDeMarque, Double> getQteStock() {
+		return QteStock;
+	}
+
+
 	// renvoie le stock de chaque chocolat
 	// Mathilde Soun 
 	public double getStock(ChocolatDeMarque c) {
@@ -38,18 +44,28 @@ public class Stock {
 	}
 	// ajout d'une qte de chocolat (ou soustraction de chocolat)
 	// Mathilde Soun 
+	
 	public void ajoutQte(ChocolatDeMarque c, double ajout){
+		if(this.QteStock.get(c) == null) {
+			this.QteStock.put(c, 0.0);
+		}
+		
+		
 		double qte = this.QteStock.get(c);
 		qte = qte + ajout;
 		if (qte<0) {
-			// à faire notificationRayonVide(c,)
+			
 			this.QteStock.put(c, null);
 		}
 		this.QteStock.put(c, qte);
 		
 	}
+	
+	
+	
+	
 	// fonction coût du stock 
-	// Mathilde Soun
+	// Mathilde Soun 
 	public double coutDeStock () {
 		double cout = Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*this.qteStockTOT();
 		return cout;
