@@ -22,6 +22,7 @@ public class AODistributeur extends CC_distributeur implements IVendeurAO {
 	}
 	
 	public void initialiser() {
+		super.initialiser();
 		this.superviseur = (SuperviseurVentesAO)(Filiere.LA_FILIERE.getActeur("Sup.AO"));
 	}
 
