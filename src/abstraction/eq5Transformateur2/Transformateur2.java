@@ -120,11 +120,11 @@ public class Transformateur2 extends Transformateur2Acteur implements IFabricant
 				this.totalStocksFeves.retirer(this, qtefeve, this.cryptogramme); // et aux stocks totaux
 				
 				this.stockChoco.put(c, this.stockChoco.get(c)+((qtefeve*(1-proportion_marque))*this.pourcentageTransfo.get(f).get(c)));
-				this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Transformation de feves "+Journal.texteSurUneLargeurDe(f.getGamme()+"", 15)+" en chocolat "+Journal.texteSurUneLargeurDe(c.getGamme()+"", 15));
+				if(proportion_marque!=1) {this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Transformation de "+qtefeve*(1-proportion_marque)+" feves "+Journal.texteSurUneLargeurDe(f.getGamme()+"", 15)+" en "+this.stockChoco.get(c)+((qtefeve*(1-proportion_marque))*this.pourcentageTransfo.get(f).get(c))+" chocolat "+Journal.texteSurUneLargeurDe(c.getGamme()+"", 15));}
 		
 				ChocolatDeMarque cm = new ChocolatDeMarque(c, Marque, cacao, 0); // le chocolat ChocoPop est a 70% fait de cacao
 				double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;	
-				this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Transformation de feves "+Journal.texteSurUneLargeurDe(f.getGamme()+"", 15)+" en "+Journal.texteSurUneLargeurDe(cm.getMarque(), 15));
+				this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Transformation de "+qtefeve*proportion_marque+" feves "+Journal.texteSurUneLargeurDe(f.getGamme()+"", 15)+" en "+((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c))+Journal.texteSurUneLargeurDe(cm.getMarque(), 15));
 				this.stockChocoMarque.put(cm, scm+((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c)));					
 				this.totalStocksChocoMarque.ajouter(this, ((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c)), this.cryptogramme);
 				this.totalStocksChoco.ajouter(this, ((qtefeve*(1-proportion_marque))*this.pourcentageTransfo.get(f).get(c)), this.cryptogramme);
