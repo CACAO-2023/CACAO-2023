@@ -12,6 +12,7 @@ import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.IProduit;
 
 public class Distributeur1Acteur implements IActeur {
 	////////////////////////////////////////////////
@@ -84,7 +85,7 @@ public class Distributeur1Acteur implements IActeur {
 	public void next() {
 
 		this.journal.ajouter("on a réussi le challenge");
-		new DistributeurContratCadre();
+		new DistributeurContratCadreVendeurAcheteur(Chocolat.C_BQ);
 
 		
 	}
