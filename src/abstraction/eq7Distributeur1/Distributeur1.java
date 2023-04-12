@@ -1,25 +1,63 @@
 package abstraction.eq7Distributeur1;
 
 import abstraction.eqXRomu.clients.ClientFinal;
+import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.contratsCadres.Echeancier;
+import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
+import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
+import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
+import abstraction.eqXRomu.produits.IProduit;
 
 public class Distributeur1 extends Distributeur1Acteur implements IDistributeurChocolatDeMarque {
 	
 	public Distributeur1() {
 		super();
 	}
+	
+	private void strategie() {
+		
+	}
+	
+	protected double prevision(ChocolatDeMarque marque) { //prevoit les qtes vendues au tour suivant
+		return 0;
+	}
+	
+	
+	
 	/**
 	 * @param choco, choco!=null
 	 * @return Le prix actuel d'un Kg de chocolat choco
 	 * IMPORTANT : durant une meme etape, la fonction doit toujours retourner la meme valeur pour un chocolat donne.
 	 */
 	public double prix(ChocolatDeMarque choco) {
-		Gamme gamme = choco.getGamme();
-		boolean bioeq = choco.isBioEquitable();
 		double qualite = choco.qualitePercue();
-		return 10;
+		double coef = 1-(((10/3)*qualite)/100)+0.1;
+		if (choco.getChocolat()==Chocolat.C_BQ) {
+			return coutCB/coef;
+		}
+		else if (choco.getChocolat()==Chocolat.C_MQ) {
+			return coutCMNL/coef;
+		}
+		else if (choco.getChocolat()==Chocolat.C_MQ_BE) {
+			return coutCML/coef;
+		}
+		else if (choco.getChocolat()==Chocolat.C_HQ_BE) {
+			return coutCH/0.8;
+		}
+		return 2;
+	}
+	
+	public double prixPromotion(ChocolatDeMarque choco) {
+		double p = prix(choco);
+		if (((Filiere.LA_FILIERE.getEtape()%2)==0)&&(choco.getChocolat()!=Chocolat.C_BQ)) {
+			return p*0.9;
+		}
+		else {
+			return p;
+		}
 	}
 	
 	/**
@@ -38,6 +76,11 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 //		}
 	}
 	
+//	public void demande_contrat_cadre(IVendeurContratCadre vendeur) {
+//		qql = new demandeAcheteur(this,  vendeur, IProduit produit, Echeancier echeancier, int cryptogramme, boolean tg) {
+//		return 
+//	}
+	
 	/**
 	 * @param choco, choco!=null
 	 * @return Retourne la quantite en Kg de chocolat de type choco 
@@ -52,6 +95,7 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 //			double qStock = stockChocoMarque7.get(choco);
 //			return qStock/20.0;
 //		} else {
+		double seuil = Filiere.SEUIL_EN_TETE_DE_GONDOLE_POUR_IMPACT;
 		return 0.0;
 //		}
 	}
