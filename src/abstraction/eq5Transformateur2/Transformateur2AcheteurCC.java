@@ -28,7 +28,7 @@ public class Transformateur2AcheteurCC extends Transformateur2 implements IAchet
 		// TODO Auto-generated method stub
 		if (produit.getType().equals("Feve")) {
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme vouloir acheter le produit "+produit);
-		return true;}
+		return true;} //on achète tout type de fèves
 		else {
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme ne pas vouloir acheter le produit "+produit);
 		return false;}
@@ -41,9 +41,9 @@ public class Transformateur2AcheteurCC extends Transformateur2 implements IAchet
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
 		if ((( ((ChocolatDeMarque) produit).getMarque())) == "Maison Doutre") {
-			return 10; }
+			return 10; } //1O% de RSE pour la marque "Maison Doutre"
 		else { 
-			return 0; }
+			return 0; } // 0% pour la marque "ChocoPop"
 			}
 
 		// TODO Auto-generated method stub
@@ -52,21 +52,21 @@ public class Transformateur2AcheteurCC extends Transformateur2 implements IAchet
 	@Override
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
-		return contrat.getEcheancier();
+		return contrat.getEcheancier(); //pas de négociations 
 	}
 		
 
 	@Override
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
-			return contrat.getPrix();
+			return contrat.getPrix(); //pas de négociations
 	}
 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
 		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
-	}
+	} //réussite des négociations sur le contrat précisé en paramètre dans tous les cas 
 
 	@Override
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
@@ -83,6 +83,7 @@ public class Transformateur2AcheteurCC extends Transformateur2 implements IAchet
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de feves "+produit+". Stock->  "+this.stockFeves.get(produit));
 		} else {
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception d'un produit de type surprenant... "+produit);
-		}}}
+		}}} //mise à jour du stock de fèves après reception d'une livraison
+			//ne prend pas en compte la pénalité si la quantité livrée est inférieure à la quantité prévue
 
 
