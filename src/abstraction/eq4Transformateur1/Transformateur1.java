@@ -31,6 +31,10 @@ public class Transformateur1 extends AODistributeur implements IFabricantChocola
 		return this.chocosProduits;
 	}
 	
+	public void initialiser() {
+		super.initialiser();
+	}
+	
 	public void next() {
 		super.next();
 	}
