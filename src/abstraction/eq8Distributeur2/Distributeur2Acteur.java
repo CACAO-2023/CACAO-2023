@@ -43,6 +43,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
     protected Journal journal_ventes;
     protected Journal journal_achats;
     protected Journal journal_stocks;
+    protected Journal journal_ContratCadre;
     protected Journal journal_activitegenerale;
     
 
@@ -62,6 +63,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	    journal_operationsbancaires = new Journal("Journal des Opérations bancaires de l'" + nom, this);
 	    journal_ventes = new Journal("Journal des Ventes de l'" + nom, this);
 	    journal_achats = new Journal("Journal des Achats de l'" + nom, this);
+	    journal_ContratCadre= new Journal("Journal des Contrats Cadre de l'" + nom, this);
 	    journal_activitegenerale = new Journal("Journal général de l'" + nom, this);
 	    journal_stocks = new Journal("Journal des stocks" + nom, this);
         initialiserGamme();
@@ -256,16 +258,13 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	    journal_activitegenerale.ajouter("Le rayon du chocolat " + choco.getNom() + " est vide.");
 	}
 //-----------------------------------------Partie contrat cadre
-	@Override
+	//Auteur : Marzougui Mariem
 	public boolean achete(IProduit produit) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	//Auteur : Ben Messaoud Karim
-	@Override
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
-		
 		return 10;
 	}
 
@@ -288,21 +287,20 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		}
 		return null;
 	}
+	
 	//Auteur : Marzougui Mariem
-	@Override
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		return contrat.getPrix();
 	}
+	
 	//Auteur : Marzougui Mariem
-	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		this.journal_activitegenerale.ajouter(contrat.toString());
-		
+		this.journal_ContratCadre;.ajouter(contrat.toString());	
 	}
+	
 	//Auteur : Marzougui Mariem
-	@Override
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
+		this.
 		
 	}
 	//-----------------------------------------FIN Partie contrat cadre
