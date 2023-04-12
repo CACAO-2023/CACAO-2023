@@ -96,6 +96,7 @@ public class Distributeur3Acteur implements IActeur{
 			this.stock.ajoutQte(c1, 1000);
 		}
 		*/
+		
 		// lancer un contrat seuil et repondre 
 
 		
@@ -259,16 +260,16 @@ public class Distributeur3Acteur implements IActeur{
 	}
 
 	
-	/*
-	 * 
-	 * ajouter IMarque & demander à un fabriquant de ajouter notre marque
-	 * @Override
+	
+	 /*
+	, IMarqueChocolat
+	  @Override
 	public List<String> getMarquesChocolat() {
 		LinkedList<String> marques = new LinkedList<String>();
 		marques.add("Choc");
 		return marques;
-	}*/
+	}
 
-	
+	*/
 
 }
