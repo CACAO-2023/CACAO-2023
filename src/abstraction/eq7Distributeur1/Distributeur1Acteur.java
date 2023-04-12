@@ -9,6 +9,7 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
@@ -28,29 +29,28 @@ public class Distributeur1Acteur implements IActeur {
 	
 	protected Journal journal;
 
-	private Variable qualiteHaute;  // La qualite d'un chocolat de gamme haute 
-	private Variable qualiteMoyenne;// La qualite d'un chocolat de gamme moyenne  
-	private Variable qualiteBasse;  // La qualite d'un chocolat de gamme basse
-	private Variable pourcentageRSEmax;//Le pourcentage de reversion RSE pour un impact max sur la qualite percue
-	private Variable partRSEQualitePercue;//L'impact de pourcentageRSEmax% du prix consacres aux RSE dans la qualite percue du chocolat
-	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
+//	private Variable qualiteHaute;  // La qualite d'un chocolat de gamme haute 
+//	private Variable qualiteMoyenne;// La qualite d'un chocolat de gamme moyenne  
+//	private Variable qualiteBasse;  // La qualite d'un chocolat de gamme basse
+//	private Variable pourcentageRSEmax;//Le pourcentage de reversion RSE pour un impact max sur la qualite percue
+//	private Variable partRSEQualitePercue;//L'impact de pourcentageRSEmax% du prix consacres aux RSE dans la qualite percue du chocolat
+//	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
 	
-	protected int totalStocksCB;  // La quantité totale de stock de chocolat bas de gamme 
-	protected int totalStocksCML;  // La quantité totale de stock de chocolat moyenne gamme labellise
-	protected int totalStocksCMNL;  // La quantité totale de stock de chocolat moyenne gamme non labellise
-	protected int totalStocksCH;  // La quantité totale de stock de chocolat haute gamme
-	protected int totalStocks;  // La quantité totale de stock de chocolat
+//	protected int totalStocksCB;  // La quantité totale de stock de chocolat bas de gamme 
+//	protected int totalStocksCML;  // La quantité totale de stock de chocolat moyenne gamme labellise
+//	protected int totalStocksCMNL;  // La quantité totale de stock de chocolat moyenne gamme non labellise
+//	protected int totalStocksCH;  // La quantité totale de stock de chocolat haute gamme
+	protected Variable totalStocks;  // La quantité totale de stock de chocolat
 	
-	protected double coutCB; //Cout d'1kg de chocolat basse gamme
-	protected double coutCML; //Cout d'1kg de chocolat moyenne gamme labellise
-	protected double coutCMNL; //Cout d'1kg de chocolat moyenne gamme non labellise
-	protected double coutCH; //Cout d'1kg de chocolat haute gamme labellise
-	
-	protected List<Feve> lesFeves;
+	protected double coutCB; //Cout d'1t de chocolat basse gamme
+	protected double coutCML; //Cout d'1t de chocolat moyenne gamme labellise
+	protected double coutCMNL; //Cout d'1t de chocolat moyenne gamme non labellise
+	protected double coutCH; //Cout d'1t de chocolat haute gamme labellise
 	
 	////////////////////////////////////////
 	protected HashMap<Chocolat, Double> stockChoco;
-	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque;
+	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; //stock de chaque marque en tonne
+	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsions;
 		
 	protected int cryptogramme;
 
@@ -59,16 +59,30 @@ public class Distributeur1Acteur implements IActeur {
 		this.coutCH = 0;
 		this.coutCML = 0;
 		this.coutCMNL = 0;
-		this.totalStocksCB = 0;
-		this.totalStocksCH = 0;
-		this.totalStocksCML = 0;
-		this.coutCMNL = 0;
-		
-		
+		this.totalStocks = new VariablePrivee("Eq7TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
 		this.journal = new Journal("Journal "+this.getNom(), this);
 	}
 	
+	/**
+	 * @author Theo
+	 */
 	public void initialiser() {
+		
+		//Initialisation des stocks
+		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			stockChocoMarque.put(marque,10.0);
+		}
+		
+		//Initialisation des previsions
+		this.previsions = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 
+		for (int i=0;i<24;i++) {
+			HashMap<ChocolatDeMarque,Double> prevtour = new HashMap<ChocolatDeMarque,Double>();
+			for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+				prevtour.put(marque, Filiere.LA_FILIERE.getVentes(marque, -(i+1)));
+			}
+			previsions.put(24-i, prevtour);
+		}
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -83,11 +97,25 @@ public class Distributeur1Acteur implements IActeur {
 		}
 	
 	public void next() {
-
 		this.journal.ajouter("on a réussi le challenge");
-		new DistributeurContratCadreVendeurAcheteur(Chocolat.C_BQ);
+//		new DistributeurContratCadreVendeurAcheteur(Chocolat.C_BQ);
 
 		
+		
+		//Actualisation des prévisions
+		int etapepreced = Filiere.LA_FILIERE.getEtape()-1;
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			HashMap<ChocolatDeMarque,Double> prevetap = previsions.get(etapepreced);
+			prevetap.replace(marque, (prevetap.get(marque)+Filiere.LA_FILIERE.getVentes(marque, etapepreced))/2);
+			previsions.replace(etapepreced, prevetap);
+		}
+		
+		double newstock = 0.;
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			newstock += stockChocoMarque.get(marque);
+		}
+		totalStocks.setValeur(this, newstock);
+
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -101,6 +129,7 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+		res.add(totalStocks);
 //		res.add(this.totalStocksCB);
 //		res.add(this.totalStocksCH);
 //		res.add(this.totalStocksCML);

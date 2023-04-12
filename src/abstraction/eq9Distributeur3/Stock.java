@@ -1,6 +1,7 @@
 package abstraction.eq9Distributeur3;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Journal;
@@ -24,6 +25,7 @@ public class Stock {
 		for (Double qte : QteStock.values()) {
 	           tot += qte;
 			}
+		//this.journal_stock.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "Etat du stock Total : "+tot); 
 		return tot;
 		}
 	
@@ -32,7 +34,7 @@ public class Stock {
 	}
 
 
-	// renvoie le stock de chaque chocolat
+	// renvoie le stock du chocolat demandé 
 	// Mathilde Soun 
 	public double getStock(ChocolatDeMarque c) {
 		double res = this.QteStock.get(c);
@@ -46,6 +48,7 @@ public class Stock {
 	// Mathilde Soun 
 	
 	public void ajoutQte(ChocolatDeMarque c, double ajout){
+		//journal_stock.ajouter("On ajoute au stock de "+ c.getNom() + " une quantite de  " + ajout); 
 		if(this.QteStock.get(c) == null) {
 			this.QteStock.put(c, 0.0);
 		}
@@ -69,5 +72,18 @@ public class Stock {
 	public double coutDeStock () {
 		double cout = Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*this.qteStockTOT();
 		return cout;
+	}
+	// met à jour le journal pour le stock de chaque chocolat 
+	// Mathilde 
+	public void maJ () {
+		//liste de chocolat de stock ?? 
+		for (Entry<ChocolatDeMarque, Double> chocolat : QteStock.entrySet()) {
+
+			//journal_stock.ajouter("Etat du stock du chocolat  : "+ chocolat.getKey()+ " "+this.QteStock.get(chocolat));
+
+			//this.journal_stock.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "Etat du stock du chocolat  : "+ chocolat.getKey()+ " "+this.QteStock.get(chocolat));
+
+		}
+		
 	}
 }
