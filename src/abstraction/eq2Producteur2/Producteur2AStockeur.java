@@ -188,39 +188,50 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	 * @param etape l'étape considéré
 	 * @return le stock prévisionnel de fève de type f sans prendre en compte les ventes à la bourse et les nouveaux contrats cadre
 	 */
-	protected HashMap<Feve,Double> getStockTheo(int etape) {
+	protected HashMap<Feve,HashMap<Integer, Double>> getStocksTheo(int etape) {
 		if (etape < Filiere.LA_FILIERE.getEtape())
-			return 0;
+			return null;
 		HashMap<Feve, Lot> stocksTheo = this.createStocks();
+		
+		HashMap<Feve, HashMap<Integer, Double>> stocksTheoTot = new HashMap<Feve, HashMap<Integer, Double>>();
+		for (Feve f: stocksTheo.keySet())
+			stocksTheoTot.put(f, new HashMap<Integer, Double>());
+		
 		
 		for (Feve f: this.stocks.keySet())
 			stocksTheo.get(f).ajouter(this.stocks.get(f));
 		
 		HashMap<Feve, Double> varQuantite = createStock();
 		
-		//ajouter prod de ce tour si pas encore fait
 		for (ExemplaireContratCadre exCC : this.contrats)
 			varQuantite.put((Feve)exCC.getProduit(), varQuantite.get((Feve) exCC.getProduit()) - exCC.getQuantiteALivrerAuStep());
 		
 		HashMap<Feve, Double> quantiteRetard = createStock();
 		
+		variaQuant(varQuantite, stocksTheo, quantiteRetard);
 		
-		
+		for (Feve f: stocksTheo.keySet())
+			stocksTheoTot.get(f).put(Filiere.LA_FILIERE.getEtape(), stocksTheo.get(f).getQuantiteTotale() - quantiteRetard.get(f));
 		
 		for (int curEtape = Filiere.LA_FILIERE.getEtape() + 1; curEtape <= etape; curEtape ++) {
 			this.majPerim(stocksTheo, curEtape);
-			
 			HashMap<Feve, Double> varQuantite2 = createStock();
-			
 			for (ExemplaireContratCadre exCC : this.contrats) {
 				Feve f = (Feve) exCC.getProduit();
 				varQuantite2.put(f, varQuantite2.get(f) - exCC.getEcheancier().getQuantite(curEtape));
 			}
-				
+			HashMap<Feve, Double> prod = thisP.Prevision_Production(curEtape);
+			for (Feve f: varQuantite2.keySet()) {
+				varQuantite2.put(f, varQuantite2.get(f) + prod.get(f) - quantiteRetard.get(f) * (1 + ContratCadre.PENALITE_LIVRAISON));
+			}
+			
+			variaQuant(varQuantite2, stocksTheo, quantiteRetard);
+			for (Feve f: stocksTheo.keySet())
+				stocksTheoTot.get(f).put(curEtape, stocksTheo.get(f).getQuantiteTotale() - quantiteRetard.get(f));
 			
 		}
+		return stocksTheoTot;
 	}
-	
 	
 	private void variaQuant(HashMap<Feve, Double> varQuantite, HashMap<Feve, Lot> stocks, HashMap<Feve, Double> quantiteRetard) {
 		for (Feve f: varQuantite.keySet()) {
@@ -231,11 +242,13 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 				}
 				else {
 					stocks.get(f).retirer(-varQuantite.get(f));
+					quantiteRetard.put(f, 0.);
 				}
 			}
 			else if(varQuantite.get(f) > 0)
 			{
 				stocks.get(f).ajouter(Filiere.LA_FILIERE.getEtape(), varQuantite.get(f));
+				quantiteRetard.put(f, 0.);
 			}
 		}
 	}
