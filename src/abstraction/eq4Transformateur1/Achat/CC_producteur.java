@@ -15,9 +15,6 @@ import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
-import abstraction.eqXRomu.filiere.IActeur;
-import abstraction.eqXRomu.general.Journal;
-import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
@@ -55,8 +52,14 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		if (produit instanceof ChocolatDeMarque) {
 			produit = ((ChocolatDeMarque)produit).getChocolat();
 		}
-		
-		if (produit instanceof Feve) {
+		if (produit instanceof Chocolat) {
+			switch ((Chocolat)produit) {
+			case C_HQ_BE   : prix= 11.0;break;
+			case C_MQ_BE   : prix=  7.0;break;
+			case C_MQ      : prix=  6.0;break;
+			case C_BQ      : prix=  5.0;break;
+			}
+		} else if (produit instanceof Feve) {
 			switch ((Feve)produit) {
 			case F_HQ_BE : prix= 3.5;break;
 			case F_MQ_BE    : prix= 2.7;break;
@@ -79,29 +82,12 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
-		super.ContratEnCours.add(contrat);
 	}
 
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		IProduit produit= lot.getProduit();
 		double quantite = lot.getQuantiteTotale();
-		if (produit instanceof ChocolatDeMarque) {
-			if (this.stockChocoMarque.keySet().contains(produit)) {
-				this.stockChocoMarque.put((ChocolatDeMarque)produit, this.stockChocoMarque.get(produit)+quantite);
-			} else {
-				this.stockChocoMarque.put((ChocolatDeMarque)produit, quantite);
-			}
-			this.totalStocksChocoMarque.ajouter(this, quantite, this.cryptogramme);
-			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de C.M. "+produit+". Stock->  "+this.stockChocoMarque.get(produit));
-		} else if (produit instanceof Chocolat) {
-			if (this.stockChoco.keySet().contains(produit)) {
-				this.stockChoco.put((Chocolat)produit, this.stockChoco.get(produit)+quantite);
-			} else {
-				this.stockChoco.put((Chocolat)produit, quantite);
-			}
-			this.totalStocksChoco.ajouter(this, quantite, this.cryptogramme);
-			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de Choco "+produit+". Stock->  "+this.stockChoco.get(produit));
-		} else if (produit instanceof Feve) {
+		if (produit instanceof Feve) {
 			if (this.stockFeves.keySet().contains(produit)) {
 				this.stockFeves.put((Feve)produit, this.stockFeves.get(produit)+quantite);
 			} else {
