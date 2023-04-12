@@ -8,9 +8,9 @@ import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 
-public class Stock {
+public class Stock  {
 	private HashMap<ChocolatDeMarque,Double> QteStock;
-	protected Journal journal_stock;
+	
 
 	
 	public Stock() {
@@ -49,7 +49,8 @@ public class Stock {
 	// Mathilde Soun 
 	
 	public void ajoutQte(ChocolatDeMarque c, double ajout){
-		//journal_stock.ajouter("On ajoute au stock de "+ c.getNom() + " une quantite de  " + ajout); 
+		//super.journal_stock.ajouter("On ajoute au stock de "+ c.getNom() + " une quantite de  " + ajout); 
+
 		if(this.QteStock.get(c) == null) {
 			this.QteStock.put(c, 0.0);
 		}
