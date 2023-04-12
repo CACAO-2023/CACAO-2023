@@ -26,7 +26,8 @@ public class Distributeur3Acteur implements IActeur {
 	protected Journal journal_stock;
 	protected List<ChocolatDeMarque> chocolats;
 	protected HashMap<ChocolatDeMarque, Double[]> prixMoyen;
-	protected boolean initialise;
+	protected boolean initialise = true;
+	protected double prix;
 
 	public Distributeur3Acteur() {
 		/*if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
@@ -65,6 +66,7 @@ public class Distributeur3Acteur implements IActeur {
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ9";
 	}
+	
 
 	////////////////////////////////////////////////////////
 	//         En lien avec l'interface graphique         //
@@ -77,6 +79,8 @@ public class Distributeur3Acteur implements IActeur {
 			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "marque", 50, 20);
 			Stock stock = new Stock();
 			this.stock = stock;
+			this.chocolats.add(c1);
+			this.stock.ajoutQte(c1, 1000);
 		}
 		
 
@@ -192,6 +196,7 @@ public class Distributeur3Acteur implements IActeur {
 		res.add(journal_achats);
 		res.add(journal_operationsbancaires);
 		res.add(journal_activitegenerale);
+		res.add(journal_stock);
 		
 		return res;
 	}
