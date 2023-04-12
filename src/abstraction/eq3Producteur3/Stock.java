@@ -172,7 +172,8 @@ public class Stock {
 	 * @return The updated stock
 	 * @author Corentin Caugant
 	 */
-	public static Stock miseAJourStock(Stock stock) {
+	public Stock miseAJourStock() {
+		Stock stock = this;
 		Stock newStock = new Stock(0);
 
 		// First we begin by creating the new lots that will be added to the stock
