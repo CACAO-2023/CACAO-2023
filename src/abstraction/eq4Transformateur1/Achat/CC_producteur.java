@@ -55,14 +55,8 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		if (produit instanceof ChocolatDeMarque) {
 			produit = ((ChocolatDeMarque)produit).getChocolat();
 		}
-		if (produit instanceof Chocolat) {
-			switch ((Chocolat)produit) {
-			case C_HQ_BE   : prix= 11.0;break;
-			case C_MQ_BE   : prix=  7.0;break;
-			case C_MQ      : prix=  6.0;break;
-			case C_BQ      : prix=  5.0;break;
-			}
-		} else if (produit instanceof Feve) {
+		
+		if (produit instanceof Feve) {
 			switch ((Feve)produit) {
 			case F_HQ_BE : prix= 3.5;break;
 			case F_MQ_BE    : prix= 2.7;break;
