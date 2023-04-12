@@ -1,40 +1,44 @@
 package abstraction.eq4Transformateur1.Vente;
 
 import abstraction.eqXRomu.offresAchat.IVendeurOA;
+
+import java.util.List;
+
+import abstraction.eqXRomu.appelsOffres.IVendeurAO;
+import abstraction.eqXRomu.appelsOffres.PropositionAchatAO;
 import abstraction.eqXRomu.appelsOffres.SuperviseurVentesAO;
+import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.offresAchat.OffreAchat;
 import abstraction.eqXRomu.offresAchat.PropositionVenteOA;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
-public class AODistributeur extends CC_distributeur implements IVendeurOA {
-
-	public PropositionVenteOA proposerVente(OffreAchat offre) {
-		this.journal.ajouter("proposerVente(offre = "+offre+")");
-		for (ChocolatDeMarque c : this.stockChocoMarque.keySet()) {
-			this.journal.ajouter("      "+c+" "+(offre.getChocolat().equals(c.getChocolat())?"convient":"ne convient pas")+" "+(offre.getMarque()==null || offre.getMarque().equals(c.getMarque())?" marque ok":" marque pas ok"));
-			if (offre.getChocolat().equals(c.getChocolat()) && (offre.getMarque()==null || offre.getMarque().equals(c.getMarque()))) { // type recherche
-				if (this.stockChocoMarque.get(c)>=offre.getQuantiteT()) {
-					this.journal.ajouter(" "+this.stockChocoMarque.get(c)+" T en stock -> quantite suffisante");
-					return new PropositionVenteOA(offre, this, c, 16.0);
-				} else {
-					this.journal.ajouter(" "+this.stockChocoMarque.get(c)+" T en stock -> quantite insuffisante");
-				}
-			}
-		}
+public class AODistributeur extends CC_distributeur implements IVendeurAO {
+	protected SuperviseurVentesAO superviseur;
+	
+	@Override
+	public PropositionAchatAO choisir(List<PropositionAchatAO> propositions) {
+		// TODO Auto-generated method stub
 		return null;
 	}
-
-	public void notifierAchatOA(PropositionVenteOA propositionRetenue) {
-		double nouveauStock = Math.max(0.0, this.stockChocoMarque.get(propositionRetenue.getChocolatDeMarque())-propositionRetenue.getOffre().getQuantiteT());
-		this.journal.ajouter(" le stock de "+propositionRetenue.getChocolatDeMarque()+" passe a "+nouveauStock+" suite a la vente "+propositionRetenue);
-		this.stockChocoMarque.put(propositionRetenue.getChocolatDeMarque(), nouveauStock);
+	
+	public void initialiser() {
+		this.superviseur = (SuperviseurVentesAO)(Filiere.LA_FILIERE.getActeur("Sup.AO"));
 	}
 
-	public void notifierPropositionNonRetenueOA(PropositionVenteOA propositionRefusee) {
-	}
+//	public void next() {
+//		super.next();
+//		if (Filiere.LA_FILIERE.getEtape()>=1) {
+//			if (this.stock.getValeur()>200) {
+//				PropositionAchatAO retenue = superviseur.vendreParAO(this, cryptogramme, this.stockChocoMarque.(), 200.0, false);
+//				if (retenue!=null) {
+//					this.stock.setValeur(this, this.stock.getValeur()-retenue.getOffre().getQuantiteT());
+//					journal.ajouter("vente de "+retenue.getOffre().getQuantiteT()+" T a "+retenue.getAcheteur().getNom());
+//				} else {
+//					journal.ajouter("pas d'offre retenue");
+//				}
+//			}
+//		}
+//	}
 
-	public void next() {
-		super.next();
-		(SuperviseurVentesAO)(Filiere.LA_FILIERE.getActeur("Sup.AO"));
-	}
+
 }
