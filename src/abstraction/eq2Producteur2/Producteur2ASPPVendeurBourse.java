@@ -6,7 +6,9 @@ import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteur implements IVendeurBourse{
-
+	
+	// code écrit par Flavien
+	
 	public Producteur2ASPPVendeurBourse() {
 		super();
 	}
@@ -70,32 +72,32 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 				return stock_mis_en_bourse(f);
 			}
 		}
-		if (f==Feve.F_MQ_BE){
-			float prix_seuil_1=100;
-			float prix_seuil_2=1000;
-			if (cours_de_f < prix_seuil_1) {
-				return 0;
-			}
-			if (cours_de_f >= prix_seuil_1 && cours_de_f<=prix_seuil_2) {
-				return stock_mis_en_bourse(f)*(cours_de_f - prix_seuil_1)/(prix_seuil_2 - prix_seuil_1);
-			}
-			if(cours_de_f >= prix_seuil_2) {
-				return stock_mis_en_bourse(f);
-			}
-		}
-		if (f==Feve.F_HQ_BE) {
-			float prix_seuil_1=1000;
-			float prix_seuil_2=10000;
-			if (cours_de_f < prix_seuil_1) {
-				return 0;
-			}
-			if (cours_de_f >= prix_seuil_1 && cours_de_f <= prix_seuil_2) {
-				return stock_mis_en_bourse(f)*(cours_de_f - prix_seuil_1)/(prix_seuil_2 - prix_seuil_1);
-			}
-			if(cours_de_f >= prix_seuil_2) {
-				return stock_mis_en_bourse(f);
-			}
-		}
+//		if (f==Feve.F_MQ_BE){            ON NE VEUT VENDRE EN BOURSE QUE DES FEVES BQ ET MQ
+//			float prix_seuil_1=100;
+//			float prix_seuil_2=1000;
+//			if (cours_de_f < prix_seuil_1) {
+//				return 0;
+//			}
+//			if (cours_de_f >= prix_seuil_1 && cours_de_f<=prix_seuil_2) {
+//				return stock_mis_en_bourse(f)*(cours_de_f - prix_seuil_1)/(prix_seuil_2 - prix_seuil_1);
+//			}
+//			if(cours_de_f >= prix_seuil_2) {
+//				return stock_mis_en_bourse(f);
+//			}
+//		}
+//		if (f==Feve.F_HQ_BE) {
+//			float prix_seuil_1=1000;
+//			float prix_seuil_2=10000;
+//			if (cours_de_f < prix_seuil_1) {
+//				return 0;
+//			}
+//			if (cours_de_f >= prix_seuil_1 && cours_de_f <= prix_seuil_2) {
+//				return stock_mis_en_bourse(f)*(cours_de_f - prix_seuil_1)/(prix_seuil_2 - prix_seuil_1);
+//			}
+//			if(cours_de_f >= prix_seuil_2) {
+//				return stock_mis_en_bourse(f);
+//			}
+//		}
 		return 0;
 	}
 
@@ -110,7 +112,14 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 	public Lot notificationVente(Feve f, double quantiteEnT, double coursEnEuroParT) {
 		Lot l = new Lot(f);
 		l.ajouter(Filiere.LA_FILIERE.getEtape(), quantiteEnT); 
-		//this.stockFeve.setValeur(this, this.stockFeve.getValeur()-quantiteEnT);
+		if (f == Feve.F_BQ) {
+			this.BQquantiteVendueBourse.setValeur(null, quantiteEnT);
+		
+		}
+		if (f == Feve.F_MQ) {
+			this.MQquantiteVendueBourse.setValeur(null, quantiteEnT);
+		}
+		this.stockFeve.setValeur(this, this.stockFeve.getValeur()-quantiteEnT);
 		return l;
 	}
 

@@ -35,6 +35,8 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable tempsDegradationFeve = new VariablePrivee("tempsDegradationFeve", "Temps (en nombre d'étapes) avant qu'une Feve ne perdent de la qualité", this, 12);
 	protected Variable tempsPerimationFeve = new VariablePrivee("tempsPerimationFeve", "Temps (en nombre d'étapes) avant qu'une Feve ne se périme totalement  après avoir perdu une gamme", this, 6);
 	protected Variable coutMoyenStock = new VariablePrivee("cout moyen stockage", "Cout moyen du stockage d'une tonne de fève pour un step", this, 1.5);
+	protected Variable BQquantiteVendueBourse = new VariablePrivee("BQquantiteVendueBourse","quantite de fèves Vendue en Bourse en BQ par step", this, 0);
+	protected Variable MQquantiteVendueBourse = new VariablePrivee("MQquantiteVendueBourse","quantite de fèves Vendue en Bourse en MQ par step", this, 0);
 	
 	public double prixMinBQ = 0.0; //provisoire
 	public double prixMinMQ = 0.0; //provisoire
