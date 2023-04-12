@@ -27,20 +27,14 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 		
 	}
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		if (Math.random()<0.1) {
-			return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
-		} else {//dans 90% des cas on fait une contreproposition pour l'echeancier
-			Echeancier e = contrat.getEcheancier();
-			e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut())*2.5);// on souhaite livrer 2.5 fois plus lors de la 1ere livraison... un choix arbitraire, juste pour l'exemple...
-			return e;
-		}
+		return contrat.getEcheancier();
 	}
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		if (Math.random()<0.1) {
-			return contrat.getPrix(); // on ne cherche pas a negocier dans 10% des cas
-		} else {//dans 90% des cas on fait une contreproposition differente
-			return contrat.getPrix()*0.95;// 5% de moins.
+		if (contrat.getPrix()/contrat.getQuantiteTotale() > 1.2) {
+			return contrat.getPrix();
+		} else {
+			return contrat.getPrix()*0.95;
 		}
 	}
 	public void next() {
@@ -56,12 +50,12 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 		
 		
 		// Proposition d'un nouveau contrat a tous les vendeurs possibles
-		/*
+		
 		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
 			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
 				Filiere.LA_FILIERE.getSuperviseurContratCadre().demande((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 5.0), cryptogramme);
 			}
-		}*/
+		}
 		
 		
 		// OU proposition d'un contrat a un des vendeurs choisi aleatoirement
@@ -105,11 +99,6 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 		// TODO Auto-generated method stub
 		
 	}
-
-
-
-	
-
 
 
 }
