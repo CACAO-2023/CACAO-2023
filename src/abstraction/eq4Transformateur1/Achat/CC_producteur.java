@@ -38,11 +38,10 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		return false;
 }
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		if (contrat.getTeteGondole()) {
-			return null;
-		}
+
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
 		return contrat.getEcheancier();
+		
 	}
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
