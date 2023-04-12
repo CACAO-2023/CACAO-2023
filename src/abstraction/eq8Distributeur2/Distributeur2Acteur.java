@@ -99,11 +99,12 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	public Color getColor() {// NE PAS MODIFIER
 		return new Color(209, 179, 221); 
 	}
-
+//Auteur : Ben Messaoud Karim
 	public String getDescription() {
 		return "Notre acteur, Royal Roast, est un distributeur de chocolat de toutes les gammes qui s'engage à prendre en compte les enjeux de la filière du cacao pour distribuer un produit final qui respecte les normes et répond aux besoins des clients.";
 	}
-
+//Auteur : Ben Messaoud Karim
+	
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
@@ -133,16 +134,18 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	// Appelee en debut de simulation pour vous communiquer 
 	// votre cryptogramme personnel, indispensable pour les
 	// transactions.
+	//Auteur : Ben Messaoud Karim
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
 	}
 
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
+	//Auteur : Ben Messaoud Karim
 	public void notificationFaillite(IActeur acteur) {
 		
 	}
-
+	
 	// Apres chaque operation sur votre compte bancaire, cette
 	// operation est appelee pour vous en informer
 	public void notificationOperationBancaire(double montant) {
@@ -158,6 +161,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	}
 	
 	// Renvoie le solde actuel de l'acteur
+	//Auteur : Ben Messaoud Karim
 	public double getSolde() {
 		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme);
 	}
@@ -176,7 +180,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
 	}
-
+	
+	//Auteur : Ben Messaoud Karim
 	public  Stock getStock(ChocolatDeMarque choco) {
 	    int pos = (((List<Variable>) choco).indexOf(choco));
 	    if (pos < 0) {
@@ -196,7 +201,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	//Si c'est le cas, la fonction renvoie le prix correspondant à ce 
 	//chocolat de marque. Sinon, la fonction renvoie 0. 
 	
-	
+	//Auteur : Ben Messaoud Karim
 	@Override
 	public double prix(ChocolatDeMarque choco) {
 		if(prixDeVente.containsKey(choco)) {
@@ -205,7 +210,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			return 0;
 		}
 	}
-
+	//Auteur : Ben Messaoud Karim et Maxime Azzi
 	@Override
     public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
         int pos = (chocolats.indexOf(choco));
@@ -223,7 +228,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
             return Math.min(stockGamme, this.getStock(choco).getValeur());
         }
     }
-
+	//Auteur : Ben Messaoud Karim et Maxime Azzi
 	@Override
     public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
         int pos = chocolats.indexOf(choco);
@@ -236,7 +241,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
                 return 0.0;
             }}
         }
-
+	//Auteur : Ben Messaoud Karim et Maxime Azzi
 	 @Override
 	    public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 	        int pos = chocolats.indexOf(choco);
@@ -244,7 +249,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	            this.getStock(choco).retirer(this, quantite);
 	        }
 	    }
-
+	//Auteur : Ben Messaoud Karim
 	@Override
 	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
 		// Ajouter un message dans le journal pour indiquer que le rayon est vide
@@ -256,7 +261,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	//Auteur : Ben Messaoud Karim
 	@Override
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
