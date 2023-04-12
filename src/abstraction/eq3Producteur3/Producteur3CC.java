@@ -14,7 +14,7 @@ import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Producteur3CC extends Producteur3 implements IVendeurContratCadre {
+public class Producteur3CC extends Producteur3Acteur implements IVendeurContratCadre {
     protected LinkedList<ExemplaireContratCadre> contracts;
     protected SuperviseurVentesContratCadre superviseur;
     
@@ -23,15 +23,14 @@ public class Producteur3CC extends Producteur3 implements IVendeurContratCadre {
      */
     public Producteur3CC() {
         super();
-        System.out.println("Producteur3CC created");
         this.contracts = new LinkedList<ExemplaireContratCadre>();
-        this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
+        
     }
 
     public void initialiser() {
-		super.initialiser();
-		new Producteur3CC();
-	}
+        super.initialiser();
+        this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
+    }
 
     /**
      * @author Corentin Caugant
@@ -45,7 +44,7 @@ public class Producteur3CC extends Producteur3 implements IVendeurContratCadre {
      */
     private double getPrixMin() {
         // return this.lot.getPrixMin();
-        return 100.0;
+        return 1.0;
     }
 
     /**
@@ -133,7 +132,6 @@ public class Producteur3CC extends Producteur3 implements IVendeurContratCadre {
         IAcheteurContratCadre acheteur = acheteurs.get((int)(Math.random() * acheteurs.size()));
 
         // Now making the contract
-        System.out.println("HERE");
         this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit + "...");
         ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
         if (cc != null) {
@@ -146,7 +144,6 @@ public class Producteur3CC extends Producteur3 implements IVendeurContratCadre {
 
     public void next() {
         super.next();
-        System.out.println("HERE");
         this.getContractForProduct(Feve.F_HQ_BE);
         this.getContractForProduct(Feve.F_MQ_BE);
     }

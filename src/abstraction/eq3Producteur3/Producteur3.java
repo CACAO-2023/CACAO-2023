@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
 
-public class Producteur3 extends Producteur3Acteur  {
+public class Producteur3 extends Producteur3CC  {
 	/*
 	 * ChampsH est un dictionnaire qui contient les champs Haut de Gamme
 	 * On associe a un ensemble d'hectars un int qui correspond  leur step de plantaison 
@@ -26,7 +26,6 @@ public class Producteur3 extends Producteur3Acteur  {
 	private Integer HectaresLibres; /*Repertorie le nombre d'hectares libres que l'on possede*/
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
 	private Integer CoutStep; /* Tout nos couts du step, reinitialises a zero au debut de chaque step et payes a la fin du step*/
-	protected Stock Stock;
 	/*
 	 * Je n'ai pas trouve le type du champs donc j'ai choisit String. A CHANGER
 	 * Il faudra aussi penser a se mettre d'accord sur les tailles des champs initiaux.
@@ -39,8 +38,6 @@ public class Producteur3 extends Producteur3Acteur  {
 		this.HectaresLibres= 0;
 		this.HectaresUtilises=950000;
 	}
-
-
 
 	public void initialiser() {
 		super.initialiser();
@@ -55,7 +52,6 @@ public class Producteur3 extends Producteur3Acteur  {
 		return this.Stock;
 	}
   
-	
 	/**
 	 * @author BOCQUET Gabriel, Dubus-Chanson Victor
 	 */

@@ -17,7 +17,8 @@ public class Producteur3Acteur implements IActeur {
     protected Journal journal_achats;
     protected Journal journal_activitegenerale;
     protected Journal journal_Stock;
-    
+    protected Stock Stock;
+
 	public Producteur3Acteur() {
 	String nom = "Equipe 3";
 	journal_operationsbancaires=new Journal("Journal des Opérations bancaires de l'"+nom,this);
