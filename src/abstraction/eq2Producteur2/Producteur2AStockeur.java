@@ -1,6 +1,6 @@
 package abstraction.eq2Producteur2;
 
-//code écrit par Nathan
+//Code écrit par Nathan
 
 import java.util.HashMap;
 import java.util.HashSet;
