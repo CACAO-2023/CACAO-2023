@@ -29,12 +29,12 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	protected String nom;
 	protected ArrayList<ChocolatDeMarque> chocolats;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
-    protected StockGeneral stocks ; 
+    protected HashMap<ChocolatDeMarque, Stock> stocks ; 
     protected HashMap<Gamme, Double> pourcentagesGamme;
     private double[] prix;
     private String[] marques;
     private IProduit produit;
-    private Map<IProduit, Integer> produitsEnStock;
+    private HashMap<IProduit, Integer> produitsEnStock;
    
 //	private Stock stockBasDeGamme;
 //	private Stock stockMoyenDeGamme;
@@ -177,7 +177,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		return Filiere.LA_FILIERE;
 	}
 
-	public  Variable getStock(ChocolatDeMarque choco) {
+	public  Stock getStock(ChocolatDeMarque choco) {
 	    int pos = (((List<Variable>) choco).indexOf(choco));
 	    if (pos < 0) {
 	        return null;

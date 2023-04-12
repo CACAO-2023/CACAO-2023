@@ -24,6 +24,7 @@ public class StockGeneral {
     public void ajouterAuStock(ChocolatDeMarque produit, double quantiteAjoutee) {
         Stock stock = getStock(produit);
         stock.ajouter(quantiteAjoutee);
+        
     }
 
     public boolean retirerDuStock(ChocolatDeMarque produit, double quantiteRetiree) {
