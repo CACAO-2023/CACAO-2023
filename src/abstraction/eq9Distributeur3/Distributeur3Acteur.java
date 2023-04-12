@@ -26,7 +26,7 @@ public class Distributeur3Acteur implements IActeur {
 	protected Journal journal_stock;
 	protected List<ChocolatDeMarque> chocolats;
 	protected HashMap<ChocolatDeMarque, Double[]> prixMoyen;
-	protected boolean initialise = true;
+	protected boolean initialise = false;
 	protected double prix;
 
 	public Distributeur3Acteur() {
