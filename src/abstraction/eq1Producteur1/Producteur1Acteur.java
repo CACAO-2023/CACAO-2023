@@ -28,12 +28,15 @@ public class Producteur1Acteur implements IActeur {
 		this.journal = new Journal("Journal "+this.getNom(), this);
 		this.journal_stocks = new Journal("Journal : stocks"+this.getNom(), this);
 		this.journal_ventes = new Journal("Journal : ventes"+this.getNom(), this);
+		this.journal_champs = new Journal("Journal : champs"+this.getNom(), this);
 	}
 	
 	public void initialiser() {
 		this.step = 0;
-		this.champ = new champ(BQ);//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
-		this.champ.add(new hectar("B"));
+		this.champBas = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
+		for (int i=0; i<30; i++) {
+			this.champBas.ajouter(-i, 8333.33);
+		}
 	}
 
 	public String getNom() {// NE PAS MODIFIER

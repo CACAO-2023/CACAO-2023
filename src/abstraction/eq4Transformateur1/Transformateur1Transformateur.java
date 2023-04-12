@@ -5,17 +5,17 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eq4Transformateur1.Achat.AchatBourse;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
-import abstraction.eqXRomu.produits.Gamme;
 
 public class Transformateur1Transformateur extends Stock implements IFabricantChocolatDeMarque  {
 	
-	private List<ChocolatDeMarque>chocosProduits;
+	protected List<ChocolatDeMarque>chocosProduits;
 	protected HashMap<Feve, Double> stockFeves;
 	protected HashMap<Chocolat, Double> stockChoco;
 	protected HashMap<ChocolatDeMarque, Double> stockChocoMarque;
@@ -57,10 +57,10 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		this.stockChocoMarque=new HashMap<ChocolatDeMarque,Double>();
 		this.pourcentageTransfo = new HashMap<Feve, HashMap<Chocolat, Double>>();
 		this.pourcentageTransfo.put(Feve.F_HQ_BE, new HashMap<Chocolat, Double>());
-		double conversion = 1.0 + (100.0 - Filiere.LA_FILIERE.getParametre("pourcentage min cacao HQ").getValeur())/100.0;
+		double conversion = 1.1;
 		this.pourcentageTransfo.get(Feve.F_HQ_BE).put(Chocolat.C_HQ_BE, conversion);// la masse de chocolat obtenue est plus importante que la masse de feve vue l'ajout d'autres ingredients
 		this.pourcentageTransfo.put(Feve.F_BQ, new HashMap<Chocolat, Double>());
-		conversion = 1.0 + (100.0 - Filiere.LA_FILIERE.getParametre("pourcentage min cacao BQ").getValeur())/100.0;
+		conversion = 1.64;
 		this.pourcentageTransfo.get(Feve.F_BQ).put(Chocolat.C_BQ, conversion);
 	}
 
