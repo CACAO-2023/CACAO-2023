@@ -89,6 +89,7 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 * Remarque : La somme des quantites en vente en tete de gondole ne peut 
 	 * pas depasser 10% de la somme totale des quantites mises en vente. 
 	 */
+	
 	public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
 		//recopie de l'exemple de romu
 //		if (stockChocoMarque7.keySet().contains(choco)) {

@@ -63,6 +63,7 @@ public class Distributeur1AcheteurOA extends Distributeur1 implements IAcheteurO
 	}
 	
 	public void next() {
+		this.journal.ajouter("Boucle next Acheteur OA");
 		super.next();
 		if (supOA==null) {
 			supOA =(SuperviseurVentesOA)(Filiere.LA_FILIERE.getActeur("Sup.OA"));
