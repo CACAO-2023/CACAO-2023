@@ -108,9 +108,10 @@ public class Distributeur1Acteur implements IActeur {
 		
 		double newstock = 0.;
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			
+			newstock += stockChocoMarque.get(marque);
 		}
-		
+		totalStocks.setValeur(this, newstock);
+
 	}
 
 	public Color getColor() {// NE PAS MODIFIER

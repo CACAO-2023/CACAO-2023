@@ -5,11 +5,12 @@ import java.util.HashMap;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.Gamme;
 
-public class Stock {
+public class Stock extends Distributeur1Acteur{
 	HashMap<Chocolat, Integer> stockChoco;
 	
-	public Stock (HashMap<Chocolat, Integer> stockChoco) {
-		this.stockChoco= stockChoco;
+	public Stock () {
+		super();
+		this.stockChoco=  new HashMap<>();
 	}
 	
 	

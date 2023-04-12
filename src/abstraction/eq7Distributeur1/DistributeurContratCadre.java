@@ -9,7 +9,7 @@ import abstraction.eqXRomu.filiere.*;
 import abstraction.eqXRomu.general.*;
 import abstraction.eqXRomu.produits.IProduit;
 
-public class DistributeurContratCadre extends Distributeur1 implements IActeur {
+public class DistributeurContratCadre extends DistributeurContratCadreVendeurAcheteur implements IActeur {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	protected int numero;
 	protected Variable stock;
@@ -19,6 +19,7 @@ public class DistributeurContratCadre extends Distributeur1 implements IActeur {
 	protected SuperviseurVentesContratCadre supCCadre;
 
 	public DistributeurContratCadre(IProduit produit) {	
+		super(produit);
 		if (produit==null) {
 			throw new IllegalArgumentException("creation d'une instance de ExempleTransformateurContratCadre avec produit==null");
 		}		
