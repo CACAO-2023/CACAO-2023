@@ -23,9 +23,7 @@ public class Producteur3 extends Bourse3  {
 	 */
 
 	
-	/**
-	 * @author Dubus-Chanson Victor, Bocquet Gabriel
-	 */
+	
 	private HashMap<String,HashMap> Champs;
 	
 
@@ -93,15 +91,25 @@ public class Producteur3 extends Bourse3  {
 		Stock Stock = this.getStock();
 		this.CoutTonne = CoutTotal / Stock.getQuantite();
 	}
-
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	public void initialiser() {
 		super.initialiser();
 		new Producteur3();		
 	}
 	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	public Champs getFields() {
 		return this.fields;
 	}
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	protected Stock getStock() {
 		// TODO Auto-generated method stub
 		return this.Stock;
