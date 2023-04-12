@@ -43,6 +43,11 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 		this.ListJournal = new LinkedList<Journal>();
 		ListJournal.add(this.journal);
 		this.chocosProduits = new LinkedList<ChocolatDeMarque>();
+		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_BQ,"eco+ choco",this.pourcentageCacaoBG,this.pourcentageRSE));
+		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_MQ,"chokchoco",this.pourcentageCacaoMG,this.pourcentageRSE));
+		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_MQ_BE,"chokchoco bio",this.pourcentageCacaoMGL,this.pourcentageRSE));
+		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_HQ_BE,"Choc",this.pourcentageCacaoHG,this.pourcentageRSE));
+
 	}
 	
 	/**
@@ -81,11 +86,7 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	}
 
 	public void initialiser() {
-		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_BQ,"eco+ choco",this.pourcentageCacaoBG,this.pourcentageRSE));
-		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_MQ,"chokchoco",this.pourcentageCacaoMG,this.pourcentageRSE));
-		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_MQ_BE,"chokchoco bio",this.pourcentageCacaoMGL,this.pourcentageRSE));
-		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_HQ_BE,"Choc",this.pourcentageCacaoHG,this.pourcentageRSE));
-	}
+			}
 
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ6";
