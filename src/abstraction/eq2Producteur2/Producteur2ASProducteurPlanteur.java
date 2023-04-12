@@ -25,6 +25,9 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		this.employes = new HashMap<Feve, Integer>();
 		this.salaires = new HashMap<Feve, Double>();
 		this.surface_plantation = new HashMap<Feve, Integer>();
+		this.age_hectares =  new HashMap<Feve,HashMap<Integer, Integer>>();
+		for (Feve f: this.lesFeves)
+			this.age_hectares.put(f, new HashMap<Integer, Integer>());
 	}
 		
 	public HashMap<Feve, Integer> getEmployes(){
@@ -44,7 +47,9 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	public HashMap<Feve,HashMap<Integer, Integer>> get_Age_Hectares(){
 		return this.age_hectares;
 	}
-	
+	// Mise en place des differents setters qui pour la version 1 ne sont pas encore utilies car seuls les 
+	//plantations évoluent cependant 
+	//
 	public void setEmploye(int employes_BQ, int employes_MQ, int employes_MQ_BE, int employes_HQ_BE) {
 		this.employes.put(Feve.F_BQ, employes_BQ);
 		this.employes.put(Feve.F_MQ, employes_MQ);
@@ -85,7 +90,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		super.next();
 		this.CoutProd();
 		this.Prevision_Vente();
-		this.ajustement();
+		this.ajustement_plantation();
 		this.Prevision_Production(Filiere.LA_FILIERE.getEtape());
 		for (Feve f : this.age_hectares.keySet()) {
 			this.ajouterStock(f, Filiere.LA_FILIERE.getEtape(), Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f));	
@@ -102,7 +107,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 					qte =+ 0;
 				}
 				if (step-i>=3*24 && Filiere.LA_FILIERE.getEtape()-i<40*24) {
-					qte =+ prodHec.getValeur();
+					qte =+ prodHec.getValeur()*this.age_hectares.get(f).get(i);
 				}
 				if (step-i>=40*24) {
 					this.age_hectares.get(f).remove(i);
@@ -137,7 +142,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	public double prix_rentable(Feve f) {
 		return 1.1*CoutProd().get(f)/Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f);
 	}
-	public void ajustement() {
+	public void ajustement_plantation() {
 		for (Feve f : this.salaires.keySet()) {
 			int nb_a_planter = 0;
 			for (int i : this.age_hectares.get(f).keySet()){
@@ -147,6 +152,13 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 			}
 			Planter(f, nb_a_planter);	
 		}
+	}
+	public void ajustement_employes () {
+		HashMap(Feve)
+		for (Feve f : this.age_hectares.keySet()) {
+			
+		}
+		
 	}
 	
 	

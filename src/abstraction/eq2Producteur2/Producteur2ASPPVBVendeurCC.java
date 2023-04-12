@@ -176,8 +176,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		if(contrat.getPrix() >= this.getPrixCC((Feve) contrat.getProduit())) {
 			return contrat.getPrix();
 		}
-		double prixMin =0;
-		if(contrat.getPrix() >= prixMin) {
+		if(contrat.getPrix() >= this.prix_rentable((Feve) contrat.getProduit())) {
 			return contrat.getEcheancier().getQuantiteTotale()*this.getPrixCC((Feve) contrat.getProduit())*this.facteurPrix(nbIterationVentePrix); /*Négociation 1/4||3/4 pour tenter de tirer un prix convenable*/
 		}
 		return -2;
