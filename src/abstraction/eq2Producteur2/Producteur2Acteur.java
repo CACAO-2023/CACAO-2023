@@ -4,6 +4,7 @@ package abstraction.eq2Producteur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,12 +36,12 @@ public class Producteur2Acteur implements IActeur {
 	public double prixMinMQ = 0.0; //provisoire
 	public double prixMinMQBE = 0.0; //provisoire
 	public double prixMinHQ = 0.0; //provisoire
-	public LinkedList<Double> prixMin;
+	public public HashMap<Feve, Double> prixMin;
 	public double prixBQ = 1.0; //provisoire
 	public double prixMQ = 2.0; //provisoire
 	public double prixMQBE = 3.0; //provisoire
 	public double prixHQ = 4.0; //provisoire
-	public LinkedList<Double> prix;
+	public public HashMap<Feve, Double> prix;
 	
 	
 	protected Feve[] lesFeves = {Feve.F_BQ, Feve.F_MQ, Feve.F_MQ_BE, Feve.F_HQ_BE};
@@ -51,9 +52,9 @@ public class Producteur2Acteur implements IActeur {
 	public void initialiser() {
 		this.journal = new Journal("Journal " + this.getNom(), this);
 		
-		this.prix = new LinkedList<Double>();
-		this.prixMin = new LinkedList<Double>();
-		this.getPrix().add(prixBQ);
+		this.prix = new HashMap<Feve, Double>();
+		this.prixMin = new HashMap<Feve, Double>();
+		this.getPrix().put();
 		this.getPrix().add(prixMQ);
 		this.getPrix().add(prixMQBE);
 		this.getPrix().add(prixHQ);
@@ -61,6 +62,7 @@ public class Producteur2Acteur implements IActeur {
 		this.getPrixMin().add(prixMinMQ);
 		this.getPrixMin().add(prixMinMQBE);
 		this.getPrixMin().add(prixMinHQ);
+		this.getPrix()<Feve.F_BQ,
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -101,7 +103,7 @@ public class Producteur2Acteur implements IActeur {
 	public double getPrixMinHQ() {
 		return this.prixMinHQ;
 	}
-	public LinkedList<Double> getPrixMin(){
+	public  HashMap<Feve, Double> getPrixMin(){
 		return this.prixMin;
 	}
 	public double getPrixBQ() {
@@ -116,7 +118,7 @@ public class Producteur2Acteur implements IActeur {
 	public double getPrixHQ() {
 		return this.prixHQ;
 	}
-	public LinkedList<Double> getPrix(){
+	public HashMap<Feve, Double> getPrix(){
 		return this.prix;
 	}
 	
