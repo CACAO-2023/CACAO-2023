@@ -34,8 +34,7 @@ public class Producteur3 extends Bourse3  {
 	private Integer HectaresLibres; /*Repertorie le nombre d'hectares libres que l'on possede*/
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
 	private LinkedList<Double> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
-	private Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
-
+	
 	/*
 	 * Je n'ai pas trouve le type du champs donc j'ai choisit String. A CHANGER
 	 * Il faudra aussi penser a se mettre d'accord sur les tailles des champs initiaux.

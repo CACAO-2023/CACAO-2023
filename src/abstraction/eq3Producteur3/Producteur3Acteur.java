@@ -19,6 +19,7 @@ public class Producteur3Acteur implements IActeur {
     protected Journal journal_Stock;
     protected Stock Stock;
 	protected Double CoutStep; /* Tout nos couts du step, reinitialises a zero au debut de chaque step et payes a la fin du step*/
+	protected Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
 
 	public Producteur3Acteur() {
 	String nom = "Equipe 3";
