@@ -81,6 +81,18 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		
 		
 	//}
+	public void next() {
+		super.next();
+		this.CoutProd();
+		this.Prevision_Vente();
+		this.ajustement();
+		this.Prevision_Production(Filiere.LA_FILIERE.getEtape());
+		for (Feve f : this.age_hectares.keySet()) {
+			this.ajouterStock(f, Filiere.LA_FILIERE.getEtape(), Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f));	
+		}
+		
+		
+	}
 	public HashMap<Feve, Double> Prevision_Production(int step){
 		HashMap<Feve, Double> prevision_production = new HashMap<Feve, Double>();
 		for (Feve f : this.age_hectares.keySet()) {
@@ -109,20 +121,32 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	}
 	public HashMap<Feve, Double> Prevision_Vente(){
 		 HashMap<Feve, Double> prevision_vente = new  HashMap<Feve, Double>();
-		 prevision_vente.put(Feve.F_MQ, this.aLivrerStep(Filiere.LA_FILIERE.getEtape(), Feve.F_MQ));
-		 prevision_vente.put(Feve.F_MQ_BE, this.aLivrerStep(Filiere.LA_FILIERE.getEtape(), Feve.F_MQ_BE));
-		 prevision_vente.put(Feve.F_HQ_BE, this.aLivrerStep(Filiere.LA_FILIERE.getEtape(), Feve.F_HQ_BE));
+		 prevision_vente.put(Feve.F_BQ, BQquantiteVendueBourse.getValeur());
+		 prevision_vente.put(Feve.F_MQ, aLivrerStep(Filiere.LA_FILIERE.getEtape(), Feve.F_MQ)+MQquantiteVendueBourse.getValeur() );
+		 prevision_vente.put(Feve.F_MQ_BE, aLivrerStep(Filiere.LA_FILIERE.getEtape(), Feve.F_MQ_BE));
+		 prevision_vente.put(Feve.F_HQ_BE, aLivrerStep(Filiere.LA_FILIERE.getEtape(), Feve.F_HQ_BE));
 		return prevision_vente;	
 	}
-	public HashMap<Feve, Double> Rentabilites(){
-		 HashMap<Feve, Double> rentabilites =  new HashMap<Feve, Double>();
-		for (Feve f : this.prix.keySet()) {
-			rentabilites.put(f,this.prix.get(f)*this.Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f)/this.CoutProd().get(f));}
-		return rentabilites;
-		
+	public boolean Rentabilites(Feve f, Double prix){
+		double rentabilite = prix*Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f)/CoutProd().get(f);
+		if (rentabilite>=1.1) {
+			return true;
+		}
+		return false;	
+	}
+	public double prix_rentable(Feve f) {
+		return 1.1*CoutProd().get(f)/Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f);
 	}
 	public void ajustement() {
-		
+		for (Feve f : this.salaires.keySet()) {
+			int nb_a_planter = 0;
+			for (int i : this.age_hectares.get(f).keySet()){
+				if (Filiere.LA_FILIERE.getEtape()-i>= 37*24) {
+					nb_a_planter =+ 1;
+				}
+			}
+			Planter(f, nb_a_planter);	
+		}
 	}
 	
 	
