@@ -6,40 +6,42 @@ import java.util.concurrent.ThreadLocalRandom;
 import abstraction.eqXRomu.produits.Lot;
 public class Producteur1Plantation extends Producteur1Acteur {
 
-	private champ champ;
-	private Lot lot_bas ;
-	private Lot lot_moyen ;
 
-	public champ getChamp() {
-		return this.champ;
+
+	public champ getChampBas() {
+		return this.champBas;
+	}
+	
+	public champ getChampMoy() {
+		return this.champMoy;
 	}
 	
 	public Lot getStockBas() {
-		return this.lot_bas;
+		return this.stockFeveBas;
 	}
 	
 	public Lot getStockMoy() {
-		return this.lot_moyen ;
+		return this.stockFeveMoy ;
 	}
 
 	
 	public void next() {
 		//===== début Elouan =====
-	 	HashMap<Integer, Double> stockFeve = lot_bas.getQuantites() ;
+	 	HashMap<Integer, Double> stockFeve = stockFeveBas.getQuantites() ;
 		super.next();
-		champ c = this.getChamp();
+		champ c = this.getChampBas();
 		for (Integer i : c.getQuantite().keySet()) {
 			double q = c.getQuantite().get(i);
 			if (step-i==2080) { //supprime l'hectar quand il produit plus, au bout de 40 ans pour la v1
-				champ.supprimer(i);
-				champ.ajouter(step, q); //on le replante quand il périme : v2 à améliorer
+				c.supprimer(i);
+				c.ajouter(step, q); //on le replante quand il périme : v2 à améliorer
 			}
 				else if ((step-i)%10==0 && step-i>0) 
 				// ===== elouan et début gab =====
 				{double nb_tonnes = q*0.56 ; //ajouter facteur random
 				double random = ThreadLocalRandom.current().nextDouble(0.9, 1.15);
 				nb_tonnes = nb_tonnes * random ;
-				lot_bas.ajouter(step, nb_tonnes); //recolte
+				stockFeveBas.ajouter(step, nb_tonnes); //recolte
 				
 				if (stockFeve.containsKey(step)) {
 					stockFeve.replace(step, stockFeve.get(step)+nb_tonnes) ;
@@ -51,13 +53,13 @@ public class Producteur1Plantation extends Producteur1Acteur {
 			}
 		//on retire les feves perimes
 		int nb_step_perime = step-12;
-		this.lot_bas.getQuantites().remove(nb_step_perime);
+		this.stockFeveBas.getQuantites().remove(nb_step_perime);
 		
 		//Elouan : tout ce qui suit sert a rien a mon avis si on utilise la classe Feve (on retrouve si la feve est seche avec la hashmap etc)
 		
 		//for (Integer i : this.lot_bas.getQuantites().keySet()) {
 			//Feve feve = this.lot_bas.getProduit() ; 
-			//if (lot_bas.) {
+			//if (stockFeveBas.) {
 				// péremption fève au bout de 6mois
 				//condition pour basse qualité, si moyenne à changer
 				//stockFeve.suppFeve(i) ;
