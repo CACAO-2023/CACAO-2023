@@ -8,7 +8,7 @@ import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 
-public class Stock extends Distributeur3Acteur{
+public class Stock {
 	private HashMap<ChocolatDeMarque,Double> QteStock;
 	
 	
@@ -25,7 +25,7 @@ public class Stock extends Distributeur3Acteur{
 		for (Double qte : QteStock.values()) {
 	           tot += qte;
 			}
-		this.journal_stock.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "Etat du stock Total : "+tot); 
+		//this.journal_stock.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "Etat du stock Total : "+tot); 
 		return tot;
 		}
 	
@@ -48,7 +48,7 @@ public class Stock extends Distributeur3Acteur{
 	// Mathilde Soun 
 	
 	public void ajoutQte(ChocolatDeMarque c, double ajout){
-		this.journal_stock.ajouter("On ajoute au stock de "+ c.getNom() + " une quantite de  " + ajout); 
+		//journal_stock.ajouter("On ajoute au stock de "+ c.getNom() + " une quantite de  " + ajout); 
 		if(this.QteStock.get(c) == null) {
 			this.QteStock.put(c, 0.0);
 		}
@@ -79,9 +79,9 @@ public class Stock extends Distributeur3Acteur{
 		//liste de chocolat de stock ?? 
 		for (Entry<ChocolatDeMarque, Double> chocolat : QteStock.entrySet()) {
 
-			journal_stock.ajouter("Etat du stock du chocolat  : "+ chocolat.getKey()+ " "+this.QteStock.get(chocolat));
+			//journal_stock.ajouter("Etat du stock du chocolat  : "+ chocolat.getKey()+ " "+this.QteStock.get(chocolat));
 
-			this.journal_stock.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "Etat du stock du chocolat  : "+ chocolat.getKey()+ " "+this.QteStock.get(chocolat));
+			//this.journal_stock.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "Etat du stock du chocolat  : "+ chocolat.getKey()+ " "+this.QteStock.get(chocolat));
 
 		}
 		

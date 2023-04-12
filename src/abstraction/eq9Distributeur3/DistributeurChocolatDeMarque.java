@@ -33,7 +33,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 	//baptiste
 	public HashMap<ChocolatDeMarque, Double> quantiteTotale() {
 		HashMap<ChocolatDeMarque, Double> qtVente = new HashMap<ChocolatDeMarque, Double> ();
-		HashMap<ChocolatDeMarque, Double> Stock = stock.getQteStock();
+		HashMap<ChocolatDeMarque, Double> Stock = this.stock.getQteStock();
 		
 		for (Entry<ChocolatDeMarque, Double> chocolat : Stock.entrySet()) {
 			qtVente.put(chocolat.getKey(), (double) 0);
