@@ -13,20 +13,17 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements IDistributeurChocolatDeMarque {
 	
-	private double capaciteDeVente;
+	private double capaciteDeVente = Double.MAX_VALUE;
 	private HashMap<ChocolatDeMarque, Double> prix;
 
 	
 	
 	
 
-	public DistributeurChocolatDeMarque(ChocolatDeMarque[] chocos, double[] stocks, double capaciteDeVente, double[] prix, String[] marques) {
-
-
-		
-		this.capaciteDeVente = capaciteDeVente;
+	public DistributeurChocolatDeMarque() {
 		this.prix = new HashMap<ChocolatDeMarque, Double> ();
 	}
+	
 	//william
 	@Override
 	public double prix(ChocolatDeMarque choco) {
