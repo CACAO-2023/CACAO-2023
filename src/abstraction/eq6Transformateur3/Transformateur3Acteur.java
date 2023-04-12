@@ -171,7 +171,8 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	public String toString() {
 		return this.getNom();
 	}
-
+/** ecrit par Nathan Claeys
+*/
 	@Override
 	public List<String> getMarquesChocolat() {
 		// TODO Auto-generated method stub
