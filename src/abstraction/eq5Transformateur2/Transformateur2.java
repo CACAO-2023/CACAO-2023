@@ -1,8 +1,18 @@
+/*/ Page redigee par Adam FERHOUT /*/
+
 package abstraction.eq5Transformateur2;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.awt.Color;
+
+import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
+import abstraction.eqXRomu.general.Journal;
+import abstraction.eqXRomu.produits.Chocolat;
+import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Feve;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
@@ -32,12 +42,14 @@ public class Transformateur2 extends Transformateur2Acteur implements IFabricant
 			this.totalStocksFeves.ajouter(this, 10000.0, this.cryptogramme);
 			this.journal.ajouter("ajout de 10000 de "+f+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
 		}
+		
 		this.stockChoco=new HashMap<Chocolat,Double>();
 		for (Chocolat c : Chocolat.values()) {
 			this.stockChoco.put(c, 1000.0);
 			this.totalStocksChoco.ajouter(this, 1000.0, this.cryptogramme);
 			this.journal.ajouter("ajout de 1000 de "+c+" au stock de chocolat --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
 		}
+		
 		this.stockChocoMarque=new HashMap<ChocolatDeMarque,Double>();
 		this.pourcentageTransfo = new HashMap<Feve, HashMap<Chocolat, Double>>();
 		this.pourcentageTransfo.put(Feve.F_HQ_BE, new HashMap<Chocolat, Double>());
@@ -64,10 +76,15 @@ public class Transformateur2 extends Transformateur2Acteur implements IFabricant
 		
 		this.journal.ajouter("=== STOCK === ");
 		for (Feve f : Feve.values()) {
-			this.journal.ajouter("Stock de "+Journal.texteSurUneLargeurDe(f+"", 15)+" = "+this.stockFeves.get(f));
+			this.journal.ajouter(COLOR_LLGRAY, COLOR_LPURPLE, "Stock de feve "+Journal.texteSurUneLargeurDe(f+"", 15)+" = "+this.stockFeves.get(f));
 		}
 		for (Chocolat c : Chocolat.values()) {
-			this.journal.ajouter("Stock de "+Journal.texteSurUneLargeurDe(c+"", 15)+" = "+this.stockChoco.get(c));
+			this.journal.ajouter(COLOR_LLGRAY, COLOR_LPURPLE, "Stock de chocolat "+Journal.texteSurUneLargeurDe(c+"", 15)+" = "+this.stockChoco.get(c));
+		}
+		if (this.stockChocoMarque.keySet().size()>0) {
+			for (ChocolatDeMarque cm : this.stockChocoMarque.keySet()) {
+				this.journal.ajouter(COLOR_LLGRAY, COLOR_LPURPLE,"Stock du cm "+Journal.texteSurUneLargeurDe(cm+"", 15)+" = "+this.stockChocoMarque.get(cm));
+			}
 		}
 		
 		
