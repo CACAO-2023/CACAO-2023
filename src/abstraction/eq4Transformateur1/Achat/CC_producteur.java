@@ -52,19 +52,34 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 			} 
 		}
 		if (( duree >= 15) && ( quantitetot <= ventetotH) && ( quantitetot >= 10000)) {
-			return echeancier;
+			
+			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
+			return contrat.getEcheancier();
 		}
 		if (( duree >= 15) && ( quantitetot <= ventetotB) && ( quantitetot >= 10000)) {
-			return echeancier;
+			
+			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
+			return contrat.getEcheancier();
+		}
+		Feve f = (Feve) contrat.getProduit();
+		if (f.getGamme().equals(Gamme.MQ)) {
+			return null;
 		}
 		
+		if (f.getGamme().equals(Gamme.HQ)) {
+			Echeancier echeancier2 = new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotH/30);
+			return echeancier2;
+		}
 		
-		
-		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
-		return contrat.getEcheancier();
+		if (f.getGamme().equals(Gamme.BQ)) {
+			Echeancier echeancier2 = new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotB/30);
+			return echeancier2;
+		}
+		return null;
 		
 	}
-
+	
+	
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		double prix=0.0;
 		double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
@@ -112,6 +127,9 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 			Echeancier echeancier, long cryptogramme, boolean tg) {
 		return 10; // --> j'afficherai un taux de RSE de 10% sur mes chocolats de marque produits
 	}
+	public void next() {
+		super.next();
 
+	}
 	
 }
