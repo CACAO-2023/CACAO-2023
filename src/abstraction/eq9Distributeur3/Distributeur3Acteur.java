@@ -22,6 +22,7 @@ public class Distributeur3Acteur implements IActeur {
 	protected Journal journal_achats;
 	protected Journal journal_operationsbancaires;
 	protected Journal journal_activitegenerale;
+	protected Journal journal_stock;
 	protected List<ChocolatDeMarque> chocolats;
 
 	public Distributeur3Acteur() {
@@ -46,6 +47,7 @@ public class Distributeur3Acteur implements IActeur {
 		this.journal_achats = new Journal(this.getNom()+" achats", this);
 		this.journal_operationsbancaires = new Journal(this.getNom()+" operations", this);
 		this.journal_activitegenerale = new Journal(this.getNom()+" activites", this);
+		this.journal_stock = new Journal(this.getNom()+" stocks", this);
 
 		
 	}
