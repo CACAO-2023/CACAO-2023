@@ -109,7 +109,7 @@ public class Producteur3 extends Bourse3  {
   
 
 	/**
-	 * @author BOCQUET Gabriel, Dubus-Chanson Victor
+	 * @author BOCQUET Gabriel, Dubus-Chanson Victor, Caugant Corentin
 	 */
 	public void next() {
 		super.next();
