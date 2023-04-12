@@ -3,7 +3,9 @@ package abstraction.eq9Distributeur3;
 
 import abstraction.eqXRomu.contratsCadres.ContratCadre;
 import java.awt.Color;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.ArrayList;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
@@ -16,6 +18,7 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
+import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 
 
 public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAcheteurContratCadre{
@@ -29,18 +32,34 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		
 		
 	}
-
+//Mathilde
 	public void next() {
 		super.next();
+		SuperviseurVentesContratCadre supCCadre = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
+		List<IVendeurContratCadre> vendeursChocolat = supCCadre.getVendeurs(chocolats.get(0));
+		//creation échéancier
+		List<Double>  quantites = new ArrayList();
+		quantites.add(1.);
+		Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape(),quantites);
+		if (vendeursChocolat.size()>0) {
+		supCCadre.demandeAcheteur(this , vendeursChocolat.get(0), chocolats.get(0),echeancier , this.cryptogramme, initialise);
+		}
+
 		
 	}
 	
-// Sami : version simpliste ou on accepte tous les chocolats
+// Mathilde : on accepte les chocolats qu'on vend
 	public boolean achete(IProduit produit) {
 		if (!(produit instanceof ChocolatDeMarque)) {
+			
 			return false;
 		}
-		return true;
+		for (ChocolatDeMarque chocolat: chocolats) {
+			if (((ChocolatDeMarque)produit).equals(chocolat)){
+				return true;
+			}
+		}
+		return false;
 
 	}
 

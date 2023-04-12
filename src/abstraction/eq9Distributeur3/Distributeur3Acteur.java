@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
@@ -85,9 +86,10 @@ public class Distributeur3Acteur implements IActeur {
 		
 
 		// lancer un contrat seuil et repondre 
+		
 
-		
-		
+
+
 		// il va falloir faire la comparaison de contrats cadres par rapport à un seuil puis choisir le plus interessant
 
 
