@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.util.List;
 
 import abstraction.eq4Transformateur1.Transformateur1Acteur;
+import abstraction.eq4Transformateur1.Transformateur1Transformateur;
 import abstraction.eq4Transformateur1.Stock;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
@@ -20,6 +21,7 @@ import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
@@ -27,12 +29,17 @@ import abstraction.eqXRomu.produits.Lot;
  * @author franc
  *
  */
-public class CC_producteur extends Stock implements IAcheteurContratCadre{
+public class CC_producteur extends Transformateur1Transformateur implements IAcheteurContratCadre{
 	public boolean achete(IProduit produit) {
-		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme acheter le produit "+produit);
-		return true;
+		if (produit instanceof Feve) {
+		if (((Feve) produit).getGamme().equals(Gamme.BQ) || (((Feve) produit).getGamme().equals(Gamme.HQ)))  {
+			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme acheter le produit "+produit);
+			return true;
+		}
+		return false;
 	}
-
+		return false;
+}
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		if (contrat.getTeteGondole()) {
 			return null;
@@ -114,8 +121,8 @@ public class CC_producteur extends Stock implements IAcheteurContratCadre{
 
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
-		return 0; // --> j'afficherai un taux de RSE de 0% sur mes chocolats de marque produits
+		return 10; // --> j'afficherai un taux de RSE de 10% sur mes chocolats de marque produits
 	}
 
-
+	
 }

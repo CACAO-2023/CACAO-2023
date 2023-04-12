@@ -17,7 +17,9 @@ public class Producteur3Acteur implements IActeur {
     protected Journal journal_achats;
     protected Journal journal_activitegenerale;
     protected Journal journal_Stock;
-    
+    protected Stock Stock;
+	protected Double CoutStep; /* Tout nos couts du step, reinitialises a zero au debut de chaque step et payes a la fin du step*/
+
 	public Producteur3Acteur() {
 	String nom = "Equipe 3";
 	journal_operationsbancaires=new Journal("Journal des Opérations bancaires de l'"+nom,this);
@@ -28,7 +30,7 @@ public class Producteur3Acteur implements IActeur {
 	}
 	
 	public void initialiser() {
-		
+		;
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -46,13 +48,25 @@ public class Producteur3Acteur implements IActeur {
 	protected Journal getJStock() {
 		return this.journal_Stock;
 	}
+
+
+	protected Journal getJVente() {
+		return this.journal_ventes;
+	}
 	
 	protected Journal getJAchats() {
 		return this.journal_achats;
 	}
-	
+
+	protected Stock getStock() {
+		return this.Stock;
+	}
+
 	public void next() {
-		;
+		this.Stock = Stock.miseAJourStock();
+
+		// Now adding to the step cost the storage costs
+		this.CoutStep += Stock.getQuantite()*50;
 	}
 
 	public Color getColor() {// NE PAS MODIFIER

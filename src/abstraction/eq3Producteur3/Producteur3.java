@@ -3,13 +3,11 @@ package abstraction.eq3Producteur3;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Set;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
-import abstraction.eqXRomu.produits.Lot;
 
-public class Producteur3 extends Producteur3Acteur  {
+public class Producteur3 extends Bourse3  {
 	/*
 	 * ChampsH est un dictionnaire qui contient les champs Haut de Gamme
 	 * On associe a un ensemble d'hectars un int qui correspond  leur step de plantaison 
@@ -23,6 +21,7 @@ public class Producteur3 extends Producteur3Acteur  {
 	 *
 	 * On cree un dictionnaire qui associe  la clef H ou M le dico ChampsM ou ChapmsH
 	 */
+
 	
 	/**
 	 * @author Dubus-Chanson Victor, Bocquet Gabriel
@@ -30,13 +29,14 @@ public class Producteur3 extends Producteur3Acteur  {
 	private HashMap<String,HashMap> Champs;
 	
 
+
 	private Champs fields;
 	private Integer HectaresLibres; /*Repertorie le nombre d'hectares libres que l'on possede*/
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
-	private Integer CoutStep; /* Tout nos couts du step, reinitialises a zero au debut de chaque step et payes a la fin du step*/
 	private LinkedList<Integer> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
 	private Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
 	protected Stock Stock;
+
 	/*
 	 * Je n'ai pas trouve le type du champs donc j'ai choisit String. A CHANGER
 	 * Il faudra aussi penser a se mettre d'accord sur les tailles des champs initiaux.
@@ -49,7 +49,8 @@ public class Producteur3 extends Producteur3Acteur  {
 		super();
 		this.fields = new Champs();
 		this.Stock = new Stock();
-		this.CoutStep = 0;
+
+		this.CoutStep = 0.0;
 		this.CoutTonne = 0.;
 		this.HectaresLibres= 0;
 		this.HectaresUtilises=950000;
@@ -94,22 +95,20 @@ public class Producteur3 extends Producteur3Acteur  {
 		this.CoutTonne = CoutTotal / Stock.getQuantite();
 	}
 
-
-	public void initalise() {
+	public void initialiser() {
 		super.initialiser();
-		new Producteur3();
-		
-		
+		new Producteur3();		
 	}
+	
 	public Champs getFields() {
 		return this.fields;
 	}
-	private Stock getStock() {
+	protected Stock getStock() {
 		// TODO Auto-generated method stub
 		return this.Stock;
 	}
   
-	
+
 	/**
 	 * @author BOCQUET Gabriel, Dubus-Chanson Victor
 	 */
@@ -120,6 +119,7 @@ public class Producteur3 extends Producteur3Acteur  {
 		if (Filiere.LA_FILIERE.getEtape() % 12 == 0) {
 			changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
 		}
+
 		this.updateListeCout();
 		this.updateCoutTonne();
 		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep);
@@ -127,7 +127,8 @@ public class Producteur3 extends Producteur3Acteur  {
 				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ "Resultat du step : pas encore calculé");
 		
 	
-		this.CoutStep = 0;
+		this.CoutStep = 0.0;
+
 	}
 	/*
 
