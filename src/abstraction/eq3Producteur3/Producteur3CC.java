@@ -14,7 +14,7 @@ import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Producteur3CC extends Producteur3 implements IVendeurContratCadre {
+public class Producteur3CC extends Producteur3Acteur implements IVendeurContratCadre {
     protected LinkedList<ExemplaireContratCadre> contracts;
     protected SuperviseurVentesContratCadre superviseur;
     
@@ -24,6 +24,11 @@ public class Producteur3CC extends Producteur3 implements IVendeurContratCadre {
     public Producteur3CC() {
         super();
         this.contracts = new LinkedList<ExemplaireContratCadre>();
+        
+    }
+
+    public void initialiser() {
+        super.initialiser();
         this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
     }
 
@@ -39,7 +44,7 @@ public class Producteur3CC extends Producteur3 implements IVendeurContratCadre {
      */
     private double getPrixMin() {
         // return this.lot.getPrixMin();
-        return 100.0;
+        return 1.0;
     }
 
     /**
