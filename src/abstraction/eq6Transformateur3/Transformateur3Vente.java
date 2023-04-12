@@ -4,17 +4,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eqXRomu.appelsOffres.IVendeurAO;
+import abstraction.eqXRomu.appelsOffres.OffreVente;
 import abstraction.eqXRomu.appelsOffres.PropositionAchatAO;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 public class Transformateur3Vente extends Transformateur3Transformation implements IVendeurAO{
 /**Nathan Salbego*/
+
 	
-	private double prixMin;
-	
-	public Transformateur3Vente(double prixMin) {
+	public Transformateur3Vente() {
 		super();
-		this.prixMin=prixMin;
 	}
 
 	@Override
@@ -29,12 +28,23 @@ public class Transformateur3Vente extends Transformateur3Transformation implemen
 				p=propositions.get(i);
 			}
 		}
-		if (p.getPrixT()<this.prixMin) {
+		if (!convient(p)) {
 			journal.ajouter("pas d'offre retenue");
 			return null;}
 			else {
 	journal.ajouter("offre retenue: "+p.getOffre().getQuantiteT()+" T a "+p.getAcheteur().getNom());
 	return p;}}}
+	
+	
+	public boolean convient(PropositionAchatAO p) {
+		return true;
+	}
+	
+	public OffreVente creerAO(IVendeurAO vendeur, ChocolatDeMarque choco, double quantiteT, boolean enTG) {
+		OffreVente o =new OffreVente(vendeur, choco, quantiteT, enTG);
+		return o;
+		
+	}
 	/**Cette fontion doit rendre la quantite de chocolat d'un type que nous devons avoir pour le vendre au step step
 	 * 
 	 * @param step
