@@ -25,7 +25,7 @@ public class Producteur3 extends Producteur3CC  {
 	private Champs fields;
 	private Integer HectaresLibres; /*Repertorie le nombre d'hectares libres que l'on possede*/
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
-	private Integer CoutStep; /* Tout nos couts du step, reinitialises a zero au debut de chaque step et payes a la fin du step*/
+	
 	/*
 	 * Je n'ai pas trouve le type du champs donc j'ai choisit String. A CHANGER
 	 * Il faudra aussi penser a se mettre d'accord sur les tailles des champs initiaux.
@@ -34,7 +34,7 @@ public class Producteur3 extends Producteur3CC  {
 		super();
 		this.fields = new Champs();
 		this.Stock = new Stock();
-		this.CoutStep = 0;
+		this.CoutStep = 0.0;
 		this.HectaresLibres= 0;
 		this.HectaresUtilises=950000;
 	}
@@ -67,7 +67,7 @@ public class Producteur3 extends Producteur3CC  {
 				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ "Resultat du step : pas encore calculé");
 	
 	
-		this.CoutStep = 0;
+		this.CoutStep = 0.0;
 	}
 	/*
 

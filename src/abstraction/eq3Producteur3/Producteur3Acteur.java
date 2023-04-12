@@ -18,6 +18,7 @@ public class Producteur3Acteur implements IActeur {
     protected Journal journal_activitegenerale;
     protected Journal journal_Stock;
     protected Stock Stock;
+	protected Double CoutStep; /* Tout nos couts du step, reinitialises a zero au debut de chaque step et payes a la fin du step*/
 
 	public Producteur3Acteur() {
 	String nom = "Equipe 3";
@@ -59,6 +60,9 @@ public class Producteur3Acteur implements IActeur {
 	
 	public void next() {
 		this.Stock = Stock.miseAJourStock();
+
+		// Now adding to the step cost the storage costs
+		this.CoutStep += Stock.getQuantite()*50;
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
