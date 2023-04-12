@@ -80,6 +80,7 @@ public class Distributeur1AcheteurOA extends Distributeur1 implements IAcheteurO
 					}
 					this.stockChocoMarque.put(pRetenue.getChocolatDeMarque(), nouveauStock);
 					this.journal.ajouter("   Achat par offre d'achat de "+pRetenue+" --> quantite en stock = "+nouveauStock);
+					couts(m,pRetenue.getPrixT()/pRetenue.getOffre().getQuantiteT());
 				}
 			}
 			

@@ -25,7 +25,21 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 		return 0;
 	}
 	
-	
+	protected void couts(ChocolatDeMarque marque, double nvcout) {
+		Chocolat gamme = marque.getChocolat();
+		if (gamme == Chocolat.C_BQ) {
+			coutCB = nvcout;
+		}
+		if (gamme == Chocolat.C_MQ) {
+			coutCMNL = nvcout;
+		}
+		if (gamme == Chocolat.C_MQ_BE) {
+			coutCML = nvcout;
+		}
+		if (gamme == Chocolat.C_HQ_BE) {
+			coutCH = nvcout;
+		}
+	}
 	
 	/**
 	 * @param choco, choco!=null
