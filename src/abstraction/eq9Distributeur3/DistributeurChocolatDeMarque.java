@@ -64,7 +64,13 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 			return 0;
 		} else {
 			HashMap<ChocolatDeMarque, Double> qtVente = this.quantiteTotale();
-			return qtVente.get(choco);
+			if (qtVente.containsKey(choco)) {
+				return qtVente.get(choco);
+			} else {
+				return 0;
+			}
+			
+			
 
 		}
 	}
@@ -76,12 +82,11 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 			journal_activitegenerale.ajouter("Quelqu'un essaye de me pirater !");
 			return 0.0;
 		} else {
-			int pos= (chocolats.indexOf(choco));
-			if (pos<0) {
-				return 0.0;
-			} else {
-				HashMap<ChocolatDeMarque, Double> qtVente = this.quantiteTotale();
+			HashMap<ChocolatDeMarque, Double> qtVente = this.quantiteTotale();
+			if (qtVente.containsKey(choco)) {
 				return qtVente.get(choco)/10.0;
+			} else {
+				return 0;
 			}
 
 		}
