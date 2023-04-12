@@ -50,7 +50,12 @@ public class Producteur3Acteur implements IActeur {
 		return this.journal_Stock;
 	}
 
-
+	protected int getCryptogramme() {
+		return this.cryptogramme;
+	}
+	protected Journal getJOperation() {
+		return this.journal_operationsbancaires;
+	}
 	protected Journal getJVente() {
 		return this.journal_ventes;
 	}
