@@ -40,6 +40,16 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 	public Echeancier propositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		Object produit = contrat.getProduit();
 		double qfeve=0;
+		int ventetotH = 0;
+		int ventetotB = 0;
+		for (abstraction.eqXRomu.produits.ChocolatDeMarque c : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			if (c.getGamme().equals(Gamme.HQ)){
+				ventetotH += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
+			}
+			if (c.getGamme().equals(Gamme.BQ)){
+				ventetotB += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
+			} 
+		}
 		if (produit instanceof Feve) {
 			switch ((Feve)produit) {
 			case F_MQ  : return null;
@@ -49,21 +59,31 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 				
 				if (this.stockFeves.keySet().contains(produit)) {
 					qfeve= this.stockFeves.get(produit);
-					this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0));
-					return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0);
+					if ((qfeve >= ventetotB/30)){
+						return null;
 					}
+					else {this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0));
+					return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotB/30);
+					}
+				}
 			
 			case F_HQ_BE :
 				
 				
 			if (this.stockFeves.keySet().contains(produit)) {
+				
 				qfeve= this.stockFeves.get(produit);
-				this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0));
-				return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0);
+				if ((qfeve >= ventetotH/30)){
+					return null;
+				}
+				else {this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0));
+				return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotH/30);
+				}
+			}
 	 
 	}}
 		
-		}
+		
 		return null;
 		}
 	
