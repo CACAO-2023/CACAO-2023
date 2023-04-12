@@ -33,14 +33,15 @@ public class Producteur1Acteur implements IActeur {
 	}
 	
 	public void initialiser() {
+		System.out.print("initiiiiiiiiiii");
 		this.step = 0;
 		this.champBas = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
 		for (int i=0; i<30; i++) {
-			this.champBas.ajouter(-i, 8333.33);
+			this.champBas.ajouter(-i, 7500.);
 		}
 		this.champMoy = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
 		for (int i=0; i<30; i++) {
-			this.champMoy.ajouter(-i, 8333.33);
+			this.champMoy.ajouter(-i, 833.33);
 		}
 		this.stockFeveBas = new Lot(Feve.F_BQ);
 		this.stockFeveBas.ajouter(0,1000);
