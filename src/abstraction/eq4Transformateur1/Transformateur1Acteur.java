@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.filiere.IMarqueChocolat;
@@ -47,6 +48,7 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	protected Variable totalStocksChocoMarque;  // La qualite totale de stock de chocolat de marque 
 	protected List<Feve> lesFeves;
 	protected Integer cryptogramme;
+	protected List<ExemplaireContratCadre> ContratEnCours;
 
 	public Transformateur1Acteur() {
 		this.qualiteHaute   = new VariableReadOnly("qualite haute", "<html>Qualite du chocolat<br>de gamme haute</html>",this, 0.0, 10.0, 3.0);

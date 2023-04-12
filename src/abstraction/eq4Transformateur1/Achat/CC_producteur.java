@@ -85,6 +85,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
+		super.ContratEnCours.add(contrat);
 	}
 
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
