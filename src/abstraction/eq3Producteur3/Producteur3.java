@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
 
-public class Producteur3 extends Producteur3CC  {
+public class Producteur3 extends Bourse3  {
 	/*
 	 * ChampsH est un dictionnaire qui contient les champs Haut de Gamme
 	 * On associe a un ensemble d'hectars un int qui correspond  leur step de plantaison 
@@ -22,52 +22,124 @@ public class Producteur3 extends Producteur3CC  {
 	 * On cree un dictionnaire qui associe  la clef H ou M le dico ChampsM ou ChapmsH
 	 */
 
+	
+	
+	private HashMap<String,HashMap> Champs;
+	
+
+
 	private Champs fields;
 	private Integer HectaresLibres; /*Repertorie le nombre d'hectares libres que l'on possede*/
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
-	private Integer CoutStep; /* Tout nos couts du step, reinitialises a zero au debut de chaque step et payes a la fin du step*/
+	private LinkedList<Double> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
+	
 	/*
 	 * Je n'ai pas trouve le type du champs donc j'ai choisit String. A CHANGER
 	 * Il faudra aussi penser a se mettre d'accord sur les tailles des champs initiaux.
 	 */
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	public Producteur3() {
 		super();
 		this.fields = new Champs();
-		this.Stock = new Stock();
-		this.CoutStep = 0;
+		
+
+		this.CoutStep = 0.0;
+		this.CoutTonne = 0.;
 		this.HectaresLibres= 0;
 		this.HectaresUtilises=950000;
+		this.ListeCout = new LinkedList<Double>();
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
 	}
-
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
+	public void updateListeCout() {
+		this.ListeCout.addLast(this.CoutStep);
+		this.ListeCout.removeFirst();
+	}
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
+	public void updateCoutTonne() {
+		Double CoutTotal = 0.;
+		for (Integer i = 0 ; i < this.ListeCout.size() ; i += 1) {
+			CoutTotal += this.ListeCout.get(i);
+		}
+		Stock Stock = this.getStock();
+		this.CoutTonne = CoutTotal / Stock.getQuantite();
+	}
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	public void initialiser() {
 		super.initialiser();
 		new Producteur3();		
 	}
 	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	public Champs getFields() {
 		return this.fields;
 	}
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	protected Stock getStock() {
 		// TODO Auto-generated method stub
 		return this.Stock;
 	}
   
+
 	/**
-	 * @author BOCQUET Gabriel, Dubus-Chanson Victor
+	 * @author BOCQUET Gabriel, Dubus-Chanson Victor, Caugant Corentin
 	 */
 	public void next() {
 		super.next();
 		HarvestToStock(Filiere.LA_FILIERE.getEtape());
+		this.Stock = Stock.miseAJourStock();
+
+		// Now adding to the step cost the storage costs
+		this.CoutStep += Stock.getQuantite()*50;
 		updateHectaresLibres(Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape() % 12 == 0) {
 			changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
 		}
+
+		this.updateListeCout();
+		this.updateCoutTonne();
 		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep);
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
 				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ "Resultat du step : pas encore calculé");
-	
-	
-		this.CoutStep = 0;
+		
+		Filiere.LA_FILIERE.getBanque().virer(this, super.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), CoutStep);
+		this.getJOperation().ajouter(Color.cyan, Color.BLACK, "On a paye "+ this.CoutStep + "euros de frais divers");
+		this.CoutStep = 0.0;
+
 	}
 	/*
 
@@ -140,11 +212,17 @@ public class Producteur3 extends Producteur3CC  {
 		return BesoinHQ + BesoinMQ;
 	}
 	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	public void achatHectares(Integer HectaresAAcheter) {
 		Integer coutAchatHectares = HectaresAAcheter * 3250;
 		this.CoutStep = this.CoutStep + coutAchatHectares;
 	}
 	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	/*A faire a chaque step et tous les 6mois avant changeHectaresAndCoutsLies*/
 	public void updateHectaresLibres(Integer CurrentStep) {
 		Champs Champs = this.getFields();
@@ -153,6 +231,9 @@ public class Producteur3 extends Producteur3CC  {
 		this.HectaresUtilises -= HectaresLiberes;
 	}
 	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	/*Modifie les variables de couts et d'hectares en fonction des resultats de variationBesoinHectares*/
 	public void changeHectaresAndCoutsLies(Integer ajoutHectares) {
 		this.HectaresUtilises = this.HectaresUtilises + ajoutHectares;
