@@ -116,12 +116,12 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 	}
 
 
- 
+ */
 protected double BesoinStep(int Step, Feve f) {
-	double a = stockChocolat.get(f);
+
 			
-	return a;
+	return 0;
 } 
 }
 
-*/
+

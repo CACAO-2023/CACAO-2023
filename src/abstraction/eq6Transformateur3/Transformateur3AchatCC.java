@@ -69,7 +69,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
 		// TODO Auto-generated method stub
-		return (int) (100*super.pourcentageRSE.getValeur());
+		return (int) (super.pourcentageRSE);
 	}
 
 	/**
