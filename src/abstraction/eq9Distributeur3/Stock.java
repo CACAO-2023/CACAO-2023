@@ -25,7 +25,7 @@ public class Stock extends Distributeur3Acteur{
 		for (Double qte : QteStock.values()) {
 	           tot += qte;
 			}
-		this.journal_stock.ajouter("Etat du stock Total : "+tot); 
+		this.journal_stock.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "Etat du stock Total : "+tot); 
 		return tot;
 		}
 	
@@ -77,7 +77,7 @@ public class Stock extends Distributeur3Acteur{
 	public void maJ () {
 		//liste de chocolat de stock ?? 
 		for (Entry<ChocolatDeMarque, Double> chocolat : QteStock.entrySet()) {
-			this.journal_stock.ajouter("Etat du stock du chocolat  : "+ chocolat.getKey()+ " "+this.QteStock.get(chocolat));
+			this.journal_stock.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "Etat du stock du chocolat  : "+ chocolat.getKey()+ " "+this.QteStock.get(chocolat));
 		}
 		
 	}
