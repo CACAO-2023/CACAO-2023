@@ -238,7 +238,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
     	return 0.0;
     	} else {
     	if (choco.getGamme() == Gamme.BQ) {
-    	return Math.min(stockBasDeGamme.getQuantite(), this.getStock(choco).getValeur()) / 10.0;
+    		double n = (this.getStock(choco).getQuantite());
+    	return n / 10.0;
     	} else {
     	return 0.0;
     	}}
