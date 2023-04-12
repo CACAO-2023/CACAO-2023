@@ -22,6 +22,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		this.coursmaxHGL = new Variable ("cours maximal HGL","cours maximal que l'acteur va accepter pour les feves haut de gamme",this,0.0,100,1);
 	}
 	/**
+	 * ecrit par Nathan Claeys
 	 * Retourne la quantite en tonnes de feves de type f desiree par l'acheteur 
 	 * sachant que le cours actuel de la feve f est cours
 	 * @param f le type de feve
@@ -70,6 +71,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		return coursmaxHGL;
 	}
 	/**
+	 * ecrit par Nathan Claeys
 	 * Methode appelee par la bourse pour avertir l'acheteur qu'il vient d'acheter
 	 * quantiteEnT tonnes de feve f au prix de  coursEnEuroParT euros par tonne.
 	 * L'acteur this doit augmenter son stock de feves de type f de la 
@@ -78,12 +80,13 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 * n'a pas a s'occuper du paiement qui a deja ete effectue)
 	 */
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
-		super.ajouterFeve((Feve)l.getProduit(), coursEnEuroParT);
+		super.ajouterFeve((Feve)l.getProduit(), l.getQuantites().get(Filiere.LA_FILIERE.getEtape()),Filiere.LA_FILIERE.getEtape());
 		super.journal.ajouter("Stock de "+l.getQuantiteTotale()+""+"tonnes de feves"+((Feve)l.getProduit()).toString()+" acheté en bourse");
 		
 	}
 
 	/**
+	 * ecrit par Nathan Claeys
 	 * Methode appelee par la bourse pour avertir l'acheteur qu'il vient 
 	 * d'etre ajoute a la black list : l'acteur a passe une commande en bourse
 	 * qu'il n'a pas pu honorer du fait d'un compte en banque trop faible. 
@@ -94,9 +97,19 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		// TODO Auto-generated method stub
 		
 	}
-	/** il faut ecrire une methode qui regarde le cours du marche de chaque feve et met à jour les valeurs 
+	/** ecrit par Nathan Claeys
+	 * il faut ecrire une methode qui regarde le cours du marche de chaque feve et met à jour les valeurs 
 	 * de coursmax afin que les achats se passent bien**/
-
+	private void MaJCours () {
+		
+	}
+	
+	/**ecrit par Nathan Claeys
+	 */
+	public void next() {
+		super.next();
+		this.MaJCours();
+	}
 	
 
 }

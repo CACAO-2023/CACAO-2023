@@ -23,6 +23,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 		
 	}
 	/**
+	 * ecrit par Nathan Claeys
 	 * Methode appelee par le superviseur afin de savoir si l'acheteur est pret a
 	 * faire un contrat cadre sur le produit indique.
 	 * 
@@ -51,6 +52,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
   
 
     /**
+     * ecrit par Nathan Claeys
      * Appelee suite au demarrage des negociations par le vendeur d'un contrat de feves labelisee 
      * afin de connaitre le pourcentage de rse qui sera effectif sur le chocolat de marque produit
      * a partir des feves de ce contrat cadre.
@@ -191,13 +193,16 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 		}
 		return res;
 	}
+/**ecrit par Nathan Claeys
+ */
 	private void retirerCCFinis() {
 		for (ExemplaireContratCadre contrat : this.getListeContratEnCours()) {
 			if (contrat.getQuantiteRestantALivrer()==0) {this.getListeContratEnCours().remove(contrat);}
 		}
 	}
 	
-	
+/** ecrit par Nathan Claeys
+ */
 	public void next() {
 		super.next();
 		this.retirerCCFinis();		
