@@ -8,6 +8,7 @@ import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
@@ -83,7 +84,11 @@ public class Transformateur2AcheteurCC extends Transformateur2 implements IAchet
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de feves "+produit+". Stock->  "+this.stockFeves.get(produit));
 		} else {
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception d'un produit de type surprenant... "+produit);
-		}}} //mise à jour du stock de fèves après reception d'une livraison
-			//ne prend pas en compte la pénalité si la quantité livrée est inférieure à la quantité prévue
+		}}//mise à jour du stock de fèves après reception d'une livraison
+		  //ne prend pas en compte la pénalité si la quantité livrée est inférieure à la quantité prévue
 
-
+	public void next() {
+		super.next();
+	
+	//this.journal.ajouter(COLOR_LLGRAY, COLOR_LPURPLE, "Qt de fèves achetées "+Journal.texteSurUneLargeurDe(f+"", 15;
+	}}
