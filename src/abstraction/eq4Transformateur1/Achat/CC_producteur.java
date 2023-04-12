@@ -8,13 +8,13 @@ import java.awt.Color;
 
 
 import abstraction.eq4Transformateur1.Transformateur1Transformateur;
-
-
+import abstraction.eq4Transformateur1.Produits.ChocolatDeMarque;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
@@ -36,6 +36,28 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		return false;
 }
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
+		
+		Echeancier echeancier = contrat.getEcheancier();
+		int duree = echeancier.getNbEcheances();
+		double quantitetot = echeancier.getQuantiteTotale();
+		
+		int ventetotH = 0;
+		int ventetotB = 0;
+		for (abstraction.eqXRomu.produits.ChocolatDeMarque c : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			if (c.getGamme().equals(Gamme.HQ)){
+				ventetotH += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
+			}
+			if (c.getGamme().equals(Gamme.BQ)){
+				ventetotB += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
+			} 
+		}
+		if (( duree >= 15) && ( quantitetot <= ventetotH) && ( quantitetot >= 10000)) {
+			return echeancier;
+		}
+		if (( duree >= 15) && ( quantitetot <= ventetotB) && ( quantitetot >= 10000)) {
+			return echeancier;
+		}
+		
 		
 		
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
