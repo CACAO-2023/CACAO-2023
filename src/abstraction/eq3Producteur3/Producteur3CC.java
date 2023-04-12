@@ -85,7 +85,6 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      * @author Corentin Caugant
      */
     public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-        System.out.println(this.CoutTonne);
         if ((Feve)contrat.getProduit() == Feve.F_MQ_BE) {
             // We return a price weing CoutTonne multiplied by a random factor between 1.1 and 1.2
             if (contrat.getPrix() >= this.CoutTonne * 1.1) {
