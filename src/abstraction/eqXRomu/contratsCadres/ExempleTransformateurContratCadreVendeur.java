@@ -42,7 +42,7 @@ public class ExempleTransformateurContratCadreVendeur extends ExempleTransformat
 		if (Math.random()<0.1) {
 			return contrat.getPrix(); // on ne cherche pas a negocier dans 10% des cas
 		} else {//dans 90% des cas on fait une contreproposition differente
-			return 0.5 + (5000.0-(contrat.getQuantiteTotale()*Math.random()));
+			return 0.5+ (5000.0-(contrat.getQuantiteTotale()*Math.random()));
 		}
 	}
 
