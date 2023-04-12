@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import abstraction.eqXRomu.contratsCadres.ContratCadre;
+import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
 
@@ -28,12 +30,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	public void initialiser() {
 		super.initialiser();
 		
-		this.stocks = new HashMap<Feve, Lot>();
-		
-		this.stocks.put(Feve.F_BQ, new Lot(Feve.F_BQ));
-		this.stocks.put(Feve.F_MQ, new Lot(Feve.F_MQ));
-		this.stocks.put(Feve.F_MQ_BE, new Lot(Feve.F_MQ_BE));
-		this.stocks.put(Feve.F_HQ_BE, new Lot(Feve.F_HQ_BE));
+		this.stocks = this.createStocks();
 		
 		this.stocks.get(Feve.F_BQ).ajouter(0, 10000);
 		this.stocks.get(Feve.F_MQ).ajouter(0, 10000);
@@ -50,6 +47,24 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		this.majTot();
 	}
 	
+	private HashMap<Feve, Lot> createStocks(){
+		HashMap<Feve, Lot> stocks = new HashMap<Feve, Lot>();
+		
+		stocks.put(Feve.F_BQ, new Lot(Feve.F_BQ));
+		stocks.put(Feve.F_MQ, new Lot(Feve.F_MQ));
+		stocks.put(Feve.F_MQ_BE, new Lot(Feve.F_MQ_BE));
+		stocks.put(Feve.F_HQ_BE, new Lot(Feve.F_HQ_BE));
+		
+		return stocks;
+	}
+	
+	private HashMap<Feve, Double> createStock(){
+		HashMap<Feve, Double> stock = new HashMap<Feve, Double>();
+		for (Feve f: this.lesFeves)
+			stock.put(f, 0.);
+		return stock;
+	}
+	
 	// mets à jour le stock total de feve de type f
 	private void majTot(Feve f) {
 		this.stocksTot.get(f).setValeur(this, this.stocks.get(f).getQuantiteTotale(), this.cryptogramme);
@@ -64,27 +79,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	
 	public void next() {
 		super.next();
-		// À chaque étape, on mets à jour les stocks pour déclasser les fèves trop vieilles
-		// et supprimer les fèves périmées
-		int etapeDegrad = Filiere.LA_FILIERE.getEtape() - (int)this.tempsDegradationFeve.getValeur();
-		int etapePerim = etapeDegrad - (int)this.tempsPerimationFeve.getValeur();
-		//System.out.println(this.stocksString());
-		for (Feve f : this.lesFeves) {
-			HashMap<Integer, Double> stock = this.stocks.get(f).getQuantites();
-			if (stock.containsKey(etapeDegrad)) {
-				if (f == Feve.F_MQ || f == Feve.F_MQ_BE) {
-					this.stocks.get(Feve.F_BQ).ajouter(etapeDegrad, stock.get(etapeDegrad));
-				}
-				if (f == Feve.F_HQ_BE) {
-					this.stocks.get(Feve.F_MQ_BE).ajouter(etapeDegrad, stock.get(etapeDegrad));
-				}
-				stock.remove(etapeDegrad);
-			}
-			Set<Integer> key = new HashSet<>(stock.keySet());
-			for (int i: key) 
-				if (i <= etapePerim)
-					stock.remove(i);
-		}
+		this.majPerim();
 		this.majTot();
 		//System.out.println(this.stocks.get(Feve.F_BQ));
 		/*this.ajouterStock(Feve.F_BQ, Filiere.LA_FILIERE.getEtape(), 1000);
@@ -97,6 +92,39 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		System.out.println(this.stocksTotString());
 		System.out.println(this.getStockTotTime(Feve.F_BQ, 2));
 		System.out.println(this.getStockTotStep(Feve.F_BQ, 2));*/
+	}
+	/**
+	 * Mets à jour la périmation du stock de l'acteur
+	 */
+	private void majPerim() {
+		majPerim(this.stocks, Filiere.LA_FILIERE.getEtape());
+	}
+	
+	/**
+	 * Effectue la déclasification et la périmation des fèves du stock stocks,
+	 * contenant des quatres types de fèves, par rapport à l'étape etape considéré
+	 * @param stocks le stock de fèves des différents types
+	 * @param etape l'étape considéré pour calculer la périmation
+	 */
+	private void majPerim(HashMap<Feve, Lot> stocks, int etape) {
+		int etapeDegrad = etape - (int)this.tempsDegradationFeve.getValeur();
+		int etapePerim = etapeDegrad - (int)this.tempsPerimationFeve.getValeur();
+		for (Feve f : this.lesFeves) {
+			HashMap<Integer, Double> stock = stocks.get(f).getQuantites();
+			if (stock.containsKey(etapeDegrad)) {
+				if (f == Feve.F_MQ || f == Feve.F_MQ_BE) {
+					stocks.get(Feve.F_BQ).ajouter(etapeDegrad, stock.get(etapeDegrad));
+				}
+				if (f == Feve.F_HQ_BE) {
+					stocks.get(Feve.F_MQ_BE).ajouter(etapeDegrad, stock.get(etapeDegrad));
+				}
+				stock.remove(etapeDegrad);
+			}
+			Set<Integer> key = new HashSet<>(stock.keySet());
+			for (int i: key) 
+				if (i <= etapePerim)
+					stock.remove(i);
+		}
 	}
 	
 	/**
@@ -152,6 +180,64 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	 */
 	protected double coutStockage() {
 		return this.coutMoyenStock.getValeur() * this.getStockTotTot();
+	}
+	
+	/**
+	 * Renvoie le stock restant théorique à l'étape etape en retirant les contrats cadres et en ajoutant la production théorique
+	 * @param f le type de fève
+	 * @param etape l'étape considéré
+	 * @return le stock prévisionnel de fève de type f sans prendre en compte les ventes à la bourse et les nouveaux contrats cadre
+	 */
+	protected HashMap<Feve,Double> getStockTheo(int etape) {
+		if (etape < Filiere.LA_FILIERE.getEtape())
+			return 0;
+		HashMap<Feve, Lot> stocksTheo = this.createStocks();
+		
+		for (Feve f: this.stocks.keySet())
+			stocksTheo.get(f).ajouter(this.stocks.get(f));
+		
+		HashMap<Feve, Double> varQuantite = createStock();
+		
+		//ajouter prod de ce tour si pas encore fait
+		for (ExemplaireContratCadre exCC : this.contrats)
+			varQuantite.put((Feve)exCC.getProduit(), varQuantite.get((Feve) exCC.getProduit()) - exCC.getQuantiteALivrerAuStep());
+		
+		HashMap<Feve, Double> quantiteRetard = createStock();
+		
+		
+		
+		
+		for (int curEtape = Filiere.LA_FILIERE.getEtape() + 1; curEtape <= etape; curEtape ++) {
+			this.majPerim(stocksTheo, curEtape);
+			
+			HashMap<Feve, Double> varQuantite2 = createStock();
+			
+			for (ExemplaireContratCadre exCC : this.contrats) {
+				Feve f = (Feve) exCC.getProduit();
+				varQuantite2.put(f, varQuantite2.get(f) - exCC.getEcheancier().getQuantite(curEtape));
+			}
+				
+			
+		}
+	}
+	
+	
+	private void variaQuant(HashMap<Feve, Double> varQuantite, HashMap<Feve, Lot> stocks, HashMap<Feve, Double> quantiteRetard) {
+		for (Feve f: varQuantite.keySet()) {
+			if (varQuantite.get(f) < 0) {
+				if (-varQuantite.get(f) > stocks.get(f).getQuantiteTotale()) {
+					quantiteRetard.put(f, -varQuantite.get(f) - stocks.get(f).getQuantiteTotale());
+					stocks.get(f).retirer(stocks.get(f).getQuantiteTotale());
+				}
+				else {
+					stocks.get(f).retirer(-varQuantite.get(f));
+				}
+			}
+			else if(varQuantite.get(f) > 0)
+			{
+				stocks.get(f).ajouter(Filiere.LA_FILIERE.getEtape(), varQuantite.get(f));
+			}
+		}
 	}
 	
 	/**

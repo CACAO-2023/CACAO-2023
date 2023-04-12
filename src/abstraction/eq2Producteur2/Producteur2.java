@@ -1,5 +1,7 @@
 package abstraction.eq2Producteur2;
 
+//Code écrit par Nathan Rabier
+
 import abstraction.eqXRomu.filiere.Filiere;
 
 public class Producteur2 extends Producteur2ASPPVBVendeurCC  {
