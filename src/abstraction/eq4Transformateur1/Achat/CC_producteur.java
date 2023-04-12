@@ -37,6 +37,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 }
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		
+		
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
 		return contrat.getEcheancier();
 		
