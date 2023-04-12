@@ -67,14 +67,14 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 
 	@Override
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		
+		IProduit nt;
+		stock.ajoutQte(((ChocolatDeMarque)(contrat.getProduit())), lot.getQuantiteTotale());
 	}
 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
-		
+		this.journal.ajouter("je viens de passer le contrat "+contrat);
 	}
 	
 	
