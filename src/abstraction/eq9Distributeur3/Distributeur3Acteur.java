@@ -268,10 +268,9 @@ public class Distributeur3Acteur implements IActeur,IFabricantChocolatDeMarque, 
 	@Override
 	public List<ChocolatDeMarque> getChocolatsProduits() {
 		if (this.chocosProduits.size()==0) {
-			for (Chocolat c : Chocolat.values()) {
-				ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
-				this.chocosProduits.add(c1);
-			}
+			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
+			this.chocosProduits.add(c1);
+			
 		}
 		return this.chocosProduits;
 	}
