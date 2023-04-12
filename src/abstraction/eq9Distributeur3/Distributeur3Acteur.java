@@ -42,7 +42,7 @@ public class Distributeur3Acteur implements IActeur {
 
 		// william
 
-		
+		this.stock = new Stock();
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
 		//this.chocolats.add(c1);
 		//this.stock.ajoutQte(c1, 1000);
