@@ -1,7 +1,11 @@
 package abstraction.eq3Producteur3;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Lot;
@@ -31,7 +35,10 @@ public class Stock {
 			this.stock.put(feve, lot);
 		}
 	}
-
+	public Stock(Feve f, Lot l) {
+		this.stock = new HashMap<Feve, Lot>();
+		this.stock.put(f,l);
+	}
 	/**
 	 * @author BOCQUET Gabriel, NAVEROS Marine, Corentin Caugant
 	 */
@@ -125,10 +132,45 @@ public class Stock {
 		return false;
 	}
 	
+	/**
+	 * Reprise de Lot.retirer pour retirer les feves d'un lot en commençant par les plus vielles
+	 * @author BOCQUET Gabriel
+	 */
+	public Lot retirerVielleFeve(Feve f, double quantite) {
+		if (quantite<=0 || quantite>this.getQuantite(f)+0.001) {
+			throw new IllegalArgumentException("Essaie de retirer ("+quantite+") alors que les stocks sont insuffisants");
+		} else {
+			Lot res=new Lot(f);
+			List<Integer> vides = new LinkedList<Integer>();
+			Set<Integer> s = this.getStock().get(f).getQuantites().keySet();
+			List<Integer> keyList = new ArrayList(s);
+			Collections.sort(keyList);
+			Collections.reverse(keyList);
+			double reste = quantite;
+			for (Integer i : keyList) {
+				if (reste>0) {
+					if (this.getStock().get(f).getQuantites().get(i)>=reste) {
+						res.ajouter(i,reste);
+						this.getStock().get(f).getQuantites().put(i,this.getStock().get(f).getQuantites().get(i)-reste);
+						reste=0;
+					} else {
+						res.ajouter(i,this.getStock().get(f).getQuantites().get(i));
+						reste = reste - this.getStock().get(f).getQuantites().get(i);
+						vides.add(i);
+					}
+				}
+			}
+			for (Integer step : vides) {
+				this.getStock().get(f).getQuantites().remove(step);
+			}
+			return res;
+		}
+	}
 	/** 
 	 * This method will at each next handles the beans that are too old
 	 * @param stock The stock to update
 	 * @return The updated stock
+	 * @author Corentin Caugant
 	 */
 	public static Stock miseAJourStock(Stock stock) {
 		Stock newStock = new Stock(0);
@@ -140,10 +182,10 @@ public class Stock {
 		}
 
 		// Then we loop through each bean type and we will change the quantities
-		for (var entry : stock.getStock().entrySet()) {
+		for (Map.Entry<Feve , Lot> entry : stock.getStock().entrySet()) {
 			// We get the type of bean and the lot of beans of this type
-			Feve f = entry.getKey();
-			Lot lot = entry.getValue();
+			Feve f = (Feve)entry.getKey();
+			Lot lot = (Lot)entry.getValue();
 			HashMap<Integer, Double> quantite = lot.getQuantites();
 
 			Lot newLot = newLots.get(f); // We will add to this lot the beans that are not too old
