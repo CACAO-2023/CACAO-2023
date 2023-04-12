@@ -28,6 +28,9 @@ public class Champs {
 		
 	}
 
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	public HashMap<String, HashMap<Integer, Integer>> getChamps() {
 		return Champs;
 	}
