@@ -210,7 +210,7 @@ public class Stock {
 									newLots.get(Feve.F_BQ).ajouter(creationStep, quantite.get(creationStep)); // We add the beans to the lower quality stock
 									break;
 								case F_HQ_BE: // If the beans are of the highest quality, we lower their quality to the medium quality
-									newLots.get(Feve.F_BQ).ajouter(creationStep, quantite.get(creationStep)); // We add the beans to the lower quality stock
+									newLots.get(Feve.F_MQ_BE).ajouter(creationStep, quantite.get(creationStep)); // We add the beans to the lower quality stock
 									break;
 							}
 							break;
