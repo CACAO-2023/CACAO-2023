@@ -26,7 +26,6 @@ public class Distributeur3Acteur implements IActeur,IFabricantChocolatDeMarque, 
 	protected Journal journal_achats;
 	protected Journal journal_operationsbancaires;
 	protected Journal journal_activitegenerale;
-	protected Journal journal_stock;
 	protected List<ChocolatDeMarque> chocolats;
 	protected HashMap<ChocolatDeMarque, Double[]> prixMoyen;
 	protected boolean initialise = true;
@@ -62,7 +61,7 @@ public class Distributeur3Acteur implements IActeur,IFabricantChocolatDeMarque, 
 		this.journal_achats = new Journal(this.getNom()+" achats", this);
 		this.journal_operationsbancaires = new Journal(this.getNom()+" operations", this);
 		this.journal_activitegenerale = new Journal(this.getNom()+" activites", this);
-		this.journal_stock = new Journal(this.getNom()+" stock", this);
+		stock.journal_stock = new Journal(this.getNom()+" stock", this);
 		this.prixMoyen = new HashMap<ChocolatDeMarque, Double[]>();
 
 		
@@ -213,7 +212,7 @@ public class Distributeur3Acteur implements IActeur,IFabricantChocolatDeMarque, 
 		res.add(journal_achats);
 		res.add(journal_operationsbancaires);
 		res.add(journal_activitegenerale);
-		res.add(journal_stock);
+		res.add(stock.journal_stock);
 		
 		return res;
 	}

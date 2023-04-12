@@ -10,7 +10,8 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 public class Stock {
 	private HashMap<ChocolatDeMarque,Double> QteStock;
-	
+	protected Journal journal_stock;
+
 	
 	public Stock() {
 		QteStock = new HashMap<ChocolatDeMarque, Double> ();
