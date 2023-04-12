@@ -110,17 +110,14 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 	 * (vendeurs et acheteurs n'ont pas a s'occuper du virement)
 	 */
 	public Lot notificationVente(Feve f, double quantiteEnT, double coursEnEuroParT) {
-		Lot l = new Lot(f);
-		l.ajouter(Filiere.LA_FILIERE.getEtape(), quantiteEnT); 
+		double quantiteLivre = Math.min(quantiteEnT, this.getStockTot(f).getValeur()); //on renvoie le min entre ce qu'on a et ce qu'on a promis
 		if (f == Feve.F_BQ) {
-			this.BQquantiteVendueBourse.setValeur(null, quantiteEnT);
-		
+			this.BQquantiteVendueBourse.setValeur(null, quantiteLivre);
 		}
 		if (f == Feve.F_MQ) {
-			this.MQquantiteVendueBourse.setValeur(null, quantiteEnT);
+			this.MQquantiteVendueBourse.setValeur(null, quantiteLivre);
 		}
-		this.stockFeve.setValeur(this, this.stockFeve.getValeur()-quantiteEnT);
-		return l;
+		return this.retirerStock(f, quantiteLivre);
 	}
 
 	/**
