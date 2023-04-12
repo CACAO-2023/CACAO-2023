@@ -182,9 +182,8 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 			Echeancier echeancier, long cryptogramme, boolean tg) {
 		return 10; // --> j'afficherai un taux de RSE de 10% sur mes chocolats de marque produits
 	}
+
 	public void next() {
 		super.next();
-
 	}
-	
 }
