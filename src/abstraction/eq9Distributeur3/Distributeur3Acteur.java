@@ -15,7 +15,7 @@ import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
 
-public class Distributeur3Acteur implements IActeur, IMarqueChocolat {
+public class Distributeur3Acteur implements IActeur{
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	protected int numero;
 	protected Integer cryptogramme;
@@ -44,14 +44,7 @@ public class Distributeur3Acteur implements IActeur, IMarqueChocolat {
 		// william
 
 
-		if(initialise == true) {
-			initialise = false;
-			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
-			Stock stock = new Stock();
-			this.stock = stock;
-			this.chocolats.add(c1);
-			this.stock.ajoutQte(c1, 1000);
-		}
+		
 		
 
 		
@@ -91,8 +84,18 @@ public class Distributeur3Acteur implements IActeur, IMarqueChocolat {
 	public void next() {
 
 		
+		this.stock = new Stock();
+		chocolats = new LinkedList<ChocolatDeMarque>();
 		
-
+		/*
+		if(initialise == true) {
+			initialise = false;
+			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
+			
+			this.chocolats.add(c1);
+			this.stock.ajoutQte(c1, 1000);
+		}
+		*/
 		// lancer un contrat seuil et repondre 
 
 		
@@ -255,12 +258,16 @@ public class Distributeur3Acteur implements IActeur, IMarqueChocolat {
 		return this.stock.getStock(c);
 	}
 
-	@Override
+	
+	/*
+	 * 
+	 * ajouter IMarque & demander à un fabriquant de ajouter notre marque
+	 * @Override
 	public List<String> getMarquesChocolat() {
 		LinkedList<String> marques = new LinkedList<String>();
 		marques.add("Choc");
 		return marques;
-	}
+	}*/
 
 	
 
