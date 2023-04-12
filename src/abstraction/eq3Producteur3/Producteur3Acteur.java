@@ -56,7 +56,9 @@ public class Producteur3Acteur implements IActeur {
 	protected Journal getJAchats() {
 		return this.journal_achats;
 	}
-	
+	protected Stock getStock() {
+		return this.Stock;
+	}
 	public void next() {
 		;
 	}

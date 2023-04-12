@@ -138,7 +138,7 @@ public class Stock {
 	 */
 	public Lot retirerVielleFeve(Feve f, double quantite) {
 		if (quantite<=0 || quantite>this.getQuantite(f)+0.001) {
-			throw new IllegalArgumentException("Essaie de retirer ("+quantite+") alors que les stocks sont insuffisants");
+			throw new IllegalArgumentException("Essaie de retirer ("+quantite+") de " + f.toString() + " alors que les stocks sont de " + this.getQuantite(f));
 		} else {
 			Lot res=new Lot(f);
 			List<Integer> vides = new LinkedList<Integer>();
