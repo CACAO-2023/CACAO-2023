@@ -8,6 +8,7 @@ import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
@@ -39,11 +40,11 @@ public class Transformateur2AcheteurCC extends Transformateur2 implements IAchet
 	@Override
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
-		//if ((( ((ChocolatDeMarque) produit).getMarque())) == "Maison Doutre") {
-			//return 10; }
-		//else { 
-			return 0; 
-			}//
+		if ((( ((ChocolatDeMarque) produit).getMarque())) == "Maison Doutre") {
+			return 10; }
+		else { 
+			return 0; }
+			}
 
 		// TODO Auto-generated method stub
 
@@ -58,33 +59,30 @@ public class Transformateur2AcheteurCC extends Transformateur2 implements IAchet
 	@Override
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
-		return 0;
+			return contrat.getPrix();
 	}
 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
-		
+		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
 	}
 
 	@Override
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
-		//////stockFeves.ajoutQte(((Feve)(contrat.getProduit())), lot.getQuantiteTotale();
-		//(this, lot.getQuantiteTotale());
-		//IProduit produit= lot.getProduit();
-		//double quantite = lot.getQuantiteTotale();
-		//if (produit instanceof Feve) {
-		
-		//if (this.stockFeves.keySet().contains(produit)) {
-				//this.stockFeves.put((Feve)produit, this.stockFeves.get(produit)+quantite);
-			//} else {
-			//	this.stockFeves.put((Feve)produit, quantite);
+		IProduit produit= lot.getProduit();
+		double quantite = lot.getQuantiteTotale();
+		if (produit instanceof Feve) {
+			if (this.stockFeves.keySet().contains(produit)) {
+				this.stockFeves.put((Feve)produit, this.stockFeves.get(produit)+quantite);
+			} else {
+				this.stockFeves.put((Feve)produit, quantite);
 			}
-			//this.totalStocksFeves.ajouter(this, quantite, this.cryptogramme);
-		//	this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de feves "+produit+". Stock->  "+this.stockFeves.get(produit));
-	//	} else {
-		//	this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception d'un produit de type surprenant... "+produit);
-}
+				this.totalStocksFeves.ajouter(this, quantite, this.cryptogramme);
+			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de feves "+produit+". Stock->  "+this.stockFeves.get(produit));
+		} else {
+			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception d'un produit de type surprenant... "+produit);
+		}}}
 
 
