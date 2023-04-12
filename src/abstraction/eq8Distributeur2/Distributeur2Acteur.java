@@ -29,22 +29,22 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	protected String nom;
 	protected ArrayList<ChocolatDeMarque> chocolats;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
-//protected HashMap<ChocolatDeMarque, Stock> stocks ;
+    //protected HashMap<ChocolatDeMarque, Stock> stocks ;
 	protected StockGeneral stocks;
-protected HashMap<Gamme, Double> pourcentagesGamme;
-private double[] prix;
-private String[] marques;
-private IProduit produit;
-private HashMap<IProduit, Integer> produitsEnStock;
-//	private Stock stockBasDeGamme;
-//	private Stock stockMoyenDeGamme;
-//	private Stock stockHautDeGamme;
-protected Journal journal_operationsbancaires;
-protected Journal journal_ventes;
-protected Journal journal_achats;
-protected Journal journal_stocks;
-protected Journal journal_ContratCadre;
-protected Journal journal_activitegenerale;
+    protected HashMap<Gamme, Double> pourcentagesGamme;
+    private double[] prix;
+    private String[] marques;
+    private IProduit produit;
+    private HashMap<IProduit, Integer> produitsEnStock;
+    //	private Stock stockBasDeGamme;
+    //	private Stock stockMoyenDeGamme;
+    //	private Stock stockHautDeGamme;
+    protected Journal journal_operationsbancaires;
+    protected Journal journal_ventes;
+    protected Journal journal_achats;
+    protected Journal journal_stocks;
+    protected Journal journal_ContratCadre;
+    protected Journal journal_activitegenerale;
 
 
 	public Distributeur2Acteur() {
@@ -301,6 +301,7 @@ protected Journal journal_activitegenerale;
 	
 	//Auteur : Marzougui Mariem
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
+	
 		
 		
 		
