@@ -36,7 +36,7 @@ import abstraction.eq2Producteur2.Producteur2;
 import abstraction.eq3Producteur3.Producteur3;
 import abstraction.eq4Transformateur1.Transformateur1;
 import abstraction.eq5Transformateur2.Transformateur2;
-import abstraction.eq6Transformateur3.Transformateur3Stocks;
+import abstraction.eq6Transformateur3.Transformateur3;
 import abstraction.eq7Distributeur1.Distributeur1;
 import abstraction.eq8Distributeur2.Distributeur2;
 import abstraction.eq9Distributeur3.Distributeur3;
@@ -79,7 +79,7 @@ public class FenetrePrincipale extends JFrame {
 		} else {
 			String filiereChoisie = args[0];
 			System.out.println(filiereChoisie);
-			IActeur[] equipes = { new Producteur1(), new Producteur2(), new Producteur3(), new Transformateur1(), new Transformateur2(), new Transformateur3Stocks(), new Transformateur3Stocks(), new Distributeur1(), new Distributeur2(), new Distributeur3(), new Romu()};
+			IActeur[] equipes = { new Producteur1(), new Producteur2(), new Producteur3(), new Transformateur1(), new Transformateur2(), new Transformateur3(), new Distributeur1(), new Distributeur2(), new Distributeur3(), new Romu()};
 			int i=0; 
 			while (i<equipes.length && !equipes[i].getNomsFilieresProposees().contains(filiereChoisie)) {
 				i++;
