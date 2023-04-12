@@ -1,5 +1,7 @@
 package abstraction.eq2Producteur2;
 
+import java.util.HashMap;
+
 //Code ecrit par Nino
 
 import java.util.List;
@@ -16,9 +18,25 @@ import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse implements IVendeurContratCadre{
-
+	private HashMap<Feve, Integer> nbEchecVentePrix = new HashMap<Feve, Integer>(); //Permet de connaitre le nombre de vente ayant echoue à la suite 
+	private HashMap<Feve, Boolean> echecVentePrix = new HashMap<Feve, Boolean>();  //Permet de savoir si la derniere venet a reussi pour chaque produit
+	private int nbIterationVentePrix; //Compte le nombre d'appel à contrePropositionPrix pour faire évoluer le prix
+	double facteurPrixInit = 1.75;
+	
+	
 	public Producteur2ASPPVBVendeurCC() {
 		super();
+	}
+	
+	public void initialiser() {
+		super.initialiser();
+		
+		this.echecVentePrix.put(Feve.F_MQ_BE, false);
+		this.echecVentePrix.put(Feve.F_HQ_BE, false);
+		this.echecVentePrix.put(Feve.F_MQ, false);
+		this.nbEchecVentePrix.put(Feve.F_MQ_BE, 0);
+		this.nbEchecVentePrix.put(Feve.F_HQ_BE, 0);
+		this.nbEchecVentePrix.put(Feve.F_MQ, 0);
 	}
 	
 	/**
@@ -26,37 +44,43 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * a chaque etape. Ici on decide si on propose aux acheteurs un contrat cadre.
 	 */
 	public void next() {
+		super.next();
+		
 		SuperviseurVentesContratCadre sup = ((SuperviseurVentesContratCadre) Filiere.LA_FILIERE.getActeur("Sup."+"CCadre"));
 		List<IAcheteurContratCadre> acheteurs = sup.getAcheteurs(Feve.F_MQ_BE);
 		for(IAcheteurContratCadre ach : acheteurs) {
-			double prodMQBE = 1; //production previsionnelle moyenne des 12 steps à venir
+			double prodMQBE = - this.aLivrer(Feve.F_MQ_BE).getQuantiteJusquA(Filiere.LA_FILIERE.getEtape() + 12) + this.aLivrer(Feve.F_MQ_BE).getQuantiteJusquA(Filiere.LA_FILIERE.getEtape());; //production previsionnelle moyenne des 12 steps à venir
 			if(this.getStockTot(Feve.F_MQ_BE).getValeur()/12 + prodMQBE >= 10) {
 				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape(), 12, this.getStockTot(Feve.F_MQ_BE).getValeur()/12 + prodMQBE);
 				ExemplaireContratCadre ex = sup.demandeVendeur(ach, this, Feve.F_MQ_BE, ech, this.cryptogramme, false);
 				if(ex != null) {
 					this.getContrats().add(ex);
+					this.echecVentePrix.put(Feve.F_MQ_BE, false);
+					this.nbEchecVentePrix.put(Feve.F_MQ_BE, 0);
 				}
 			}
-			double prodHQ = 1; //production previsionnelle moyenne des 12 steps à venir
-			if(this.getStockTot(Feve.F_HQ_BE).getValeur()/12 + prodHQ >= 10) {
+			double prodHQ = this.aLivrer(Feve.F_HQ_BE).getQuantiteJusquA(Filiere.LA_FILIERE.getEtape() + 12) - this.aLivrer(Feve.F_HQ_BE).getQuantiteJusquA(Filiere.LA_FILIERE.getEtape());; //production previsionnelle moyenne des 12 steps à venir
+			if(this.getStockTot(Feve.F_HQ_BE).getValeur()/12 + prodHQ >= 5) {
 				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape(), 12, this.getStockTot(Feve.F_HQ_BE).getValeur()/12 + prodHQ);
 				ExemplaireContratCadre ex = sup.demandeVendeur(ach, this, Feve.F_MQ_BE, ech, this.cryptogramme, false);
 				if(ex != null) {
 					this.getContrats().add(ex);
+					this.echecVentePrix.put(Feve.F_HQ_BE, false);
+					this.nbEchecVentePrix.put(Feve.F_HQ_BE, 0);
 				}
 			}
-			double prodMQ = 1; //production previsionnelle moyenne des 12 steps à venir
+			double prodMQ = this.aLivrer(Feve.F_MQ).getQuantiteJusquA(Filiere.LA_FILIERE.getEtape() + 12) - this.aLivrer(Feve.F_MQ).getQuantiteJusquA(Filiere.LA_FILIERE.getEtape()); //production previsionnelle moyenne des 12 steps à venir
 			if(this.getStockTot(Feve.F_MQ).getValeur()/12 + prodMQ >= 10) {
 				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape(), 12, this.getStockTot(Feve.F_MQ).getValeur()/12 + prodMQ);
 				ExemplaireContratCadre ex = sup.demandeVendeur(ach, this, Feve.F_MQ, ech, this.cryptogramme, false);
 				if(ex != null) {
 					this.getContrats().add(ex);
+					this.echecVentePrix.put(Feve.F_MQ, false);
+					this.nbEchecVentePrix.put(Feve.F_MQ, 0);
 				}
 			}
 			
 		}
-		
-		super.next();
 	}
 	
 	/**
@@ -106,7 +130,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 					testQuantite = testQuantite + this.getNbHecHauteBE().getValeur()*this.getProdHec().getValeur() - echeancierAch.getQuantite(i);
 				}
 				if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.MQ && ((Feve) contrat.getProduit()).isBioEquitable()) {
-					testQuantite = testQuantite + this.getNbHecHauteBE().getValeur()*this.getProdHec().getValeur() - echeancierAch.getQuantite(i);
+					testQuantite = testQuantite + this.getNbHecMoyBE().getValeur()*this.getProdHec().getValeur() - echeancierAch.getQuantite(i);
 				}
 			}
 			if(testQuantite < 0.0) {
@@ -124,7 +148,17 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * @return La proposition initale du prix a la tonne.
 	 */
 	public double propositionPrix(ExemplaireContratCadre contrat) {
-		return contrat.getEcheancier().getQuantiteTotale()*this.getPrixCC((Feve) contrat.getProduit());
+		if(this.echecVentePrix.get(contrat.getProduit())) {
+			this.nbEchecVentePrix.put((Feve) contrat.getProduit(), this.nbEchecVentePrix.get(contrat.getProduit()) + 1);
+		}
+		if(this.nbEchecVentePrix.get(contrat.getProduit()) == 3) { //Si un produit voit trois ventes annulés de suite, on baisse son prix
+			this.nbIterationVentePrix = 0;
+			this.nbEchecVentePrix.put((Feve) contrat.getProduit(), 0);
+			this.getPrixCC().put((Feve) contrat.getProduit(), this.getPrixCC((Feve) contrat.getProduit())*0.9);
+		}
+		this.echecVentePrix.put((Feve) contrat.getProduit(), true);
+		this.nbIterationVentePrix = 0; 
+		return contrat.getEcheancier().getQuantiteTotale()*this.getPrixCC((Feve) contrat.getProduit())*this.facteurPrix(nbIterationVentePrix);
 	}
 	
 	/**
@@ -138,11 +172,13 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * Sinon, retourne une contreproposition de prix.
 	 */
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
+		this.nbIterationVentePrix++;
 		if(contrat.getPrix() >= this.getPrixCC((Feve) contrat.getProduit())) {
 			return contrat.getPrix();
 		}
-		if(contrat.getPrix() >= this.getPrixMinCC((Feve) contrat.getProduit())) {
-			return contrat.getPrix()*0.25+contrat.getEcheancier().getQuantiteTotale()*this.getPrixCC((Feve) contrat.getProduit())*0.75; /*Négociation 1/4||3/4 pour tenter de tirer un prix convenable*/
+		double prixMin =0;
+		if(contrat.getPrix() >= prixMin) {
+			return contrat.getEcheancier().getQuantiteTotale()*this.getPrixCC((Feve) contrat.getProduit())*this.facteurPrix(nbIterationVentePrix); /*Négociation 1/4||3/4 pour tenter de tirer un prix convenable*/
 		}
 		return -2;
 	}
@@ -157,6 +193,9 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * @param contrat
 	 */
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
+		this.echecVentePrix.put((Feve) contrat.getProduit(), false);
+		this.nbEchecVentePrix.put((Feve) contrat.getProduit(), 0);
+		this.getPrixCC().put((Feve) contrat.getProduit(), this.getPrixCC((Feve) contrat.getProduit())*0.9 + contrat.getPrix()*0.1);
 		this.getContrats().add(contrat);
 	}
 	
@@ -170,11 +209,19 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * Une penalite est prevue si la quantite du lot retourne est inferieure a la quantite
 	 */
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
-		System.out.println(Math.min(this.getStockTot((Feve) produit).getValeur(), quantite));
 		if(Math.min(this.getStockTot((Feve) produit).getValeur(), quantite) > 0.001) {
 			return retirerStock((Feve) produit, Math.min(this.getStockTot((Feve) produit).getValeur(), quantite));
 		} else {
 			return new Lot(produit);
 		}
+	}
+	
+	/**
+	 * Methode appelee pour connaitre le facteur de prix que l'on applqiue en focntion du nombre d'appels précédents
+	 * @param iteration
+	 * @return Retourne un double correspondant au facteur
+	 */
+	public double facteurPrix(int iteration) {
+		return (iteration-10)*0.8 + iteration*this.facteurPrixInit;
 	}
 }
