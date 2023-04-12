@@ -93,7 +93,7 @@ public class Transformateur2AcheteurCC extends Transformateur2 implements IAchet
 	       
 	   
 	    public ExemplaireContratCadre getContrat(Feve produit) {
-	    	this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit + "...");
+	    	this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit);
 	    	List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
 	    	IVendeurContratCadre vendeur = vendeurs.get((int)(Math.random() * vendeurs.size())); //on cherche un vendeur
 	    	
