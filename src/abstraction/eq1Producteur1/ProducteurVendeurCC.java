@@ -3,6 +3,7 @@ package abstraction.eq1Producteur1;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
@@ -14,13 +15,16 @@ import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 // AYOUB
 public class ProducteurVendeurCC extends Producteur1Plantation implements IVendeurContratCadre{
     private List<ExemplaireContratCadre> mescontrats;
-    
+    protected SuperviseurVentesContratCadre supCCadre;
 	
 	
 	
 	public ProducteurVendeurCC() {
 		super();
 		this.mescontrats= new LinkedList<ExemplaireContratCadre>();
+	}
+	public void initialiser() {
+		this.supCCadre = (SuperviseurVentesContratCadre) (Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 	}
 	
 	public boolean peutVendre(IProduit produit) {
@@ -103,8 +107,19 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 			Lot lot2 = new Lot(produi);
 			lot2.ajouter(Filiere.LA_FILIERE.getEtape(), livr); // cet exemple ne gere pas la peremption : la marchandise est consideree comme produite au step courant
 			return lot2;
-	 	
+	 case F_HQ_BE : return null;
+	 case F_MQ_BE : return null;	
 	 }
+	return null;
+	}
+	public void next() {
+		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
+		for (ExemplaireContratCadre contrat : this.mescontrats) {
+			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
+				contratsObsoletes.add(contrat);
+			}
+		}
+		this.mescontrats.removeAll(contratsObsoletes);
 	}
 
 	@Override
@@ -112,5 +127,6 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
 
 }
