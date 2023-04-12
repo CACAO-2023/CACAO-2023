@@ -71,7 +71,7 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 	}
 
 	
-/**		public void transformationChoco(Feve f, double qte) {
+		public void transformationChoco(Feve f, double qte) {
 		if (f instanceof F_BQ) {
 			double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
 			double a=stockFeve.get(F_BQ);
@@ -82,33 +82,45 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 				if (f instanceof F_MQ) {
 					double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
 					double a=stockFeve.get(F_MQ);
+					double c=getMQStep1();
+					setMQStep1(qte);
 					stockFeve.replace(F_MQ, a-(pourcentageTransfo*qte));
 					double b=stockChocolat.get(C_MQ);
-					stockChocolat.replace(C_MQ,b+qte);
+					stockChocolat.replace(C_MQ,b+c);
 					} else {
 						if (f instanceof F_MQ_BE) {
 							double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
 							double a=stockFeve.get(F_MQ_BE);
+							double c=getMQBEStep1();
+							setMQBEStep1(qte)
 							stockFeve.replace(F_MQ_BE, a-(pourcentageTransfo*qte));
 							double b=stockChocolat.get(C_MQ_BE);
-							stockChocolat.replace(C_MQ_BE,b+qte);
+							stockChocolat.replace(C_MQ_BE,b+c);
 							} else {
 								if (f instanceof F_HQ_BE) {
 									double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
 									double a=stockFeve.get(F_HQ_BE);
+									double c=getHQBEStep1();
+									setHQBEStep1(qte);
+									double d = getHQBEStep2();
+									setHQBEStep2(c);
 									stockFeve.replace(F_HQ_BE, a-(pourcentageTransfo*qte));
 									double b=stockChocolat.get(C_HQ_BE);
-									stockChocolat.replace(C_HQ_BE,b+qte);
+									stockChocolat.replace(C_HQ_BE,b+d);
 							}
 	
 }
 					}
 			}
 	}
-**/
 
 
+ 
 protected double BesoinStep(int Step, Feve f) {
-	return 0.1;
+	double a = stockChocolat.get(f);
+			
+	return a;
+} 
 }
-}
+
+

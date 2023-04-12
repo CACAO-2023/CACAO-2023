@@ -78,6 +78,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	    }
 	    lot.ajouter(dateDeRecolte, quantite);
 	}
+  /**methode pour savoir ou il faut ajouter la feve*/
   private Lot getLotFeve(IProduit produit) {
 	    if (produit instanceof Feve) {
 	        Feve feve = (Feve) produit;
@@ -99,6 +100,28 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	        return null;
 	    }
 	}
+  /**methode pour savoir ou il faut ajouter le chocolat*/
+  private Lot getLotChocolat(IProduit produit) {
+	  if(produit instanceof Chocolat) {
+		  Chocolat chocolat=(Chocolat) produit ;
+		  switch(chocolat.getGamme()) {
+		  case MQ :
+			  return this.stockChocolatBG ;
+		  case BQ :
+			  if(chocolat.isBioEquitable()) {
+				  return this.stockChocolatMGL ;
+			  }else {
+				  return this.stockChocolatMG ;
+			  }
+		  case HQ :
+			  return this.stockChocolatHGL ;
+			  default:
+				  return null ;
+		  }
+	  }else {
+		  return null ;
+	  }
+  }
 
   /**Mouhamed SOW*/
   public void retirerFeve(Feve feve, double quantite) {
@@ -148,21 +171,32 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  }
 	  lot.ajouter(dateProduction,quantite);
   }
-  public void retirerChcoclat() {
-	  
-  }
+  public void retirerChcoclat(Chocolat chocolat,Double quantite) {
+	  Lot lot=this.getLotChocolat(chocolat) ;
+	  HashMap<Integer, Double> quantites = lot.getQuantites();
 
-	    
-	    
-	    
-	    
-	    
+	    // Tri des clés dans l'ordre décroissant (les plus vieux choco en premier)
+	    List<Integer> keys = new ArrayList<Integer>(quantites.keySet());
+	    Collections.sort(keys, Collections.reverseOrder());
+
+	    double quantiteRetiree = 0;
+	    for (int key : keys) {
+	        if (quantiteRetiree == quantite) {
+	            break;
+	        }
+	        if (key >= 0 && key <= 6) { // On retire uniquement les choco périmés (plus de 6 mois)
+	            double quantiteRestante = quantites.get(key);
+	            if (quantiteRestante >= quantite - quantiteRetiree) {
+	                quantites.put(key, quantiteRestante - (quantite - quantiteRetiree));
+	                quantiteRetiree = quantite;
+	            } else {
+	                quantites.remove(key);
+	                quantiteRetiree += quantiteRestante;
+	            }
+	        }
+	    }
+  }
   
-  public void retirerChocolat(Chocolat chocolat, Double quantite) {
-	  
-
-  }
-
 }
     
     
