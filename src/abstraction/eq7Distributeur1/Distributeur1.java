@@ -11,7 +11,7 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 
-public class Distributeur1 extends Distributeur1Acteur implements IDistributeurChocolatDeMarque {
+public class Distributeur1 extends Distributeur1AcheteurOA implements IDistributeurChocolatDeMarque {
 	
 	public Distributeur1() {
 		super();

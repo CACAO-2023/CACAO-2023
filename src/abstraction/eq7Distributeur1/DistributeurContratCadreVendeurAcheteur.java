@@ -1,5 +1,6 @@
 package abstraction.eq7Distributeur1;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,15 +10,18 @@ import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.*;
+import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class DistributeurContratCadreVendeurAcheteur extends DistributeurContratCadre implements IAcheteurContratCadre{
+public class DistributeurContratCadreVendeurAcheteur extends Distributeur1Acteur implements IAcheteurContratCadre{
 	protected List<ExemplaireContratCadre> mesContratEnTantQuAcheteur;
 	private Echeancier echeancier_type;
+	private IProduit produit;
 	
 	public DistributeurContratCadreVendeurAcheteur(IProduit produit) {
-		super(produit);
+		super();
+		this.produit=produit;
 		this.mesContratEnTantQuAcheteur=new LinkedList<ExemplaireContratCadre>();
 	}
 
@@ -49,37 +53,69 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 		this.mesContratEnTantQuAcheteur.removeAll(contratsObsoletes);
 		
 		
+<<<<<<< HEAD
 		// Proposition d'un nouveau contrat a tous les vendeurs possibles
 		
+=======
+		journal.ajouter("Recherche d'un vendeur aupres de qui acheter");
+>>>>>>> branch 'main' of https://github.com/theoo33/CACAO-2023-Eq7
 		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
 			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
-				Filiere.LA_FILIERE.getSuperviseurContratCadre().demande((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 5.0), cryptogramme);
+				SuperviseurVentesContratCadre superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
+				superviseurVentesCC.demandeAcheteur((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 5.0), cryptogramme,false);
+				journal.ajouter("Demande au superviseur de debuter les negociations pour un contrat cadre de "+produit+" avec le vendeur "+acteur);
+
 			}
 		}
 		
+		System.out.println("okkkkk");
 		
 		// OU proposition d'un contrat a un des vendeurs choisi aleatoirement
-		journal.ajouter("Recherche d'un vendeur aupres de qui acheter");
-		List<IVendeurContratCadre> vendeurs = supCCadre.getVendeurs(produit);
-		if (vendeurs.contains(this)) {
-			vendeurs.remove(this);
-		}
-		IVendeurContratCadre vendeur = null;
-		if (vendeurs.size()==1) {
-			vendeur=vendeurs.get(0);
-		} else if (vendeurs.size()>1) {
-			vendeur = vendeurs.get((int)( Math.random()*vendeurs.size()));
-		}
-		if (vendeur!=null) {
-			journal.ajouter("Demande au superviseur de debuter les negociations pour un contrat cadre de "+produit+" avec le vendeur "+vendeur);
-			ExemplaireContratCadre cc = supCCadre.demandeAcheteur((IAcheteurContratCadre)this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
-			journal.ajouter("-->aboutit au contrat "+cc);
-		}
+//		journal.ajouter("Recherche d'un vendeur aupres de qui acheter");
+//		List<IVendeurContratCadre> vendeurs = supCCadre.getVendeurs(produit);
+//		if (vendeurs.contains(this)) {
+//			vendeurs.remove(this);
+//		}
+//		IVendeurContratCadre vendeur = null;
+//		if (vendeurs.size()==1) {
+//			vendeur=vendeurs.get(0);
+//		} else if (vendeurs.size()>1) {
+//			vendeur = vendeurs.get((int)( Math.random()*vendeurs.size()));
+//		}
+//		if (vendeur!=null) {
+//			journal.ajouter("Demande au superviseur de debuter les negociations pour un contrat cadre de "+produit+" avec le vendeur "+vendeur);
+//			ExemplaireContratCadre cc = supCCadre.demandeAcheteur((IAcheteurContratCadre)this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
+//			journal.ajouter("-->aboutit au contrat "+cc);
+//		}
 		
 	}
-
+	
+	
+//	public String meilleur_prix(Echeancier e,IProduit produit) {
+//		HashMap<IActeur, Double> res= new HashMap<>();
+//		
+//		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
+//			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
+//				ExemplaireContratCadre cc = supCCadre.demandeAcheteur((IAcheteurContratCadre)this, (IVendeurContratCadre) acteur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
+//			}}
+//		
+//		return "ok";
+//	}
+	
+//	public static Integer obtenirValeurMinimale(HashMap<String, Integer> hashMap) {
+//        Integer valeurMinimale = null;
+//        for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
+//            Integer valeur = entry.getValue();
+//            if (valeurMinimale == null || valeur < valeurMinimale) {
+//                valeurMinimale = valeur;
+//            }
+//        }
+//        return valeurMinimale;	}
+	
+	
+	
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-		stock.ajouter(this, lot.getQuantiteTotale()); // Cet exemple ne gere pas la peremption : il n'utilise pas la mention du step de production du produit
+//		stock.ajouter(this, lot.getQuantiteTotale()); // Cet exemple ne gere pas la peremption : il n'utilise pas la mention du step de production du produit
 	}
 
 	public boolean achete(IProduit produit) {
@@ -96,7 +132,7 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
+		journal.ajouter("Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString());
 		
 	}
 

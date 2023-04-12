@@ -12,12 +12,11 @@ import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 
-public class Distributeur1AcheteurOA extends Distributeur1 implements IAcheteurOA {
+public class Distributeur1AcheteurOA extends Distributeur1Acteur implements IAcheteurOA {
 	private SuperviseurVentesOA supOA;
 
 	public Distributeur1AcheteurOA() {
 		super();
-		
 	}
 
 	@Override
