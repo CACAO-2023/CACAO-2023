@@ -11,7 +11,7 @@ import abstraction.eqXRomu.clients.ClientFinal;
 import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
-public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements IDistributeurChocolatDeMarque {
+public class DistributeurChocolatDeMarque extends Distributeur3AcheteurCC implements IDistributeurChocolatDeMarque {
 	
 	private double capaciteDeVente = Double.MAX_VALUE;
 	private HashMap<ChocolatDeMarque, Double> prix;
