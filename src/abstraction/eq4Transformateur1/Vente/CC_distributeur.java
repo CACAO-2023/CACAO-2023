@@ -59,6 +59,11 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend(prod="+produit+"  ech="+contrat.getEcheancier());
 
 		if (produit instanceof ChocolatDeMarque) {
+			switch ((Chocolat)produit) {
+			case C_BQ   : return null;
+			case C_MQ  : return null;
+			case C_MQ_BE :return null;
+			case C_HQ_BE :
 			if (this.stockChocoMarque.keySet().contains(produit)) {
 				qtok= this.stockChocoMarque.get(produit);
 				if (qtok>+0.0) {
@@ -71,8 +76,14 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 						return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qtok*0.8/15.0);
 					}
 			}
-			}	
+			}
+			}
 		} else if (produit instanceof Chocolat) {
+				switch ((Chocolat)produit) {
+				case C_HQ_BE   : return null;
+				case C_MQ  : return null;
+				case C_MQ_BE :return null;
+				case C_BQ :
 			if (this.stockChoco.keySet().contains(produit)) {
 				qtok= this.stockChoco.get(produit);
 				if (qtok>0.0) {
@@ -85,12 +96,14 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 					}
 			}
 		}
-		
+				
 		}
 		
+		
+}
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend --> return null");
 		return null;
-}
+	}
 
 
 	public double propositionPrix(ExemplaireContratCadre contrat) {
