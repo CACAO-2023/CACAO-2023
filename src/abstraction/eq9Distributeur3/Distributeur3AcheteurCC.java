@@ -46,7 +46,10 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 			quantites.add(1.);
 			Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape(),quantites);
 			if (vendeursChocolat.size()>0) {
-			supCCadre.demandeAcheteur(this , vendeursChocolat.get(0), chocolats.get(0),echeancier , this.cryptogramme, initialise);
+				for (int i=0; i< vendeursChocolat.size();i++) {
+					supCCadre.demandeAcheteur(this , vendeursChocolat.get(i), chocolats.get(0),echeancier , this.cryptogramme, initialise);
+				}
+			
 			}
 		}
 		
