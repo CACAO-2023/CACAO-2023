@@ -145,7 +145,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	public void notificationFaillite(IActeur acteur) {
 		
 	}
-	
+	//Auteur : Marzougui Mariem
 	// Apres chaque operation sur votre compte bancaire, cette
 	// operation est appelee pour vous en informer
 	public void notificationOperationBancaire(double montant) {
@@ -288,18 +288,18 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		}
 		return null;
 	}
-
+	//Auteur : Marzougui Mariem
 	@Override
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		return contrat.getPrix();
 	}
-
+	//Auteur : Marzougui Mariem
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.journal_activitegenerale.ajouter(contrat.toString());
 		
 	}
-
+	//Auteur : Marzougui Mariem
 	@Override
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
