@@ -101,30 +101,34 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	public Color getColor() {// NE PAS MODIFIER
 		return new Color(209, 179, 221); 
 	}
-//Auteur : Ben Messaoud Karim
+	
+    //Auteur : Ben Messaoud Karim
 	public String getDescription() {
 		return "Notre acteur, Royal Roast, est un distributeur de chocolat de toutes les gammes qui s'engage à prendre en compte les enjeux de la filière du cacao pour distribuer un produit final qui respecte les normes et répond aux besoins des clients.";
 	}
-//Auteur : Ben Messaoud Karim
 	
+    //Auteur : Ben Messaoud Karim
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
 		return res;
 	}
-
+	
+	//Auteur : Marzougui Mariem
 	// Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
 		return res;
 	}
-
+	
+	//Auteur : Marzougui Mariem
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(journal_operationsbancaires);
 		res.add(journal_achats);
 		res.add(journal_ventes);
+		res.add(journal_ContratCadre);
 		res.add(journal_activitegenerale);
 		return res;
 	}
@@ -204,7 +208,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	//chocolat de marque. Sinon, la fonction renvoie 0. 
 	
 	//Auteur : Ben Messaoud Karim
-	@Override
 	public double prix(ChocolatDeMarque choco) {
 		if(prixDeVente.containsKey(choco)) {
 			return prixDeVente.get(choco);
@@ -213,7 +216,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		}
 	}
 	//Auteur : Ben Messaoud Karim et Maxime Azzi
-	@Override
     public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
         int pos = (chocolats.indexOf(choco));
         if (pos < 0) {
@@ -231,7 +233,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
         }
     }
 	//Auteur : Ben Messaoud Karim et Maxime Azzi
-	@Override
     public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
         int pos = chocolats.indexOf(choco);
         if (pos < 0) {
@@ -244,7 +245,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
             }}
         }
 	//Auteur : Ben Messaoud Karim et Maxime Azzi
-	 @Override
 	    public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 	        int pos = chocolats.indexOf(choco);
 	        if (pos >= 0) {
@@ -252,7 +252,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	        }
 	    }
 	//Auteur : Ben Messaoud Karim
-	@Override
 	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
 		// Ajouter un message dans le journal pour indiquer que le rayon est vide
 	    journal_activitegenerale.ajouter("Le rayon du chocolat " + choco.getNom() + " est vide.");
@@ -268,7 +267,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		return 10;
 	}
 
-	@Override
+	//Auteur : Azzi Maxime
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit().equals(produit)) {
 			if (contrat.getEcheancier().getQuantiteTotale()<this.stock().getValeur()) {
@@ -295,12 +294,12 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	
 	//Auteur : Marzougui Mariem
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		this.journal_ContratCadre;.ajouter(contrat.toString());	
+		this.journal_ContratCadre.ajouter(contrat.toString());	
 	}
 	
 	//Auteur : Marzougui Mariem
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-		this.
+		
 		
 	}
 	//-----------------------------------------FIN Partie contrat cadre
