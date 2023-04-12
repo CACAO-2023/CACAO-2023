@@ -9,6 +9,7 @@ import java.util.List;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
 import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
@@ -16,7 +17,7 @@ import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
 
-public class Distributeur3Acteur implements IActeur{
+public class Distributeur3Acteur implements IActeur,IFabricantChocolatDeMarque, IMarqueChocolat{
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	protected int numero;
 	protected Integer cryptogramme;
@@ -30,6 +31,7 @@ public class Distributeur3Acteur implements IActeur{
 	protected HashMap<ChocolatDeMarque, Double[]> prixMoyen;
 	protected boolean initialise = true;
 	protected double prix;
+	private List<ChocolatDeMarque>chocosProduits;
 
 	public Distributeur3Acteur() {
 		/*if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
@@ -45,7 +47,7 @@ public class Distributeur3Acteur implements IActeur{
 		// william
 
 
-		
+		this.chocosProduits = new LinkedList<ChocolatDeMarque>();
 		
 
 		
@@ -88,7 +90,7 @@ public class Distributeur3Acteur implements IActeur{
 		this.stock = new Stock();
 		chocolats = new LinkedList<ChocolatDeMarque>();
 		
-		/*
+		
 		if(initialise == true) {
 			initialise = false;
 			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
@@ -96,7 +98,7 @@ public class Distributeur3Acteur implements IActeur{
 			this.chocolats.add(c1);
 			this.stock.ajoutQte(c1, 1000);
 		}
-		*/
+		
 		
 		// lancer un contrat seuil et repondre 
 		
@@ -262,9 +264,22 @@ public class Distributeur3Acteur implements IActeur{
 	}
 
 	
+
+	@Override
+	public List<ChocolatDeMarque> getChocolatsProduits() {
+		if (this.chocosProduits.size()==0) {
+			for (Chocolat c : Chocolat.values()) {
+				ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
+				this.chocosProduits.add(c1);
+			}
+		}
+		return this.chocosProduits;
+	}
+
 	
-	 /*
-	, IMarqueChocolat
+	
+	 
+	
 	  @Override
 	public List<String> getMarquesChocolat() {
 		LinkedList<String> marques = new LinkedList<String>();
@@ -272,6 +287,6 @@ public class Distributeur3Acteur implements IActeur{
 		return marques;
 	}
 
-	*/
+	
 
 }
