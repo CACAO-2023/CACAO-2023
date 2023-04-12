@@ -1,3 +1,4 @@
+
 package abstraction.eq8Distributeur2;
 
 import java.awt.Color;
@@ -5,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
 import abstraction.eqXRomu.clients.ClientFinal;
 import abstraction.eqXRomu.clients.ExempleDistributeurChocolatMarque;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
@@ -24,42 +24,42 @@ import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarque, IMarqueChocolat,IAcheteurContratCadre {
-	
+
 	protected int cryptogramme;
 	protected String nom;
 	protected ArrayList<ChocolatDeMarque> chocolats;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
-    protected HashMap<ChocolatDeMarque, Stock> stocks ; 
-    protected HashMap<Gamme, Double> pourcentagesGamme;
-    private double[] prix;
-    private String[] marques;
-    private IProduit produit;
-    private HashMap<IProduit, Integer> produitsEnStock;
-   
+//protected HashMap<ChocolatDeMarque, Stock> stocks ;
+	protected StockGeneral stocks;
+protected HashMap<Gamme, Double> pourcentagesGamme;
+private double[] prix;
+private String[] marques;
+private IProduit produit;
+private HashMap<IProduit, Integer> produitsEnStock;
 //	private Stock stockBasDeGamme;
 //	private Stock stockMoyenDeGamme;
 //	private Stock stockHautDeGamme;
-    protected Journal journal_operationsbancaires;
-    protected Journal journal_ventes;
-    protected Journal journal_achats;
-    protected Journal journal_stocks;
-    protected Journal journal_ContratCadre;
-    protected Journal journal_activitegenerale;
-    
+protected Journal journal_operationsbancaires;
+protected Journal journal_ventes;
+protected Journal journal_achats;
+protected Journal journal_stocks;
+protected Journal journal_ContratCadre;
+protected Journal journal_activitegenerale;
+
 
 	public Distributeur2Acteur() {
 		cryptogramme = 0; // valeur par défaut à modifier
 	    nom = "équipe 8";
 	    chocolats =  new ArrayList<ChocolatDeMarque>();
 	    prixDeVente = new HashMap<>();
-	    stocks = new HashMap<ChocolatDeMarque, Stock>();
+	    stocks = new StockGeneral();
 	    
 	    pourcentagesGamme = new HashMap<>();
 	    prix = new double[]{0, 0, 0}; // valeurs par défaut à modifier
 	    marques = new String[]{"marque 1", "marque 2", "marque 3"}; // valeurs par défaut à modifier
 //	    stockBasDeGamme = new Stock(0.0);//0.0; // valeur par défaut à modifier
 //	    stockMoyenDeGamme =  new Stock(0.0);//0.0; // valeur par défaut à modifier
-///	    stockHautDeGamme =  new Stock(0.0);//0.0; // valeur par défaut à modifier
+//      stockHautDeGamme =  new Stock(0.0);//0.0; // valeur par défaut à modifier
 	    journal_operationsbancaires = new Journal("Journal des Opérations bancaires de l'" + nom, this);
 	    journal_ventes = new Journal("Journal des Ventes de l'" + nom, this);
 	    journal_achats = new Journal("Journal des Achats de l'" + nom, this);
@@ -189,13 +189,15 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	
 	//Auteur : Ben Messaoud Karim
 	public  Stock getStock(ChocolatDeMarque choco) {
-	    int pos = (((List<Variable>) choco).indexOf(choco));
-	    if (pos < 0) {
-	        return null;
-	    } else {
-	        return stocks.get(pos);
-	    }
-	}
+		 int pos = (((List<Variable>) choco).indexOf(choco));
+		 
+		 if (pos < 0) {
+		 return null;
+		 
+		 } else {
+		 return this.getStock(choco);
+		 }
+		}
 
 	public List<String> getMarquesChocolat() {
 		return null;
@@ -217,33 +219,36 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	}
 	//Auteur : Ben Messaoud Karim et Maxime Azzi
     public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
-        int pos = (chocolats.indexOf(choco));
-        if (pos < 0) {
-            return 0.0;
-        } else {
-            double stockGamme;
-            if (choco.getGamme() == Gamme.BQ) {
-                stockGamme = this.stockBasDeGamme.getQuantite();
-            } else if (choco.getGamme() == Gamme.MQ) {
-                stockGamme = stockMoyenDeGamme.getQuantite();
-            } else {
-                stockGamme = stockHautDeGamme.getQuantite();
-            }
-            return Math.min(stockGamme, this.getStock(choco).getValeur());
-        }
-    }
+    	 if (choco == null || this.stocks.getStock(choco) == 0.0) {
+    		 return 0.0;
+    		 } else {
+    		 double stockGamme;
+    		 double stockChoco = this.stocks.getStock(choco);
+    		 if (choco.getGamme() == Gamme.BQ) {
+    		 stockGamme = this.stocks.getStock(choco);
+    		 } else if (choco.getGamme() == Gamme.MQ) {
+    		 stockGamme = this.stocks.getStock(choco);
+    		 } else {
+    		 stockGamme = this.stocks.getStock(choco);
+    		 }
+    		
+    		 return Math.min(stockGamme, stockChoco);
+    		 }
+    		}
+
 	//Auteur : Ben Messaoud Karim et Maxime Azzi
     public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
-        int pos = chocolats.indexOf(choco);
-        if (pos < 0) {
-            return 0.0;
-        } else {
-            if (choco.getGamme() == Gamme.BQ) {
-                return Math.min(stockBasDeGamme.getQuantite(), this.getStock(choco).getValeur()) / 10.0;
-            } else {
-                return 0.0;
-            }}
-        }
+    	int pos = chocolats.indexOf(choco);
+    	if (pos < 0) {
+    	return 0.0;
+    	} else {
+    	if (choco.getGamme() == Gamme.BQ) {
+    	return Math.min(stockBasDeGamme.getQuantite(), this.getStock(choco).getValeur()) / 10.0;
+    	} else {
+    	return 0.0;
+    	}}
+    	}
+
 	//Auteur : Ben Messaoud Karim et Maxime Azzi
 	    public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 	        int pos = chocolats.indexOf(choco);
@@ -269,25 +274,27 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	//Auteur : Azzi Maxime
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		if (contrat.getProduit().equals(produit)) {
-			if (contrat.getEcheancier().getQuantiteTotale()<this.stock().getValeur()) {
-				if (Math.random()<0.1) {
-				return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
-				} else {//dans 90% des cas on fait une contreproposition pour l'echeancier
-					Echeancier e = contrat.getEcheancier();
-					e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut())/2.0);// on souhaite livrer deux fois moins lors de la 1ere livraison... un choix arbitraire, juste pour l'exemple...
-					return e;
-				}
-			} else {
-				return null; // on est frileux : on ne s'engage dans un contrat cadre que si on a toute la quantite en stock (on pourrait accepter meme si nous n'avons pas tout car nous pouvons produire/acheter pour tenir les engagements) 
-			}
-		} else {
-			return null;// on ne vend pas de ce produit
+		ChocolatDeMarque produit = (ChocolatDeMarque) contrat.getProduit();
+		 if (produit != null && this.stocks.getStock(produit) != 0.0) {
+		 double quantiteEnStock = this.stocks.getStock(produit);
+		 if (contrat.getEcheancier().getQuantiteTotale() < quantiteEnStock) {
+		 if (Math.random() < 0.1) {
+		 return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
+		 } else { //dans 90% des cas on fait une contreproposition pour l'echeancier
+		 Echeancier e = contrat.getEcheancier();
+		 e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut()) / 2.0); // on souhaite livrer deux fois moins lors de la 1ere livraison... un choix arbitraire, juste pour l'exemple...
+		 return e;
+		 }
+		 } else {
+		 return null; // on est frileux : on ne s'engage dans un contrat cadre que si on a toute la quantite en stock (on pourrait accepter même si nous n'avons pas tout car nous pouvons produire/acheter pour tenir les engagements)
+		 }
+		 } else {
+		 return null; // on ne vend pas de ce produit
+		 }
 		}
-		return null;
-	}
-	
+
 	//Auteur : Marzougui Mariem
+	//On retourne le prix sans négociation
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		return contrat.getPrix();
 	}
@@ -299,6 +306,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	
 	//Auteur : Marzougui Mariem
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
+		
 		
 		
 	}

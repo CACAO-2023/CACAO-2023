@@ -1,34 +1,37 @@
 package abstraction.eq8Distributeur2;
 
 import java.util.HashMap;
-
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+//auteur : AZZI Maxime
 
 public class StockGeneral {
-    protected HashMap<ChocolatDeMarque, Stock> stocks;
+protected HashMap<ChocolatDeMarque, Stock> stocks;
 
-    public StockGeneral() {
-        stocks = new HashMap<ChocolatDeMarque, Stock>();
-    }
+// auteur : AZZI Maxime
+public StockGeneral() {
+stocks = new HashMap<ChocolatDeMarque, Stock>();
+}
 
-    public Stock getStock(ChocolatDeMarque produit) {
-        Stock stock = stocks.get(produit);
-        if (stock == null) {
-            stock = new Stock(0); // On crée un nouveau stock avec une quantité initiale de 0
-            stocks.put(produit, stock);
-        }
-        return stock;
-    }
+// auteur : AZZI Maxime
+public double getStock(ChocolatDeMarque produit) {
+Stock stock = stocks.get(produit);
+if (stock == null) {
+stock = new Stock(0); // On crée un nouveau stock avec une quantité initiale de 0
+stocks.put(produit, stock);
+}
+return stock.getQuantite();
+}
 
-    // Autres méthodes pour gérer le stock général (ajouter, retirer, etc.)
-    public void ajouterAuStock(ChocolatDeMarque produit, double quantiteAjoutee) {
-        Stock stock = getStock(produit);
-        stock.ajouter(quantiteAjoutee);
-        
-    }
+// Autres méthodes pour gérer le stock général (ajouter, retirer, etc.)
+// auteur : AZZI Maxime
+public void ajouterAuStock(ChocolatDeMarque produit, double quantiteAjoutee) {
+double stock = getStock(produit);
+stock+=quantiteAjoutee;
+}
 
-    public boolean retirerDuStock(ChocolatDeMarque produit, double quantiteRetiree) {
-        Stock stock = getStock(produit);
-        return stock.retirer(quantiteRetiree);
-    }
+// auteur : AZZI Maxime
+public void retirerDuStock(ChocolatDeMarque produit, double quantiteRetiree) {
+double stock = getStock(produit);
+stock-=quantiteRetiree;
+}
 }
