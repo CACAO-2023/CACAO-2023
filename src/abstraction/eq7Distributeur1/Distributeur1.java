@@ -34,6 +34,7 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	protected ChocolatDeMarque topvente() {
 		ChocolatDeMarque top = Filiere.LA_FILIERE.getChocolatsProduits().get(0);
 		return top;
+		
 			
 	}
 	
