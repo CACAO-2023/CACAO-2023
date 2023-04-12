@@ -104,7 +104,7 @@ public class Lot {
 			double reste = quantite;
 			for (Integer i : this.quantites.keySet()) {
 				if (reste>0) {
-					if (this.quantites.get(i)>=reste) {
+					if (this.quantites.get(i)>reste) {
 						res.ajouter(i,reste);
 						this.quantites.put(i,this.quantites.get(i)-reste);
 						reste=0;
