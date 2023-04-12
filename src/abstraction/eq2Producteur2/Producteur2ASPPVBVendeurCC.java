@@ -1,8 +1,5 @@
 package abstraction.eq2Producteur2;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
@@ -19,7 +16,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	}
 
 	public boolean peutVendre(IProduit produit) {
-		return produit instanceof Feve && (((Feve) produit).getGamme() != Gamme.MQ || ((Feve) produit).isBioEquitable() != false);
+		return produit instanceof Feve && produit == Feve.F_BQ && produit == Feve.F_MQ && produit == Feve.F_MQ_BE && produit == Feve.F_HQ_BE; //Est-ce qu'on vend vraiment de tout ?
 	}
 	
 	public boolean vend(IProduit produit) {
@@ -30,7 +27,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		return false;
 	}
 
-	//On renvoie toujours  un Echeancier constan tdans le temps dans la limite de nos cpaacités de production
+	//On renvoie toujours  un Echeancier constant dans le temps dans la limite de nos capacités de production
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		Echeancier echeancierAch = contrat.getEcheancier();
 		if(echeancierAch.getStepDebut() > Filiere.LA_FILIERE.getEtape()) {
@@ -52,33 +49,35 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	}
 
 	public double propositionPrix(ExemplaireContratCadre contrat) {
-		if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.HQ) {
+		if(contrat.getProduit() == Feve.F_HQ_BE) {
 			return contrat.getEcheancier().getQuantiteTotale()*this.getPrixHQ();
 		}
-		if(contrat.getProduit() instanceof Feve && ((Feve) contrat.getProduit()).getGamme() == Gamme.MQ) {
+		if(contrat.getProduit() == Feve.F_MQ_BE) {
 			return contrat.getEcheancier().getQuantiteTotale()*this.getPrixMQBE();
 		}
 		return 0.0;		
 	}
 
-	@Override
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(contrat.getPrix() >= 1) {
+			return contrat.getPrix();
+		}
+		if(contrat.getPrix() >= 0.9) {
+			return contrat.getPrix()*0.25+contrat.getEcheancier().getQuantiteTotale()*this.getPrixHQ()*0.75; /*Négociation 1/4||3/4 pour tenter de tirer un prix convenable*/
+		}
+		return -2;
 	}
 
-	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		
+		this.getContrats().add(contrat);
 	}
 
-	@Override
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return null;
+		System.out.println(Math.min(this.getStockTot((Feve) produit).getValeur(), quantite));
+		if(Math.min(this.getStockTot((Feve) produit).getValeur(), quantite) > 0.001) {
+			return retirerStock((Feve) produit, Math.min(this.getStockTot((Feve) produit).getValeur(), quantite));
+		} else {
+			return new Lot(produit);
+		}
 	}
-
-	/*Creer une fonction qui renvoie les quantités à livrer au prochain step/aux prochains steps (proposition)
-	*/
 }

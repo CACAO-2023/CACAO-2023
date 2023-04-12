@@ -5,26 +5,28 @@ package abstraction.eq2Producteur2;
 import java.util.LinkedList;
 import java.util.HashMap;
 
-import abstraction.eqXRomu.general.Journal;
+import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
+
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Lot;
+
+
 
 public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	public HashMap<Feve, Integer> employes;
 	public HashMap<Feve, Double> salaires;
 	public HashMap<Feve, Integer> surface_plantation;
 	public HashMap<Feve, Double> prix;
-	
-	
+	public HashMap<Feve,HashMap<Integer, Integer>> age_hectares;
+
 	public Producteur2ASProducteurPlanteur() {
 		super();
 		this.employes = new HashMap<Feve, Integer>();
 		this.salaires = new HashMap<Feve, Double>();
 		this.surface_plantation = new HashMap<Feve, Integer>();
 	}
-	
-	
+		
 	public HashMap<Feve, Integer> getEmployes(){
 		return this.employes;
 	}
@@ -37,6 +39,10 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 
 	public HashMap<Feve, Double> getPrix(){
 		return this.prix;
+	}
+	
+	public HashMap<Feve,HashMap<Integer, Integer>> get_Age_Hectares(){
+		return this.age_hectares;
 	}
 	
 	public void setEmploye(int employes_BQ, int employes_MQ, int employes_MQ_BE, int employes_HQ_BE) {
@@ -65,7 +71,9 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		this.employes.put(Feve.F_MQ_BE, surface_plantation_MQ_BE);
 		this.employes.put(Feve.F_HQ_BE, surface_plantation_HQ_BE);
 	}
-		
+	public void Planter(Feve f, int i) {
+		this.age_hectares.get(f).put(Filiere.LA_FILIERE.getEtape(), i);
+	}
 		
 
 	// Méthodes à utiliser dans chaque next //
@@ -73,6 +81,26 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		
 		
 	//}
+	public HashMap<Feve, Double> Prevision_Production(int step){
+		HashMap<Feve, Double> prevision_production = new HashMap<Feve, Double>();
+		for (Feve f : this.age_hectares.keySet()) {
+			double qte = 0;
+			for (int i : this.age_hectares.get(f).keySet()){
+				if (step-i<3*24) {
+					qte =+ 0;
+				}
+				if (step-i>=3*24 && Filiere.LA_FILIERE.getEtape()-i<40*24) {
+					qte =+ prodHec.getValeur();
+				}
+				if (step-i>=40*24) {
+					this.age_hectares.get(f).remove(i);
+				}
+			}
+			prevision_production.put(f, qte);
+		}
+		return prevision_production;	
+	}
+	
 	public HashMap<Feve, Double> CoutProd(){
 		HashMap<Feve, Double> coûts_totaux = new HashMap<Feve, Double>();
 		for (Feve f : this.salaires.keySet()) {
@@ -81,15 +109,19 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	}
 	public HashMap<Feve, Double> Prevision_Vente(){
 		 HashMap<Feve, Double> prevision_vente = new  HashMap<Feve, Double>();
-		for (Feve f : this.salaires.keySet()) {
-			prevision_vente.put(f, null); }//a voir comment determiner les ventes en fonction des contrats cadre et evolution des ventes precedentes
+		 prevision_vente.put(Feve.F_MQ, this.aLivrerStep(Filiere.LA_FILIERE.getEtape(), Feve.F_MQ));
+		 prevision_vente.put(Feve.F_MQ_BE, this.aLivrerStep(Filiere.LA_FILIERE.getEtape(), Feve.F_MQ_BE));
+		 prevision_vente.put(Feve.F_HQ_BE, this.aLivrerStep(Filiere.LA_FILIERE.getEtape(), Feve.F_HQ_BE));
 		return prevision_vente;	
 	}
-	public  HashMap<Feve, Double> Rentabilites(){
+	public HashMap<Feve, Double> Rentabilites(){
 		 HashMap<Feve, Double> rentabilites =  new HashMap<Feve, Double>();
 		for (Feve f : this.prix.keySet()) {
-			rentabilites.put(f,this.prix.get(f)*this.Prevision_Vente().get(f)/this.CoutProd().get(f));}
+			rentabilites.put(f,this.prix.get(f)*this.Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f)/this.CoutProd().get(f));}
 		return rentabilites;
+		
+	}
+	public void ajustement() {
 		
 	}
 	
