@@ -56,7 +56,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
       this.stockChocolatHGL = new Lot(Chocolat.C_HQ_BE);
       this.stockProduit = new ArrayList<ChocolatDeMarque>();
   }
-  public void ajouterFeve(Feve feve, int quantite, int dateDeRecolte) {
+  public void ajouterFeve(Feve feve, Double quantite, int dateDeRecolte) {
 	    Lot lot;
 	    switch(feve.getGamme()) {
 	        case BQ:
@@ -76,7 +76,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	        default:
 	            throw new IllegalArgumentException("Type de fève invalide");
 	    }
-	    lot.ajouter(quantite, dateDeRecolte);
+	    lot.ajouter(dateDeRecolte, quantite);
 	}
   private Lot getLotFeve(IProduit produit) {
 	    if (produit instanceof Feve) {
@@ -126,7 +126,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	        }
 	    }
 	}
-  public void ajouterChocolat(Chocolat choco,int quantite,int dateProduction) {
+  public void ajouterChocolat(Chocolat choco,Double quantite,int dateProduction) {
 	  Lot lot ;
 	  switch(choco.getGamme()) {
 	  	case BQ :
@@ -146,9 +146,11 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  	default :
 	  		throw new IllegalArgumentException("Type de Chocolat invalide");
 	  }
-	  lot.ajouter(quantite,dateProduction);
+	  lot.ajouter(dateProduction,quantite);
   }
-  
+  public void retirerChcoclat() {
+	  
+  }
 
 	    
 	    
