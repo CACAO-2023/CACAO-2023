@@ -85,6 +85,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 				if (i <= etapePerim)
 					stock.remove(i);
 		}
+		this.majTot();
 		//System.out.println(this.stocks.get(Feve.F_BQ));
 		/*this.ajouterStock(Feve.F_BQ, Filiere.LA_FILIERE.getEtape(), 1000);
 		this.retirerStock(Feve.F_BQ, 500);
@@ -92,7 +93,6 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		lotHQ_BE.ajouter(0, 1000);
 		this.ajouterStock(lotHQ_BE);
 		//this.retirerStock(Feve.F_MQ, 500);
-		this.majTot();
 		System.out.println(this.stocksString());
 		System.out.println(this.stocksTotString());
 		System.out.println(this.getStockTotTime(Feve.F_BQ, 2));
@@ -104,10 +104,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	 * @return la variable de la quantité totale de fèves stockée du type f
 	 * @param f le type de fève
 	 */
-	protected double getStockTot(Feve f) {
-		return this.stocks.get(f).getQuantiteTotale();
-	}
-	protected Variable getStockTot2(Feve f) {
+	protected Variable getStockTot(Feve f) {
 		return this.stocksTot.get(f);
 	}
 	
