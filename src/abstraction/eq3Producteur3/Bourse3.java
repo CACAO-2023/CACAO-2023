@@ -28,7 +28,6 @@ public class Bourse3 extends Producteur3CC implements IVendeurBourse {
 			
 			
 		}
-		System.out.println(quantiteM + " step : " +Filiere.LA_FILIERE.getEtape());
 		return quantiteM;
 	}
 
@@ -39,7 +38,6 @@ public class Bourse3 extends Producteur3CC implements IVendeurBourse {
 		Lot l = new Lot(f);
 		l.ajouter(Filiere.LA_FILIERE.getEtape(), quantiteEnT);
 		Stock s = super.getStock();
-		System.out.println(f.toString() + " step : " + Filiere.LA_FILIERE.getEtape());
 		s.retirerVielleFeve(Feve.F_MQ_BE, quantiteEnT);
 		super.getJVente().ajouter("La quantite " + quantiteEnT + " en tonnes de " + f.toString() + " a ete vendu "+coursEnEuroParT + "le step " + Filiere.LA_FILIERE.getEtape() + " en Bourse");
 		return l;
