@@ -58,6 +58,7 @@ public class Producteur1Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		System.out.println("coucou");
 		this.step = this.step + 1;
 		this.journal.ajouter("step : "+step);
 		this.journal_stocks.ajouter("===== step : "+step+" =====");

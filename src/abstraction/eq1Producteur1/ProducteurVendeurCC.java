@@ -127,6 +127,7 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	return null;
 	}
 	public void next() {
+		super.next();
 		List<ExemplaireContratCadre> contratstermine=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.mescontrats) {
 			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
