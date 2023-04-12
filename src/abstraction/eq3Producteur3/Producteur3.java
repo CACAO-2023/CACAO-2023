@@ -35,7 +35,6 @@ public class Producteur3 extends Bourse3  {
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
 	private LinkedList<Double> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
 	private Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
-	protected Stock Stock;
 
 	/*
 	 * Je n'ai pas trouve le type du champs donc j'ai choisit String. A CHANGER
@@ -48,7 +47,7 @@ public class Producteur3 extends Bourse3  {
 	public Producteur3() {
 		super();
 		this.fields = new Champs();
-		this.Stock = new Stock();
+		
 
 		this.CoutStep = 0.0;
 		this.CoutTonne = 0.;
@@ -79,7 +78,7 @@ public class Producteur3 extends Bourse3  {
 	 * @author Dubus-Chanson Victor
 	 */
 	public void updateListeCout() {
-		this.ListeCout.addLast(this.CoutStep);
+		this.ListeCout.addLast(0);
 		this.ListeCout.removeFirst();
 	}
 	
