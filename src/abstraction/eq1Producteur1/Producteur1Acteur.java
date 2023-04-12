@@ -96,6 +96,9 @@ public class Producteur1Acteur implements IActeur {
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(this.journal);
+		res.add(this.journal_ventes);
+		res.add(this.journal_stocks);
+		res.add(this.journal_champs);
 		return res;
 	}
 
