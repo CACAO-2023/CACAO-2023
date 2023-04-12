@@ -17,9 +17,11 @@ import abstraction.eqXRomu.produits.Lot;
 public class DistributeurContratCadreVendeurAcheteur extends Distributeur1Acteur implements IAcheteurContratCadre{
 	protected List<ExemplaireContratCadre> mesContratEnTantQuAcheteur;
 	private Echeancier echeancier_type;
+	private IProduit produit;
 	
 	public DistributeurContratCadreVendeurAcheteur(IProduit produit) {
 		super();
+		this.produit=produit;
 		this.mesContratEnTantQuAcheteur=new LinkedList<ExemplaireContratCadre>();
 	}
 
@@ -90,16 +92,16 @@ public class DistributeurContratCadreVendeurAcheteur extends Distributeur1Acteur
 	}
 	
 	
-	public String meilleur_prix(Echeancier e,IProduit produit) {
-		HashMap<IActeur, Double> res= new HashMap<>();
-		
-		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
-			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
-				ExemplaireContratCadre cc = supCCadre.demandeAcheteur((IAcheteurContratCadre)this, (IVendeurContratCadre) acteur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
-			}}
-		
-		return "ok";
-	}
+//	public String meilleur_prix(Echeancier e,IProduit produit) {
+//		HashMap<IActeur, Double> res= new HashMap<>();
+//		
+//		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
+//			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
+//				ExemplaireContratCadre cc = supCCadre.demandeAcheteur((IAcheteurContratCadre)this, (IVendeurContratCadre) acteur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
+//			}}
+//		
+//		return "ok";
+//	}
 	
 //	public static Integer obtenirValeurMinimale(HashMap<String, Integer> hashMap) {
 //        Integer valeurMinimale = null;
@@ -114,7 +116,7 @@ public class DistributeurContratCadreVendeurAcheteur extends Distributeur1Acteur
 	
 	
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-		stock.ajouter(this, lot.getQuantiteTotale()); // Cet exemple ne gere pas la peremption : il n'utilise pas la mention du step de production du produit
+//		stock.ajouter(this, lot.getQuantiteTotale()); // Cet exemple ne gere pas la peremption : il n'utilise pas la mention du step de production du produit
 	}
 
 	public boolean achete(IProduit produit) {
