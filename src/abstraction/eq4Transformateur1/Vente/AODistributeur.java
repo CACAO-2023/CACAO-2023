@@ -1,6 +1,7 @@
 package abstraction.eq4Transformateur1.Vente;
 
 import abstraction.eqXRomu.offresAchat.IVendeurOA;
+import abstraction.eqXRomu.appelsOffres.SuperviseurVentesAO;
 import abstraction.eqXRomu.offresAchat.OffreAchat;
 import abstraction.eqXRomu.offresAchat.PropositionVenteOA;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
@@ -32,4 +33,8 @@ public class AODistributeur extends CC_distributeur implements IVendeurOA {
 	public void notifierPropositionNonRetenueOA(PropositionVenteOA propositionRefusee) {
 	}
 
+	public void next() {
+		super.next();
+		(SuperviseurVentesAO)(Filiere.LA_FILIERE.getActeur("Sup.AO"));
+	}
 }
