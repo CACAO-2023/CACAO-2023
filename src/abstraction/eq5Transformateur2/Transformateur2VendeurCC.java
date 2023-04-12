@@ -26,15 +26,15 @@ public class Transformateur2VendeurCC extends Transformateur2 implements IVendeu
 			res=this.stockChoco.keySet().contains(produit) && this.stockChoco.get(produit)>1000;
 		}
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : vend("+produit+") --> "+res);
-		return res;//On initie la vente de produit
+		return res;//On initie la vente de produit en fonction des stocks
 	}
 	
-	public Echeancier propositionDuVendeur(ExemplaireContratCadre contrat){
+	public void InitialisationProposition(ExemplaireContratCadre contrat){
 		Object produit = contrat.getProduit();
 		double qt=0;
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : propovend(prod="+produit+"  ech="+contrat.getEcheancier());
 
-		return null;
+		return ;//lorsque quelqu'un propose de nous acheter, on recoit l'offre
 	}
 
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
@@ -92,7 +92,7 @@ public class Transformateur2VendeurCC extends Transformateur2 implements IVendeu
 		if (produit instanceof Chocolat) {
 			switch ((Chocolat)produit) {
 			case C_HQ_BE   : prix= 11.0;break;
-			case C_MQ      : prix=  5.0;break;
+			case C_MQ      : prix=  7.0;break;
 			}
 		}
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : propose prix de "+prix+" pour "+produit);
@@ -140,4 +140,7 @@ public class Transformateur2VendeurCC extends Transformateur2 implements IVendeu
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
 	}
+	
+	
+	
 }
