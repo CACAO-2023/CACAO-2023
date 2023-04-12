@@ -16,7 +16,7 @@ import abstraction.eqXRomu.produits.Lot;
 
 public class Transformateur3Stocks extends Transformateur3Acteur  {
 
-
+/**Mouhamed SOW*/
 	protected Lot stockFeveBG; // feve bas gamme
     protected Lot stockFeveMG; // feve moyenne gamme
     protected Lot stockFeveMGL;// feve moyenne gamme labelisée
@@ -27,7 +27,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
     protected Lot stockChocolatHGL; // Chocolat haute gamme labélisée
     protected List<ChocolatDeMarque> stockProduit;
 
-    
+    /**Mouhamed SOW*/  
   public Transformateur3Stocks(Lot stockFeveBG, Lot stockFeveMG, Lot stockFeveMGL, Lot stockFeveHGL,
 			Lot stockChocolatBG, Lot stockChocolatMG, Lot stockChocolatMGL, Lot stockChocolatHGL,
 			List<ChocolatDeMarque> stockProduit) {
@@ -100,7 +100,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	    }
 	}
 
-
+  /**Mouhamed SOW*/
   public void retirerFeve(Feve feve, double quantite) {
 	    Lot lot = getLotFeve(feve);
 	    HashMap<Integer, Double> quantites = lot.getQuantites();
