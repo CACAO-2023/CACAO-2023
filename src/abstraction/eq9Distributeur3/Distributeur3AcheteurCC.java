@@ -23,27 +23,33 @@ import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 
 public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAcheteurContratCadre{
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
-	protected Integer cryptogramme;
+	
 	protected Journal journal;
 	
 	//faire une méthode qui connait le prix d'achat moyen d'un chocolat
 	
-	public Distributeur3AcheteurCC(ChocolatDeMarque[] chocos, double[] stocks) {
+	public Distributeur3AcheteurCC() {//ChocolatDeMarque[] chocos, double[] stocks) {
 		
 		
 	}
 //Mathilde
 	public void next() {
 		super.next();
+		System.out.print("nexxxxxxt");
 		SuperviseurVentesContratCadre supCCadre = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
-		List<IVendeurContratCadre> vendeursChocolat = supCCadre.getVendeurs(chocolats.get(0));
-		//creation échéancier
-		List<Double>  quantites = new ArrayList();
-		quantites.add(1.);
-		Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape(),quantites);
-		if (vendeursChocolat.size()>0) {
-		supCCadre.demandeAcheteur(this , vendeursChocolat.get(0), chocolats.get(0),echeancier , this.cryptogramme, initialise);
+		if (chocolats.size()>0) {
+			System.out.print(">>>>0");
+			
+			List<IVendeurContratCadre> vendeursChocolat = supCCadre.getVendeurs(chocolats.get(0));
+			//creation échéancier
+			List<Double>  quantites = new ArrayList();
+			quantites.add(1.);
+			Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape(),quantites);
+			if (vendeursChocolat.size()>0) {
+			supCCadre.demandeAcheteur(this , vendeursChocolat.get(0), chocolats.get(0),echeancier , this.cryptogramme, initialise);
+			}
 		}
+		
 
 		
 	}
