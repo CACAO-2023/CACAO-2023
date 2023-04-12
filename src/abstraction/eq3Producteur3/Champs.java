@@ -173,7 +173,9 @@ public class Champs {
 	
 	/**
 	 * @author Dubus-Chanson Victor
-	 */	
+	 */
+	/*Ajouter HectaresLiberes a HectaresLibres de Producteur3 a chaque step*/
+	/*Utilisee dans Producteur3 dans methode updateHectaresLiberes()*/
   	public Integer destructionVieuxHectares(int CurrentStep) {
 		HashMap<Integer, Integer> ChampsH = Champs.get("H");
 		HashMap<Integer, Integer> ChampsM = Champs.get("M");
