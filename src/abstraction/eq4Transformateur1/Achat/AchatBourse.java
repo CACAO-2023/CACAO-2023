@@ -26,7 +26,12 @@ public class AchatBourse extends CC_producteur implements IAcheteurBourse{
 					quantCC+=c.getQuantiteALivrerAuStep();
 				}
 			}
-			quantite=Filiere.LA_FILIERE.getVentes(this.chocosProduits.get(0), step)/(this.pourcentageTransfo.get(this.chocosProduits.get(0)).get(this.chocosProduits.get(0)))-quantCC; //quantite = venteBQ/ratioTransfo - Quant_CC_BQ
+			for (ExemplaireContratCadre d:this.ContratEnCours) {
+				if (d.getProduit().equals(Chocolat.C_BQ)) {
+					quantite+=d.getQuantiteALivrerAuStep()/(this.pourcentageTransfo.get(Feve.F_BQ)).get(Chocolat.C_BQ); //quantite = venteBQ/ratioTransfo - Quant_CC_BQ
+				}
+			}
+			quantite-=quantCC;
 			if (this.stockChoco.get(Chocolat.C_BQ)==0) {
 				quantite *= 1.2;
 			}
