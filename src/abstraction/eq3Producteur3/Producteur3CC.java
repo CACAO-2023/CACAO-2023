@@ -76,7 +76,10 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
             Stock.retirer((Feve)produit, currentQuantite);
         }
 
-        lot.ajouter(oldestStep, currentQuantite);
+        if (currentQuantite > 0) {
+            lot.ajouter(oldestStep, currentQuantite);
+        }
+        
         return lot;
     }
 
