@@ -22,7 +22,6 @@ public class Distributeur1AcheteurOA extends Distributeur1 implements IAcheteurO
 
 	public Distributeur1AcheteurOA() {
 		super();
-		
 	}
 
 	@Override
