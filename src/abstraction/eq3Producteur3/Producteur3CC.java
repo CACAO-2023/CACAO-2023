@@ -3,6 +3,7 @@ package abstraction.eq3Producteur3;
 import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
@@ -36,15 +37,12 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      * @author Corentin Caugant
      */
     public double propositionPrix(ExemplaireContratCadre contrat) {
-        return this.getPrixMin();
-    }
-
-    /**
-     * @author Corentin Caugant
-     */
-    private double getPrixMin() {
-        // return this.lot.getPrixMin();
-        return 1.0;
+        if ((Feve)contrat.getProduit() == Feve.F_MQ_BE) {
+            // We return a price weing CoutTonne multiplied by a random factor between 1.1 and 1.2
+            return this.CoutTonne * 1.3;
+        } else {
+            return this.CoutTonne * 1.6;
+        }
     }
 
     /**
@@ -87,7 +85,20 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      * @author Corentin Caugant
      */
     public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-        return this.getPrixMin();
+        if ((Feve)contrat.getProduit() == Feve.F_MQ_BE) {
+            // We return a price weing CoutTonne multiplied by a random factor between 1.1 and 1.2
+            if (contrat.getPrix() >= this.CoutTonne * 1.1) {
+                return contrat.getPrix();
+            } else {
+                return this.CoutTonne * (1.1 + Math.random() * 0.1);
+            }
+        } else {
+            if (contrat.getPrix() >= this.CoutTonne * 1.2) {
+                return contrat.getPrix();
+            } else {
+                return this.CoutTonne * (1.2 + Math.random() * 0.3);
+            }
+        }
     }
 
     /** 
@@ -102,12 +113,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
             echeancier.ajouter(Stock.getQuantite((Feve)contrat.getProduit()));
         }
 
-        // We stop negociations if it lasts too long
-        if (echeancier.getNbEcheances() > 12) {
-            return null;
-        } else {
-            return echeancier;
-        }
+        return echeancier;
     }
 
     /** 
@@ -136,7 +142,8 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
 
         // Now making the contract
         this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit + "...");
-        ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
+        int length = ((int) Math.round(Math.random() * 10)) + 1;
+        ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, length, (int) Math.round(SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+this.getStock().getQuantite(produit)/length)), cryptogramme,false);
         if (cc != null) {
             this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
         } else {
