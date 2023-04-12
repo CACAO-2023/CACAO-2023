@@ -71,7 +71,7 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 	}
 
 	
-/**		public void transformationChoco(Feve f, double qte) {
+		public void transformationChoco(Feve f, double qte) {
 		if (f instanceof F_BQ) {
 			double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
 			double a=stockFeve.get(F_BQ);
@@ -105,10 +105,14 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 					}
 			}
 	}
-**/
 
 
+ 
 protected double BesoinStep(int Step, Feve f) {
-	return 0.1;
+	double a = stockChocolat.get(f);
+			
+	return a;
+} 
 }
-}
+
+

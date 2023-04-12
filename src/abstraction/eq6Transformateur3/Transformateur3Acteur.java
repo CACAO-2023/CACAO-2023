@@ -87,7 +87,8 @@ public class Transformateur3Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 	//         En lien avec l'interface graphique         //
 	////////////////////////////////////////////////////////
-
+/**ecrit par Nathan Claeys
+ */
 	public void next() {
 		this.journal = new Journal(Filiere.LA_FILIERE.getEtape()+"",this);
 		this.ListJournal.add(this.journal);
@@ -96,7 +97,8 @@ public class Transformateur3Acteur implements IActeur {
 	public Color getColor() {// NE PAS MODIFIER
 		return new Color(158, 242, 226); 
 	}
-
+/** par Maxime Bedu
+ */
 	public String getDescription() {
 		return "Eco Choco, le choco est un cadeau !";
 	}
@@ -106,7 +108,8 @@ public class Transformateur3Acteur implements IActeur {
 		List<Variable> res = new ArrayList<Variable>();
 		return res;
 	}
-
+/** ecrit par Nathan Claeys
+ */
 	// Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
