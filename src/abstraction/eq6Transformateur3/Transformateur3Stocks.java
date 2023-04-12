@@ -149,7 +149,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	        }
 	    }
 	}
-  public void ajouterChocolat(Chocolat choco,Double quantite,int dateProduction) {
+  public void ajouterChocolat(ChocolatDeMarque choco,Double quantite,int dateProduction) {
 	  Lot lot ;
 	  switch(choco.getGamme()) {
 	  	case BQ :
@@ -171,7 +171,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  }
 	  lot.ajouter(dateProduction,quantite);
   }
-  public void retirerChcoclat(Chocolat chocolat,Double quantite) {
+  public void retirerChcoclat(ChocolatDeMarque chocolat,Double quantite) {
 	  Lot lot=this.getLotChocolat(chocolat) ;
 	  HashMap<Integer, Double> quantites = lot.getQuantites();
 
