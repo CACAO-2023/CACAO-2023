@@ -260,8 +260,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	@Override
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return 10;
 	}
 
 	@Override
@@ -286,13 +286,12 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	@Override
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return 0;
+		return contrat.getPrix();
 	}
 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
+		this.journal_activitegenerale.ajouter(contrat.toString());
 		
 	}
 
