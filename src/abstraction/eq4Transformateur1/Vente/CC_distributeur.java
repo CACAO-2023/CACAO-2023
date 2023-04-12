@@ -79,7 +79,7 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
 		double prixInit=contrat.getListePrix().get(0);
 		double prix = contrat.getPrix();
-		if (prix>0.0 && (prixInit-prix)/prixInit<=0.49) {
+		if (prix>0.0 && (prixInit-prix)/prixInit<=0.049) {
 			return prix;
 		} else {
 			return prixInit;
