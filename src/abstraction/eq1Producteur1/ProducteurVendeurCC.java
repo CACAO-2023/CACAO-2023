@@ -24,6 +24,7 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		this.mescontrats= new LinkedList<ExemplaireContratCadre>();
 	}
 	public void initialiser() {
+		super.initialiser();
 		this.supCCadre = (SuperviseurVentesContratCadre) (Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 	}
 	
