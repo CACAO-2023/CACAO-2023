@@ -58,7 +58,7 @@ public class Producteur3Acteur implements IActeur {
 	}
 	
 	public void next() {
-		;
+		this.Stock = Stock.miseAJourStock();
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
