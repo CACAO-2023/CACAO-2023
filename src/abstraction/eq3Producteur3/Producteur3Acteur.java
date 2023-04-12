@@ -27,6 +27,7 @@ public class Producteur3Acteur implements IActeur {
     journal_achats=new Journal("Journal des Achats de l'"+nom,this);
     journal_activitegenerale=new Journal("Journal général de l'"+nom,this);
     journal_Stock = new Journal("Journal des Stocks de l'"+nom,this);
+	this.Stock = new Stock();
 	}
 	
 	public void initialiser() {
