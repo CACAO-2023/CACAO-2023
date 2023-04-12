@@ -30,6 +30,7 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	public boolean peutVendre(IProduit produit) {
 		return (produit instanceof Feve) ;
 	}
+	
 
 	//On doit revoir la stratégie de contreproposition(criteres, quantité max, quantité min ...)
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
@@ -71,8 +72,18 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 
 	@Override
 	public double propositionPrix(ExemplaireContratCadre c) {
+		double p=0;
+		switch((Feve)c.getProduit()) {		
+		case F_BQ:
+			p= 1100*c.getQuantiteTotale();
+		case F_MQ:
+			p= 1300*c.getQuantiteTotale();
+		case F_HQ_BE : p= 0;
+		case F_MQ_BE : p= 0;
+		}
+		return p;
 		
-		return 0;
+		
 	}
 
 	@Override

@@ -35,7 +35,7 @@ public class ExempleTransformateurContratCadreVendeur extends ExempleTransformat
 	}
 
 	public double propositionPrix(ExemplaireContratCadre contrat) {
-		return 0.5 + (5000.0-contrat.getQuantiteTotale());// plus la quantite est elevee, plus le prix est interessant
+		return 0.5+ (5000.0-contrat.getQuantiteTotale());// plus la quantite est elevee, plus le prix est interessant
 	}
 
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
