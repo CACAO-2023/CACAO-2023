@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import abstraction.eqXRomu.contratsCadres.ContratCadre;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
@@ -222,7 +221,7 @@ public class Producteur2Acteur implements IActeur {
 		for(ExemplaireContratCadre conEx : this.contrats) {
 			Echeancier ech2 = conEx.getEcheancier();
 			if(conEx.getProduit() == feve) {
-				for(int i = Filiere.LA_FILIERE.getEtape(); i<ech2.getStepFin(); i++) {
+				for(int i = ech.getStepDebut(); i<ech2.getStepFin(); i++) {
 					ech.set(i, ech.getQuantite(i) + ech2.getQuantite(i));	
 				}
 			}
