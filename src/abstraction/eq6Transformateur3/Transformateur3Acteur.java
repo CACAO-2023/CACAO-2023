@@ -32,12 +32,12 @@ public class Transformateur3Acteur implements IActeur {
 	protected Transformateur3Acteur() {
 		this.journal = new Journal("Journal"+this.getNom(),this);
 		this.pourcentageCacaoBG = new Variable ("pourcentageCacaoBG","pourcentage de cacao dans le produit BG fini",this,0.4,0.60,0.5);
-		this.pourcentageCacaoMG = new Variable ("pourcentageCacaoMG","pourcentage de cacao dans le produit MG non labélisé fini",this,0.6,0.80,0.65);
-		this.pourcentageCacaoMGL = new Variable ("pourcentageCacaoMGL","pourcentage de cacao dans le produit MG labélisé fini",this,0.6,0.80,0.75);
-		this.pourcentageCacaoHG = new Variable ("pourcentageCacaoHG","pourcentage de cacao dans le produit HG labélisé fini",this,0.8,0.95,0.85);
-		this.pourcentageRSE = new Variable ("pourcentageRSE", "défini le pourcentage RSE sur les recettes",this,0.05,0.15,0.05);
-		this.totalStocksFeves = new Variable ("totalStocksFeves","défini l'état total du stock de fèves",this,0.0,1000000.0,0.0);
-		this.totalStocksChoco = new Variable ("totalStocksChoco","défini l'état total du stock de produit fini",this,0.0,1000000.0,0.0);
+		this.pourcentageCacaoMG = new Variable ("pourcentageCacaoMG","pourcentage de cacao dans le produit MG non labelise fini",this,0.6,0.80,0.65);
+		this.pourcentageCacaoMGL = new Variable ("pourcentageCacaoMGL","pourcentage de cacao dans le produit MG labelise fini",this,0.6,0.80,0.75);
+		this.pourcentageCacaoHG = new Variable ("pourcentageCacaoHG","pourcentage de cacao dans le produit HG labelise fini",this,0.8,0.95,0.85);
+		this.pourcentageRSE = new Variable ("pourcentageRSE", "defini le pourcentage RSE sur les recettes",this,0.05,0.15,0.05);
+		this.totalStocksFeves = new Variable ("totalStocksFeves","defini l'etat total du stock de feves",this,0.0,1000000.0,0.0);
+		this.totalStocksChoco = new Variable ("totalStocksChoco","defini l'etat total du stock de produit fini",this,0.0,1000000.0,0.0);
 		this.ListJournal = new LinkedList<Journal>();
 		ListJournal.add(this.journal);
 	}
