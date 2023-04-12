@@ -84,6 +84,7 @@ public class Distributeur1Acteur implements IActeur {
 	public void next() {
 
 		this.journal.ajouter("on a réussi le challenge");
+		new DistributeurContratCadre();
 
 		
 	}
