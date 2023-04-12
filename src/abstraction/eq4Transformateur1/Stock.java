@@ -35,16 +35,18 @@ public class Stock extends Transformateur1Acteur{
 	
 	public void next() {
 		super.next();
-		this.journal.ajouter("=== STOCKS === ");
-		for (Feve f : this.lesFeves) {
-			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(f+"", 15)+" = "+this.stockFeves.get(f));
-		}
-		for (Chocolat c : Chocolat.values()) {
-			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(c+"", 15)+" = "+this.stockChoco.get(c));
-		}
-		if (this.stockChocoMarque.keySet().size()>0) {
-			for (ChocolatDeMarque cm : this.stockChocoMarque.keySet()) {
-				this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(cm+"", 15)+" = "+this.stockChocoMarque.get(cm));
+		if (step >=1) {
+			this.journal.ajouter("=== STOCKS === ");
+			for (Feve f : this.lesFeves) {
+				this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(f+"", 15)+" = "+this.stockFeves.get(f));
+			}
+			for (Chocolat c : Chocolat.values()) {
+				this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(c+"", 15)+" = "+this.stockChoco.get(c));
+			}
+			if (this.stockChocoMarque.keySet().size()>0) {
+				for (ChocolatDeMarque cm : this.stockChocoMarque.keySet()) {
+					this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(cm+"", 15)+" = "+this.stockChocoMarque.get(cm));
+				}
 			}
 		}
 	}
