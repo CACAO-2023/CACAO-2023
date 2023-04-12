@@ -229,17 +229,17 @@ public class Producteur2Acteur implements IActeur {
 	//         Pour prévoir les ventes à venir            //
 	////////////////////////////////////////////////////////
 	
-	/*Quantité à livrer au step i pour les ventes par contrat cadre*/
+	/*Quantité à livrer au step i pour les ventes par contrat cadre pour la Feve feve*/
 	public Double aLivrerStep(int step, Feve feve) {
 		return aLivrer(feve).getQuantite(step);
 	}
-	/*Quantité à livrer aux différents steps pour les ventes par contrat cadre*/
+	/*Quantité à livrer aux différents steps pour les ventes par contrat cadre pour la Feve feve*/
 	public Echeancier aLivrer(Feve feve) {
 		Echeancier ech = new Echeancier(); /*Il faut peut-etre m'etre un 0 dans la paranthese de newEchancier() en fonction des tests futurs*/
 		for(ExemplaireContratCadre conEx : this.contrats) {
 			Echeancier ech2 = conEx.getEcheancier();
 			if(conEx.getProduit() == feve) {
-				for(int i = ech2.getStepDebut(); i<ech2.getStepFin(); i++) {
+				for(int i = Filiere.LA_FILIERE.getEtape(); i<ech2.getStepFin(); i++) {
 					ech.set(i, ech.getQuantite(i) + ech2.getQuantite(i));	
 				}
 			}
