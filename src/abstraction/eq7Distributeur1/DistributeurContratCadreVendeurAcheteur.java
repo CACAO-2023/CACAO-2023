@@ -58,7 +58,6 @@ public class DistributeurContratCadreVendeurAcheteur extends Distributeur1Acteur
 		}
 		this.mesContratEnTantQuAcheteur.removeAll(contratsObsoletes);
 		
-		
 		journal.ajouter("Recherche d'un vendeur aupres de qui acheter");
 		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
 			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
