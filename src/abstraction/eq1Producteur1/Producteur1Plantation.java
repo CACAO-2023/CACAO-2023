@@ -25,7 +25,7 @@ public class Producteur1Plantation extends Producteur1Acteur {
 	
 	public void next() {
 		//===== début Elouan =====
-		HashMap<Integer, Double> stockFeve = lot_bas.getQuantites() ;
+	 	HashMap<Integer, Double> stockFeve = lot_bas.getQuantites() ;
 		super.next();
 		champ c = this.getChamp();
 		for (Integer i : c.getQuantite().keySet()) {
