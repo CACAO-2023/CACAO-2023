@@ -70,9 +70,10 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 		HQBEStep2 = a;
 	}
 
+	/**
 	
 		public void transformationChoco(Feve f, double qte) {
-		if (f instanceof F_BQ) {
+		if (f instanceof Feve.F_BQ) {
 			double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
 			double a=stockFeve.get(F_BQ);
 			stockFeve.replace(F_BQ, a-(pourcentageTransfo*qte));
@@ -92,7 +93,7 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 							double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
 							double a=stockFeve.get(F_MQ_BE);
 							double c=getMQBEStep1();
-							setMQBEStep1(qte)
+							setMQBEStep1(qte);
 							stockFeve.replace(F_MQ_BE, a-(pourcentageTransfo*qte));
 							double b=stockChocolat.get(C_MQ_BE);
 							stockChocolat.replace(C_MQ_BE,b+c);
@@ -123,4 +124,4 @@ protected double BesoinStep(int Step, Feve f) {
 } 
 }
 
-
+*/
