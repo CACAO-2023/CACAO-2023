@@ -77,7 +77,7 @@ public class Stock extends Distributeur3Acteur{
 	public void maJ () {
 		//liste de chocolat de stock ?? 
 		for (Entry<ChocolatDeMarque, Double> chocolat : QteStock.entrySet()) {
-			this.journal_stock.ajouter("Etat du stock du chocolat  : "+ chocolat.getKey()+ " "+this.QteStock.get(chocolat));
+			journal_stock.ajouter("Etat du stock du chocolat  : "+ chocolat.getKey()+ " "+this.QteStock.get(chocolat));
 		}
 		
 	}

@@ -37,13 +37,13 @@ public class Distributeur3Acteur implements IActeur {
 		
 		// Ici pour tester on se créé un stock de chocolat à partir de rien (william)
 		// ChocolatDeMarque(Chocolat chocolat, String marque, int pourcentageCacao, int pourcentageRSE)
-		ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "marque", 50, 20);
-		Stock stock = new Stock();
-		this.stock = stock;
+		//ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "marque", 50, 20);
+		
+		this.stock = new Stock();
 		
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
-		this.chocolats.add(c1);
-		this.stock.ajoutQte(c1, 1000);
+		//this.chocolats.add(c1);
+		//this.stock.ajoutQte(c1, 1000);
 		
 		this.journal_ventes = new Journal(this.getNom()+" ventes", this);
 		this.journal_achats = new Journal(this.getNom()+" achats", this);
