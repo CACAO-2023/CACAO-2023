@@ -13,6 +13,12 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
+
+/**
+ * @author fouad/amine
+ *
+ */
+
 public class CC_distributeur extends Stock implements IVendeurContratCadre {
 
 	public boolean vend(IProduit produit) {

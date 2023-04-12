@@ -7,6 +7,7 @@ import java.awt.Color;
 
 
 
+
 import abstraction.eq4Transformateur1.Transformateur1Transformateur;
 import abstraction.eq4Transformateur1.Produits.ChocolatDeMarque;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
@@ -21,7 +22,7 @@ import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 /**
- * @author francois et fouad
+ * @author francois/fouad/amine
  *
  */
 public class CC_producteur extends Transformateur1Transformateur implements IAcheteurContratCadre{
@@ -35,6 +36,40 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 	}
 		return false;
 }
+	
+	public Echeancier propositionDeLAcheteur(ExemplaireContratCadre contrat) {
+		Object produit = contrat.getProduit();
+		double qfeve=0;
+		if (produit instanceof Feve) {
+			switch ((Feve)produit) {
+			case F_MQ  : return null;
+			case F_MQ_BE :return null;
+			
+			case F_BQ : 
+				
+				if (this.stockFeves.keySet().contains(produit)) {
+					qfeve= this.stockFeves.get(produit);
+					this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0));
+					return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0);
+					}
+			
+			case F_HQ_BE :
+				
+				
+			if (this.stockFeves.keySet().contains(produit)) {
+				qfeve= this.stockFeves.get(produit);
+				this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0));
+				return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0);
+	 
+	}}
+		
+		}
+		return null;
+		}
+	
+	
+	
+	
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		
 		Echeancier echeancier = contrat.getEcheancier();
