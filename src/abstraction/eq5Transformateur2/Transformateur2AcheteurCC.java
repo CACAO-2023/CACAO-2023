@@ -9,10 +9,11 @@ import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Transformateur2AcheteurCC extends Transformateur2Acteur implements IAcheteurContratCadre {
+public class Transformateur2AcheteurCC extends Transformateur2 implements IAcheteurContratCadre {
 
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
@@ -69,8 +70,21 @@ public class Transformateur2AcheteurCC extends Transformateur2Acteur implements 
 	@Override
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
+		//////stockFeves.ajoutQte(((Feve)(contrat.getProduit())), lot.getQuantiteTotale();
+		//(this, lot.getQuantiteTotale());
+		//IProduit produit= lot.getProduit();
+		//double quantite = lot.getQuantiteTotale();
+		//if (produit instanceof Feve) {
 		
-	}
-
+		//if (this.stockFeves.keySet().contains(produit)) {
+				//this.stockFeves.put((Feve)produit, this.stockFeves.get(produit)+quantite);
+			//} else {
+			//	this.stockFeves.put((Feve)produit, quantite);
+			}
+			//this.totalStocksFeves.ajouter(this, quantite, this.cryptogramme);
+		//	this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de feves "+produit+". Stock->  "+this.stockFeves.get(produit));
+	//	} else {
+		//	this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception d'un produit de type surprenant... "+produit);
 }
+
 
