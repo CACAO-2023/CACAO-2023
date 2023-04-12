@@ -39,15 +39,10 @@ public class Producteur2Acteur implements IActeur {
 	
 
 	//Prix provisoires
-	public double prixMinBQ = 0.0;
-	public double prixMinMQ = 0.0;
-	public double prixMinMQBE = 0.0;
-	public double prixMinHQ = 0.0;
-	public HashMap<Feve, Double> prixMinCC;
-	public double prixBQ = 1.0;
-	public double prixMQ = 2.0;
-	public double prixMQBE = 3.0;
-	public double prixHQ = 4.0;
+	public double prixBQ = 2000.0;
+	public double prixMQ = 4000.0;
+	public double prixMQBE = 6000.0;
+	public double prixHQ = 8000.0;
 	public HashMap<Feve, Double> prixCC;
 
 	protected LinkedList<ExemplaireContratCadre> contrats;
@@ -62,15 +57,10 @@ public class Producteur2Acteur implements IActeur {
 	public void initialiser() {
 		
 		this.prixCC = new HashMap<Feve, Double>();
-		this.prixMinCC = new HashMap<Feve, Double>();
 		this.getPrixCC().put(Feve.F_BQ, prixBQ);
 		this.getPrixCC().put(Feve.F_MQ, prixMQ);
 		this.getPrixCC().put(Feve.F_MQ_BE, prixMQBE);
 		this.getPrixCC().put(Feve.F_HQ_BE, prixHQ);
-		this.getPrixMinCC().put(Feve.F_BQ, prixMinBQ);
-		this.getPrixMinCC().put(Feve.F_MQ, prixMinMQ);
-		this.getPrixMinCC().put(Feve.F_MQ_BE, prixMinMQBE);
-		this.getPrixMinCC().put(Feve.F_HQ_BE, prixMinHQ);
 		
 
 		this.contrats = new LinkedList<ExemplaireContratCadre>();
@@ -102,14 +92,8 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable getProdHec() {
 		return this.prodHec;
 	}
-	public HashMap<Feve, Double> getPrixMinCC(){
-		return this.prixMinCC;
-	}
 	public HashMap<Feve, Double> getPrixCC(){
 		return this.prixCC;
-	}
-	public double getPrixMinCC(Feve f){
-		return this.prixMinCC.get(f);
 	}
 
 	public double getPrixCC(Feve f){
@@ -216,6 +200,8 @@ public class Producteur2Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 	//         Pour prévoir les ventes à venir            //
 	////////////////////////////////////////////////////////
+	//Code par Nino
+	
 	
 	/*Quantité à livrer au step i pour les ventes par contrat cadre pour la Feve feve*/
 	public Double aLivrerStep(int step, Feve feve) {

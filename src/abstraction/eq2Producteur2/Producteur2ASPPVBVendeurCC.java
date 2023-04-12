@@ -18,9 +18,9 @@ import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse implements IVendeurContratCadre{
-	private HashMap<Feve, Integer> nbEchecVentePrix = new HashMap<Feve, Integer>();
-	private HashMap<Feve, Boolean> echecVentePrix = new HashMap<Feve, Boolean>();
-	private int nbIterationVentePrix;
+	private HashMap<Feve, Integer> nbEchecVentePrix = new HashMap<Feve, Integer>(); //Permet de connaitre le nombre de vente ayant echoue à la suite 
+	private HashMap<Feve, Boolean> echecVentePrix = new HashMap<Feve, Boolean>();  //Permet de savoir si la derniere venet a reussi pour chaque produit
+	private int nbIterationVentePrix; //Compte le nombre d'appel à contrePropositionPrix pour faire évoluer le prix
 	double facteurPrixInit = 1.75;
 	
 	
@@ -56,6 +56,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 				if(ex != null) {
 					this.getContrats().add(ex);
 					this.echecVentePrix.put(Feve.F_MQ_BE, false);
+					this.nbEchecVentePrix.put(Feve.F_MQ_BE, 0);
 				}
 			}
 			double prodHQ = this.aLivrer(Feve.F_HQ_BE).getQuantiteJusquA(Filiere.LA_FILIERE.getEtape() + 12) - this.aLivrer(Feve.F_HQ_BE).getQuantiteJusquA(Filiere.LA_FILIERE.getEtape());; //production previsionnelle moyenne des 12 steps à venir
@@ -65,6 +66,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 				if(ex != null) {
 					this.getContrats().add(ex);
 					this.echecVentePrix.put(Feve.F_HQ_BE, false);
+					this.nbEchecVentePrix.put(Feve.F_HQ_BE, 0);
 				}
 			}
 			double prodMQ = this.aLivrer(Feve.F_MQ).getQuantiteJusquA(Filiere.LA_FILIERE.getEtape() + 12) - this.aLivrer(Feve.F_MQ).getQuantiteJusquA(Filiere.LA_FILIERE.getEtape()); //production previsionnelle moyenne des 12 steps à venir
@@ -74,6 +76,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 				if(ex != null) {
 					this.getContrats().add(ex);
 					this.echecVentePrix.put(Feve.F_MQ, false);
+					this.nbEchecVentePrix.put(Feve.F_MQ, 0);
 				}
 			}
 			
@@ -148,12 +151,13 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		if(this.echecVentePrix.get(contrat.getProduit())) {
 			this.nbEchecVentePrix.put((Feve) contrat.getProduit(), this.nbEchecVentePrix.get(contrat.getProduit()) + 1);
 		}
-		if(this.nbEchecVentePrix.get(contrat.getProduit()) == 3) {
+		if(this.nbEchecVentePrix.get(contrat.getProduit()) == 3) { //Si un produit voit trois ventes annulés de suite, on baisse son prix
 			this.nbIterationVentePrix = 0;
+			this.nbEchecVentePrix.put((Feve) contrat.getProduit(), 0);
 			this.getPrixCC().put((Feve) contrat.getProduit(), this.getPrixCC((Feve) contrat.getProduit())*0.9);
 		}
 		this.echecVentePrix.put((Feve) contrat.getProduit(), true);
-		this.nbIterationVentePrix = 0;
+		this.nbIterationVentePrix = 0; 
 		return contrat.getEcheancier().getQuantiteTotale()*this.getPrixCC((Feve) contrat.getProduit())*this.facteurPrix(nbIterationVentePrix);
 	}
 	
@@ -172,7 +176,8 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		if(contrat.getPrix() >= this.getPrixCC((Feve) contrat.getProduit())) {
 			return contrat.getPrix();
 		}
-		if(contrat.getPrix() >= this.getPrixMinCC((Feve) contrat.getProduit())) {
+		double prixMin =0;
+		if(contrat.getPrix() >= prixMin) {
 			return contrat.getEcheancier().getQuantiteTotale()*this.getPrixCC((Feve) contrat.getProduit())*this.facteurPrix(nbIterationVentePrix); /*Négociation 1/4||3/4 pour tenter de tirer un prix convenable*/
 		}
 		return -2;
@@ -189,6 +194,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 */
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.echecVentePrix.put((Feve) contrat.getProduit(), false);
+		this.nbEchecVentePrix.put((Feve) contrat.getProduit(), 0);
 		this.getPrixCC().put((Feve) contrat.getProduit(), this.getPrixCC((Feve) contrat.getProduit())*0.9 + contrat.getPrix()*0.1);
 		this.getContrats().add(contrat);
 	}
@@ -210,6 +216,11 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		}
 	}
 	
+	/**
+	 * Methode appelee pour connaitre le facteur de prix que l'on applqiue en focntion du nombre d'appels précédents
+	 * @param iteration
+	 * @return Retourne un double correspondant au facteur
+	 */
 	public double facteurPrix(int iteration) {
 		return (iteration-10)*0.8 + iteration*this.facteurPrixInit;
 	}
