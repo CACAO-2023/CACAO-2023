@@ -29,25 +29,25 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		SuperviseurVentesContratCadre sup = ((SuperviseurVentesContratCadre) Filiere.LA_FILIERE.getActeur("Sup."+"CCadre"));
 		List<IAcheteurContratCadre> acheteurs = sup.getAcheteurs(Feve.F_MQ_BE);
 		for(IAcheteurContratCadre ach : acheteurs) {
-			if(this.getStockTot(Feve.F_MQ_BE).getValeur() >= 10) {
-				double prod = 1; //production previsionnelle moyenne des 12 steps à venir
-				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape(), 12, this.getStockTot(Feve.F_MQ_BE).getValeur()/12 + prod);
+			double prodMQBE = 1; //production previsionnelle moyenne des 12 steps à venir
+			if(this.getStockTot(Feve.F_MQ_BE).getValeur()/12 + prodMQBE >= 10) {
+				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape(), 12, this.getStockTot(Feve.F_MQ_BE).getValeur()/12 + prodMQBE);
 				ExemplaireContratCadre ex = sup.demandeVendeur(ach, this, Feve.F_MQ_BE, ech, this.cryptogramme, false);
 				if(ex != null) {
 					this.getContrats().add(ex);
 				}
 			}
-			if(this.getStockTot(Feve.F_HQ_BE).getValeur() >= 10) {
-				double prod = 1; //production previsionnelle moyenne des 12 steps à venir
-				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape(), 12, this.getStockTot(Feve.F_HQ_BE).getValeur()/12 + prod);
+			double prodHQ = 1; //production previsionnelle moyenne des 12 steps à venir
+			if(this.getStockTot(Feve.F_HQ_BE).getValeur()/12 + prodHQ >= 10) {
+				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape(), 12, this.getStockTot(Feve.F_HQ_BE).getValeur()/12 + prodHQ);
 				ExemplaireContratCadre ex = sup.demandeVendeur(ach, this, Feve.F_MQ_BE, ech, this.cryptogramme, false);
 				if(ex != null) {
 					this.getContrats().add(ex);
 				}
 			}
-			if(this.getStockTot(Feve.F_MQ).getValeur() >= 10) {
-				double prod = 1; //production previsionnelle moyenne des 12 steps à venir
-				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape(), 12, this.getStockTot(Feve.F_MQ).getValeur()/12 + prod);
+			double prodMQ = 1; //production previsionnelle moyenne des 12 steps à venir
+			if(this.getStockTot(Feve.F_MQ).getValeur()/12 + prodMQ >= 10) {
+				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape(), 12, this.getStockTot(Feve.F_MQ).getValeur()/12 + prodMQ);
 				ExemplaireContratCadre ex = sup.demandeVendeur(ach, this, Feve.F_MQ, ech, this.cryptogramme, false);
 				if(ex != null) {
 					this.getContrats().add(ex);
@@ -78,7 +78,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * negocier un contrat cadre pour ce type de produit).
 	 */
 	public boolean vend(IProduit produit) {
-		boolean testQuantite = true;  /*Implementer dans le IF une condition sur la quantite minimale produite chaque step*/
+		boolean testQuantite = true;  /*Implementer dans le If une condition sur la quantite minimale produite chaque step*/
 		if(produit instanceof Feve && ((Feve) produit).isBioEquitable() && testQuantite) {
 			return true;			
 		}
@@ -124,13 +124,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * @return La proposition initale du prix a la tonne.
 	 */
 	public double propositionPrix(ExemplaireContratCadre contrat) {
-		if(contrat.getProduit() == Feve.F_HQ_BE) {
-			return contrat.getEcheancier().getQuantiteTotale()*this.getPrixHQ();
-		}
-		if(contrat.getProduit() == Feve.F_MQ_BE) {
-			return contrat.getEcheancier().getQuantiteTotale()*this.getPrixMQBE();
-		}
-		return 0.0;		
+		return contrat.getEcheancier().getQuantiteTotale()*this.getPrixCC((Feve) contrat.getProduit());
 	}
 	
 	/**
@@ -144,11 +138,11 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * Sinon, retourne une contreproposition de prix.
 	 */
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		if(contrat.getPrix() >= 1) {
+		if(contrat.getPrix() >= this.getPrixCC((Feve) contrat.getProduit())) {
 			return contrat.getPrix();
 		}
-		if(contrat.getPrix() >= 0.9) {
-			return contrat.getPrix()*0.25+contrat.getEcheancier().getQuantiteTotale()*this.getPrixHQ()*0.75; /*Négociation 1/4||3/4 pour tenter de tirer un prix convenable*/
+		if(contrat.getPrix() >= this.getPrixMinCC((Feve) contrat.getProduit())) {
+			return contrat.getPrix()*0.25+contrat.getEcheancier().getQuantiteTotale()*this.getPrixCC((Feve) contrat.getProduit())*0.75; /*Négociation 1/4||3/4 pour tenter de tirer un prix convenable*/
 		}
 		return -2;
 	}
