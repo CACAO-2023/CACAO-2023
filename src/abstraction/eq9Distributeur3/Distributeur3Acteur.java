@@ -8,13 +8,14 @@ import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
 
-public class Distributeur3Acteur implements IActeur {
+public class Distributeur3Acteur implements IActeur, IMarqueChocolat {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	protected int numero;
 	protected Integer cryptogramme;
@@ -26,7 +27,7 @@ public class Distributeur3Acteur implements IActeur {
 	protected Journal journal_stock;
 	protected List<ChocolatDeMarque> chocolats;
 	protected HashMap<ChocolatDeMarque, Double[]> prixMoyen;
-	protected boolean initialise = false;
+	protected boolean initialise = true;
 	protected double prix;
 
 	public Distributeur3Acteur() {
@@ -40,6 +41,14 @@ public class Distributeur3Acteur implements IActeur {
 		// Ici pour tester on se créé un stock de chocolat à partir de rien (william)
 		// ChocolatDeMarque(Chocolat chocolat, String marque, int pourcentageCacao, int pourcentageRSE)
 		// william
+		if(initialise == true) {
+			initialise = false;
+			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
+			Stock stock = new Stock();
+			this.stock = stock;
+			this.chocolats.add(c1);
+			this.stock.ajoutQte(c1, 1000);
+		}
 		
 		
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
@@ -74,14 +83,7 @@ public class Distributeur3Acteur implements IActeur {
 
 	public void next() {
 
-		if(initialise == true) {
-			initialise = false;
-			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "marque", 50, 20);
-			Stock stock = new Stock();
-			this.stock = stock;
-			this.chocolats.add(c1);
-			this.stock.ajoutQte(c1, 1000);
-		}
+		
 		
 
 		// lancer un contrat seuil et repondre 
@@ -244,6 +246,13 @@ public class Distributeur3Acteur implements IActeur {
 	
 	public double getStock(ChocolatDeMarque c) {
 		return this.stock.getStock(c);
+	}
+
+	@Override
+	public List<String> getMarquesChocolat() {
+		LinkedList<String> marques = new LinkedList<String>();
+		marques.add("Choc");
+		return marques;
 	}
 
 	
