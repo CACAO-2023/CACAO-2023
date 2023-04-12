@@ -10,10 +10,9 @@ public class Transformateur3 extends Transformateur3Acteur implements IFabricant
 
 	/**ecrit par Nathan Claeys
 	 */
-	protected List<ChocolatDeMarque>chocosProduits;
+
 		public Transformateur3 () {
 			super();
-			this.chocosProduits = new LinkedList<ChocolatDeMarque>();
 		}
 /** ecrit par Nathan Claeys
  * @return
@@ -21,6 +20,6 @@ public class Transformateur3 extends Transformateur3Acteur implements IFabricant
 	@Override
 	public List<ChocolatDeMarque> getChocolatsProduits() {
 		// TODO Auto-generated method stub
-		return this.chocosProduits;
+		return super.chocosProduits;
 	}
 }

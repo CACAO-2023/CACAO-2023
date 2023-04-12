@@ -27,6 +27,7 @@ public class Transformateur3Acteur implements IActeur {
 	protected Variable pourcentageRSE ;
 	protected Variable totalStocksFeves;   
 	protected Variable totalStocksChoco; 
+	protected List<ChocolatDeMarque>chocosProduits;
 	
 	/**Nathan Claeys*/
 	protected Transformateur3Acteur() {
@@ -40,6 +41,7 @@ public class Transformateur3Acteur implements IActeur {
 		this.totalStocksChoco = new Variable ("totalStocksChoco","defini l'etat total du stock de produit fini",this,0.0,1000000.0,0.0);
 		this.ListJournal = new LinkedList<Journal>();
 		ListJournal.add(this.journal);
+		this.chocosProduits = new LinkedList<ChocolatDeMarque>();
 	}
 	
 	/**
@@ -78,6 +80,7 @@ public class Transformateur3Acteur implements IActeur {
 	}
 
 	public void initialiser() {
+		
 	}
 
 	public String getNom() {// NE PAS MODIFIER
