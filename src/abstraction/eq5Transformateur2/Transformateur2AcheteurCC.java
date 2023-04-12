@@ -14,11 +14,14 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Transformateur2AcheteurCC extends Transformateur2 implements IAcheteurContratCadre {
 
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
+	protected LinkedList<ExemplaireContratCadre> contrats;
 	public void initialiser() {
 		super.initialiser();
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
@@ -87,8 +90,30 @@ public class Transformateur2AcheteurCC extends Transformateur2 implements IAchet
 		}}//mise à jour du stock de fèves après reception d'une livraison
 		  //ne prend pas en compte la pénalité si la quantité livrée est inférieure à la quantité prévue
 
-	public void next() {
+	       
+	   
+	    public ExemplaireContratCadre getContrat(Feve produit) {
+	    	this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit + "...");
+	    	List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
+	    	IVendeurContratCadre vendeur = vendeurs.get((int)(Math.random() * vendeurs.size())); //on cherche un vendeur
+	    	
+	    	this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
+	        ExemplaireContratCadre c = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
+	        	//demandeAcheteur(acheteur, vendeur, produit, echeancier, cryptogramme, tg, 0);
+	        if (c != null) {   
+	        		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + vendeur.getNom() + " pour " + produit + "CC : " + c);
+	        	} else {
+	        		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
+	        	}
+	        	return c; //on établit le contrat
+	    	}
+	    
+	    public void next() {
 		super.next();
+		this.getContrat(Feve.F_MQ);
+		this.getContrat(Feve.F_HQ_BE);
+		
+
+		}
+}
 	
-	//this.journal.ajouter(COLOR_LLGRAY, COLOR_LPURPLE, "Qt de fèves achetées "+Journal.texteSurUneLargeurDe(f+"", 15;
-	}}
