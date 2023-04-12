@@ -247,8 +247,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	@Override
 	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
-		// TODO Auto-generated method stub
-		
+		// Ajouter un message dans le journal pour indiquer que le rayon est vide
+	    journal_activitegenerale.ajouter("Le rayon du chocolat " + choco.getNom() + " est vide.");
 	}
 //-----------------------------------------Partie contrat cadre
 	@Override
