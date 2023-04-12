@@ -22,10 +22,12 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	public static Color COLOR_GREEN  = new Color(  6,162, 37);
 	public static Color COLOR_LGREEN = new Color(  6,255, 37);
 	public static Color COLOR_LBLUE = new Color(  6,130,230);
-	
-
 	protected Journal journal;
-
+	protected Journal journal_BOURSE;
+	protected Journal journal_CC_PROD;
+	protected Journal journal_CC_DISTRI;
+	protected Journal journal_appel;
+	protected int step; // tour du jeu 
 	private Variable qualiteHaute;  // La qualite d'un chocolat de gamme haute 
 	private Variable qualiteMoyenne;// La qualite d'un chocolat de gamme moyenne  
 	private Variable qualiteBasse;  // La qualite d'un chocolat de gamme basse
@@ -39,7 +41,6 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	private Variable pourcentageRSEmax;//Le pourcentage de reversion RSE pour un impact max sur la qualite percue
 	private Variable partRSEQualitePercue;//L'impact de pourcentageRSEmax% du prix consacres aux RSE dans la qualite percue du chocolat
 	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
-	private int step; // tour du jeu 
 
 	protected Variable totalStocksFeves;
 	protected Variable totalStocksChoco;
@@ -65,7 +66,10 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 
 		this.coutStockageProducteur = new VariableReadOnly("cout moyen stockage producteur", "<html>Le cout moyen du stockage d'une Tomme de produit chez un producteur</html>",this, 0.0, 3.0, 1.5);
 		this.journal = new Journal("Journal "+this.getNom(), this);
-		
+		this.journal_BOURSE = new Journal("Journal "+this.getNom() + " achat bourse", this);
+		this.journal_CC_PROD = new Journal("Journal "+this.getNom() + " achat CC producteur", this);
+		this.journal_CC_DISTRI = new Journal("Journal "+this.getNom() + " vente CC distributeur", this);
+		this.journal_appel = new Journal("Journal "+this.getNom() + " vente appel d'offre", this);
 		this.totalStocksFeves = new VariablePrivee("Eq4StockFeves", "<html>Quantite totale de feves en stock</html>",this, 0.0, 1000000.0, 0.0);this.totalStocksFeves= new VariablePrivee("Eq4StockFeves", "<html>Quantite totale de feves en stock</html>",this, 0.0, 1000000.0, 0.0);
 		this.totalStocksChoco = new VariablePrivee("Eq4StockChoco", "<html>Quantite totale de chocolat en stock</html>",this, 0.0, 1000000.0, 0.0); 
 		this.totalStocksChocoMarque = new VariablePrivee("EqXStockChocoMarque", "<html>Quantite totale de chocolat de marque en stock</html>",this, 0.0, 1000000.0, 0.0);
@@ -101,8 +105,8 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	}
 
 	public String getDescription() {
-		return "Pour les produits bas de gamme vendus sous marque distributeur, notre objectif est de maximiser les ventes en proposant des prix comp�titifs. Nous comparons les prix propos�s par tous les producteurs et la bourse afin d'acheter le cacao au meilleur prix. Les producteurs sont s�lectionn�s par contrat cadre ainsi que les distributeurs. Nous envisageons �galement des principes de solde et de promotion pour �couler les stocks plus rapidement, � choisir entre la p�riode des f�tes ou non.\r\n"
-				+ "Pour les produits haut de gamme, nous souhaitons vendre directement sous notre marque en tant que transfo-distributeur responsable en mati�re de RSE. Nous signons des contrats cadres avec les producteurs s�lectionn�s pour garantir la qualit� de notre cacao. Nous prenons �galement en compte l'avis des clients pour d�cider si nous optons pour une approche haut de gamme ou moyenne gamme en mati�re de RSE. En cas de surplus de stock, nous pouvons envisager de vendre � la bourse. Notre objectif n'est pas de faire de grosses marges, mais de vendre en quantit� suffisante pour maintenir notre entreprise durable et responsable.";
+		return "Pour les produits bas de gamme vendus sous marque distributeur, notre objectif est de maximiser les ventes en proposant des prix comp�titifs. Nous comparons les prix propos�s par tous les producteurs et la bourse afin d'acheter le cacao au meilleur prix. Les producteurs sont s�lectionnes par contrat cadre ainsi que les distributeurs. Nous envisageons �galement des principes de solde et de promotion pour �couler les stocks plus rapidement, � choisir entre la p�riode des f�tes ou non.\r\n"
+				+ "Pour les produits haut de gamme, changement, nous allons opter pour vendre en CC aux distrbuteurs (qui donne le meilleur prix) sous notre marque avec une très grande qualité. Nous signons des contrats cadres avec les producteurs s�lectionn�s pour garantir la qualit� de notre cacao. Nous prenons �galement en compte l'avis des clients pour d�cider si nous optons pour une approche haut de gamme ou moyenne gamme en mati�re de RSE. En cas de surplus de stock, nous pouvons envisager de vendre en appel d'offre. Notre objectif n'est pas de faire de grosses marges, mais de vendre en quantit� suffisante pour maintenir notre entreprise durable et responsable.";
 	}
 
 	// Renvoie les indicateurs
@@ -121,6 +125,10 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	public List<Journal> getJournaux() {
 		List<Journal> res = new LinkedList<Journal>();
 		res.add(this.journal);
+		res.add(this.journal_CC_PROD);
+		res.add(this.journal_BOURSE);
+		res.add(this.journal_CC_DISTRI);
+		res.add(this.journal_appel);
 		return res;
 	}
 
