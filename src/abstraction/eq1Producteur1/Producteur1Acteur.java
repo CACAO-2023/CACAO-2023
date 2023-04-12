@@ -9,6 +9,7 @@ import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Lot;
+import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 
 public class Producteur1Acteur implements IActeur {
@@ -35,8 +36,16 @@ public class Producteur1Acteur implements IActeur {
 		this.step = 0;
 		this.champBas = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
 		for (int i=0; i<30; i++) {
-			this.champBas.ajouter(-i, 8333.33);
+			this.champBas.ajouter(-i, 7500.);
 		}
+		this.champMoy = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
+		for (int i=0; i<30; i++) {
+			this.champMoy.ajouter(-i, 833.33);
+		}
+		this.stockFeveBas = new Lot(Feve.F_BQ);
+		this.stockFeveBas.ajouter(0,1000);
+		this.stockFeveMoy = new Lot(Feve.F_MQ);
+		this.stockFeveMoy.ajouter(0,1000);
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -86,6 +95,9 @@ public class Producteur1Acteur implements IActeur {
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(this.journal);
+		res.add(this.journal_ventes);
+		res.add(this.journal_stocks);
+		res.add(this.journal_champs);
 		return res;
 	}
 
