@@ -10,7 +10,7 @@ import abstraction.eqXRomu.produits.Lot;
 /**
  * @author Gabriel
  */
-public class Bourse3 extends Producteur3 implements IVendeurBourse {
+public class Bourse3 extends Producteur3CC implements IVendeurBourse {
 	
 	/**
 	 * @author BOCQUET Gabriel
@@ -28,19 +28,21 @@ public class Bourse3 extends Producteur3 implements IVendeurBourse {
 			
 			
 		}
+		System.out.println(quantiteM + " step : " +Filiere.LA_FILIERE.getEtape());
 		return quantiteM;
 	}
 
-	/**
+	/** On va mettre en vente que des MQ et la bourse ne prend pas en compte le label
 	 * @author BOCQUET Gabriel
 	 */
 	public Lot notificationVente(Feve f, double quantiteEnT, double coursEnEuroParT) {
 		Lot l = new Lot(f);
 		l.ajouter(Filiere.LA_FILIERE.getEtape(), quantiteEnT);
 		Stock s = super.getStock();
-		s.retirerVielleFeve(f, quantiteEnT);
-		super.getJVente().ajouter("La quantite " + quantiteEnT + " en tonnes de " + f.toString() + " a ete vendu "+coursEnEuroParT + "le step " + Filiere.LA_FILIERE.getEtape());
-		return null;
+		System.out.println(f.toString() + " step : " + Filiere.LA_FILIERE.getEtape());
+		s.retirerVielleFeve(Feve.F_MQ_BE, quantiteEnT);
+		super.getJVente().ajouter("La quantite " + quantiteEnT + " en tonnes de " + f.toString() + " a ete vendu "+coursEnEuroParT + "le step " + Filiere.LA_FILIERE.getEtape() + " en Bourse");
+		return l;
 	}
 
 	/**

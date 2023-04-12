@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
 
-public class Producteur3 extends Producteur3CC  {
+public class Producteur3 extends Bourse3  {
 	/*
 	 * ChampsH est un dictionnaire qui contient les champs Haut de Gamme
 	 * On associe a un ensemble d'hectars un int qui correspond  leur step de plantaison 
