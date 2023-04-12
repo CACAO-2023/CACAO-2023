@@ -2,8 +2,8 @@ package abstraction.eq1Producteur1;
 
 
 import java.util.HashMap;
+import abstraction.eqXRomu.produits.Gamme;
 import java.util.concurrent.ThreadLocalRandom;
-
 import abstraction.eqXRomu.produits.Lot;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Feve;
@@ -29,39 +29,29 @@ public class Producteur1Plantation extends Producteur1Acteur {
 	public void next() {
 		HashMap<Integer, Double> stockFeve = lot_bas.getQuantites() ;
 		//début Elouan
-
-		int n = champ.nbhectare();
-
 		super.next();
 		champ c = this.getChamp();
-		for (int i=0; i<n; i++) {
-			hectar h = champ.getHectare(i);
-			h.setNb_step(h.getNombreSep()+1);
-			if (h.getNombreSep()==10) 
-				{h.setNb_step(0);
-				//rajt une ligne de code pour récolter les feves
-				
-				// debut gab
+		for (Integer i : c.getQuantite().keySet()) {
+			double q = c.getQuantite().get(i);
+			if ((step-i)%10==0 && step-i>0) 
+				// elouan et gab
 				// ramassage, ajout dans stock et replantage
-				double nb_tonnes = 0.56 ; //ajouter facteur random
+				{double nb_tonnes = q*0.56 ; //ajouter facteur random
 				double random = ThreadLocalRandom.current().nextDouble(0.9, 1.15);
 				nb_tonnes = nb_tonnes * random ;
 				lot_bas.ajouter(step, nb_tonnes);
-				//if (stockFeve.containsKey(step)) {
-					//stockFeve.replace(step, stockFeve.get(step)+nb_tonnes) ;
-				//} else {
-					//stockFeve.ajouter(step, nb_tonnes) ;
-				//}
-				h.setNb_recolte(h.getNombreRecolte()+1);
+				if (stockFeve.containsKey(step)) {
+					stockFeve.replace(step, stockFeve.get(step)+nb_tonnes) ;
+				} else {
+					stockFeve.put(step, nb_tonnes) ;
+				}
 				//ajouter lot moyen et cout replantation 
-						
-						
-				h.setNb_recolte(h.getNombreRecolte()+1);}
-			if (h.getNombreRecolte()==96) { //supprime l'hectar quand il produit plus
-				champ.supphectare(h);
+						}
+			if (step-i==2080) { //supprime l'hectar quand il produit plus, au bout de 40 ans pour la v1
+				champ.supprimer(i);
 				// supprime l'hectare ou replante direct en fct de la qualité qu'on veut + coût replantation
 			}
-			}
+		}
 		//fin Elouan
 		
 		//debut gab
