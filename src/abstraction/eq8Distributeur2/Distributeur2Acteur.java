@@ -23,7 +23,7 @@ import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarque, IMarqueChocolat,IAcheteurContratCadre {
+public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarque, IMarqueChocolat {
 
 	protected int cryptogramme;
 	protected String nom;
@@ -257,55 +257,5 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		// Ajouter un message dans le journal pour indiquer que le rayon est vide
 	    journal_activitegenerale.ajouter("Le rayon du chocolat " + choco.getNom() + " est vide.");
 	}
-//-----------------------------------------Partie contrat cadre
-	//Auteur : Marzougui Mariem
-	public boolean achete(IProduit produit) {
-		return true;
-	}
-	//Auteur : Ben Messaoud Karim
-	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
-			Echeancier echeancier, long cryptogramme, boolean tg) {
-		return 10;
-	}
 
-	//Auteur : Azzi Maxime
-	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		ChocolatDeMarque produit = (ChocolatDeMarque) contrat.getProduit();
-		 if (produit != null && this.stocks.getStock(produit) != 0.0) {
-		 double quantiteEnStock = this.stocks.getStock(produit);
-		 if (contrat.getEcheancier().getQuantiteTotale() < quantiteEnStock) {
-		 if (Math.random() < 0.1) {
-		 return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
-		 } else { //dans 90% des cas on fait une contreproposition pour l'echeancier
-		 Echeancier e = contrat.getEcheancier();
-		 e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut()) / 2.0); // on souhaite livrer deux fois moins lors de la 1ere livraison... un choix arbitraire, juste pour l'exemple...
-		 return e;
-		 }
-		 } else {
-		 return null; // on est frileux : on ne s'engage dans un contrat cadre que si on a toute la quantite en stock (on pourrait accepter même si nous n'avons pas tout car nous pouvons produire/acheter pour tenir les engagements)
-		 }
-		 } else {
-		 return null; // on ne vend pas de ce produit
-		 }
-		}
-
-	//Auteur : Marzougui Mariem
-	//On retourne le prix sans négociation
-	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		return contrat.getPrix();
-	}
-	
-	//Auteur : Marzougui Mariem
-	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		this.journal_ContratCadre.ajouter(contrat.toString());	
-	}
-	
-	//Auteur : Marzougui Mariem
-	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-	
-		
-		
-		
-	}
-	//-----------------------------------------FIN Partie contrat cadre
 }

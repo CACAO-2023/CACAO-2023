@@ -11,18 +11,17 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class ContratCadre implements IAcheteurContratCadre {
+public class ContratCadre extends Distributeur2Acteur implements IAcheteurContratCadre {
 
-	@Override
 	public void initialiser() {
-		// TODO Auto-generated method stub
+	
 		
 	}
 
-	@Override
 	public String getNom() {
 		// TODO Auto-generated method stub
 		return null;
@@ -90,45 +89,59 @@ public class ContratCadre implements IAcheteurContratCadre {
 
 	@Override
 	public Filiere getFiliere(String nom) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+	//Auteur : Marzougui Mariem
 	public boolean achete(IProduit produit) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
-	@Override
+	//Auteur : Marzougui Mariem
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
-		// TODO Auto-generated method stub
-		return 0;
+		return 10;
 	}
 
-	@Override
+	//Auteur : Marzougui Mariem
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		ChocolatDeMarque produit = (ChocolatDeMarque) contrat.getProduit();
+		 if (produit != null && this.stocks.getStock(produit) != 0.0) {
+		 double quantiteEnStock = this.stocks.getStock(produit);
+		 if (contrat.getEcheancier().getQuantiteTotale() < quantiteEnStock) {
+		 if (Math.random() < 0.1) {
+		 return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
+		 } else { //dans 90% des cas on fait une contreproposition pour l'echeancier
+		 Echeancier e = contrat.getEcheancier();
+		 e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut()) / 2.0); // on souhaite livrer deux fois moins lors de la 1ere livraison... un choix arbitraire, juste pour l'exemple...
+		 return e;
+		 }
+		 } else {
+		 return null; // on est frileux : on ne s'engage dans un contrat cadre que si on a toute la quantite en stock (on pourrait accepter même si nous n'avons pas tout car nous pouvons produire/acheter pour tenir les engagements)
+		 }
+		 } else {
+		 return null; // on ne vend pas de ce produit
+		 }
+		}
+	
 
-	@Override
+	//Auteur : Marzougui Mariem
+	//On retourne le prix sans négociation
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return 0;
+		return contrat.getPrix();
 	}
 
-	@Override
+	//Auteur : Marzougui Mariem
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
+		this.journal_ContratCadre.ajouter(contrat.toString());	
 		
 	}
 
-	@Override
+	//Auteur : Marzougui Mariem
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
+		stocks.ajouterAuStock((ChocolatDeMarque)(contrat.getProduit()),lot.getQuantiteTotale() );
 		
 	}
 
 }
+
