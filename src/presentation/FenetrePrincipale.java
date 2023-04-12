@@ -79,7 +79,7 @@ public class FenetrePrincipale extends JFrame {
 		} else {
 			String filiereChoisie = args[0];
 			System.out.println(filiereChoisie);
-			IActeur[] equipes = { new Producteur1(), new Producteur2(), new Producteur3(), new Transformateur1(), new Transformateur2(), new Transformateur3(), new Distributeur1(), new Distributeur2(), new Distributeur3(), new Romu()};
+			IActeur[] equipes = { new Producteur1(), new Producteur2(), new Producteur3(), new Transformateur1(), new Transformateur2(), new Transformateur3(), new Transformateur3(), new Distributeur1(), new Distributeur2(), new Distributeur3(), new Romu()};
 			int i=0; 
 			while (i<equipes.length && !equipes[i].getNomsFilieresProposees().contains(filiereChoisie)) {
 				i++;
