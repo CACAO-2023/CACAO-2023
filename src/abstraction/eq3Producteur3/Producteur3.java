@@ -33,7 +33,7 @@ public class Producteur3 extends Bourse3  {
 	private Champs fields;
 	private Integer HectaresLibres; /*Repertorie le nombre d'hectares libres que l'on possede*/
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
-	private LinkedList<Integer> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
+	private LinkedList<Double> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
 	private Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
 	protected Stock Stock;
 
@@ -54,25 +54,25 @@ public class Producteur3 extends Bourse3  {
 		this.CoutTonne = 0.;
 		this.HectaresLibres= 0;
 		this.HectaresUtilises=950000;
-		this.ListeCout = new LinkedList<Integer>();
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
-		this.ListeCout.add(0);
+		this.ListeCout = new LinkedList<Double>();
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
+		this.ListeCout.add(0.);
 	}
 	
 	/**
