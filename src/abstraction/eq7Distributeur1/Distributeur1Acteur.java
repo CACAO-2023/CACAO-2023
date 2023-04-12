@@ -9,6 +9,7 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 
@@ -32,27 +33,38 @@ public class Distributeur1Acteur implements IActeur {
 	private Variable pourcentageRSEmax;//Le pourcentage de reversion RSE pour un impact max sur la qualite percue
 	private Variable partRSEQualitePercue;//L'impact de pourcentageRSEmax% du prix consacres aux RSE dans la qualite percue du chocolat
 	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
-
-	protected Variable totalStocksCB;  // La qualite totale de stock de chocolat bas de gamme 
-	protected Variable totalStocksCML;  // La qualite totale de stock de chocolat moyenne gamme labellise
-	protected Variable totalStocksCMNL;  // La qualite totale de stock de chocolat moyenne gamme non labellise
-	protected Variable totalStocksCH;  // La qualite totale de stock de chocolat haute gamme
-	protected Variable totalStocks;  // La qualite totale de stock de chocolat
 	
-	protected Variable coutCB; //Cout d'1kg de chocolat basse gamme
-	protected Variable coutCML; //Cout d'1kg de chocolat moyenne gamme labellise
-	protected Variable coutCMNL; //Cout d'1kg de chocolat moyenne gamme non labellise
-	protected Variable coutCH; //Cout d'1kg de chocolat haute gamme labellise
+	protected int totalStocksCB;  // La quantité totale de stock de chocolat bas de gamme 
+	protected int totalStocksCML;  // La quantité totale de stock de chocolat moyenne gamme labellise
+	protected int totalStocksCMNL;  // La quantité totale de stock de chocolat moyenne gamme non labellise
+	protected int totalStocksCH;  // La quantité totale de stock de chocolat haute gamme
+	protected int totalStocks;  // La quantité totale de stock de chocolat
+	
+	protected double coutCB; //Cout d'1kg de chocolat basse gamme
+	protected double coutCML; //Cout d'1kg de chocolat moyenne gamme labellise
+	protected double coutCMNL; //Cout d'1kg de chocolat moyenne gamme non labellise
+	protected double coutCH; //Cout d'1kg de chocolat haute gamme labellise
 	
 	protected List<Feve> lesFeves;
 	
 	////////////////////////////////////////
-	
-	protected HashMap<ChocolatDeMarque, Double> stockChocoMarque7;
-	
+	protected HashMap<Chocolat, Double> stockChoco;
+	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque;
+		
 	protected int cryptogramme;
 
 	public Distributeur1Acteur() {
+		this.coutCB = 0;
+		this.coutCH = 0;
+		this.coutCML = 0;
+		this.coutCMNL = 0;
+		this.totalStocksCB = 0;
+		this.totalStocksCH = 0;
+		this.totalStocksCML = 0;
+		this.coutCMNL = 0;
+		
+		
+		this.journal = new Journal("Journal "+this.getNom(), this);
 	}
 	
 	public void initialiser() {
@@ -65,8 +77,15 @@ public class Distributeur1Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 	//         En lien avec l'interface graphique         //
 	////////////////////////////////////////////////////////
-
+	public String toString() {
+		return this.getNom();
+		}
+	
 	public void next() {
+
+		this.journal.ajouter("on a réussi le challenge");
+
+		
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -98,7 +117,8 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
-//		res.add(this.journal);
+
+		res.add(this.journal);
 		return res;
 	}
 
