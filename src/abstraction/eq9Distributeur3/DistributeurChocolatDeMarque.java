@@ -27,7 +27,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 	//william
 	@Override
 	public double prix(ChocolatDeMarque choco) {
-		return 0.0;
+		return 1.0;
 	}
 	
 	//baptiste
