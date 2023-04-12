@@ -2,6 +2,7 @@ package abstraction.eq9Distributeur3;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,8 +23,8 @@ public class Distributeur3Acteur implements IActeur {
 	protected Journal journal_achats;
 	protected Journal journal_operationsbancaires;
 	protected Journal journal_activitegenerale;
-	protected Journal journal_stock;
 	protected List<ChocolatDeMarque> chocolats;
+	protected HashMap<ChocolatDeMarque, Double[]> prixMoyen;
 
 	public Distributeur3Acteur() {
 		/*if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
@@ -47,7 +48,8 @@ public class Distributeur3Acteur implements IActeur {
 		this.journal_achats = new Journal(this.getNom()+" achats", this);
 		this.journal_operationsbancaires = new Journal(this.getNom()+" operations", this);
 		this.journal_activitegenerale = new Journal(this.getNom()+" activites", this);
-		this.journal_stock = new Journal(this.getNom()+" stocks", this);
+		
+		this.prixMoyen = new HashMap<ChocolatDeMarque, Double[]>();
 
 		
 	}
@@ -157,16 +159,14 @@ public class Distributeur3Acteur implements IActeur {
 	
 	
 	public List<Variable> getIndicateurs() {
-		
-		ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "marque", 50, 20);
-
-		
-		Variable res= new Variable("Stock",this,stock.getStock(c1));
-		
-		List<Variable> d = null;
-		d.add(res);
-		
-		return d;
+		List<Variable> res=new ArrayList<Variable>();
+		/*
+		 * Ici il faut adapter la récupération de l'indicateur stock de l'exemple avec notre classe stock
+		 * 
+		for (int i=0; i<this.chocolats.size(); i++) {
+			res.add(stock.getStock(chocolats.get(i)));
+		}*/
+		return res;
 		
 	}
 
