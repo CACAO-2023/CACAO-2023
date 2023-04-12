@@ -63,10 +63,7 @@ public class Producteur3Acteur implements IActeur {
 	}
 
 	public void next() {
-		this.Stock = Stock.miseAJourStock();
-
-		// Now adding to the step cost the storage costs
-		this.CoutStep += Stock.getQuantite()*50;
+		
 	}
 
 	public Color getColor() {// NE PAS MODIFIER

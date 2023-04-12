@@ -115,6 +115,10 @@ public class Producteur3 extends Bourse3  {
 	public void next() {
 		super.next();
 		HarvestToStock(Filiere.LA_FILIERE.getEtape());
+		this.Stock = Stock.miseAJourStock();
+
+		// Now adding to the step cost the storage costs
+		this.CoutStep += Stock.getQuantite()*50;
 		updateHectaresLibres(Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape() % 12 == 0) {
 			changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
