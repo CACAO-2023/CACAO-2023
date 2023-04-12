@@ -82,7 +82,9 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		//on retire les feves perimes
 		quantiteFeveM.remove(nb_step_perime);
 		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), this.getStockBas().getQuantiteTotale()*50);
+		
 		}
+	
 		
 		//===== fin elouan et gab =====	
 	}
