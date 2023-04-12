@@ -7,21 +7,22 @@ import java.awt.Color;
 
 
 
+
 import abstraction.eq4Transformateur1.Transformateur1Transformateur;
-
-
+import abstraction.eq4Transformateur1.Produits.ChocolatDeMarque;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 /**
- * @author francois et fouad
+ * @author francois/fouad/amine
  *
  */
 public class CC_producteur extends Transformateur1Transformateur implements IAcheteurContratCadre{
@@ -35,7 +36,63 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 	}
 		return false;
 }
+	
+	public Echeancier propositionDeLAcheteur(ExemplaireContratCadre contrat) {
+		Object produit = contrat.getProduit();
+		double qfeve=0;
+		if (produit instanceof Feve) {
+			switch ((Feve)produit) {
+			case F_MQ  : return null;
+			case F_MQ_BE :return null;
+			
+			case F_BQ : 
+				
+				if (this.stockFeves.keySet().contains(produit)) {
+					qfeve= this.stockFeves.get(produit);
+					this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0));
+					return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0);
+					}
+			
+			case F_HQ_BE :
+				
+				
+			if (this.stockFeves.keySet().contains(produit)) {
+				qfeve= this.stockFeves.get(produit);
+				this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0));
+				return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0);
+	 
+	}}
+		
+		}
+		return null;
+		}
+	
+	
+	
+	
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
+		
+		Echeancier echeancier = contrat.getEcheancier();
+		int duree = echeancier.getNbEcheances();
+		double quantitetot = echeancier.getQuantiteTotale();
+		
+		int ventetotH = 0;
+		int ventetotB = 0;
+		for (abstraction.eqXRomu.produits.ChocolatDeMarque c : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			if (c.getGamme().equals(Gamme.HQ)){
+				ventetotH += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
+			}
+			if (c.getGamme().equals(Gamme.BQ)){
+				ventetotB += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
+			} 
+		}
+		if (( duree >= 15) && ( quantitetot <= ventetotH) && ( quantitetot >= 10000)) {
+			return echeancier;
+		}
+		if (( duree >= 15) && ( quantitetot <= ventetotB) && ( quantitetot >= 10000)) {
+			return echeancier;
+		}
+		
 		
 		
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
