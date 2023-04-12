@@ -3,6 +3,7 @@ package abstraction.eq4Transformateur1;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eq4Transformateur1.Vente.AODistributeur;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
 import abstraction.eqXRomu.produits.Chocolat;
@@ -11,7 +12,7 @@ import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 
 
-public class Transformateur1 extends Transformateur1Acteur implements IFabricantChocolatDeMarque{
+public class Transformateur1 extends AODistributeur implements IFabricantChocolatDeMarque{
 	
 	private List<ChocolatDeMarque>chocosProduits;
 
