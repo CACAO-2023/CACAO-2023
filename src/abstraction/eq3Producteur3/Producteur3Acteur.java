@@ -31,10 +31,16 @@ public class Producteur3Acteur implements IActeur {
 	this.Stock = new Stock();
 	}
 	
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	public void initialiser() {
 		;
 	}
 
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ3";
 	}
@@ -43,32 +49,60 @@ public class Producteur3Acteur implements IActeur {
 	//         En lien avec l'interface graphique         //
 	////////////////////////////////////////////////////////
 	
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	protected Journal getJGeneral() {
 		return this.journal_activitegenerale;
 	}
 	
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	protected Journal getJStock() {
 		return this.journal_Stock;
 	}
 
-
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
+	protected int getCryptogramme() {
+		return this.cryptogramme;
+	}
+	
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
+	protected Journal getJOperation() {
+		return this.journal_operationsbancaires;
+	}
+	
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	protected Journal getJVente() {
 		return this.journal_ventes;
 	}
 	
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	protected Journal getJAchats() {
 		return this.journal_achats;
 	}
 
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	protected Stock getStock() {
 		return this.Stock;
 	}
 
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	public void next() {
-		this.Stock = Stock.miseAJourStock();
-
-		// Now adding to the step cost the storage costs
-		this.CoutStep += Stock.getQuantite()*50;
+		
 	}
 
 	public Color getColor() {// NE PAS MODIFIER

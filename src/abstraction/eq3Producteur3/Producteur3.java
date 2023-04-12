@@ -23,9 +23,7 @@ public class Producteur3 extends Bourse3  {
 	 */
 
 	
-	/**
-	 * @author Dubus-Chanson Victor, Bocquet Gabriel
-	 */
+	
 	private HashMap<String,HashMap> Champs;
 	
 
@@ -92,15 +90,25 @@ public class Producteur3 extends Bourse3  {
 		Stock Stock = this.getStock();
 		this.CoutTonne = CoutTotal / Stock.getQuantite();
 	}
-
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	public void initialiser() {
 		super.initialiser();
 		new Producteur3();		
 	}
 	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	public Champs getFields() {
 		return this.fields;
 	}
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	protected Stock getStock() {
 		// TODO Auto-generated method stub
 		return this.Stock;
@@ -108,11 +116,15 @@ public class Producteur3 extends Bourse3  {
   
 
 	/**
-	 * @author BOCQUET Gabriel, Dubus-Chanson Victor
+	 * @author BOCQUET Gabriel, Dubus-Chanson Victor, Caugant Corentin
 	 */
 	public void next() {
 		super.next();
 		HarvestToStock(Filiere.LA_FILIERE.getEtape());
+		this.Stock = Stock.miseAJourStock();
+
+		// Now adding to the step cost the storage costs
+		this.CoutStep += Stock.getQuantite()*50;
 		updateHectaresLibres(Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape() % 12 == 0) {
 			changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
@@ -124,7 +136,8 @@ public class Producteur3 extends Bourse3  {
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
 				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ "Resultat du step : pas encore calculé");
 		
-	
+		Filiere.LA_FILIERE.getBanque().virer(this, super.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), CoutStep);
+		this.getJOperation().ajouter(Color.cyan, Color.BLACK, "On a paye "+ this.CoutStep + "euros de frais divers");
 		this.CoutStep = 0.0;
 
 	}
