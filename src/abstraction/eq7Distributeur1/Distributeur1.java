@@ -31,12 +31,10 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 		return previsions.get(etape).get(marque);
 	}
 	
-	protected HashMap<ChocolatDeMarque,Double> classement() {
-		HashMap<ChocolatDeMarque,Double> classement  = new HashMap<ChocolatDeMarque,Double>();
-		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+	protected ChocolatDeMarque topvente() {
+		ChocolatDeMarque top = Filiere.LA_FILIERE.getChocolatsProduits().get(0);
+		return top;
 			
-		}
-		return classement;
 	}
 	
 	/**
@@ -131,7 +129,7 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 //			double qStock = stockChocoMarque7.get(choco);
 //			return qStock/20.0;
 //		} else {
-		HashMap<ChocolatDeMarque,Double> topventes = classement();
+		ChocolatDeMarque topvente = topvente();
 		double seuil = Filiere.SEUIL_EN_TETE_DE_GONDOLE_POUR_IMPACT;
 		return 0.0;
 	}
