@@ -23,5 +23,5 @@ public class Transformateur3 extends Transformateur3Acteur implements IFabricant
 		return super.chocosProduits;
 	}
 	public List<String >getMarquesChocolat() {
-		return super.getMarquesChocolat();}
+		return super.getMarquesChocolat();} 
 	}
