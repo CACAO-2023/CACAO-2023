@@ -26,6 +26,7 @@ public class Distributeur3Acteur implements IActeur {
 	protected Journal journal_stock;
 	protected List<ChocolatDeMarque> chocolats;
 	protected HashMap<ChocolatDeMarque, Double[]> prixMoyen;
+	protected boolean initialise;
 
 	public Distributeur3Acteur() {
 		/*if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
@@ -38,13 +39,11 @@ public class Distributeur3Acteur implements IActeur {
 		// Ici pour tester on se créé un stock de chocolat à partir de rien (william)
 		// ChocolatDeMarque(Chocolat chocolat, String marque, int pourcentageCacao, int pourcentageRSE)
 		// william
-		ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "marque", 50, 20);
-		Stock stock = new Stock();
-		this.stock = stock;
+		
 		
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
-		this.chocolats.add(c1);
-		this.stock.ajoutQte(c1, 1000);
+		//this.chocolats.add(c1);
+		//this.stock.ajoutQte(c1, 1000);
 		
 		this.journal_ventes = new Journal(this.getNom()+" ventes", this);
 		this.journal_achats = new Journal(this.getNom()+" achats", this);
@@ -73,6 +72,13 @@ public class Distributeur3Acteur implements IActeur {
 
 	public void next() {
 
+		if(initialise == true) {
+			initialise = false;
+			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "marque", 50, 20);
+			Stock stock = new Stock();
+			this.stock = stock;
+		}
+		
 
 		// lancer un contrat seuil et repondre 
 
