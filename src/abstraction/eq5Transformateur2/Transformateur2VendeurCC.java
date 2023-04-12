@@ -12,7 +12,7 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Transformateur5VendeurCC extends Stock implements IVendeurContratCadre {
+public class Transformateur2VendeurCC extends Stock implements IVendeurContratCadre {
 
 	public boolean vend(IProduit produit) {
 		boolean res=false;
