@@ -14,6 +14,7 @@ public enum Feve implements IProduit {
 		this.gamme = gamme;
 		this.bioequitable = bioEquitable;
 	}
+	
 	public String getType() {
 		return "Feve";
 	}
