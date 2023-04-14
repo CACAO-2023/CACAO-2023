@@ -98,9 +98,7 @@ public class Distributeur1Acteur implements IActeur {
 	
 	public void next() {
 		this.journal.ajouter("on a réussi le challenge");
-//		new DistributeurContratCadreVendeurAcheteur(Chocolat.C_BQ);
-
-		
+		new DistributeurContratCadre((IProduit)(Chocolat.C_BQ));
 		
 		//Actualisation des prévisions
 		int etapepreced = Filiere.LA_FILIERE.getEtape()-1;

@@ -1,6 +1,5 @@
 package abstraction.eq7Distributeur1;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,18 +9,15 @@ import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.*;
-import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class DistributeurContratCadreVendeurAcheteur extends Distributeur1Acteur implements IAcheteurContratCadre{
+public class DistributeurContratCadreVendeurAcheteur extends DistributeurContratCadre implements IAcheteurContratCadre{
 	protected List<ExemplaireContratCadre> mesContratEnTantQuAcheteur;
 	private Echeancier echeancier_type;
-	private IProduit produit;
 	
 	public DistributeurContratCadreVendeurAcheteur(IProduit produit) {
-		super();
-		this.produit=produit;
+		super(produit);
 		this.mesContratEnTantQuAcheteur=new LinkedList<ExemplaireContratCadre>();
 	}
 
@@ -49,6 +45,9 @@ public class DistributeurContratCadreVendeurAcheteur extends Distributeur1Acteur
 	}
 	public void next() {
 		super.next();
+		
+		System.out.println("okkkkk");
+
 		// On enleve les contrats obsolete (nous pourrions vouloir les conserver pour "archive"...)
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.mesContratEnTantQuAcheteur) {
@@ -63,12 +62,11 @@ public class DistributeurContratCadreVendeurAcheteur extends Distributeur1Acteur
 			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
 				SuperviseurVentesContratCadre superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 				superviseurVentesCC.demandeAcheteur((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 5.0), cryptogramme,false);
-				journal.ajouter("Demande au superviseur de debuter les negociations pour un contrat cadre de "+produit+" avec le vendeur "+acteur);
+				journal.ajouter("Demande au superviseur de debuter les negociations pour un contrat cadre de "+this.produit.toString()+" avec le vendeur "+acteur);
 
 			}
 		}
 		
-		System.out.println("okkkkk");
 		
 		// OU proposition d'un contrat a un des vendeurs choisi aleatoirement
 //		journal.ajouter("Recherche d'un vendeur aupres de qui acheter");
@@ -132,7 +130,7 @@ public class DistributeurContratCadreVendeurAcheteur extends Distributeur1Acteur
 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		journal.ajouter("Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString());
+//		journal.ajouter("Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString());
 		
 	}
 
