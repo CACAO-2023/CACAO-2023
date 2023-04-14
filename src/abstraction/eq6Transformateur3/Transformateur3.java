@@ -22,4 +22,6 @@ public class Transformateur3 extends Transformateur3Acteur implements IFabricant
 		// TODO Auto-generated method stub
 		return super.chocosProduits;
 	}
-}
+	public List<String >getMarquesChocolat() {
+		return super.getMarquesChocolat();} 
+	}

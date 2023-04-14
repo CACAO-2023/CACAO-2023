@@ -45,17 +45,19 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   * dans le code de la filière il faut donc construire les feves et les lots et ensuite 
   * utiliser les constructeur avec le constructeur déjà ecrit
   */
+  /**Mouhamed SOW*/
   public Transformateur3Stocks() {
       this.stockFeveBG = new Lot(Feve.F_BQ);
       this.stockFeveMG = new Lot(Feve.F_MQ);
       this.stockFeveMGL = new Lot(Feve.F_MQ_BE);
       this.stockFeveHGL = new Lot(Feve.F_HQ_BE);
-      this.stockChocolatBG = new Lot(Chocolat.C_BQ);
-      this.stockChocolatMG = new Lot(Chocolat.C_MQ);
-      this.stockChocolatMGL = new Lot(Chocolat.C_MQ_BE);
-      this.stockChocolatHGL = new Lot(Chocolat.C_HQ_BE);
+      this.stockChocolatBG = new Lot(new ChocolatDeMarque(Chocolat.C_BQ,"eco+ choco",super.pourcentageCacaoBG,super.pourcentageRSE));
+      this.stockChocolatMG = new Lot(new ChocolatDeMarque(Chocolat.C_MQ,"chokchoco",super.pourcentageCacaoMG,super.pourcentageRSE));
+      this.stockChocolatMGL = new Lot(new ChocolatDeMarque(Chocolat.C_MQ_BE,"chokchoco bio",super.pourcentageCacaoMGL,super.pourcentageRSE));
+      this.stockChocolatHGL = new Lot(new ChocolatDeMarque(Chocolat.C_HQ_BE,"Choc",super.pourcentageCacaoHG,super.pourcentageRSE));
       this.stockProduit = new ArrayList<ChocolatDeMarque>();
   }
+  /**Mouhamed SOW*/
   public void ajouterFeve(Feve feve, Double quantite, int dateDeRecolte) {
 	    Lot lot;
 	    switch(feve.getGamme()) {
@@ -78,6 +80,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	    }
 	    lot.ajouter(dateDeRecolte, quantite);
 	}
+  /**Mouhamed SOW*/
   /**methode pour savoir ou il faut ajouter la feve*/
   private Lot getLotFeve(IProduit produit) {
 	    if (produit instanceof Feve) {
@@ -100,6 +103,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	        return null;
 	    }
 	}
+  /**Mouhamed SOW*/
   /**methode pour savoir ou il faut ajouter le chocolat*/
   private Lot getLotChocolat(IProduit produit) {
 	  if(produit instanceof Chocolat) {
@@ -149,7 +153,8 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	        }
 	    }
 	}
-  public void ajouterChocolat(Chocolat choco,Double quantite,int dateProduction) {
+  /**Mouhamed SOW*/
+  public void ajouterChocolat(ChocolatDeMarque choco,Double quantite,int dateProduction) {
 	  Lot lot ;
 	  switch(choco.getGamme()) {
 	  	case BQ :
@@ -171,7 +176,8 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  }
 	  lot.ajouter(dateProduction,quantite);
   }
-  public void retirerChcoclat(Chocolat chocolat,Double quantite) {
+ /**Mouhamed SOW*/
+  public void retirerChcoclat(ChocolatDeMarque chocolat,Double quantite) {
 	  Lot lot=this.getLotChocolat(chocolat) ;
 	  HashMap<Integer, Double> quantites = lot.getQuantites();
 
