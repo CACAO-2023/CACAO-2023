@@ -20,7 +20,6 @@ public class DistributeurContratCadre extends Distributeur1Acteur implements IAc
 
 	public DistributeurContratCadre(IProduit produit) {	
 		if (produit==null) {
-			System.out.println("d,edsdee");
 			throw new IllegalArgumentException("creation d'une instance de ExempleTransformateurContratCadre avec produit==null");
 		}		
 		NB_INSTANCES++;
@@ -29,10 +28,10 @@ public class DistributeurContratCadre extends Distributeur1Acteur implements IAc
 		this.stock=new Variable(getNom()+" stock ", null, this, 0, 1000, 300);
 		this.journal = new Journal(this.getNom()+" activites", this);
 	}
-	
-	public String getNom() {
-		return "TCC"+this.numero+""+this.produit.toString();
-	}
+//	
+//	public String getNom() {
+//		return "TCC"+this.numero+""+this.produit.toString();
+//	}
 
 	public String getDescription() {
 		return "TransformateurContratCadre "+this.numero+" "+this.produit.toString();
@@ -47,7 +46,6 @@ public class DistributeurContratCadre extends Distributeur1Acteur implements IAc
 	}
 
 	public void next() {
-		super.next();
 	}
 
 	public List<String> getNomsFilieresProposees() {

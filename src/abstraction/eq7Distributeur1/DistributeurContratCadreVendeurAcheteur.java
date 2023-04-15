@@ -23,6 +23,7 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 
 	public Echeancier echeancier_strat(int stepDebut, int quantite, int nb_step) {
 		Echeancier e = new Echeancier(stepDebut, nb_step, quantite/nb_step);
+		
 		return e;
 		
 	}
@@ -44,9 +45,7 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 		}
 	}
 	public void next() {
-		super.next();
 		
-		System.out.println("okkkkk");
 
 		// On enleve les contrats obsolete (nous pourrions vouloir les conserver pour "archive"...)
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
@@ -56,15 +55,19 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 			}
 		}
 		this.mesContratEnTantQuAcheteur.removeAll(contratsObsoletes);
-		
+
 		journal.ajouter("Recherche d'un vendeur aupres de qui acheter");
 		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
+
 			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
 				SuperviseurVentesContratCadre superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 				superviseurVentesCC.demandeAcheteur((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 5.0), cryptogramme,false);
 				journal.ajouter("Demande au superviseur de debuter les negociations pour un contrat cadre de "+this.produit.toString()+" avec le vendeur "+acteur);
+			}
+			else {
 
 			}
+
 		}
 		
 		
