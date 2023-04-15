@@ -82,7 +82,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	}
   /**Mouhamed SOW*/
   /**methode pour savoir ou il faut ajouter la feve*/
-  private Lot getLotFeve(IProduit produit) {
+  public Lot getLotFeve(IProduit produit) {
 	    if (produit instanceof Feve) {
 	        Feve feve = (Feve) produit;
 	        switch (feve.getGamme()) {
@@ -105,7 +105,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	}
   /**Mouhamed SOW*/
   /**methode pour savoir ou il faut ajouter le chocolat*/
-  private Lot getLotChocolat(IProduit produit) {
+  public Lot getLotChocolat(IProduit produit) {
 	  if(produit instanceof Chocolat) {
 		  Chocolat chocolat=(Chocolat) produit ;
 		  switch(chocolat.getGamme()) {
@@ -177,7 +177,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  lot.ajouter(dateProduction,quantite);
   }
  /**Mouhamed SOW*/
-  public void retirerChcoclat(ChocolatDeMarque chocolat,Double quantite) {
+  public void retirerChocolat(ChocolatDeMarque chocolat,Double quantite) {
 	  Lot lot=this.getLotChocolat(chocolat) ;
 	  HashMap<Integer, Double> quantites = lot.getQuantites();
 
