@@ -30,6 +30,7 @@ public class DistributeurContratCadre extends DistributeurContratCadreVendeurAch
 		this.journal = new Journal(this.getNom()+" activites", this);
 	}
 	
+
 	public String getNom() {
 		return "TCC"+this.numero+""+produit.toString();
 	}
@@ -47,6 +48,8 @@ public class DistributeurContratCadre extends DistributeurContratCadreVendeurAch
 	}
 
 	public void next() {
+		super.next();
+		journal.ajouter("CC");
 	}
 
 	public List<String> getNomsFilieresProposees() {

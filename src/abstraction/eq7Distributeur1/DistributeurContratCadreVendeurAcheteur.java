@@ -49,6 +49,7 @@ public class DistributeurContratCadreVendeurAcheteur extends Distributeur1Acteur
 	}
 	public void next() {
 		super.next();
+		journal.ajouter(getDescription());
 		// On enleve les contrats obsolete (nous pourrions vouloir les conserver pour "archive"...)
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.mesContratEnTantQuAcheteur) {
