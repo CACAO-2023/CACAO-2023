@@ -12,7 +12,6 @@ import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
-import abstraction.eqXRomu.produits.Feve;
 
 public class Distributeur1Acteur implements IActeur {
 	////////////////////////////////////////////////
@@ -60,6 +59,7 @@ public class Distributeur1Acteur implements IActeur {
 		this.coutCMNL = 3;
 		this.totalStocks = new VariablePrivee("Eq7TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
 		this.journal = new Journal("Journal "+this.getNom(), this);
+		
 	}
 	
 	////////////////////////////////////////////////////////
@@ -130,6 +130,7 @@ public class Distributeur1Acteur implements IActeur {
 		}
 	
 	public void next() {
+		
 		//Actualisation des prévisions
 		int etapepreced = Filiere.LA_FILIERE.getEtape()-1;
 		int etapenormalisee = (etapepreced+24)%24;
@@ -139,12 +140,13 @@ public class Distributeur1Acteur implements IActeur {
 			previsions.replace(etapenormalisee, prevetap);
 		}
 		
+//		DistributeurContratCadre c = new DistributeurContratCadreVendeurAcheteur(Chocolat.C_HQ_BE);
+//		c.next();
+		
 		double newstock = 0.;
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			newstock += stockChocoMarque.get(marque);
 		}
-//		journal.ajouter(""+stockChocoMarque.get(Filiere.LA_FILIERE.getChocolatsProduits().get(0)));
-//		journal.ajouter(""+Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getChocolatsProduits().get(0), etapepreced+1));
 		totalStocks.setValeur(this, newstock);
 
 	}
@@ -193,6 +195,7 @@ public class Distributeur1Acteur implements IActeur {
 	// transactions.
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
+
 	}
 
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)

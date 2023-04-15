@@ -12,11 +12,7 @@ import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
 
-/**
- * 
- * @author Theo
- *
- */
+
 
 public class Distributeur1AcheteurOA extends Distributeur1Acteur implements IAcheteurOA {
 
