@@ -8,19 +8,28 @@ import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
-import abstraction.eqXRomu.filiere.*;
+import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class DistributeurContratCadreVendeurAcheteur extends DistributeurContratCadre implements IAcheteurContratCadre{
+public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implements IAcheteurContratCadre{
 	protected List<ExemplaireContratCadre> mesContratEnTantQuAcheteur;
 	private Echeancier echeancier_type;
+	protected IProduit produit;
 	
-	public DistributeurContratCadreVendeurAcheteur(IProduit produit) {
-		super(produit);
+	public DistributeurContratCadreAcheteur(IProduit produit) {
+		super();
+		if (produit==null) {
+			throw new IllegalArgumentException("creation d'une instance de ExempleTransformateurContratCadre avec produit==null");
+		}
+		this.produit=produit;
+
 		this.mesContratEnTantQuAcheteur=new LinkedList<ExemplaireContratCadre>();
 	}
 
+	
+	
 	public Echeancier echeancier_strat(int stepDebut, int quantite, int nb_step) {
 		Echeancier e = new Echeancier(stepDebut, nb_step, quantite/nb_step);
 		
@@ -46,7 +55,6 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 	}
 	public void next() {
 		
-
 		// On enleve les contrats obsolete (nous pourrions vouloir les conserver pour "archive"...)
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.mesContratEnTantQuAcheteur) {
@@ -57,12 +65,26 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 		this.mesContratEnTantQuAcheteur.removeAll(contratsObsoletes);
 
 		journal.ajouter("Recherche d'un vendeur aupres de qui acheter");
+		System.out.println("okkk");
+		
+		
+		for (IProduit p : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			
+		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
+
+			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(p)) {
+				System.out.println("ya un produit");
+
+			}}}
+		
 		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
 
 			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
 				SuperviseurVentesContratCadre superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 				superviseurVentesCC.demandeAcheteur((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 5.0), cryptogramme,false);
 				journal.ajouter("Demande au superviseur de debuter les negociations pour un contrat cadre de "+this.produit.toString()+" avec le vendeur "+acteur);
+				System.out.println("okkk");
+
 			}
 			else {
 
@@ -87,9 +109,9 @@ public class DistributeurContratCadreVendeurAcheteur extends DistributeurContrat
 //			journal.ajouter("Demande au superviseur de debuter les negociations pour un contrat cadre de "+produit+" avec le vendeur "+vendeur);
 //			ExemplaireContratCadre cc = supCCadre.demandeAcheteur((IAcheteurContratCadre)this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
 //			journal.ajouter("-->aboutit au contrat "+cc);
-//		}
+		}
 		
-	}
+//}
 	
 	
 //	public String meilleur_prix(Echeancier e,IProduit produit) {

@@ -20,9 +20,6 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 		super();
 	}
 	
-	private void strategie() {
-		
-	}
 	/**
 	 * @author Theo
 	 * Renvoie les previsions, actualisees à chaque tour

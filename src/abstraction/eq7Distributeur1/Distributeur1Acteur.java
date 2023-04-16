@@ -26,6 +26,7 @@ public class Distributeur1Acteur implements IActeur {
 
 	
 	protected Journal journal;
+	protected Journal journal_achat;
 
 //	private Variable qualiteHaute;  // La qualite d'un chocolat de gamme haute 
 //	private Variable qualiteMoyenne;// La qualite d'un chocolat de gamme moyenne  
@@ -49,7 +50,12 @@ public class Distributeur1Acteur implements IActeur {
 	protected HashMap<Chocolat, Double> stockChoco;
 	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; //stock de chaque marque en tonne
 	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsions;
-		
+	
+	protected Variable stock_BQ = new VariablePrivee("Eq7stock_BQ", "Stock total de chocolat de basse qualité", this, 0);
+	protected Variable stock_MQ = new VariablePrivee("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
+	protected Variable stock_MQ_BE = new VariablePrivee("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
+	protected Variable stock_HQ_BE = new VariablePrivee("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
+	
 	protected int cryptogramme;
 
 	public Distributeur1Acteur() {
@@ -59,7 +65,8 @@ public class Distributeur1Acteur implements IActeur {
 		this.coutCMNL = 3;
 		this.totalStocks = new VariablePrivee("Eq7TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
 		this.journal = new Journal("Journal "+this.getNom(), this);
-		
+	    this.journal_achat=new Journal("Journal des Achats de l'" + this.getNom(),this);
+
 	}
 	
 	/**
@@ -84,7 +91,7 @@ public class Distributeur1Acteur implements IActeur {
 		}
 	}
 
-	public String getNom() {// NE PAS MODIFIER
+	public String getNom() {
 		return "EQ7";
 	}
 
@@ -98,7 +105,7 @@ public class Distributeur1Acteur implements IActeur {
 	public void next() {
 
 		this.journal.ajouter("on a réussi le challenge");
-		DistributeurContratCadre c = new DistributeurContratCadreVendeurAcheteur(Chocolat.C_HQ_BE);
+		DistributeurContratCadreAcheteur c = new DistributeurContratCadreAcheteur(Chocolat.C_HQ_BE);
 		c.next();
 		
 		
@@ -132,12 +139,10 @@ public class Distributeur1Acteur implements IActeur {
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
 		res.add(totalStocks);
-//		res.add(this.totalStocksCB);
-//		res.add(this.totalStocksCH);
-//		res.add(this.totalStocksCML);
-//		res.add(this.totalStocksCMNL);
-//		res.add(this.totalStocks);
-
+		res.add(stock_HQ_BE);
+		res.add(stock_MQ_BE);
+		res.add(stock_BQ);
+		res.add(stock_MQ);
 		return res;
 	}
 
@@ -150,8 +155,8 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
-
 		res.add(this.journal);
+		res.add(this.journal_achat);
 		return res;
 	}
 

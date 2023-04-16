@@ -26,7 +26,7 @@ public class DistributeurContratCadre extends Distributeur1Acteur implements IAc
 		this.numero=NB_INSTANCES;
 		this.produit=produit;
 		this.stock=new Variable(getNom()+" stock ", null, this, 0, 1000, 300);
-		this.journal = new Journal(this.getNom()+" activites", this);
+		this.journal = journal_achat;
 	}
 //	
 //	public String getNom() {
