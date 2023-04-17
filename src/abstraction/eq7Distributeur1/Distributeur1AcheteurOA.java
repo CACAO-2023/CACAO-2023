@@ -10,17 +10,19 @@ import abstraction.eqXRomu.offresAchat.PropositionVenteOA;
 import abstraction.eqXRomu.offresAchat.SuperviseurVentesOA;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.IProduit;
 
 
 
-public class Distributeur1AcheteurOA extends Distributeur1 implements IAcheteurOA {
+public class Distributeur1AcheteurOA extends Distributeur1Acteur implements IAcheteurOA {
+
 	private SuperviseurVentesOA supOA;
 
-	public Distributeur1AcheteurOA() {
-		super();
-	}
+//	public Distributeur1AcheteurOA() {
+//		super();
+//	}
 
-	@Override
+//	@Override
 	public PropositionVenteOA choisirPV(List<PropositionVenteOA> propositions) { //Choisit la meilleure proposition
 		PropositionVenteOA best = propositions.get(0);
 		double critere = propositions.get(0).getPrixT()*propositions.get(0).getPrixT()/propositions.get(0).getChocolatDeMarque().qualitePercue();
@@ -33,7 +35,7 @@ public class Distributeur1AcheteurOA extends Distributeur1 implements IAcheteurO
 	}
 	
 	private Boolean besoin() { //Besoin ou non d'un appel d'offre
-		int etapesuiv = Filiere.LA_FILIERE.getEtape()+1;
+		int etapesuiv = (Filiere.LA_FILIERE.getEtape()+1)%24;
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			if (stockChocoMarque.get(marque) < prevision(marque,etapesuiv)) { //On achete seulement si on prevoit de vendre plus que ce qu'on a
 				return true;
@@ -44,7 +46,7 @@ public class Distributeur1AcheteurOA extends Distributeur1 implements IAcheteurO
 	
 	
 	private HashMap<ChocolatDeMarque,Double> besoinQte() { //Quelle qte a-t-on besoin
-		int etapesuiv = Filiere.LA_FILIERE.getEtape()+1;
+		int etapesuiv = (Filiere.LA_FILIERE.getEtape()+1)%24;
 		HashMap<ChocolatDeMarque,Double> qte = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			if (stockChocoMarque.get(marque) < prevision(marque,etapesuiv)) {
@@ -55,7 +57,7 @@ public class Distributeur1AcheteurOA extends Distributeur1 implements IAcheteurO
 	}
 	
 	private List<ChocolatDeMarque> besoinMarque() { //De quelle marque avons-nous besoin
-		int etapesuiv = Filiere.LA_FILIERE.getEtape()+1;
+		int etapesuiv = (Filiere.LA_FILIERE.getEtape()+1)%24;
 		List<ChocolatDeMarque> liste = new ArrayList<ChocolatDeMarque>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			if (stockChocoMarque.get(marque) < prevision(marque,etapesuiv)) {
@@ -66,25 +68,29 @@ public class Distributeur1AcheteurOA extends Distributeur1 implements IAcheteurO
 	}
 	
 	public void next() {
-		this.journal.ajouter("Boucle next Acheteur OA");
 		super.next();
+		journal.ajouter("AcheteurOA");
 		if (supOA==null) {
 			supOA =(SuperviseurVentesOA)(Filiere.LA_FILIERE.getActeur("Sup.OA"));
 		}
+//		journal.ajouter(""+besoin());
 		if (besoin()!=null) { //Si on manque à l'instant t de stock, on lance cette méthode d'achat
 			List<ChocolatDeMarque> marque = besoinMarque();
 			HashMap<ChocolatDeMarque,Double> qte = besoinQte();
 			for (ChocolatDeMarque m : marque) {
-				PropositionVenteOA pRetenue = supOA.acheterParAO(this, cryptogramme,m.getChocolat(), m.getMarque(), qte.get(m), false); //acteur,crypto,choco,marque,qté,TG
-				if (pRetenue!=null) { //Update des paramètres etc
-					double nouveauStock = pRetenue.getOffre().getQuantiteT();
-					if (this.stockChocoMarque.keySet().contains(pRetenue.getChocolatDeMarque())) {
-						nouveauStock+=this.stockChocoMarque.get(pRetenue.getChocolatDeMarque());
+				if (qte.get(m) > 2.0) {
+					PropositionVenteOA pRetenue = supOA.acheterParAO(this, cryptogramme,m.getChocolat(), m.getMarque(), qte.get(m), false); //acteur,crypto,choco,marque,qté,TG
+					if (pRetenue!=null) { //Update des paramètres etc
+						double nouveauStock = pRetenue.getOffre().getQuantiteT();
+						if (this.stockChocoMarque.keySet().contains(pRetenue.getChocolatDeMarque())) {
+							nouveauStock+=this.stockChocoMarque.get(pRetenue.getChocolatDeMarque());
+						}
+						stockChocoMarque.replace(pRetenue.getChocolatDeMarque(), nouveauStock);
+						journal.ajouter("   Achat par offre d'achat de "+pRetenue+" --> quantite en stock = "+nouveauStock);
+						couts(m,pRetenue.getPrixT()/pRetenue.getOffre().getQuantiteT());
 					}
-					this.stockChocoMarque.put(pRetenue.getChocolatDeMarque(), nouveauStock);
-					this.journal.ajouter("   Achat par offre d'achat de "+pRetenue+" --> quantite en stock = "+nouveauStock);
-					couts(m,pRetenue.getPrixT()/pRetenue.getOffre().getQuantiteT());
 				}
+				
 			}
 			
 		}

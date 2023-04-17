@@ -14,12 +14,22 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 
-public class Distributeur1 extends Distributeur1Acteur implements IDistributeurChocolatDeMarque {
+public class Distributeur1 extends Distributeur1AcheteurOA implements IDistributeurChocolatDeMarque {
 	
 	public Distributeur1() {
 		super();
+		
 	}
 	
+	public void next() {
+		super.next();
+//		DistributeurContratCadreAcheteur c = new DistributeurContratCadreAcheteur(Chocolat.C_HQ_BE);
+//		c.next();
+		
+	}
+	
+	private void strategie() {
+	}
 	/**
 	 * @author Theo
 	 * Renvoie les previsions, actualisees à chaque tour
@@ -31,28 +41,6 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	protected ChocolatDeMarque topvente() {
 		ChocolatDeMarque top = Filiere.LA_FILIERE.getChocolatsProduits().get(0);
 		return top;
-		
-			
-	}
-	
-	/**
-	 * @author Theo
-	 * Actualise les couts (par tonne)
-	 */
-	protected void couts(ChocolatDeMarque marque, double nvcout) {
-		Chocolat gamme = marque.getChocolat();
-		if (gamme == Chocolat.C_BQ) {
-			coutCB = nvcout;
-		}
-		if (gamme == Chocolat.C_MQ) {
-			coutCMNL = nvcout;
-		}
-		if (gamme == Chocolat.C_MQ_BE) {
-			coutCML = nvcout;
-		}
-		if (gamme == Chocolat.C_HQ_BE) {
-			coutCH = nvcout;
-		}
 	}
 	
 	/**
@@ -61,7 +49,7 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 * @return Le prix actuel d'un Kg de chocolat choco
 	 * IMPORTANT : durant une meme etape, la fonction doit toujours retourner la meme valeur pour un chocolat donne.
 	 */
-	public double prix(ChocolatDeMarque choco) { //Fait par Théo
+	public double prix(ChocolatDeMarque choco) {
 		double qualite = choco.qualitePercue();
 		double coef = 1-(((10/3)*qualite)/100)+0.1;
 		double promo = prixPromotion(choco);
@@ -144,8 +132,9 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 * @param montant, le montant correspondant a la transaction que le client a deja verse sur le compte du distributeur
 	 */
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
-//		stockChocoMarque7.put(choco, stockChocoMarque7.get(choco)-quantite);
-//		totalStocks.setValeur(this, totalStocks.getValeur(cryptogramme)-quantite, cryptogramme);
+		stockChocoMarque.put(choco, stockChocoMarque.get(choco)-quantite);
+		totalStocks.setValeur(this, totalStocks.getValeur(cryptogramme)-quantite, cryptogramme);
+		this.journal.ajouter("Eq7 a vendu "+quantite+" T de "+choco+ " aux clients finaux ");
 	}
 	
 	/**

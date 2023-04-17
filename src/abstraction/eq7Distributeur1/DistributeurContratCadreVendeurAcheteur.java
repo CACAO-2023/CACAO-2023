@@ -8,27 +8,19 @@ import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
-import abstraction.eqXRomu.filiere.Filiere;
-import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.filiere.*;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implements IAcheteurContratCadre{
+public class DistributeurContratCadreVendeurAcheteur extends DistributeurContratCadre implements IAcheteurContratCadre{
 	protected List<ExemplaireContratCadre> mesContratEnTantQuAcheteur;
 	private Echeancier echeancier_type;
-	protected IProduit produit;
 	
-	public DistributeurContratCadreAcheteur(IProduit produit) {
-		if (produit==null) {
-			throw new IllegalArgumentException("creation d'une instance de ExempleTransformateurContratCadre avec produit==null");
-		}
-		this.produit=produit;
-
+	public DistributeurContratCadreVendeurAcheteur(IProduit produit) {
+		super(produit);
 		this.mesContratEnTantQuAcheteur=new LinkedList<ExemplaireContratCadre>();
 	}
 
-	
-	
 	public Echeancier echeancier_strat(int stepDebut, int quantite, int nb_step) {
 		Echeancier e = new Echeancier(stepDebut, nb_step, quantite/nb_step);
 		
@@ -53,7 +45,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		}
 	}
 	public void next() {
-		
+
 		// On enleve les contrats obsolete (nous pourrions vouloir les conserver pour "archive"...)
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.mesContratEnTantQuAcheteur) {
@@ -64,10 +56,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		this.mesContratEnTantQuAcheteur.removeAll(contratsObsoletes);
 
 		journal.ajouter("Recherche d'un vendeur aupres de qui acheter");
-		System.out.println("okkk");
-		
-		
-		
 		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
 
 			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
@@ -98,9 +86,9 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 //			journal.ajouter("Demande au superviseur de debuter les negociations pour un contrat cadre de "+produit+" avec le vendeur "+vendeur);
 //			ExemplaireContratCadre cc = supCCadre.demandeAcheteur((IAcheteurContratCadre)this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
 //			journal.ajouter("-->aboutit au contrat "+cc);
-		}
+//		}
 		
-//}
+	}
 	
 	
 //	public String meilleur_prix(Echeancier e,IProduit produit) {

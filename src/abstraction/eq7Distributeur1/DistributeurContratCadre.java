@@ -9,7 +9,7 @@ import abstraction.eqXRomu.filiere.*;
 import abstraction.eqXRomu.general.*;
 import abstraction.eqXRomu.produits.IProduit;
 
-public class DistributeurContratCadre extends Distributeur1Acteur implements IActeur {
+public class DistributeurContratCadre  implements IActeur {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	protected int numero;
 	protected Variable stock;
@@ -26,12 +26,15 @@ public class DistributeurContratCadre extends Distributeur1Acteur implements IAc
 		this.numero=NB_INSTANCES;
 		this.produit=produit;
 		this.stock=new Variable(getNom()+" stock ", null, this, 0, 1000, 300);
-		this.journal = journal_achat;
+//		this.journal = journal_achat;
+		this.journal = new Journal("Journal "+this.getNom(), this);
+		System.out.println(produit.toString());
+
+	}	
+
+	public String getNom() {
+		return "TCC"+this.numero+""+this.produit.toString();
 	}
-//	
-//	public String getNom() {
-//		return "TCC"+this.numero+""+this.produit.toString();
-//	}
 
 	public String getDescription() {
 		return "TransformateurContratCadre "+this.numero+" "+this.produit.toString();
@@ -46,6 +49,7 @@ public class DistributeurContratCadre extends Distributeur1Acteur implements IAc
 	}
 
 	public void next() {
+		journal.ajouter("CC");
 	}
 
 	public List<String> getNomsFilieresProposees() {
