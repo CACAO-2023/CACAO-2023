@@ -1,4 +1,4 @@
-package abstraction.eq6Transformateur3;
+                                                                                                                                                                                                                                                package abstraction.eq6Transformateur3;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -111,7 +111,7 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 
  
 protected double BesoinStep(int Step, Feve f) {
-
+	if 
 			
 	return 0;
 } 
