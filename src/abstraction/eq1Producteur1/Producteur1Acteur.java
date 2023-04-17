@@ -58,7 +58,6 @@ public class Producteur1Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
-		System.out.println("coucou");
 		this.step = this.step + 1;
 		this.journal.ajouter("step : "+step);
 		this.journal_stocks.ajouter("===== step : "+step+" =====");
@@ -66,10 +65,10 @@ public class Producteur1Acteur implements IActeur {
 		this.journal_stocks.ajouter("Stock moyenne gamme : "+this.stockFeveMoy.getQuantiteTotale());
 		this.journal_champs.ajouter("===== step : "+step+" =====");
 		this.journal_champs.ajouter("---> Qualite : Bas");
-		//this.journal_champs.ajouter(this.champBas.toString());
+		this.journal_champs.ajouter(this.champBas.toString());
 		this.journal_champs.ajouter("Cela fait en tout "+this.champBas.getNbHectare()+" hectares");
 		this.journal_champs.ajouter("---> Qualite : Moy");
-		//this.journal_champs.ajouter(this.champMoy.toString());
+		this.journal_champs.ajouter(this.champMoy.toString());
 		this.journal_champs.ajouter("Cela fait en tout "+this.champMoy.getNbHectare()+" hectares");
 	}
 

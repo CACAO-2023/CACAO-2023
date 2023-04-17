@@ -8,6 +8,7 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Lot;
 public class Producteur1Plantation extends Producteur1Acteur {
 
+//===== 4 premières methodes : elouan =====
 
 	public champ getChampBas() {
 		return this.champBas;
@@ -26,34 +27,6 @@ public class Producteur1Plantation extends Producteur1Acteur {
 	public void next() {
 		//===== début Elouan =====
 		super.next();
-		Lot lot_bas = this.getStockBas();
-		HashMap<Integer, Double> quantiteFeveB = lot_bas.getQuantites() ;
-		champ cb = this.getChampBas();
-		for (Integer i : cb.getQuantite().keySet()) {
-			double q = cb.getQuantite().get(i);
-			if (step-i==2080) { //supprime l'hectar quand il produit plus, au bout de 40 ans pour la v1
-				cb.supprimer(i);
-				cb.ajouter(step, q); //on le replante quand il périme : v2 à améliorer
-			}
-				else if ((step-i)%10==0 && step-i>0) 
-				// ===== elouan et début gab =====
-				{Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), 30*q);
-				double nb_tonnes = q*0.56 ; //ajouter facteur random
-				double random = ThreadLocalRandom.current().nextDouble(0.9, 1.15);
-				nb_tonnes = nb_tonnes * random ;
-				stockFeveBas.ajouter(step, nb_tonnes); //recolte
-				
-				if (quantiteFeveB.containsKey(step)) {
-					quantiteFeveB.replace(step, quantiteFeveB.get(step)+nb_tonnes);
-				} else {
-					quantiteFeveB.put(step, nb_tonnes);
-				}
-				//ajouter lot moyen et cout replantation 
-						}
-			}
-		//on retire les feves perimes
-		int nb_step_perime = step-12;
-		quantiteFeveB.remove(nb_step_perime);
 		Lot lot_moy = this.getStockMoy();
 		HashMap<Integer, Double> quantiteFeveM = lot_moy.getQuantites() ;
 		champ cm = this.getChampMoy();
@@ -80,9 +53,41 @@ public class Producteur1Plantation extends Producteur1Acteur {
 						}
 			}
 		//on retire les feves perimes
+		int nb_step_perime = step-12;
+		Double fevemoyabas = quantiteFeveM.get(nb_step_perime); //quantite de feve qui baisse de gamme, qu'on va rajouter dans le stock de bas
 		quantiteFeveM.remove(nb_step_perime);
-		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), this.getStockBas().getQuantiteTotale()*50);
-		
+		Lot lot_bas = this.getStockBas();
+		HashMap<Integer, Double> quantiteFeveB = lot_bas.getQuantites() ;
+		champ cb = this.getChampBas();
+		for (Integer i : cb.getQuantite().keySet()) {
+			double q = cb.getQuantite().get(i);
+			if (step-i==2080) { //supprime l'hectar quand il produit plus, au bout de 40 ans pour la v1
+				cb.supprimer(i);
+				cb.ajouter(step, q); //on le replante quand il périme : v2 à améliorer
+			}
+				else if ((step-i)%10==0 && step-i>0) 
+				// ===== elouan et début gab =====
+				{Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), 30*q);
+				double nb_tonnes = q*0.56 ; //ajouter facteur random
+				double random = ThreadLocalRandom.current().nextDouble(0.9, 1.15);
+				nb_tonnes = nb_tonnes * random ;
+				stockFeveBas.ajouter(step, nb_tonnes); //recolte
+				
+				if (quantiteFeveB.containsKey(step)) {
+					quantiteFeveB.replace(step, quantiteFeveB.get(step)+nb_tonnes);
+				} else {
+					quantiteFeveB.put(step, nb_tonnes);
+				}
+				//ajouter lot moyen et cout replantation 
+						}
+			}
+		//on retire les feves perimes
+		if (fevemoyabas!=null) {
+			quantiteFeveB.put(step-6, fevemoyabas); //on rajoute les feves qui ont baisse de qualite pour qu'elles aient une duree de vie de 3 mois
+		}
+		quantiteFeveB.remove(nb_step_perime);
+		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), (this.getStockBas().getQuantiteTotale()+this.getStockMoy().getQuantiteTotale())*50);
+		// cout de stockage
 		}
 	
 		
