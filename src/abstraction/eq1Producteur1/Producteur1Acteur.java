@@ -8,24 +8,45 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.Lot;
+import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.Gamme;
 
 public class Producteur1Acteur implements IActeur {
 	
 	protected int cryptogramme;
-	
-	
 	protected Journal journal;
+	protected Journal journal_stocks;
+	protected Journal journal_ventes;
+	protected Journal journal_champs;
 	protected int step;
-	protected champ champ;
+	protected champ champBas;
+	protected champ champMoy;
+	protected Lot stockFeveBas;
+	protected Lot stockFeveMoy;
 
 	public Producteur1Acteur() {
 		this.journal = new Journal("Journal "+this.getNom(), this);
+		this.journal_stocks = new Journal("Journal : stocks"+this.getNom(), this);
+		this.journal_ventes = new Journal("Journal : ventes"+this.getNom(), this);
+		this.journal_champs = new Journal("Journal : champs"+this.getNom(), this);
 	}
 	
 	public void initialiser() {
+		System.out.print("initiiiiiiiiiii");
 		this.step = 0;
-		this.champ = new champ();
-		this.champ.add(new hectar("bas"));
+		this.champBas = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
+		for (int i=0; i<30; i++) {
+			this.champBas.ajouter(-i, 7500.);
+		}
+		this.champMoy = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
+		for (int i=0; i<30; i++) {
+			this.champMoy.ajouter(-i, 833.33);
+		}
+		this.stockFeveBas = new Lot(Feve.F_BQ);
+		this.stockFeveBas.ajouter(0,1000);
+		this.stockFeveMoy = new Lot(Feve.F_MQ);
+		this.stockFeveMoy.ajouter(0,1000);
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -37,8 +58,19 @@ public class Producteur1Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		System.out.println("coucou");
 		this.step = this.step + 1;
 		this.journal.ajouter("step : "+step);
+		this.journal_stocks.ajouter("===== step : "+step+" =====");
+		this.journal_stocks.ajouter("Stock bas de gamme : "+this.stockFeveBas.getQuantiteTotale());
+		this.journal_stocks.ajouter("Stock moyenne gamme : "+this.stockFeveMoy.getQuantiteTotale());
+		this.journal_champs.ajouter("===== step : "+step+" =====");
+		this.journal_champs.ajouter("---> Qualite : Bas");
+		//this.journal_champs.ajouter(this.champBas.toString());
+		this.journal_champs.ajouter("Cela fait en tout "+this.champBas.getNbHectare()+" hectares");
+		this.journal_champs.ajouter("---> Qualite : Moy");
+		//this.journal_champs.ajouter(this.champMoy.toString());
+		this.journal_champs.ajouter("Cela fait en tout "+this.champMoy.getNbHectare()+" hectares");
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -65,6 +97,9 @@ public class Producteur1Acteur implements IActeur {
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(this.journal);
+		res.add(this.journal_ventes);
+		res.add(this.journal_stocks);
+		res.add(this.journal_champs);
 		return res;
 	}
 
