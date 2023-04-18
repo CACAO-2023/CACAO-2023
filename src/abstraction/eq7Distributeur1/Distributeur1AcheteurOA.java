@@ -14,13 +14,13 @@ import abstraction.eqXRomu.produits.IProduit;
 
 
 
-public class Distributeur1AcheteurOA extends Distributeur1Acteur implements IAcheteurOA {
+public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur implements IAcheteurOA {
 
 	private SuperviseurVentesOA supOA;
 
-//	public Distributeur1AcheteurOA() {
-//		super();
-//	}
+	public Distributeur1AcheteurOA() {
+		super();
+	}
 
 //	@Override
 	public PropositionVenteOA choisirPV(List<PropositionVenteOA> propositions) { //Choisit la meilleure proposition

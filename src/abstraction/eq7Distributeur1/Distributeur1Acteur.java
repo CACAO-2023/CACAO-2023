@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
@@ -23,7 +24,6 @@ public class Distributeur1Acteur implements IActeur {
 	public static Color COLOR_GREEN  = new Color(  6,162, 37);
 	public static Color COLOR_LGREEN = new Color(  6,255, 37);
 	public static Color COLOR_LBLUE  = new Color(  6,130,230);
-
 	
 	protected Journal journal;
 	protected Journal journal_achat;
@@ -104,9 +104,11 @@ public class Distributeur1Acteur implements IActeur {
 	
 	
 	/**
-	 * @author Theo
+	 * @author Theo and Ghaly
 	 */
 	public void initialiser() {
+//		SuperviseurVentesContratCadre superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
+
 		
 		//Initialisation des stocks
 		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
@@ -137,9 +139,8 @@ public class Distributeur1Acteur implements IActeur {
 		}
 	
 	public void next() {
-		System.out.println("okkk");
 
-		this.journal.ajouter("on a réussi le challenge");
+		this.journal.ajouter("on a réussi le challenge 1");
 
 
 //		DistributeurContratCadreAcheteur c = new DistributeurContratCadreAcheteur(Chocolat.C_HQ_BE);
