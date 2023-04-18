@@ -73,7 +73,7 @@ public class Distributeur1AcheteurOA extends Distributeur1Acteur implements IAch
 		if (supOA==null) {
 			supOA =(SuperviseurVentesOA)(Filiere.LA_FILIERE.getActeur("Sup.OA"));
 		}
-//		journal.ajouter(""+besoin());
+		journal.ajouter(""+besoin());
 		if (besoin()!=null) { //Si on manque à l'instant t de stock, on lance cette méthode d'achat
 			List<ChocolatDeMarque> marque = besoinMarque();
 			HashMap<ChocolatDeMarque,Double> qte = besoinQte();
