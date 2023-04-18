@@ -50,6 +50,7 @@ public class Distributeur1Acteur implements IActeur {
 	protected HashMap<Chocolat, Double> stockChoco;
 	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; //stock de chaque marque en tonne
 	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsions;
+	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsionsperso;
 	
 	protected Variable stock_BQ = new VariablePrivee("Eq7stock_BQ", "Stock total de chocolat de basse qualité", this, 0);
 	protected Variable stock_MQ = new VariablePrivee("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
