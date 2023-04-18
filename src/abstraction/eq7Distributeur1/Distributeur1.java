@@ -18,10 +18,12 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	
 	public Distributeur1() {
 		super();
+		
 	}
 	
 	public void next() {
 		super.next();
+		
 	}
 	
 	private void strategie() {
@@ -63,8 +65,9 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		}
 		return 2.0;
 	}
-	
-	public double prixPromotion(ChocolatDeMarque choco) { //Fait par Théo
+	/**
+	 * @author Theo	 */
+	public double prixPromotion(ChocolatDeMarque choco) { 
 		if (((Filiere.LA_FILIERE.getEtape()%3)==0)&&(choco.getChocolat()!=Chocolat.C_BQ)) {
 			return 0.9;
 		}
