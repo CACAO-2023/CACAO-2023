@@ -80,7 +80,6 @@ public class Distributeur1Acteur implements IActeur {
 	protected double prevision(ChocolatDeMarque marque, Integer etape) { //prevoit les qtes vendues à un tour donné
 		return previsions.get(etape).get(marque);
 	}
-	
 
 	/**
 	 * @author Theo
@@ -113,10 +112,12 @@ public class Distributeur1Acteur implements IActeur {
 		//Initialisation des stocks
 		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			stockChocoMarque.put(marque,0.1);
+			stockChocoMarque.put(marque,1.);
 		}
 		
 		//Initialisation des previsions
+		//le probleme est ici que ces previsions concernent l'ensemble de la filiere et non pas juste notre acteur
+		//il faut creer un autre fonction car notre part de vente depend de la marque et plus generalement de la gamme
 		this.previsions = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 
 		for (int i=0;i<24;i++) {
 			HashMap<ChocolatDeMarque,Double> prevtour = new HashMap<ChocolatDeMarque,Double>();
@@ -139,28 +140,21 @@ public class Distributeur1Acteur implements IActeur {
 		}
 	
 	public void next() {
-
-		this.journal.ajouter("on a réussi le challenge 1");
-
-
-//		DistributeurContratCadreAcheteur c = new DistributeurContratCadreAcheteur(Chocolat.C_HQ_BE);
-//		c.next();
 		
 		//Actualisation des prévisions
-//		int etapepreced = Filiere.LA_FILIERE.getEtape()-1;
-//		int etapenormalisee = (etapepreced+24)%24;
-//		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-//			HashMap<ChocolatDeMarque,Double> prevetap = previsions.get(etapenormalisee);
-//			prevetap.replace(marque, (prevetap.get(marque)+Filiere.LA_FILIERE.getVentes(marque, etapepreced))/2);
-//			previsions.replace(etapenormalisee, prevetap);
-//		}
-		
-		
-//		double newstock = 0.;
-//		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-//			newstock += stockChocoMarque.get(marque);
-//		}
-//		totalStocks.setValeur(this, newstock);
+		int etapepreced = Filiere.LA_FILIERE.getEtape()-1;
+		int etapenormalisee = (etapepreced+24)%24;
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			HashMap<ChocolatDeMarque,Double> prevetap = previsions.get(etapenormalisee);
+			prevetap.replace(marque, (prevetap.get(marque)+Filiere.LA_FILIERE.getVentes(marque, etapepreced))/2);
+			previsions.replace(etapenormalisee, prevetap);
+		}
+		//Actualisation du stock total
+		double newstock = 0.;
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			newstock += stockChocoMarque.get(marque);
+		}
+		totalStocks.setValeur(this, newstock, this.cryptogramme);
 
 	}
 

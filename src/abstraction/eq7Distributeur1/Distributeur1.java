@@ -18,7 +18,10 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	
 	public Distributeur1() {
 		super();
-		
+	}
+	
+	public void initialiser() {
+		super.initialiser();
 	}
 	
 	public void next() {
@@ -27,13 +30,6 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	}
 	
 	private void strategie() {
-	}
-	/**
-	 * @author Theo
-	 * Renvoie les previsions, actualisees à chaque tour
-	 */
-	protected double prevision(ChocolatDeMarque marque, Integer etape) { //prevoit les qtes vendues à un tour donné
-		return previsions.get(etape).get(marque);
 	}
 	
 	protected ChocolatDeMarque topvente() {
@@ -65,6 +61,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		}
 		return 2.0;
 	}
+	
 	/**
 	 * @author Theo	 */
 	public double prixPromotion(ChocolatDeMarque choco) { 

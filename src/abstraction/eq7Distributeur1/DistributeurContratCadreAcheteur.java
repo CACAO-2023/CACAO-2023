@@ -26,7 +26,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 	
 	public DistributeurContratCadreAcheteur() {
 		super();
-
 		this.mesContratEnTantQuAcheteur=new LinkedList<ExemplaireContratCadre>();
 	}
 
@@ -55,6 +54,13 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 			return contrat.getPrix()*0.95;// 5% de moins.
 		}
 	}
+//	AUTRE VERSION POSSINLE DE CONTREPROPOSITIONPRIXACHETEUR
+//
+//	public double contrePropositionPrixAcheteur_negociations(ExemplaireContratCadre contrat) {
+//	int step_nego = step_nego ( contrat);
+//	if (step_nego<minNego) {
+//		return contrat.getPrix()*0.95
+//	}
 	
 	
     /**
@@ -84,6 +90,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		
 		
 		IProduit produit = Chocolat.C_BQ;
+		
 //		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
 //
 //			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
@@ -92,8 +99,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 //			else {
 //
 //			}
-
-		
 		
 		
 		// OU proposition d'un contrat a un des vendeurs choisi aleatoirement
@@ -124,14 +129,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
      */
 	public double step_nego (ExemplaireContratCadre contrat) {
 		return contrat.getListePrix().size()/2;
-	}
-	
-//	public double contrePropositionPrixAcheteur_negociations(ExemplaireContratCadre contrat) {
-//		int step_nego = step_nego ( contrat);
-//		if (step_nego<minNego) {
-//			return contrat.getPrix()*0.95
-//		}
-			
+	}	
 			
     /**
   
