@@ -1,3 +1,5 @@
+/*/ Page redigee par Adam FERHOUT /*/
+
 package abstraction.eq5Transformateur2;
 
 import java.awt.Color;
@@ -23,6 +25,13 @@ public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 	protected Variable totalStocksChoco;  // La qualite totale de stock de chocolat 
 	protected Variable totalStocksChocoMarque;  // La qualite totale de stock de chocolat de marque 
 
+	public static Color COLOR_LLGRAY = new Color(238,238,238);
+	public static Color COLOR_BROWN  = new Color(141,100,  7);
+	public static Color COLOR_PURPLE = new Color(100, 10,115);
+	public static Color COLOR_LPURPLE= new Color(155, 89,182);
+	public static Color COLOR_GREEN  = new Color(  6,162, 37);
+	public static Color COLOR_LGREEN = new Color(  6,255, 37);
+	public static Color COLOR_LBLUE = new Color(  6,130,230);
 
 	public Transformateur2Acteur() {
 		this.journal = new Journal("Journal "+this.getNom(), this);
