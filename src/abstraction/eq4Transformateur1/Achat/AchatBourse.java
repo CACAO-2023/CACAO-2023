@@ -14,6 +14,11 @@ import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.Lot;
 
+/**
+ * @author alexian
+ *
+ */
+
 public class AchatBourse extends CC_producteur implements IAcheteurBourse{
 
 	public double demande(Feve f, double cours) {
