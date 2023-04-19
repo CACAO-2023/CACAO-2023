@@ -96,11 +96,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 	public ExemplaireContratCadre proposition_achat_aleatoire(IProduit produit,Echeancier e) {
 
 		List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
-		if (vendeurs.size() > 0) {
-			System.out.println(produit);
-			System.out.println(vendeurs);
-		}
-		
 		ExemplaireContratCadre cc = null;
 		if (vendeurs.contains(this)) {
 			vendeurs.remove(this);
