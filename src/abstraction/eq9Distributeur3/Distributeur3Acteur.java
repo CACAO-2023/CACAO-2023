@@ -28,6 +28,7 @@ public class Distributeur3Acteur implements IActeur,IFabricantChocolatDeMarque, 
 	protected Journal journal_stock;
 	protected Journal journal_activitegenerale;
 	protected List<ChocolatDeMarque> chocolats;
+	protected List<String> chocolats_cible_noms;
 	protected HashMap<ChocolatDeMarque, Double[]> prixMoyen;
 	protected boolean initialise = true;
 	protected double prix;
@@ -55,6 +56,13 @@ public class Distributeur3Acteur implements IActeur,IFabricantChocolatDeMarque, 
 		this.stock = new Stock();
 
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
+		this.chocolats_cible_noms = new LinkedList<String>();
+		this.chocolats_cible_noms.add("C_HQ_BE_Vccotioi");
+		this.chocolats_cible_noms.add("C_HQ_BE_Maison_Doutre");
+		this.chocolats_cible_noms.add("C_HQ_BE_Choc");
+		this.chocolats_cible_noms.add("C_HQ_BE_Villors");
+		this.chocolats_cible_noms.add("C_MQ_BE_Villors");
+		
 		//this.chocolats.add(c1);
 		//this.stock.ajoutQte(c1, 1000);
 		
@@ -96,7 +104,7 @@ public class Distributeur3Acteur implements IActeur,IFabricantChocolatDeMarque, 
 			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
 			
 			this.chocolats.add(c1);
-			this.stock.ajoutQte(c1, 1000);
+			this.stock.ajoutQte(c1, 100000);
 			this.journal_stock.ajouter("On ajoute au stock de "+ c1.getNom() + " une quantite de  " + 1000.0); 
 
 		}
