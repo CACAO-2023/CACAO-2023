@@ -80,9 +80,9 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			int pourcentageCacao =  94;
 			ChocolatDeMarque cm= new ChocolatDeMarque(ch, "Vccotioi", pourcentageCacao, 15);
 			double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;
-			this.stockChocoMarque.put(cm, scm+((transfo)*this.pourcentageTransfo.get(fh).get(ch)));
-			this.totalStocksChocoMarque.ajouter(this, ((transfo)*this.pourcentageTransfo.get(fh).get(ch)), this.cryptogramme);
-			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfo<10?" "+transfo:transfo)+" T de "+fh+" en "+Journal.doubleSur(transfo*this.pourcentageTransfo.get(fh).get(ch),3,2)+" T de "+ch);
+			this.stockChocoMarque.put(cm, scm+((transfoh)*this.pourcentageTransfo.get(fh).get(ch)));
+			this.totalStocksChocoMarque.ajouter(this, ((transfoh)*this.pourcentageTransfo.get(fh).get(ch)), this.cryptogramme);
+			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfoh<10?" "+transfoh:transfoh)+" T de "+fh+" en "+Journal.doubleSur(transfo*this.pourcentageTransfo.get(fh).get(ch),3,2)+" T de "+ch);
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fh+")->"+this.stockFeves.get(fh));
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+ch+")->"+this.stockChoco.get(ch));
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cm+")->"+this.stockChocoMarque.get(cm));
