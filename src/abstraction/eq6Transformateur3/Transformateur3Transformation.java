@@ -111,10 +111,101 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 
  
 protected double BesoinStep(int Step, Feve f) {
-	if 
+	int Stepi=Filiere.LA_FILIERE.getEtape();
+	if (f == Feve.F_BQ) {
+		double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_BQ)-stockFeveBG.getQuantiteTotale();
+		for (int i=0;i<(Step-Stepi);i++) {
+		a=a+Transformateur3Vente.demandeTotStep(Stepi+i+1,Feve.F_BQ);
+		}
+		if (a>0) {
+			return a;
+		} else {
+			return 0;
+		}
+	}
+	if (f == Feve.F_MQ) {
+		if ((Step-Stepi)>1) {
+		double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_MQ)-stockFeveMG.getQuantiteTotale()-getMQStep1();
+		for (int i=0;i<(Step-Stepi);i++) {
+		a=a+Transformateur3Vente.demandeTotStep(Stepi+i+1,Feve.F_MQ);
+		}
+		if (a>0) {
+			return a;
+		} else {
+			return 0;
+		}
+	} else {
+		if ((Step-Stepi)==1) {
+			double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_MQ)-getMQStep1();
+			if (a>0) {
+				return a;
+			}else {
+				return 0;
+			}
+			}
+		}
 			
-	return 0;
-} 
+		}
+	if (f == Feve.F_MQ_BE) {
+		if ((Step-Stepi)>1) {
+		double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_MQ_BE)-stockFeveMGL.getQuantiteTotale()-getMQBEStep1();
+		for (int i=0;i<(Step-Stepi);i++) {
+		a=a+Transformateur3Vente.demandeTotStep(Stepi+i+1,Feve.F_MQ_BE);
+		}
+		if (a>0) {
+			return a;
+		} else {
+			return 0;
+		}
+	} else {
+		if ((Step-Stepi)==1) {
+			double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_MQ_BE)-getMQBEStep1();
+			if (a>0) {
+				return a;
+			}else {
+				return 0;
+			}
+			}
+		}
+			
+		}
+	if (f == Feve.F_HQ_BE) {
+		if ((Step-Stepi)>2) {
+		double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_HQ_BE)-stockFeveHGL.getQuantiteTotale()-getHQBEStep1()-getHQBEStep2();
+		for (int i=0;i<(Step-Stepi);i++) {
+		a=a+Transformateur3Vente.demandeTotStep(Stepi+i+1,Feve.F_HQ_BE);
+		}
+		if (a>0) {
+			return a;
+		} else {
+			return 0;
+		}
+	} else {
+		if ((Step-Stepi)==2) {
+			double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_HQ_BE)-getHQBEStep1()-getHQBEStep2();
+			if (a>0) {
+				return a;
+			}else {
+				return 0;
+			}
+			} else {
+			if ((Step-Stepi)==1) {
+				double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_HQ_BE)-getHQBEStep2();
+				if (a>0) {
+					return a;
+				}else {
+					return 0;
+				}
+				}
+			}
+			
+		}
+	
 }
+}
+
+
+} 
+
 
 
