@@ -3,7 +3,9 @@ package abstraction.eq7Distributeur1;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
@@ -13,6 +15,11 @@ import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+
+
+
+
+
 
 public class Distributeur1Acteur implements IActeur {
 	////////////////////////////////////////////////
@@ -49,16 +56,16 @@ public class Distributeur1Acteur implements IActeur {
 	
 	////////////////////////////////////////
 	protected HashMap<Chocolat, Double> stockChoco;
-	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
-; //stock de chaque marque en tonne
-	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsions;
-	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsionsperso;
+
+	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; //stock de chaque marque en tonne
+	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsions; //previsions de ventes de la filiere globale
+	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsionsperso; //previsions de vente perso
 	
 	protected Variable stock_BQ = new VariablePrivee("Eq7stock_BQ", "Stock total de chocolat de basse qualité", this, 0);
 	protected Variable stock_MQ = new VariablePrivee("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
 	protected Variable stock_MQ_BE = new VariablePrivee("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
 	protected Variable stock_HQ_BE = new VariablePrivee("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
-	
+//	protected LinkedList<VariablePrivee> indicateurs = indicateurs();
 	protected int cryptogramme;
 
 
@@ -74,6 +81,17 @@ public class Distributeur1Acteur implements IActeur {
 
 	}
 	
+	
+	public LinkedList<VariablePrivee> indicateurs(){
+		
+	    LinkedList<VariablePrivee> liste = new LinkedList<VariablePrivee>();
+	    List<String> liste_marques = Filiere.LA_FILIERE.getMarquesChocolat();
+	    for (int i = 0; i < liste_marques.size(); i++) {
+	    	String marque = liste_marques.get(i);
+	        liste.add(new VariablePrivee(marque, "Stock total de "+ marque, this, 0)); // appel de la méthode getNom() sur l'objet ChocolatDeMarque
+	    }
+	    return liste;}
+	
 	////////////////////////////////////////////////////////
 	//         Methodes principales				          //
 	////////////////////////////////////////////////////////
@@ -82,8 +100,12 @@ public class Distributeur1Acteur implements IActeur {
 	 * @author Theo
 	 * Renvoie les previsions, actualisees à chaque tour
 	 */
-	protected double prevision(ChocolatDeMarque marque, Integer etape) { //prevoit les qtes vendues à un tour donné
+	protected double previsions(ChocolatDeMarque marque, Integer etape) {
 		return previsions.get(etape).get(marque);
+	}
+	
+	protected double previsionsperso(ChocolatDeMarque marque, Integer etape) {
+		return previsionsperso.get(etape).get(marque);
 	}
 
 	/**
@@ -114,6 +136,7 @@ public class Distributeur1Acteur implements IActeur {
 
 		
 		//Initialisation des stocks
+		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			stockChocoMarque.put(marque,1.);
 			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
@@ -181,13 +204,10 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
-		/**
-		res.add(totalStocks);
-		res.add(stock_HQ_BE);
-		res.add(stock_MQ_BE);
-		res.add(stock_BQ);
-		res.add(stock_MQ);
-		*/
+//		LinkedList<VariablePrivee> list = indicateurs();
+//		for (VariablePrivee v : list) {
+//			res.add(v);
+//		}
 		return res;
 	}
 

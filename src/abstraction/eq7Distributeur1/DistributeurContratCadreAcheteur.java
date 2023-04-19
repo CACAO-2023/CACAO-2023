@@ -24,11 +24,22 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
 	private List<Object> negociations = new ArrayList<>();
 	private double minNego=5;
-
-
+	protected List<Integer> durees_CC = new ArrayList<>(); 
+	protected int etape ;
+	
+	
 	public void initialiser() {
 		super.initialiser();
+		int etape = Filiere.LA_FILIERE.getEtape();
+
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
+	}
+	
+	public void set_duree(){
+		durees_CC.add(24);
+		durees_CC.add(18);
+		durees_CC.add(12);
+		durees_CC.add(6);
 	}
 	
 	public DistributeurContratCadreAcheteur() {
@@ -38,23 +49,29 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 	
 	/**
 	 * @author Theo
+	 * @param stepDebut : debut de livraison
+	 * @param d : nbr_etape
 	 * @return echeancier sur 1 an, base sur les previsions de ventes
 	 */
 	//A COMPLETER POUR PRENDRE EN COMPTE VRAIES PREVISIONS PERSO
-	public Echeancier echeancier_strat(int stepDebut, ChocolatDeMarque marque) {
+	public Echeancier echeancier_strat(int stepDebut, int d, ChocolatDeMarque marque) {
 		Echeancier e = new Echeancier(stepDebut);
-		for (int etape = stepDebut+1; etape<stepDebut+25; etape++) {
+		for (int etape = stepDebut+1; etape<stepDebut+d; etape++) {
 			int etapemod = etape%24;
 			e.ajouter(previsionsperso.get(etapemod).get(marque)*1.5);
 		}
 		return e;
 	}
+	
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		if (Math.random()<0.3) {
 			return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
 		} else {//dans 70% des cas on fait une contreproposition pour l'echeancier
 			Echeancier e = contrat.getEcheancier();
-			e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut())*2.5);// on souhaite livrer 2.5 fois plus lors de la 1ere livraison... un choix arbitraire, juste pour l'exemple...
+			int stepdebut = e.getStepDebut();
+			for (int step = stepdebut; step < e.getStepFin()+1; step++) {
+				e.set(step, e.getQuantite(step)*0.9);
+			}
 			return e;
 		}
 	}
@@ -128,33 +145,46 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		return somme;
 	}
 	
-	/**   
-	 * proposition d'un contrat a un des vendeurs choisi aleatoirement
-     * @author Ghaly sentissi
-     */
+	public double getLivraisonEtape(IProduit produit) {
+		double somme = 0;
+		for (ExemplaireContratCadre contrat : mesContratEnTantQuAcheteur) {
+			if (contrat.getProduit() == produit) {
+				somme += contrat.getQuantiteALivrerAuStep();
+			}
+		}
+		return somme;
+	}
+
+	/**
+	 * @author Ghaly & Theo
+	 */
+	public boolean besoin_de_CC (int d,ChocolatDeMarque marque) { //durée en étapes 
+			double previsionannee = 0;
+			for (int numetape = etape+1; numetape < etape+d ; numetape++ ) {
+				previsionannee += previsions.get(numetape%24).get(marque);
+				}
+			return (previsionannee > stockChocoMarque.get(marque)+getLivraison(marque));//On lance un CC seulement si notre stock n'est pas suffisant sur l'annee qui suit
+					
+	};
+	
+	/**
+	 * @author Ghaly & Theo
+	 */
 	public void next() {
 		super.next();
 		enleve_contrats_obsolete();
-		
-		//On va regarder si on a besoin d'un nouveau contrat cadre pour chaque marque
-		if (this.superviseurVentesCC!=null) {
-			int etape = Filiere.LA_FILIERE.getEtape();
-			for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-				double previsionannee = 0;
-				for (int numetape = etape+1; numetape < etape+25 ; numetape++ ) {
-					previsionannee += previsions.get(numetape%24).get(marque);
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			for (Integer d : durees_CC) {
+			if(besoin_de_CC ( d, marque)) {					//On va regarder si on a besoin d'un nouveau contrat cadre pour chaque marque
+				Echeancier echeancier = echeancier_strat(etape,d,marque);
+				journal_achat.ajouter("Recherche d'un vendeur aupres de qui acheter "+ marque.getNom());
+				ExemplaireContratCadre cc = proposition_achat_aleatoire(marque,echeancier);
+				if (cc!=null) {
+					break;
 				}
-				if (previsionannee > stockChocoMarque.get(marque)+getLivraison(marque)) { //On lance un CC seulement si notre stock n'est pas suffisant sur l'annee qui suit
-					Echeancier echeancier = echeancier_strat(etape+1,marque);
-					journal_achat.ajouter("Recherche d'un vendeur aupres de qui acheter "+ marque.getNom());
-					ExemplaireContratCadre cc = proposition_achat_aleatoire(marque,echeancier);
-						}
-					}
-				}
-				
-								
+			};  		
 
-									
+			}}						
 		}
 		
 	
