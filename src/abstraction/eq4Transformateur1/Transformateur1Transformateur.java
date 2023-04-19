@@ -13,10 +13,6 @@ import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 
-/**
- * @author fouad/amine
- *
- */
 
 public class Transformateur1Transformateur extends Stock implements IFabricantChocolatDeMarque  {
 	
@@ -49,15 +45,19 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		super.initialiser();
 		this.stockFeves=new HashMap<Feve,Double>();
 		for (Feve f : this.lesFeves) {
+			if (f==Feve.F_BQ || f==Feve.F_HQ_BE  ) {
 			this.stockFeves.put(f, 10000.0);
 			this.totalStocksFeves.ajouter(this, 10000.0, this.cryptogramme);
 			this.journal.ajouter("ajout de 10000 de "+f+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
 		}
+		}
 		this.stockChoco=new HashMap<Chocolat,Double>();
 		for (Chocolat c : Chocolat.values()) {
+			if (c==Chocolat.C_BQ) {
 			this.stockChoco.put(c, 1000.0);
 			this.totalStocksChoco.ajouter(this, 1000.0, this.cryptogramme);
 			this.journal.ajouter("ajout de 1000 de "+c+" au stock de chocolat --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
+		}
 		}
 		this.stockChocoMarque=new HashMap<ChocolatDeMarque,Double>();
 		this.pourcentageTransfo = new HashMap<Feve, HashMap<Chocolat, Double>>();
@@ -69,14 +69,24 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		this.pourcentageTransfo.get(Feve.F_BQ).put(Chocolat.C_BQ, conversion);
 	}
 
+	/**
+	 * @author fouad/amine
+	 *
+	 */
+
+	
 	public void next() {
 		super.next();
 		this.journal.ajouter("=== STOCKS === ");
 		for (Feve f : this.lesFeves) {
+			if (f==Feve.F_BQ || f==Feve.F_HQ_BE  ) {
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(f+"", 15)+" = "+this.stockFeves.get(f));
 		}
+		}
 		for (Chocolat c : Chocolat.values()) {
+			if (c==Chocolat.C_BQ) {
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(c+"", 15)+" = "+this.stockChoco.get(c));
+		}
 		}
 		if (this.stockChocoMarque.keySet().size()>0) {
 			for (ChocolatDeMarque cm : this.stockChocoMarque.keySet()) {

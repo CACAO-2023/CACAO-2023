@@ -21,11 +21,15 @@ import abstraction.eqXRomu.produits.Lot;
 
 
 /**
+<<<<<<< HEAD
  * @author Fouad LBAKALI & Amine RAHIM
 =======
 
 /**
  * @author fouad/amine
+>>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4/
+=======
+ * @author amine
 >>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4/
  *
  */
@@ -177,6 +181,12 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 	}
 
 
+	
+	/**
+	 * @author fouad
+	 *
+	 */
+	
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		double prix=0.0;
 		Object produit = contrat.getProduit();
