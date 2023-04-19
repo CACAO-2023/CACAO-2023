@@ -7,6 +7,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Lot;
 public class Producteur1Plantation extends Producteur1Acteur {
+	private Lot stockBasPasSec;
+	private Lot stockMoyPasSec;
 
 //===== 4 premières methodes : elouan =====
 
@@ -16,11 +18,17 @@ public class Producteur1Plantation extends Producteur1Acteur {
 	public champ getChampMoy() {
 		return this.champMoy;
 	}
-	public Lot getStockBas() {
-		return this.stockFeveBas;
-	}
 	public Lot getStockMoy() {
-		return this.stockFeveMoy ;
+		return this.stockMoyPasSec ;
+	}
+	public Lot getStockBas() {
+		return this.stockBasPasSec ;
+	}
+	public Lot getVraiStockM() {
+		return this.stockFeveMoy;
+	}
+	public Lot getVraiStockB() {
+		return this.stockFeveBas;
 	}
 
 	
@@ -28,6 +36,7 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		//===== début Elouan =====
 		super.next();
 		Lot lot_moy = this.getStockMoy();
+		Lot lot_moy_sec = this.getVraiStockM();
 		HashMap<Integer, Double> quantiteFeveM = lot_moy.getQuantites() ;
 		champ cm = this.getChampMoy();
 		for (Integer i : cm.getQuantite().keySet()) {
@@ -56,8 +65,13 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		int nb_step_perime = step-12;
 		Double fevemoyabas = quantiteFeveM.get(nb_step_perime); //quantite de feve qui baisse de gamme, qu'on va rajouter dans le stock de bas
 		quantiteFeveM.remove(nb_step_perime);
+		// on s'occupe des feves sechées
+		Double nb_feve_sec = quantiteFeveM.get(step-1);
+		lot_moy_sec.ajouter(step, nb_feve_sec);
+		quantiteFeveM.remove(step-1);
 		Lot lot_bas = this.getStockBas();
 		HashMap<Integer, Double> quantiteFeveB = lot_bas.getQuantites() ;
+		Lot lot_bas_sec = this.getVraiStockB();
 		champ cb = this.getChampBas();
 		for (Integer i : cb.getQuantite().keySet()) {
 			double q = cb.getQuantite().get(i);
@@ -86,11 +100,13 @@ public class Producteur1Plantation extends Producteur1Acteur {
 			quantiteFeveB.put(step-6, fevemoyabas); //on rajoute les feves qui ont baisse de qualite pour qu'elles aient une duree de vie de 3 mois
 		}
 		quantiteFeveB.remove(nb_step_perime);
+		// on s'occupe des feves sechées
+		Double nb_feve_sec2 = quantiteFeveB.get(step-1);
+		lot_bas_sec.ajouter(step, nb_feve_sec2);
+		quantiteFeveB.remove(step-1);
 		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), (this.getStockBas().getQuantiteTotale()+this.getStockMoy().getQuantiteTotale())*50);
 		// cout de stockage
 		}
-	
-		
 		//===== fin elouan et gab =====	
 	}
 
