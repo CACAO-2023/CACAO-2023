@@ -59,6 +59,16 @@ public class Distributeur1ContratCadre extends Distributeur1Acteur implements IA
 		return somme;
 	}
 	
+	public double getLivraisonEtape(IProduit produit) {
+		double somme = 0;
+		for (ExemplaireContratCadre contrat : mesContrats) {
+			if (contrat.getProduit() == produit) {
+				somme += contrat.getQuantiteALivrerAuStep();
+			}
+		}
+		return somme;
+	}
+	
 	/**
      * 	enleve les contrats obsolete (nous pourrions vouloir les conserver pour "archive"...)
      * @author Ghaly sentissi
