@@ -127,12 +127,15 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 
 	@Override
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
-		double livre = Math.min(super.getLotChocolat(produit).getQuantiteTotale(), quantite);
+		double livre;
+		if(super.getLotChocolat(produit)!=null) {
+		livre = Math.min(super.getLotChocolat(produit).getQuantiteTotale(), quantite);}
+		else {livre =0;}
 		if (livre>0.0) {
 			super.retirerChocolat((ChocolatDeMarque)produit, livre);
 		}
 		Lot lot = new Lot(produit);
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); 
 		return lot;
-	}
+		}
 }
