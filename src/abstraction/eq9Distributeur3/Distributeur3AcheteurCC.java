@@ -16,7 +16,7 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
-
+import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
@@ -129,7 +129,31 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
 		prix = contrat.getPrix()/contrat.getQuantiteTotale();
+
 		journal_ventes.ajouter("achat du chocolat" + contrat.getProduit()+"au prix à la tonne de" + prix);
+
+		
+		// william 
+		
+		// marge de 80% sur HQ_BE
+		if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.HQ)  {
+			var prix_tonne_de_vente = prix*5;
+			this.prix_tonne_vente.put((ChocolatDeMarque)contrat.getProduit(), prix_tonne_de_vente);
+		}
+		
+		// marge de 67% sur MQ_BE
+		if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.MQ && ((ChocolatDeMarque)contrat.getProduit()).isBioEquitable()){
+			var prix_tonne_de_vente = prix*3;
+			this.prix_tonne_vente.put((ChocolatDeMarque)contrat.getProduit(), prix_tonne_de_vente);
+		}
+		// marge de 50% sur MQ
+		if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.MQ  && !((ChocolatDeMarque)contrat.getProduit()).isBioEquitable()) {
+			var prix_tonne_de_vente = prix*2;
+			this.prix_tonne_vente.put((ChocolatDeMarque)contrat.getProduit(), prix_tonne_de_vente);
+		}
+		
+		
+		
 		return contrat.getPrix();
 		
 		
