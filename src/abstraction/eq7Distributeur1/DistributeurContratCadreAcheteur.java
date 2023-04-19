@@ -167,7 +167,17 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 									
 		}
 		
-
+	@Override
+	/**
+	 * @author Theo
+	 */
+	// A COMPLETER SI ASSEZ DE STOCK (appele si cc initie par vendeur)
+	public boolean achete(IProduit produit) {
+		if (produit instanceof ChocolatDeMarque) {
+			return true;
+		}
+		return false;
+	}
     /**
      * retourne l'étape de négociation en cours
      * @param contrat     
@@ -236,9 +246,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 //		stock.ajouter(this, lot.getQuantiteTotale()); // Cet exemple ne gere pas la peremption : il n'utilise pas la mention du step de production du produit
 	}
 
-	public boolean achete(IProduit produit) {
-		return true;
-	}
 	public String toString() {
 		return this.getNom();
 	}
