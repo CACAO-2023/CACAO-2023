@@ -50,8 +50,8 @@ public class Distributeur1Acteur implements IActeur {
 	////////////////////////////////////////
 	protected HashMap<Chocolat, Double> stockChoco;
 	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; //stock de chaque marque en tonne
-	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsions;
-	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsionsperso;
+	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsions; //previsions de ventes de la filiere globale
+	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsionsperso; //previsions de vente perso
 	
 	protected Variable stock_BQ = new VariablePrivee("Eq7stock_BQ", "Stock total de chocolat de basse qualité", this, 0);
 	protected Variable stock_MQ = new VariablePrivee("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
@@ -80,8 +80,12 @@ public class Distributeur1Acteur implements IActeur {
 	 * @author Theo
 	 * Renvoie les previsions, actualisees à chaque tour
 	 */
-	protected double prevision(ChocolatDeMarque marque, Integer etape) { //prevoit les qtes vendues à un tour donné
+	protected double previsions(ChocolatDeMarque marque, Integer etape) {
 		return previsions.get(etape).get(marque);
+	}
+	
+	protected double previsionsperso(ChocolatDeMarque marque, Integer etape) {
+		return previsionsperso.get(etape).get(marque);
 	}
 
 	/**

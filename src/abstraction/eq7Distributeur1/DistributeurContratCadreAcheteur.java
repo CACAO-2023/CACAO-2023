@@ -49,12 +49,16 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		}
 		return e;
 	}
+	
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		if (Math.random()<0.3) {
 			return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
 		} else {//dans 70% des cas on fait une contreproposition pour l'echeancier
 			Echeancier e = contrat.getEcheancier();
-			e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut())*2.5);// on souhaite livrer 2.5 fois plus lors de la 1ere livraison... un choix arbitraire, juste pour l'exemple...
+			int stepdebut = e.getStepDebut();
+			for (int step = stepdebut; step < e.getStepFin()+1; step++) {
+				e.set(step, e.getQuantite(step)*0.9);
+			}
 			return e;
 		}
 	}
@@ -127,10 +131,19 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		return somme;
 	}
 	
-	/**   
-	 * proposition d'un contrat a un des vendeurs choisi aleatoirement
-     * @author Ghaly sentissi
-     */
+	public double getLivraisonEtape(IProduit produit) {
+		double somme = 0;
+		for (ExemplaireContratCadre contrat : mesContratEnTantQuAcheteur) {
+			if (contrat.getProduit() == produit) {
+				somme += contrat.getQuantiteALivrerAuStep();
+			}
+		}
+		return somme;
+	}
+	
+	/**
+	 * @author Ghaly & Theo
+	 */
 	public void next() {
 		super.next();
 		enleve_contrats_obsolete();
@@ -149,13 +162,9 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 
 					ExemplaireContratCadre cc = proposition_achat_aleatoire(marque,echeancier);
 
-						}
 					}
 				}
-				
-								
-
-									
+			}						
 		}
 		
 	@Override
