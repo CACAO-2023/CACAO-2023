@@ -104,7 +104,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 * n'a pas a s'occuper du paiement qui a deja ete effectue)
 	 */
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
-		super.ajouterFeve((Feve)l.getProduit(), l.getQuantites().get(Filiere.LA_FILIERE.getEtape()),Filiere.LA_FILIERE.getEtape());
+		super.ajouterFeve((Feve)l.getProduit(), l.getQuantiteTotale(),Filiere.LA_FILIERE.getEtape());
 		super.journal.ajouter("Stock de "+l.getQuantiteTotale()+""+"tonnes de feves"+((Feve)l.getProduit()).toString()+" acheté en bourse");
 		
 	}
