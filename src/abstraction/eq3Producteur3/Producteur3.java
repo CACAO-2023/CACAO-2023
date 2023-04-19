@@ -8,21 +8,7 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
 
 public class Producteur3 extends Bourse3  {
-	/*
-	 * ChampsH est un dictionnaire qui contient les champs Haut de Gamme
-	 * On associe a un ensemble d'hectars un int qui correspond  leur step de plantaison 
-	 *
-	 *private HashMap<Integer,String> ChampsH;//UTILE ?
-	 *
-	 * ChampsM est un dictionnaire qui contient les champs Moyen de Gamme
-	 * On associe a un ensemble d'hectars un int qui correspond  leur step de plantaison 
-	 *
-	 *private HashMap<Integer,String> ChampsM;//UTILE ?
-	 *
-	 * On cree un dictionnaire qui associe  la clef H ou M le dico ChampsM ou ChapmsH
-	 */
 
-	
 	/**
 	 * @author Dubus-Chanson Victor, Bocquet Gabriel
 	 */
@@ -36,10 +22,6 @@ public class Producteur3 extends Bourse3  {
 	private LinkedList<Double> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
 	private Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
 
-	/*
-	 * Je n'ai pas trouve le type du champs donc j'ai choisit String. A CHANGER
-	 * Il faudra aussi penser a se mettre d'accord sur les tailles des champs initiaux.
-	 */
 	
 	/**
 	 * @author Dubus-Chanson Victor
