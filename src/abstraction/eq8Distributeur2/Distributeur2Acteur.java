@@ -169,11 +169,11 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	public void notificationOperationBancaire(double montant) {
 		if (montant<0) {
 			double m=montant*(-1);
-			String ch="retrait de "+m;
+			String ch="retrait de "+m+"€";
 			this.journal_operationsbancaires.ajouter(ch);
 		}
 		if (montant>0) {
-			String ch= "dépot de "+montant;
+			String ch= "dépot de "+montant+"€";
 			this.journal_operationsbancaires.ajouter(ch);
 		}
 	}
@@ -202,7 +202,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	//Auteur : Ben Messaoud Karim
 	public  Stock getStock(ChocolatDeMarque choco) {
 		int pos = (((List<Variable>) choco).indexOf(choco));
-
 		if (pos < 0) {
 			return null;
 
