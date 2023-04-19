@@ -64,17 +64,16 @@ public class Producteur3Acteur implements IActeur {
 	protected Journal getJStock() {
 		return this.journal_Stock;
 	}
-<<<<<<< HEAD
+
 
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
-=======
+
 	protected Journal getJCatastrophe() {
 		return this.journal_catastrophe;
 	}
 	
->>>>>>> branch 'Desov2suisUnBoulet' of https://github.com/Dahan13/CACAO-2023
 	protected int getCryptogramme() {
 		return this.cryptogramme;
 	}

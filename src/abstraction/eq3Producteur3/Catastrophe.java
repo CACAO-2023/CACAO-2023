@@ -13,6 +13,34 @@ import abstraction.eqXRomu.produits.Feve;
 
 public class Catastrophe extends Producteur3{
 	
+	public void next() {
+		super.next();
+		// Incendie ?
+		double probaIncendie =  Math.random();
+		if(probaIncendie < 0.02) {
+			this.Fire("Big");
+		}
+		else if(probaIncendie < 0.05) {
+			this.Fire("Med");
+		}
+		else if(probaIncendie < 0.1) {	
+			this.Fire("Lit");
+		}
+		
+		double probaCyclone =  Math.random();
+		if(probaCyclone <0.05) {
+			this.Cyclone();
+	}
+		double probaGreve = Math.random();
+		if(probaGreve < 0.02) {
+			this.GreveGeneral();
+		}
+}
+	
+	
+	
+	
+	
 	/**
 	 * @author BOCQUET Gabriel
 	 * @param s
@@ -68,7 +96,7 @@ public class Catastrophe extends Producteur3{
 	/**
 	 * @author NAVEROS Marine
 	 */	
-	public void Cyclone(String s) {
+	public void Cyclone() {
 		Champs fields = this.getFields();
 		HashMap<Integer,Integer> FieldH = fields.getChamps().get("H");
 		HashMap<Integer, Integer> FieldM = fields.getChamps().get("M");
@@ -77,27 +105,24 @@ public class Catastrophe extends Producteur3{
 		Set<Integer> KeysH = FieldH.keySet();
 		Set<Integer> KeysM = FieldM.keySet();
 		Journal j = this.getJCatastrophe();
-		if (s.equals("H")) {
-			for(Integer key: KeysH) {
-				hectarDetruitH += FieldH.get(key)*(0+ Math.random()*0.3);
-				FieldH.put(key, (int)(FieldH.get(key)*(0+ Math.random()*0.3)));	
-			}
-			j.ajouter(Color.yellow, Color.black, hectarDetruitH + "d'hectares de Haute Gamme qui ont été détruits");
-			for (Integer key: KeysM) {
-				hectarDetruitM += FieldM.get(key)*(0+ Math.random()*0.3);
-				FieldM.put(key, (int)(FieldM.get(key)*(0+ Math.random()*0.3)));
-			}
-			j.ajouter(Color.gray, Color.black, hectarDetruitM+"d'hectares de Moyenne Gamme qui ont été détruits");
-			
-			
+		for(Integer key: KeysH) {
+			hectarDetruitH += FieldH.get(key)*(0+ Math.random()*0.7);
+			FieldH.put(key, (int)(FieldH.get(key)*(0+ Math.random()*0.7)));	
 		}
-		
+		j.ajouter(Color.yellow, Color.black, hectarDetruitH + "d'hectares de Haute Gamme qui ont été détruits par un cyclone");
+		for (Integer key: KeysM) {
+			hectarDetruitM += FieldM.get(key)*(0+ Math.random()*0.7);
+			FieldM.put(key, (int)(FieldM.get(key)*(0+ Math.random()*0.7)));
+		}
+		j.ajouter(Color.gray, Color.black, hectarDetruitM+"d'hectares de Moyenne Gamme qui ont été détruits par un cyclone");		
+		}
 			
 		
-	}
 	
+	/**
+	 * @author BOCQUET Gabriel
+	 */
 	//Pour modéliser la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
-
 	protected void GreveGeneral() {
 		//On a autant d'employé que d'hectare Utilise
 		Integer nbrgreviste = (int) Math.round(super.getHectaresUt()*0.8);
