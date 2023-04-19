@@ -45,7 +45,7 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 		if (f==Feve.F_BQ) {
 			int FeveBQPeri = this.feveBQPeri();
 			if (this.getStockBas().getQuantiteTotale()!=0.0 && 
-			   ((this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale())*50) >= (this.stockFeveBas.getQuantiteTotale()*bourse.getCours(Feve.F_BQ).getValeur()+this.stockFeveMoy.getQuantiteTotale()*bourse.getCours(Feve.F_MQ).getValeur())/2 ) {
+			   ((this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale())*50) >= (this.stockFeveBas.getQuantiteTotale()*bourse.getCours(Feve.F_BQ).getValeur()+this.stockFeveMoy.getQuantiteTotale()*bourse.getCours(Feve.F_MQ).getValeur())/10 ) {
 				System.out.print(this.getStockBas().getQuantiteTotale()/10);
 				return this.getStockBas().getQuantiteTotale()/10+FeveBQPeri;
 			}
@@ -55,7 +55,7 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 		if (f==Feve.F_MQ) {
 			int FeveMQPeri = this.feveMQPeri();
 			if (this.getStockMoy().getQuantiteTotale()!=0.0 && 
-			   ((this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale())*50) >= (this.stockFeveBas.getQuantiteTotale()*bourse.getCours(Feve.F_BQ).getValeur()+this.stockFeveMoy.getQuantiteTotale()*bourse.getCours(Feve.F_MQ).getValeur())/2  ) {
+			   ((this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale())*50) >= (this.stockFeveBas.getQuantiteTotale()*bourse.getCours(Feve.F_BQ).getValeur()+this.stockFeveMoy.getQuantiteTotale()*bourse.getCours(Feve.F_MQ).getValeur())/10  ) {
 			return this.getStockMoy().getQuantiteTotale()/10+ FeveMQPeri;
 			}
 
