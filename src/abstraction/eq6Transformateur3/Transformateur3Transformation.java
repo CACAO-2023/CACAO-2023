@@ -1,9 +1,10 @@
 package abstraction.eq6Transformateur3;
 
+import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
 
-public class Transformateur3Transformation extends Transformateur3Stocks {
+public class Transformateur3Transformation extends Transformateur3Vente {
 
 	/** Maxime Bedu*/
 	
@@ -32,6 +33,7 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 	private double HQBEStep2;
 	
 	public Transformateur3Transformation() {
+		super();
 		this.MQStep1=0;
 		this.MQBEStep1=0;
 		this.HQBEStep1=0;
@@ -71,44 +73,142 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 	}
 
 	
-/**		public void transformationChoco(Feve f, double qte) {
-		if (f instanceof F_BQ) {
-			double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
-			double a=stockFeve.get(F_BQ);
-			stockFeve.replace(F_BQ, a-(pourcentageTransfo*qte));
-			double b=stockChocolat.get(C_BQ);
-			stockChocolat.replace(C_BQ,b+qte);
+	
+		public void transformationChoco(Feve f, double qte) {
+		if (f == Feve.F_BQ) {
+			double pourcentageTransfo = this.getPourcentageCacaoBG();
+			stockFeveBG.retirer(pourcentageTransfo*qte);
+			stockChocolatBG.ajouter(Filiere.LA_FILIERE.getEtape(),qte);
 			} else {
-				if (f instanceof F_MQ) {
-					double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
-					double a=stockFeve.get(F_MQ);
-					stockFeve.replace(F_MQ, a-(pourcentageTransfo*qte));
-					double b=stockChocolat.get(C_MQ);
-					stockChocolat.replace(C_MQ,b+qte);
+				if (f == Feve.F_MQ) {
+					double pourcentageTransfo = this.getPourcentageCacaoMG();
+					double c=getMQStep1();
+					setMQStep1(qte);
+					stockFeveMG.retirer(pourcentageTransfo*qte);
+					stockChocolatMG.ajouter(Filiere.LA_FILIERE.getEtape(),c);
 					} else {
-						if (f instanceof F_MQ_BE) {
-							double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
-							double a=stockFeve.get(F_MQ_BE);
-							stockFeve.replace(F_MQ_BE, a-(pourcentageTransfo*qte));
-							double b=stockChocolat.get(C_MQ_BE);
-							stockChocolat.replace(C_MQ_BE,b+qte);
+						if (f ==Feve.F_MQ_BE) {
+							double pourcentageTransfo = this.getPourcentageCacaoMG();
+							double c=getMQBEStep1();
+							setMQBEStep1(qte);
+							stockFeveMGL.retirer(pourcentageTransfo*qte);
+							stockChocolatMGL.ajouter(Filiere.LA_FILIERE.getEtape(), c);
 							} else {
-								if (f instanceof F_HQ_BE) {
-									double pourcentageTransfo = this.getPourcentageCacaoBG().getValeur();
-									double a=stockFeve.get(F_HQ_BE);
-									stockFeve.replace(F_HQ_BE, a-(pourcentageTransfo*qte));
-									double b=stockChocolat.get(C_HQ_BE);
-									stockChocolat.replace(C_HQ_BE,b+qte);
+								if (f == Feve.F_HQ_BE) {
+									double pourcentageTransfo = this.getPourcentageCacaoHG();
+									double c=getHQBEStep1();
+									setHQBEStep1(qte);
+									double d = getHQBEStep2();
+									setHQBEStep2(c);
+									stockFeveHGL.retirer(pourcentageTransfo*qte);
+									stockChocolatHGL.ajouter(Filiere.LA_FILIERE.getEtape(), d);
 							}
 	
 }
 					}
 			}
 	}
-**/
 
 
+ 
 protected double BesoinStep(int Step, Feve f) {
-	return 0.1;
+	int Stepi=Filiere.LA_FILIERE.getEtape();
+	if (f == Feve.F_BQ) {
+		double a=super.demandeTotStep(Stepi,Feve.F_BQ)-stockFeveBG.getQuantiteTotale();
+		for (int i=0;i<(Step-Stepi);i++) {
+		a=a+super.demandeTotStep(Stepi+i+1,Feve.F_BQ);
+		}
+		if (a>0) {
+			return a;
+		} else {
+			return 0;
+		}
+	}
+	if (f == Feve.F_MQ) {
+		if ((Step-Stepi)>1) {
+		double a=super.demandeTotStep(Stepi,Feve.F_MQ)-stockFeveMG.getQuantiteTotale()-getMQStep1();
+		for (int i=0;i<(Step-Stepi);i++) {
+		a=a+super.demandeTotStep(Stepi+i+1,Feve.F_MQ);
+		}
+		if (a>0) {
+			return a;
+		} else {
+			return 0;
+		}
+	} else {
+		if ((Step-Stepi)==1) {
+			double a=super.demandeTotStep(Stepi,Feve.F_MQ)-getMQStep1();
+			if (a>0) {
+				return a;
+			}else {
+				return 0;
+			}
+			}
+		}
+			
+		}
+	if (f == Feve.F_MQ_BE) {
+		if ((Step-Stepi)>1) {
+		double a=super.demandeTotStep(Stepi,Feve.F_MQ_BE)-stockFeveMGL.getQuantiteTotale()-getMQBEStep1();
+		for (int i=0;i<(Step-Stepi);i++) {
+		a=a+super.demandeTotStep(Stepi+i+1,Feve.F_MQ_BE);
+		}
+		if (a>0) {
+			return a;
+		} else {
+			return 0;
+		}
+	} else {
+		if ((Step-Stepi)==1) {
+			double a=super.demandeTotStep(Stepi,Feve.F_MQ_BE)-getMQBEStep1();
+			if (a>0) {
+				return a;
+			}else {
+				return 0;
+			}
+			}
+		}
+			
+		}
+	if (f == Feve.F_HQ_BE) {
+		if ((Step-Stepi)>2) {
+		double a=super.demandeTotStep(Stepi,Feve.F_HQ_BE)-stockFeveHGL.getQuantiteTotale()-getHQBEStep1()-getHQBEStep2();
+		for (int i=0;i<(Step-Stepi);i++) {
+		a=a+super.demandeTotStep(Stepi+i+1,Feve.F_HQ_BE);
+		}
+		if (a>0) {
+			return a;
+		} else {
+			return 0;
+		}
+	} else {
+		if ((Step-Stepi)==2) {
+			double a=super.demandeTotStep(Stepi,Feve.F_HQ_BE)-getHQBEStep1()-getHQBEStep2();
+			if (a>0) {
+				return a;
+			}else {
+				return 0;
+			}
+			} else {
+			if ((Step-Stepi)==1) {
+				double a=super.demandeTotStep(Stepi,Feve.F_HQ_BE)-getHQBEStep2();
+				if (a>0) {
+					return a;
+				}else {
+					return 0;
+				}
+				}
+			}
+			
+		}
+	
+} 
+	return 100;
 }
-}
+	public void next() {
+		super.next();
+	}
+} 
+
+
+

@@ -14,15 +14,17 @@ import java.util.List;
 
 /** Nathan Claeys*/
 
-public class Transformateur3AchatCC extends Transformateur3Vente implements IAcheteurContratCadre {
+public class Transformateur3AchatCC extends Transformateur3Transformation  implements IAcheteurContratCadre {
 	
 	private List<ExemplaireContratCadre> ListeContratEnCours;
 	
 	public Transformateur3AchatCC () {
+		super();
 		this.ListeContratEnCours = new LinkedList<ExemplaireContratCadre>();
 		
 	}
 	/**
+	 * ecrit par Nathan Claeys
 	 * Methode appelee par le superviseur afin de savoir si l'acheteur est pret a
 	 * faire un contrat cadre sur le produit indique.
 	 * 
@@ -51,6 +53,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
   
 
     /**
+     * ecrit par Nathan Claeys
      * Appelee suite au demarrage des negociations par le vendeur d'un contrat de feves labelisee 
      * afin de connaitre le pourcentage de rse qui sera effectif sur le chocolat de marque produit
      * a partir des feves de ce contrat cadre.
@@ -67,10 +70,11 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
 		// TODO Auto-generated method stub
-		return (int) (100*super.pourcentageRSE.getValeur());
+		return (int) (super.pourcentageRSE);
 	}
 
 	/**
+	 * ecrit par Nathan Claeys
 	 * Methode appelee par le SuperviseurVentesContratCadre lors des negociations
 	 * sur l'echeancier afin de connaitre la contreproposition de l'acheteur. Les
 	 * precedentes propositions d'echeancier peuvent etre consultees via un appel a
@@ -114,6 +118,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 		return max;
 	}
 	/**
+	 * Ecrit par Nathan Claeys 
 	 * Methode appelee par le SuperviseurVentesContratCadre lors des negociations
 	 * sur le prix au Kg afin de connaitre la contreproposition de l'acheteur.
 	 * L'acheteur peut consulter les precedentes propositions via un appel a la
@@ -138,6 +143,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	}
 
 	/**
+	 * ecrit par Nathan Claeys
 	 * Methode appelee par le SuperviseurVentesContratCadre afin de notifier le
 	 * l'acheteur de la reussite des negociations sur le contrat precise en
 	 * parametre qui a ete initie par le vendeur. Le superviseur veillera a
@@ -153,6 +159,7 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	}
 
 	/**
+	 * Ecris par Nathan Claeys
 	 * Methode appelee par le SuperviseurVentesContratCadre afin de notifier
 	 * l'acheteur de la livraison du lot de produit precise en parametre
 	 * (dans le cadre du contrat contrat). Il se peut que la quantitee livree
@@ -167,7 +174,8 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 	 */
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		Object produit = contrat.getProduit();
-		if (produit instanceof Feve) {super.ajouterFeve(((Feve)produit), contrat.getQuantiteLivree().getQuantite(Filiere.LA_FILIERE.getEtape()));}		
+		if (produit instanceof Feve && lot.getQuantiteTotale()>0) {super.ajouterFeve(((Feve)produit), contrat.getQuantiteLivree().getQuantite(Filiere.LA_FILIERE.getEtape()),Filiere.LA_FILIERE.getEtape());}
+		super.journal.ajouter("nouvel arrivage d'un lot de contrat cadre de "+lot.getQuantites()+"");
 	}
 	public List<ExemplaireContratCadre> getListeContratEnCours() {
 		return ListeContratEnCours;
@@ -187,15 +195,27 @@ public class Transformateur3AchatCC extends Transformateur3Vente implements IAch
 		}
 		return res;
 	}
-	private void retirerCCFinis() {
+/**ecrit par Nathan Claeys
+ */
+	/**private void retirerCCFinis() {
+		List<ExemplaireContratCadre> contrat_fini = new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.getListeContratEnCours()) {
-			if (contrat.getQuantiteRestantALivrer()==0) {this.getListeContratEnCours().remove(contrat);}
+			if (contrat.getQuantiteRestantALivrer()==0 && contrat.getMontantRestantARegler()==0) {contrat_fini.add(contrat);}
+		for (ExemplaireContratCadre c : contrat_fini)
+			{this.getListeContratEnCours().remove(c);}
 		}
-	}
+	}*/
 	
-	
+/** ecrit par Nathan Claeys
+ */
 	public void next() {
-		super.next();
-		this.retirerCCFinis();		
-	}
-}
+		super.next(); 
+		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
+		for (ExemplaireContratCadre contrat : this.getListeContratEnCours()) {
+			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
+				contratsObsoletes.add(contrat);
+			}
+		}  
+		this.getListeContratEnCours().removeAll(contratsObsoletes);		
+	}  
+}  
