@@ -169,13 +169,13 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 	
 	
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		double prix=10.0;
+		double prix=1500.0;
 		double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
 		Object produit = contrat.getProduit();
 		if (produit instanceof Feve) {
 			switch ((Feve)produit) {
-			case F_HQ_BE : prix= 312;break;
-			case F_BQ : prix= 150;break;
+			case F_HQ_BE : prix= 3125;break;
+			case F_BQ : prix= 1106;break;
 			}
 		}
 		int nbPas=0;
