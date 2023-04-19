@@ -197,19 +197,25 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	}
 /**ecrit par Nathan Claeys
  */
-	private void retirerCCFinis() {
+	/**private void retirerCCFinis() {
 		List<ExemplaireContratCadre> contrat_fini = new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.getListeContratEnCours()) {
 			if (contrat.getQuantiteRestantALivrer()==0 && contrat.getMontantRestantARegler()==0) {contrat_fini.add(contrat);}
 		for (ExemplaireContratCadre c : contrat_fini)
 			{this.getListeContratEnCours().remove(c);}
 		}
-	}
+	}*/
 	
 /** ecrit par Nathan Claeys
  */
 	public void next() {
 		super.next();
-		this.retirerCCFinis();		
+		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
+		for (ExemplaireContratCadre contrat : this.getListeContratEnCours()) {
+			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
+				contratsObsoletes.add(contrat);
+			}
+		}
+		this.getListeContratEnCours().removeAll(contratsObsoletes);		
 	}
 }
