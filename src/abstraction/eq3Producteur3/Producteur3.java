@@ -131,7 +131,7 @@ public class Producteur3 extends Bourse3  {
 					changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
 				}
 				else {
-					changeHectaresAndCoutsLies(variationBesoinHectaresv2(Filiere.LA_FILIERE.getEtape()));
+					changeHectaresAndCoutsLies(variationBesoinHectaresv2(Filiere.LA_FILIERE.getEtape(), ));
 				}
 			}
 		}
