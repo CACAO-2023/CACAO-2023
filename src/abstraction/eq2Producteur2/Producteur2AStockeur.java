@@ -83,9 +83,9 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		super.next();
 		this.majPerim();
 		this.majTot();
-		System.out.println(Filiere.LA_FILIERE.getEtape());
+		/*System.out.println(Filiere.LA_FILIERE.getEtape());
 		System.out.println(this.stocks);
-		System.out.println(this.getDescrStocksTheo(Filiere.LA_FILIERE.getEtape() + 1));
+		System.out.println(this.getDescrStocksTheo(Filiere.LA_FILIERE.getEtape() + 1));*/
 		/*this.ajouterStock(Feve.F_BQ, Filiere.LA_FILIERE.getEtape(), 1000);
 		this.retirerStock(Feve.F_BQ, 500);
 		Lot lotHQ_BE = new Lot(Feve.F_HQ_BE);
