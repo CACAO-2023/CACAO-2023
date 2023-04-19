@@ -198,7 +198,7 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 
 		// NEGOCIATIONS SUR L'ECHEANCIER
 		Echeancier contrePropositionV, contrePropositionA;
-		journal.ajouter(Journal.texteColore(acheteur, acheteur.getNom())+" lance le contrat #"+contrat.getNumero()+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(vendeur, vendeur.getNom()));
+		journal.ajouter(" negociations echeancier contrat #"+contrat.getNumero()+" vendeur="+Journal.texteColore(vendeur, vendeur.getNom())+" acheteur="+Journal.texteColore(acheteur, acheteur.getNom())+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(vendeur, vendeur.getNom()));
 		int numNego=0;
 		do { 
 			numNego++;
