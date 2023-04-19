@@ -17,6 +17,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	protected LinkedList<ExemplaireContratCadre> listeCC ;
 
 	
+	
 	public Transformateur3Vente() {
 		super();
 		listeCC=new LinkedList<ExemplaireContratCadre>();
