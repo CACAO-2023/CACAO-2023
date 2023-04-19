@@ -78,7 +78,8 @@ public class Distributeur3Acteur implements IActeur,IFabricantChocolatDeMarque, 
 	}
 	
 	public void initialiser() {
-		var chocolats_filiere = new LinkedList<ChocolatDeMarque>();
+		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
+		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
 		for (int i=0; i<chocolats_filiere.size(); i++) {
 			if(chocolats_cible_noms.contains((chocolats_filiere.get(i)).toString())){
 				chocolats.add(chocolats_filiere.get(i));
