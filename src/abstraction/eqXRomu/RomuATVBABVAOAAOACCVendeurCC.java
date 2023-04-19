@@ -6,12 +6,12 @@ import java.util.List;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
+import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
-import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
@@ -57,6 +57,23 @@ public class RomuATVBABVAOAAOACCVendeurCC extends RomuATVBABVAOAAOAcheteurCC imp
 						ExemplaireContratCadre contrat = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, echeancier, this.cryptogramme, false);
 						if (contrat!=null) {
 							this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : contrat signe = "+contrat);
+						}
+					}
+				}
+			}
+			// Tentative de lancer un contrat avec tous les acheteurs  a l'etape 3
+			if (Filiere.LA_FILIERE.getEtape()==3) {
+				for (ChocolatDeMarque cm : this.chocolatsVillors) {
+					List<IAcheteurContratCadre> acheteurs = superviseurVentesCC.getAcheteurs(cm);
+					this.journal.ajouter(COLOR_LLGRAY, Color.BLACK, " CCV : tentative de vente de "+cm+" aupres de "+acheteurs);
+					for (IAcheteurContratCadre acheteur : acheteurs) {
+						if (!acheteur.equals(this)) {
+							Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 100);
+							this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative de vente aupres de "+acheteur);
+							ExemplaireContratCadre contrat = superviseurVentesCC.demandeVendeur(acheteur, this, cm, echeancier, this.cryptogramme, false);
+							if (contrat!=null) {
+								this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : contrat signe = "+contrat);
+							}
 						}
 					}
 				}
