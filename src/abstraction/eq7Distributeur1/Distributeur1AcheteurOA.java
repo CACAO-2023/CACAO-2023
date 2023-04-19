@@ -81,7 +81,6 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 		if (supOA==null) {
 			supOA =(SuperviseurVentesOA)(Filiere.LA_FILIERE.getActeur("Sup.OA"));
 		}
-		journal.ajouter(""+besoin());
 		if (besoin()!=null) { //Si on manque à l'instant t de stock, on lance cette méthode d'achat car l'effet est immediat
 			List<ChocolatDeMarque> marque = besoinMarque();
 			HashMap<ChocolatDeMarque,Double> qte = besoinQte();
