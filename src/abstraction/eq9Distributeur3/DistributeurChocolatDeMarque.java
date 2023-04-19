@@ -28,11 +28,11 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurCC implem
 	@Override
 	public double prix(ChocolatDeMarque choco) {
 		if(prix_tonne_vente.get(choco) != null) {
-			return prix_tonne_vente.get(choco);
+			return prix_tonne_vente.get(choco) +1.0;
 			
 		}
 		// TODO Auto-generated method stub
-		return 10;
+		return 10.0;
 	}
 	
 	//baptiste
