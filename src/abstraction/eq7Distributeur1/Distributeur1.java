@@ -90,7 +90,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	/**
 	 * @author Theo
 	 * @param choco, choco!=null
-	 * @return Retourne la quantite totale (rayon+tete de gondole) en Kg de chocolat de type choco 
+	 * @return Retourne la quantite totale (rayon+tete de gondole) en tonne de chocolat de type choco 
 	 * actuellement disponible a la vente (pour un achat immediat --> le distributeur a 
 	 * au moins cette quantite en stock)
 	 */

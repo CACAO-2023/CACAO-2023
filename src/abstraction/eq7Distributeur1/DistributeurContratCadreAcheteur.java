@@ -77,11 +77,23 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 	}
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
+		ChocolatDeMarque marque = (ChocolatDeMarque) contrat.getProduit();
+		if (nombre_achats.get(marque)==0) {
+			return contrat.getPrix(); //
+		}
+		else {
+			if (contrat.getPrix()<0.5*getCout(marque)) {
+				return 0.;
+			}
+			else {
+				
+			
+		
 		if (Math.random()<0.3) {
 			return contrat.getPrix(); // on ne cherche pas a negocier dans 30% des cas
 		} else {//dans 70% des cas on fait une contreproposition differente
 			return contrat.getPrix()*0.95;// 5% de moins.
-		}
+		}}}
 	}
 	
 	
@@ -133,20 +145,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 
 		}
 
-/**
- * Cette méthode va Actualiser le cout du chocolat
- * @param cc contrat cadre
- * @author Ghaly
- */
-public void actualiser_cout (ExemplaireContratCadre cc) {
-    Object produit = cc.getProduit();
-	if (produit instanceof ChocolatDeMarque) {
-    	ChocolatDeMarque marque = (ChocolatDeMarque)(produit);
-    	List<Double> liste_couts = couts.get(marque);
-    	Double nv_cout = cc.getPrix();
-    	liste_couts.add(nv_cout);
-        couts.replace(marque ,liste_couts ) ;
-}}
+
 	
 /**
  * Cette méthode va essayer de lancer un contrat cadre d'un produit avec un acteur donné
@@ -170,8 +169,9 @@ public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier 
 	//si le contrat est signé 
 	if (cc != null) {
         this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + acteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
-        actualiser_cout (cc);        
+        actualise_cout (cc.getPrix());        
         mesContratEnTantQuAcheteur.add(cc);
+        
     } else {
     //si le contrat est un echec
         this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Echec de la négociation de contrat cadre avec " + acteur.getNom() + " pour " + produit + "...");
@@ -234,6 +234,7 @@ public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier 
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			for (Integer d : durees_CC) {
 			if(besoin_de_CC ( d, marque)) {					//On va regarder si on a besoin d'un nouveau contrat cadre pour chaque marque
+				System.out.println("--------------------------------------------------------------------");
 				Echeancier echeancier = echeancier_strat(etape,d,marque);
 				journal_achat.ajouter("Recherche d'un vendeur aupres de qui acheter "+ marque.getNom());
 				ExemplaireContratCadre cc = getContrat(marque,echeancier);
@@ -255,7 +256,8 @@ public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier 
 	public boolean achete(IProduit produit) {
 		if (produit instanceof ChocolatDeMarque) {
 			
-			return besoin_de_CC ((ChocolatDeMarque)(produit));
+			Boolean b = besoin_de_CC ((ChocolatDeMarque)(produit));
+			return b;
 		}
 		return false;
 	}
@@ -351,7 +353,14 @@ public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier 
 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		journal.ajouter("Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString());
+		if (nombre_achats.get((ChocolatDeMarque)(contrat.getProduit()))==0) {
+			journal.ajouter("Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix());
+
+		}
+		else {
+			journal.ajouter("Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix()*100 /couts.get(contrat.getProduit())+ "%");
+
+		}
 		
 	}
 
