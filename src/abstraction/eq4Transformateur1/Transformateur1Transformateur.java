@@ -45,9 +45,11 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		super.initialiser();
 		this.stockFeves=new HashMap<Feve,Double>();
 		for (Feve f : this.lesFeves) {
+			if (f==Feve.F_BQ || f==Feve.F_HQ_BE  ) {
 			this.stockFeves.put(f, 10000.0);
 			this.totalStocksFeves.ajouter(this, 10000.0, this.cryptogramme);
 			this.journal.ajouter("ajout de 10000 de "+f+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
+		}
 		}
 		this.stockChoco=new HashMap<Chocolat,Double>();
 		for (Chocolat c : Chocolat.values()) {
