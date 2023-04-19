@@ -174,7 +174,8 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 */
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		Object produit = contrat.getProduit();
-		if (produit instanceof Feve) {super.ajouterFeve(((Feve)produit), contrat.getQuantiteLivree().getQuantite(Filiere.LA_FILIERE.getEtape()),Filiere.LA_FILIERE.getEtape());}		
+		if (produit instanceof Feve && lot.getQuantiteTotale()>0) {super.ajouterFeve(((Feve)produit), contrat.getQuantiteLivree().getQuantite(Filiere.LA_FILIERE.getEtape()),Filiere.LA_FILIERE.getEtape());}
+		super.journal.ajouter("nouvel arrivage d'un lot de contrat cadre de "+lot.getQuantites()+"");
 	}
 	public List<ExemplaireContratCadre> getListeContratEnCours() {
 		return ListeContratEnCours;
@@ -196,16 +197,25 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	}
 /**ecrit par Nathan Claeys
  */
-	private void retirerCCFinis() {
+	/**private void retirerCCFinis() {
+		List<ExemplaireContratCadre> contrat_fini = new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.getListeContratEnCours()) {
-			if (contrat.getQuantiteRestantALivrer()==0) {this.getListeContratEnCours().remove(contrat);}
+			if (contrat.getQuantiteRestantALivrer()==0 && contrat.getMontantRestantARegler()==0) {contrat_fini.add(contrat);}
+		for (ExemplaireContratCadre c : contrat_fini)
+			{this.getListeContratEnCours().remove(c);}
 		}
-	}
+	}*/
 	
 /** ecrit par Nathan Claeys
  */
 	public void next() {
-		super.next();
-		this.retirerCCFinis();		
-	}
-}
+		super.next(); 
+		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
+		for (ExemplaireContratCadre contrat : this.getListeContratEnCours()) {
+			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
+				contratsObsoletes.add(contrat);
+			}
+		}  
+		this.getListeContratEnCours().removeAll(contratsObsoletes);		
+	}  
+}  

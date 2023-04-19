@@ -4,10 +4,10 @@
 
 A team mate pushed something new to your team repository before you.
 
-1. Commit your changes.
-2. Pull from your team repository.
-3. Resolve conflicts if needed.
-4. Commit and push.
+1. Commit your changes
+2. Pull from your team repository
+3. Resolve conflicts if needed
+4. Commit and push
 
 # 2. Problems on Pull
 
@@ -15,8 +15,8 @@ A team mate pushed something new to your team repository before you.
 
 You have a local change that you did not commit. 
 
-1. You can A) commit without pushing your local change or B) delete your local change by replacing the changed files/folders with a previous version.
-2. Pull from your team repository.
+1. Two options: A) commit without pushing your local change or B) delete your local change by replacing the changed files/folders with a previous version (right-click on these files or folders -> Replace with -> HEAD Revision)
+2. Pull from your team repository
 
 This will maybe result in a conflict, if your team mate changed the same lines. 
 In this case you will have to resolve the conflict before being able to commit your changes and push.
@@ -31,15 +31,18 @@ Note that there is no need to close and reopen the pull request, you can just fi
 
 You are changing files outside of the java package of your team. You can see the files that you are changing in the "Files changed" tab of your pull request on the github website. This list must contain only files in your package.
 
-You can replace these files with the version from the main repository. To do that, right click on these files or folders -> Replace with -> Branch, Tag or Reference -> Remote tracking -> select the main repository (not your team repository) -> Replace. Then commit and push to your repository. Don't close the pull request, it will be automatically updated.
+1. Replace these files in Eclipse with the version from the main repository: right-click on these files or folders -> Replace with -> Branch, Tag or Reference... -> Remote tracking -> select the main repository (not your team repository) -> Replace
+2. Commit and push
 
-Note that if the files you changed are not Java files, they will be hidden in the Package Exporer of Eclipse. To see and edit them, click the three dots in the top bar of Package Exporer, select "Filters..." and remove the check from ".* resources". 
+Note that if the files you changed are not Java files, they will be hidden in the Package Exporer of Eclipse. To see and replace them, click the three dots in the top bar of Package Exporer, select "Filters..." and remove the check from ".* resources". 
 
 ## "Some checks were not successful": "Java CI / build (pull_request)"
 
-Not accepting because the code does not pass the tests. You can read the error message by clicking on "Details" near to the failed test at the bottom of your pull request. You can run the same tests on your Eclipse, they are `test/abstraction/FiliereParDefaultTest.java` and `test/presentation/FenetrePrincipaleTest.java`. To run them right-click on "build.xml", Run As -> Ant Build. You will see the error message in the console. Fix the error and commit+push again.
+Not accepting because the code does not pass the tests. You can read the error message by clicking on "Details" near to the failed test at the bottom of your pull request. You can run the same tests on your Eclipse, they are `test/abstraction/FiliereParDefaultTest.java` and `test/presentation/FenetrePrincipaleTest.java`. To run them right-click on "build.xml", Run As -> Ant Build. You will see the error message in the console. Fix the error, then commit and push.
 
 ## "This branch is out-of-date with the base branch"
 
-Your team repository is not up-to-date with the changes that happened on the main repository.  Pull from the main repository and then push to the team repository.
+Your team repository is not up-to-date with the changes that happened on the main repository. 
 
+1. Pull from the main repository: right-click on the java project -> Team -> Pull... -> in "Remote:" select the main repository (not your team repository) -> Finish
+2. Push
