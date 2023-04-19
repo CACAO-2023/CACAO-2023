@@ -4,6 +4,11 @@ import abstraction.eqXRomu.clients.ClientFinal;
 import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
+/**
+ * @author Fouad 
+ *
+ */
+
 public class DistributeurChocolatDeMarque extends CC_distributeur implements IDistributeurChocolatDeMarque {
 
 	public double prix(ChocolatDeMarque choco) {
