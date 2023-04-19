@@ -40,7 +40,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 	 * @author Theo
 	 * @return echeancier sur 1 an, base sur les previsions de ventes
 	 */
-	//A COMPLETER POUR PRENDRE EN COMPTE VRAIES PREVISIONS PERSO
 	public Echeancier echeancier_strat(int stepDebut, ChocolatDeMarque marque) {
 		Echeancier e = new Echeancier(stepDebut);
 		for (int etape = stepDebut+1; etape<stepDebut+25; etape++) {
@@ -97,6 +96,11 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 	public ExemplaireContratCadre proposition_achat_aleatoire(IProduit produit,Echeancier e) {
 
 		List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
+		if (vendeurs.size() > 0) {
+			System.out.println(produit);
+			System.out.println(vendeurs);
+		}
+		
 		ExemplaireContratCadre cc = null;
 		if (vendeurs.contains(this)) {
 			vendeurs.remove(this);
@@ -152,9 +156,10 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		if (this.superviseurVentesCC!=null) {
 			int etape = Filiere.LA_FILIERE.getEtape();
 			for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+				//V2 : ENLEVER LES MARQUES DISTRIBUTEUR
 				double previsionannee = 0;
 				for (int numetape = etape+1; numetape < etape+25 ; numetape++ ) {
-					previsionannee += previsions.get(numetape%24).get(marque);
+					previsionannee += previsionsperso.get(numetape%24).get(marque);
 				}
 				if (previsionannee > stockChocoMarque.get(marque)+getLivraison(marque)) { //On lance un CC seulement si notre stock n'est pas suffisant sur l'annee qui suit
 					Echeancier echeancier = echeancier_strat(etape+1,marque);
@@ -286,6 +291,12 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), produit, e, cryptogramme,false);
         if (cc != null) {
         	mesContratEnTantQuAcheteur.add(cc);
+        	
+        	//Actualisation du cout
+        	double nvcout = getCout((ChocolatDeMarque) cc.getProduit());
+        	nvcout = (nvcout + (cc.getPrix()/cc.getQuantiteTotale()))/2;
+        	couts((ChocolatDeMarque) cc.getProduit(), nvcout);
+        	
             this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + acteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
         } else {
             this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Echec de la négociation de contrat cadre avec " + acteur.getNom() + " pour " + produit + "...");

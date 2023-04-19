@@ -88,6 +88,23 @@ public class Distributeur1Acteur implements IActeur {
 		return previsionsperso.get(etape).get(marque);
 	}
 
+	protected double getCout(ChocolatDeMarque marque) {
+		Chocolat gamme = marque.getChocolat();
+		if (gamme == Chocolat.C_BQ) {
+			return coutCB;
+		}
+		if (gamme == Chocolat.C_MQ) {
+			return coutCMNL;
+		}
+		if (gamme == Chocolat.C_MQ_BE) {
+			return coutCML;
+		}
+		if (gamme == Chocolat.C_HQ_BE) {
+			return coutCH;
+		}
+		return coutCB;
+	}
+	
 	/**
 	 * @author Theo
 	 * Actualise les couts (par tonne)
@@ -119,7 +136,7 @@ public class Distributeur1Acteur implements IActeur {
 		//Initialisation des stocks
 		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			stockChocoMarque.put(marque,1.);
+			stockChocoMarque.put(marque,100000.);
 			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
 		}
 		
@@ -168,6 +185,10 @@ public class Distributeur1Acteur implements IActeur {
 		}
 		totalStocks.setValeur(this, newstock, this.cryptogramme);
 
+		//Prise en compte des couts de stockage
+		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), totalStocks.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());	
+		journal.ajouter("Cout de stockage : "+totalStocks.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());
+		
 		//Journaux
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
@@ -185,8 +206,8 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
-		/**
 		res.add(totalStocks);
+		/**
 		res.add(stock_HQ_BE);
 		res.add(stock_MQ_BE);
 		res.add(stock_BQ);
@@ -206,6 +227,7 @@ public class Distributeur1Acteur implements IActeur {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(this.journal);
 		res.add(this.journal_achat);
+		res.add(this.journal_stock);
 		return res;
 	}
 
