@@ -217,5 +217,5 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 			}
 		}
 		this.getListeContratEnCours().removeAll(contratsObsoletes);		
-	}
+	}  
 }
