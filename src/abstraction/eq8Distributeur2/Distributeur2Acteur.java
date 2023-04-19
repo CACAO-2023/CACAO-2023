@@ -205,7 +205,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		}
 
 	public List<String> getMarquesChocolat() {
-		return Arrays.asList(this.marques);
+		return new ArrayList<String>();
 	}
 //-----------------------------------------------
 	//La fonction prix() permet de connaître le prix actuel 
@@ -219,7 +219,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		if(prixDeVente.containsKey(choco)) {
 			return prixDeVente.get(choco);
 		}else {
-			return 0;
+			return 100000000;
 		}
 	}
 	/*tous les next on ajoute dans le journal la quantité en stock*/
