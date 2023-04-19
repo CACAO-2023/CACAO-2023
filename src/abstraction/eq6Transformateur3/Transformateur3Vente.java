@@ -33,7 +33,8 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 			if (listeCC.get(i).getProduit().equals(choco)) 
 			tot+=listeCC.get(i).getQuantiteALivrerAuStep();
 		}
-		return tot;
+		if (tot == 0){return 100;}
+		else{return tot;}
 	}
 
 	@Override

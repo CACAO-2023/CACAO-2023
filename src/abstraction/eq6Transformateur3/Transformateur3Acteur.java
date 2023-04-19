@@ -98,7 +98,7 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 /**ecrit par Nathan Claeys
  */
 	public void next() {
-		this.journal = new Journal(Filiere.LA_FILIERE.getEtape()+"",this);
+		this.journal.ajouter(Filiere.LA_FILIERE.getEtape()+"");
 		this.ListJournal.add(this.journal);
 	}
 
