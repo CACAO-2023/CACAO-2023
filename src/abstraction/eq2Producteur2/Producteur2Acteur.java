@@ -166,6 +166,11 @@ public class Producteur2Acteur implements IActeur {
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
+		if(acteur.getNom().equals("EQ2")) {
+			this.getJournal().ajouter("Adieu monde cruel !");
+		} else {
+			this.getJournal().ajouter("RIP " + acteur.getNom() + ", nous ne t'oublierons pas.");
+		}
 	}
 
 	// Apres chaque operation sur votre compte bancaire, cette
