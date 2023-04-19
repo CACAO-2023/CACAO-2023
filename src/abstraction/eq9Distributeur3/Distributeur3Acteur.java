@@ -54,8 +54,9 @@ public class Distributeur3Acteur implements IActeur,IFabricantChocolatDeMarque, 
 		
 
 		this.stock = new Stock();
-
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
+		
+		// william : pour pouvoir acheter le chocolat qui nous intéresse (HQ BE, MQ BE, MQ)
 		this.chocolats_cible_noms = new LinkedList<String>();
 		this.chocolats_cible_noms.add("C_HQ_BE_Vccotioi");
 		this.chocolats_cible_noms.add("C_HQ_BE_Maison_Doutre");
