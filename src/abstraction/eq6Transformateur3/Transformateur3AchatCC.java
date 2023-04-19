@@ -14,7 +14,7 @@ import java.util.List;
 
 /** Nathan Claeys*/
 
-public class Transformateur3AchatCC extends Transformateur3Vente implements IAcheteurContratCadre {
+public class Transformateur3AchatCC extends Transformateur3Transformation  implements IAcheteurContratCadre {
 	
 	private List<ExemplaireContratCadre> ListeContratEnCours;
 	
