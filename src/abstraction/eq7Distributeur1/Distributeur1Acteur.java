@@ -3,7 +3,9 @@ package abstraction.eq7Distributeur1;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
@@ -56,7 +58,14 @@ public class Distributeur1Acteur implements IActeur {
 	protected Variable stock_MQ = new VariablePrivee("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
 	protected Variable stock_MQ_BE = new VariablePrivee("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
 	protected Variable stock_HQ_BE = new VariablePrivee("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
-	
+	public LinkedList<VariablePrivee> indicateurs(HashMap<ChocolatDeMarque,Double> stockChocoMarque){
+	    LinkedList<VariablePrivee> liste = new LinkedList<VariablePrivee>();
+	    for(Map.Entry<ChocolatDeMarque, Double> chocolat : stockChocoMarque.entrySet()) {
+	        ChocolatDeMarque marque = chocolat.getKey(); // récupérer l'objet ChocolatDeMarque à partir de la clé
+	        liste.add(new VariablePrivee(marque.getNom(), "Stock total de "+ marque.getNom(), this, 0)); // appel de la méthode getNom() sur l'objet ChocolatDeMarque
+	    }
+	    return liste;
+	}
 	protected int cryptogramme;
 
 	public Distributeur1Acteur() {
@@ -170,14 +179,21 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
-		res.add(totalStocks);
-		res.add(stock_HQ_BE);
-		res.add(stock_MQ_BE);
-		res.add(stock_BQ);
-		res.add(stock_MQ);
+//		res.add(totalStocks);
+//		res.add(stock_HQ_BE);
+//		res.add(stock_MQ_BE);
+//		res.add(stock_BQ);
+//		res.add(stock_MQ);
+		LinkedList<VariablePrivee> list = indicateurs(stockChocoMarque);
+		for (VariablePrivee v : list) {
+			res.add(v);
+		}
 		return res;
 	}
-
+	/**
+	 * @author Romain et Ghaly
+	 */
+	
 	// Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();

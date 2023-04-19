@@ -215,9 +215,14 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 //		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
 //			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
 //				ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur((IAcheteurContratCadre)this, (IVendeurContratCadre) acteur, produit,e, cryptogramme,false);
-//			}}
+//				double prix_au_min_nego = cc.getListePrix().get(2*(int)(minNego)-1);
+//				res.put(acteur, prix_au_min_nego);
+//			} else {
+//			}
+//				return "0";
+//				}
 //		
-//		return "ok";
+//		return "pas de vendeur trouvé" ;
 //	}
 	
 //	public static Integer obtenirValeurMinimale(HashMap<String, Integer> hashMap) {
