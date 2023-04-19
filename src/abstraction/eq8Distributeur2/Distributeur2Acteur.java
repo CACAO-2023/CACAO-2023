@@ -4,6 +4,7 @@ package abstraction.eq8Distributeur2;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import abstraction.eqXRomu.clients.ClientFinal;
@@ -99,7 +100,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
-		return new Color(209, 179, 221); 
+		return new Color(209, 179, 221);
 	}
 	
     //Auteur : Ben Messaoud Karim
@@ -120,6 +121,9 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		List<Variable> res=new ArrayList<Variable>();
 		return res;
 	}
+	
+	
+	
 	
 	//Auteur : Marzougui Mariem
 	// Renvoie les journaux
@@ -250,6 +254,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	        int pos = chocolats.indexOf(choco);
 	        if (pos >= 0) {
 	            this.stocks.retirerDuStock(choco, quantite);
+	            journal_activitegenerale.ajouter("La quantité " + quantite + " a été vendue à" + montant);
 	        }
 	    }
 	//Auteur : Ben Messaoud Karim

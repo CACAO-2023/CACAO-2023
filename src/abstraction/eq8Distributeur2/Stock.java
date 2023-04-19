@@ -7,7 +7,7 @@ private double quantite;
 
 //auteur : AZZI Maxime
 public Stock(double quantiteInitiale) {
-this.quantite = quantiteInitiale;
+	this.quantite = 1000.0;
 }
 
 //auteur : AZZI Maxime

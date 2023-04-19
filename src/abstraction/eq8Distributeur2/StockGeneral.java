@@ -1,5 +1,6 @@
 package abstraction.eq8Distributeur2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 //auteur : AZZI Maxime
@@ -13,11 +14,11 @@ stocks = new HashMap<ChocolatDeMarque, Stock>();
 }
 
 // auteur : AZZI Maxime
-public double getStock(ChocolatDeMarque produit) {
-Stock stock = stocks.get(produit);
+public double getStock(ChocolatDeMarque chocolats) {
+Stock stock = stocks.get(chocolats);
 if (stock == null) {
 stock = new Stock(0); // On crée un nouveau stock avec une quantité initiale de 0
-stocks.put(produit, stock);
+stocks.put(chocolats, stock);
 }
 return stock.getQuantite();
 }
