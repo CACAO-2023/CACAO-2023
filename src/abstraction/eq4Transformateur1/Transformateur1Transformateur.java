@@ -13,10 +13,6 @@ import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 
-/**
- * @author fouad/amine
- *
- */
 
 public class Transformateur1Transformateur extends Stock implements IFabricantChocolatDeMarque  {
 	
@@ -69,6 +65,12 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		this.pourcentageTransfo.get(Feve.F_BQ).put(Chocolat.C_BQ, conversion);
 	}
 
+	/**
+	 * @author fouad/amine
+	 *
+	 */
+
+	
 	public void next() {
 		super.next();
 		this.journal.ajouter("=== STOCKS === ");

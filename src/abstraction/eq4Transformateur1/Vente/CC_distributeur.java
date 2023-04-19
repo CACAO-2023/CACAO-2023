@@ -15,7 +15,7 @@ import abstraction.eqXRomu.produits.Lot;
 
 
 /**
- * @author fouad/amine
+ * @author amine
  *
  */
 
@@ -112,6 +112,12 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 	}
 
 
+	
+	/**
+	 * @author fouad
+	 *
+	 */
+	
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		double prix=0.0;
 		Object produit = contrat.getProduit();

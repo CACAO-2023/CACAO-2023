@@ -22,7 +22,7 @@ import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 /**
- * @author francois/fouad/amine
+ * @author francois/fouad
  *
  */
 public class CC_producteur extends Transformateur1Transformateur implements IAcheteurContratCadre{
