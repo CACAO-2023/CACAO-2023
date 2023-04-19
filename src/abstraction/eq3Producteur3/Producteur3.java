@@ -25,7 +25,7 @@ public class Producteur3 extends Bourse3  {
 	
 	
 	private HashMap<String,HashMap> Champs;
-	
+	private Double Seuil;
 
 
 	private Champs fields;
@@ -44,7 +44,7 @@ public class Producteur3 extends Bourse3  {
 	public Producteur3() {
 		super();
 		this.fields = new Champs();
-		
+		this.Seuil = 0.;
 
 		this.CoutStep = 0.0;
 		this.CoutTonne = 0.;
@@ -124,7 +124,9 @@ public class Producteur3 extends Bourse3  {
 		
 		updateHectaresLibres(Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape() % 12 == 0) {
-			changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
+			if (Filiere.LA_FILIERE.getEtape() != 0) {
+				changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
+			}
 		}
 
 		// We only add the costs to CoutStep if we are not at step one :
@@ -213,6 +215,38 @@ public class Producteur3 extends Bourse3  {
 		Besoin.add(BesoinHQ);
 		return Besoin;*/
 		return BesoinHQ + BesoinMQ;
+	}
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
+	
+	public Integer besoinHectares(Integer CurrentStep, LinkedList<Double> Liste12DernieresVentes) {
+		Double M12 = 0.;
+		Double M4 = 0.;
+		for (Double i : Liste12DernieresVentes) {
+			M12 += i;
+		}
+		M4 += Liste12DernieresVentes.get(11);
+		M4 += Liste12DernieresVentes.get(10);
+		M4 += Liste12DernieresVentes.get(9);
+		M4 += Liste12DernieresVentes.get(8);
+		
+	}
+	
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 * @param CurrentStep
+	 * @param Liste12DernieresVentesMG
+	 * @param Liste12DernieresVentesHG
+	 * @return
+	 */
+	public Integer variationBesoinHectaresv2(Integer CurrentStep, LinkedList<Double> Liste12DernieresVentesMG, LinkedList<Double> Liste12DernieresVentesHG) {
+		
+		
+		
+		return 0;
 	}
 	
 	/**
