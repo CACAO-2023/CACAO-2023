@@ -38,7 +38,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		}
 		return this.chocosProduits;
 	}
-
+//Verifier par Alexian / François
 	public void initialiser() {
 		super.initialiser();
 		this.pourcentageTransfo = new HashMap<Feve, HashMap<Chocolat, Double>>();
@@ -66,6 +66,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			this.totalStocksFeves.retirer(this, transfo, this.cryptogramme);
 			this.stockChoco.put(cb, this.stockChoco.get(cb)+(transfo)*this.pourcentageTransfo.get(fb).get(cb));
 			int pourcentageCacao =  42;
+			this.totalStocksChoco.ajouter(this, ((transfo)*this.pourcentageTransfo.get(fb).get(cb)), this.cryptogramme);
 			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfo<10?" "+transfo:transfo)+" T de "+fb+" en "+Journal.doubleSur(transfo*this.pourcentageTransfo.get(fb).get(cb),3,2)+" T de "+cb);
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fb+")->"+this.stockFeves.get(fb));
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cb+")->"+this.stockChoco.get(cb));
