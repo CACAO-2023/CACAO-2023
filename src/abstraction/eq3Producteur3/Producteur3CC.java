@@ -36,12 +36,19 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     /**
      * @author Corentin Caugant
      */
+    public double getPrixTonne() {
+        return Math.max(this.CoutTonne, 1000.0);
+    }
+
+    /**
+     * @author Corentin Caugant
+     */
     public double propositionPrix(ExemplaireContratCadre contrat) {
         if ((Feve)contrat.getProduit() == Feve.F_MQ_BE) {
-            // We return a price weing CoutTonne multiplied by a random factor between 1.1 and 1.2
-            return this.CoutTonne * 1.3;
+            // We return a price being CoutTonne multiplied by a random factor between 1.1 and 1.2
+            return this.getPrixTonne() * 1.3;
         } else {
-            return this.CoutTonne * 1.6;
+            return this.getPrixTonne() * 1.6;
         }
     }
 
