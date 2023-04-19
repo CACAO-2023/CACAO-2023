@@ -45,7 +45,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		if (f.getGamme().compareTo(Gamme.BQ)==0 && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
 			return (super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f));}}
 		else {return 0;};};};};
-		return 0;
+		return 100;
 	}
 
 	/**
