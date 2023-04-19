@@ -26,6 +26,9 @@ public class Producteur3Acteur implements IActeur {
 	protected LinkedList<Double> VentesMG; /*Les 12 quantités des dernières ventes de moyens de gammes*/
 	protected LinkedList<Double> VentesHG; /*Les 12 quantités des dernières ventes de hauts de gammes*/
 
+	/**
+	 * @author BOCQUET Gabriel, Corentin Caugant
+	 */
 	public Producteur3Acteur() {
 		String nom = "Equipe 3";
 		journal_operationsbancaires=new Journal("Journal des Opérations bancaires de l'"+nom,this);
