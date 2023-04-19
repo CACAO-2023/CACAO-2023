@@ -55,9 +55,6 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		if (this.superviseurVentesCC!=null) {
 			List<IProduit> produits = new LinkedList<IProduit>();
 			produits.addAll(Filiere.LA_FILIERE.getChocolatsProduits());
-			for (Feve f : Feve.values()) {
-				produits.add(f);
-			}
 			for (Chocolat c : Chocolat.values()) {
 				produits.add(c);
 			}
