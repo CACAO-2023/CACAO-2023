@@ -44,7 +44,7 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2AcheteurC
 		double quantite = l.getQuantiteTotale();
 		
 		System.out.println(" sto "+stockFeves);
-		//.stockFeves.get(feve_concernee).setValeur(this, this.stockFeves.get(feve_concernee)+l.getQuantiteTotale());
+		//.stockFeves.get(feve_conernee).setValeur(this, this.stockFeves.get(feve_concernee)+l.getQuantiteTotale());
 		this.stockFeves.put(feve_concernee, this.stockFeves.get(feve_concernee)-quantite);
 	}
 	
