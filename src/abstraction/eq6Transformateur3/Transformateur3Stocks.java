@@ -14,7 +14,7 @@ import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Transformateur3Stocks extends Transformateur3  {
+public class Transformateur3Stocks extends Transformateur3Acteur  {
 
 /**Mouhamed SOW*/
 	protected Lot stockFeveBG; // feve bas gamme
@@ -61,6 +61,8 @@ public class Transformateur3Stocks extends Transformateur3  {
   /**Mouhamed SOW*/
   public void ajouterFeve(Feve feve, Double quantite, int dateDeRecolte) {
 	    Lot lot;
+	    if (quantite ==0) {;}
+	    else {
 	    switch(feve.getGamme()) {
 	        case BQ:
 	            lot = stockFeveBG;
@@ -79,7 +81,7 @@ public class Transformateur3Stocks extends Transformateur3  {
 	        default:
 	            throw new IllegalArgumentException("Type de fève invalide");
 	    }
-	    lot.ajouter(dateDeRecolte, quantite);
+	    lot.ajouter(dateDeRecolte, quantite);}
 	}
   /**Mouhamed SOW*/
   /**methode pour savoir ou il faut ajouter la feve*/
@@ -157,6 +159,8 @@ public class Transformateur3Stocks extends Transformateur3  {
   /**Mouhamed SOW*/
   public void ajouterChocolat(ChocolatDeMarque choco,Double quantite,int dateProduction) {
 	  Lot lot ;
+	  if (quantite == 0) {;}
+	  else {
 	  switch(choco.getGamme()) {
 	  	case BQ :
 	  		lot=this.stockChocolatBG ;
@@ -175,7 +179,7 @@ public class Transformateur3Stocks extends Transformateur3  {
 	  	default :
 	  		throw new IllegalArgumentException("Type de Chocolat invalide");
 	  }
-	  lot.ajouter(dateProduction,quantite);
+	  lot.ajouter(dateProduction,quantite);}
   }
  /**Mouhamed SOW*/
   public void retirerChocolat(ChocolatDeMarque chocolat,Double quantite) {
@@ -203,7 +207,9 @@ public class Transformateur3Stocks extends Transformateur3  {
 	        }
 	    }
   }
-  
+  	public void next() {
+  		super.next();
+  	}
 }
     
     

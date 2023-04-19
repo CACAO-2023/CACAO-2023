@@ -102,7 +102,6 @@ public class RomuActeur implements IActeur, IMarqueChocolat {
 	@Override
 	public void next() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public List<Variable> getIndicateurs() {

@@ -120,7 +120,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
 
         // We rework the echeancier to fit the stock
         if (echeancier.getQuantiteAPartirDe(contrat.getEcheancier().getStepDebut()) > Stock.getQuantite((Feve)contrat.getProduit())) {
-            echeancier.ajouter(Stock.getQuantite((Feve)contrat.getProduit()));
+            echeancier.ajouter(Math.max(SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER, Stock.getQuantite((Feve)contrat.getProduit())));
         }
 
         return echeancier;
@@ -153,7 +153,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         // Now making the contract
         this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit + "...");
         int length = ((int) Math.round(Math.random() * 10)) + 1;
-        ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, length, (int) Math.round(SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+this.getStock().getQuantite(produit)/length)), cryptogramme,false);
+        ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, length, SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER + (int) Math.round(this.getStock().getQuantite(produit)/length)), cryptogramme,false);
         if (cc != null) {
             this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
         } else {
@@ -167,7 +167,11 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      */
     public void next() {
         super.next();
-        this.getContractForProduct(Feve.F_HQ_BE);
-        this.getContractForProduct(Feve.F_MQ_BE);
+        if (this.getStock().getQuantite(Feve.F_HQ_BE) > 100) {
+            this.getContractForProduct(Feve.F_HQ_BE);
+        }
+        if (this.getStock().getQuantite(Feve.F_MQ_BE) > 100) {
+            this.getContractForProduct(Feve.F_MQ_BE);
+        }
     }
 }
