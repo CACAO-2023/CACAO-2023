@@ -11,7 +11,7 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Transformateur3Vente extends Transformateur3Transformation implements IVendeurContratCadre{
+public class Transformateur3Vente extends Transformateur3Stocks  implements IVendeurContratCadre{
 /**Nathan Salbego*/
 	
 	protected LinkedList<ExemplaireContratCadre> listeCC ;

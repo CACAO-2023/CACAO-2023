@@ -4,7 +4,7 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
 
-public class Transformateur3Transformation extends Transformateur3Stocks {
+public class Transformateur3Transformation extends Transformateur3Vente {
 
 	/** Maxime Bedu*/
 	
@@ -113,9 +113,9 @@ public class Transformateur3Transformation extends Transformateur3Stocks {
 protected double BesoinStep(int Step, Feve f) {
 	int Stepi=Filiere.LA_FILIERE.getEtape();
 	if (f == Feve.F_BQ) {
-		double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_BQ)-stockFeveBG.getQuantiteTotale();
+		double a=super.demandeTotStep(Stepi,Feve.F_BQ)-stockFeveBG.getQuantiteTotale();
 		for (int i=0;i<(Step-Stepi);i++) {
-		a=a+Transformateur3Vente.demandeTotStep(Stepi+i+1,Feve.F_BQ);
+		a=a+super.demandeTotStep(Stepi+i+1,Feve.F_BQ);
 		}
 		if (a>0) {
 			return a;
@@ -125,9 +125,9 @@ protected double BesoinStep(int Step, Feve f) {
 	}
 	if (f == Feve.F_MQ) {
 		if ((Step-Stepi)>1) {
-		double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_MQ)-stockFeveMG.getQuantiteTotale()-getMQStep1();
+		double a=super.demandeTotStep(Stepi,Feve.F_MQ)-stockFeveMG.getQuantiteTotale()-getMQStep1();
 		for (int i=0;i<(Step-Stepi);i++) {
-		a=a+Transformateur3Vente.demandeTotStep(Stepi+i+1,Feve.F_MQ);
+		a=a+super.demandeTotStep(Stepi+i+1,Feve.F_MQ);
 		}
 		if (a>0) {
 			return a;
@@ -136,7 +136,7 @@ protected double BesoinStep(int Step, Feve f) {
 		}
 	} else {
 		if ((Step-Stepi)==1) {
-			double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_MQ)-getMQStep1();
+			double a=super.demandeTotStep(Stepi,Feve.F_MQ)-getMQStep1();
 			if (a>0) {
 				return a;
 			}else {
@@ -148,9 +148,9 @@ protected double BesoinStep(int Step, Feve f) {
 		}
 	if (f == Feve.F_MQ_BE) {
 		if ((Step-Stepi)>1) {
-		double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_MQ_BE)-stockFeveMGL.getQuantiteTotale()-getMQBEStep1();
+		double a=super.demandeTotStep(Stepi,Feve.F_MQ_BE)-stockFeveMGL.getQuantiteTotale()-getMQBEStep1();
 		for (int i=0;i<(Step-Stepi);i++) {
-		a=a+Transformateur3Vente.demandeTotStep(Stepi+i+1,Feve.F_MQ_BE);
+		a=a+super.demandeTotStep(Stepi+i+1,Feve.F_MQ_BE);
 		}
 		if (a>0) {
 			return a;
@@ -159,7 +159,7 @@ protected double BesoinStep(int Step, Feve f) {
 		}
 	} else {
 		if ((Step-Stepi)==1) {
-			double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_MQ_BE)-getMQBEStep1();
+			double a=super.demandeTotStep(Stepi,Feve.F_MQ_BE)-getMQBEStep1();
 			if (a>0) {
 				return a;
 			}else {
@@ -171,9 +171,9 @@ protected double BesoinStep(int Step, Feve f) {
 		}
 	if (f == Feve.F_HQ_BE) {
 		if ((Step-Stepi)>2) {
-		double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_HQ_BE)-stockFeveHGL.getQuantiteTotale()-getHQBEStep1()-getHQBEStep2();
+		double a=super.demandeTotStep(Stepi,Feve.F_HQ_BE)-stockFeveHGL.getQuantiteTotale()-getHQBEStep1()-getHQBEStep2();
 		for (int i=0;i<(Step-Stepi);i++) {
-		a=a+Transformateur3Vente.demandeTotStep(Stepi+i+1,Feve.F_HQ_BE);
+		a=a+super.demandeTotStep(Stepi+i+1,Feve.F_HQ_BE);
 		}
 		if (a>0) {
 			return a;
@@ -182,7 +182,7 @@ protected double BesoinStep(int Step, Feve f) {
 		}
 	} else {
 		if ((Step-Stepi)==2) {
-			double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_HQ_BE)-getHQBEStep1()-getHQBEStep2();
+			double a=super.demandeTotStep(Stepi,Feve.F_HQ_BE)-getHQBEStep1()-getHQBEStep2();
 			if (a>0) {
 				return a;
 			}else {
@@ -190,7 +190,7 @@ protected double BesoinStep(int Step, Feve f) {
 			}
 			} else {
 			if ((Step-Stepi)==1) {
-				double a=Transformateur3Vente.demandeTotStep(Stepi,Feve.F_HQ_BE)-getHQBEStep2();
+				double a=super.demandeTotStep(Stepi,Feve.F_HQ_BE)-getHQBEStep2();
 				if (a>0) {
 					return a;
 				}else {
