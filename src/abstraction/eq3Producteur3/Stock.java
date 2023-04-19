@@ -35,6 +35,10 @@ public class Stock {
 			this.stock.put(feve, lot);
 		}
 	}
+	
+	/**
+	 * @author Naveros Marine
+	 */
 	public Stock(Feve f, Lot l) {
 		this.stock = new HashMap<Feve, Lot>();
 		this.stock.put(f,l);
@@ -138,7 +142,7 @@ public class Stock {
 	 */
 	public Lot retirerVielleFeve(Feve f, double quantite) {
 		if (quantite<=0 || quantite>this.getQuantite(f)+0.001) {
-			throw new IllegalArgumentException("Essaie de retirer ("+quantite+") alors que les stocks sont insuffisants");
+			throw new IllegalArgumentException("Essaie de retirer ("+quantite+") de " + f.toString() + " alors que les stocks sont de " + this.getQuantite(f));
 		} else {
 			Lot res=new Lot(f);
 			List<Integer> vides = new LinkedList<Integer>();
@@ -210,7 +214,7 @@ public class Stock {
 									newLots.get(Feve.F_BQ).ajouter(creationStep, quantite.get(creationStep)); // We add the beans to the lower quality stock
 									break;
 								case F_HQ_BE: // If the beans are of the highest quality, we lower their quality to the medium quality
-									newLots.get(Feve.F_BQ).ajouter(creationStep, quantite.get(creationStep)); // We add the beans to the lower quality stock
+									newLots.get(Feve.F_MQ_BE).ajouter(creationStep, quantite.get(creationStep)); // We add the beans to the lower quality stock
 									break;
 							}
 							break;
@@ -234,6 +238,7 @@ public class Stock {
 	 * This method will return the age of the beans of a given type
 	 * @param feve Type of bean
 	 * @return The age of the beans of the given type
+	 * @author Caugant Corentin
 	 */
 	public int getAge(Feve feve) {
 		if (this.stock.get(feve).getQuantites().keySet().size() > 0) {
