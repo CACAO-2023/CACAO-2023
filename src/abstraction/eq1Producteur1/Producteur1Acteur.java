@@ -35,7 +35,7 @@ public class Producteur1Acteur implements IActeur {
 		this.journal_champs = new Journal("Journal : champs"+this.getNom(), this);
 	}
 	
-	public void initialiser() {
+	public void initialiser() { //elouan et charles
 		this.step = 0;
 		this.champBas = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
 		for (int i=0; i<30; i++) {
