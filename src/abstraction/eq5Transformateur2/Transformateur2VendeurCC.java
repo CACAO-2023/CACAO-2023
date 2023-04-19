@@ -14,7 +14,7 @@ import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 
-public class Transformateur2VendeurCC extends Transformateur2 implements IVendeurContratCadre {
+public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implements IVendeurContratCadre {
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
 	private LinkedList<ExemplaireContratCadre> mesContratEnTantQueVendeur;
 	private IProduit produit;
