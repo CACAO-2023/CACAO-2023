@@ -1,8 +1,8 @@
 package abstraction.eq2Producteur2;
 
-import java.util.ArrayList;
+//Code écrit par Nathan Rabier
 
-//Code écrit par Nathan
+import java.util.ArrayList;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -93,6 +93,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	}
 	
 	public void next() {
+		this.journalStocks.ajouter("Stocks début step " + this.stocksString());
 		super.next();
 		this.majPerim();
 		this.majTot();
@@ -112,7 +113,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	}
 	
 	/**
-	 * Mets à jour la périmation du stock de l'acteur
+	 * Mets à jour la périmation des stocks de l'acteur
 	 * @return les quantitées déclassées et périmées de fèves par type de fève.
 	 */
 	private ArrayList<HashMap<Feve, Double>> majPerim() {
@@ -120,9 +121,9 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	}
 	
 	/**
-	 * Effectue la déclasification et la périmation des fèves du stock stocks,
-	 * contenant des quatres types de fèves, par rapport à l'étape etape considéré
-	 * @param stocks le stock de fèves des différents types
+	 * Effectue la déclasification et la périmation des fèves des stocks stocks,
+	 * contenant les quatres types de fèves, par rapport à l'étape etape considéré
+	 * @param stocks les stocks des fèves des différents types
 	 * @param etape l'étape considéré pour calculer la périmation
 	 * @return un arraylist de deux HashMap<Feve, Double>, dont le premier représente les quantitées de fèves déclassées en fonction du type de fève, et le second les quantitées de fèves périmées en fonction du type de fève.
 	 */
@@ -161,8 +162,8 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	
 	/**
 	 * Renvoie la variable représentant la quantité totale de fèves stockée du type f
-	 * @return la variable de la quantité totale de fèves stockée du type f
 	 * @param f le type de fève
+	 * @return la variable de la quantité totale de fèves stockée du type f
 	 */
 	protected Variable getStockTot(Feve f) {
 		return this.stocksTot.get(f);
@@ -182,9 +183,9 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	
 	/**
 	 * Calcule la quantité de fèves stocké du type f produites avant l'étape etape (inclus)
-	 * @return la quantité de fève
 	 * @param f Le type de fève
 	 * @param etape L'étape maximal de production
+	 * @return la quantité de fève
 	 */
 	protected double getStockTotStep(Feve f, int etape) {
 		HashMap<Integer, Double> stockFeve = this.stocks.get(f).getQuantites();
@@ -308,6 +309,15 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		return copieStocks;
 	}
 	
+	/**
+	 * Retire les quantites varQuantite au stocks, et s'il reste moins de fèves que ce 
+	 * qu'il faut enlever, alors le stock devient vide et la quantite manquante 
+	 * se retrouve stocké dans quantiteRetard. Fonctionne par effet de bord.
+	 * La valeur de QuantiteRetard en entrée n'importe pas, tant que non Null.
+	 * @param varQuantite les variations de quantite par type de fève.
+	 * @param stocks le stock de chaque type de fève.
+	 * @param quantiteRetard la quantite restante à retirer par type de fève.
+	 */
 	private void variaQuant(HashMap<Feve, Double> varQuantite, HashMap<Feve, Lot> stocks, HashMap<Feve, Double> quantiteRetard) {
 		for (Feve f: varQuantite.keySet()) {
 			if (varQuantite.get(f) < 0) {
@@ -332,6 +342,13 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		}
 	}
 	
+	/**
+	 * Calcule la quantité de fèves stocké du type f produites avant l'étape etape (inclus),
+	 * une fois les livraisons des contrats cadre à faire cette étape-ci enlevées.
+	 * @param f le type de fève.
+	 * @param etape l'étape maximale de production des fèves.
+	 * @return la quantite de fèves correspondantes
+	 */
 	protected double getStockTotStepTheo(Feve f, int etape) {
 		HashMap<Integer, Double> stockFeve = this.getDescrStocksTheo(Filiere.LA_FILIERE.getEtape()).get(1).get(f);
 		double quantiteTot = 0.;
@@ -342,20 +359,45 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		return quantiteTot;
 	}
 	
-	protected double getStockTotTimeTheo(Feve f, int nbStepProduite) {
-		return this.getStockTotStepTheo(f, Filiere.LA_FILIERE.getEtape() - nbStepProduite);
+	/**
+	 * Calcule la quantité de fèves stocké du type f, qui sont produite depuis plus
+	 * de nbStepStocke étapes (nbStepStocke étant inclus), une fois les fèves à livrer
+	 * par contrat cadre ce tour ci enlevées.
+	 * @param f le type de fève.
+	 * @param nbStepStocke le temps maximal en stock.
+	 * @return la quantite de fèves correspondantes.
+	 */
+	protected double getStockTotTimeTheo(Feve f, int nbStepStocke) {
+		return this.getStockTotStepTheo(f, Filiere.LA_FILIERE.getEtape() - nbStepStocke);
 	}
 	
+	/**
+	 * Renvoie les stocks prévus à l'étape etape en considérant la production prévisionnelle et
+	 * les contrats cadres en cours.
+	 * @param etape l'étape de calcul du stock prévisionnel.
+	 * @return les stocks (en HashMap<Feve, HashMap<Integer, Double>> et non en HashMap<Feve, Lot>)
+	 */
 	protected HashMap<Feve, HashMap<Integer, Double>> getStocksTheo(int etape) {
 		return this.getDescrStocksTheo(etape).get(etape - Filiere.LA_FILIERE.getEtape() + 1);
 	}
 	
-	protected HashMap<Integer, Double> getStocksTotTheo(Feve f, int etape) {
-		return this.getDescrStocksTheo(etape).get(0).get(f);
+	/**
+	 * Renvoie l'évolution du stock total entre l'étape courante et l'étape etape.
+	 * @param etape la dernière etape de calcul du stock total prévisionnel.
+	 * @return Pour chaque type de fève, un dictionnaire liant une étape à la valeur du stock total de ce type de fève.
+	 */
+	protected HashMap<Feve, HashMap<Integer, Double>> getStocksTotTheo(int etape) {
+		return this.getDescrStocksTheo(etape).get(0);
 	}
 	
-	protected HashMap<Feve, HashMap<Integer, Double>> getStocksTotTheo( int etape) {
-		return this.getDescrStocksTheo(etape).get(0);
+	/**
+	 * Renvoie l'évolution du stock total du type de fève f entre l'étape courante et l'étape etape.
+	 * @param f le type de fève
+	 * @param etape la dernière etape de calcul du stock total prévisionnel.
+	 * @return Un dictionnaire liant une étape à la valeur du stock total de ce type de fève.
+	 */
+	protected HashMap<Integer, Double> getStocksTotTheo(Feve f, int etape) {
+		return getStocksTotTheo(etape).get(f);
 	}
 	
 	/**
@@ -376,6 +418,19 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	protected void ajouterStock(Feve f, int etapeProd, double quantite) {
 		stocks.get(f).ajouter(etapeProd, quantite);
 		this.majTot(f);
+	}
+	
+	/**
+	 * Convertis la quantite quantite du stock de fèves moyenne qualité bio-équitable en fèves
+	 * moyenne qualité sans label, afin de pouvoir les vendres à la bourse.
+	 * @param quantite la quantite à convertir.
+	 */
+	protected void convertStockMQ_BE(double quantite) {
+		Lot convLot = this.retirerStock(Feve.F_MQ_BE, quantite);
+		for (int etape: convLot.getQuantites().keySet())
+			this.ajouterStock(Feve.F_MQ, etape, convLot.getQuantites().get(etape));
+		this.majTot(Feve.F_MQ_BE);
+		this.majTot(Feve.F_MQ);
 	}
 	
 	/**
