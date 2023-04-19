@@ -32,6 +32,14 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		this.age_hectares =  new HashMap<Feve,HashMap<Integer, Integer>>();
 		for (Feve f: this.lesFeves)
 			this.age_hectares.put(f, new HashMap<Integer, Integer>());
+		setEmploye(300000, 300000, 250000, 50000);
+		setSalaires(50,50,200,300);
+		setSurface(300000, 300000, 250000, 50000);
+		setPrix(4000, 5500, 6000, 8000);
+		setAge(Feve.F_BQ, 24*3, 300000);
+		setAge(Feve.F_MQ, 24*3, 300000);
+		setAge(Feve.F_MQ_BE, 24*3, 250000);
+		setAge(Feve.F_HQ_BE, 24*3, 50000);
 	}
 	// Mise en place des differents setters
 	
@@ -61,6 +69,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		this.employes.put(Feve.F_MQ_BE, employes_MQ_BE);
 		this.employes.put(Feve.F_HQ_BE, employes_HQ_BE);
 	}
+	
 	/**
 	 * @author Florian
 	 * @param salaire_employes_BQ
@@ -84,10 +93,16 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	}
 	public void setSurface(int surface_plantation_BQ, int surface_plantation_MQ, int surface_plantation_MQ_BE, int surface_plantation_HQ_BE) {
 		this.surface_plantation.put(Feve.F_BQ, surface_plantation_BQ);
-		this.employes.put(Feve.F_MQ, surface_plantation_MQ);
-		this.employes.put(Feve.F_MQ_BE, surface_plantation_MQ_BE);
-		this.employes.put(Feve.F_HQ_BE, surface_plantation_HQ_BE);
+		this.surface_plantation.put(Feve.F_MQ, surface_plantation_MQ);
+		this.surface_plantation.put(Feve.F_MQ_BE, surface_plantation_MQ_BE);
+		this.surface_plantation.put(Feve.F_HQ_BE, surface_plantation_HQ_BE);
 	}
+	
+	public void setAge(Feve f, int age, int qte) {
+		this.age_hectares.get(f).put(age, qte);
+	}
+	
+	
 	public void Planter(Feve f, int i) {
 		this.age_hectares.get(f).put(Filiere.LA_FILIERE.getEtape(), i);
 	}
