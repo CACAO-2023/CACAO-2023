@@ -50,6 +50,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			this.totalStocksFeves.ajouter(this, 10000.0, this.cryptogramme);
 			this.journal.ajouter("ajout de 10000 de "+f+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
 		}
+			
 		}
 		this.stockChoco=new HashMap<Chocolat,Double>();
 		for (Chocolat c : Chocolat.values()) {
