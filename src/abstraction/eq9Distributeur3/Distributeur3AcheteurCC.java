@@ -176,7 +176,9 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		else {
 			prix_tonne_de_vente_apres_achat = prix_tonne_de_vente_contrat;
 		}
-		
+		journal_ventes.ajouter("ancien prix tonne de " + contrat.getProduit()+" est de " + prix_tonne_vente.get(choco) + "€");
+		journal_ventes.ajouter("nouveau prix tonne de " + contrat.getProduit()+" est de " + prix_tonne_de_vente_apres_achat + "€");
+
 		this.prix_tonne_vente.put((ChocolatDeMarque)contrat.getProduit(), prix_tonne_de_vente_apres_achat);
 
 		return contrat.getPrix();
