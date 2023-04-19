@@ -25,7 +25,8 @@ public class Producteur3 extends Bourse3  {
 	
 	
 	private HashMap<String,HashMap> Champs;
-	private Double Seuil;
+	private Double SeuilHG;
+	private Double SeuilMG;
 
 
 	private Champs fields;
@@ -44,7 +45,8 @@ public class Producteur3 extends Bourse3  {
 	public Producteur3() {
 		super();
 		this.fields = new Champs();
-		this.Seuil = 0.;
+		this.SeuilHG = 0.;
+		this.SeuilMG = 0.;
 
 		this.CoutStep = 0.0;
 		this.CoutTonne = 0.;
@@ -125,7 +127,9 @@ public class Producteur3 extends Bourse3  {
 		updateHectaresLibres(Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape() % 12 == 0) {
 			if (Filiere.LA_FILIERE.getEtape() != 0) {
-				changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
+				if (Filiere.LA_FILIERE.getEtape() == 12) {
+					changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
+				}
 			}
 		}
 
@@ -220,7 +224,33 @@ public class Producteur3 extends Bourse3  {
 	/**
 	 * @author Dubus-Chanson Victor
 	 */
+	/*Initialise le seuil de HG des 6 premiers mois*/
+	public void setSeuilHG(LinkedList<Double> Liste12DernieresVentesHG) {
+		Double M = 0.;
+		for (Double i : Liste12DernieresVentesHG) {
+			M += i;
+		}
+		this.SeuilHG = M/12;
+	}
 	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
+	/*Initialise le seuil de MG des 6 premiers mois*/
+	public void setSeuilMG(LinkedList<Double> Liste12DernieresVentesMG) {
+		Double M = 0.;
+		for (Double i : Liste12DernieresVentesMG) {
+			M += i;
+		}
+		this.SeuilMG = M/12;
+	}
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 * @param CurrentStep
+	 * @param Liste12DernieresVentes
+	 * @return
+	 */
 	public Integer besoinHectares(Integer CurrentStep, LinkedList<Double> Liste12DernieresVentes) {
 		Double M12 = 0.;
 		Double M4 = 0.;
