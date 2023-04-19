@@ -1,3 +1,4 @@
+
 package abstraction.eq8Distributeur2;
 
 import java.awt.Color;
@@ -5,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
 import abstraction.eqXRomu.clients.ClientFinal;
 import abstraction.eqXRomu.clients.ExempleDistributeurChocolatMarque;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
@@ -23,42 +23,47 @@ import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarque, IMarqueChocolat,IAcheteurContratCadre {
-	
+public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarque, IMarqueChocolat {
+
 	protected int cryptogramme;
 	protected String nom;
 	protected ArrayList<ChocolatDeMarque> chocolats;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
-    protected HashMap<ChocolatDeMarque, Variable> stocks;
+    //protected HashMap<ChocolatDeMarque, Stock> stocks ;
+	protected StockGeneral stocks;
     protected HashMap<Gamme, Double> pourcentagesGamme;
     private double[] prix;
     private String[] marques;
-   
-	private double stockBasDeGamme;
-	private double stockMoyenDeGamme;
-	private double stockHautDeGamme;
+    private IProduit produit;
+    private HashMap<IProduit, Integer> produitsEnStock;
+    //	private Stock stockBasDeGamme;
+    //	private Stock stockMoyenDeGamme;
+    //	private Stock stockHautDeGamme;
     protected Journal journal_operationsbancaires;
     protected Journal journal_ventes;
     protected Journal journal_achats;
     protected Journal journal_stocks;
+    protected Journal journal_ContratCadre;
     protected Journal journal_activitegenerale;
-    
+
 
 	public Distributeur2Acteur() {
 		cryptogramme = 0; // valeur par défaut à modifier
 	    nom = "équipe 8";
 	    chocolats =  new ArrayList<ChocolatDeMarque>();
 	    prixDeVente = new HashMap<>();
-	    stocks = new HashMap<>();
+	    stocks = new StockGeneral();
+	    
 	    pourcentagesGamme = new HashMap<>();
 	    prix = new double[]{0, 0, 0}; // valeurs par défaut à modifier
 	    marques = new String[]{"marque 1", "marque 2", "marque 3"}; // valeurs par défaut à modifier
-	    stockBasDeGamme = 0.0; // valeur par défaut à modifier
-	    stockMoyenDeGamme = 0.0; // valeur par défaut à modifier
-	    stockHautDeGamme = 0.0; // valeur par défaut à modifier
+//	    stockBasDeGamme = new Stock(0.0);//0.0; // valeur par défaut à modifier
+//	    stockMoyenDeGamme =  new Stock(0.0);//0.0; // valeur par défaut à modifier
+//      stockHautDeGamme =  new Stock(0.0);//0.0; // valeur par défaut à modifier
 	    journal_operationsbancaires = new Journal("Journal des Opérations bancaires de l'" + nom, this);
 	    journal_ventes = new Journal("Journal des Ventes de l'" + nom, this);
 	    journal_achats = new Journal("Journal des Achats de l'" + nom, this);
+	    journal_ContratCadre= new Journal("Journal des Contrats Cadre de l'" + nom, this);
 	    journal_activitegenerale = new Journal("Journal général de l'" + nom, this);
 	    journal_stocks = new Journal("Journal des stocks" + nom, this);
         initialiserGamme();
@@ -96,29 +101,34 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	public Color getColor() {// NE PAS MODIFIER
 		return new Color(209, 179, 221); 
 	}
-
+	
+    //Auteur : Ben Messaoud Karim
 	public String getDescription() {
 		return "Notre acteur, Royal Roast, est un distributeur de chocolat de toutes les gammes qui s'engage à prendre en compte les enjeux de la filière du cacao pour distribuer un produit final qui respecte les normes et répond aux besoins des clients.";
 	}
-
+	
+    //Auteur : Ben Messaoud Karim
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
 		return res;
 	}
-
+	
+	//Auteur : Marzougui Mariem
 	// Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
 		return res;
 	}
-
+	
+	//Auteur : Marzougui Mariem
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(journal_operationsbancaires);
 		res.add(journal_achats);
 		res.add(journal_ventes);
+		res.add(journal_ContratCadre);
 		res.add(journal_activitegenerale);
 		return res;
 	}
@@ -130,16 +140,18 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	// Appelee en debut de simulation pour vous communiquer 
 	// votre cryptogramme personnel, indispensable pour les
 	// transactions.
+	//Auteur : Ben Messaoud Karim
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
 	}
 
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
+	//Auteur : Ben Messaoud Karim
 	public void notificationFaillite(IActeur acteur) {
 		
 	}
-
+	//Auteur : Marzougui Mariem
 	// Apres chaque operation sur votre compte bancaire, cette
 	// operation est appelee pour vous en informer
 	public void notificationOperationBancaire(double montant) {
@@ -155,6 +167,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	}
 	
 	// Renvoie le solde actuel de l'acteur
+	//Auteur : Ben Messaoud Karim
 	public double getSolde() {
 		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme);
 	}
@@ -173,15 +186,18 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
 	}
-
-	public  Variable getStock(ChocolatDeMarque choco) {
-	    int pos = (((List<Variable>) choco).indexOf(choco));
-	    if (pos < 0) {
-	        return null;
-	    } else {
-	        return stocks.get(pos);
-	    }
-	}
+	
+	//Auteur : Ben Messaoud Karim
+	public  Stock getStock(ChocolatDeMarque choco) {
+		 int pos = (((List<Variable>) choco).indexOf(choco));
+		 
+		 if (pos < 0) {
+		 return null;
+		 
+		 } else {
+		 return this.getStock(choco);
+		 }
+		}
 
 	public List<String> getMarquesChocolat() {
 		return null;
@@ -193,8 +209,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	//Si c'est le cas, la fonction renvoie le prix correspondant à ce 
 	//chocolat de marque. Sinon, la fonction renvoie 0. 
 	
-	
-	@Override
+	//Auteur : Ben Messaoud Karim
 	public double prix(ChocolatDeMarque choco) {
 		if(prixDeVente.containsKey(choco)) {
 			return prixDeVente.get(choco);
@@ -202,87 +217,45 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			return 0;
 		}
 	}
-
-	@Override
+	
+	//Auteur : Ben Messaoud Karim et Maxime Azzi
     public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
-        int pos = (chocolats.indexOf(choco));
-        if (pos < 0) {
-            return 0.0;
-        } else {
-            double stockGamme;
-            if (choco.getGamme() == Gamme.BQ) {
-                stockGamme = stockBasDeGamme;
-            } else if (choco.getGamme() == Gamme.MQ) {
-                stockGamme = stockMoyenDeGamme;
-            } else {
-                stockGamme = stockHautDeGamme;
-            }
-            return Math.min(stockGamme, this.getStock(choco).getValeur());
-        }
-    }
+    	 if (choco == null || this.stocks.getStock(choco) == 0.0) {
+    		 return 0.0;
+    		 } else {
+    		 double stockGamme;
+    		 double stockChoco = this.stocks.getStock(choco);
+    		 stockGamme = this.stocks.getStock(choco);
+    		 
+    		 return Math.min(stockGamme, stockChoco);
+    		 }
+    		}
 
-	@Override
+	//Auteur : Ben Messaoud Karim et Maxime Azzi
     public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
-        int pos = chocolats.indexOf(choco);
-        if (pos < 0) {
-            return 0.0;
-        } else {
-            if (choco.getGamme() == Gamme.BQ) {
-                return Math.min(stockBasDeGamme, this.getStock(choco).getValeur()) / 10.0;
-            } else {
-                return 0.0;
-            }}
-        }
+    	int pos = chocolats.indexOf(choco);
+    	if (pos < 0) {
+    	return 0.0;
+    	} else {
+    	if (choco.getGamme() == Gamme.BQ) {
+    		double n = (this.getStock(choco).getQuantite());
+    	return n / 10.0;
+    	} else {
+    	return 0.0;
+    	}}
+    	}
 
-	 @Override
+	//Auteur : Ben Messaoud Karim et Maxime Azzi
 	    public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 	        int pos = chocolats.indexOf(choco);
 	        if (pos >= 0) {
-	            this.getStock(choco).retirer(this, quantite);
+	            this.stocks.retirerDuStock(choco, quantite);
 	        }
 	    }
-
-	@Override
+	//Auteur : Ben Messaoud Karim
 	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
-		// TODO Auto-generated method stub
-		
-	}
-//-----------------------------------------Partie contrat cadre
-	@Override
-	public boolean achete(IProduit produit) {
-		// TODO Auto-generated method stub
-		return false;
+		// Ajouter un message dans le journal pour indiquer que le rayon est vide
+	    journal_activitegenerale.ajouter("Le rayon du chocolat " + choco.getNom() + " est vide.");
 	}
 
-	@Override
-	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
-			Echeancier echeancier, long cryptogramme, boolean tg) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		
-	}
-	//-----------------------------------------FIN Partie contrat cadre
 }

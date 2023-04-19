@@ -2,12 +2,14 @@ package abstraction.eq3Producteur3;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.Feve;
 
 public class Producteur3Acteur implements IActeur {
 	
@@ -22,7 +24,11 @@ public class Producteur3Acteur implements IActeur {
 	protected Double CoutStep; /* Tout nos couts du step, reinitialises a zero au debut de chaque step et payes a la fin du step*/
 	protected Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
 
+	protected LinkedList<Double> VentesMG; /*Les 12 quantités des dernières ventes de moyens de gammes*/
+	protected LinkedList<Double> VentesHG; /*Les 12 quantités des dernières ventes de hauts de gammes*/
+
 	public Producteur3Acteur() {
+
 	String nom = "Equipe 3";
 	journal_operationsbancaires=new Journal("Journal des Opérations bancaires de l'"+nom,this);
     journal_ventes=new Journal("Journal des Ventes de l'"+nom,this);
@@ -30,7 +36,10 @@ public class Producteur3Acteur implements IActeur {
     journal_activitegenerale=new Journal("Journal général de l'"+nom,this);
     journal_Stock = new Journal("Journal des Stocks de l'"+nom,this);
     journal_catastrophe = new Journal("Journal des Catastrophes de l'"+nom,this);
-	this.Stock = new Stock();
+	 this.Stock = new Stock();
+
+		this.VentesMG = new LinkedList<Double>();
+		this.VentesHG = new LinkedList<Double>();
 	}
 	
 	/**
@@ -64,17 +73,16 @@ public class Producteur3Acteur implements IActeur {
 	protected Journal getJStock() {
 		return this.journal_Stock;
 	}
-<<<<<<< HEAD
+
 
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
-=======
 	protected Journal getJCatastrophe() {
 		return this.journal_catastrophe;
 	}
 	
->>>>>>> branch 'Desov2suisUnBoulet' of https://github.com/Dahan13/CACAO-2023
+
 	protected int getCryptogramme() {
 		return this.cryptogramme;
 	}
@@ -111,7 +119,6 @@ public class Producteur3Acteur implements IActeur {
 	 * @author BOCQUET Gabriel
 	 */	
 	public void next() {
-		
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -187,4 +194,25 @@ public class Producteur3Acteur implements IActeur {
 		return Filiere.LA_FILIERE;
 	}
 
+	////////////////////////////////////////////////////////
+	//      Quelques fonction utilitaires diverses        //
+	////////////////////////////////////////////////////////
+
+	/**
+	 * @author Corentin Caugant
+	 */
+	public void addVenteQuantite(double quantite, Feve feve) {
+		if (feve == Feve.F_MQ_BE || feve == Feve.F_MQ) {
+			if (this.VentesMG.size() == 12) {
+				this.VentesMG.removeFirst();
+			}
+			this.VentesMG.addLast(quantite);
+		}
+		else if (feve == Feve.F_HQ_BE) {
+			if (this.VentesHG.size() == 12) {
+				this.VentesHG.removeFirst();
+			}
+			this.VentesHG.addLast(quantite);
+		}
+	}
 }
