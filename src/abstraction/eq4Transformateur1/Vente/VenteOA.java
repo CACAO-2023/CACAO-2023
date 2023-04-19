@@ -16,7 +16,7 @@ public class VenteOA extends AODistributeur implements IVendeurOA {
 			if (offre.getChocolat().equals(c.getChocolat()) && (offre.getMarque()==null || offre.getMarque().equals(c.getMarque()))) { // type recherche
 				if (this.stockChocoMarque.get(c)>=offre.getQuantiteT()) {
 					this.journal.ajouter(" "+this.stockChocoMarque.get(c)+" T en stock -> quantite suffisante");
-					return new abstraction.eqXRomu.offresAchat.PropositionVenteOA(offre, this, c, 200);
+					return new abstraction.eqXRomu.offresAchat.PropositionVenteOA(offre, this, c, 1000);
 				} else {
 					this.journal.ajouter(" "+this.stockChocoMarque.get(c)+" T en stock -> quantite insuffisante");
 				}

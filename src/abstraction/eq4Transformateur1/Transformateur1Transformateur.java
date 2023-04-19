@@ -60,7 +60,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		super.next();
 		Feve fb = Feve.F_BQ;
 		Chocolat cb = Chocolat.C_BQ;
-		int transfo = (int) (Math.min(this.stockFeves.get(fb), Math.random()*100));
+		int transfo = (int) (Math.min(this.stockFeves.get(fb), Math.random()*1000));
 		if (transfo>0) {
 			this.stockFeves.put(fb, this.stockFeves.get(fb)-transfo);
 			this.totalStocksFeves.retirer(this, transfo, this.cryptogramme);
@@ -73,7 +73,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		}
 		Feve fh = Feve.F_HQ_BE;
 		Chocolat ch = Chocolat.C_HQ_BE;
-		int transfoh = (int) (Math.min(this.stockFeves.get(fh), Math.random()*100));
+		int transfoh = (int) (Math.min(this.stockFeves.get(fh), Math.random()*1000));
 		if (transfoh>0) {
 			this.stockFeves.put(fh, this.stockFeves.get(fh)-transfoh);
 			this.totalStocksFeves.retirer(this, transfoh, this.cryptogramme);
