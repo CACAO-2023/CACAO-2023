@@ -20,19 +20,6 @@ import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 
-/**
-<<<<<<< HEAD
- * @author Fouad LBAKALI & Amine RAHIM
-=======
-
-/**
- * @author fouad/amine
->>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4/
-=======
- * @author amine
->>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4/
- *
- */
 
 public class CC_distributeur extends Stock implements IVendeurContratCadre {
 
@@ -43,6 +30,11 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 	}
 	
+	/**
+	 * @author fouad
+	 *
+	 */
+	 
 	public void next() {
 		super.next();
 
@@ -80,7 +72,7 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 					if (vendeur!=this) { // on ne peut pas passer de contrat avec soi meme
 						this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : Vendeur tire au sort = "+vendeur);
 						Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 100);
-						//ExemplaireContratCadre contrat = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, echeancier, this.cryptogramme.intValue(), false, 10);
+						//ExemplaireContratCadre contrat = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, echeancier, this.cryptogramme.intValue(), false, 15);
 						//if (contrat!=null) {
 							//this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : contrat signe = "+contrat);
 						//}
@@ -102,6 +94,11 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+res);
 		return res;
 	}
+	
+	
+	/**
+	 @author amine
+	 */
 	
 	public Echeancier propositionDuVendeur(ExemplaireContratCadre contrat){
 		
