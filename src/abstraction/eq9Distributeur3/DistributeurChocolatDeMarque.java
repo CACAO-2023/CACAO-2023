@@ -32,12 +32,13 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurCC implem
 			
 		}
 		// TODO Auto-generated method stub
-		return 0;
+		return 10;
 	}
 	
 	//baptiste
 	public HashMap<ChocolatDeMarque, Double> quantiteTotale() {
 		HashMap<ChocolatDeMarque, Double> qtVente = new HashMap<ChocolatDeMarque, Double> ();
+		journal_ventes.ajouter("Test" + qtVente.toString() );
 		HashMap<ChocolatDeMarque, Double> Stock = this.stock.getQteStock();
 		journal_ventes.ajouter("Voici l'état du stock : " + Stock.toString());
 		for (Entry<ChocolatDeMarque, Double> chocolat : Stock.entrySet()) {
@@ -58,7 +59,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurCC implem
 				quantiteEnVente_0 = quantiteEnVente;
 			}
 		}
-		journal_ventes.ajouter("On met en vente " + quantiteEnVente + "tonnes de chocolat");
+		journal_ventes.ajouter("On met en vente " + qtVente.toString() + "tonnes de chocolat");
 		return qtVente;
 
 	}

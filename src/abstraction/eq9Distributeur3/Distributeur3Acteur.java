@@ -56,7 +56,7 @@ public class Distributeur3Acteur implements IActeur{
 
 		
 
-		this.stock = new Stock(this);
+		
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
 		
 		// william : pour pouvoir acheter le chocolat qui nous intéresse (HQ BE, MQ BE, MQ)
@@ -80,12 +80,12 @@ public class Distributeur3Acteur implements IActeur{
 		this.prixMoyen = new HashMap<ChocolatDeMarque, Double[]>();
 		
 		this.prix_tonne_vente = new HashMap<ChocolatDeMarque, Double> ();
-
+		
+		this.stock = new Stock(this);
 		
 	}
 	
 	public void initialiser() {
-		
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
 		for (int i=0; i<chocolats_filiere.size(); i++) {
@@ -95,6 +95,11 @@ public class Distributeur3Acteur implements IActeur{
 			}
 		}
 		System.out.println(chocolats);
+		for (int i = 0; i< this.chocolats.size(); i++) {
+			this.stock.ajoutQte(chocolats.get(i), 100000000);
+		}
+		
+		
 		
 	}
 	

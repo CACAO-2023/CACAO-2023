@@ -16,6 +16,7 @@ public class Stock  {
 	public Stock(Distributeur3Acteur a) {
 		QteStock = new HashMap<ChocolatDeMarque, Double> ();
 		this.a = a;
+		
 	}
 	
 	
