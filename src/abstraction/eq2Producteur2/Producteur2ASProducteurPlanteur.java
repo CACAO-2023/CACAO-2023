@@ -29,6 +29,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		this.employes = new HashMap<Feve, Integer>();
 		this.salaires = new HashMap<Feve, Double>();
 		this.surface_plantation = new HashMap<Feve, Integer>();
+		this.prix = new HashMap<Feve, Double>();
 		this.age_hectares =  new HashMap<Feve,HashMap<Integer, Integer>>();
 		for (Feve f: this.lesFeves)
 			this.age_hectares.put(f, new HashMap<Integer, Integer>());
