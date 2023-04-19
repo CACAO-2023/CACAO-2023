@@ -175,8 +175,8 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		Object produit = contrat.getProduit();
 		if (produit instanceof Feve) {
 			switch ((Feve)produit) {
-			case F_HQ_BE : prix= 3525;break;
-			case F_BQ : prix= 1525;break;
+			case F_HQ_BE : prix= 3.525;break;
+			case F_BQ : prix= 1.525;break;
 			}
 		}
 		int nbPas=0;

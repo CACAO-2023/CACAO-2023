@@ -38,7 +38,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		}
 		return this.chocosProduits;
 	}
-
+//Verifier par Alexian / François
 	public void initialiser() {
 		super.initialiser();
 		this.pourcentageTransfo = new HashMap<Feve, HashMap<Chocolat, Double>>();
