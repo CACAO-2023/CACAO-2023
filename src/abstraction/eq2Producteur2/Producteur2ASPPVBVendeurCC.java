@@ -49,7 +49,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		
 		SuperviseurVentesContratCadre sup = ((SuperviseurVentesContratCadre) Filiere.LA_FILIERE.getActeur("Sup."+"CCadre"));
 		List<IAcheteurContratCadre> acheteurs = sup.getAcheteurs(Feve.F_MQ_BE);
-		ArrayList<HashMap<Feve,HashMap<Integer, Double>>> lst = this.getDescrStocksTheo((Filiere.LA_FILIERE.getEtape() + 8));
+		ArrayList<HashMap<Feve,HashMap<Integer, Double>>> lst = this.getDescrStocksTheo((Filiere.LA_FILIERE.getEtape() + 9));
 		HashMap<Integer, Double> hs = lst.get(0).get(Feve.F_MQ_BE);
 		HashMap<Integer, Double> hs2 = lst.get(0).get(Feve.F_HQ_BE);
 		for(IAcheteurContratCadre ach : acheteurs) {
