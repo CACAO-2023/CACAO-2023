@@ -232,9 +232,22 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 //        return valeurMinimale;	}
 	
 	
-	
+	@Override
+	/**
+	 * @author Theo
+	 */
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-//		stock.ajouter(this, lot.getQuantiteTotale()); // Cet exemple ne gere pas la peremption : il n'utilise pas la mention du step de production du produit
+		IProduit produit= lot.getProduit();
+		double quantite = lot.getQuantiteTotale();
+		if (produit instanceof ChocolatDeMarque) {
+			if (this.stockChocoMarque.keySet().contains(produit)) {
+				this.stockChocoMarque.put((ChocolatDeMarque)produit, this.stockChocoMarque.get(produit)+quantite);
+			} else {
+				this.stockChocoMarque.put((ChocolatDeMarque)produit, quantite);
+			}
+			this.totalStocks.ajouter(this, quantite, this.cryptogramme);
+			this.journal.ajouter("Reception de "+quantite+" T de "+produit+". Stock->  "+this.stockChocoMarque.get(produit));
+		}
 	}
 
 	public String toString() {
@@ -263,6 +276,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 
 		ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), produit, e, cryptogramme,false);
         if (cc != null) {
+        	mesContratEnTantQuAcheteur.add(cc);
             this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + acteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
         } else {
             this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Echec de la négociation de contrat cadre avec " + acteur.getNom() + " pour " + produit + "...");
