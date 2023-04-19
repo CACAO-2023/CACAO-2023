@@ -21,13 +21,9 @@ import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 /**
-<<<<<<< HEAD
- * @author Fouad LBAKALI & Amine RAHIM & verification François Glavatkii
-=======
-=======
->>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4
 
-<<<<<<< HEAD
+ * @author Fouad LBAKALI & Amine RAHIM & verification François Glavatkii
+
 /**
 
  *

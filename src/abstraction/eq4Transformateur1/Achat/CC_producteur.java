@@ -7,7 +7,6 @@ import java.awt.Color;
 import java.util.LinkedList;
 
 import abstraction.eq4Transformateur1.Transformateur1Transformateur;
-import abstraction.eq4Transformateur1.Produits.ChocolatDeMarque;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
@@ -175,8 +174,8 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		Object produit = contrat.getProduit();
 		if (produit instanceof Feve) {
 			switch ((Feve)produit) {
-			case F_HQ_BE : prix= 3.525;break;
-			case F_BQ : prix= 1.525;break;
+			case F_HQ_BE : prix= 3.125;break;
+			case F_BQ : prix= 1.125;break;
 			}
 		}
 		int nbPas=0;
