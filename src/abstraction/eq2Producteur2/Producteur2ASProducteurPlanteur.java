@@ -40,17 +40,17 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		this.surface_plantation.put(Feve.F_MQ, this.nbHecMoy);
 		this.surface_plantation.put(Feve.F_MQ_BE, this.nbHecMoyBE);
 		this.surface_plantation.put(Feve.F_HQ_BE, this.nbHecHauteBE);
-		setEmploye(300000, 300000, 250000, 50000);
+		setEmploye(30000, 30000, 25000, 5000);
 		setSalaires(50,50,200,300);
 		setPrix(3000, 3500, 4000, 4500);
 		for (int i = -24 * 39; i <= 0; i += 24)
-			setAge(Feve.F_BQ, i, 7500);
+			setAge(Feve.F_BQ, i, 3750);
 		for (int i = -24 * 39; i <= 0; i += 24)
-			setAge(Feve.F_MQ, i, 7500);
+			setAge(Feve.F_MQ, i, 3750);
 		for (int i = -24 * 39; i <= 0; i += 24)
-			setAge(Feve.F_MQ_BE, i, 6250);
+			setAge(Feve.F_MQ_BE, i, 3125);
 		for (int i = -24 * 39; i <= 0; i += 24)
-			setAge(Feve.F_HQ_BE, i, 1250);
+			setAge(Feve.F_HQ_BE, i, 625);
 		setCout_Parcelle(1000, 2000, 3000, 5000);
 	}
 	
