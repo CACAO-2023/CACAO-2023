@@ -1,4 +1,4 @@
-package abstraction.eq5Transformateur2; ///WIEM LABBAOUI
+package abstraction.eq5Transformateur2; ///WIEM
 
 import java.awt.Color;
 
@@ -12,7 +12,6 @@ import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
-import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 import java.util.LinkedList;
@@ -31,24 +30,27 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	@Override
 	public boolean achete(IProduit produit) {
 		// TODO Auto-generated method stub
-		if (((produit.getType().equals("Feve")))&&((((Feve)produit).getGamme()== Gamme.MQ) ||((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable())))){
+		if (produit.getType().equals("Feve")) {
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme vouloir acheter le produit "+produit);
-		return true;} //on achète seulement les fèves haute gamme bio équitable et les fèves moyenne gamme
+		return true;} //on achète tout type de fèves
 		else {
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme ne pas vouloir acheter le produit "+produit);
 		return false;}
-		}
-	
+		
+		
+		
+	}
 
 	@Override
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
-		if ((( ((ChocolatDeMarque) produit).getMarque())) == "Maison Doutre") {
+		/*if ((( ((ChocolatDeMarque) produit).getMarque())) == "Maison Doutre") {
 			return 10; } //1O% de RSE pour la marque "Maison Doutre"
 		else { 
 			return 0; } // 0% pour la marque "ChocoPop"
-			}
-
+			}*/
+		return 0;}
+				
 		// TODO Auto-generated method stub
 
 
@@ -91,13 +93,14 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 
 	       
 	   
-	    public ExemplaireContratCadre getContratA(Feve produit) {
+	    public ExemplaireContratCadre getContrat(Feve produit) {
 	    	this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit);
 	    	List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
 	    	IVendeurContratCadre vendeur = vendeurs.get((int)(Math.random() * vendeurs.size())); //on cherche un vendeur
 	    	
 	    	this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
 	        ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
+	        	//demandeAcheteur(acheteur, vendeur, produit, echeancier, cryptogramme, tg, 0);
 	        if (cc != null) {   
 	        		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + vendeur.getNom() + " pour " + produit + "CC : " + cc);
 	        	} else {
@@ -108,8 +111,8 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	    
 	    public void next() {
 		super.next();
-		this.getContratA(Feve.F_MQ);
-		this.getContratA(Feve.F_HQ_BE);
+		this.getContrat(Feve.F_MQ);
+		this.getContrat(Feve.F_HQ_BE);
 		
 
 		}
