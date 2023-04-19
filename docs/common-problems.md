@@ -27,7 +27,7 @@ In this case you will have to resolve the conflict before being able to commit y
 
 If the pull request is correct, it is merged automatically (within 5 minutes) and it is removed from the list of open pull requests in the main repository. If you still see your pull request, it means that there is some problem you will need to solve as soon as possible. The problems of your pull requests are listed at the bottom of the pull request page on github. The 3 possible kinds of problem are described next.
 
-Note that there is no need to close and reopen the pull request, you can just fix the problems and push to your repository.
+**Note that there is no need to close and reopen the pull request, you can just fix the problems and push to your repository.**
 
 ## `Code owner review required`
 
