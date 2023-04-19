@@ -129,17 +129,17 @@ public class RomuATVBABVAOAAOACCVendeurCC extends RomuATVBABVAOAAOAcheteurCC imp
 		}
 		if (produit instanceof Chocolat) {
 			switch ((Chocolat)produit) {
-			case C_HQ_BE   : prix= 11.0;break;
-			case C_MQ_BE   : prix=  7.0;break;
-			case C_MQ      : prix=  6.0;break;
-			case C_BQ      : prix=  5.0;break;
+			case C_HQ_BE   : prix= 11000.0;break;
+			case C_MQ_BE   : prix=  7000.0;break;
+			case C_MQ      : prix=  6000.0;break;
+			case C_BQ      : prix=  5000.0;break;
 			}
 		} else if (produit instanceof Feve) {
 			switch ((Feve)produit) {
-			case F_HQ_BE : prix= 3.5;break;
-			case F_MQ_BE    : prix= 2.7;break;
-			case F_MQ      : prix= 2.5;break;
-			case F_BQ : prix= 1.5;break;
+			case F_HQ_BE : prix= 3500;break;
+			case F_MQ_BE    : prix= 2700;break;
+			case F_MQ      : prix= 2500;break;
+			case F_BQ : prix= 1500;break;
 			}
 		}
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propose prix de "+prix+" pour "+produit);
@@ -187,9 +187,11 @@ public class RomuATVBABVAOAAOACCVendeurCC extends RomuATVBABVAOAAOAcheteurCC imp
 				}
 				lot=new Lot((Feve)produit);
 			}
-		} 
-		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : doit livrer "+quantite+" de "+produit+" --> livre "+livre);
-		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);
+		}
+		if (livre!=0.0) {
+			this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : doit livrer "+quantite+" de "+produit+" --> livre "+livre);
+			lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);
+		}
 		return lot;
 	}
 
