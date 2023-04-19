@@ -48,7 +48,7 @@ public class AchatBourse extends CC_producteur implements IAcheteurBourse{
 			}
 		}
 			else {
-				quantite=2000;
+				quantite=200;
 			}
 		double demande = quantite ;
 
