@@ -4,9 +4,7 @@
 package abstraction.eq4Transformateur1.Achat;
 
 import java.awt.Color;
-
-
-
+import java.util.LinkedList;
 
 import abstraction.eq4Transformateur1.Transformateur1Transformateur;
 import abstraction.eq4Transformateur1.Produits.ChocolatDeMarque;
@@ -14,6 +12,7 @@ import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.Feve;
@@ -28,6 +27,8 @@ import abstraction.eqXRomu.produits.Lot;
 
 //François Glavatkii et Alexian Bothorel 
 
+
+
 public class CC_producteur extends Transformateur1Transformateur implements IAcheteurContratCadre{
 	public boolean achete(IProduit produit) {
 		if (produit instanceof Feve) {
@@ -39,7 +40,13 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 	}
 		return false;
 }
-	
+	protected SuperviseurVentesContratCadre superviseurVentesCC;
+
+	public void initialiser() {
+		super.initialiser();
+		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
+	}
+
 	public Echeancier propositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		Object produit = contrat.getProduit();
 		double qfeve=0;
