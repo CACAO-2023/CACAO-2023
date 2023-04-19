@@ -238,7 +238,8 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 			}
 		} 
 		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : doit livrer "+quantite+" de "+produit+" --> livre "+livre);
-		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);
+		if (livre>0) {
+		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);}
 		return lot;
 	}
 
