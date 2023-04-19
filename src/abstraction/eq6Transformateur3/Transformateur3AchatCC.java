@@ -199,7 +199,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
  */
 	private void retirerCCFinis() {
 		for (ExemplaireContratCadre contrat : this.getListeContratEnCours()) {
-			if (contrat.getQuantiteRestantALivrer()==0) {this.getListeContratEnCours().remove(contrat);}
+			if (contrat.getQuantiteRestantALivrer()==0 && contrat.getMontantRestantARegler()==0) {this.getListeContratEnCours().remove(contrat);}
 		}
 	}
 	
