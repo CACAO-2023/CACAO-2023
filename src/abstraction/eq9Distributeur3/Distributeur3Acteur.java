@@ -61,13 +61,13 @@ public class Distributeur3Acteur implements IActeur{
 		
 		// william : pour pouvoir acheter le chocolat qui nous intéresse (HQ BE, MQ BE, MQ)
 		this.chocolats_cible_noms = new LinkedList<String>();
-		this.chocolats_cible_noms.add("C_HQ_BE Vccotioi");
-		this.chocolats_cible_noms.add("C_HQ_BE Maison Doutre");
-		this.chocolats_cible_noms.add("C_HQ_BE Choc");
+		this.chocolats_cible_noms.add("C_HQ_BE_Vccotioi");
+		this.chocolats_cible_noms.add("C_HQ_BE_Maison_Doutre");
+		this.chocolats_cible_noms.add("C_HQ_BE_Choc");
 		this.chocolats_cible_noms.add("C_MQ_BE chokchoco bio");
-		this.chocolats_cible_noms.add("C_HQ_BE Villors");
-		this.chocolats_cible_noms.add("C_MQ_BE Villors");
-		this.chocolats_cible_noms.add("C_BQ Villors");
+		this.chocolats_cible_noms.add("C_HQ_BE_Villors");
+		this.chocolats_cible_noms.add("C_MQ_BE_Villors");
+		this.chocolats_cible_noms.add("C_BQ_Villors");
 
 		//this.chocolats.add(c1);
 		//this.stock.ajoutQte(c1, 1000);
@@ -85,9 +85,12 @@ public class Distributeur3Acteur implements IActeur{
 	}
 	
 	public void initialiser() {
+		
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
 		for (int i=0; i<chocolats_filiere.size(); i++) {
+			journal_activitegenerale.ajouter("Il y a " + (chocolats_filiere.get(i)).toString());
+
 			if(chocolats_cible_noms.contains((chocolats_filiere.get(i)).toString())){
 				chocolats.add(chocolats_filiere.get(i));
 			}
@@ -131,15 +134,9 @@ public class Distributeur3Acteur implements IActeur{
 		journal_ventes.ajouter("Etat des ventes : "+"\n");
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
 			for (int i=0; i<this.chocolats.size(); i++) {
-				if(Filiere.LA_FILIERE.getEtape()-1 > 1) 
-				{
 				journal_activitegenerale.ajouter("Le prix moyen du chocolat \""+chocolats.get(i).getNom()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyen(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-1));
 				journal_activitegenerale.ajouter("Les ventes de chocolat \""+chocolats.get(i)+" a l'etape precedente etaient de "+Filiere.LA_FILIERE.getVentes(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-1));
-				}
-				
 
-			
-			
 			}
 		}
 	}

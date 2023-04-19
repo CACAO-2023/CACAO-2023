@@ -41,7 +41,11 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		SuperviseurVentesContratCadre supCCadre = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 		if (chocolats.size()>0) {
 			System.out.print(">>>>0");
+			journal_activitegenerale.ajouter("On va regarder nos chocolats");
+
 			for (int i=0; i<chocolats.size();i++) {
+				journal_activitegenerale.ajouter("On regarde pour " + chocolats.toString());
+
 				List<IVendeurContratCadre> vendeursChocolat = supCCadre.getVendeurs(chocolats.get(i));
 				Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape(),24, 25000.0);
 				System.out.println(""+vendeursChocolat.size()+" v");
