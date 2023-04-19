@@ -75,7 +75,7 @@ public class Transformateur3Vente extends Transformateur3Transformation implemen
 
 	@Override
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
+		if (contrat.getPrix()-)
 		return contrat.getPrix()*(10+Math.random()/10);
 	}
 
