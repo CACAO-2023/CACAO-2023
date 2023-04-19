@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eq4Transformateur1.Stock;
+import abstraction.eq4Transformateur1.Achat.AchatBourse;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
@@ -34,7 +35,7 @@ import abstraction.eqXRomu.produits.Lot;
  *
  */
 
-public class CC_distributeur extends Stock implements IVendeurContratCadre {
+public class CC_distributeur extends AchatBourse implements IVendeurContratCadre {
 
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
 	
