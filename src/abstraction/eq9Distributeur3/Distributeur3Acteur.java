@@ -89,7 +89,6 @@ public class Distributeur3Acteur implements IActeur{
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
 		for (int i=0; i<chocolats_filiere.size(); i++) {
-			journal_activitegenerale.ajouter("Il y a " + (chocolats_filiere.get(i)).toString());
 
 			if(chocolats_cible_noms.contains((chocolats_filiere.get(i)).toString())){
 				chocolats.add(chocolats_filiere.get(i));
