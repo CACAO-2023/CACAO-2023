@@ -15,6 +15,7 @@ import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Gamme;
 
 
 
@@ -49,18 +50,19 @@ public class Distributeur1Acteur implements IActeur {
 //	protected int totalStocksCH;  // La quantité totale de stock de chocolat haute gamme
 	protected Variable totalStocks;  // La quantité totale de stock de chocolat
 	
-	protected double coutCB; //Cout d'1t de chocolat basse gamme
-	protected double coutCML; //Cout d'1t de chocolat moyenne gamme labellise
-	protected double coutCMNL; //Cout d'1t de chocolat moyenne gamme non labellise
-	protected double coutCH; //Cout d'1t de chocolat haute gamme labellise
+	protected double cout_BQ; //Cout d'1t de chocolat basse gamme
+	protected double cout_MQ_BE; //Cout d'1t de chocolat moyenne gamme labellise
+	protected double cout_MQ; //Cout d'1t de chocolat moyenne gamme non labellise
+	protected double cout_HQ_BE; //Cout d'1t de chocolat haute gamme labellise
 	
+
 	////////////////////////////////////////
 	protected HashMap<Chocolat, Double> stockChoco;
 
 	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; //stock de chaque marque en tonne
 	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsions; //previsions de ventes de la filiere globale
 	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsionsperso; //previsions de vente perso
-	
+	protected HashMap<ChocolatDeMarque,List<Double>> couts; //couts
 	protected Variable stock_BQ = new VariablePrivee("Eq7stock_BQ", "Stock total de chocolat de basse qualité", this, 0);
 	protected Variable stock_MQ = new VariablePrivee("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
 	protected Variable stock_MQ_BE = new VariablePrivee("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
@@ -70,10 +72,10 @@ public class Distributeur1Acteur implements IActeur {
 
 
 	public Distributeur1Acteur() {
-		this.coutCB = 3;
-		this.coutCH = 3;
-		this.coutCML = 3;
-		this.coutCMNL = 3;
+		this.cout_BQ = 3;
+		this.cout_HQ_BE = 3;
+		this.cout_MQ_BE = 3;
+		this.cout_MQ = 3;
 		this.totalStocks = new VariablePrivee("Eq7TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
 		this.journal = new Journal("Journal "+this.getNom(), this);
 	    this.journal_achat=new Journal("Journal des Achats de l'" + this.getNom(),this);
@@ -107,24 +109,75 @@ public class Distributeur1Acteur implements IActeur {
 	protected double previsionsperso(ChocolatDeMarque marque, Integer etape) {
 		return previsionsperso.get(etape).get(marque);
 	}
-
+	
+	/**
+	 * @author ghaly
+	 * @return moyenne de la liste passée en commentaire
+	 */
+	public double moyenne(List<Double> l) {
+		int n = 0;
+		double s = 0;
+		for (double d :l) {
+			n++;
+			s+=d;
+			
+		}
+		return s/n;
+	}
+	/**
+	 * @author ghaly
+	 */
+	protected double getCout_gamme(Gamme gamme) {
+		int n = 0;
+		double s = 0;
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			if (marque.getGamme()==gamme) {
+				n++;
+				s+= moyenne(couts.get(marque));
+			}
+		}
+		return s/n;
+		
+	}
 	/**
 	 * @author Theo
-	 * Actualise les couts (par tonne)
+	 * @return le prix de la gamme associée à marque
 	 */
-	protected void couts(ChocolatDeMarque marque, double nvcout) {
+	protected double getCout(ChocolatDeMarque marque) {
 		Chocolat gamme = marque.getChocolat();
 		if (gamme == Chocolat.C_BQ) {
-			coutCB = nvcout;
+			return cout_BQ;
 		}
 		if (gamme == Chocolat.C_MQ) {
-			coutCMNL = nvcout;
+			return cout_MQ;
 		}
 		if (gamme == Chocolat.C_MQ_BE) {
-			coutCML = nvcout;
+			return cout_MQ_BE;
 		}
 		if (gamme == Chocolat.C_HQ_BE) {
-			coutCH = nvcout;
+			return cout_HQ_BE;
+		}
+		return cout_BQ;
+	}
+	
+	/**
+	 * @author Theo-ghaly
+	 * Actualise les couts (par tonne)
+	 */
+	protected void couts(ChocolatDeMarque marque) {
+		Gamme gamme = marque.getGamme();
+		double nv_prix = getCout_gamme(gamme);
+		if (gamme== Gamme.BQ ) {
+			cout_BQ = nv_prix;
+		}
+		if (gamme ==  Gamme.MQ && marque.isBioEquitable()) {
+			cout_MQ_BE = nv_prix;
+		}
+		if (gamme ==  Gamme.MQ && !marque.isBioEquitable()) {
+			cout_MQ = nv_prix;
+		}
+		if (gamme ==  Gamme.HQ) {
+			cout_HQ_BE = nv_prix;
 		}
 	}
 	
@@ -138,7 +191,7 @@ public class Distributeur1Acteur implements IActeur {
 		//Initialisation des stocks
 		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			stockChocoMarque.put(marque,1.);
+			stockChocoMarque.put(marque,100000.);
 			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
 		}
 		
@@ -170,6 +223,9 @@ public class Distributeur1Acteur implements IActeur {
 		return this.getNom();
 		}
 	
+	/**
+	 * @author Romain,Ghaly et Theo
+	 */
 	public void next() {
 		
 		//Actualisation des previsions
@@ -187,6 +243,11 @@ public class Distributeur1Acteur implements IActeur {
 		}
 		totalStocks.setValeur(this, newstock, this.cryptogramme);
 
+		//Prise en compte des couts de stockage
+		if (totalStocks.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() > 0) {
+			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), totalStocks.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());	
+			journal.ajouter("Cout de stockage : "+totalStocks.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());
+		}
 		//Journaux
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
@@ -208,6 +269,14 @@ public class Distributeur1Acteur implements IActeur {
 //		for (VariablePrivee v : list) {
 //			res.add(v);
 //		}
+
+		res.add(totalStocks);
+		/**
+		res.add(stock_HQ_BE);
+		res.add(stock_MQ_BE);
+		res.add(stock_BQ);
+		res.add(stock_MQ);
+		*/
 		return res;
 	}
 
@@ -222,7 +291,7 @@ public class Distributeur1Acteur implements IActeur {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(this.journal);
 		res.add(this.journal_achat);
-		res.add(journal_stock);
+		res.add(this.journal_stock);
 		return res;
 	}
 

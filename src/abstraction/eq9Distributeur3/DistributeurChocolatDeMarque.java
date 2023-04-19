@@ -11,30 +11,36 @@ import abstraction.eqXRomu.clients.ClientFinal;
 import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
-public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements IDistributeurChocolatDeMarque {
+public class DistributeurChocolatDeMarque extends Distributeur3AcheteurCC implements IDistributeurChocolatDeMarque {
 	
 	private double capaciteDeVente = Double.MAX_VALUE;
-	private HashMap<ChocolatDeMarque, Double> prix;
+	
 
 	
 	
 	
 
 	public DistributeurChocolatDeMarque() {
-		this.prix = new HashMap<ChocolatDeMarque, Double> ();
+		
 	}
 	
 	//william
 	@Override
 	public double prix(ChocolatDeMarque choco) {
-		return 0.0;
+		if(prix_tonne_vente.get(choco) != null) {
+			return prix_tonne_vente.get(choco) +1.0;
+			
+		}
+		// TODO Auto-generated method stub
+		return 10.0;
 	}
 	
 	//baptiste
 	public HashMap<ChocolatDeMarque, Double> quantiteTotale() {
 		HashMap<ChocolatDeMarque, Double> qtVente = new HashMap<ChocolatDeMarque, Double> ();
+		journal_ventes.ajouter("Test" + qtVente.toString() );
 		HashMap<ChocolatDeMarque, Double> Stock = this.stock.getQteStock();
-		
+		journal_ventes.ajouter("Voici l'état du stock : " + Stock.toString());
 		for (Entry<ChocolatDeMarque, Double> chocolat : Stock.entrySet()) {
 			qtVente.put(chocolat.getKey(), (double) 0);
 		}
@@ -46,12 +52,14 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 			for (Entry<ChocolatDeMarque, Double> chocolat : Stock.entrySet()) {
 				qtVente.replace(chocolat.getKey(), Math.min(Math.min(this.capaciteDeVente/3, chocolat.getValue()), this.capaciteDeVente - quantiteEnVente));
 			}
+			
 			if (quantiteEnVente == quantiteEnVente_0) {
 				rupture = false;
 			} else {
 				quantiteEnVente_0 = quantiteEnVente;
 			}
 		}
+		journal_ventes.ajouter("On met en vente " + qtVente.toString() + "tonnes de chocolat");
 		return qtVente;
 
 	}
@@ -64,6 +72,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 			return 0;
 		} else {
 			HashMap<ChocolatDeMarque, Double> qtVente = this.quantiteTotale();
+			journal_ventes.ajouter("On vend " + qtVente.get(choco) +" "+ choco.getNom());
 			if (qtVente.containsKey(choco)) {
 				return qtVente.get(choco);
 			} else {

@@ -94,7 +94,11 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 						}
 						stockChocoMarque.replace(pRetenue.getChocolatDeMarque(), nouveauStock);
 						journal.ajouter("   Achat par offre d'achat de "+pRetenue+" --> quantite en stock = "+nouveauStock);
-						couts(m,pRetenue.getPrixT()/pRetenue.getOffre().getQuantiteT());
+
+		////////////////////////////////////////////////				
+						//						couts(m,pRetenue.getPrixT()/pRetenue.getOffre().getQuantiteT());
+		//je ne sais pas si cest pertinent d'enregistrer le cout d'une OA vu qu'elle coute cher de base
+						////////////////////////////////////////////////////////////////////
 					}
 				}
 				
