@@ -49,6 +49,10 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		this.majTot();
 	}
 	
+	/**
+	 *Crée un nouveau Stocks : HashMap<Feve, Lot>
+	 *@return un nouveau stocks (HashMap<Feve, Lot>)
+	 */
 	private HashMap<Feve, Lot> createStocks(){
 		HashMap<Feve, Lot> stocks = new HashMap<Feve, Lot>();
 		
@@ -60,6 +64,10 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		return stocks;
 	}
 	
+	/**
+	 * Crée un nouveau stock : HashMap<Feve, Double>
+	 * @return un nouveau stock : HashMap<Feve, Double>
+	 */
 	private HashMap<Feve, Double> createStock(){
 		HashMap<Feve, Double> stock = new HashMap<Feve, Double>();
 		for (Feve f: this.lesFeves)
@@ -67,12 +75,17 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		return stock;
 	}
 	
-	// mets à jour le stock total de feve de type f
+	/**
+	 *  mets à jour le stock total de feve de type f
+	 * @param f le type de Fève
+	 */
 	private void majTot(Feve f) {
 		this.stocksTot.get(f).setValeur(this, this.stocks.get(f).getQuantiteTotale(), this.cryptogramme);
 	}
 	
-	// mets à jour les stocks totaux
+	/**
+	 *  mets à jour les stocks totaux
+	 */
 	private void majTot() {
 		for (Feve f : this.lesFeves) {
 			this.majTot(f);
@@ -97,6 +110,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		System.out.println(this.getStockTotTime(Feve.F_BQ, 2));
 		System.out.println(this.getStockTotStep(Feve.F_BQ, 2));*/
 	}
+	
 	/**
 	 * Mets à jour la périmation du stock de l'acteur
 	 * @return les quantitées déclassées et périmées de fèves par type de fève.
@@ -201,10 +215,13 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	}
 	
 	/**
-	 * Renvoie le stock restant théorique à l'étape etape en retirant les contrats cadres et en ajoutant la production théorique
-	 * @param f le type de fève
-	 * @param etape l'étape considéré
-	 * @return le stock prévisionnel de fève de type f sans prendre en compte les ventes à la bourse et les nouveaux contrats cadre effectués plus tard
+	 * Renvoie le stock restant théorique à l'étape etape en retirant les contrats cadres et en ajoutant la production théorique.
+	 * La structure du renvoie est : indice 0 -> HashMap donnant la quantité totale en stock en fonction de l'étape
+	 * indice x dans 1 à n - 2 -> HashMap donnant l'état du stock à l'étape x - 1 + Filiere.LA_FILIERE.getEtape() (tel que 1->Filiere.LA_FILIERE.getEtape() et n-2->etape)
+	 * indice n-1 -> HashMap donnant la quantité de fèves déclassées entre l'étape x et x+1
+	 * indice n -> HashMap donnant la quantité de fèves périmées entre l'étape x et x+1
+	 * @param etape l'étape d'arrêt du calcul considéré
+	 * @return le stock prévisionnel de fève de type f sans prendre en compte les ventes à la bourse et les nouveaux contrats cadre effectués plus tard.
 	 */
 	protected ArrayList<HashMap<Feve,HashMap<Integer, Double>>> getDescrStocksTheo(int etape) {
 		if (etape < Filiere.LA_FILIERE.getEtape())
@@ -261,6 +278,13 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		return descrStocksTheo;
 	}
 	
+	/**
+	 * Mets à jour la périmation des stocks de stocksTheo par rapport à l'étape étape, et ajoute dans stocksDeclasse et stocksPerim la quantité déclassé et périmé à l'étape etape
+	 * @param stocksTheo le stock considéré
+	 * @param stocksDeclasse le dictionnaire stockant la quantité de fèves déclassées
+	 * @param stocksPerime le dictionnaire stockant la quantité de fèves périmées
+	 * @param etape l'étape de calcul de la périmation du stock
+	 */
 	private void majPerimTheo(HashMap<Feve, Lot> stocksTheo, HashMap<Feve, HashMap<Integer, Double>> stocksDeclasse, HashMap<Feve, HashMap<Integer, Double>> stocksPerime, int etape) {
 		ArrayList<HashMap<Feve, Double>> descrPerim = this.majPerim(stocksTheo, etape);
 		for (Feve f: descrPerim.get(0).keySet()) {
@@ -269,17 +293,11 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		}
 	}
 	
-	private HashMap<Feve, HashMap<Integer, Double>> copieStocksHashHash(HashMap<Feve, HashMap<Integer, Double>> stocks){
-		HashMap<Feve, HashMap<Integer, Double>> copieStocks = new HashMap<Feve, HashMap<Integer, Double>>();
-		for (Feve f: stocks.keySet()) {
-			copieStocks.put(f, new HashMap<Integer, Double>());
-			for (int etape: stocks.get(f).keySet())
-				copieStocks.get(f).put(etape, stocks.get(f).get(etape));
-		}
-		return copieStocks;
-	}
-	
-	
+	/**
+	 * Effectue la copie du stocks depuis le type HashMap<Feve, Lot> vers le type HashMap<Feve, HashMap<Integer, Double>>
+	 * @param stocks le stocks à copier
+	 * @return une copie du stocks, avec le type HashMap<Feve, HashMap<Integer, Double>
+	 */
 	private HashMap<Feve, HashMap<Integer, Double>> copieStocksLotHash(HashMap<Feve, Lot> stocks){
 		HashMap<Feve, HashMap<Integer, Double>> copieStocks = new HashMap<Feve, HashMap<Integer, Double>>();
 		for (Feve f: stocks.keySet()) {
@@ -334,6 +352,10 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	
 	protected HashMap<Integer, Double> getStocksTotTheo(Feve f, int etape) {
 		return this.getDescrStocksTheo(etape).get(0).get(f);
+	}
+	
+	protected HashMap<Feve, HashMap<Integer, Double>> getStocksTotTheo( int etape) {
+		return this.getDescrStocksTheo(etape).get(0);
 	}
 	
 	/**
