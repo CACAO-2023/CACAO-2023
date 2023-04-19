@@ -41,6 +41,7 @@ public class Producteur1Plantation extends Producteur1Acteur {
 				double nb_tonnes = q*0.56 ; //ajouter facteur random
 				double random = ThreadLocalRandom.current().nextDouble(0.9, 1.15);
 				nb_tonnes = nb_tonnes * random ;
+				System.out.print(nb_tonnes);
 				stockFeveBas.ajouter(step, nb_tonnes); //recolte
 				
 				if (quantiteFeveB.containsKey(step)) {

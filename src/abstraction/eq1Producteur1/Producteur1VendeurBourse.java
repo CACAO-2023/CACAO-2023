@@ -15,6 +15,7 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 			
 		if (f==Feve.F_BQ) {
 			if (this.getStockBas().getQuantiteTotale()!=0.0) {
+				System.out.print(this.getStockBas().getQuantiteTotale()/10);
 				return this.getStockBas().getQuantiteTotale()/10;
 			}
 		}
