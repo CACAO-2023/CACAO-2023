@@ -39,10 +39,10 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		setSalaires(50,50,200,300);
 		setSurface(300000, 300000, 250000, 50000);
 		setPrix(4000, 5500, 6000, 8000);
-		setAge(Feve.F_BQ, 24*3, 300000);
-		setAge(Feve.F_MQ, 24*3, 300000);
-		setAge(Feve.F_MQ_BE, 24*3, 250000);
-		setAge(Feve.F_HQ_BE, 24*3, 50000);
+		setAge(Feve.F_BQ, -24*3, 300000);
+		setAge(Feve.F_MQ, -24*3, 300000);
+		setAge(Feve.F_MQ_BE, -24*3, 250000);
+		setAge(Feve.F_HQ_BE, -24*3, 50000);
 		setCout_Parcelle(1000, 2000, 3000, 5000);
 	}
 	// Mise en place des differents setters
@@ -233,9 +233,10 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	public void next() {
 		super.next();
 		this.ajustement_plantation();
+		System.out.println(this.age_hectares);
 		for (Feve f : this.age_hectares.keySet()) {
 			if (Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f)>0){
-			this.ajouterStock(f, Filiere.LA_FILIERE.getEtape(), Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f));
+				this.ajouterStock(f, Filiere.LA_FILIERE.getEtape(), Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f));
 		}
 		this.ajustement_employes();
 		}
