@@ -222,6 +222,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			return 0;
 		}
 	}
+	/*tous les next on ajoute dans le journal la quantité en stock*/
+	/*mettre en indicateur que l'on est en rupture de stock */
 	
 	//Auteur : Ben Messaoud Karim et Maxime Azzi
     public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
