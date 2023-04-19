@@ -187,7 +187,7 @@ public class RomuATVBABVAOAAOACCVendeurCC extends RomuATVBABVAOAAOAcheteurCC imp
 				lot=new Lot((Feve)produit);
 			}
 		}
-		if (livre!=0.0){
+		if (livre!=0.0) {
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : doit livrer "+quantite+" de "+produit+" --> livre "+livre);
 			lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);
 		}
