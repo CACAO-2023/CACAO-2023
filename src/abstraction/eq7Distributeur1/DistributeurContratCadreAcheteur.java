@@ -19,6 +19,8 @@ import abstraction.eqXRomu.produits.Lot;
 
 public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implements IAcheteurContratCadre{
 	protected List<ExemplaireContratCadre> mesContratEnTantQuAcheteur;
+	protected List<ExemplaireContratCadre> historique_de_mes_contrats;
+	
 	private List<Object> negociations = new ArrayList<>();
 	private double minNego=5;
 
@@ -71,32 +73,15 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		}
 		this.mesContratEnTantQuAcheteur.removeAll(contratsObsoletes);
 	}
+	List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
+
 	
-    /**   
+	/**   
+	 * proposition d'un contrat a un des vendeurs choisi aleatoirement
+
      * @author Ghaly sentissi
      */
-	public void next() {
-		super.next();
-		enleve_contrats_obsolete();
-		Echeancier echeancier_type = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 10.0);
-
-//		journal.ajouter("Recherche d'un vendeur aupres de qui acheter");
-		
-		
-		IProduit produit = Chocolat.C_BQ;
-//		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
-//
-//			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
-//				getContractForProduct(produit,acteur);
-//				}
-//			else {
-//
-//			}
-
-		
-		
-		
-		// OU proposition d'un contrat a un des vendeurs choisi aleatoirement
+	public void proposition_achat_aleatoire(IProduit produit,Echeancier e) {
 		SuperviseurVentesContratCadre superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre")); 
 
 		journal_achat.ajouter("Recherche d'un vendeur aupres de qui acheter");
@@ -112,11 +97,37 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		}
 		if (vendeur!=null) {
 			
-			getContractForProduct(produit,echeancier_type,vendeur);
+			getContractForProduct(produit,e,vendeur);
+	}}
+	/**   
+     * @author Ghaly sentissi
+     */
+	public void next() {
+		super.next();
+		enleve_contrats_obsolete();
+		Echeancier echeancier_type = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 10.0);
+
+		
+		choco
+		IProduit produit = ;
+//		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
+//
+//			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
+//				getContractForProduct(produit,acteur);
+//				}
+//			else {
+//
+//			}
+
+		
+		
+		
+		// OU proposition d'un contrat a un des vendeurs choisi aleatoirement
+		proposition_achat_aleatoire( produit, echeancier_type);
 
 		}
 		
-}
+
     /**
      * retourne l'étape de négociation en cours
      * @param contrat     
