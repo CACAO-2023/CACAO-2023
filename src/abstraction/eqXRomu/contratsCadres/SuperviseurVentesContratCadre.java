@@ -8,6 +8,7 @@ import java.util.List;
 
 import abstraction.eqXRomu.filiere.*;
 import abstraction.eqXRomu.general.*;
+import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
@@ -182,6 +183,10 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 			journal.ajouter("contrat #"+contrat.getNumero()+Journal.texteColore(Color.RED,  Color.white, " ANNULE "));
 			return null;// arret des negociations
 		}
+		if (contrePropositionA.getQuantiteTotale()<SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER) {
+			journal.ajouter("   "+Journal.texteColore(acheteur, acheteur.getNom()+" retourne un echeancier dont la quantite totale est inferieure a "+SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER)+" Arret des negos");
+			return null;// arret des negociations
+		}
 		contrat.ajouterEcheancier(contrePropositionA);
 		if (!contrat.accordSurEcheancier()) {
 			journal.ajouter("   "+Journal.texteColore(acheteur, acheteur.getNom())+" propose un echeancier different de "+Journal.doubleSur(contrat.getQuantiteTotale(),4)+" T "+contrat.getEcheancier());
@@ -341,7 +346,16 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 		}
 	}
 
+	public void quiVendQuoi() {
+		List<ChocolatDeMarque> c = Filiere.LA_FILIERE.getChocolatsProduits();
+		for (ChocolatDeMarque cm : c) {
+			this.journal.ajouter("produit "+cm);
+			this.journal.ajouter("   vendeurs "+getVendeurs(cm));
+			this.journal.ajouter("  acheteurs "+getAcheteurs(cm));
+		}
+	}
 	public void next() {
+	//	quiVendQuoi();
 		recapitulerContratsEnCours();
 		gererLesEcheancesDesContratsEnCours();
 		archiverContrats();
