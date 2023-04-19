@@ -203,7 +203,9 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	        }
 	    }
   }
-  
+  	public void next() {
+  		super.next();
+  	}
 }
     
     

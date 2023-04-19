@@ -113,6 +113,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	}
 	
 	public void next() {
+		super.next();
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.listeCC) {
 			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
@@ -132,6 +133,4 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); 
 		return lot;
 	}
-
-
 }
