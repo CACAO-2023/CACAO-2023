@@ -36,10 +36,11 @@ public class Producteur3Acteur implements IActeur {
     journal_activitegenerale=new Journal("Journal général de l'"+nom,this);
     journal_Stock = new Journal("Journal des Stocks de l'"+nom,this);
     journal_catastrophe = new Journal("Journal des Catastrophes de l'"+nom,this);
-	 this.Stock = new Stock();
+    this.CoutTonne = 0.;
+	this.Stock = new Stock();
 
-		this.VentesMG = new LinkedList<Double>();
-		this.VentesHG = new LinkedList<Double>();
+	this.VentesMG = new LinkedList<Double>();
+	this.VentesHG = new LinkedList<Double>();
 	}
 	
 	/**
