@@ -18,10 +18,10 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	
 	public Transformateur3AchatB () {
 		super();
-		this.coursmaxBG = new Variable ("cours maximal BG","cours maximal que l'acteur va accepter pour les feves bas de gamme",this,0.0,5000,1300);
-		this.coursmaxMG = new Variable ("cours maximal MG","cours maximal que l'acteur va accepter pour les feves moyenne gamme",this,0.0,6000,1900);
-		this.coursmaxMGL = new Variable ("cours maximal MGL","cours maximal que l'acteur va accepter pour les feves moyenne gamme labelisees",this,0.0,6000,2000);
-		this.coursmaxHGL = new Variable ("cours maximal HGL","cours maximal que l'acteur va accepter pour les feves haut de gamme",this,0.0,8000,2500);
+		this.coursmaxBG = new Variable ("cours maximal BG","cours maximal que l'acteur va accepter pour les feves bas de gamme",this,0.0,5000,5000);
+		this.coursmaxMG = new Variable ("cours maximal MG","cours maximal que l'acteur va accepter pour les feves moyenne gamme",this,0.0,6000,5900);
+		this.coursmaxMGL = new Variable ("cours maximal MGL","cours maximal que l'acteur va accepter pour les feves moyenne gamme labelisees",this,0.0,6000,6000);
+		this.coursmaxHGL = new Variable ("cours maximal HGL","cours maximal que l'acteur va accepter pour les feves haut de gamme",this,0.0,8000,6500);
 	}
 	/**
 	 * ecrit par Nathan Claeys
@@ -32,22 +32,39 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 * @return la quantite en tonnes de feves de type f desiree 
 	 * 
 	 */
-	
+	/**
+>>>>>>> branch 'main' of https://github.com/NathanSlbg/NathanSlbg
 	public double demande(Feve f, double cours) {
 		if (f.getGamme()==Gamme.BQ) {if(cours<=this.getCoursmaxBG().getValeur()) {
 													return (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1000.0));}
 		}else {
 		if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxMGL().getValeur()) {
-			return (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1000));}}
+			return (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),100));}}
 			else {
 		if (f.getGamme()==Gamme.MQ) {if(cours<=this.getCoursmaxMG().getValeur()) {
-			return (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1000));}}
+			return (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),100));}}
 		else {
 		if (f.getGamme()==Gamme.BQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
-			return (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1000));}}
+			return (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),10));}}
 		else {return 0;};};};};
-		return 1000;
-	}
+	}*/
+	public double demande(Feve f, double cours) {
+		double res = 60.0;
+		if (f.getGamme()==Gamme.BQ) {if(cours<=this.getCoursmaxBG().getValeur()) {
+													res =(max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1000.0));}
+		}
+		else {}
+		if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxMGL().getValeur()) {
+			res = (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),100));}}
+		else {;}
+		if (f.getGamme()==Gamme.MQ) {if(cours<=this.getCoursmaxMG().getValeur()) {
+			res = (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),100));}}
+		else {;}
+		if (f.getGamme()==Gamme.BQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
+			res = (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),10));}}
+		else {;}
+		return res;}
+
 
 	private double max(double d, double e) {
 		// TODO Auto-generated method stub
@@ -88,7 +105,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 * n'a pas a s'occuper du paiement qui a deja ete effectue)
 	 */
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
-		super.ajouterFeve((Feve)l.getProduit(), l.getQuantites().get(Filiere.LA_FILIERE.getEtape()),Filiere.LA_FILIERE.getEtape());
+		super.ajouterFeve((Feve)l.getProduit(), l.getQuantiteTotale(),Filiere.LA_FILIERE.getEtape());
 		super.journal.ajouter("Stock de "+l.getQuantiteTotale()+""+"tonnes de feves"+((Feve)l.getProduit()).toString()+" acheté en bourse");
 		
 	}
