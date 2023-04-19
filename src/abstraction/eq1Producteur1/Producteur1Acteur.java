@@ -73,6 +73,7 @@ public class Producteur1Acteur implements IActeur {
 		this.journal_champs.ajouter("---> Qualite : Moy");
 		this.journal_champs.ajouter(this.champMoy.toString());
 		this.journal_champs.ajouter("Cela fait en tout "+this.champMoy.getNbHectare()+" hectares");
+		this.journal_ventes.ajouter("===== step : "+step+" =====");
 		// maj des indicateurs
 		this.Stock.setValeur(this, this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale());
 		this.Champ.setValeur(this, this.champBas.getNbHectare()+this.champMoy.getNbHectare());
@@ -127,7 +128,7 @@ public class Producteur1Acteur implements IActeur {
 		if (this==acteur) {
 			System.out.println("bye :( ");
 		} else {
-			System.out.println("Force à vous "+this.getNom());
+			System.out.println("Force à vous "+acteur.getNom());
 		}
 	}
 
