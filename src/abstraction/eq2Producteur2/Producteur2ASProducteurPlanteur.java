@@ -127,7 +127,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 				if (step-i<3*24) {
 					qte =+ 0;
 				}
-				if (step-i>=3*24 && Filiere.LA_FILIERE.getEtape()-i<40*24) {
+				if (step-i>=3*24 && step-i<40*24) {
 					qte =+ prodHec.getValeur()*this.age_hectares.get(f).get(i);
 				}
 				if (step-i>=40*24) {
