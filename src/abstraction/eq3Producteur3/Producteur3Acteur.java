@@ -19,6 +19,7 @@ public class Producteur3Acteur implements IActeur {
     protected Journal journal_achats;
     protected Journal journal_activitegenerale;
     protected Journal journal_Stock;
+    protected Journal journal_catastrophe;
     protected Stock Stock;
 	protected Double CoutStep; /* Tout nos couts du step, reinitialises a zero au debut de chaque step et payes a la fin du step*/
 	protected Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
@@ -27,13 +28,15 @@ public class Producteur3Acteur implements IActeur {
 	protected LinkedList<Double> VentesHG; /*Les 12 quantités des dernières ventes de hauts de gammes*/
 
 	public Producteur3Acteur() {
-		String nom = "Equipe 3";
-		journal_operationsbancaires=new Journal("Journal des Opérations bancaires de l'"+nom,this);
-    	journal_ventes=new Journal("Journal des Ventes de l'"+nom,this);
-    	journal_achats=new Journal("Journal des Achats de l'"+nom,this);
-    	journal_activitegenerale=new Journal("Journal général de l'"+nom,this);
-    	journal_Stock = new Journal("Journal des Stocks de l'"+nom,this);
-		this.Stock = new Stock();
+
+	String nom = "Equipe 3";
+	journal_operationsbancaires=new Journal("Journal des Opérations bancaires de l'"+nom,this);
+    journal_ventes=new Journal("Journal des Ventes de l'"+nom,this);
+    journal_achats=new Journal("Journal des Achats de l'"+nom,this);
+    journal_activitegenerale=new Journal("Journal général de l'"+nom,this);
+    journal_Stock = new Journal("Journal des Stocks de l'"+nom,this);
+    journal_catastrophe = new Journal("Journal des Catastrophes de l'"+nom,this);
+	 this.Stock = new Stock();
 
 		this.VentesMG = new LinkedList<Double>();
 		this.VentesHG = new LinkedList<Double>();
@@ -71,9 +74,15 @@ public class Producteur3Acteur implements IActeur {
 		return this.journal_Stock;
 	}
 
+
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
+	protected Journal getJCatastrophe() {
+		return this.journal_catastrophe;
+	}
+	
+
 	protected int getCryptogramme() {
 		return this.cryptogramme;
 	}
@@ -140,6 +149,7 @@ public class Producteur3Acteur implements IActeur {
 		res.add(journal_ventes);
 		res.add(journal_achats);
 		res.add(journal_Stock);
+		res.add(journal_catastrophe);
 		return res;
 	}
 
