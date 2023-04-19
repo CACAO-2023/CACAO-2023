@@ -95,7 +95,7 @@ public class Transformateur2Transfo extends Transformateur2Acteur implements IFa
 				}
 				
 				if((c.getGamme()==Gamme.HQ) && (c.isBioEquitable())) {
-					qtefeve = this.stockFeves.get(f)*0.10 ; //15% des feves moyenne gamme sont transformées en ChocoPop, 25% sans marque
+					qtefeve = this.stockFeves.get(f)*0.10 ; //10% des feves haute gamme sont transformées en ChocoPop
 					proportion_marque = 1;
 					Marque = "Maison Doutre";
 					cacao = 90;
