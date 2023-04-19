@@ -73,10 +73,10 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 					if (vendeur!=this) { // on ne peut pas passer de contrat avec soi meme
 						this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : Vendeur tire au sort = "+vendeur);
 						Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 100);
-						//ExemplaireContratCadre contrat = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, echeancier, this.cryptogramme.intValue(), false, 15);
-						//if (contrat!=null) {
+						ExemplaireContratCadre contrat = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, echeancier, this.cryptogramme.intValue(), false, 15);
+						if (contrat!=null) {
 							//this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : contrat signe = "+contrat);
-						//}
+						}
 					}
 				}
 			}
