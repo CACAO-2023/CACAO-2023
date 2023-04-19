@@ -28,15 +28,14 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2AcheteurC
 			double pourcentage = (bourse.getCours(getFeve()).getMax()-bourse.getCours(getFeve()).getValeur())/(bourse.getCours(getFeve()).getMax()-bourse.getCours(getFeve()).getMin()); // difference de prix avec le max / amplitude totale
 			this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   BOURSEA: demande en bourse de "+achatMaxParStep*pourcentage+" de "+f);
 			return achatMaxParStep*pourcentage;*/
-			if( (f.getGamme().equals("F_MQ")) || (f.getGamme().equals("F_HQ_BE"))) {
-				double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
-				double demande = Math.max(0, Math.min( Math.random()*50, solde));
-				this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   BOURSEA: demande en bourse de "+demande+" de "+f);
-				return demande;
-			}	 
-			else {
-				return 0.0;
-		}}
+			
+			double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
+			double demande = Math.max(0, Math.min( Math.random()*500, solde));
+			this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   BOURSEA: demande en bourse de "+demande+" de "+f);
+			return demande;
+		} /*else {
+			return 0.0;
+		}}*/
 
 
 	@Override
@@ -51,7 +50,7 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2AcheteurC
 	
 	@Override
 	public void notificationBlackList(int dureeEnStep) {
-		this.journalAchats.ajouter("Aiee... je suis blackliste... j'aurais du verifier que j'avais assez d'argent avant de passer une trop grosse commande en bourse...");
+		this.journalAchats.ajouter("Aie... je suis blackliste... j'aurais du verifier que j'avais assez d'argent avant de passer une trop grosse commande en bourse...");
 	
 		
 	}
