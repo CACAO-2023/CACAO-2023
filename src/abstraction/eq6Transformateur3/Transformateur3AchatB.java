@@ -18,10 +18,10 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	
 	public Transformateur3AchatB () {
 		super();
-		this.coursmaxBG = new Variable ("cours maximal BG","cours maximal que l'acteur va accepter pour les feves bas de gamme",this,0.0,100,1300);
-		this.coursmaxMG = new Variable ("cours maximal MG","cours maximal que l'acteur va accepter pour les feves moyenne gamme",this,0.0,100,1900);
-		this.coursmaxMGL = new Variable ("cours maximal MGL","cours maximal que l'acteur va accepter pour les feves moyenne gamme labelisees",this,0.0,100,2000);
-		this.coursmaxHGL = new Variable ("cours maximal HGL","cours maximal que l'acteur va accepter pour les feves haut de gamme",this,0.0,100,2500);
+		this.coursmaxBG = new Variable ("cours maximal BG","cours maximal que l'acteur va accepter pour les feves bas de gamme",this,0.0,5000,1300);
+		this.coursmaxMG = new Variable ("cours maximal MG","cours maximal que l'acteur va accepter pour les feves moyenne gamme",this,0.0,6000,1900);
+		this.coursmaxMGL = new Variable ("cours maximal MGL","cours maximal que l'acteur va accepter pour les feves moyenne gamme labelisees",this,0.0,6000,2000);
+		this.coursmaxHGL = new Variable ("cours maximal HGL","cours maximal que l'acteur va accepter pour les feves haut de gamme",this,0.0,8000,2500);
 	}
 	/**
 	 * ecrit par Nathan Claeys
@@ -45,7 +45,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		if (f.getGamme().compareTo(Gamme.BQ)==0 && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
 			return (super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f));}}
 		else {return 0;};};};};
-		return 0;
+		return 100;
 	}
 
 	/**
