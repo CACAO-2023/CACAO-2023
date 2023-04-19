@@ -34,10 +34,11 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	
 	protected ChocolatDeMarque topvente() {
 		int etape = Filiere.LA_FILIERE.getEtape();
+		int etapenormalisee = (etape+24)%24;
 		ChocolatDeMarque topmarque = Filiere.LA_FILIERE.getChocolatsProduits().get(0);
-		double topvente = previsionsperso.get(etape).get(topmarque);
+		double topvente = previsionsperso.get(etapenormalisee).get(topmarque);
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (previsionsperso.get(etape).get(marque) > topvente) {
+			if (previsionsperso.get(etapenormalisee).get(marque) > topvente) {
 				topmarque = marque;
 			}
 		}

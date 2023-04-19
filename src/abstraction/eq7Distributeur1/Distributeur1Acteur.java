@@ -122,7 +122,8 @@ public class Distributeur1Acteur implements IActeur {
 		//Initialisation des previsions
 		//le probleme est ici que ces previsions concernent l'ensemble de la filiere et non pas juste notre acteur
 		//il faut creer un autre fonction car notre part de vente depend de la marque et plus generalement de la gamme
-		this.previsions = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 
+		this.previsions = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>();
+		this.previsionsperso = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 
 		for (int i=0;i<24;i++) {
 			HashMap<ChocolatDeMarque,Double> prevtour = new HashMap<ChocolatDeMarque,Double>();
 			HashMap<ChocolatDeMarque,Double> prevtourperso = new HashMap<ChocolatDeMarque,Double>();
