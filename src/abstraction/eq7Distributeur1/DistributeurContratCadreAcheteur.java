@@ -22,15 +22,14 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 	protected List<ExemplaireContratCadre> mesContratEnTantQuAcheteur;
 	protected List<ExemplaireContratCadre> historique_de_mes_contrats;
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
-	protected List<ExemplaireContratCadre> mesContrats;
 	private List<Object> negociations = new ArrayList<>();
 	private double minNego=5;
 
 
 	public void initialiser() {
 		super.initialiser();
+		
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
-		mesContrats = new LinkedList<ExemplaireContratCadre>();
 	}
 	public DistributeurContratCadreAcheteur() {
 		super();
@@ -56,7 +55,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		for (int etape = stepDebut+1; etape<stepDebut+25; etape++) {
 			int etapemod = etape%24;
 			e.ajouter(previsions.get(etapemod).get(marque));
-			journal.ajouter(""+previsions.get(etapemod).get(marque));
 		}
 		return e;
 	}
@@ -102,26 +100,26 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
      * @author Ghaly sentissi
      */
 	public ExemplaireContratCadre proposition_achat_aleatoire(IProduit produit,Echeancier e) {
-		SuperviseurVentesContratCadre superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre")); 
 
-		journal_achat.ajouter("Recherche d'un vendeur aupres de qui acheter");
 		List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
+		ExemplaireContratCadre cc = null;
 		if (vendeurs.contains(this)) {
 			vendeurs.remove(this);
 		}
-		IVendeurContratCadre vendeur = null;
-		if (vendeurs.size()==1) {
-			vendeur=vendeurs.get(0);
-		} else if (vendeurs.size()>1) {
-			vendeur = vendeurs.get((int)( Math.random()*vendeurs.size()));
-		}
-		
-		
-		if (vendeur!=null) {
+		while (!vendeurs.isEmpty() && cc == null) {
+			IVendeurContratCadre vendeur = null;
+			if (vendeurs.size()==1) {
+				vendeur=vendeurs.get(0);
+			} else if (vendeurs.size()>1) {
+				vendeur = vendeurs.get((int)( Math.random()*vendeurs.size()));
+			}
 			
-			return getContractForProduct(produit,e,vendeur);
+			vendeurs.remove(vendeur);
+			if (vendeur!=null) {
+			
+				cc = getContractForProduct(produit,e,vendeur);}
 	}
-		return null;}
+		return cc;}
 	
 	/**
 	 * 
@@ -130,7 +128,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 	 */
 	public double getLivraison(IProduit produit) {
 		double somme = 0;
-		for (ExemplaireContratCadre contrat : mesContrats) {
+		for (ExemplaireContratCadre contrat : mesContratEnTantQuAcheteur) {
 			if (contrat.getProduit() == produit) {
 				somme += contrat.getQuantiteRestantALivrer();
 			}
@@ -156,6 +154,8 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 				}
 				if (previsionannee > stockChocoMarque.get(marque)+getLivraison(marque)) { //On lance un CC seulement si notre stock n'est pas suffisant sur l'annee qui suit
 					Echeancier echeancier = echeancier_strat(etape+1,marque);
+					journal_achat.ajouter("Recherche d'un vendeur aupres de qui acheter "+ marque.getNom());
+
 					ExemplaireContratCadre cc = proposition_achat_aleatoire(marque,echeancier);
 
 						}
@@ -167,7 +167,17 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 									
 		}
 		
-
+	@Override
+	/**
+	 * @author Theo
+	 */
+	// A COMPLETER SI ASSEZ DE STOCK (appele si cc initie par vendeur)
+	public boolean achete(IProduit produit) {
+		if (produit instanceof ChocolatDeMarque) {
+			return true;
+		}
+		return false;
+	}
     /**
      * retourne l'étape de négociation en cours
      * @param contrat     
@@ -236,9 +246,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 //		stock.ajouter(this, lot.getQuantiteTotale()); // Cet exemple ne gere pas la peremption : il n'utilise pas la mention du step de production du produit
 	}
 
-	public boolean achete(IProduit produit) {
-		return true;
-	}
 	public String toString() {
 		return this.getNom();
 	}
