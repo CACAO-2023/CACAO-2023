@@ -146,7 +146,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 				if (previsionannee > stockChocoMarque.get(marque)+getLivraison(marque)) { //On lance un CC seulement si notre stock n'est pas suffisant sur l'annee qui suit
 					Echeancier echeancier = echeancier_strat(etape+1,marque);
 					journal_achat.ajouter("Recherche d'un vendeur aupres de qui acheter "+ marque.getNom());
-
 					ExemplaireContratCadre cc = proposition_achat_aleatoire(marque,echeancier);
 
 						}
@@ -158,6 +157,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 									
 		}
 		
+	
 	@Override
 	/**
 	 * @author Theo
@@ -165,6 +165,8 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 	// A COMPLETER SI ASSEZ DE STOCK (appele si cc initie par vendeur)
 	public boolean achete(IProduit produit) {
 		if (produit instanceof ChocolatDeMarque) {
+			stockChocoMarque.get(produit);
+			previsionsperso
 			return true;
 		}
 		return false;

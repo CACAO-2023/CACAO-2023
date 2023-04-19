@@ -60,6 +60,7 @@ public class Distributeur1Acteur implements IActeur {
 	
 	protected int cryptogramme;
 
+
 	public Distributeur1Acteur() {
 		this.coutCB = 3;
 		this.coutCH = 3;
@@ -109,7 +110,6 @@ public class Distributeur1Acteur implements IActeur {
 	 * @author Theo and Ghaly
 	 */
 	public void initialiser() {
-//		SuperviseurVentesContratCadre superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 
 		
 		//Initialisation des stocks
@@ -202,6 +202,7 @@ public class Distributeur1Acteur implements IActeur {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(this.journal);
 		res.add(this.journal_achat);
+		res.add(journal_stock);
 		return res;
 	}
 

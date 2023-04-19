@@ -141,10 +141,35 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		this.journal.ajouter("Eq7 a vendu "+quantite+" T de "+choco+ " aux clients finaux ");
 		
 		//Actualisation des previsions persos
-		int etapepreced = Filiere.LA_FILIERE.getEtape();
-		int etapenormalisee = (etapepreced+24)%24;
+		actualiser_prevision_perso( choco,   quantite);
+
+	}
+	
+	
+	/**
+	 * Actualisation des previsions persos
+	 * @author Theo, Ghaly
+	 */
+	public void actualiser_prevision_perso(ChocolatDeMarque choco,  double quantite) {
+		int etape_annee = Filiere.LA_FILIERE.getEtape()/24;
+		int etapenormalisee = Filiere.LA_FILIERE.getEtape()%24;
+		Filiere.LA_FILIERE.getVentes(choco, etapenormalisee);
 		HashMap<ChocolatDeMarque,Double> prevetapeperso = previsionsperso.get(etapenormalisee);
-		prevetapeperso.replace(choco, (prevetapeperso.get(choco)+quantite)/2);
+		prevetapeperso.replace(choco, (prevetapeperso.get(choco)*etape_annee+quantite)/(etape_annee+1));
+		previsionsperso.replace(etapenormalisee, prevetapeperso);
+	}
+	
+	/**
+	 * Actualisation des previsions persos
+	 * @author Ghaly
+	 */
+	public void actualiser_prevision_generale(ChocolatDeMarque choco) {
+		int etape_annee = Filiere.LA_FILIERE.getEtape()/24;
+		int etapenormalisee = Filiere.LA_FILIERE.getEtape()%24;
+		double quantite = Filiere.LA_FILIERE.getVentes(choco, etapenormalisee);
+		
+		HashMap<ChocolatDeMarque,Double> prevetapeperso = previsionsperso.get(etapenormalisee);
+		prevetapeperso.replace(choco, (prevetapeperso.get(choco)*etape_annee+quantite)/(etape_annee+1));
 		previsionsperso.replace(etapenormalisee, prevetapeperso);
 	}
 	
