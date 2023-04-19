@@ -26,14 +26,17 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	}
 	 
 	public boolean vend(IProduit produit) {
-		boolean res=false;
-		if (produit instanceof ChocolatDeMarque) {
+		boolean res = false;
+		
+		if (produit instanceof ChocolatDeMarque)  {
 			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : vend("+produit+") --> "+(this.stockChocoMarque.keySet().contains(produit)?" dans keySet "+this.stockChocoMarque.get(produit):"pas dans keySet"));
-			res=this.stockChocoMarque.keySet().contains(produit) && this.stockChocoMarque.get(produit)>1000;
+			res = this.stockChocoMarque.keySet().contains(produit) && this.stockChocoMarque.get(produit)>1000;
+			
 		} else if (produit instanceof Chocolat) {
 			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : vend("+produit+") --> "+(this.stockChoco.keySet().contains(produit)?" dans keySet "+this.stockChoco.get(produit):"pas dans keySet"));
-			res=this.stockChoco.keySet().contains(produit) && this.stockChoco.get(produit)>1000;
+			res = this.stockChoco.keySet().contains(produit) && this.stockChoco.get(produit)>1000;
 		}
+		
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : vend("+produit+") --> "+res);
 		return res;//On initie la vente de produit en fonction des stocks
 	}
