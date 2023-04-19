@@ -28,7 +28,7 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2AcheteurC
 			double pourcentage = (bourse.getCours(getFeve()).getMax()-bourse.getCours(getFeve()).getValeur())/(bourse.getCours(getFeve()).getMax()-bourse.getCours(getFeve()).getMin()); // difference de prix avec le max / amplitude totale
 			this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   BOURSEA: demande en bourse de "+achatMaxParStep*pourcentage+" de "+f);
 			return achatMaxParStep*pourcentage;*/
-			if( (f.getGamme().equals("F_BQ")) || (f.getGamme().equals("F_HQ_BE"))) {
+			if( (f.getGamme().equals("F_MQ")) || (f.getGamme().equals("F_HQ_BE"))) {
 				double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
 				double demande = Math.max(0, Math.min( Math.random()*50, solde));
 				this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   BOURSEA: demande en bourse de "+demande+" de "+f);

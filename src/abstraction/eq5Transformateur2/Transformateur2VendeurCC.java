@@ -43,7 +43,6 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	
 	
 	
-	/*
 	public void InitialisationProposition(ExemplaireContratCadre contrat){
 		Object produit = contrat.getProduit();
 		double qt=0;
@@ -51,7 +50,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 		return ;//lorsque quelqu'un propose de nous acheter, on recoit l'offre
 	}
-	*/
+	
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : j'accepte l'echeancier "+contrat.getEcheancier());
 		return contrat.getEcheancier(); } //pas de négociations
