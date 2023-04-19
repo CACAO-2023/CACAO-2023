@@ -209,13 +209,13 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 /** ecrit par Nathan Claeys
  */
 	public void next() {
-		super.next();
+		super.next(); 
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.getListeContratEnCours()) {
 			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
 				contratsObsoletes.add(contrat);
 			}
-		}
+		}  
 		this.getListeContratEnCours().removeAll(contratsObsoletes);		
-	}
-}
+	}  
+}  
