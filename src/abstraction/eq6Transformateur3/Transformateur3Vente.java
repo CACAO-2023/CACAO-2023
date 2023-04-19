@@ -60,19 +60,19 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
-				return 2;
+				return 2000;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco")) {
-				return 2;
+				return 2100;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco bio")) {
-				return 2;
+				return 2300;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("Choc")) {
-				return 2;
+				return 2500;
 			}
 		}
-		return 2;
+		return 2000;
 	}
 
 	@Override
@@ -81,30 +81,30 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 			double i=(10+Math.random()/10);
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
 				if(contrat.getPrix()<1800) {
-					return 2*(1-i);
+					return 2000*(1-i);
 				}
-				else {return Math.min(contrat.getPrix()*(1+i), 2);
+				else {return Math.min(contrat.getPrix()*(1+i), 2000);
 			}}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco")) {
 				if(contrat.getPrix()<1890) {
-					return 2*(1-i);
+					return 2100*(1-i);
 				}
-				else {return Math.min(contrat.getPrix()*(1+i), 2);
+				else {return Math.min(contrat.getPrix()*(1+i), 2100);
 			}}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco bio")) {
 				if(contrat.getPrix()<2070) {
-					return 2*(1-i);
+					return 2300*(1-i);
 				}
-				else {return Math.min(contrat.getPrix()*(1+i), 2);
+				else {return Math.min(contrat.getPrix()*(1+i), 2300);
 			}}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("Choc")) {
 				if(contrat.getPrix()<2250) {
-					return 2*(1-i);
+					return 2500*(1-i);
 				}
-				else {return Math.min(contrat.getPrix()*(1+i), 2);
+				else {return Math.min(contrat.getPrix()*(1+i), 2500);
 			}}
 		}
-		return 2;
+		return 2000;
 	}
 
 	@Override
