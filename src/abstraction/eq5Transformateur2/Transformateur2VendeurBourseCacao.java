@@ -7,7 +7,7 @@ import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Transformateur2VendeurBourseCacao extends Transformateur2 implements IVendeurBourse{
+public class Transformateur2VendeurBourseCacao extends Transformateur2AcheteurBourseCacao implements IVendeurBourse{
 	
 	private Feve feve;
 	private Variable stockFeve;
@@ -30,13 +30,13 @@ public class Transformateur2VendeurBourseCacao extends Transformateur2 implement
 
 	@Override
 	public double offre(Feve f, double cours) {
-		if (this.getFeve().equals(f)) {
+		/*if (this.getFeve().equals(f)) {
 			BourseCacao bourse = (BourseCacao)(Filiere.LA_FILIERE.getActeur("BourseCacao"));
 			double pourcentage = (bourse.getCours(getFeve()).getValeur()-bourse.getCours(getFeve()).getMin())/(bourse.getCours(getFeve()).getMax()-bourse.getCours(getFeve()).getMin());
 			return this.stockFeve.getValeur()*pourcentage;
-		} else {
+		} else {*/
 			return 0.0;
-		}
+		//}
 	}
 	/**
 	 * @return the stockFeve

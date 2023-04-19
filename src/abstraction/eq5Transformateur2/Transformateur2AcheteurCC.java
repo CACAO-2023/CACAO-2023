@@ -1,4 +1,4 @@
-package abstraction.eq5Transformateur2; ///WIEM
+package abstraction.eq5Transformateur2; ///WIEM LABBAOUI
 
 import java.awt.Color;
 
@@ -12,12 +12,13 @@ import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Transformateur2AcheteurCC extends Transformateur2 implements IAcheteurContratCadre {
+public class Transformateur2AcheteurCC extends Transformateur2Transfo implements IAcheteurContratCadre {
 
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
@@ -30,25 +31,23 @@ public class Transformateur2AcheteurCC extends Transformateur2 implements IAchet
 	@Override
 	public boolean achete(IProduit produit) {
 		// TODO Auto-generated method stub
-		if (produit.getType().equals("Feve")) {
+		if (((produit.getType().equals("Feve")))&&((((Feve)produit).getGamme()== Gamme.MQ) ||((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable())))){
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme vouloir acheter le produit "+produit);
-		return true;} //on achète tout type de fèves
+		return true;} //on achète seulement les fèves haute gamme bio équitable et les fèves moyenne gamme
 		else {
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme ne pas vouloir acheter le produit "+produit);
 		return false;}
-		
-		
-		
-	}
+		}
+	
 
 	@Override
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
-		if ((( ((ChocolatDeMarque) produit).getMarque())) == "Maison Doutre") {
+		/*if ((( ((ChocolatDeMarque) produit).getMarque())) == "Maison Doutre") {
 			return 10; } //1O% de RSE pour la marque "Maison Doutre"
-		else { 
+		else { */
 			return 0; } // 0% pour la marque "ChocoPop"
-			}
+			// }
 
 		// TODO Auto-generated method stub
 
