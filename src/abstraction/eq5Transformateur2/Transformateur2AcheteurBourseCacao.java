@@ -51,7 +51,7 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2AcheteurC
 	
 	@Override
 	public void notificationBlackList(int dureeEnStep) {
-		this.journalAchats.ajouter("Aie... je suis blackliste... j'aurais du verifier que j'avais assez d'argent avant de passer une trop grosse commande en bourse...");
+		this.journalAchats.ajouter("Aiee... je suis blackliste... j'aurais du verifier que j'avais assez d'argent avant de passer une trop grosse commande en bourse...");
 	
 		
 	}
