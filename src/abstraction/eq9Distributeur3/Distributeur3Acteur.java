@@ -94,6 +94,7 @@ public class Distributeur3Acteur implements IActeur{
 				chocolats.add(chocolats_filiere.get(i));
 			}
 		}
+		System.out.println(chocolats);
 		
 	}
 	

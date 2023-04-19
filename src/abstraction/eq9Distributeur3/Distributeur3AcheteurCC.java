@@ -45,8 +45,9 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 
 			for (int i=0; i<chocolats.size();i++) {
 				journal_activitegenerale.ajouter("On regarde pour " + chocolats.toString());
-
+				System.out.println(chocolats.get(i));
 				List<IVendeurContratCadre> vendeursChocolat = supCCadre.getVendeurs(chocolats.get(i));
+				System.out.println(vendeursChocolat);
 				Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape(),24, 25000.0);
 				System.out.println(""+vendeursChocolat.size()+" v");
 				List<ExemplaireContratCadre> contratAvecChocolat = new ArrayList<ExemplaireContratCadre> ();
