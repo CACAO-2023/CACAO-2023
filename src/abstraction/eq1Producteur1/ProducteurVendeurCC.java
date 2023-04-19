@@ -77,9 +77,10 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	public double propositionPrix(ExemplaireContratCadre c) {
 		double p=0;
 		if((Feve)c.getProduit()==Feve.F_BQ) {		
-			p= 1.1*c.getQuantiteTotale();
-		if((Feve)c.getProduit()==Feve.F_MQ)
-			p= 1.3*c.getQuantiteTotale();
+			p= 1.5;
+		}
+		if((Feve)c.getProduit()==Feve.F_MQ) {
+			p= 1.9;
 		}
 		return p;
 		
@@ -120,13 +121,13 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		double livraisonBQ = Math.min(super.getVraiStockB().getQuantiteTotale(), quantite);		
 		Lot lot = new Lot(produi);
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livraisonBQ); 
-		this.journal_ventes.ajouter("Livraison de "+ livraisonBQ +" bas de gamme pour "+ contrat.getAcheteur());
+		this.journal_ventes.ajouter("Livraison de "+ livraisonBQ +"tonnes de bas de gamme pour "+ contrat.getAcheteur());
 		return lot;
 	 case F_MQ:
 		 double livraisonMQ = Math.min(super.getVraiStockM().getQuantiteTotale(), quantite);
 		 Lot lot2 = new Lot(produi);
 		 lot2.ajouter(Filiere.LA_FILIERE.getEtape(), livraisonMQ); 
-		 this.journal_ventes.ajouter("Livraison de "+ livraisonMQ +" moyen de gamme pour "+ contrat.getAcheteur());
+		 this.journal_ventes.ajouter("Livraison de "+ livraisonMQ +"tonnes de moyen de gamme pour "+ contrat.getAcheteur());
 		 return lot2;
 	 case F_HQ_BE : return null;
 	 case F_MQ_BE : return null;	
@@ -145,23 +146,24 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		this.PropositionVendeur(Feve.F_BQ);
 		this.PropositionVendeur(Feve.F_MQ);
 		this.journal_ventes.ajouter("Nos contrats à l'étape "+ Filiere.LA_FILIERE.getEtape()+"sont "+ this.mescontrats);
+	    
 	}
 
 	@Override
 	public boolean vend(IProduit produit) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		return produit instanceof Feve && (produit == Feve.F_BQ || produit == Feve.F_MQ);
+	}	
 	
 	public ExemplaireContratCadre PropositionVendeur(IProduit produit){
-		
-		IAcheteurContratCadre client=supCCadre.getAcheteurs(produit).get((int)supCCadre.getAcheteurs(produit).size()-1);
+		int a=(int)(supCCadre.getAcheteurs(produit).size()*Math.random());		
+		IAcheteurContratCadre client=supCCadre.getAcheteurs(produit).get(a);
 		Echeancier e= new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 1000);
-		this.journal_ventes.ajouter("Client potentiel contrat cadre "+ this.getNom());
+		this.journal_ventes.ajouter("Client potentiel contrat cadre "+ client.getNom());
 		this.journal_ventes.ajouter("Négociation avec "+client.getNom()+ " pour " + produit);
 		ExemplaireContratCadre c=supCCadre.demandeVendeur(client, this, produit, e, cryptogramme, false);
 		if (c != null) {
-			this.journal_ventes.ajouter("Début contrat cadre avec "+client +"pour" + produit +c);
+			this.journal_ventes.ajouter("Début contrat cadre avec "+client.getNom() +"pour" + produit +c);
+			this.mescontrats.add(c);
 		}
 		return c;
 		
