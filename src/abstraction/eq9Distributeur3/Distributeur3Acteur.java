@@ -92,13 +92,14 @@ public class Distributeur3Acteur implements IActeur{
 
 			if(chocolats_cible_noms.contains((chocolats_filiere.get(i)).toString())){
 				chocolats.add(chocolats_filiere.get(i));
+				stock.QteStock.put(chocolats_filiere.get(i),0.0);
 			}
 		}
 		System.out.println(chocolats);
-		for (int i = 0; i< this.chocolats.size(); i++) {
-			this.stock.ajoutQte(chocolats.get(i), 100000000);
-			this.prix_tonne_vente.put(chocolats.get(i), 10000.0);
-		}
+	//	for (int i = 0; i< this.chocolats.size(); i++) {
+		//	this.stock.ajoutQte(chocolats.get(i), 100000000);
+		//	this.prix_tonne_vente.put(chocolats.get(i), 10000.0);
+		//}
 		
 		
 		
