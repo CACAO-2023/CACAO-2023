@@ -52,13 +52,7 @@ public class DistributeurContratCadreVendeurAcheteur extends Distributeur1Acteur
 		}
 		this.mesContratEnTantQuAcheteur.removeAll(contratsObsoletes);
 		
-		
-<<<<<<< HEAD
-		// Proposition d'un nouveau contrat a tous les vendeurs possibles
-		
-=======
 		journal.ajouter("Recherche d'un vendeur aupres de qui acheter");
->>>>>>> branch 'main' of https://github.com/theoo33/CACAO-2023-Eq7
 		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
 			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
 				SuperviseurVentesContratCadre superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
