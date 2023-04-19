@@ -33,8 +33,6 @@ public class Stock extends Transformateur1Acteur{
 		this.stockFeves.put(Feve.F_HQ_BE, 10000.0);
 		this.totalStocksFeves.ajouter(this, 10000.0, this.cryptogramme);
 		this.journal.ajouter("ajout de 10000 de "+Feve.F_HQ_BE+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
-		
-		this.journal.ajouter("on a stockFeve : "+stockFeves);
 
 		this.stockChoco=new HashMap<Chocolat,Double>();
 		this.stockChoco.put(Chocolat.C_BQ, 1000.0);
@@ -53,6 +51,7 @@ public class Stock extends Transformateur1Acteur{
 	
 	public void next() {
 		super.next();
+		this.journal.ajouter("on a stockFeve : "+stockFeves);
 		this.journal.ajouter("=== STOCKS === ");
 		for (Feve f : this.stockFeves.keySet()) {
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(f+"", 15)+" = "+this.stockFeves.get(f));

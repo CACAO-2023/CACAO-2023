@@ -17,9 +17,7 @@ import abstraction.eqXRomu.produits.Feve;
 public class Transformateur1Transformateur extends Stock implements IFabricantChocolatDeMarque  {
 	
 	protected List<ChocolatDeMarque>chocosProduits;
-	protected HashMap<Feve, Double> stockFeves;
-	protected HashMap<Chocolat, Double> stockChoco;
-	protected HashMap<ChocolatDeMarque, Double> stockChocoMarque;
+
 	protected HashMap<Feve, HashMap<Chocolat, Double>> pourcentageTransfo; // pour les differentes feves, le chocolat qu'elle peuvent contribuer a produire avec le ratio
 	
 	public Transformateur1Transformateur() {
@@ -43,7 +41,6 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 
 	public void initialiser() {
 		super.initialiser();
-		this.stockChocoMarque=new HashMap<ChocolatDeMarque,Double>();
 		this.pourcentageTransfo = new HashMap<Feve, HashMap<Chocolat, Double>>();
 		this.pourcentageTransfo.put(Feve.F_HQ_BE, new HashMap<Chocolat, Double>());
 		double conversion = 1.1;
