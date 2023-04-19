@@ -33,7 +33,6 @@ import abstraction.eqXRomu.produits.Lot;
  *
  */
 
-
 public class CC_distributeur extends AchatBourse implements IVendeurContratCadre {
 
 
