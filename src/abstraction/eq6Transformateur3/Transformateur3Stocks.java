@@ -14,7 +14,7 @@ import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Transformateur3Stocks extends Transformateur3Acteur  {
+public class Transformateur3Stocks extends Transformateur3  {
 
 /**Mouhamed SOW*/
 	protected Lot stockFeveBG; // feve bas gamme
@@ -31,6 +31,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   public Transformateur3Stocks(Lot stockFeveBG, Lot stockFeveMG, Lot stockFeveMGL, Lot stockFeveHGL,
 			Lot stockChocolatBG, Lot stockChocolatMG, Lot stockChocolatMGL, Lot stockChocolatHGL,
 			List<ChocolatDeMarque> stockProduit) {
+	  	super();
 		this.stockFeveBG = stockFeveBG;
 		this.stockFeveMG = stockFeveMG;
 		this.stockFeveMGL = stockFeveMGL;

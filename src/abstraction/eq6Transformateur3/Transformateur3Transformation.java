@@ -33,6 +33,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 	private double HQBEStep2;
 	
 	public Transformateur3Transformation() {
+		super();
 		this.MQStep1=0;
 		this.MQBEStep1=0;
 		this.HQBEStep1=0;

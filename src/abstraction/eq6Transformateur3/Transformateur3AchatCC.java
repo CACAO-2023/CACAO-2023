@@ -19,6 +19,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	private List<ExemplaireContratCadre> ListeContratEnCours;
 	
 	public Transformateur3AchatCC () {
+		super();
 		this.ListeContratEnCours = new LinkedList<ExemplaireContratCadre>();
 		
 	}
