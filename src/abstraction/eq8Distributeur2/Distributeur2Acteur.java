@@ -112,6 +112,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+		Variable s= new Variable("stock",this,stocks.getStockGlobal());
+		res.add(s);
 		
 		return res;
 	}
@@ -120,6 +122,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	// Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
+	
 		return res;
 	}
 	
