@@ -24,7 +24,7 @@ public class Transformateur2VendeurCC extends Transformateur2 implements IVendeu
 		this.produit = produit;
 		this.mesContratEnTantQueVendeur=new LinkedList<ExemplaireContratCadre>();
 	}
-	
+	 
 	public boolean vend(IProduit produit) {
 		boolean res=false;
 		if (produit instanceof ChocolatDeMarque) {
