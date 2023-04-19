@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import abstraction.eqXRomu.bourseCacao.BourseCacao;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
@@ -47,6 +48,8 @@ public class Producteur1Acteur implements IActeur {
 		this.stockFeveBas.ajouter(0,1000);
 		this.stockFeveMoy = new Lot(Feve.F_MQ);
 		this.stockFeveMoy.ajouter(0,1000);
+
+		
 	}
 
 	public String getNom() {// NE PAS MODIFIER
