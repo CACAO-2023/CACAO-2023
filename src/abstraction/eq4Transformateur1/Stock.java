@@ -29,12 +29,13 @@ public class Stock extends Transformateur1Acteur{
 		this.stockFeves.put(Feve.F_BQ, 10000.0);
 		this.totalStocksFeves.ajouter(this, 10000.0, this.cryptogramme);
 		this.journal.ajouter("ajout de 10000 de "+Feve.F_BQ+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
-		
-		this.stockFeves=new HashMap<Feve,Double>();
+
 		this.stockFeves.put(Feve.F_HQ_BE, 10000.0);
 		this.totalStocksFeves.ajouter(this, 10000.0, this.cryptogramme);
 		this.journal.ajouter("ajout de 10000 de "+Feve.F_HQ_BE+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
 		
+		this.journal.ajouter("on a stockFeve : "+stockFeves);
+
 		this.stockChoco=new HashMap<Chocolat,Double>();
 		this.stockChoco.put(Chocolat.C_BQ, 1000.0);
 		this.totalStocksChoco.ajouter(this, 1000.0, this.cryptogramme);
@@ -42,8 +43,7 @@ public class Stock extends Transformateur1Acteur{
 			
 		this.stockChocoMarque=new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque c: Filiere.LA_FILIERE.getChocolatsProduits()) {
-			this.journal.ajouter("il existe : "+c);
-			if (c.getNom().equals("Vccotioi")) {
+			if (c.getMarque().equals("Vccotioi")) {
 					this.stockChocoMarque.put(c, 1000.0);
 					this.totalStocksChocoMarque.ajouter(this, 1000.0, this.cryptogramme);
 					this.journal.ajouter("ajout de 1000 de "+c+" au stock de chocolat de marque "+c.getMarque() +" +--> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
