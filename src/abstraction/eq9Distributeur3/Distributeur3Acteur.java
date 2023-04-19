@@ -61,12 +61,14 @@ public class Distributeur3Acteur implements IActeur{
 		
 		// william : pour pouvoir acheter le chocolat qui nous intéresse (HQ BE, MQ BE, MQ)
 		this.chocolats_cible_noms = new LinkedList<String>();
-		this.chocolats_cible_noms.add("C_HQ_BE_Vccotioi");
-		this.chocolats_cible_noms.add("C_HQ_BE_Maison_Doutre");
-		this.chocolats_cible_noms.add("C_HQ_BE_Choc");
-		this.chocolats_cible_noms.add("C_HQ_BE_Villors");
-		this.chocolats_cible_noms.add("C_MQ_BE_Villors");
-		
+		this.chocolats_cible_noms.add("C_HQ_BE Vccotioi");
+		this.chocolats_cible_noms.add("C_HQ_BE Maison Doutre");
+		this.chocolats_cible_noms.add("C_HQ_BE Choc");
+		this.chocolats_cible_noms.add("C_MQ_BE chokchoco bio");
+		this.chocolats_cible_noms.add("C_HQ_BE Villors");
+		this.chocolats_cible_noms.add("C_MQ_BE Villors");
+		this.chocolats_cible_noms.add("C_BQ Villors");
+
 		//this.chocolats.add(c1);
 		//this.stock.ajoutQte(c1, 1000);
 		
