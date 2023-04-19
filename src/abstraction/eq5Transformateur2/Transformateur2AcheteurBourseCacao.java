@@ -43,7 +43,10 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2AcheteurC
 
 	@Override
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
-		this.stockFeve.setValeur(this, this.stockFeve.getValeur()+l.getQuantiteTotale());
+		Feve feve_concernee = ((Feve) l.getProduit());
+		double quantite = l.getQuantiteTotale();
+		System.out.println("stock"+stockFeves.get(feve_concernee));
+		this.stockFeves.put(feve_concernee, this.stockFeves.get(feve_concernee)+quantite);
 	}
 	
 	@Override
