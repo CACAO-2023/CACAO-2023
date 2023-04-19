@@ -121,16 +121,19 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		if (produit instanceof ChocolatDeMarque) {
 			if (this.stockChocoMarque.keySet().contains(produit)) {
 				qtok= this.stockChocoMarque.get(produit);
+				if (qtok>100) {
 				this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propovend --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qtok/15.0));
 				return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qtok/15.0);
 	}
 			}
+			}
 		else if (produit instanceof Chocolat) {
 			if (this.stockChoco.keySet().contains(produit)) {
 				qtok= this.stockChoco.get(produit);
+				if (qtok>100) {
 				this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propovend --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qtok/15.0));
 				return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qtok/15.0);
-
+				}
 	}
 		}
 		return null;
@@ -152,9 +155,9 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 			case C_HQ_BE :
 			if (this.stockChocoMarque.keySet().contains(produit)) {
 				qtok= this.stockChocoMarque.get(produit);
-				if (qtok>+0.0) {
+				if (qtok>200) {
 					
-					if (contrat.getEcheancier().getQuantiteTotale()<qtok ){
+					if (contrat.getEcheancier().getQuantiteTotale()<qtok && contrat.getEcheancier().getQuantiteTotale()>100 ){
 						this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend --> meme echeancier");
 						return contrat.getEcheancier();
 					} else {
@@ -172,8 +175,8 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 				case C_BQ :
 			if (this.stockChoco.keySet().contains(produit)) {
 				qtok= this.stockChoco.get(produit);
-				if (qtok>0.0) {
-					if (contrat.getEcheancier().getQuantiteTotale()<qtok) {
+				if (qtok>200) {
+					if (contrat.getEcheancier().getQuantiteTotale()<qtok && contrat.getEcheancier().getQuantiteTotale()>100) {
 						this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend --> meme echeancier");
 						return contrat.getEcheancier();
 					} else {
