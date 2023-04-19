@@ -1,4 +1,4 @@
-package abstraction.eq5Transformateur2; ///WIEM
+package abstraction.eq5Transformateur2; ///WIEM LABBAOUI
 
 import java.awt.Color;
 
@@ -18,7 +18,7 @@ import abstraction.eqXRomu.produits.Lot;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Transformateur2AcheteurCC extends Transformateur2 implements IAcheteurContratCadre {
+public class Transformateur2AcheteurCC extends Transformateur2Transfo implements IAcheteurContratCadre {
 
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
 	protected SuperviseurVentesContratCadre superviseurVentesCC;

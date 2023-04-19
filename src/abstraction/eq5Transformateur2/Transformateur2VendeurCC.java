@@ -1,8 +1,9 @@
 package abstraction.eq5Transformateur2;//Fait par Yassine 
 
 import java.awt.Color;
+import java.util.LinkedList;
+import java.util.List;
 
-import abstraction.eq5Transformateur2.Transformateur2;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
@@ -13,9 +14,17 @@ import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 
-public class Transformateur2VendeurCC extends Transformateur2 implements IVendeurContratCadre {
+public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implements IVendeurContratCadre {
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
-
+	private LinkedList<ExemplaireContratCadre> mesContratEnTantQueVendeur;
+	private IProduit produit;
+	
+	public Transformateur2VendeurCC(IProduit produit) {
+		super();
+		this.produit = produit;
+		this.mesContratEnTantQueVendeur=new LinkedList<ExemplaireContratCadre>();
+	}
+	 
 	public boolean vend(IProduit produit) {
 		boolean res=false;
 		if (produit instanceof ChocolatDeMarque) {
@@ -28,7 +37,7 @@ public class Transformateur2VendeurCC extends Transformateur2 implements IVendeu
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : vend("+produit+") --> "+res);
 		return res;//On initie la vente de produit en fonction des stocks
 	}
-	
+	/*
 	public void InitialisationProposition(ExemplaireContratCadre contrat){
 		Object produit = contrat.getProduit();
 		double qt=0;
@@ -36,7 +45,7 @@ public class Transformateur2VendeurCC extends Transformateur2 implements IVendeu
 
 		return ;//lorsque quelqu'un propose de nous acheter, on recoit l'offre
 	}
-
+	*/
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		
 		Object produit = contrat.getProduit();
@@ -108,6 +117,9 @@ public class Transformateur2VendeurCC extends Transformateur2 implements IVendeu
 			return prixInit;
 		}
 	}
+	
+	
+	
 
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
 		double stock=0.0;
@@ -141,6 +153,24 @@ public class Transformateur2VendeurCC extends Transformateur2 implements IVendeu
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
 	}
 	
+	public boolean peutVendre(IProduit produit) {
+		return produit.equals(produit);
+	}
 	
 	
+	public String toString() {
+		return this.getNom();
+	}
+	/*
+	public void next() {
+		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
+		for (ExemplaireContratCadre contrat : this.mesContratEnTantQueVendeur) {
+			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
+				contratsObsoletes.add(contrat);
+			}
+		}
+		this.mesContratEnTantQueVendeur.removeAll(contratsObsoletes);
+		super.next();
+	}
+	*/
 }
