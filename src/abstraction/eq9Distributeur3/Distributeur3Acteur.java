@@ -96,6 +96,7 @@ public class Distributeur3Acteur implements IActeur{
 		}
 		System.out.println(chocolats);
 		
+		
 	}
 	
 	public String toString() {
