@@ -78,6 +78,13 @@ public class Distributeur3Acteur implements IActeur,IFabricantChocolatDeMarque, 
 	}
 	
 	public void initialiser() {
+		var chocolats_filiere = new LinkedList<ChocolatDeMarque>();
+		for (int i=0; i<chocolats_filiere.size(); i++) {
+			if(chocolats_cible_noms.contains((chocolats_filiere.get(i)).toString())){
+				chocolats.add(chocolats_filiere.get(i));
+			}
+		}
+		
 	}
 	
 	public String toString() {
@@ -96,17 +103,17 @@ public class Distributeur3Acteur implements IActeur,IFabricantChocolatDeMarque, 
 	public void next() {
 
 		
-		this.stock = new Stock();
-		chocolats = new LinkedList<ChocolatDeMarque>();
+		//this.stock = new Stock();
+		//chocolats = new LinkedList<ChocolatDeMarque>();
 		
 		
 		if(initialise == true) {
 			
-			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
+			//ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
 			
-			this.chocolats.add(c1);
-			this.stock.ajoutQte(c1, 100000);
-			this.journal_stock.ajouter("On ajoute au stock de "+ c1.getNom() + " une quantite de  " + 1000.0); 
+			//this.chocolats.add(c1);
+			//this.stock.ajoutQte(c1, 100000);
+			//this.journal_stock.ajouter("On ajoute au stock de "+ c1.getNom() + " une quantite de  " + 1000.0); 
 
 		}
 		
