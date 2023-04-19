@@ -31,34 +31,35 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	public boolean peutVendre(IProduit produit) {
 		return (produit instanceof Feve) ;
 	}
-
 	
+
+	//On doit revoir la stratégie de contreproposition(criteres, quantité max, quantité min ...)
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		if (this.peutVendre((IProduit) contrat.getProduit())) {
 		  switch ((Feve)contrat.getProduit()) {
 		  case F_BQ:
 			if (contrat.getEcheancier().getQuantiteTotale()<super.getStockBas().getQuantiteTotale()) {
-				if (Math.random()<0.1) {
+				Echeancier e = contrat.getEcheancier();
+				if (e.getQuantite(e.getStepDebut())>super.getStockBas().getQuantiteTotale()/5) { //Si la quantité demandé au premier step est inferieur au cinquieme de notre stock on negocie
 				    return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
-				} else {//dans 90% des cas on fait une contreproposition pour l'echeancier
-					Echeancier e = contrat.getEcheancier();
-					e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut())/2.0);// on souhaite livrer deux fois moins lors de la 1ere livraison... un choix arbitraire, juste pour l'exemple...
+				} else {
+					e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut())*2);// on livre plus lors de la 1ere livraison... 
 					return e;
 				}
-			} else {
-				return null; // on est frileux : on ne s'engage dans un contrat cadre que si on a toute la quantite en stock (on pourrait accepter meme si nous n'avons pas tout car nous pouvons produire/acheter pour tenir les engagements) 
+			}else {
+				return null; // On s'engage pas si on a pas la quantité demandé
 			}
 		  case F_MQ:
 			  if (contrat.getEcheancier().getQuantiteTotale()<super.getStockMoy().getQuantiteTotale()) {
-					if (Math.random()<0.1) {
-					    return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
-					} else {//dans 90% des cas on fait une contreproposition pour l'echeancier
-						Echeancier e = contrat.getEcheancier();
-						e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut())/2.0);// on souhaite livrer deux fois moins lors de la 1ere livraison... un choix arbitraire, juste pour l'exemple...
+				  Echeancier e = contrat.getEcheancier();
+					if (e.getQuantite(e.getStepDebut())>super.getStockBas().getQuantiteTotale()/10) { //Si la quantité demandé au premier step est inferieur au dixieme de notre stock on negocie
+					    return contrat.getEcheancier(); 
+					} else {
+						e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut())*2);
 						return e;
 					}
 				} else {
-					return null; // on est frileux : on ne s'engage dans un contrat cadre que si on a toute la quantite en stock (on pourrait accepter meme si nous n'avons pas tout car nous pouvons produire/acheter pour tenir les engagements) 
+					return null; // On s'engage pas si on a pas la quantité necessaire
 				}
 		  case F_HQ_BE : return null;
 		  case F_MQ_BE : return null;
@@ -71,15 +72,33 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	}
 
 	@Override
-	public double propositionPrix(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double propositionPrix(ExemplaireContratCadre c) {
+		double p=0;
+		switch((Feve)c.getProduit()) {		
+		case F_BQ:
+			p= 1100*c.getQuantiteTotale();
+		case F_MQ:
+			p= 1300*c.getQuantiteTotale();
+		case F_HQ_BE : p= 0;
+		case F_MQ_BE : p= 0;
+		}
+		return p;
+		
+		
 	}
 
 	@Override
-	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double contrePropositionPrixVendeur(ExemplaireContratCadre c) {
+		if (c.getPrix()>propositionPrix(c)) {//s'ils sont genereux pourquoi pas :)
+			return c.getPrix();
+		}
+		else {
+		double p= (c.getPrix()+propositionPrix(c))/2;
+		if (p>0.75*propositionPrix(c)) {
+		return p;
+		}else {
+			return (p+propositionPrix(c))/2;
+		}}
 	}
 
 	@Override
@@ -93,34 +112,29 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	 switch ((Feve)produi) {
 	 
 	 case F_BQ:
-		double livre = Math.min(super.getStockBas().getQuantiteTotale(), quantite);
-		if (livre>0.0) {
-			super.getStockBas().retirer(livre);
-		}
+		double livre = Math.min(super.getStockBas().getQuantiteTotale(), quantite);		
 		Lot lot = new Lot(produi);
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); // cet exemple ne gere pas la peremption : la marchandise est consideree comme produite au step courant
 		return lot;
 	 case F_MQ:
 		 double livr = Math.min(super.getStockMoy().getQuantiteTotale(), quantite);
-			if (livr>0.0) {
-				super.getStockMoy().retirer(livr);
-			}
-			Lot lot2 = new Lot(produi);
-			lot2.ajouter(Filiere.LA_FILIERE.getEtape(), livr); // cet exemple ne gere pas la peremption : la marchandise est consideree comme produite au step courant
-			return lot2;
+		 Lot lot2 = new Lot(produi);
+		 lot2.ajouter(Filiere.LA_FILIERE.getEtape(), livr); // cet exemple ne gere pas la peremption : la marchandise est consideree comme produite au step courant
+		 return lot2;
 	 case F_HQ_BE : return null;
 	 case F_MQ_BE : return null;	
 	 }
 	return null;
 	}
 	public void next() {
-		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
+		super.next();
+		List<ExemplaireContratCadre> contratstermine=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.mescontrats) {
 			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
-				contratsObsoletes.add(contrat);
+				contratstermine.add(contrat);
 			}
 		}
-		this.mescontrats.removeAll(contratsObsoletes);
+		this.mescontrats.removeAll(contratstermine);
 	}
 
 	@Override
