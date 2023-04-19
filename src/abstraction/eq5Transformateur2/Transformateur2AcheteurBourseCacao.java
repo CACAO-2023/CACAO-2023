@@ -42,15 +42,15 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2AcheteurC
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
 		Feve feve_concernee = ((Feve) l.getProduit());
 		double quantite = l.getQuantiteTotale();
-		
 		System.out.println(" sto "+stockFeves);
 		//.stockFeves.get(feve_conernee).setValeur(this, this.stockFeves.get(feve_concernee)+l.getQuantiteTotale());
 		this.stockFeves.put(feve_concernee, this.stockFeves.get(feve_concernee)-quantite);
+		this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_GREEN,"Achat de "+feve_concernee.getGamme()+" En quantité "+ quantite);
 	}
 	
 	@Override
 	public void notificationBlackList(int dureeEnStep) {
-		this.journal.ajouter("Aie... je suis blackliste... j'aurais du verifier que j'avais assez d'argent avant de passer une trop grosse commande en bourse...");
+		this.journalAchats.ajouter("Aie... je suis blackliste... j'aurais du verifier que j'avais assez d'argent avant de passer une trop grosse commande en bourse...");
 	
 		
 	}
