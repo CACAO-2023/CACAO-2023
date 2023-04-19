@@ -33,7 +33,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 * 
 	 */
 	public double demande(Feve f, double cours) {
-		/**if (f.getGamme().compareTo(Gamme.BQ)==0) {if(cours<=this.getCoursmaxBG().getValeur()) {
+		if (f.getGamme().compareTo(Gamme.BQ)==0) {if(cours<=this.getCoursmaxBG().getValeur()) {
 													return (super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f));}
 		}else {
 		if (f.getGamme().compareTo(Gamme.MQ)==0 && f.isBioEquitable()) {if(cours<=this.getCoursmaxMGL().getValeur()) {
@@ -44,7 +44,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		else {
 		if (f.getGamme().compareTo(Gamme.BQ)==0 && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
 			return (super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f));}}
-		else {return 0;};};};};*/
+		else {return 0;};};};};
 		return 1000;
 	}
 
