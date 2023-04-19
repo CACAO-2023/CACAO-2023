@@ -2,6 +2,8 @@ package abstraction.eq8Distributeur2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 //auteur : AZZI Maxime
 
@@ -22,6 +24,17 @@ stocks.put(chocolats, stock);
 }
 return stock.getQuantite();
 }
+
+//auteur: MOUDACHIROU Kayodé
+
+public double getStockGlobal() {
+	double s=0;
+	for (Map.Entry mapentry : stocks.entrySet()) {
+		s+=this.getStock((ChocolatDeMarque)mapentry.getKey());
+	}
+	return s;
+}
+
 
 // Autres méthodes pour gérer le stock général (ajouter, retirer, etc.)
 // auteur : AZZI Maxime
