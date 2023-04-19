@@ -30,9 +30,8 @@ import abstraction.eqXRomu.produits.Lot;
 
 
 public class CC_producteur extends Transformateur1Transformateur implements IAcheteurContratCadre{
-	
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
-
+	
 	public void initialiser() {
 		super.initialiser();
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
@@ -41,19 +40,14 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 	public boolean achete(IProduit produit) {
 		if (produit instanceof Feve) {
 		if (((Feve) produit).getGamme().equals(Gamme.BQ) || (((Feve) produit).getGamme().equals(Gamme.HQ)))  {
-			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme acheter le produit "+produit);
+			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme acheter le produit "+produit);
 			return true;
 		}
 		return false;
 	}
 		return false;
 }
-	protected SuperviseurVentesContratCadre superviseurVentesCC;
 
-	public void initialiser() {
-		super.initialiser();
-		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
-	}
 
 	public Echeancier propositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		Object produit = contrat.getProduit();
@@ -80,7 +74,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 					if ((qfeve >= ventetotB/30)){ // si quantité >= vente totale basse qualité / (15 steps * 2) en se disant que nous allons prendre 50% du marché
 						return null;
 					}
-					else {this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0));
+					else {this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0));
 					return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotB/30);
 					}
 				}
@@ -94,7 +88,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 				if ((qfeve >= ventetotH/30)){
 					return null;
 				}
-				else {this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0));
+				else {this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0));
 				return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotH/30);
 				}
 			}
@@ -126,12 +120,12 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		}
 		if (( duree >= 15) && ( quantitetot <= ventetotH) && ( quantitetot >= 10000)) {
 			
-			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
+			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
 			return contrat.getEcheancier();
 		}
 		if (( duree >= 15) && ( quantitetot <= ventetotB) && ( quantitetot >= 10000)) {
 			
-			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
+			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
 			return contrat.getEcheancier();
 		}
 		Feve f = (Feve) contrat.getProduit();
@@ -172,7 +166,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 			return 0.0;
 		}
 		prix = Math.min(prix, contrat.getPrix());
-		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : on me propose le prix "+contrat.getPrix()+" -> ma proposition ="+prix);
+		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : on me propose le prix "+contrat.getPrix()+" -> ma proposition ="+prix);
 		return prix;
 	}
 
@@ -190,9 +184,9 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 				this.stockFeves.put((Feve)produit, quantite);
 			}
 			this.totalStocksFeves.ajouter(this, quantite, this.cryptogramme);
-			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de feves "+produit+". Stock->  "+this.stockFeves.get(produit));
+			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de feves "+produit+". Stock->  "+this.stockFeves.get(produit));
 		} else {
-			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception d'un produit de type surprenant... "+produit);
+			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception d'un produit de type surprenant... "+produit);
 		}
 	}
 

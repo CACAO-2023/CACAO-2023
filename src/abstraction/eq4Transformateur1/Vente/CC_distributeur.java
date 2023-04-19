@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eq4Transformateur1.Stock;
+import abstraction.eq4Transformateur1.Achat.AchatBourse;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
@@ -19,18 +20,22 @@ import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-
 /**
 <<<<<<< HEAD
  * @author Fouad LBAKALI & Amine RAHIM & verification François Glavatkii
 =======
+=======
+>>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4
 
+<<<<<<< HEAD
 /**
 
  *
  */
 
-public class CC_distributeur extends Stock implements IVendeurContratCadre {
+
+public class CC_distributeur extends AchatBourse implements IVendeurContratCadre {
+
 
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
 	
@@ -39,6 +44,11 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 	}
 	
+	/**
+	 * @author fouad
+	 *
+	 */
+	 
 	public void next() {
 		super.next();
 
@@ -76,7 +86,7 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 					if (vendeur!=this) { // on ne peut pas passer de contrat avec soi meme
 						this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : Vendeur tire au sort = "+vendeur);
 						Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 100);
-						//ExemplaireContratCadre contrat = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, echeancier, this.cryptogramme.intValue(), false, 10);
+						//ExemplaireContratCadre contrat = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, echeancier, this.cryptogramme.intValue(), false, 15);
 						//if (contrat!=null) {
 							//this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : contrat signe = "+contrat);
 						//}
@@ -98,6 +108,11 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+res);
 		return res;
 	}
+	
+	
+	/**
+	 @author amine
+	 */
 	
 	public Echeancier propositionDuVendeur(ExemplaireContratCadre contrat){
 		
@@ -240,3 +255,4 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
 	}
 }
+
