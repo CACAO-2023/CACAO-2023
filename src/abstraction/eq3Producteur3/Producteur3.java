@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Set;
 
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import java.util.Timer;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.Feve;
@@ -281,6 +286,13 @@ public class Producteur3 extends Bourse3  {
 			Set<Integer> KeyH = FieldsH.keySet();
 			Journal j = this.getJCatastrophe();
 			if(s.equals("Big")) {
+				JFrame popup = new JFrame("Gros incendie !");		
+				popup.setLocation(300, 100);
+				ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Gros_incendie.gif");
+				JLabel label = new JLabel(icon);
+		        popup.getContentPane().add(label);
+		        popup.pack();
+		        popup.setVisible(true);
 				for(Integer key : KeyM) {
 					hectarMburnt += FieldsM.get(key)*0.5;
 					FieldsM.put(key,(int) (FieldsM.get(key)*0.5));
@@ -293,6 +305,13 @@ public class Producteur3 extends Bourse3  {
 				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
 			}
 			else if(s.equals("Med")) {
+				JFrame popup = new JFrame("Incendie Moyen !");		
+				popup.setLocation(300, 100);
+				ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Incendie_Moyen.gif");
+				JLabel label = new JLabel(icon);
+		        popup.getContentPane().add(label);
+		        popup.pack();
+		        popup.setVisible(true);
 				for(Integer key : KeyM) {
 					hectarMburnt += FieldsM.get(key)*0.2;
 					FieldsM.put(key,(int) (FieldsM.get(key)*0.8));
@@ -305,6 +324,13 @@ public class Producteur3 extends Bourse3  {
 				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
 			}
 			else if(s.equals("Lit")) {
+				JFrame popup = new JFrame("Petit Incendie !");		
+				popup.setLocation(300, 100);
+				ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Petit_Incendie.gif");
+				JLabel label = new JLabel(icon);
+		        popup.getContentPane().add(label);
+		        popup.pack();
+		        popup.setVisible(true);
 				for(Integer key : KeyM) {
 					hectarMburnt += FieldsM.get(key)*0.1;
 					FieldsM.put(key,(int) (FieldsM.get(key)*0.9));
@@ -323,6 +349,13 @@ public class Producteur3 extends Bourse3  {
 	 * @author NAVEROS Marine
 	 */	
 	public void Cyclone() {
+		JFrame popup = new JFrame("Cyclone !");		
+		popup.setLocation(300, 100);
+		ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Cyclone.gif");
+		JLabel label = new JLabel(icon);
+        popup.getContentPane().add(label);
+        popup.pack();
+        popup.setVisible(true);
 		Champs fields = this.getFields();
 		HashMap<Integer,Integer> FieldH = fields.getChamps().get("H");
 		HashMap<Integer, Integer> FieldM = fields.getChamps().get("M");
@@ -350,6 +383,14 @@ public class Producteur3 extends Bourse3  {
 	 */
 	//Pour modéliser la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
 	protected void GreveGeneral() {
+		JFrame popup = new JFrame("Grêve des Ouvriers !");
+		
+		popup.setLocation(300, 100);
+		ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Greve.gif");
+		JLabel label = new JLabel(icon);
+        popup.getContentPane().add(label);
+        popup.pack();
+		popup.setVisible(true);
 		//On a autant d'employé que d'hectare Utilise
 		Integer nbrgreviste = (int) Math.round(this.getHectaresUt()*0.2);
 		//on calcule le ce qu'on aurait du produire avec ces employees
