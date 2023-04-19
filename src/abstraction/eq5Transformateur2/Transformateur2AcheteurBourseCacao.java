@@ -7,16 +7,17 @@ import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Transformateur2AcheteurBourseCacao extends Transformateur2AcheteurCC implements IAcheteurBourse {
+public class Transformateur2AcheteurBourseCacao extends Transformateur2 implements IAcheteurBourse {
 
-	private double coursMax;
-	private double coursMin;
+	private double achatMaxParStep;
 	private Feve feve;
 	private Variable stockFeve;
 	
-	public Transformateur2AcheteurBourseCacao() {
-		this.coursMin = 10;
-		this.coursMax = 20;
+	public Transformateur2AcheteurBourseCacao(Feve f, Variable s, double a) {
+		super();
+		this.achatMaxParStep = a;
+		this.feve = f;
+		this.stockFeve = s;
 	}
 	
 	public Feve getFeve() {
