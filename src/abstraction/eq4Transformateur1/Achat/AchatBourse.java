@@ -63,4 +63,8 @@ public class AchatBourse extends CC_producteur implements IAcheteurBourse{
 	public void next() {
 		super.next();
 	}
+	
+	public void initialiser() {
+		super.initialiser();
+	}
 }
