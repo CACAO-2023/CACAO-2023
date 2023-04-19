@@ -49,13 +49,12 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		
 		SuperviseurVentesContratCadre sup = ((SuperviseurVentesContratCadre) Filiere.LA_FILIERE.getActeur("Sup."+"CCadre"));
 		List<IAcheteurContratCadre> acheteurs = sup.getAcheteurs(Feve.F_MQ_BE);
-		ArrayList<HashMap<Feve,HashMap<Integer, Double>>> lst = this.getDescrStocksTheo((Filiere.LA_FILIERE.getEtape() + 9));
-		HashMap<Integer, Double> hs = lst.get(0).get(Feve.F_MQ_BE);
-		HashMap<Integer, Double> hs2 = lst.get(0).get(Feve.F_HQ_BE);
+		HashMap<Integer, Double> hs = getStocksTotTheo(Feve.F_MQ_BE, Filiere.LA_FILIERE.getEtape() + 9);
+		HashMap<Integer, Double> hs2 = getStocksTotTheo(Feve.F_MQ_BE, Filiere.LA_FILIERE.getEtape() + 9);
 		for(IAcheteurContratCadre ach : acheteurs) {
 			boolean testQuantite = true;
 			for(int i = Filiere.LA_FILIERE.getEtape() +1; i<Filiere.LA_FILIERE.getEtape()+9; i++){
-				if(hs.get(i) < this.venteMin) {
+				if(hs.get(i)-(i-Filiere.LA_FILIERE.getEtape() +1)*this.venteMin < this.venteMin) {
 					testQuantite = false;
 				}
 			}if(testQuantite) {
@@ -71,7 +70,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		for(IAcheteurContratCadre ach2 : acheteurs2) {
 			boolean testQuantite2 = true;
 			for(int i = Filiere.LA_FILIERE.getEtape() +1; i<Filiere.LA_FILIERE.getEtape()+9; i++){
-				if(hs.get(i) < this.venteMin/2) {
+				if(hs.get(i)-(i-Filiere.LA_FILIERE.getEtape() +1)*this.venteMin/2 < this.venteMin/2) {
 					testQuantite2 = false;
 				}
 			}if(testQuantite2) {
@@ -118,8 +117,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 */
 	public boolean vend(IProduit produit) {
 		boolean testQuantite = true;
-		ArrayList<HashMap<Feve,HashMap<Integer, Double>>> lst = this.getDescrStocksTheo(Filiere.LA_FILIERE.getEtape() + 12);
-		HashMap<Integer, Double> hs = lst.get(0).get(produit);
+		HashMap<Integer, Double> hs = getStocksTotTheo((Feve) produit, Filiere.LA_FILIERE.getEtape() + 9);
 		for(int i = Filiere.LA_FILIERE.getEtape() +1; i<Filiere.LA_FILIERE.getEtape()+13; i++){
 			if(hs.get(i) < this.venteMin) {
 				testQuantite = false;
@@ -147,10 +145,9 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		Echeancier echeancierAch = contrat.getEcheancier();
 		if(echeancierAch.getStepDebut() > Filiere.LA_FILIERE.getEtape()) {
 			boolean testQuantite = true;
-			ArrayList<HashMap<Feve,HashMap<Integer, Double>>> lst = this.getDescrStocksTheo(Filiere.LA_FILIERE.getEtape() + contrat.getEcheancier().getNbEcheances());
-			HashMap<Integer, Double> hs = lst.get(0).get(contrat.getProduit());
+			HashMap<Integer, Double> hs = getStocksTotTheo((Feve) contrat.getProduit(), Filiere.LA_FILIERE.getEtape() + contrat.getEcheancier().getNbEcheances() + 1);
 			for(int i = Filiere.LA_FILIERE.getEtape() +1; i<Filiere.LA_FILIERE.getEtape()+contrat.getEcheancier().getNbEcheances()+1; i++){
-				if(hs.get(i)-contrat.getEcheancier().getQuantite(i) < 0.0) {
+				if(hs.get(i)-contrat.getEcheancier().getQuantiteJusquA(i) < 0.0) {
 					testQuantite = false;
 				}
 			}
