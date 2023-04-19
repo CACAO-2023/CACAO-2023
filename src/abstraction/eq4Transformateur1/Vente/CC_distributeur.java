@@ -128,7 +128,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 				}
 	}
 		}
-		return null;
+		return new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 15, 101);
 	}
 	
 
