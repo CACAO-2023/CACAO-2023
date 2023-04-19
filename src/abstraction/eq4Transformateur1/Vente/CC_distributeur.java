@@ -241,7 +241,6 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);}
 		return lot;
 	}
-	
 
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
