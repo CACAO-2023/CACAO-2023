@@ -6,8 +6,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eqXRomu.clients.ClientFinal;
+import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
+import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
 import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
@@ -23,12 +27,15 @@ public class Distributeur3Acteur implements IActeur{
 	protected Journal journal_ventes;
 	protected Journal journal_achats;
 	protected Journal journal_operationsbancaires;
-	protected Journal journal_activitegenerale;
 	protected Journal journal_stock;
+	protected Journal journal_activitegenerale;
 	protected List<ChocolatDeMarque> chocolats;
+	protected List<String> chocolats_cible_noms;
 	protected HashMap<ChocolatDeMarque, Double[]> prixMoyen;
 	protected boolean initialise = true;
 	protected double prix;
+	private List<ChocolatDeMarque>chocosProduits;
+	protected HashMap<ChocolatDeMarque, Double> prix_tonne_vente;
 
 	public Distributeur3Acteur() {
 		/*if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
@@ -44,14 +51,22 @@ public class Distributeur3Acteur implements IActeur{
 		// william
 
 
-		
+		this.chocosProduits = new LinkedList<ChocolatDeMarque>();
 		
 
 		
 
 		this.stock = new Stock();
-
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
+		
+		// william : pour pouvoir acheter le chocolat qui nous intéresse (HQ BE, MQ BE, MQ)
+		this.chocolats_cible_noms = new LinkedList<String>();
+		this.chocolats_cible_noms.add("C_HQ_BE_Vccotioi");
+		this.chocolats_cible_noms.add("C_HQ_BE_Maison_Doutre");
+		this.chocolats_cible_noms.add("C_HQ_BE_Choc");
+		this.chocolats_cible_noms.add("C_HQ_BE_Villors");
+		this.chocolats_cible_noms.add("C_MQ_BE_Villors");
+		
 		//this.chocolats.add(c1);
 		//this.stock.ajoutQte(c1, 1000);
 		
@@ -61,11 +76,21 @@ public class Distributeur3Acteur implements IActeur{
 		this.journal_activitegenerale = new Journal(this.getNom()+" activites", this);
 		this.journal_stock = new Journal(this.getNom()+" stock", this);
 		this.prixMoyen = new HashMap<ChocolatDeMarque, Double[]>();
+		
+		this.prix_tonne_vente = new HashMap<ChocolatDeMarque, Double> ();
 
 		
 	}
 	
 	public void initialiser() {
+		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
+		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
+		for (int i=0; i<chocolats_filiere.size(); i++) {
+			if(chocolats_cible_noms.contains((chocolats_filiere.get(i)).toString())){
+				chocolats.add(chocolats_filiere.get(i));
+			}
+		}
+		
 	}
 	
 	public String toString() {
@@ -82,24 +107,12 @@ public class Distributeur3Acteur implements IActeur{
 	////////////////////////////////////////////////////////
 
 	public void next() {
-
 		
-		this.stock = new Stock();
-		chocolats = new LinkedList<ChocolatDeMarque>();
-		
-		/*
-		if(initialise == true) {
-			initialise = false;
-			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
-			
-			this.chocolats.add(c1);
-			this.stock.ajoutQte(c1, 1000);
-		}
-		*/
 		// lancer un contrat seuil et repondre 
+		
 
-		
-		
+
+
 		// il va falloir faire la comparaison de contrats cadres par rapport à un seuil puis choisir le plus interessant
 
 
@@ -153,19 +166,22 @@ public class Distributeur3Acteur implements IActeur{
 
 	}
 	public void repartition_tete_gondole() {
+		HashMap<ChocolatDeMarque, Double> repartition = new HashMap<ChocolatDeMarque, Double>();
+		repartition.put((get_chocolat_with_name("C_HQ_BE_Choc")),1.0);
+		
 		//renvoie une hashmap <marque, quatité>
 	}
-	public void cout_stock() {
-				//, calcul le coût de stockage.
 
+	
+	
+	public ChocolatDeMarque get_chocolat_with_name(String name) {
+		for(int i =0; i< chocolats.size();i++) {
+			if( (chocolats.get(i)).toString() == name) {
+				return chocolats.get(i);
+			}
+		}
+		return null;
 	}
-	public void quantite_rayon() {
-
-				//déterminer quel part du stock est mise en rayon
-
-	}
-	public void cout_masse_salariale() {}
-
 	
 
 
@@ -174,12 +190,9 @@ public class Distributeur3Acteur implements IActeur{
 	}
 
 	public String getDescription() {
-		
 		return "Des ingrédients d'exception pour un chocolat unique";
 	}
 
-
-	
 	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
@@ -202,7 +215,6 @@ public class Distributeur3Acteur implements IActeur{
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		
-		
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(journal_ventes);
 		res.add(journal_achats);
@@ -220,6 +232,7 @@ public class Distributeur3Acteur implements IActeur{
 	// Appelee en debut de simulation pour vous communiquer 
 	// votre cryptogramme personnel, indispensable pour les
 	// transactions.
+	
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
 	}
@@ -257,17 +270,29 @@ public class Distributeur3Acteur implements IActeur{
 	public double getStock(ChocolatDeMarque c) {
 		return this.stock.getStock(c);
 	}
-
 	
 	/*
-	 * 
-	 * ajouter IMarque & demander à un fabriquant de ajouter notre marque
-	 * @Override
+
+	@Override
+	public List<ChocolatDeMarque> getChocolatsProduits() {
+		if (this.chocosProduits.size()==0) {
+			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
+			this.chocosProduits.add(c1);
+		}
+		return this.chocosProduits;
+	}
+*/
+	/*
+	  @Override
 	public List<String> getMarquesChocolat() {
 		LinkedList<String> marques = new LinkedList<String>();
 		marques.add("Choc");
 		return marques;
-	}*/
+	}
+
+	
+*/
+	
 
 	
 

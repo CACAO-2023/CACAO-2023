@@ -27,6 +27,9 @@ public class Producteur3Acteur implements IActeur {
 	protected LinkedList<Double> VentesMG; /*Les 12 quantités des dernières ventes de moyens de gammes*/
 	protected LinkedList<Double> VentesHG; /*Les 12 quantités des dernières ventes de hauts de gammes*/
 
+	/**
+	 * @author BOCQUET Gabriel, Corentin Caugant
+	 */
 	public Producteur3Acteur() {
 
 	String nom = "Equipe 3";
@@ -46,7 +49,10 @@ public class Producteur3Acteur implements IActeur {
 	 * @author BOCQUET Gabriel
 	 */	
 	public void initialiser() {
-		;
+		for (int i = 0; i < 12; i++) {
+			this.VentesMG.add(0.0);
+			this.VentesHG.add(0.0);
+		}
 	}
 
 	/**
@@ -119,12 +125,21 @@ public class Producteur3Acteur implements IActeur {
 	 * @author BOCQUET Gabriel
 	 */	
 	public void next() {
+		// Removing the first element for both lists and adding a new 0 at the end of both
+		this.VentesMG.removeFirst();
+		this.VentesMG.add(0.0);
+		this.VentesHG.removeFirst();
+		this.VentesHG.add(0.0);
+
+		System.out.println(VentesMG);
+		System.out.println(VentesHG);
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
 		return new Color(249, 230, 151); 
 	}
 
+	
 	public String getDescription() {
 		return "Vendeurs ELITE de cacao, spécialistes de la faillite éclair, de la vente à perte et de la vente de produits de qualité médiocre. Nous sommes les meilleurs !";
 	}
@@ -203,16 +218,12 @@ public class Producteur3Acteur implements IActeur {
 	 */
 	public void addVenteQuantite(double quantite, Feve feve) {
 		if (feve == Feve.F_MQ_BE || feve == Feve.F_MQ) {
-			if (this.VentesMG.size() == 12) {
-				this.VentesMG.removeFirst();
-			}
-			this.VentesMG.addLast(quantite);
+			double newValue = quantite + this.VentesMG.getLast();
+			this.VentesMG.set(11, newValue);
 		}
 		else if (feve == Feve.F_HQ_BE) {
-			if (this.VentesHG.size() == 12) {
-				this.VentesHG.removeFirst();
-			}
-			this.VentesHG.addLast(quantite);
+			double newValue = quantite + this.VentesHG.getLast();
+			this.VentesHG.set(11, newValue);
 		}
 	}
 }
