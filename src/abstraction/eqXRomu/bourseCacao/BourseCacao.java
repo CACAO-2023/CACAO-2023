@@ -127,11 +127,14 @@ public class BourseCacao implements IActeur, IAssermente {
 		this.acheteurs = new LinkedList<IAcheteurBourse>();
 		List<IActeur> acteurs = Filiere.LA_FILIERE.getActeurs();
 		for (IActeur acteur : acteurs) {
+			System.out.println("acteur ="+acteur);
 			if (acteur instanceof IVendeurBourse) {
+				System.out.println("vendeur");
 				this.vendeurs.add(((IVendeurBourse)acteur));
 				this.blackListV.put((IVendeurBourse)acteur, 0);
 			}
 			if (acteur instanceof IAcheteurBourse) {
+				System.out.println("acheteur");
 				this.acheteurs.add(((IAcheteurBourse)acteur));
 				this.blackListA.put((IAcheteurBourse)acteur, 0);
 			}

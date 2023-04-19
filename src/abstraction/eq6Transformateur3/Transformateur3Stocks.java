@@ -14,7 +14,7 @@ import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Transformateur3Stocks extends Transformateur3  {
+public class Transformateur3Stocks extends Transformateur3Acteur  {
 
 /**Mouhamed SOW*/
 	protected Lot stockFeveBG; // feve bas gamme

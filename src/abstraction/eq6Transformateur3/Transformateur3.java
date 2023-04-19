@@ -6,7 +6,7 @@ import java.util.List;
 import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
-public class Transformateur3 extends Transformateur3Acteur implements IFabricantChocolatDeMarque{
+public class Transformateur3 extends Transformateur3AchatB implements IFabricantChocolatDeMarque{
 
 	/**ecrit par Nathan Claeys
 	 */
