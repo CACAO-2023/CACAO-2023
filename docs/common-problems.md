@@ -1,4 +1,4 @@
-# Problems on Push
+# 1. Problems on Push
 
 ## "Rejected - non-fast-forward"
 
@@ -9,7 +9,7 @@ A team mate pushed something new to your team repository before you.
 3. Resolve conflicts if needed.
 4. Commit and push.
 
-# Problems on Pull
+# 2. Problems on Pull
 
 ## "Checkout conflict" or "DIRTY_WORKTREE"
 
@@ -21,7 +21,7 @@ You have a local change that you did not commit.
 This will maybe result in a conflict, if your team mate changed the same lines. 
 In this case you will have to resolve the conflict before being able to commit your changes and push.
 
-# Problems on Pull Request
+# 3. Problems on Pull Request
 
 If the pull request is correct, it is merged automatically (within 5 minutes) and it is removed from the list of open pull requests in the main repository. If you still see your pull request, it means that there is some problem you will need to solve as soon as possible. The problems of your pull requests are listed at the bottom of the pull request page on github. The 3 possible kinds of problem are described next.
 
