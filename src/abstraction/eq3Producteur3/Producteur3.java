@@ -35,7 +35,7 @@ public class Producteur3 extends Bourse3  {
 	
 	/*
 	 * Je n'ai pas trouve le type du champs donc j'ai choisit String. A CHANGER
-	 * Il faudra aussi penser a se mettre d'accord sur les tailles des champs initiaux.
+	 * Il faudra aussi penser a se mettre d'accord sur les tailles des champs initiaux
 	 */
 	
 	/**
