@@ -2,9 +2,12 @@ package abstraction.eq3Producteur3;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Set;
 
+import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Journal;
+import abstraction.eqXRomu.produits.Feve;
 
 public class Catastrophe extends Producteur3{
 	
@@ -59,10 +62,21 @@ public class Catastrophe extends Producteur3{
 			}
 		
 	}
-	//Pour modéliser la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
+	//Pour modéliser la greve generale, on va considerer les champs qui ne sont pas recoltes seront une perte de fève
 	protected void GreveGeneral() {
-		//On a autant d'employé que d'hectare Utilisé
-		Integer nbrgreviste = ((Integer)super.getHectaresUt()*0.8);
+		//On a autant d'employé que d'hectare Utilise
+		Integer nbrgreviste = (int) Math.round(super.getHectaresUt()*0.8);
+		//on calcule le ce qu'on aurait du produire avec ces employees
+		Champs fields = super.getFields();
+		HashMap<String, LinkedList<Integer>> Keys = fields.HarvestKeys(Filiere.LA_FILIERE.getEtape());
+		LinkedList<Integer> quantitePerdues = fields.HarvestQuantityG(Filiere.LA_FILIERE.getEtape(),Keys, nbrgreviste);
+		super.getStock().retirerVielleFeve(Feve.F_HQ_BE,quantitePerdues.get(0));
+		super.getStock().retirerVielleFeve(Feve.F_HQ_BE,quantitePerdues.get(1));
+		Journal j = super.getJCatastrophe();
+		j.ajouter(Color.red, Color.black, "Il y a "+ nbrgreviste + " qui font grèves ");
+		j.ajouter(Color.gray, Color.black, quantitePerdues.get(1) + " d'hectares de Feves Moyennes Gammes n'ont pas été récolté par les grévistes ");
+		j.ajouter(Color.yellow, Color.black, quantitePerdues.get(0) + " d'hectares de Feves Hautes Gammes n'ont pas été récolté par les grévistes ");
+		
 		
 	}
 	
