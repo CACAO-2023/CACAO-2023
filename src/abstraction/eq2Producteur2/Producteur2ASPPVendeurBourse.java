@@ -47,7 +47,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 			// prix_seuil_1=1, prix_seuil_2=10, ces prix sont pour l'instant arbitraires
 			float prix_seuil_1=1;
 			float prix_seuil_2=10;
-			if (cours_de_f < prix_seuil_1) {
+			if (cours_de_f < prix_seuil_1 || this.Rentabilites(f, cours_de_f)==false) {
 				return 0;
 			}
 			if (cours_de_f >= prix_seuil_1 && cours_de_f <= prix_seuil_2) {
@@ -60,7 +60,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 		if (f==Feve.F_MQ) {
 			float prix_seuil_1=10;
 			float prix_seuil_2=100;
-			if (cours_de_f < prix_seuil_1) {
+			if (cours_de_f < prix_seuil_1 || this.Rentabilites(f, cours_de_f)==false) {
 				return 0;
 			}
 			if (cours_de_f >= prix_seuil_1 && cours_de_f <= prix_seuil_2) {
@@ -76,7 +76,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 		if (f==Feve.F_MQ_BE ){ 
 			float prix_seuil_1=100;
 			float prix_seuil_2=1000;
-			if (cours_de_f < prix_seuil_1) {
+			if (cours_de_f < prix_seuil_1 || this.Rentabilites(f, cours_de_f)==false) {
 				return 0;
 			}
 			if (cours_de_f >= prix_seuil_1 && cours_de_f<=prix_seuil_2) {
