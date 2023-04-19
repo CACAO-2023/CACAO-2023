@@ -14,6 +14,7 @@ import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.Feve;
@@ -26,6 +27,14 @@ import abstraction.eqXRomu.produits.Lot;
  *
  */
 public class CC_producteur extends Transformateur1Transformateur implements IAcheteurContratCadre{
+	
+	protected SuperviseurVentesContratCadre superviseurVentesCC;
+
+	public void initialiser() {
+		super.initialiser();
+		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
+	}
+	
 	public boolean achete(IProduit produit) {
 		if (produit instanceof Feve) {
 		if (((Feve) produit).getGamme().equals(Gamme.BQ) || (((Feve) produit).getGamme().equals(Gamme.HQ)))  {
@@ -181,9 +190,5 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
 		return 10; // --> j'afficherai un taux de RSE de 10% sur mes chocolats de marque produits
-	}
-
-	public void next() {
-		super.next();
 	}
 }
