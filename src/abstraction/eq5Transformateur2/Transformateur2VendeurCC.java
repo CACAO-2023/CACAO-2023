@@ -23,7 +23,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	private IProduit produit;
 	
 	public Transformateur2VendeurCC(IProduit produit) {
-		super();
+		super();  
 		this.produit = produit;
 		this.mesContratEnTantQueVendeur=new LinkedList<ExemplaireContratCadre>();
 	}
