@@ -30,7 +30,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	protected double demandeTotStep (int step,Object choco) {
 		double tot=0;
 		for (int i=0;i<listeCC.size();i++) {
-			if (listeCC.get(i).getProduit().equals(choco)) /**Faut que je prenne en compte la date*/
+			if (listeCC.get(i).getProduit().equals(choco)) 
 			tot+=listeCC.get(i).getQuantiteALivrerAuStep();
 		}
 		return tot;
@@ -70,13 +70,39 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 				return 2500;
 			}
 		}
-		return 0.5;
+		return 2000;
 	}
 
 	@Override
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return contrat.getPrix()*(10+Math.random()/10);
+		if (contrat.getProduit() instanceof ChocolatDeMarque) {
+			double i=(10+Math.random()/10);
+			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
+				if(contrat.getPrix()<1800) {
+					return 2000*(1-i);
+				}
+				else {return Math.min(contrat.getPrix()*(1+i), 2000);
+			}}
+			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco")) {
+				if(contrat.getPrix()<1890) {
+					return 2100*(1-i);
+				}
+				else {return Math.min(contrat.getPrix()*(1+i), 2100);
+			}}
+			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco bio")) {
+				if(contrat.getPrix()<2070) {
+					return 2300*(1-i);
+				}
+				else {return Math.min(contrat.getPrix()*(1+i), 2300);
+			}}
+			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("Choc")) {
+				if(contrat.getPrix()<2250) {
+					return 2500*(1-i);
+				}
+				else {return Math.min(contrat.getPrix()*(1+i), 2500);
+			}}
+		}
+		return 2000;
 	}
 
 	@Override
