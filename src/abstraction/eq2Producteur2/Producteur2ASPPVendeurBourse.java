@@ -7,11 +7,9 @@ import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteur implements IVendeurBourse{
 	
-	// code écrit par Flavien
+	//  code écrit par Flavien
 	
-	public Producteur2ASPPVendeurBourse() {
-		super();
-	}
+	
 
 	/**
 	 * Retourne la quantite en tonnes de feves de type f que le vendeur 
@@ -30,11 +28,11 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 			return this.stockTotMoy.getValeur();
 		}
 		if (f==Feve.F_MQ_BE) {
-			return this.stockTotMoyBE.getValeur();
+			return this.getStockTotTime(f, 10);
 		}
-		if (f==Feve.F_HQ_BE) {
-			return this.stockTotHauteBE.getValeur();
-		}
+//		if (f==Feve.F_HQ_BE) {
+//			return this.stockTotHauteBE.getValeur();
+//		}
 		return 0;
 	}
 		
@@ -49,7 +47,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 			// prix_seuil_1=1, prix_seuil_2=10, ces prix sont pour l'instant arbitraires
 			float prix_seuil_1=1;
 			float prix_seuil_2=10;
-			if (cours_de_f < prix_seuil_1) {
+			if (cours_de_f < prix_seuil_1 || this.Rentabilites(f, cours_de_f)==false) {
 				return 0;
 			}
 			if (cours_de_f >= prix_seuil_1 && cours_de_f <= prix_seuil_2) {
@@ -62,7 +60,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 		if (f==Feve.F_MQ) {
 			float prix_seuil_1=10;
 			float prix_seuil_2=100;
-			if (cours_de_f < prix_seuil_1) {
+			if (cours_de_f < prix_seuil_1 || this.Rentabilites(f, cours_de_f)==false) {
 				return 0;
 			}
 			if (cours_de_f >= prix_seuil_1 && cours_de_f <= prix_seuil_2) {
@@ -72,19 +70,22 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 				return stock_mis_en_bourse(f);
 			}
 		}
-//		if (f==Feve.F_MQ_BE){            ON NE VEUT VENDRE EN BOURSE QUE DES FEVES BQ ET MQ
-//			float prix_seuil_1=100;
-//			float prix_seuil_2=1000;
-//			if (cours_de_f < prix_seuil_1) {
-//				return 0;
-//			}
-//			if (cours_de_f >= prix_seuil_1 && cours_de_f<=prix_seuil_2) {
-//				return stock_mis_en_bourse(f)*(cours_de_f - prix_seuil_1)/(prix_seuil_2 - prix_seuil_1);
-//			}
-//			if(cours_de_f >= prix_seuil_2) {
-//				return stock_mis_en_bourse(f);
-//			}
-//		}
+//		           ON NE VEUT VENDRE EN BOURSE QUE DES FEVES BQ ET MQ ou des feves MQ BE proches de la date de péremption 
+//					c'est à dire des fèves MQ BE ayant plus de 10 steps d'âge (et des fèves HQ BE ayant plus de 12 ssteps d'âges
+//					car elles ont rétrogradé en fève MQ BE proches de la destruction)
+		if (f==Feve.F_MQ_BE ){ 
+			float prix_seuil_1=100;
+			float prix_seuil_2=1000;
+			if (cours_de_f < prix_seuil_1 || this.Rentabilites(f, cours_de_f)==false) {
+				return 0;
+			}
+			if (cours_de_f >= prix_seuil_1 && cours_de_f<=prix_seuil_2) {
+				return stock_mis_en_bourse(f)*(cours_de_f - prix_seuil_1)/(prix_seuil_2 - prix_seuil_1);
+			}
+			if(cours_de_f >= prix_seuil_2) {
+				return stock_mis_en_bourse(f);
+			}
+		}
 //		if (f==Feve.F_HQ_BE) {
 //			float prix_seuil_1=1000;
 //			float prix_seuil_2=10000;
