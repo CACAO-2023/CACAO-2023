@@ -44,12 +44,13 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	@Override
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
-		if ((( ((ChocolatDeMarque) produit).getMarque())) == "Maison Doutre") {
+		/*if ((( ((ChocolatDeMarque) produit).getMarque())) == "Maison Doutre") {
 			return 10; } //1O% de RSE pour la marque "Maison Doutre"
 		else { 
 			return 0; } // 0% pour la marque "ChocoPop"
-			}
-
+			}*/
+		return 0;}
+				
 		// TODO Auto-generated method stub
 
 
