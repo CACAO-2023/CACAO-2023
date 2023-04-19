@@ -30,13 +30,13 @@ public class Transformateur2VendeurBourseCacao extends Transformateur2AcheteurBo
 
 	@Override
 	public double offre(Feve f, double cours) {
-		if (this.getFeve().equals(f)) {
+		/*if (this.getFeve().equals(f)) {
 			BourseCacao bourse = (BourseCacao)(Filiere.LA_FILIERE.getActeur("BourseCacao"));
 			double pourcentage = (bourse.getCours(getFeve()).getValeur()-bourse.getCours(getFeve()).getMin())/(bourse.getCours(getFeve()).getMax()-bourse.getCours(getFeve()).getMin());
 			return this.stockFeve.getValeur()*pourcentage;
-		} else {
+		} else {*/
 			return 0.0;
-		}
+		//}
 	}
 	/**
 	 * @return the stockFeve
