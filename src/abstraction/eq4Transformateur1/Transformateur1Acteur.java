@@ -74,7 +74,7 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 		this.journal_appel = new Journal("Journal "+this.getNom() + " vente appel d'offre", this);
 		this.totalStocksFeves = new VariablePrivee("Eq4StockFeves", "<html>Quantite totale de feves en stock</html>",this, 0.0, 1000000.0, 0.0);this.totalStocksFeves= new VariablePrivee("Eq4StockFeves", "<html>Quantite totale de feves en stock</html>",this, 0.0, 1000000.0, 0.0);
 		this.totalStocksChoco = new VariablePrivee("Eq4StockChoco", "<html>Quantite totale de chocolat en stock</html>",this, 0.0, 1000000.0, 0.0); 
-		this.totalStocksChocoMarque = new VariablePrivee("EqXStockChocoMarque", "<html>Quantite totale de chocolat de marque en stock</html>",this, 0.0, 1000000.0, 0.0);
+		this.totalStocksChocoMarque = new VariablePrivee("Eq4StockChocoMarque", "<html>Quantite totale de chocolat de marque en stock</html>",this, 0.0, 1000000.0, 0.0);
 	}
 	
 	public void initialiser() {
@@ -114,6 +114,9 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+		res.add(this.totalStocksFeves);
+		res.add(this.totalStocksChoco);
+		res.add(this.totalStocksChocoMarque);
 		return res;
 	}
 
