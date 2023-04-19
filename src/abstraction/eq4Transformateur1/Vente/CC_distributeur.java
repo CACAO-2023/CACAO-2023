@@ -1,26 +1,95 @@
 package abstraction.eq4Transformateur1.Vente;
 
 import java.awt.Color;
+import java.util.LinkedList;
+import java.util.List;
 
 import abstraction.eq4Transformateur1.Stock;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
+import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.offresAchat.PropositionVenteOA;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 
 /**
+<<<<<<< HEAD
+ * @author Fouad LBAKALI & Amine RAHIM
+=======
+
+/**
+ * @author fouad/amine
+>>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4/
+=======
  * @author amine
+>>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4/
  *
  */
 
 public class CC_distributeur extends Stock implements IVendeurContratCadre {
 
+	protected SuperviseurVentesContratCadre superviseurVentesCC;
+	
+	public void initialiser() {
+		super.initialiser();
+		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
+	}
+	
+	public void next() {
+		super.next();
+
+		// === Lancement si possible d'un contrat cadre
+		if (this.superviseurVentesCC!=null) {
+			List<IProduit> produits = new LinkedList<IProduit>();
+			produits.addAll(Filiere.LA_FILIERE.getChocolatsProduits());
+			for (Feve f : Feve.values()) {
+				produits.add(f);
+			}
+			for (Chocolat c : Chocolat.values()) {
+				produits.add(c);
+			}
+			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : Tentative de lancer un contrat cadre");
+			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : Liste de tous les produits "+produits);
+			List<IProduit> produitsVendus = new LinkedList<IProduit>();
+			List<IProduit> produits2Vendeurs = new LinkedList<IProduit>();
+			for (IProduit prod : produits) {
+				if (superviseurVentesCC.getVendeurs(prod).size()>0) {
+					produitsVendus.add(prod);
+					if (superviseurVentesCC.getVendeurs(prod).size()>1) {
+						produits2Vendeurs.add(prod);
+					}
+				}
+			}
+			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : Liste de tous les produits pour lesquels il existe au moins 1 vendeur  "+produitsVendus);
+			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : Liste de tous les produits pour lesquels il existe au moins 2 vendeurs "+produits2Vendeurs);
+			if (produitsVendus.size()>0) {
+				IProduit produit = produitsVendus.get((int)(Math.random()*produitsVendus.size()));
+				this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : Produit tire au sort = "+produit);
+				List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
+				this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : Les vendeurs de "+produit+" sont : "+vendeurs);
+				if (vendeurs.size()>0) {
+					IVendeurContratCadre vendeur = vendeurs.get((int)(Math.random()*vendeurs.size()));
+					if (vendeur!=this) { // on ne peut pas passer de contrat avec soi meme
+						this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : Vendeur tire au sort = "+vendeur);
+						Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 100);
+						//ExemplaireContratCadre contrat = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, echeancier, this.cryptogramme.intValue(), false, 15);
+						//if (contrat!=null) {
+							//this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : contrat signe = "+contrat);
+						//}
+					}
+				}
+			}
+		}
+	}
+	
 	public boolean vend(IProduit produit) {
 		boolean res=false;
 		if (produit instanceof ChocolatDeMarque) {
@@ -137,7 +206,7 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
 		double prixInit=contrat.getListePrix().get(0);
 		double prix = contrat.getPrix();
-		if (prix>0.0 && (prixInit-prix)/prixInit<=0.49) {
+		if (prix>0.0 && (prixInit-prix)/prixInit<=0.049) {
 			return prix;
 		} else {
 			return prixInit;

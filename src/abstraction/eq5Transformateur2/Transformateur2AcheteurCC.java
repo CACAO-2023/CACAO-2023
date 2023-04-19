@@ -37,8 +37,6 @@ public class Transformateur2AcheteurCC extends Transformateur2 implements IAchet
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme ne pas vouloir acheter le produit "+produit);
 		return false;}
 		
-		
-		
 	}
 
 	@Override
