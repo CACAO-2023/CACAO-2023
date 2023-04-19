@@ -263,6 +263,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	            journal_ventes.ajouter("La quantité " + quantite + " a été vendue à" + montant);
 	        }
 	    }
+	    //IacheteurOA
 	//Auteur : Ben Messaoud Karim
 	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
 		// Ajouter un message dans le journal pour indiquer que le rayon est vide
