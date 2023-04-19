@@ -61,7 +61,6 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 			}
 	}
 
-
 	//Auteur : Marzougui Mariem
 	//On retourne le prix sans négociation
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
@@ -80,6 +79,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	//Auteur : Marzougui Mariem
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		stocks.ajouterAuStock((ChocolatDeMarque)(contrat.getProduit()),lot.getQuantiteTotale() );
+		this.journal_stocks.ajouter("ajout d'une quantité de"+lot.getQuantiteTotale()+"T");
 
 	}
 
