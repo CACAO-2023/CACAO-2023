@@ -74,10 +74,16 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 					if ((qfeve >= ventetotB/30)){ // si quantité >= vente totale basse qualité / (15 steps * 2) en se disant que nous allons prendre 50% du marché
 						return null;
 					}
-					else {this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0));
-					return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotB/30);
+					else if (ventetotB/30 > 100){
+						this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotB/30));
+						return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotB/30);
+					}else {
+						this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, 100));
+
+							return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, 100);
+						}
 					}
-				}
+				
 			
 			case F_HQ_BE :
 				
