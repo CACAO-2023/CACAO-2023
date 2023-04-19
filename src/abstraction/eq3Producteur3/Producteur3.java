@@ -130,6 +130,9 @@ public class Producteur3 extends Bourse3  {
 				if (Filiere.LA_FILIERE.getEtape() == 12) {
 					changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
 				}
+				else {
+					changeHectaresAndCoutsLies(variationBesoinHectaresv2(Filiere.LA_FILIERE.getEtape()));
+				}
 			}
 		}
 
