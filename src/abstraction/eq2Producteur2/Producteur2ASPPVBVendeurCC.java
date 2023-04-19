@@ -48,7 +48,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		super.next();
 		
 		SuperviseurVentesContratCadre sup = ((SuperviseurVentesContratCadre) Filiere.LA_FILIERE.getActeur("Sup."+"CCadre"));
-		List<IAcheteurContratCadre> acheteurs = sup.getAcheteurs(Feve.F_MQ_BE);
+		/*List<IAcheteurContratCadre> acheteurs = sup.getAcheteurs(Feve.F_MQ_BE);
 		HashMap<Integer, Double> hs = getStocksTotTheo(Feve.F_MQ_BE, Filiere.LA_FILIERE.getEtape() + 9);
 		HashMap<Integer, Double> hs2 = getStocksTotTheo(Feve.F_MQ_BE, Filiere.LA_FILIERE.getEtape() + 9);
 		for(IAcheteurContratCadre ach : acheteurs) {
@@ -92,9 +92,9 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 					this.echecVentePrix.put(Feve.F_MQ, false);
 					this.nbEchecVentePrix.put(Feve.F_MQ, 0);
 				}
-			} */
+			} *
 			
-		}
+		}*/
 	}
 	
 	/**
@@ -116,6 +116,9 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * negocier un contrat cadre pour ce type de produit).
 	 */
 	public boolean vend(IProduit produit) {
+		if (!peutVendre(produit)) {
+			return false;
+		}
 		boolean testQuantite = true;
 		HashMap<Integer, Double> hs = getStocksTotTheo((Feve) produit, Filiere.LA_FILIERE.getEtape() + 9);
 		for(int i = Filiere.LA_FILIERE.getEtape() +1; i<Filiere.LA_FILIERE.getEtape()+13; i++){
