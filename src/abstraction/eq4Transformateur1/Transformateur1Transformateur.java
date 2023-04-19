@@ -13,7 +13,7 @@ import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 
-
+// Francois, Alexian, Amine, Fouad
 public class Transformateur1Transformateur extends Stock implements IFabricantChocolatDeMarque  {
 	
 	protected List<ChocolatDeMarque>chocosProduits;

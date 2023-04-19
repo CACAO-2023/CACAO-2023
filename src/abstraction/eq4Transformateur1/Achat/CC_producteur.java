@@ -7,7 +7,6 @@ import java.awt.Color;
 import java.util.LinkedList;
 
 import abstraction.eq4Transformateur1.Transformateur1Transformateur;
-import abstraction.eq4Transformateur1.Produits.ChocolatDeMarque;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
