@@ -2,6 +2,7 @@ package abstraction.eq6Transformateur3;
 
 import abstraction.eqXRomu.bourseCacao.IAcheteurBourse;
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
@@ -96,6 +97,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 */
 	public void notificationBlackList(int dureeEnStep) {
 		// TODO Auto-generated method stub
+		super.journal.ajouter("on est dans le rouge ça va mal finir");
 		
 	}
 	/** ecrit par Nathan Claeys
