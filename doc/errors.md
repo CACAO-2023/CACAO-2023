@@ -25,7 +25,7 @@ You are changing files outside of your java package. You can see the files that 
 
 You can replace these files with the version from the main repository. To do that, right click on these files or folders -> Replace with -> Branch, Tag or Reference -> Remote tracking -> select the main repository (not your team repository) -> Replace. Then commit and push to your repository. Don't close the pull request, it will be automatically updated.
 
-Note that if the files you changed are not Java files, they will be hidden in the Java perspective of Eclipse. To see and edit them, switch to the Resource perspective of Eclipse.
+Note that if the files you changed are not Java files, they will be hidden in the Package Exporer of Eclipse. To see and edit them, open the Navigator view of Eclipse.
 
 ## Compilation or execution error
 
