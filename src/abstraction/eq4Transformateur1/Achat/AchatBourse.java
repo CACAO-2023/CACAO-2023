@@ -45,8 +45,13 @@ public class AchatBourse extends CC_producteur implements IAcheteurBourse{
 //			}
 //		}
 		double demande = quantite ;
-		this.journal.ajouter(COLOR_LLGRAY, COLOR_LPURPLE,"   BOURSEA: demande en bourse de "+demande+" de "+f);
-		return demande;
+		if (f.equals(Feve.F_BQ)) {
+			this.journal.ajouter(COLOR_LLGRAY, COLOR_LPURPLE,"   BOURSEA: demande en bourse de "+demande+" de "+f);
+			return demande;
+		}
+		else {
+			return 0;
+		}
 	}
 
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
