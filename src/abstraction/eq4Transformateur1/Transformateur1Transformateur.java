@@ -58,22 +58,6 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 	
 	public void next() {
 		super.next();
-		this.journal.ajouter("=== STOCKS === ");
-		for (Feve f : this.lesFeves) {
-			if (f==Feve.F_BQ || f==Feve.F_HQ_BE  ) {
-			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(f+"", 15)+" = "+this.stockFeves.get(f));
-		}
-		}
-		for (Chocolat c : Chocolat.values()) {
-			if (c==Chocolat.C_BQ) {
-			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(c+"", 15)+" = "+this.stockChoco.get(c));
-		}
-		}
-		if (this.stockChocoMarque.keySet().size()>0) {
-			for (ChocolatDeMarque cm : this.stockChocoMarque.keySet()) {
-				this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(cm+"", 15)+" = "+this.stockChocoMarque.get(cm));
-			}
-		}
 		Feve fb = Feve.F_BQ;
 		Chocolat cb = Chocolat.C_BQ;
 		int transfo = (int) (Math.min(this.stockFeves.get(fb), Math.random()*30));
