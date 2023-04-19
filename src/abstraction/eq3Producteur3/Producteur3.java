@@ -249,11 +249,14 @@ public class Producteur3 extends Bourse3  {
 	 * @author Dubus-Chanson Victor
 	 * @param CurrentStep
 	 * @param Liste12DernieresVentes
+	 * @param Seuil
 	 * @return
 	 */
-	public Integer besoinHectares(Integer CurrentStep, LinkedList<Double> Liste12DernieresVentes) {
+	public Integer besoinHectares(Integer CurrentStep, LinkedList<Double> Liste12DernieresVentes, Double Seuil) {
 		Double M12 = 0.;
 		Double M4 = 0.;
+		Integer besoin = 0;
+		Double prix = 0.;
 		for (Double i : Liste12DernieresVentes) {
 			M12 += i;
 		}
@@ -261,7 +264,20 @@ public class Producteur3 extends Bourse3  {
 		M4 += Liste12DernieresVentes.get(10);
 		M4 += Liste12DernieresVentes.get(9);
 		M4 += Liste12DernieresVentes.get(8);
+		if (M4 < (Seuil + 5000) && M4 > (Seuil - 10000)) {
+			if (M12 > (Seuil + 5000)) {
+				prix = M12 - Seuil;
+				besoin = (int)(prix / 2500.); //2500euros etant ce que l'on considere comme ce qu'un hectare peut nous rapporter par recolte.
+			}
+		}
 		
+		if (M4 > (Seuil + 5000)) {
+			if (M12 > (Seuil - 10000)) {
+				prix = M12 - Seuil;
+				besoin = (int)(prix / 2500.);
+			}
+		}
+		return besoin;
 	}
 	
 	
@@ -273,10 +289,24 @@ public class Producteur3 extends Bourse3  {
 	 * @return
 	 */
 	public Integer variationBesoinHectaresv2(Integer CurrentStep, LinkedList<Double> Liste12DernieresVentesMG, LinkedList<Double> Liste12DernieresVentesHG) {
+		Integer besoinHG = besoinHectares(CurrentStep, Liste12DernieresVentesHG, this.SeuilHG);
+		Integer besoinMG = besoinHectares(CurrentStep, Liste12DernieresVentesHG, this.SeuilMG);
 		
+		if (besoinHG != 0) {
+			this.SeuilHG += besoinHG * 2500.;
+			HashMap<Integer, Integer> ChampsH = this.fields.getChamps().get("H");
+			ChampsH.put(CurrentStep, besoinHG);
+			this.fields.getChamps().put("H", ChampsH);
+		}
 		
+		if (besoinMG != 0) {
+			this.SeuilHG += besoinHG * 2500.;
+			HashMap<Integer, Integer> ChampsM = this.fields.getChamps().get("M");
+			ChampsM.put(CurrentStep, besoinMG);
+			this.fields.getChamps().put("M", ChampsM);
+		}
 		
-		return 0;
+		return besoinHG + besoinMG;
 	}
 	
 	/**
