@@ -10,7 +10,7 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
  *
  */
 
-public class DistributeurOA extends DistributeurChocolatDeMarque implements IVendeurOA {
+public class VendeurOA extends DistributeurChocolatDeMarque implements IVendeurOA {
 	
 	public PropositionVenteOA proposerVente(OffreAchat offre) {
 		this.journal.ajouter("proposerVente(offre = "+offre+")");
@@ -19,7 +19,7 @@ public class DistributeurOA extends DistributeurChocolatDeMarque implements IVen
 			if (offre.getChocolat().equals(c.getChocolat()) && (offre.getMarque()==null || offre.getMarque().equals(c.getMarque()))) { // type recherche
 				if (this.stockChocoMarque.get(c)>=offre.getQuantiteT()) {
 					this.journal.ajouter(" "+this.stockChocoMarque.get(c)+" T en stock -> quantite suffisante");
-					return new PropositionVenteOA(offre, this, c, 16.64);
+					return new PropositionVenteOA(offre, this, c, 200);
 				} else {
 					this.journal.ajouter(" "+this.stockChocoMarque.get(c)+" T en stock -> quantite insuffisante");
 				}
