@@ -128,7 +128,6 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		if (livre>0.0) {
 			super.retirerChocolat((ChocolatDeMarque)produit, livre);
 		}
-		
 		Lot lot = new Lot(produit);
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); 
 		return lot;
