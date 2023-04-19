@@ -1,5 +1,7 @@
 package abstraction.eq4Transformateur1;
 
+// @author Francois / Alexian / fouad 
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -50,7 +52,7 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	protected Integer cryptogramme;
 	protected List<ExemplaireContratCadre> ContratEnCours;
 
-//François Glavatkii
+
 	
 	public Transformateur1Acteur() {
 		this.qualiteHaute   = new VariableReadOnly("qualite haute", "<html>Qualite du chocolat<br>de gamme haute</html>",this, 80.0, 95.0, 94.0); //(min, max, valeur init) 
