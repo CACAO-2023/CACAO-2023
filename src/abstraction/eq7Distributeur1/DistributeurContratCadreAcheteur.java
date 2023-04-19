@@ -60,7 +60,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 	}
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		
 		if (Math.random()<0.3) {
 			return contrat.getPrix(); // on ne cherche pas a negocier dans 30% des cas
 		} else {//dans 70% des cas on fait une contreproposition differente
@@ -101,13 +100,15 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 			IVendeurContratCadre vendeur = null;
 			if (vendeurs.size()==1) {
 				vendeur=vendeurs.get(0);
+
+				
 			} else if (vendeurs.size()>1) {
 				vendeur = vendeurs.get((int)( Math.random()*vendeurs.size()));
 			}
 			
 			vendeurs.remove(vendeur);
 			if (vendeur!=null) {
-			
+
 				cc = getContractForProduct(produit,e,vendeur);}
 	}
 		return cc;}
@@ -147,7 +148,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 					Echeancier echeancier = echeancier_strat(etape+1,marque);
 					journal_achat.ajouter("Recherche d'un vendeur aupres de qui acheter "+ marque.getNom());
 					ExemplaireContratCadre cc = proposition_achat_aleatoire(marque,echeancier);
-
 						}
 					}
 				}
@@ -166,7 +166,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 	public boolean achete(IProduit produit) {
 		if (produit instanceof ChocolatDeMarque) {
 			stockChocoMarque.get(produit);
-			previsionsperso
 			return true;
 		}
 		return false;

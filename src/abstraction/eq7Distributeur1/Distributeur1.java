@@ -153,7 +153,6 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	public void actualiser_prevision_perso(ChocolatDeMarque choco,  double quantite) {
 		int etape_annee = Filiere.LA_FILIERE.getEtape()/24;
 		int etapenormalisee = Filiere.LA_FILIERE.getEtape()%24;
-		Filiere.LA_FILIERE.getVentes(choco, etapenormalisee);
 		HashMap<ChocolatDeMarque,Double> prevetapeperso = previsionsperso.get(etapenormalisee);
 		prevetapeperso.replace(choco, (prevetapeperso.get(choco)*etape_annee+quantite)/(etape_annee+1));
 		previsionsperso.replace(etapenormalisee, prevetapeperso);

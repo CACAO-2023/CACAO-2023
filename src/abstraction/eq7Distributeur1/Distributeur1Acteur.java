@@ -49,7 +49,8 @@ public class Distributeur1Acteur implements IActeur {
 	
 	////////////////////////////////////////
 	protected HashMap<Chocolat, Double> stockChoco;
-	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; //stock de chaque marque en tonne
+	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
+; //stock de chaque marque en tonne
 	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsions;
 	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsionsperso;
 	
@@ -113,7 +114,6 @@ public class Distributeur1Acteur implements IActeur {
 
 		
 		//Initialisation des stocks
-		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			stockChocoMarque.put(marque,1.);
 			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
