@@ -28,6 +28,9 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         
     }
 
+    /**
+     * @author Corentin Caugant
+     */
     public void initialiser() {
         super.initialiser();
         this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
@@ -36,12 +39,19 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     /**
      * @author Corentin Caugant
      */
+    public double getPrixTonne() {
+        return Math.max(this.CoutTonne, 1000.0);
+    }
+
+    /**
+     * @author Corentin Caugant
+     */
     public double propositionPrix(ExemplaireContratCadre contrat) {
         if ((Feve)contrat.getProduit() == Feve.F_MQ_BE) {
-            // We return a price weing CoutTonne multiplied by a random factor between 1.1 and 1.2
-            return this.CoutTonne * 1.3;
+            // We return a price being CoutTonne multiplied by a random factor between 1.1 and 1.2
+            return this.getPrixTonne() * 1.3;
         } else {
-            return this.CoutTonne * 1.6;
+            return this.getPrixTonne() * 1.6;
         }
     }
 
@@ -87,16 +97,16 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
         if ((Feve)contrat.getProduit() == Feve.F_MQ_BE) {
             // We return a price weing CoutTonne multiplied by a random factor between 1.1 and 1.2
-            if (contrat.getPrix() >= this.CoutTonne * 1.1) {
+            if (contrat.getPrix() >= this.getPrixTonne() * 1.1) {
                 return contrat.getPrix();
             } else {
-                return this.CoutTonne * (1.1 + Math.random() * 0.1);
+                return this.getPrixTonne() * (1.1 + Math.random() * 0.1);
             }
         } else {
-            if (contrat.getPrix() >= this.CoutTonne * 1.2) {
+            if (contrat.getPrix() >= this.getPrixTonne() * 1.2) {
                 return contrat.getPrix();
             } else {
-                return this.CoutTonne * (1.2 + Math.random() * 0.3);
+                return this.getPrixTonne() * (1.2 + Math.random() * 0.3);
             }
         }
     }
@@ -110,7 +120,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
 
         // We rework the echeancier to fit the stock
         if (echeancier.getQuantiteAPartirDe(contrat.getEcheancier().getStepDebut()) > Stock.getQuantite((Feve)contrat.getProduit())) {
-            echeancier.ajouter(Stock.getQuantite((Feve)contrat.getProduit()));
+            echeancier.ajouter(Math.max(SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER, Stock.getQuantite((Feve)contrat.getProduit())));
         }
 
         return echeancier;
@@ -143,7 +153,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         // Now making the contract
         this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit + "...");
         int length = ((int) Math.round(Math.random() * 10)) + 1;
-        ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, length, (int) Math.round(SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+this.getStock().getQuantite(produit)/length)), cryptogramme,false);
+        ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, length, SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER + (int) Math.round(this.getStock().getQuantite(produit)/length)), cryptogramme,false);
         if (cc != null) {
             this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
         } else {
@@ -152,9 +162,16 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         return cc;
     }
 
+    /** 
+     * @author Corentin Caugant
+     */
     public void next() {
         super.next();
-        this.getContractForProduct(Feve.F_HQ_BE);
-        this.getContractForProduct(Feve.F_MQ_BE);
+        if (this.getStock().getQuantite(Feve.F_HQ_BE) > 100) {
+            this.getContractForProduct(Feve.F_HQ_BE);
+        }
+        if (this.getStock().getQuantite(Feve.F_MQ_BE) > 100) {
+            this.getContractForProduct(Feve.F_MQ_BE);
+        }
     }
 }
