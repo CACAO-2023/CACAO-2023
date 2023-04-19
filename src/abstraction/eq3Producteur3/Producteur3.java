@@ -81,14 +81,16 @@ public class Producteur3 extends Bourse3  {
 		new Producteur3();		
 	}
 	
-	public Champs getFields() {
+	protected Champs getFields() {
 		return this.fields;
 	}
 	protected Stock getStock() {
 		// TODO Auto-generated method stub
 		return this.Stock;
 	}
-  
+	protected Integer getHectaresUt() {
+		return this.HectaresUtilises;
+	}
 
 	/**
 	 * @author BOCQUET Gabriel, Dubus-Chanson Victor
