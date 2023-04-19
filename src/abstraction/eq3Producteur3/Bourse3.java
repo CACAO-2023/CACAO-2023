@@ -39,7 +39,7 @@ public class Bourse3 extends Producteur3CC implements IVendeurBourse {
 	}
 
 	/** On va mettre en vente que des MQ et la bourse ne prend pas en compte le label
-	 * @author BOCQUET Gabriel
+	 * @author BOCQUET Gabriel, Corentin Caugant
 	 */
 	public Lot notificationVente(Feve f, double quantiteEnT, double coursEnEuroParT) {
 		Lot l = new Lot(f);
@@ -51,6 +51,10 @@ public class Bourse3 extends Producteur3CC implements IVendeurBourse {
 		else if ( f==Feve.F_BQ) {
 			s.retirerVielleFeve(Feve.F_BQ, quantiteEnT);
 		}
+
+		// Ajout de la quantité vendu à notre listeMG qui garde une trace des quantités vendus
+		super.addVenteQuantite(quantiteEnT, f);
+
 		super.getJVente().ajouter("La quantite " + quantiteEnT + " en tonnes de " + f.toString() + " a ete vendu "+coursEnEuroParT + "le step " + Filiere.LA_FILIERE.getEtape() + " en Bourse");
 		return l;
 	}

@@ -3,8 +3,10 @@ package abstraction.eq3Producteur3;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Set;
 
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.Feve;
 
 public class Producteur3 extends Bourse3  {
@@ -40,32 +42,16 @@ public class Producteur3 extends Bourse3  {
 		this.HectaresLibres= 0;
 		this.HectaresUtilises=950000;
 		this.ListeCout = new LinkedList<Double>();
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
 	}
 	
 	/**
 	 * @author Dubus-Chanson Victor
 	 */
 	public void updateListeCout() {
-		this.ListeCout.addLast(this.CoutStep);
-		this.ListeCout.removeFirst();
+		this.ListeCout.add(this.CoutStep);
+		if (ListeCout.size() >= 8) {
+			this.ListeCout.removeFirst();
+		}
 	}
 	
 	/**
@@ -73,11 +59,20 @@ public class Producteur3 extends Bourse3  {
 	 */
 	public void updateCoutTonne() {
 		Double CoutTotal = 0.;
+
+		if (this.ListeCout.size() == 0) {
+			this.CoutTonne = 0.;
+			return;
+		}
+
 		for (Integer i = 0 ; i < this.ListeCout.size() ; i += 1) {
 			CoutTotal += this.ListeCout.get(i);
 		}
+		CoutTotal = CoutTotal / this.ListeCout.size();
+
+
 		Stock Stock = this.getStock();
-		this.CoutTonne = CoutTotal / Stock.getQuantite();
+		this.CoutTonne = CoutTotal / Math.max(Stock.getQuantite(), 1);
 	}
 	
 	/**
@@ -85,7 +80,11 @@ public class Producteur3 extends Bourse3  {
 	 */
 	public void initialiser() {
 		super.initialiser();
-		new Producteur3();		
+
+		this.CoutStep += Stock.getQuantite()*50;
+		this.addCoutHectaresUtilises();
+		this.updateListeCout();
+		this.updateCoutTonne();
 	}
 	
 
@@ -117,14 +116,41 @@ public class Producteur3 extends Bourse3  {
 		this.Stock = Stock.miseAJourStock();
 
 		// Now adding to the step cost the storage costs
-		this.CoutStep += Stock.getQuantite()*50;
+		
 		updateHectaresLibres(Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape() % 12 == 0) {
 			changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
 		}
 
+		// We only add the costs to CoutStep if we are not at step one :
+		if (Filiere.LA_FILIERE.getEtape() > 0) {
+			this.CoutStep += Stock.getQuantite()*50;
+			this.addCoutHectaresUtilises();
+		}
+
 		this.updateListeCout();
 		this.updateCoutTonne();
+		// Incendie ?
+				double probaIncendie =  Math.random();
+				if(probaIncendie < 0.02) {
+					this.Fire("Big");
+				}
+				else if(probaIncendie < 0.05) {
+					this.Fire("Med");
+				}
+				else if(probaIncendie < 0.1) {	
+					this.Fire("Lit");
+				}
+				//Cyclone ou tempete ?
+				double probaCyclone =  Math.random();
+				if(probaCyclone <0.05) {
+					this.Cyclone();
+			}
+				//Greve ?
+				double probaGreve = Math.random();
+				if(probaGreve < 0.02) {
+					this.GreveGeneral();
+				}
 		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep);
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
 				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ this.HectaresUtilises);
@@ -239,4 +265,112 @@ public class Producteur3 extends Bourse3  {
 			this.HectaresLibres = 0;
 		}
 	}
+	
+	//PARTIE CATASTROPHE
+	/**
+	 * @author BOCQUET Gabriel
+	 * @param s
+	 */
+	public void Fire(String s) {
+			Champs fields = this.getFields();
+			HashMap<Integer,Integer> FieldsH = fields.getChamps().get("H");
+			HashMap<Integer,Integer> FieldsM = fields.getChamps().get("M");
+			double hectarMburnt = 0;
+			double hectarHburnt = 0;
+			Set<Integer> KeyM = FieldsM.keySet();
+			Set<Integer> KeyH = FieldsH.keySet();
+			Journal j = this.getJCatastrophe();
+			if(s.equals("Big")) {
+				for(Integer key : KeyM) {
+					hectarMburnt += FieldsM.get(key)*0.5;
+					FieldsM.put(key,(int) (FieldsM.get(key)*0.5));
+				}
+				j.ajouter(Color.gray, Color.black, hectarMburnt + " d'hectares de Moyenne Gamme d'arbres ont brulé");
+				for(Integer key : KeyH) {
+					hectarHburnt = FieldsH.get(key)*0.5;
+					FieldsH.put(key,(int) (FieldsH.get(key)*0.5));
+				}
+				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
+			}
+			else if(s.equals("Med")) {
+				for(Integer key : KeyM) {
+					hectarMburnt += FieldsM.get(key)*0.2;
+					FieldsM.put(key,(int) (FieldsM.get(key)*0.8));
+				}
+				j.ajouter(Color.gray, Color.black, hectarMburnt + " d'hectares de Moyenne Gamme d'arbres ont brulé");
+				for(Integer key : KeyH) {
+					hectarHburnt = FieldsH.get(key)*0.2;
+					FieldsH.put(key,(int) (FieldsH.get(key)*0.8));
+				}
+				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
+			}
+			else if(s.equals("Lit")) {
+				for(Integer key : KeyM) {
+					hectarMburnt += FieldsM.get(key)*0.1;
+					FieldsM.put(key,(int) (FieldsM.get(key)*0.9));
+				}
+				j.ajouter(Color.gray, Color.black, hectarMburnt + " d'hectares de Moyenne Gamme d'arbres ont brulé");
+				for(Integer key : KeyH) {
+					hectarHburnt = FieldsH.get(key)*0.1;
+					FieldsH.put(key,(int) (FieldsH.get(key)*0.9));
+				}
+				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
+			}
+		
+	}
+
+	/**
+	 * @author NAVEROS Marine
+	 */	
+	public void Cyclone() {
+		Champs fields = this.getFields();
+		HashMap<Integer,Integer> FieldH = fields.getChamps().get("H");
+		HashMap<Integer, Integer> FieldM = fields.getChamps().get("M");
+		double hectarDetruitH = 0;
+		double hectarDetruitM=0;
+		Set<Integer> KeysH = FieldH.keySet();
+		Set<Integer> KeysM = FieldM.keySet();
+		Journal j = this.getJCatastrophe();
+		for(Integer key: KeysH) {
+			hectarDetruitH += FieldH.get(key)*(0+ Math.random()*0.7);
+			FieldH.put(key, (int)(FieldH.get(key)*(0+ Math.random()*0.7)));	
+		}
+		j.ajouter(Color.yellow, Color.black, hectarDetruitH + "d'hectares de Haute Gamme qui ont été détruits par un cyclone");
+		for (Integer key: KeysM) {
+			hectarDetruitM += FieldM.get(key)*(0+ Math.random()*0.7);
+			FieldM.put(key, (int)(FieldM.get(key)*(0+ Math.random()*0.7)));
+		}
+		j.ajouter(Color.gray, Color.black, hectarDetruitM+"d'hectares de Moyenne Gamme qui ont été détruits par un cyclone");		
+		}
+			
+		
+	
+	/**
+	 * @author BOCQUET Gabriel
+	 */
+	//Pour modéliser la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
+	protected void GreveGeneral() {
+		//On a autant d'employé que d'hectare Utilise
+		Integer nbrgreviste = (int) Math.round(this.getHectaresUt()*0.2);
+		//on calcule le ce qu'on aurait du produire avec ces employees
+		Champs fields = this.getFields();
+		HashMap<String, LinkedList<Integer>> Keys = fields.HarvestKeys(Filiere.LA_FILIERE.getEtape());
+		LinkedList<Integer> quantitePerdues = fields.HarvestQuantityG(Filiere.LA_FILIERE.getEtape(),Keys, nbrgreviste);
+		if(quantitePerdues.get(0) > 0) {
+		super.getStock().retirerVielleFeve(Feve.F_HQ_BE,quantitePerdues.get(0));
+		}
+		if(quantitePerdues.get(1) > 0) {
+		super.getStock().retirerVielleFeve(Feve.F_MQ_BE,quantitePerdues.get(1));
+		}
+		Journal j = super.getJCatastrophe();
+		j.ajouter(Color.red, Color.black, "Il y a "+ nbrgreviste + " qui font grèves ");
+		j.ajouter(Color.gray, Color.black, quantitePerdues.get(1) + " d'hectares de Feves Moyennes Gammes n'ont pas été récolté par les grévistes ");
+		j.ajouter(Color.yellow, Color.black, quantitePerdues.get(0) + " d'hectares de Feves Hautes Gammes n'ont pas été récolté par les grévistes ");
+		
+		
+	}
+	
+	
 }
+
+

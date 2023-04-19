@@ -221,17 +221,25 @@ public class Champs {
 		//On recupere la liste des clefs H
 		LinkedList<Integer> HarvestKeysH = Keys.get("H");
 		int quantiteH=0;
-		
+		Set<Integer> s1= (FieldM.keySet());
+		LinkedList<Integer> allKeyM = new LinkedList<>(s1);
+		Set<Integer> s2= (FieldH.keySet());
+		LinkedList<Integer> allKeyH = new LinkedList<>(s2);
 		int quantitePerdu = 0;
-		while (quantitePerdu < NbrGreviste) {
-			//On regarde si on choisit un champs Haut de Gamme ou Moyenne Gamme
+		while (quantitePerdu < NbrGreviste && HarvestKeysM.size()!=0 ) {
+			//On regarde si les grevistes travaillaient sur les champs H ou M
 			double MouH = Math.random() ;
 			if(MouH <= 0.5) {
-				//Ce taux permet de prendre en compte l'aspect aleatoire d'une recolte
-				double HarvestRateM = (Math.random() * (1.1- 0.9)) + 0.9;
-				//On choisit la clef du champs où il va y avoir des grevistes.
-				Integer ChampGreve = (int)(Math.random() * (HarvestKeysM.size()-1));
-				Integer key = HarvestKeysM.get(ChampGreve);
+				double HarvestRateM =  0.9;
+				//On choisit un nombre qui nous donnera la clef du champs ou il va y avoir des grevistes et ils ne travaillent pas forcement sur un champ qui a besoin d'etre recolte.
+				Integer ChampGreve = (int)(Math.random() * (FieldM.size()-1));
+				//on regarde si le champ ou les ouvriers font greve doit etre recolte
+				if(!HarvestKeysM.contains(allKeyM.get(ChampGreve))) {
+					quantitePerdu += FieldM.get(allKeyM.get(ChampGreve));
+				}
+				else {
+				Integer key = allKeyM.get(ChampGreve);
+				HarvestKeysM.remove(HarvestKeysM.indexOf(key)); 
 				if ((CurrentStep-key) <72 && (CurrentStep-key)>=0) {
 					quantiteM += 0; //Champ pas assez vieux
 					quantitePerdu +=FieldM.get(key);
@@ -262,13 +270,19 @@ public class Champs {
 					quantitePerdu +=FieldM.get(key);
 				}
 			}
+				
+			}
 			else {
 			//Ce taux permet de prendre en compte l'aspect aleatoire d'une recolte
-			double HarvestRateH = (Math.random() * (1.1- 0.85)) + 0.85;
+			double HarvestRateH =  0.85;
 			//On choisit la clef du champs où il va y avoir des grevistes.
-			Integer ChampGreve = (int)(Math.random() * (HarvestKeysM.size()-1));
-			Integer keyH = HarvestKeysH.get(ChampGreve);
-
+			Integer ChampGreve = (int)(Math.random() * (FieldH.size()-1));
+			if(!HarvestKeysH.contains(allKeyH.get(ChampGreve))) {
+				quantitePerdu += FieldH.get(allKeyH.get(ChampGreve));
+			}
+			else {
+			Integer keyH = allKeyH.get(ChampGreve);
+			HarvestKeysH.remove(HarvestKeysH.indexOf(keyH));
 				//Le champ M a entre 0 et 3 ans
 				if ((CurrentStep-keyH) <72 && (CurrentStep-keyH)>=0) {
 					quantiteH += 0; //Champ pas assez vieux
@@ -298,10 +312,14 @@ public class Champs {
 					quantitePerdu +=FieldH.get(keyH);
 				}
 			}
+			}
+
 		}
 			LinkedList<Integer> l = new LinkedList();
 			l.add(quantiteH);
 			l.add(quantiteM);
+			if(l.get(0) >0 && l.get(1) > 0) {
+			}
 			return l;
 
 	
