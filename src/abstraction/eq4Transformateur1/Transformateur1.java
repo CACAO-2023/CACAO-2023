@@ -23,14 +23,20 @@ public class Transformateur1 extends AODistributeur implements IFabricantChocola
 
 	public List<ChocolatDeMarque> getChocolatsProduits() {
 		if (this.chocosProduits.size()==0) {
-				Chocolat c1 = Chocolat.C_MQ;
-				Chocolat c2 = Chocolat.C_HQ_BE;
-				this.chocosProduits.add(new ChocolatDeMarque(c1, "Yocttoootoa", 55, 0));
-				this.chocosProduits.add(new ChocolatDeMarque(c2, "Vccotioi", 90, 10));
+				Chocolat c = Chocolat.C_HQ_BE;
+				this.chocosProduits.add(new ChocolatDeMarque(c, "Vccotioi", 90, 10));
 		}
 	//System.out.println(	Filiere.LA_FILIERE.getParametre("pourcentage min cacao BQ").getValeur());
 		
 		return this.chocosProduits;
+	}
+	
+	public void initialiser() {
+		super.initialiser();
+	}
+	
+	public void next() {
+		super.next();
 	}
 
 }

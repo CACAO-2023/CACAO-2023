@@ -12,14 +12,22 @@ import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
 
+/**
+ * Classe permettant d'acheter par appel d'offre
+ * @author Theo
+ *
+ */
 
-
-public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur implements IAcheteurOA {
+public class Distributeur1AcheteurOA extends Distributeur1ContratCadre implements IAcheteurOA {
 
 	private SuperviseurVentesOA supOA;
 
 	public Distributeur1AcheteurOA() {
 		super();
+	}
+	
+	public void initialiser() {
+		super.initialiser();
 	}
 
 //	@Override
@@ -27,7 +35,7 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 		PropositionVenteOA best = propositions.get(0);
 		double critere = propositions.get(0).getPrixT()*propositions.get(0).getPrixT()/propositions.get(0).getChocolatDeMarque().qualitePercue();
 		for (PropositionVenteOA p : propositions) {
-			if (p.getPrixT()*p.getPrixT()/p.getChocolatDeMarque().qualitePercue() < critere) { //Critère améliorable
+			if (p.getPrixT()*p.getPrixT()/p.getChocolatDeMarque().qualitePercue() < critere) { //Critere ameliorable
 				best = p;
 			}
 		}
@@ -73,8 +81,8 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 		if (supOA==null) {
 			supOA =(SuperviseurVentesOA)(Filiere.LA_FILIERE.getActeur("Sup.OA"));
 		}
-//		journal.ajouter(""+besoin());
-		if (besoin()!=null) { //Si on manque à l'instant t de stock, on lance cette méthode d'achat
+		journal.ajouter(""+besoin());
+		if (besoin()!=null) { //Si on manque à l'instant t de stock, on lance cette méthode d'achat car l'effet est immediat
 			List<ChocolatDeMarque> marque = besoinMarque();
 			HashMap<ChocolatDeMarque,Double> qte = besoinQte();
 			for (ChocolatDeMarque m : marque) {

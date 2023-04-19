@@ -27,14 +27,19 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2 implemen
 
 	@Override
 	public double demande(Feve f, double cours) {
-		if (this.getFeve().equals(f)) {
+		/*if (this.getFeve().equals(f)) {
 			BourseCacao bourse = (BourseCacao)(Filiere.LA_FILIERE.getActeur("BourseCacao"));
 			double pourcentage = (bourse.getCours(getFeve()).getMax()-bourse.getCours(getFeve()).getValeur())/(bourse.getCours(getFeve()).getMax()-bourse.getCours(getFeve()).getMin()); // difference de prix avec le max / amplitude totale
-			return achatMaxParStep*pourcentage;
-		} else {
+			this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   BOURSEA: demande en bourse de "+achatMaxParStep*pourcentage+" de "+f);
+			return achatMaxParStep*pourcentage;*/
+			double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
+			double demande = Math.max(0, Math.min( Math.random()*50, solde));
+			this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   BOURSEA: demande en bourse de "+demande+" de "+f);
+			return demande;
+		} /*else {
 			return 0.0;
-		}
-	}
+		}}*/
+
 
 	@Override
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
