@@ -117,6 +117,7 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 			return null;			
 		}
 		ContratCadre contrat = new ContratCadre(acheteur, vendeur, produit, echeancier, cryptogramme, tg, pourcentageRSE);
+		journal.ajouter(Journal.texteColore(acheteur, "==>"+acheteur.getNom())+" lance le contrat #"+contrat.getNumero()+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(vendeur, vendeur.getNom()));
 		return negociations(acheteur, vendeur, produit, echeancier, cryptogramme, tg, contrat,acheteur);
 	}
 	// si on ne precise pas le taux de RSE il est (par defaut) de 0
@@ -176,7 +177,7 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 			contrat = new ContratCadre(acheteur, vendeur, produit, echeancier, cryptogramme, tg);
 		}
 		Echeancier contrePropositionA;
-		journal.ajouter(Journal.texteColore(vendeur, vendeur.getNom())+" lance le contrat #"+contrat.getNumero()+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(acheteur, acheteur.getNom()));
+		journal.ajouter(Journal.texteColore(vendeur, "==>"+vendeur.getNom())+" lance le contrat #"+contrat.getNumero()+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(acheteur, acheteur.getNom()));
 		contrePropositionA=acheteur.contrePropositionDeLAcheteur(new ExemplaireContratCadre(contrat));
 		if (contrePropositionA==null) {
 			journal.ajouter("   "+Journal.texteColore(acheteur, acheteur.getNom()+" retourne null pour echeancier : arret des negociations"));
@@ -198,7 +199,7 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 
 		// NEGOCIATIONS SUR L'ECHEANCIER
 		Echeancier contrePropositionV, contrePropositionA;
-		journal.ajouter(Journal.texteColore(acheteur, acheteur.getNom())+" lance le contrat #"+contrat.getNumero()+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(vendeur, vendeur.getNom()));
+		journal.ajouter(" negociations echeancier contrat #"+contrat.getNumero()+" vendeur="+Journal.texteColore(vendeur, vendeur.getNom())+" acheteur="+Journal.texteColore(acheteur, acheteur.getNom())+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(vendeur, vendeur.getNom()));
 		int numNego=0;
 		do { 
 			numNego++;
@@ -347,15 +348,16 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 	}
 
 	public void quiVendQuoi() {
+		this.journal.ajouter("== Qui vend quoi ===");
 		List<ChocolatDeMarque> c = Filiere.LA_FILIERE.getChocolatsProduits();
 		for (ChocolatDeMarque cm : c) {
 			this.journal.ajouter("produit "+cm);
-			this.journal.ajouter("   vendeurs "+getVendeurs(cm));
-			this.journal.ajouter("  acheteurs "+getAcheteurs(cm));
+			this.journal.ajouter("&nbsp;&nbsp;&nbsp;vendeurs "+getVendeurs(cm));
+			this.journal.ajouter("&nbsp;&nbsp;acheteurs "+getAcheteurs(cm));
 		}
 	}
 	public void next() {
-	//	quiVendQuoi();
+		quiVendQuoi();
 		recapitulerContratsEnCours();
 		gererLesEcheancesDesContratsEnCours();
 		archiverContrats();
