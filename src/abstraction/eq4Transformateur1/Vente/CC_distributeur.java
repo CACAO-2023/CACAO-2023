@@ -7,9 +7,11 @@ import java.util.List;
 import abstraction.eq4Transformateur1.Stock;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
+import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.offresAchat.PropositionVenteOA;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
@@ -17,15 +19,21 @@ import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
+
 /**
  * @author Fouad LBAKALI & Amine RAHIM
+=======
+
+/**
+ * @author fouad/amine
+>>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4/
  *
  */
 
 public class CC_distributeur extends Stock implements IVendeurContratCadre {
 
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
-
+	
 	public void initialiser() {
 		super.initialiser();
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
@@ -39,8 +47,10 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 			List<IProduit> produits = new LinkedList<IProduit>();
 			produits.addAll(Filiere.LA_FILIERE.getChocolatsProduits());
 			for (Feve f : Feve.values()) {
-				if ((f.getGamme()==Gamme.BQ)||(f.getGamme()==Gamme.HQ))
 				produits.add(f);
+			}
+			for (Chocolat c : Chocolat.values()) {
+				produits.add(c);
 			}
 			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : Tentative de lancer un contrat cadre");
 			this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : Liste de tous les produits "+produits);
@@ -66,10 +76,10 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 					if (vendeur!=this) { // on ne peut pas passer de contrat avec soi meme
 						this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : Vendeur tire au sort = "+vendeur);
 						Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 100);
-						ExemplaireContratCadre contrat = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, echeancier, this.cryptogramme, false);
-						if (contrat!=null) {
-							this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : contrat signe = "+contrat);
-						}
+						//ExemplaireContratCadre contrat = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, echeancier, this.cryptogramme.intValue(), false, 15);
+						//if (contrat!=null) {
+							//this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : contrat signe = "+contrat);
+						//}
 					}
 				}
 			}
@@ -88,6 +98,28 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+res);
 		return res;
 	}
+	
+	public Echeancier propositionDuVendeur(ExemplaireContratCadre contrat){
+		
+		Object produit = contrat.getProduit();
+		double qtok=0;
+		if (produit instanceof ChocolatDeMarque) {
+			if (this.stockChocoMarque.keySet().contains(produit)) {
+				qtok= this.stockChocoMarque.get(produit);
+				this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propovend --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qtok/15.0));
+				return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qtok/15.0);
+	}
+			}
+		else if (produit instanceof Chocolat) {
+			if (this.stockChoco.keySet().contains(produit)) {
+				qtok= this.stockChoco.get(produit);
+				this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propovend --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qtok/15.0));
+				return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qtok/15.0);
+
+	}
+		}
+		return null;
+	}
 
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		if (contrat.getTeteGondole()) {
@@ -98,25 +130,48 @@ public class CC_distributeur extends Stock implements IVendeurContratCadre {
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend(prod="+produit+"  ech="+contrat.getEcheancier());
 
 		if (produit instanceof ChocolatDeMarque) {
+			switch ((Chocolat)produit) {
+			case C_BQ   : return null;
+			case C_MQ  : return null;
+			case C_MQ_BE :return null;
+			case C_HQ_BE :
 			if (this.stockChocoMarque.keySet().contains(produit)) {
 				qtok= this.stockChocoMarque.get(produit);
+				if (qtok>+0.0) {
+					
+					if (contrat.getEcheancier().getQuantiteTotale()<qtok ){
+						this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend --> meme echeancier");
+						return contrat.getEcheancier();
+					} else {
+						this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, (qtok*0.8)/15.0));
+						return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qtok*0.8/15.0);
+					}
+			}
+			}
 			}
 		} else if (produit instanceof Chocolat) {
+				switch ((Chocolat)produit) {
+				case C_HQ_BE   : return null;
+				case C_MQ  : return null;
+				case C_MQ_BE :return null;
+				case C_BQ :
 			if (this.stockChoco.keySet().contains(produit)) {
 				qtok= this.stockChoco.get(produit);
-			}
-		} 
-		if (qtok<1000.0) {
-			qtok=0.0;
-		} else {
-			if (contrat.getEcheancier().getQuantiteTotale()<qtok) {
-				this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend --> meme echeancier");
-				return contrat.getEcheancier();
-			} else {
-				this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 10, qtok/10.0));
-				return new Echeancier(contrat.getEcheancier().getStepDebut(), 10, qtok/10.0);
+				if (qtok>0.0) {
+					if (contrat.getEcheancier().getQuantiteTotale()<qtok) {
+						this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend --> meme echeancier");
+						return contrat.getEcheancier();
+					} else {
+						this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qtok*0.8/15.0));
+						return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qtok*0.8/15.0);
+					}
 			}
 		}
+				
+		}
+		
+		
+}
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend --> return null");
 		return null;
 	}

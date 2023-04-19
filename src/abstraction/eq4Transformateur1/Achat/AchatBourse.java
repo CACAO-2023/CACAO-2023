@@ -54,4 +54,8 @@ public class AchatBourse extends CC_producteur implements IAcheteurBourse{
 	public void notificationBlackList(int dureeEnStep) {
 		this.journal.ajouter(" aie aie aie ... blackliste de la bourse pendant "+dureeEnStep+" tour");
 	}
+	
+	public void next() {
+		super.next();
+	}
 }
