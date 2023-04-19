@@ -9,14 +9,18 @@ import abstraction.eqXRomu.produits.Lot;
 
 public class Transformateur2AcheteurBourseCacao extends Transformateur2AcheteurCC implements IAcheteurBourse {
 
-	private double coursMax;
-	private double coursMin;
+	private double coursMaxMQ;
+	private double coursMinMQ;
+	
+	private double coursMaxHQ;
+	private double coursMinHQ;
+	
 	private Feve feve;
 	private Variable stockFeve;
 	
 	public Transformateur2AcheteurBourseCacao() {
-		this.coursMin = 10;
-		this.coursMax = 20;
+		this.coursMinMQ = 10;
+		this.coursMaxMQ = 20;
 	}
 	
 	public Feve getFeve() {
@@ -42,6 +46,7 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2AcheteurC
 
 	@Override
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
+		System.out.println(" sto "+stockFeve);
 		this.stockFeve.setValeur(this, this.stockFeve.getValeur()+l.getQuantiteTotale());
 	}
 	
