@@ -1,33 +1,37 @@
 package abstraction.eq1Producteur1;
 
-import java.util.LinkedList;
-
 //classe écrite par Elouan
 
+import java.util.HashMap;
+
 public class champ {
-	private LinkedList<hectar> hectares;
+	private HashMap<Integer, Double> quantite; //integer : nb de step (key), double : nb d'hectar (value)
 	
-	public champ() {
-		this.hectares = new LinkedList<hectar>();
+	public champ() { 
+		this.quantite = new HashMap<Integer, Double>();
 	}
-	
-	public LinkedList<hectar> getHectares(){
-		return this.hectares;
+	public HashMap<Integer, Double> getQuantite(){
+		return this.quantite;
 	}
-	public void add(hectar h) {
-		this.getHectares().add(h);
+	public void ajouter(int i, Double d) {
+		this.quantite.put(i, d);
 	}
-	public hectar getHectare(int i) {
-		return this.getHectares().get(i);
+	public double getNbHectare() {
+		double q=0;
+		for (Integer i : this.quantite.keySet()) {
+			q = q + this.quantite.get(i);
+		}
+		return q;
 	}
-	public int nbhectare() {
-		return this.getHectares().size();
+	public void supprimer(int i) {
+		this.getQuantite().remove(i);
 	}
-	public void supphectare(int i) {
-		this.getHectares().remove(i);
-	}
-	public void supphectare(hectar h) {
-		this.getHectares().remove(h);
+	public String toString() {
+		String s = "qualite : ";
+		for (Integer i : this.getQuantite().keySet()) {
+			s=s+"On a "+this.getQuantite().get(i)+" hectares qui datent de "+i+" steps ("+(i*15)+"jours).";
+		}
+		return s;
 	}
 	
 }

@@ -1,65 +1,129 @@
 package abstraction.eq1Producteur1;
 
-import abstraction.eqXRomu.produits.Lot;
 
+import java.util.HashMap;
+import java.util.concurrent.ThreadLocalRandom;
+
+import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.Lot;
 public class Producteur1Plantation extends Producteur1Acteur {
-	private Lot stockFeveBas;
-	private Lot stockFeveMoy;
-	
-	public champ getChamp() {
-		return this.champ;
+	private Lot stockBasPasSec;
+	private Lot stockMoyPasSec;
+
+//===== 4 premières methodes : elouan =====
+
+	public champ getChampBas() {
+		return this.champBas;
 	}
-	
-	public Lot getStockBas() {
-		return this.stockFeveBas ;
+	public champ getChampMoy() {
+		return this.champMoy;
 	}
-	
 	public Lot getStockMoy() {
-		return this.stockFeveMoy ;
+		return this.stockMoyPasSec ;
 	}
+	public Lot getStockBas() {
+		return this.stockBasPasSec ;
+	}
+	public Lot getVraiStockM() {
+		return this.stockFeveMoy;
+	}
+	public Lot getVraiStockB() {
+		return this.stockFeveBas;
+	}
+	
+	public void initialiser () { // elouan
+		//initialisation d'un faible nombre de feves qui sont en sechage
+		super.initialiser();
+		this.stockBasPasSec = new Lot(Feve.F_BQ);
+		this.stockBasPasSec.ajouter(0,50);
+		this.stockMoyPasSec = new Lot(Feve.F_MQ);
+		this.stockMoyPasSec.ajouter(0,10);
+	}
+
 	
 	public void next() {
-		//début Elouan
+		//===== début Elouan =====
 		super.next();
-		champ c = this.getChamp();
-		int n = c.nbhectare();
-		for (int i=0; i<n; i++) {
-			hectar h = c.getHectare(i);
-			h.setNb_step(h.getNombreSep()+1);
-			if (h.getNombreSep()==10) 
-				{h.setNb_step(0);
-				//rajt une ligne de code pour récolter les feves
-				h.setNb_recolte(h.getNombreRecolte()+1);}
-			if (h.getNombreRecolte()==96) { //supprime l'hectar quand il produit plus
-				c.supphectare(h);
-				// supprime l'hectare ou replante direct en fct de la qualité qu'on veut + coût replantation
+		Lot lot_moy = this.getStockMoy();
+		Lot lot_moy_sec = this.getVraiStockM();
+		HashMap<Integer, Double> quantiteFeveM = lot_moy.getQuantites();
+		champ cm = this.getChampMoy();
+		for (Integer i : cm.getQuantite().keySet()) {
+			double q = cm.getQuantite().get(i);
+			Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), 30*q);
+			if (step-i==2080) { //supprime l'hectar quand il produit plus, au bout de 40 ans pour la v1
+				cm.supprimer(i);
+				cm.ajouter(step, q); //on le replante quand il périme : v2 à améliorer
 			}
-			}
-		//fin Elouan
-		
-		//debut gab
-		
-//		stockFeve stockFeve = this.getStock() ;
-//		int m = stockFeve.nbFeve() ; // faut changer avec le lot
-//		for (int i=0; i<n; i++) {
-//			Feve feve = stockFeve.getFeve(i) ; // faut changer avec le lot
-//			feve.setNbStepsDepuisRecolte(feve.getNbStepsDepuisRecolte()+1) ;
-			
-//			if (feve.getNbStepsDepuisRecolte() == 12) {
-				// péremption fève au bout de 6mois
-				//condition pour basse qualité, si moyenne à changer
-//				stockFeve.suppFeve(i) ;
-//			}
-			
-//			if (feve.getSeche()==true && feve.getNbStepsDepuisRecolte()>=1) {
+				else if ((step-i)%12==0 && step-i>0) 
+				// ===== elouan et début gab =====
+				{
+				double nb_tonnes = q*0.56 ; //ajouter facteur random
+				double random = ThreadLocalRandom.current().nextDouble(0.9, 1.1);
+				nb_tonnes = nb_tonnes * random ;
+				lot_moy.ajouter(step, nb_tonnes); //recolte
 				
-//			}
-//		}
-		
-		//fin gab
-		
-		
-		
+				if (quantiteFeveM.containsKey(step)) {
+					quantiteFeveM.replace(step, quantiteFeveM.get(step)+nb_tonnes);
+				} else {
+					quantiteFeveM.put(step, nb_tonnes);
+				}
+				//ajouter lot moyen et cout replantation 
+						}
+			}
+		//on retire les feves perimes
+		int nb_step_perime = step-12;
+		Double fevemoyabas = quantiteFeveM.get(nb_step_perime); //quantite de feve qui baisse de gamme, qu'on va rajouter dans le stock de bas
+		quantiteFeveM.remove(nb_step_perime);
+		// on s'occupe des feves sechées
+		Double nb_feve_sec = quantiteFeveM.get(step-1);
+		lot_moy_sec.ajouter(step, nb_feve_sec);
+		quantiteFeveM.remove(step-1);
+		Lot lot_bas = this.getStockBas();
+		HashMap<Integer, Double> quantiteFeveB = lot_bas.getQuantites();
+		Lot lot_bas_sec = this.getVraiStockB();
+		champ cb = this.getChampBas();
+		for (Integer i : cb.getQuantite().keySet()) {
+			double q = cb.getQuantite().get(i);
+			Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), 30*q);
+			if (step-i==2080) { //supprime l'hectar quand il produit plus, au bout de 40 ans pour la v1
+				cb.supprimer(i);
+				cb.ajouter(step, q); //on le replante quand il périme : v2 à améliorer
+			}
+				else if ((step-i)%10==0 && step-i>0) 
+				// ===== elouan et début gab =====
+				{
+				double nb_tonnes = q*0.56 ; //ajouter facteur random
+				double random = ThreadLocalRandom.current().nextDouble(0.9, 1.15);
+				nb_tonnes = nb_tonnes * random ;
+				stockFeveBas.ajouter(step, nb_tonnes); //recolte
+				
+				if (quantiteFeveB.containsKey(step)) {
+					quantiteFeveB.replace(step, quantiteFeveB.get(step)+nb_tonnes);
+				} else {
+					quantiteFeveB.put(step, nb_tonnes);
+				}
+				//ajouter lot moyen et cout replantation 
+						}
+			}
+		//on retire les feves perimes
+		if (fevemoyabas!=null) {
+			quantiteFeveB.put(step-6, fevemoyabas); //on rajoute les feves qui ont baisse de qualite pour qu'elles aient une duree de vie de 3 mois
+		}
+		quantiteFeveB.remove(nb_step_perime);
+		// on s'occupe des feves sechées
+		Double nb_feve_sec2 = quantiteFeveB.get(step-1);
+		lot_bas_sec.ajouter(step, nb_feve_sec2);
+		quantiteFeveB.remove(step-1);
+		Double q1 = 0.0;
+		Double q2 = 0.0;
+		if (lot_moy_sec!=null) 
+			{q1=lot_moy_sec.getQuantiteTotale();}
+		if (lot_bas_sec!=null) 
+			{q2=lot_moy_sec.getQuantiteTotale();}
+		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), (q1+q2)*50);
+		// cout de stockage
+		}
+		//===== fin elouan et gab =====	
 	}
-
-}
