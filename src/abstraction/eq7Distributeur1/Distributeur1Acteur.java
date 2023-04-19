@@ -27,6 +27,7 @@ public class Distributeur1Acteur implements IActeur {
 	
 	protected Journal journal;
 	protected Journal journal_achat;
+	protected Journal journal_stock;
 
 //	private Variable qualiteHaute;  // La qualite d'un chocolat de gamme haute 
 //	private Variable qualiteMoyenne;// La qualite d'un chocolat de gamme moyenne  
@@ -67,6 +68,7 @@ public class Distributeur1Acteur implements IActeur {
 		this.totalStocks = new VariablePrivee("Eq7TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
 		this.journal = new Journal("Journal "+this.getNom(), this);
 	    this.journal_achat=new Journal("Journal des Achats de l'" + this.getNom(),this);
+	    this.journal_stock = new Journal("Journal des Stocks del'" + this.getNom(),this);
 
 	}
 	
@@ -114,6 +116,7 @@ public class Distributeur1Acteur implements IActeur {
 		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			stockChocoMarque.put(marque,1.);
+			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
 		}
 		
 		//Initialisation des previsions
@@ -122,10 +125,13 @@ public class Distributeur1Acteur implements IActeur {
 		this.previsions = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 
 		for (int i=0;i<24;i++) {
 			HashMap<ChocolatDeMarque,Double> prevtour = new HashMap<ChocolatDeMarque,Double>();
+			HashMap<ChocolatDeMarque,Double> prevtourperso = new HashMap<ChocolatDeMarque,Double>();
 			for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 				prevtour.put(marque, Filiere.LA_FILIERE.getVentes(marque, -(i+1)));
+				prevtourperso.put(marque, Filiere.LA_FILIERE.getVentes(marque, -(i+1))*0.5);
 			}
 			previsions.put(24-(i+1), prevtour);
+			previsionsperso.put(24-(i+1), prevtourperso);
 		}
 	}
 
@@ -142,7 +148,7 @@ public class Distributeur1Acteur implements IActeur {
 	
 	public void next() {
 		
-		//Actualisation des prévisions
+		//Actualisation des previsions
 		int etapepreced = Filiere.LA_FILIERE.getEtape()-1;
 		int etapenormalisee = (etapepreced+24)%24;
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
@@ -157,6 +163,10 @@ public class Distributeur1Acteur implements IActeur {
 		}
 		totalStocks.setValeur(this, newstock, this.cryptogramme);
 
+		//Journaux
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
+		}
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -170,11 +180,13 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+		/**
 		res.add(totalStocks);
 		res.add(stock_HQ_BE);
 		res.add(stock_MQ_BE);
 		res.add(stock_BQ);
 		res.add(stock_MQ);
+		*/
 		return res;
 	}
 

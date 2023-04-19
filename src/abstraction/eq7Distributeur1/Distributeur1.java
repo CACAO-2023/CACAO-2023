@@ -33,8 +33,15 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	}
 	
 	protected ChocolatDeMarque topvente() {
-		ChocolatDeMarque top = Filiere.LA_FILIERE.getChocolatsProduits().get(0);
-		return top;
+		int etape = Filiere.LA_FILIERE.getEtape();
+		ChocolatDeMarque topmarque = Filiere.LA_FILIERE.getChocolatsProduits().get(0);
+		double topvente = previsionsperso.get(etape).get(topmarque);
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			if (previsionsperso.get(etape).get(marque) > topvente) {
+				topmarque = marque;
+			}
+		}
+		return topmarque;
 	}
 	
 	/**
@@ -106,13 +113,12 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	 * La mise en place d'une contrepartie avec le transformateur sera mise en place lors de la V2
 	 */
 	public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
-		//recopie de l'exemple de romu
-//		if (stockChocoMarque7.keySet().contains(choco)) {
-//			double qStock = stockChocoMarque7.get(choco);
-//			return qStock/20.0;
-//		} else {
-		ChocolatDeMarque topvente = topvente();
+
+		ChocolatDeMarque topmarque = topvente();
 		double seuil = Filiere.SEUIL_EN_TETE_DE_GONDOLE_POUR_IMPACT;
+		if ((choco==topmarque)&&(stockChocoMarque.get(topmarque)>0)) {
+			return stockChocoMarque.get(topmarque)/10;
+		}
 		return 0.0;
 	}
 	
@@ -126,11 +132,19 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	 * @param choco, choco!=null
 	 * @param quantite, quantite>0.0 et quantite<=quantiteEnVente(choco)
 	 * @param montant, le montant correspondant a la transaction que le client a deja verse sur le compte du distributeur
+	 * @author Theo
 	 */
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 		stockChocoMarque.put(choco, stockChocoMarque.get(choco)-quantite);
 		totalStocks.setValeur(this, totalStocks.getValeur(cryptogramme)-quantite, cryptogramme);
 		this.journal.ajouter("Eq7 a vendu "+quantite+" T de "+choco+ " aux clients finaux ");
+		
+		//Actualisation des previsions persos
+		int etapepreced = Filiere.LA_FILIERE.getEtape();
+		int etapenormalisee = (etapepreced+24)%24;
+		HashMap<ChocolatDeMarque,Double> prevetapeperso = previsionsperso.get(etapenormalisee);
+		prevetapeperso.replace(choco, (prevetapeperso.get(choco)+quantite)/2);
+		previsionsperso.replace(etapenormalisee, prevetapeperso);
 	}
 	
 	/**
