@@ -28,7 +28,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 			return this.stockTotMoy.getValeur();
 		}
 		if (f==Feve.F_MQ_BE) {
-			return this.getStockTotTime(f, 10);
+			return this.getStockTotTimeTheo(f, 10);
 		}
 //		if (f==Feve.F_HQ_BE) {
 //			return this.stockTotHauteBE.getValeur();
@@ -89,7 +89,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 //		if (f==Feve.F_HQ_BE) {
 //			float prix_seuil_1=1000;
 //			float prix_seuil_2=10000;
-//			if (cours_de_f < prix_seuil_1) {
+//			if (cours_de_f < prix_seuil_1 || this.Rentabilites(f, cours_de_f)==false) {
 //				return 0;
 //			}
 //			if (cours_de_f >= prix_seuil_1 && cours_de_f <= prix_seuil_2) {
