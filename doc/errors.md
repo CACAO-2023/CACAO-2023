@@ -1,24 +1,29 @@
-# Errors on Push
+# Problems on Push
 
 ## "Rejected - non-fast-forward"
 
+A team mate pushed something new to your team repository before you.
+
 1. Commit your changes.
-2. Pull the changes from your team repository.
+2. Pull from your team repository.
 3. Resolve conflicts if needed.
 4. Commit and push.
 
-# Errors on Pull
+# Problems on Pull
 
 ## "Checkout conflict" or "DIRTY_WORKTREE"
 
 You have a local change that you did not commit. 
-You can 1) commit without pushing you local change or 2) delete your local change by replacing the changed files/folders with a previous version.
-Then you will be able to pull. This will maybe result in a conflict, if your colleagues changed the same lines.
-After resolving the conflict, commit all changed files and push.
 
-# Problems of Pull Requests
+1. You can A) commit without pushing your local change or B) delete your local change by replacing the changed files/folders with a previous version.
+2. Pull from your team repository.
 
-If the pull request is correct, it is merged automatically (within 5 minutes) and it is removed from the list of open full requests in the main repository. If you still see your pull request, then it means that there is some problem you will need to solve. The three possible problems are described next.
+This will maybe result in a conflict, if your team mate changed the same lines. 
+In this case you will have to resolve the conflict before being able to commit your changes and push.
+
+# Problems on Pull Request
+
+If the pull request is correct, it is merged automatically (within 5 minutes) and it is removed from the list of open pull requests in the main repository. If you still see your pull request, it means that there is some problem you will need to solve as soon as possible. The problems of your pull requests are listed at the bottom of the pull request page on github. The 3 possible kinds of problem are described next.
 
 Note that there is no need to close and reopen the pull request, you can just fix the problems and push to your repository.
 
@@ -32,9 +37,9 @@ Note that if the files you changed are not Java files, they will be hidden in th
 
 ## "Some checks were not successful": "Java CI / build (pull_request)"
 
-Not accepting because the code does not pass the tests. You can read the error message by clicking on "Details" near to the failed test at the bottom of your pull request. You can run the same tests on your Eclipse, they are `test/abstraction/FiliereParDefaultTest.java` and `test/presentation/FenetrePrincipaleTest.java`. To run them right-click on "build.xml", Run As -> Ant Build. You will see the error message in the console. Please fix the error and commit+push again.
+Not accepting because the code does not pass the tests. You can read the error message by clicking on "Details" near to the failed test at the bottom of your pull request. You can run the same tests on your Eclipse, they are `test/abstraction/FiliereParDefaultTest.java` and `test/presentation/FenetrePrincipaleTest.java`. To run them right-click on "build.xml", Run As -> Ant Build. You will see the error message in the console. Fix the error and commit+push again.
 
 ## "This branch is out-of-date with the base branch"
 
-Your team repository is not up-to-date with the changes that happened on the main repository. Please pull from the main repository and then push to the team repository.
+Your team repository is not up-to-date with the changes that happened on the main repository.  Pull from the main repository and then push to the team repository.
 
