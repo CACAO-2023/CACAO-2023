@@ -38,15 +38,15 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		}
 		return this.chocosProduits;
 	}
-//Verifier par Alexian / François
+
 	public void initialiser() {
 		super.initialiser();
 		this.pourcentageTransfo = new HashMap<Feve, HashMap<Chocolat, Double>>();
 		this.pourcentageTransfo.put(Feve.F_HQ_BE, new HashMap<Chocolat, Double>());
-		double conversion = 1.1;
+		double conversion = 1.58;
 		this.pourcentageTransfo.get(Feve.F_HQ_BE).put(Chocolat.C_HQ_BE, conversion);// la masse de chocolat obtenue est plus importante que la masse de feve vue l'ajout d'autres ingredients
 		this.pourcentageTransfo.put(Feve.F_BQ, new HashMap<Chocolat, Double>());
-		conversion = 1.64;
+		conversion = 1.06;
 		this.pourcentageTransfo.get(Feve.F_BQ).put(Chocolat.C_BQ, conversion);
 	}
 
