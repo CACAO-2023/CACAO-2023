@@ -48,7 +48,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		else {return 0;};};};};
 	}*/
 	public double demande(Feve f, double cours) {
-		double res = 100.0;
+		double res = 60.0;
 		if (f.getGamme()==Gamme.BQ) {if(cours<=this.getCoursmaxBG().getValeur()) {
 													res =(max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1000.0));}
 		}
