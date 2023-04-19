@@ -21,19 +21,6 @@ import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 
-/**
-<<<<<<< HEAD
- * @author Fouad LBAKALI & Amine RAHIM
-=======
-
-/**
- * @author fouad/amine
->>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4/
-=======
- * @author amine
->>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4/
- *
- */
 
 public class CC_distributeur extends AchatBourse implements IVendeurContratCadre {
 
@@ -44,6 +31,11 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 	}
 	
+	/**
+	 * @author fouad
+	 *
+	 */
+	 
 	public void next() {
 		super.next();
 
@@ -103,6 +95,11 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+res);
 		return res;
 	}
+	
+	
+	/**
+	 @author amine
+	 */
 	
 	public Echeancier propositionDuVendeur(ExemplaireContratCadre contrat){
 		
