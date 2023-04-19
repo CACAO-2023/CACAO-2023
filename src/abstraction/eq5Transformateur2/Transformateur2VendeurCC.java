@@ -119,10 +119,10 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		}
 
 
-	public ExemplaireContratCadre getContratV(IProduit produit) {
+	public ExemplaireContratCadre getContrat(IProduit produit) {
     	this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche acheteur pour " + produit);
     	List<IAcheteurContratCadre> acheteurs = superviseurVentesCC.getAcheteurs(produit);
-    	IAcheteurContratCadre acheteur = acheteurs.get((int)(Math.random() * acheteurs.size())); //on cherche un vendeur
+    	IAcheteurContratCadre acheteur = acheteurs.get((int)(Math.random() * acheteurs.size())); //on cherche un acheteur
     	
     	this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
         ExemplaireContratCadre cc = superviseurVentesCC.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
@@ -137,8 +137,8 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
     
     public void next() {
 	super.next();
-	this.getContratV(Chocolat.C_MQ);
-	this.getContratV(Chocolat.C_HQ_BE);
+	this.getContrat(Chocolat.C_MQ);
+	this.getContrat(Chocolat.C_HQ_BE);
 
     }
 }
