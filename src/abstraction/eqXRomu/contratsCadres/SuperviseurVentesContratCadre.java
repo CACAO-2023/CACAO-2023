@@ -355,7 +355,7 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 		}
 	}
 	public void next() {
-		quiVendQuoi();
+	//	quiVendQuoi();
 		recapitulerContratsEnCours();
 		gererLesEcheancesDesContratsEnCours();
 		archiverContrats();
