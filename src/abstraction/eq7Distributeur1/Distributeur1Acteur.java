@@ -88,6 +88,9 @@ public class Distributeur1Acteur implements IActeur {
 		return previsionsperso.get(etape).get(marque);
 	}
 
+	/**
+	 * @author Theo
+	 */
 	protected double getCout(ChocolatDeMarque marque) {
 		Chocolat gamme = marque.getChocolat();
 		if (gamme == Chocolat.C_BQ) {
@@ -168,6 +171,9 @@ public class Distributeur1Acteur implements IActeur {
 		return this.getNom();
 		}
 	
+	/**
+	 * @author Romain,Ghaly et Theo
+	 */
 	public void next() {
 		
 		//Actualisation des previsions
@@ -186,9 +192,10 @@ public class Distributeur1Acteur implements IActeur {
 		totalStocks.setValeur(this, newstock, this.cryptogramme);
 
 		//Prise en compte des couts de stockage
-		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), totalStocks.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());	
-		journal.ajouter("Cout de stockage : "+totalStocks.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());
-		
+		if (totalStocks.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() > 0) {
+			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), totalStocks.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());	
+			journal.ajouter("Cout de stockage : "+totalStocks.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());
+		}
 		//Journaux
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");

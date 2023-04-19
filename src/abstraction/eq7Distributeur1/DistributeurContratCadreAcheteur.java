@@ -87,19 +87,19 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		this.mesContratEnTantQuAcheteur.removeAll(contratsObsoletes);
 	}
 
-
-	
 	/**   
 	 * proposition d'un contrat a un des vendeurs choisi aleatoirement
+	 * @param produit le produit qu'on veut vendre
+	 * @return le contrat s'il existe, sinon null
      * @author Ghaly sentissi
      */
-	public ExemplaireContratCadre proposition_achat_aleatoire(IProduit produit,Echeancier e) {
+	public ExemplaireContratCadre getContrat(IProduit produit,Echeancier e) {
 
+		this.journal_achat.ajouter("Recherche acheteur pour " + produit + "...");
 		List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
 		ExemplaireContratCadre cc = null;
-		if (vendeurs.contains(this)) {
-			vendeurs.remove(this);
-		}
+		
+		//On parcourt tous les vendeurs aleatoirement
 		while (!vendeurs.isEmpty() && cc == null) {
 			IVendeurContratCadre vendeur = null;
 			if (vendeurs.size()==1) {
@@ -107,16 +107,30 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 			} else if (vendeurs.size()>1) {
 				vendeur = vendeurs.get((int)( Math.random()*vendeurs.size()));
 			}
-			
 			vendeurs.remove(vendeur);
 			if (vendeur!=null) {
+				//On lance la procedure
+				this.journal_achat.ajouter("Tentative de négociation de contrat cadre avec "+vendeur.getNom()+" pour "+produit+"...");
+				cc = superviseurVentesCC.demandeAcheteur((IAcheteurContratCadre)this, ((IVendeurContratCadre)vendeur), produit, e, cryptogramme,false);
 			
-				cc = getContractForProduct(produit,e,vendeur);}
+				if (cc != null) { //Si la procedure aboutit
+					this.journal_achat.ajouter("Contrat cadre passé avec "+vendeur.getNom()+" pour "+produit+"\nDétails : "+cc+"!");
+		        	mesContratEnTantQuAcheteur.add(cc);
+		        	
+		        	//Actualisation du cout
+		        	double nvcout = getCout((ChocolatDeMarque) cc.getProduit());
+		        	nvcout = (nvcout + (cc.getPrix()/cc.getQuantiteTotale()))/2;
+		        	couts((ChocolatDeMarque) cc.getProduit(), nvcout);
+		        }
+				else {
+		            this.journal_achat.ajouter("Echec de la négociation de contrat cadre avec "+vendeur.getNom()+" pour "+produit);
+		        }
+			}
+		}
+		return cc;
 	}
-		return cc;}
 	
 	/**
-	 * 
 	 * @author Theo
 	 * @return la qte d'un produit devant se faire livrer dans l'annee prochaine (en supposant que la duree d'un CC <= 1 an
 	 */
@@ -160,8 +174,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 					Echeancier echeancier = echeancier_strat(etape+1,marque);
 					journal_achat.ajouter("Recherche d'un vendeur aupres de qui acheter "+ marque.getNom());
 
-					ExemplaireContratCadre cc = proposition_achat_aleatoire(marque,echeancier);
-
+					ExemplaireContratCadre cc = getContrat(marque,echeancier);
 					}
 				}
 			}						
@@ -267,37 +280,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 			Echeancier echeancier, long cryptogramme, boolean tg) {
 		return 5;
 	}
-    /**
-     * Cette méthode va essayer de lancer un contrat cadre d'un produit avec un acteur donné
-     * @param produit le produit qu'on veut vendre
-     * @param acteur l'acteur à qui on essaye de vendre
-     * @return le contrat s'il existe, sinon null
-     * @author Ghaly sentissi
-     */
-    public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier e,  IActeur acteur) {
-        // First we need to select a buyer for the product
-        this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Recherche acheteur pour " + produit + "...");
-
-        // Now making the contract
-        this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Tentative de négociation de contrat cadre avec " + acteur.getNom() + " pour " + produit + "...");
-        int length = ((int) Math.round(Math.random() * 10)) + 1;
-    	SuperviseurVentesContratCadre superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre")); 
-
-		ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), produit, e, cryptogramme,false);
-        if (cc != null) {
-        	mesContratEnTantQuAcheteur.add(cc);
-        	
-        	//Actualisation du cout
-        	double nvcout = getCout((ChocolatDeMarque) cc.getProduit());
-        	nvcout = (nvcout + (cc.getPrix()/cc.getQuantiteTotale()))/2;
-        	couts((ChocolatDeMarque) cc.getProduit(), nvcout);
-        	
-            this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + acteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
-        } else {
-            this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Echec de la négociation de contrat cadre avec " + acteur.getNom() + " pour " + produit + "...");
-        }
-        return cc;
-    }
 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
