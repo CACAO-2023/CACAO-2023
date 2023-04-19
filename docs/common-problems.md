@@ -15,8 +15,10 @@ A team mate pushed something new to your team repository before you.
 
 You have a local change that you did not commit. 
 
-1. Two options: A) commit without pushing your local change or B) delete your local change by replacing the changed files/folders with a previous version (right-click on these files or folders -> Replace with -> HEAD Revision)
-2. Pull from your team repository
+1. Two options:
+   1. commit without pushing your local change, or 
+   2. delete your local change by replacing the changed files/folders with a previous version (right-click on these files or folders -> Replace with -> HEAD Revision)
+3. Pull from your team repository
 
 This will maybe result in a conflict, if your team mate changed the same lines. 
 In this case you will have to resolve the conflict before being able to commit your changes and push.
