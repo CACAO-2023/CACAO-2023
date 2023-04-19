@@ -112,14 +112,14 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	 switch ((Feve)produi) {
 	 
 	 case F_BQ:
-		double livre = Math.min(super.getStockBas().getQuantiteTotale(), quantite);		
+		double livraisonBQ = Math.min(super.getStockBas().getQuantiteTotale(), quantite);		
 		Lot lot = new Lot(produi);
-		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); // cet exemple ne gere pas la peremption : la marchandise est consideree comme produite au step courant
+		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livraisonBQ); // cet exemple ne gere pas la peremption : la marchandise est consideree comme produite au step courant
 		return lot;
 	 case F_MQ:
-		 double livr = Math.min(super.getStockMoy().getQuantiteTotale(), quantite);
+		 double livraisonHQ = Math.min(super.getStockMoy().getQuantiteTotale(), quantite);
 		 Lot lot2 = new Lot(produi);
-		 lot2.ajouter(Filiere.LA_FILIERE.getEtape(), livr); // cet exemple ne gere pas la peremption : la marchandise est consideree comme produite au step courant
+		 lot2.ajouter(Filiere.LA_FILIERE.getEtape(), livraisonHQ); // cet exemple ne gere pas la peremption : la marchandise est consideree comme produite au step courant
 		 return lot2;
 	 case F_HQ_BE : return null;
 	 case F_MQ_BE : return null;	
