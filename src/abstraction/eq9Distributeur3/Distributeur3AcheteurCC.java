@@ -130,30 +130,55 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		// TODO Auto-generated method stub
 		prix = contrat.getPrix()/contrat.getQuantiteTotale();
 
+
 		journal_ventes.ajouter("achat du chocolat" + contrat.getProduit()+"au prix à la tonne de" + prix);
 
 		
+
+		ChocolatDeMarque choco = (ChocolatDeMarque)contrat.getProduit();
+
 		// william 
 		
-		// marge de 80% sur HQ_BE
-		if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.HQ)  {
-			var prix_tonne_de_vente = prix*5;
-			this.prix_tonne_vente.put((ChocolatDeMarque)contrat.getProduit(), prix_tonne_de_vente);
-		}
+		// on calcule le prix de vente du chocolat du contract en fonction de la gamme
 		
+		
+		double prix_tonne_de_vente_contrat = 0.0;
+		
+		
+		// marge de 80% sur HQ_BE
+		if(choco.getGamme() == Gamme.HQ)  {
+			prix_tonne_de_vente_contrat = prix*5;
+		}
 		// marge de 67% sur MQ_BE
 		if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.MQ && ((ChocolatDeMarque)contrat.getProduit()).isBioEquitable()){
-			var prix_tonne_de_vente = prix*3;
-			this.prix_tonne_vente.put((ChocolatDeMarque)contrat.getProduit(), prix_tonne_de_vente);
+			prix_tonne_de_vente_contrat = prix*3;
 		}
 		// marge de 50% sur MQ
 		if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.MQ  && !((ChocolatDeMarque)contrat.getProduit()).isBioEquitable()) {
-			var prix_tonne_de_vente = prix*2;
-			this.prix_tonne_vente.put((ChocolatDeMarque)contrat.getProduit(), prix_tonne_de_vente);
+			prix_tonne_de_vente_contrat = prix*2;
 		}
 		
+		double prix_tonne_de_vente_apres_achat = 0.0;
 		
 		
+
+		// si il existe deja un stock de ce chocolat, on fait la moyenne des prix pondérés par la quantite acheté et la quantite deja stockee
+		// si il y a du stock
+		if(stock.getStock(choco) != 0) {
+			var qtte_actuelle = stock.getStock(choco);
+			var qtte_apres_achat = qtte_actuelle + contrat.getQuantiteTotale();
+			// proportion de nouveau chocolat
+			var proportion_contrat = contrat.getQuantiteTotale()/qtte_apres_achat;
+			// ponderation
+			prix_tonne_de_vente_apres_achat = prix_tonne_de_vente_contrat*proportion_contrat +prix_tonne_vente.get(choco)*(1-proportion_contrat) ;
+		}
+		// il n'y a pas de stock
+		else {
+			prix_tonne_de_vente_apres_achat = prix_tonne_de_vente_contrat;
+		}
+		
+		this.prix_tonne_vente.put((ChocolatDeMarque)contrat.getProduit(), prix_tonne_de_vente_apres_achat);
+
 		return contrat.getPrix();
 		
 		
