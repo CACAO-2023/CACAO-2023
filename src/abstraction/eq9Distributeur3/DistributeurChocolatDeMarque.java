@@ -69,6 +69,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurCC implem
 			return 0;
 		} else {
 			HashMap<ChocolatDeMarque, Double> qtVente = this.quantiteTotale();
+			journal_ventes.ajouter("On vend" + qtVente.get(choco) + choco.getNom());
 			if (qtVente.containsKey(choco)) {
 				return qtVente.get(choco);
 			} else {
