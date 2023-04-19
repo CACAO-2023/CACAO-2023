@@ -247,6 +247,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		if (livre>0.0) {
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);}
 		return lot;
+		
 	}
 
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
