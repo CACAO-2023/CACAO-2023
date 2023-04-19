@@ -51,32 +51,16 @@ public class Producteur3 extends Bourse3  {
 		this.HectaresLibres= 0;
 		this.HectaresUtilises=950000;
 		this.ListeCout = new LinkedList<Double>();
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
-		this.ListeCout.add(0.);
 	}
 	
 	/**
 	 * @author Dubus-Chanson Victor
 	 */
 	public void updateListeCout() {
-		this.ListeCout.addLast(this.CoutStep);
-		this.ListeCout.removeFirst();
+		this.ListeCout.add(this.CoutStep);
+		if (ListeCout.size() >= 8) {
+			this.ListeCout.removeFirst();
+		}
 	}
 	
 	/**
@@ -84,11 +68,20 @@ public class Producteur3 extends Bourse3  {
 	 */
 	public void updateCoutTonne() {
 		Double CoutTotal = 0.;
+
+		if (this.ListeCout.size() == 0) {
+			this.CoutTonne = 0.;
+			return;
+		}
+
 		for (Integer i = 0 ; i < this.ListeCout.size() ; i += 1) {
 			CoutTotal += this.ListeCout.get(i);
 		}
+		CoutTotal = CoutTotal / this.ListeCout.size();
+
+
 		Stock Stock = this.getStock();
-		this.CoutTonne = CoutTotal / Stock.getQuantite();
+		this.CoutTonne = CoutTotal / Math.max(Stock.getQuantite(), 1);
 	}
 	
 	/**
@@ -96,7 +89,11 @@ public class Producteur3 extends Bourse3  {
 	 */
 	public void initialiser() {
 		super.initialiser();
-		new Producteur3();		
+
+		this.CoutStep += Stock.getQuantite()*50;
+		this.addCoutHectaresUtilises();
+		this.updateListeCout();
+		this.updateCoutTonne();
 	}
 	
 	/**
@@ -124,10 +121,16 @@ public class Producteur3 extends Bourse3  {
 		this.Stock = Stock.miseAJourStock();
 
 		// Now adding to the step cost the storage costs
-		this.CoutStep += Stock.getQuantite()*50;
+		
 		updateHectaresLibres(Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape() % 12 == 0) {
 			changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
+		}
+
+		// We only add the costs to CoutStep if we are not at step one :
+		if (Filiere.LA_FILIERE.getEtape() > 0) {
+			this.CoutStep += Stock.getQuantite()*50;
+			this.addCoutHectaresUtilises();
 		}
 
 		this.updateListeCout();
