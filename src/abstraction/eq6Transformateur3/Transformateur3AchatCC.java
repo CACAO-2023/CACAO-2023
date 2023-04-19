@@ -215,7 +215,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
 				contratsObsoletes.add(contrat);
 			}
-		}
+		}  
 		this.getListeContratEnCours().removeAll(contratsObsoletes);		
 	}  
 }
