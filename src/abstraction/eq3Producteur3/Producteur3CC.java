@@ -167,7 +167,11 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      */
     public void next() {
         super.next();
-        this.getContractForProduct(Feve.F_HQ_BE);
-        this.getContractForProduct(Feve.F_MQ_BE);
+        if (this.getStock().getQuantite(Feve.F_HQ_BE) > 100) {
+            this.getContractForProduct(Feve.F_HQ_BE);
+        }
+        if (this.getStock().getQuantite(Feve.F_MQ_BE) > 100) {
+            this.getContractForProduct(Feve.F_MQ_BE);
+        }
     }
 }
