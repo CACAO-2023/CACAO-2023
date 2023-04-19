@@ -91,9 +91,7 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre c) {
 		
 		
-		double p= (c.getPrix()+ propositionPrix(c))/2;
-		System.out.println(propositionPrix(c));
-		
+		double p= (c.getPrix()+ propositionPrix(c))/2;		
 		if (c.getPrix()>=propositionPrix(c)) {
 			return c.getPrix();
 		}
@@ -112,6 +110,7 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		this.mescontrats.add(contrat);
 		
 	}
+	
 
 	@Override
 	public Lot livrer(IProduit produi, double quantite, ExemplaireContratCadre contrat) {
@@ -143,6 +142,7 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		this.mescontrats.removeAll(contratstermine);
 		this.PropositionVendeur(Feve.F_BQ);
 		this.PropositionVendeur(Feve.F_MQ);
+		this.journal_ventes.ajouter("Nos contrats à l'étape "+ Filiere.LA_FILIERE.getEtape()+"sont "+ this.mescontrats);
 	}
 
 	@Override
@@ -152,10 +152,15 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	}
 	
 	public ExemplaireContratCadre PropositionVendeur(IProduit produit){
+		
 		IAcheteurContratCadre client=supCCadre.getAcheteurs(produit).get((int)supCCadre.getAcheteurs(produit).size()-1);
 		Echeancier e= new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 1000);
-		
+		this.journal_ventes.ajouter("Client potentiel contrat cadre "+ this.getNom());
+		this.journal_ventes.ajouter("Négociation avec "+client.getNom()+ " pour " + produit);
 		ExemplaireContratCadre c=supCCadre.demandeVendeur(client, this, produit, e, cryptogramme, false);
+		if (c != null) {
+			this.journal_ventes.ajouter("Début contrat cadre avec "+client +"pour" + produit +c);
+		}
 		return c;
 		
 	}
