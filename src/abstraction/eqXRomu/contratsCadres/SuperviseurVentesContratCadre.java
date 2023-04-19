@@ -117,6 +117,7 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 			return null;			
 		}
 		ContratCadre contrat = new ContratCadre(acheteur, vendeur, produit, echeancier, cryptogramme, tg, pourcentageRSE);
+		journal.ajouter(Journal.texteColore(acheteur, acheteur.getNom())+" lance le contrat #"+contrat.getNumero()+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(vendeur, vendeur.getNom()));
 		return negociations(acheteur, vendeur, produit, echeancier, cryptogramme, tg, contrat,acheteur);
 	}
 	// si on ne precise pas le taux de RSE il est (par defaut) de 0
