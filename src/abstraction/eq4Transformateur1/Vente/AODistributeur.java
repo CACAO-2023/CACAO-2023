@@ -12,6 +12,11 @@ import abstraction.eqXRomu.offresAchat.OffreAchat;
 import abstraction.eqXRomu.offresAchat.PropositionVenteOA;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
+/**
+ * @author alexian
+ *
+ */
+
 public class AODistributeur extends CC_distributeur implements IVendeurAO {
 	protected SuperviseurVentesAO superviseur;
 	
@@ -26,20 +31,21 @@ public class AODistributeur extends CC_distributeur implements IVendeurAO {
 		this.superviseur = (SuperviseurVentesAO)(Filiere.LA_FILIERE.getActeur("Sup.AO"));
 	}
 
-//	public void next() {
-//		super.next();
-//		if (Filiere.LA_FILIERE.getEtape()>=1) {
-//			if (this.stock.getValeur()>200) {
-//				PropositionAchatAO retenue = superviseur.vendreParAO(this, cryptogramme, this.stockChocoMarque.(), 200.0, false);
-//				if (retenue!=null) {
-//					this.stock.setValeur(this, this.stock.getValeur()-retenue.getOffre().getQuantiteT());
-//					journal.ajouter("vente de "+retenue.getOffre().getQuantiteT()+" T a "+retenue.getAcheteur().getNom());
-//				} else {
-//					journal.ajouter("pas d'offre retenue");
-//				}
-//			}
-//		}
-//	}
+	public void next() {
+		super.next();
+		for (ChocolatDeMarque c : stockChocoMarque.keySet()) {
+			if (this.stockChocoMarque.get(c)>200) {
+				PropositionAchatAO retenue = superviseur.vendreParAO(this, cryptogramme, c, 200.0, false);
+				if (retenue!=null) {
+					this.totalStocksChocoMarque.ajouter(this,-retenue.getOffre().getQuantiteT() ,this.cryptogramme);
+					this.stockChocoMarque.put(c, this.stockChocoMarque.get(c)-retenue.getOffre().getQuantiteT());
+					journal.ajouter("vente de "+retenue.getOffre().getQuantiteT()+" T a "+retenue.getAcheteur().getNom());
+				} else {
+					journal.ajouter("pas d'offre retenue");
+				}
+			}
+		}
+	}
 
 
 }

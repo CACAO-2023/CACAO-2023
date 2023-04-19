@@ -2,6 +2,11 @@ package abstraction.eq4Transformateur1;
 
 import java.util.HashMap;
 
+/**
+ * @author alexian
+ *
+ */
+
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
