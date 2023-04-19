@@ -14,20 +14,25 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 public class DistributeurChocolatDeMarque extends Distributeur3AcheteurCC implements IDistributeurChocolatDeMarque {
 	
 	private double capaciteDeVente = Double.MAX_VALUE;
-	private HashMap<ChocolatDeMarque, Double> prix;
+	
 
 	
 	
 	
 
 	public DistributeurChocolatDeMarque() {
-		this.prix = new HashMap<ChocolatDeMarque, Double> ();
+		
 	}
 	
 	//william
 	@Override
 	public double prix(ChocolatDeMarque choco) {
-		return 1.0;
+		if(prix_tonne_vente.get(choco) != null) {
+			return prix_tonne_vente.get(choco);
+			
+		}
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 	//baptiste
