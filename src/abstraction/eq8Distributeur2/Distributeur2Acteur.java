@@ -112,6 +112,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+		
 		return res;
 	}
 	
@@ -254,7 +255,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	        int pos = chocolats.indexOf(choco);
 	        if (pos >= 0) {
 	            this.stocks.retirerDuStock(choco, quantite);
-	            journal_activitegenerale.ajouter("La quantité " + quantite + " a été vendue à" + montant);
+	            journal_ventes.ajouter("La quantité " + quantite + " a été vendue à" + montant);
 	        }
 	    }
 	//Auteur : Ben Messaoud Karim
