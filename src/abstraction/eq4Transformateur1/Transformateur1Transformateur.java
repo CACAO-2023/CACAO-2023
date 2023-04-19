@@ -92,7 +92,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			this.stockFeves.put(fb, this.stockFeves.get(fb)-transfo);
 			this.totalStocksFeves.retirer(this, transfo, this.cryptogramme);
 			this.stockChoco.put(cb, this.stockChoco.get(cb)+(transfo)*this.pourcentageTransfo.get(fb).get(cb));
-			int pourcentageCacao =  36;
+			int pourcentageCacao =  42;
 			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfo<10?" "+transfo:transfo)+" T de "+fb+" en "+Journal.doubleSur(transfo*this.pourcentageTransfo.get(fb).get(cb),3,2)+" T de "+cb);
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fb+")->"+this.stockFeves.get(fb));
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cb+")->"+this.stockChoco.get(cb));
@@ -104,7 +104,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			this.stockFeves.put(fh, this.stockFeves.get(fh)-transfoh);
 			this.totalStocksFeves.retirer(this, transfoh, this.cryptogramme);
 			// Tous les chocolats sont directement étiquetés "Vccotioi"
-			int pourcentageCacao =  90;
+			int pourcentageCacao =  94;
 			ChocolatDeMarque cm= new ChocolatDeMarque(ch, "Vccotioi", pourcentageCacao, 15);
 			double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;
 			this.stockChocoMarque.put(cm, scm+((transfo)*this.pourcentageTransfo.get(fh).get(ch)));

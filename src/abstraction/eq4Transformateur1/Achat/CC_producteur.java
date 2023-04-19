@@ -22,9 +22,12 @@ import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 /**
- * @author francois/fouad
+ * @author Francois / Alexian / fouad 
  *
  */
+
+//François Glavatkii et Alexian Bothorel 
+
 public class CC_producteur extends Transformateur1Transformateur implements IAcheteurContratCadre{
 	public boolean achete(IProduit produit) {
 		if (produit instanceof Feve) {
@@ -88,7 +91,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		}
 	
 	
-	
+	// François Glavatkii et Alexian 
 	
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		
@@ -141,8 +144,8 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		Object produit = contrat.getProduit();
 		if (produit instanceof Feve) {
 			switch ((Feve)produit) {
-			case F_HQ_BE : prix= 3.525;break;
-			case F_BQ : prix= 1.425;break;
+			case F_HQ_BE : prix= 3525;break;
+			case F_BQ : prix= 1525;break;
 			}
 		}
 		int nbPas=0;
@@ -183,7 +186,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		return 10; // --> j'afficherai un taux de RSE de 10% sur mes chocolats de marque produits
 	}
 
-	public void next() {
-		super.next();
-	}
+	 public void next() {
+			super.next();
+		}
 }
