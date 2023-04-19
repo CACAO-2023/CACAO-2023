@@ -108,6 +108,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
+		super.journal.ajouter("Nouveau contrat cadre : Prix = "+ contrat.getPrix()+", Quantite totale = "+contrat.getQuantiteTotale()+", Nb de steps : "+contrat.getEcheancier().getNbEcheances());
 		this.listeCC.add(contrat);
 		
 	}
