@@ -21,8 +21,6 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2AcheteurC
 
 	}
 
-
-
 	@Override
 	public double demande(Feve f, double cours) {
 		/*if (this.getFeve().equals(f)) {
