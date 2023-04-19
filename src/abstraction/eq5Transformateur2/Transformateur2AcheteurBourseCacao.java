@@ -28,14 +28,15 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2AcheteurC
 			double pourcentage = (bourse.getCours(getFeve()).getMax()-bourse.getCours(getFeve()).getValeur())/(bourse.getCours(getFeve()).getMax()-bourse.getCours(getFeve()).getMin()); // difference de prix avec le max / amplitude totale
 			this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   BOURSEA: demande en bourse de "+achatMaxParStep*pourcentage+" de "+f);
 			return achatMaxParStep*pourcentage;*/
-		
-			double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
-			double demande = Math.max(0, Math.min( Math.random()*50, solde));
-			this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   BOURSEA: demande en bourse de "+demande+" de "+f);
-			return demande;
-		} /*else {
-			return 0.0;
-		}}*/
+			if( (f.getGamme().equals("F_BQ")) || (f.getGamme().equals("F_HQ_BE"))) {
+				double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
+				double demande = Math.max(0, Math.min( Math.random()*50, solde));
+				this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   BOURSEA: demande en bourse de "+demande+" de "+f);
+				return demande;
+			}	 
+			else {
+				return 0.0;
+		}}
 
 
 	@Override
@@ -44,7 +45,7 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2AcheteurC
 		double quantite = l.getQuantiteTotale();
 		System.out.println(" sto "+stockFeves);
 		//.stockFeves.get(feve_conernee).setValeur(this, this.stockFeves.get(feve_concernee)+l.getQuantiteTotale());
-		this.stockFeves.put(feve_concernee, this.stockFeves.get(feve_concernee)-quantite);
+		this.stockFeves.put(feve_concernee, this.stockFeves.get(feve_concernee)+quantite);
 		this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_GREEN,"Achat de "+feve_concernee.getGamme()+" En quantité "+ quantite);
 	}
 	
