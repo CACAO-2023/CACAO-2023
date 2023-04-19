@@ -1,5 +1,6 @@
 package abstraction.eq3Producteur3;
 
+
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,6 +9,7 @@ import java.util.Set;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.Feve;
+
 
 public class Catastrophe extends Producteur3{
 	
@@ -62,7 +64,40 @@ public class Catastrophe extends Producteur3{
 			}
 		
 	}
-	//Pour modéliser la greve generale, on va considerer les champs qui ne sont pas recoltes seront une perte de fève
+
+	/**
+	 * @author NAVEROS Marine
+	 */	
+	public void Cyclone(String s) {
+		Champs fields = this.getFields();
+		HashMap<Integer,Integer> FieldH = fields.getChamps().get("H");
+		HashMap<Integer, Integer> FieldM = fields.getChamps().get("M");
+		double hectarDetruitH = 0;
+		double hectarDetruitM=0;
+		Set<Integer> KeysH = FieldH.keySet();
+		Set<Integer> KeysM = FieldM.keySet();
+		Journal j = this.getJCatastrophe();
+		if (s.equals("H")) {
+			for(Integer key: KeysH) {
+				hectarDetruitH += FieldH.get(key)*(0+ Math.random()*0.3);
+				FieldH.put(key, (int)(FieldH.get(key)*(0+ Math.random()*0.3)));	
+			}
+			j.ajouter(Color.yellow, Color.black, hectarDetruitH + "d'hectares de Haute Gamme qui ont été détruits");
+			for (Integer key: KeysM) {
+				hectarDetruitM += FieldM.get(key)*(0+ Math.random()*0.3);
+				FieldM.put(key, (int)(FieldM.get(key)*(0+ Math.random()*0.3)));
+			}
+			j.ajouter(Color.gray, Color.black, hectarDetruitM+"d'hectares de Moyenne Gamme qui ont été détruits");
+			
+			
+		}
+		
+			
+		
+	}
+	
+	//Pour modéliser la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
+
 	protected void GreveGeneral() {
 		//On a autant d'employé que d'hectare Utilise
 		Integer nbrgreviste = (int) Math.round(super.getHectaresUt()*0.8);
@@ -79,9 +114,6 @@ public class Catastrophe extends Producteur3{
 		
 		
 	}
-	
-	
-	
 	
 	
 	

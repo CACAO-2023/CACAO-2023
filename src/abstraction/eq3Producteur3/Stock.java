@@ -35,6 +35,10 @@ public class Stock {
 			this.stock.put(feve, lot);
 		}
 	}
+	
+	/**
+	 * @author Naveros Marine
+	 */
 	public Stock(Feve f, Lot l) {
 		this.stock = new HashMap<Feve, Lot>();
 		this.stock.put(f,l);
@@ -234,6 +238,7 @@ public class Stock {
 	 * This method will return the age of the beans of a given type
 	 * @param feve Type of bean
 	 * @return The age of the beans of the given type
+	 * @author Caugant Corentin
 	 */
 	public int getAge(Feve feve) {
 		if (this.stock.get(feve).getQuantites().keySet().size() > 0) {

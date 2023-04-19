@@ -20,6 +20,7 @@ public class Producteur3Acteur implements IActeur {
     protected Journal journal_catastrophe;
     protected Stock Stock;
 	protected Double CoutStep; /* Tout nos couts du step, reinitialises a zero au debut de chaque step et payes a la fin du step*/
+	protected Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
 
 	public Producteur3Acteur() {
 	String nom = "Equipe 3";
@@ -32,10 +33,16 @@ public class Producteur3Acteur implements IActeur {
 	this.Stock = new Stock();
 	}
 	
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	public void initialiser() {
 		;
 	}
 
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ3";
 	}
@@ -44,40 +51,67 @@ public class Producteur3Acteur implements IActeur {
 	//         En lien avec l'interface graphique         //
 	////////////////////////////////////////////////////////
 	
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	protected Journal getJGeneral() {
 		return this.journal_activitegenerale;
 	}
 	
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	protected Journal getJStock() {
 		return this.journal_Stock;
 	}
+<<<<<<< HEAD
+
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
+=======
 	protected Journal getJCatastrophe() {
 		return this.journal_catastrophe;
 	}
 	
+>>>>>>> branch 'Desov2suisUnBoulet' of https://github.com/Dahan13/CACAO-2023
 	protected int getCryptogramme() {
 		return this.cryptogramme;
 	}
+	
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	protected Journal getJOperation() {
 		return this.journal_operationsbancaires;
 	}
+	
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	protected Journal getJVente() {
 		return this.journal_ventes;
 	}
 	
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	protected Journal getJAchats() {
 		return this.journal_achats;
 	}
 
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	protected Stock getStock() {
 		return this.Stock;
 	}
 
+	/**
+	 * @author BOCQUET Gabriel
+	 */	
 	public void next() {
-		this.Stock = Stock.miseAJourStock();
-
-		// Now adding to the step cost the storage costs
-		this.CoutStep += Stock.getQuantite()*50;
+		
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -85,7 +119,7 @@ public class Producteur3Acteur implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Bla bla bla";
+		return "Vendeurs ELITE de cacao, spécialistes de la faillite éclair, de la vente à perte et de la vente de produits de qualité médiocre. Nous sommes les meilleurs !";
 	}
 
 	// Renvoie les indicateurs

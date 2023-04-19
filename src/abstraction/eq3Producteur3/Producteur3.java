@@ -9,9 +9,14 @@ import abstraction.eqXRomu.produits.Feve;
 
 public class Producteur3 extends Bourse3  {
 
+<<<<<<< HEAD
+	
+	
+=======
 	/**
 	 * @author Dubus-Chanson Victor, Bocquet Gabriel
 	 */
+>>>>>>> branch 'Desov2suisUnBoulet' of https://github.com/Dahan13/CACAO-2023
 	private HashMap<String,HashMap> Champs;
 	
 
@@ -20,8 +25,16 @@ public class Producteur3 extends Bourse3  {
 	private Integer HectaresLibres; /*Repertorie le nombre d'hectares libres que l'on possede*/
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
 	private LinkedList<Double> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
+<<<<<<< HEAD
+	
+	/*
+	 * Je n'ai pas trouve le type du champs donc j'ai choisit String. A CHANGER
+	 * Il faudra aussi penser a se mettre d'accord sur les tailles des champs initiaux.
+	 */
+=======
 	private Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
 
+>>>>>>> branch 'Desov2suisUnBoulet' of https://github.com/Dahan13/CACAO-2023
 	
 	/**
 	 * @author Dubus-Chanson Victor
@@ -75,15 +88,29 @@ public class Producteur3 extends Bourse3  {
 		Stock Stock = this.getStock();
 		this.CoutTonne = CoutTotal / Stock.getQuantite();
 	}
-
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	public void initialiser() {
 		super.initialiser();
 		new Producteur3();		
 	}
 	
+<<<<<<< HEAD
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
+	public Champs getFields() {
+=======
 	protected Champs getFields() {
+>>>>>>> branch 'Desov2suisUnBoulet' of https://github.com/Dahan13/CACAO-2023
 		return this.fields;
 	}
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	protected Stock getStock() {
 		// TODO Auto-generated method stub
 		return this.Stock;
@@ -93,11 +120,15 @@ public class Producteur3 extends Bourse3  {
 	}
 
 	/**
-	 * @author BOCQUET Gabriel, Dubus-Chanson Victor
+	 * @author BOCQUET Gabriel, Dubus-Chanson Victor, Caugant Corentin
 	 */
 	public void next() {
 		super.next();
 		HarvestToStock(Filiere.LA_FILIERE.getEtape());
+		this.Stock = Stock.miseAJourStock();
+
+		// Now adding to the step cost the storage costs
+		this.CoutStep += Stock.getQuantite()*50;
 		updateHectaresLibres(Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape() % 12 == 0) {
 			changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
@@ -107,7 +138,7 @@ public class Producteur3 extends Bourse3  {
 		this.updateCoutTonne();
 		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep);
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
-				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ "Resultat du step : pas encore calculé");
+				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ this.HectaresUtilises);
 		
 		Filiere.LA_FILIERE.getBanque().virer(this, super.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), CoutStep);
 		this.getJOperation().ajouter(Color.cyan, Color.BLACK, "On a paye "+ this.CoutStep + "euros de frais divers");
