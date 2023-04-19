@@ -119,12 +119,14 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	 case F_BQ:
 		double livraisonBQ = Math.min(super.getVraiStockB().getQuantiteTotale(), quantite);		
 		Lot lot = new Lot(produi);
-		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livraisonBQ); // cet exemple ne gere pas la peremption : la marchandise est consideree comme produite au step courant
+		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livraisonBQ); 
+		this.journal_ventes.ajouter("Livraison de "+ livraisonBQ +" bas de gamme pour "+ contrat.getAcheteur());
 		return lot;
 	 case F_MQ:
-		 double livraisonHQ = Math.min(super.getVraiStockM().getQuantiteTotale(), quantite);
+		 double livraisonMQ = Math.min(super.getVraiStockM().getQuantiteTotale(), quantite);
 		 Lot lot2 = new Lot(produi);
-		 lot2.ajouter(Filiere.LA_FILIERE.getEtape(), livraisonHQ); // cet exemple ne gere pas la peremption : la marchandise est consideree comme produite au step courant
+		 lot2.ajouter(Filiere.LA_FILIERE.getEtape(), livraisonMQ); 
+		 this.journal_ventes.ajouter("Livraison de "+ livraisonMQ +" moyen de gamme pour "+ contrat.getAcheteur());
 		 return lot2;
 	 case F_HQ_BE : return null;
 	 case F_MQ_BE : return null;	
