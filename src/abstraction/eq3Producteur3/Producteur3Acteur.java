@@ -39,10 +39,10 @@ public class Producteur3Acteur implements IActeur {
     journal_activitegenerale=new Journal("Journal général de l'"+nom,this);
     journal_Stock = new Journal("Journal des Stocks de l'"+nom,this);
     journal_catastrophe = new Journal("Journal des Catastrophes de l'"+nom,this);
-	 this.Stock = new Stock();
-
-		this.VentesMG = new LinkedList<Double>();
-		this.VentesHG = new LinkedList<Double>();
+	this.Stock = new Stock();
+	this.CoutTonne = 0.0;
+	this.VentesMG = new LinkedList<Double>();
+	this.VentesHG = new LinkedList<Double>();
 	}
 	
 	/**
@@ -87,7 +87,7 @@ public class Producteur3Acteur implements IActeur {
 	protected Journal getJCatastrophe() {
 		return this.journal_catastrophe;
 	}
-	
+
 
 	protected int getCryptogramme() {
 		return this.cryptogramme;
