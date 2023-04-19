@@ -33,7 +33,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
     //protected HashMap<ChocolatDeMarque, Stock> stocks ;
 	protected StockGeneral stocks;
     protected HashMap<Gamme, Double> pourcentagesGamme;
-    private double[] prix;
+   
     private String[] marques;
     private IProduit produit;
     private HashMap<IProduit, Integer> produitsEnStock;
@@ -56,7 +56,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	    stocks = new StockGeneral();
 	    
 	    pourcentagesGamme = new HashMap<>();
-	    prix = new double[]{0, 0, 0}; // valeurs par défaut à modifier
+	    
 	    marques = new String[]{"marque 1", "marque 2", "marque 3"}; // valeurs par défaut à modifier
 //	    stockBasDeGamme = new Stock(0.0);//0.0; // valeur par défaut à modifier
 //	    stockMoyenDeGamme =  new Stock(0.0);//0.0; // valeur par défaut à modifier
