@@ -100,7 +100,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			this.totalStocksChocoMarque.ajouter(this, ((transfo)*this.pourcentageTransfo.get(fh).get(ch)), this.cryptogramme);
 			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfo<10?" "+transfo:transfo)+" T de "+fh+" en "+Journal.doubleSur(transfo*this.pourcentageTransfo.get(fh).get(ch),3,2)+" T de "+ch);
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fh+")->"+this.stockFeves.get(fh));
-			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+ch+")->"+this.stockChoco.get(ch));
+//			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+ch+")->"+this.stockChoco.get(ch));
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cm+")->"+this.stockChocoMarque.get(cm));
 		}
 	}
