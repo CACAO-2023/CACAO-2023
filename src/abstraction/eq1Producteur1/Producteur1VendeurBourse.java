@@ -51,6 +51,7 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 			}
 			return FeveBQPeri;
 		}
+		
 		if (f==Feve.F_MQ) {
 			int FeveMQPeri = this.feveMQPeri();
 			if (this.getStockMoy().getQuantiteTotale()!=0.0 && 
