@@ -27,7 +27,7 @@ public class Transformateur3Vente extends Transformateur3Transformation implemen
 	 * @param choco
 	 * @return
 	 */
-	protected static double demandeTotStep (int step,Object choco) {
+	protected double demandeTotStep (int step,Object choco) {
 		double tot=0;
 		for (int i=0;i<listeCC.size();i++) {
 			if (listeCC.get(i).getProduit().equals(choco)) /**Faut que je prenne en compte la date*/
