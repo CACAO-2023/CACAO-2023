@@ -15,6 +15,7 @@ import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
 import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
@@ -36,7 +37,7 @@ public class Distributeur3Acteur implements IActeur{
 	protected double prix;
 	private List<ChocolatDeMarque>chocosProduits;
 	protected HashMap<ChocolatDeMarque, Double> prix_tonne_vente;
-
+	protected Variable variable_stock;
 	public Distributeur3Acteur() {
 		/*if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
 			throw new IllegalArgumentException("creation d'une instance de ExempleAbsDistributeurChocolatMarqe avec des arguments non valides");
@@ -82,7 +83,8 @@ public class Distributeur3Acteur implements IActeur{
 		this.prix_tonne_vente = new HashMap<ChocolatDeMarque, Double> ();
 		
 		this.stock = new Stock(this);
-		
+		variable_stock = new VariablePrivee("Eq9StockTablettes", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
+
 	}
 	
 	public void initialiser() {
@@ -209,6 +211,8 @@ public class Distributeur3Acteur implements IActeur{
 		for (int i=0; i<this.chocolats.size(); i++) {
 			res.add(stock.getStock(chocolats.get(i)));
 		}*/
+//		
+		res.add(variable_stock);
 		return res;
 		
 	}

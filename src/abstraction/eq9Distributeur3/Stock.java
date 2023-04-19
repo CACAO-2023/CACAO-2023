@@ -54,6 +54,7 @@ public class Stock  {
 
 		if(this.QteStock.get(c) == null) {
 			this.QteStock.put(c, 0.0);
+			
 		}
 		
 		
@@ -64,7 +65,7 @@ public class Stock  {
 			this.QteStock.put(c, null);
 		}
 		this.QteStock.put(c, qte);
-		
+		a.variable_stock.ajouter(a, qte, a.cryptogramme);
 	}
 	
 	

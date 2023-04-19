@@ -108,7 +108,10 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		}
 		for (ChocolatDeMarque chocolat: chocolats) {
 			if (((ChocolatDeMarque)produit).equals(chocolat)){
+			
+				this.journal_achats.ajouter("j'ai achete le chocolat" + produit.toString());
 				return true;
+				
 			}
 		}
 		return false;
