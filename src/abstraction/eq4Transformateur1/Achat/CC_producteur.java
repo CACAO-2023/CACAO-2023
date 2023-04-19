@@ -22,9 +22,12 @@ import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 /**
- * @author francois/fouad
+ * @author Francois / Alexian / fouad 
  *
  */
+
+//François Glavatkii et Alexian Bothorel 
+
 public class CC_producteur extends Transformateur1Transformateur implements IAcheteurContratCadre{
 	public boolean achete(IProduit produit) {
 		if (produit instanceof Feve) {
@@ -59,7 +62,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 				
 				if (this.stockFeves.keySet().contains(produit)) {
 					qfeve= this.stockFeves.get(produit);
-					if ((qfeve >= ventetotB/30)){
+					if ((qfeve >= ventetotB/30)){ // si quantité >= vente totale basse qualité / (15 steps * 2) en se disant que nous allons prendre 50% du marché
 						return null;
 					}
 					else {this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qfeve/15.0));
@@ -88,7 +91,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		}
 	
 	
-	
+	// François Glavatkii et Alexian 
 	
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		
@@ -141,8 +144,8 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		Object produit = contrat.getProduit();
 		if (produit instanceof Feve) {
 			switch ((Feve)produit) {
-			case F_HQ_BE : prix= 3.525;break;
-			case F_BQ : prix= 1.425;break;
+			case F_HQ_BE : prix= 3525;break;
+			case F_BQ : prix= 1525;break;
 			}
 		}
 		int nbPas=0;
@@ -159,7 +162,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 	}
 
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
+		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc_producteur conclu "+contrat);
 	}
 
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
@@ -183,7 +186,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		return 10; // --> j'afficherai un taux de RSE de 10% sur mes chocolats de marque produits
 	}
 
-	public void next() {
-		super.next();
-	}
+	 public void next() {
+			super.next();
+		}
 }
