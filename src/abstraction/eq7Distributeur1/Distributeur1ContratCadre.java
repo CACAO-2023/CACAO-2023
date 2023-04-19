@@ -13,6 +13,7 @@ import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
@@ -121,7 +122,54 @@ public class Distributeur1ContratCadre extends Distributeur1Acteur implements IA
 			Echeancier echeancier, long cryptogramme, boolean tg) {
 		return 0;
 	}
+	
+	/**   
+	 * proposition d'un contrat a un des vendeurs choisi aleatoirement
+     * @author Ghaly sentissi
+     */
+	public void proposition_achat_aleatoire(IProduit produit,Echeancier e) {
+		SuperviseurVentesContratCadre superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre")); 
 
+		journal_achat.ajouter("Recherche d'un vendeur aupres de qui acheter");
+		List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
+		if (vendeurs.contains(this)) {
+			vendeurs.remove(this);
+		}
+		IVendeurContratCadre vendeur = null;
+		if (vendeurs.size()==1) {
+			vendeur=vendeurs.get(0);
+		} else if (vendeurs.size()>1) {
+			vendeur = vendeurs.get((int)( Math.random()*vendeurs.size()));
+		}
+		if (vendeur!=null) {
+			
+			getContractForProduct(produit,e,vendeur);
+	}}
+    /**
+     * Cette méthode va essayer de lancer un contrat cadre d'un produit avec un acteur donné
+     * @param produit le produit qu'on veut vendre
+     * @param acteur l'acteur à qui on essaye de vendre
+     * @return le contrat s'il existe, sinon null
+     * @author Ghaly sentissi
+     */
+    public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier e,  IActeur acteur) {
+        // First we need to select a buyer for the product
+        this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Recherche acheteur pour " + produit + "...");
+
+        // Now making the contract
+        this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Tentative de négociation de contrat cadre avec " + acteur.getNom() + " pour " + produit + "...");
+        int length = ((int) Math.round(Math.random() * 10)) + 1;
+    	SuperviseurVentesContratCadre superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre")); 
+
+		ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), produit, e, cryptogramme,false);
+        if (cc != null) {
+            this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + acteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
+        } else {
+            this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Echec de la négociation de contrat cadre avec " + acteur.getNom() + " pour " + produit + "...");
+        }
+        return cc;
+    }
+	
 	@Override
 	/**
 	 * @author Ghaly & Theo
