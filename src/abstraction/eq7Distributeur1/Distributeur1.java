@@ -32,6 +32,10 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	private void strategie() {
 	}
 	
+	/**
+	 * @author Theo
+	 * @return notre meilleure vente à ce tour
+	 */
 	protected ChocolatDeMarque topvente() {
 		int etape = Filiere.LA_FILIERE.getEtape();
 		int etapenormalisee = (etape+24)%24;
@@ -48,7 +52,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	/**
 	 * @author Theo
 	 * @param choco, choco!=null
-	 * @return Le prix actuel d'un Kg de chocolat choco
+	 * @return Le prix de vente actuel d'un Kg de chocolat choco
 	 * IMPORTANT : durant une meme etape, la fonction doit toujours retourner la meme valeur pour un chocolat donne.
 	 */
 	public double prix(ChocolatDeMarque choco) {
@@ -71,7 +75,9 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	}
 	
 	/**
-	 * @author Theo	 */
+	 * @author Theo	 
+	 * @return Le coeff de promo : une fois toutes les 3 etapes, on applique une promotion
+	 */
 	public double prixPromotion(ChocolatDeMarque choco) { 
 		if (((Filiere.LA_FILIERE.getEtape()%3)==0)&&(choco.getChocolat()!=Chocolat.C_BQ)) {
 			return 0.9;
