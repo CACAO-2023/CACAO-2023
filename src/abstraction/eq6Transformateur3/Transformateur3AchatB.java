@@ -2,25 +2,29 @@ package abstraction.eq6Transformateur3;
 
 import abstraction.eqXRomu.bourseCacao.IAcheteurBourse;
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.Lot;
 
 public class Transformateur3AchatB extends Transformateur3AchatCC implements IAcheteurBourse{
-
+/**ecrit par Nathan Claeys
+ */
 	protected Variable coursmaxBG;
 	protected Variable coursmaxMG;
 	protected Variable coursmaxMGL;
 	protected Variable coursmaxHGL;
 	
 	public Transformateur3AchatB () {
-		this.coursmaxBG = new Variable ("cours maximal BG","cours maximal que l'acteur va accepter pour les feves bas de gamme",this,0.0,100,1);
-		this.coursmaxMG = new Variable ("cours maximal MG","cours maximal que l'acteur va accepter pour les feves moyenne gamme",this,0.0,100,1);
-		this.coursmaxMGL = new Variable ("cours maximal MGL","cours maximal que l'acteur va accepter pour les feves moyenne gamme labelisees",this,0.0,100,1);
-		this.coursmaxHGL = new Variable ("cours maximal HGL","cours maximal que l'acteur va accepter pour les feves haut de gamme",this,0.0,100,1);
+		super();
+		this.coursmaxBG = new Variable ("cours maximal BG","cours maximal que l'acteur va accepter pour les feves bas de gamme",this,0.0,5000,1300);
+		this.coursmaxMG = new Variable ("cours maximal MG","cours maximal que l'acteur va accepter pour les feves moyenne gamme",this,0.0,6000,1900);
+		this.coursmaxMGL = new Variable ("cours maximal MGL","cours maximal que l'acteur va accepter pour les feves moyenne gamme labelisees",this,0.0,6000,2000);
+		this.coursmaxHGL = new Variable ("cours maximal HGL","cours maximal que l'acteur va accepter pour les feves haut de gamme",this,0.0,8000,2500);
 	}
 	/**
+	 * ecrit par Nathan Claeys
 	 * Retourne la quantite en tonnes de feves de type f desiree par l'acheteur 
 	 * sachant que le cours actuel de la feve f est cours
 	 * @param f le type de feve
@@ -29,7 +33,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 * 
 	 */
 	public double demande(Feve f, double cours) {
-		if (f.getGamme().compareTo(Gamme.BQ)==0) {if(cours<=this.getCoursmaxBG().getValeur()) {
+		/**if (f.getGamme().compareTo(Gamme.BQ)==0) {if(cours<=this.getCoursmaxBG().getValeur()) {
 													return (super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f));}
 		}else {
 		if (f.getGamme().compareTo(Gamme.MQ)==0 && f.isBioEquitable()) {if(cours<=this.getCoursmaxMGL().getValeur()) {
@@ -40,8 +44,8 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		else {
 		if (f.getGamme().compareTo(Gamme.BQ)==0 && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
 			return (super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f));}}
-		else {return 0;};};};};
-		return 0;
+		else {return 0;};};};};*/
+		return 1000;
 	}
 
 	/**
@@ -69,6 +73,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		return coursmaxHGL;
 	}
 	/**
+	 * ecrit par Nathan Claeys
 	 * Methode appelee par la bourse pour avertir l'acheteur qu'il vient d'acheter
 	 * quantiteEnT tonnes de feve f au prix de  coursEnEuroParT euros par tonne.
 	 * L'acteur this doit augmenter son stock de feves de type f de la 
@@ -77,12 +82,13 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 * n'a pas a s'occuper du paiement qui a deja ete effectue)
 	 */
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
-		super.ajouterFeve((Feve)l.getProduit(), coursEnEuroParT);
+		super.ajouterFeve((Feve)l.getProduit(), l.getQuantites().get(Filiere.LA_FILIERE.getEtape()),Filiere.LA_FILIERE.getEtape());
 		super.journal.ajouter("Stock de "+l.getQuantiteTotale()+""+"tonnes de feves"+((Feve)l.getProduit()).toString()+" acheté en bourse");
 		
 	}
 
 	/**
+	 * ecrit par Nathan Claeys
 	 * Methode appelee par la bourse pour avertir l'acheteur qu'il vient 
 	 * d'etre ajoute a la black list : l'acteur a passe une commande en bourse
 	 * qu'il n'a pas pu honorer du fait d'un compte en banque trop faible. 
@@ -91,11 +97,22 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 */
 	public void notificationBlackList(int dureeEnStep) {
 		// TODO Auto-generated method stub
+		super.journal.ajouter("on est dans le rouge ça va mal finir");
 		
 	}
-	/** il faut ecrire une methode qui regarde le cours du marche de chaque feve et met à jour les valeurs 
+	/** ecrit par Nathan Claeys
+	 * il faut ecrire une methode qui regarde le cours du marche de chaque feve et met à jour les valeurs 
 	 * de coursmax afin que les achats se passent bien**/
-
+	private void MaJCours () {
+		
+	}
+	
+	/**ecrit par Nathan Claeys
+	 */
+	public void next() {
+		super.next();
+		this.MaJCours();
+	}
 	
 
 }

@@ -22,7 +22,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 	protected List<ExemplaireContratCadre> mesContratEnTantQuAcheteur;
 	protected List<ExemplaireContratCadre> historique_de_mes_contrats;
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
-	protected List<ExemplaireContratCadre> mesContrats;
 	private List<Object> negociations = new ArrayList<>();
 	private double minNego=5;
 
@@ -30,20 +29,11 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 	public void initialiser() {
 		super.initialiser();
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
-		mesContrats = new LinkedList<ExemplaireContratCadre>();
 	}
+	
 	public DistributeurContratCadreAcheteur() {
 		super();
-
 		this.mesContratEnTantQuAcheteur=new LinkedList<ExemplaireContratCadre>();
-	}
-
-	
-	
-	public Echeancier echeancier_strat(int stepDebut, int quantite, int nb_step) {
-		Echeancier e = new Echeancier(stepDebut, nb_step, quantite/nb_step);
-		return e;
-		
 	}
 	
 	/**
@@ -55,26 +45,29 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		Echeancier e = new Echeancier(stepDebut);
 		for (int etape = stepDebut+1; etape<stepDebut+25; etape++) {
 			int etapemod = etape%24;
-			e.ajouter(previsions.get(etapemod).get(marque));
-			journal.ajouter(""+previsions.get(etapemod).get(marque));
+			e.ajouter(previsionsperso.get(etapemod).get(marque)*1.5);
 		}
 		return e;
 	}
+	
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		if (Math.random()<0.1) {
+		if (Math.random()<0.3) {
 			return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
-		} else {//dans 90% des cas on fait une contreproposition pour l'echeancier
+		} else {//dans 70% des cas on fait une contreproposition pour l'echeancier
 			Echeancier e = contrat.getEcheancier();
-			e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut())*2.5);// on souhaite livrer 2.5 fois plus lors de la 1ere livraison... un choix arbitraire, juste pour l'exemple...
+			int stepdebut = e.getStepDebut();
+			for (int step = stepdebut; step < e.getStepFin()+1; step++) {
+				e.set(step, e.getQuantite(step)*0.9);
+			}
 			return e;
 		}
 	}
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		
-		if (Math.random()<0.1) {
-			return contrat.getPrix(); // on ne cherche pas a negocier dans 10% des cas
-		} else {//dans 90% des cas on fait une contreproposition differente
+		if (Math.random()<0.3) {
+			return contrat.getPrix(); // on ne cherche pas a negocier dans 30% des cas
+		} else {//dans 70% des cas on fait une contreproposition differente
 			return contrat.getPrix()*0.95;// 5% de moins.
 		}
 	}
@@ -94,7 +87,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		}
 		this.mesContratEnTantQuAcheteur.removeAll(contratsObsoletes);
 	}
-	List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
+
 
 	
 	/**   
@@ -102,26 +95,26 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
      * @author Ghaly sentissi
      */
 	public ExemplaireContratCadre proposition_achat_aleatoire(IProduit produit,Echeancier e) {
-		SuperviseurVentesContratCadre superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre")); 
 
-		journal_achat.ajouter("Recherche d'un vendeur aupres de qui acheter");
 		List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
+		ExemplaireContratCadre cc = null;
 		if (vendeurs.contains(this)) {
 			vendeurs.remove(this);
 		}
-		IVendeurContratCadre vendeur = null;
-		if (vendeurs.size()==1) {
-			vendeur=vendeurs.get(0);
-		} else if (vendeurs.size()>1) {
-			vendeur = vendeurs.get((int)( Math.random()*vendeurs.size()));
-		}
-		
-		
-		if (vendeur!=null) {
+		while (!vendeurs.isEmpty() && cc == null) {
+			IVendeurContratCadre vendeur = null;
+			if (vendeurs.size()==1) {
+				vendeur=vendeurs.get(0);
+			} else if (vendeurs.size()>1) {
+				vendeur = vendeurs.get((int)( Math.random()*vendeurs.size()));
+			}
 			
-			return getContractForProduct(produit,e,vendeur);
+			vendeurs.remove(vendeur);
+			if (vendeur!=null) {
+			
+				cc = getContractForProduct(produit,e,vendeur);}
 	}
-		return null;}
+		return cc;}
 	
 	/**
 	 * 
@@ -130,7 +123,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 	 */
 	public double getLivraison(IProduit produit) {
 		double somme = 0;
-		for (ExemplaireContratCadre contrat : mesContrats) {
+		for (ExemplaireContratCadre contrat : mesContratEnTantQuAcheteur) {
 			if (contrat.getProduit() == produit) {
 				somme += contrat.getQuantiteRestantALivrer();
 			}
@@ -138,10 +131,19 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		return somme;
 	}
 	
-	/**   
-	 * proposition d'un contrat a un des vendeurs choisi aleatoirement
-     * @author Ghaly sentissi
-     */
+	public double getLivraisonEtape(IProduit produit) {
+		double somme = 0;
+		for (ExemplaireContratCadre contrat : mesContratEnTantQuAcheteur) {
+			if (contrat.getProduit() == produit) {
+				somme += contrat.getQuantiteALivrerAuStep();
+			}
+		}
+		return somme;
+	}
+	
+	/**
+	 * @author Ghaly & Theo
+	 */
 	public void next() {
 		super.next();
 		enleve_contrats_obsolete();
@@ -156,18 +158,26 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 				}
 				if (previsionannee > stockChocoMarque.get(marque)+getLivraison(marque)) { //On lance un CC seulement si notre stock n'est pas suffisant sur l'annee qui suit
 					Echeancier echeancier = echeancier_strat(etape+1,marque);
+					journal_achat.ajouter("Recherche d'un vendeur aupres de qui acheter "+ marque.getNom());
+
 					ExemplaireContratCadre cc = proposition_achat_aleatoire(marque,echeancier);
 
-						}
 					}
 				}
-				
-								
-
-									
+			}						
 		}
 		
-
+	@Override
+	/**
+	 * @author Theo
+	 */
+	// A COMPLETER SI ASSEZ DE STOCK (appele si cc initie par vendeur)
+	public boolean achete(IProduit produit) {
+		if (produit instanceof ChocolatDeMarque) {
+			return true;
+		}
+		return false;
+	}
     /**
      * retourne l'étape de négociation en cours
      * @param contrat     
@@ -236,14 +246,24 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 //        return valeurMinimale;	}
 	
 	
-	
+	@Override
+	/**
+	 * @author Theo
+	 */
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-//		stock.ajouter(this, lot.getQuantiteTotale()); // Cet exemple ne gere pas la peremption : il n'utilise pas la mention du step de production du produit
+		IProduit produit= lot.getProduit();
+		double quantite = lot.getQuantiteTotale();
+		if (produit instanceof ChocolatDeMarque) {
+			if (this.stockChocoMarque.keySet().contains(produit)) {
+				this.stockChocoMarque.put((ChocolatDeMarque)produit, this.stockChocoMarque.get(produit)+quantite);
+			} else {
+				this.stockChocoMarque.put((ChocolatDeMarque)produit, quantite);
+			}
+			this.totalStocks.ajouter(this, quantite, this.cryptogramme);
+			this.journal.ajouter("Reception de "+quantite+" T de "+produit+". Stock->  "+this.stockChocoMarque.get(produit));
+		}
 	}
 
-	public boolean achete(IProduit produit) {
-		return true;
-	}
 	public String toString() {
 		return this.getNom();
 	}
@@ -270,6 +290,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 
 		ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), produit, e, cryptogramme,false);
         if (cc != null) {
+        	mesContratEnTantQuAcheteur.add(cc);
             this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + acteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
         } else {
             this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Echec de la négociation de contrat cadre avec " + acteur.getNom() + " pour " + produit + "...");

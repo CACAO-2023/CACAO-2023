@@ -40,7 +40,6 @@ public class Distributeur1ContratCadre extends Distributeur1Acteur implements IA
 		for (int etape = stepDebut+1; etape<stepDebut+25; etape++) {
 			int etapemod = etape%24;
 			e.ajouter(previsions.get(etapemod).get(marque));
-			journal.ajouter(""+previsions.get(etapemod).get(marque));
 		}
 		return e;
 	}
@@ -55,6 +54,16 @@ public class Distributeur1ContratCadre extends Distributeur1Acteur implements IA
 		for (ExemplaireContratCadre contrat : mesContrats) {
 			if (contrat.getProduit() == produit) {
 				somme += contrat.getQuantiteRestantALivrer();
+			}
+		}
+		return somme;
+	}
+	
+	public double getLivraisonEtape(IProduit produit) {
+		double somme = 0;
+		for (ExemplaireContratCadre contrat : mesContrats) {
+			if (contrat.getProduit() == produit) {
+				somme += contrat.getQuantiteALivrerAuStep();
 			}
 		}
 		return somme;

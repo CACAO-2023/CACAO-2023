@@ -29,6 +29,7 @@ public class Distributeur1Acteur implements IActeur {
 	
 	protected Journal journal;
 	protected Journal journal_achat;
+	protected Journal journal_stock;
 
 //	private Variable qualiteHaute;  // La qualite d'un chocolat de gamme haute 
 //	private Variable qualiteMoyenne;// La qualite d'un chocolat de gamme moyenne  
@@ -51,22 +52,17 @@ public class Distributeur1Acteur implements IActeur {
 	////////////////////////////////////////
 	protected HashMap<Chocolat, Double> stockChoco;
 	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; //stock de chaque marque en tonne
-	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsions;
-	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsionsperso;
+	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsions; //previsions de ventes de la filiere globale
+	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsionsperso; //previsions de vente perso
 	
 	protected Variable stock_BQ = new VariablePrivee("Eq7stock_BQ", "Stock total de chocolat de basse qualité", this, 0);
 	protected Variable stock_MQ = new VariablePrivee("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
 	protected Variable stock_MQ_BE = new VariablePrivee("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
 	protected Variable stock_HQ_BE = new VariablePrivee("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
-	public LinkedList<VariablePrivee> indicateurs(HashMap<ChocolatDeMarque,Double> stockChocoMarque){
-	    LinkedList<VariablePrivee> liste = new LinkedList<VariablePrivee>();
-	    for(Map.Entry<ChocolatDeMarque, Double> chocolat : stockChocoMarque.entrySet()) {
-	        ChocolatDeMarque marque = chocolat.getKey(); // récupérer l'objet ChocolatDeMarque à partir de la clé
-	        liste.add(new VariablePrivee(marque.getNom(), "Stock total de "+ marque.getNom(), this, 0)); // appel de la méthode getNom() sur l'objet ChocolatDeMarque
-	    }
-	    return liste;
-	}
+	
+	protected LinkedList<VariablePrivee> liste = new LinkedList<VariablePrivee>();
 	protected int cryptogramme;
+	
 
 	public Distributeur1Acteur() {
 		this.coutCB = 3;
@@ -76,6 +72,8 @@ public class Distributeur1Acteur implements IActeur {
 		this.totalStocks = new VariablePrivee("Eq7TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
 		this.journal = new Journal("Journal "+this.getNom(), this);
 	    this.journal_achat=new Journal("Journal des Achats de l'" + this.getNom(),this);
+	    this.journal_stock = new Journal("Journal des Stocks del'" + this.getNom(),this);
+
 
 	}
 	
@@ -87,8 +85,12 @@ public class Distributeur1Acteur implements IActeur {
 	 * @author Theo
 	 * Renvoie les previsions, actualisees à chaque tour
 	 */
-	protected double prevision(ChocolatDeMarque marque, Integer etape) { //prevoit les qtes vendues à un tour donné
+	protected double previsions(ChocolatDeMarque marque, Integer etape) {
 		return previsions.get(etape).get(marque);
+	}
+	
+	protected double previsionsperso(ChocolatDeMarque marque, Integer etape) {
+		return previsionsperso.get(etape).get(marque);
 	}
 
 	/**
@@ -120,22 +122,33 @@ public class Distributeur1Acteur implements IActeur {
 
 		
 		//Initialisation des stocks
-		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
-		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			stockChocoMarque.put(marque,1.);
-		}
+
 		
 		//Initialisation des previsions
 		//le probleme est ici que ces previsions concernent l'ensemble de la filiere et non pas juste notre acteur
 		//il faut creer un autre fonction car notre part de vente depend de la marque et plus generalement de la gamme
-		this.previsions = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 
+		this.previsions = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>();
+		this.previsionsperso = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 
 		for (int i=0;i<24;i++) {
 			HashMap<ChocolatDeMarque,Double> prevtour = new HashMap<ChocolatDeMarque,Double>();
+			HashMap<ChocolatDeMarque,Double> prevtourperso = new HashMap<ChocolatDeMarque,Double>();
 			for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 				prevtour.put(marque, Filiere.LA_FILIERE.getVentes(marque, -(i+1)));
+				prevtourperso.put(marque, Filiere.LA_FILIERE.getVentes(marque, -(i+1))*0.5);
 			}
 			previsions.put(24-(i+1), prevtour);
+			previsionsperso.put(24-(i+1), prevtourperso);
 		}
+		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			stockChocoMarque.put(marque,1.);
+			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
+		}
+	    for(Map.Entry<ChocolatDeMarque, Double> chocolat : stockChocoMarque.entrySet()) {
+	        ChocolatDeMarque marque = chocolat.getKey(); // récupérer l'objet ChocolatDeMarque à partir de la clé
+	        this.liste.add(new VariablePrivee(marque.getNom(), "Stock total de "+ marque.getNom(), this, 0)); // appel de la méthode getNom() sur l'objet ChocolatDeMarque
+	    }
+	    
 	}
 
 	public String getNom() {
@@ -151,7 +164,7 @@ public class Distributeur1Acteur implements IActeur {
 	
 	public void next() {
 		
-		//Actualisation des prévisions
+		//Actualisation des previsions
 		int etapepreced = Filiere.LA_FILIERE.getEtape()-1;
 		int etapenormalisee = (etapepreced+24)%24;
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
@@ -166,6 +179,10 @@ public class Distributeur1Acteur implements IActeur {
 		}
 		totalStocks.setValeur(this, newstock, this.cryptogramme);
 
+		//Journaux
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
+		}
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -184,10 +201,14 @@ public class Distributeur1Acteur implements IActeur {
 //		res.add(stock_MQ_BE);
 //		res.add(stock_BQ);
 //		res.add(stock_MQ);
-		LinkedList<VariablePrivee> list = indicateurs(stockChocoMarque);
-		for (VariablePrivee v : list) {
+		for (VariablePrivee v : liste) {
 			res.add(v);
 		}
+//		res.add(totalStocks);
+//		res.add(stock_HQ_BE);
+//		res.add(stock_MQ_BE);
+//		res.add(stock_BQ);
+//		res.add(stock_MQ);
 		return res;
 	}
 	/**
