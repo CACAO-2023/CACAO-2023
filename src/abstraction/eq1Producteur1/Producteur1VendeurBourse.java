@@ -67,6 +67,7 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 	public Lot notificationVente(Feve f, double quantite, double cours) {
 		Lot l = new Lot(f);
 		l.ajouter(Filiere.LA_FILIERE.getEtape(), quantite); // cet exemple ne gere pas la production : tout le stock est considere comme venant d'etre produit
+		System.out.println(l);
 		if (f==Feve.F_BQ) {
 			this.stockFeveBas.retirer(quantite);
 			this.journal_stocks.ajouter("BOURSEV: vente de "+quantite+" T de "+f+" en bourse. Stock -> "+this.getStockBas().getQuantiteTotale());
