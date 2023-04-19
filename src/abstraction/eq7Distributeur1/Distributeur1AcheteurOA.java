@@ -18,7 +18,7 @@ import abstraction.eqXRomu.produits.IProduit;
  *
  */
 
-public class Distributeur1AcheteurOA extends Distributeur1ContratCadre implements IAcheteurOA {
+public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur implements IAcheteurOA {
 
 	private SuperviseurVentesOA supOA;
 
