@@ -18,7 +18,7 @@ After resolving the conflict, commit all changed files and push.
 
 # Problems of Pull Requests
 
-If the pull request is correct it is merged automatically (within 5 minutes) and it is removed from the list of open full requests in the main repository. If you still see your pull request, then it means that there is some problem you will need to solve. The three possible problems are described next.
+If the pull request is correct, it is merged automatically (within 5 minutes) and it is removed from the list of open full requests in the main repository. If you still see your pull request, then it means that there is some problem you will need to solve. The three possible problems are described next.
 
 Note that there is no need to close and reopen the pull request, you can just fix the problems and push to your repository.
 
