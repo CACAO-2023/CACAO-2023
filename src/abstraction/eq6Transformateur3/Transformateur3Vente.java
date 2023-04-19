@@ -58,16 +58,16 @@ public class Transformateur3Vente extends Transformateur3Transformation implemen
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
-				return 0.5;
+				return 2000;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco")) {
-				return 0.5;
+				return 2100;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco bio")) {
-				return 0.5;
+				return 2300;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("Choc")) {
-				return 0.5;
+				return 2500;
 			}
 		}
 		return 0.5;
