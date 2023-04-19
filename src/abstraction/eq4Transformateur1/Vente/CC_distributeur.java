@@ -147,12 +147,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend(prod="+produit+"  ech="+contrat.getEcheancier());
 
 		if (produit instanceof ChocolatDeMarque) {
-			switch ((Chocolat)produit) {
-			case C_BQ   : return null;
-			case C_MQ  : return null;
-			case C_MQ_BE :return null;
-			case C_HQ_BE :
-			if (this.stockChocoMarque.keySet().contains(produit)) {
+			if (((ChocolatDeMarque) produit).getMarque().equals("Vccotioi") && this.stockChocoMarque.keySet().contains(produit)) {
 				qtok= this.stockChocoMarque.get(produit);
 				if (qtok>200) {
 					
@@ -166,7 +161,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 			}
 			}
 			}
-		} else if (produit instanceof Chocolat) {
+		 else if (produit instanceof Chocolat) {
 				switch ((Chocolat)produit) {
 				case C_HQ_BE   : return null;
 				case C_MQ  : return null;
