@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
@@ -31,7 +32,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	//faire une méthode qui connait le prix d'achat moyen d'un chocolat
 	
 	public Distributeur3AcheteurCC() {//ChocolatDeMarque[] chocos, double[] stocks) {
-		
+		contratEnCours = new LinkedList<ExemplaireContratCadre>();
 		
 	}
 //Mathilde
@@ -199,7 +200,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
-		this.journal.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "je viens de passer le contrat "+contrat);
+		this.journal_achats.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "je viens de passer le contrat "+contrat);
 		this.contratEnCours.add(contrat);
 	}
 	
