@@ -28,6 +28,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 * @return la quantite en tonnes de feves de type f desiree 
 	 * 
 	 */
+	
 	public double demande(Feve f, double cours) {
 		if (f.getGamme().compareTo(Gamme.BQ)==0) {if(cours<=this.getCoursmaxBG().getValeur()) {
 													return (super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f));}
