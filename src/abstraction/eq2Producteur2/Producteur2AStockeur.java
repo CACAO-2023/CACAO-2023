@@ -83,9 +83,9 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		super.next();
 		this.majPerim();
 		this.majTot();
-		/*System.out.println(Filiere.LA_FILIERE.getEtape());
+		System.out.println(Filiere.LA_FILIERE.getEtape());
 		System.out.println(this.stocks);
-		System.out.println(this.getDescrStocksTheo(Filiere.LA_FILIERE.getEtape() + 18));*/
+		System.out.println(this.getDescrStocksTheo(Filiere.LA_FILIERE.getEtape() + 1));
 		/*this.ajouterStock(Feve.F_BQ, Filiere.LA_FILIERE.getEtape(), 1000);
 		this.retirerStock(Feve.F_BQ, 500);
 		Lot lotHQ_BE = new Lot(Feve.F_HQ_BE);
@@ -204,7 +204,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	 * Renvoie le stock restant théorique à l'étape etape en retirant les contrats cadres et en ajoutant la production théorique
 	 * @param f le type de fève
 	 * @param etape l'étape considéré
-	 * @return le stock prévisionnel de fève de type f sans prendre en compte les ventes à la bourse et les nouveaux contrats cadre
+	 * @return le stock prévisionnel de fève de type f sans prendre en compte les ventes à la bourse et les nouveaux contrats cadre effectués plus tard
 	 */
 	protected ArrayList<HashMap<Feve,HashMap<Integer, Double>>> getDescrStocksTheo(int etape) {
 		if (etape < Filiere.LA_FILIERE.getEtape())
@@ -328,6 +328,13 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		return this.getStockTotStepTheo(f, Filiere.LA_FILIERE.getEtape() - nbStepProduite);
 	}
 	
+	protected HashMap<Feve, HashMap<Integer, Double>> getStocksTheo(int etape) {
+		return this.getDescrStocksTheo(etape).get(etape - Filiere.LA_FILIERE.getEtape() + 1);
+	}
+	
+	protected HashMap<Integer, Double> getStocksTotTheo(Feve f, int etape) {
+		return this.getDescrStocksTheo(etape).get(0).get(f);
+	}
 	
 	/**
 	 * Ajoute le lot au stock

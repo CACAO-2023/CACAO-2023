@@ -183,7 +183,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		for (Feve f : this.salaires.keySet()) {
 			int nb_a_planter = 0;
 			for (int i : this.age_hectares.get(f).keySet()){
-				if (Filiere.LA_FILIERE.getEtape()-i>= 37*24) {
+				if (Filiere.LA_FILIERE.getEtape()-i == 37*24) {
 					nb_a_planter =+ 1;
 				}
 			if (Filiere.LA_FILIERE.getEtape()%24==0) {
@@ -214,12 +214,9 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	
 	public void next() {
 		super.next();
-		this.CoutProd();
-		this.Prevision_Vente();
 		this.ajustement_plantation();
-		this.Prevision_Production(Filiere.LA_FILIERE.getEtape());
 		for (Feve f : this.age_hectares.keySet()) {
-			if (Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f)!=0){
+			if (Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f)>0){
 			this.ajouterStock(f, Filiere.LA_FILIERE.getEtape(), Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f));
 		}
 		this.ajustement_employes();
