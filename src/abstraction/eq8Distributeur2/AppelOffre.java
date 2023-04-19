@@ -7,6 +7,8 @@ import abstraction.eqXRomu.offresAchat.PropositionVenteOA;
 
 public class AppelOffre extends Distributeur2 implements IAcheteurOA{
 
+	
+	//Auteur : Marzougui Mariem
 	public PropositionVenteOA choisirPV(List<PropositionVenteOA> propositions) {
 		double meilleure_proposition = propositions.get(0).getPrixT()*propositions.get(0).getPrixT()/propositions.get(0).getChocolatDeMarque().qualitePercue();
 		PropositionVenteOA proposition=propositions.get(0);
