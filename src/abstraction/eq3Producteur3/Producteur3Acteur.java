@@ -116,6 +116,7 @@ public class Producteur3Acteur implements IActeur {
 		return new Color(249, 230, 151); 
 	}
 
+	
 	public String getDescription() {
 		return "Vendeurs ELITE de cacao, spécialistes de la faillite éclair, de la vente à perte et de la vente de produits de qualité médiocre. Nous sommes les meilleurs !";
 	}

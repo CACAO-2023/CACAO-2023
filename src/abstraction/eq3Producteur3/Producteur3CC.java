@@ -162,6 +162,9 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         return cc;
     }
 
+    /**
+     * @author Corentin Caugant
+     */
     public void next() {
         super.next();
         this.getContractForProduct(Feve.F_HQ_BE);

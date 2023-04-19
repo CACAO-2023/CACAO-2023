@@ -149,7 +149,6 @@ public class Producteur3 extends Bourse3  {
 
 	
 	/**
-
 	 * @author Dubus-Chanson Victor
 	 */
 	public void addCoutHectaresUtilises() {
