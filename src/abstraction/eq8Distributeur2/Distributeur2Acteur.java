@@ -205,7 +205,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		}
 
 	public List<String> getMarquesChocolat() {
-		return null;
+		return Arrays.asList(this.marques);
 	}
 //-----------------------------------------------
 	//La fonction prix() permet de connaître le prix actuel 
