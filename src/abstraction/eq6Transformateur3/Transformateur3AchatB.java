@@ -33,16 +33,16 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 * 
 	 */
 	public double demande(Feve f, double cours) {
-		if (f.getGamme().compareTo(Gamme.BQ)==0) {if(cours<=this.getCoursmaxBG().getValeur()) {
+		if (f.getGamme()==Gamme.BQ) {if(cours<=this.getCoursmaxBG().getValeur()) {
 													return (super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f));}
 		}else {
-		if (f.getGamme().compareTo(Gamme.MQ)==0 && f.isBioEquitable()) {if(cours<=this.getCoursmaxMGL().getValeur()) {
+		if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxMGL().getValeur()) {
 			return (super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f));}}
 			else {
-		if (f.getGamme().compareTo(Gamme.MQ)==0) {if(cours<=this.getCoursmaxMG().getValeur()) {
+		if (f.getGamme()==Gamme.MQ) {if(cours<=this.getCoursmaxMG().getValeur()) {
 			return (super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f));}}
 		else {
-		if (f.getGamme().compareTo(Gamme.BQ)==0 && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
+		if (f.getGamme()==Gamme.BQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
 			return (super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f));}}
 		else {return 0;};};};};
 		return 1000;
