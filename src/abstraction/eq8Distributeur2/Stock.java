@@ -7,7 +7,7 @@ public class Stock {
 
 	//auteur : AZZI Maxime
 	public Stock(double quantiteInitiale) {
-		this.quantite = 1000.0;
+		this.quantite = quantiteInitiale;
 	}
 
 	//auteur : AZZI Maxime

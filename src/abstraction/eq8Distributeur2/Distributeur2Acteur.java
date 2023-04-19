@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import abstraction.eqXRomu.clients.ClientFinal;
 import abstraction.eqXRomu.clients.ExempleDistributeurChocolatMarque;
@@ -29,17 +30,12 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	protected int cryptogramme;
 	protected String nom;
 	protected ArrayList<ChocolatDeMarque> chocolats;
+	protected LinkedList<String> nos_chocolats;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
-	//protected HashMap<ChocolatDeMarque, Stock> stocks ;
 	protected StockGeneral stocks;
 	protected HashMap<Gamme, Double> pourcentagesGamme;
-
-	private String[] marques;
-	private IProduit produit;
-	private HashMap<IProduit, Integer> produitsEnStock;
-	//	private Stock stockBasDeGamme;
-	//	private Stock stockMoyenDeGamme;
-	//	private Stock stockHautDeGamme;
+	private double stock_total;
+	
 	protected Journal journal_operationsbancaires;
 	protected Journal journal_ventes;
 	protected Journal journal_achats;
@@ -54,20 +50,38 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		chocolats =  new ArrayList<ChocolatDeMarque>();
 		prixDeVente = new HashMap<>();
 		stocks = new StockGeneral();
-
+		stock_total = 0.;
 		pourcentagesGamme = new HashMap<>();
 
-		marques = new String[]{"marque 1", "marque 2", "marque 3"}; // valeurs par défaut à modifier
-		//	    stockBasDeGamme = new Stock(0.0);//0.0; // valeur par défaut à modifier
-		//	    stockMoyenDeGamme =  new Stock(0.0);//0.0; // valeur par défaut à modifier
-		//      stockHautDeGamme =  new Stock(0.0);//0.0; // valeur par défaut à modifier
 		journal_operationsbancaires = new Journal("Journal des Opérations bancaires de l'" + nom, this);
 		journal_ventes = new Journal("Journal des Ventes de l'" + nom, this);
 		journal_achats = new Journal("Journal des Achats de l'" + nom, this);
 		journal_ContratCadre= new Journal("Journal des Contrats Cadre de l'" + nom, this);
 		journal_activitegenerale = new Journal("Journal général de l'" + nom, this);
-		journal_stocks = new Journal("Journal des stocks" + nom, this);
+		journal_stocks = new Journal("Journal des stocks " + nom, this);
 		initialiserGamme();
+
+		this.nos_chocolats = new LinkedList<String>();
+		
+		//nos marques de chocolats
+		this.nos_chocolats.add("C_HQ_BE_Vccotioi");
+		this.nos_chocolats.add("C_MQ_ChocoPop");
+		this.nos_chocolats.add("C_MQ_chokchoco");
+		this.nos_chocolats.add("C_MQ_BE_Villors");
+
+		
+	//C_HQ_BE_Vccotioi
+	//C_MQ_ChocoPop
+	//C_HQ_BE_Maison Doutre
+	//C_BQ_eco+ choco
+	//C_MQ_chokchoco
+	//C_MQ_BE_chokchoco bio
+	//C_HQ_BE_Choc
+	//C_HQ_BE_Villors
+	//C_MQ_BE_Villors
+	//C_MQ_Villors
+	//C_BQ_Villors	
+		
 	}
 
 	private void initialiserGamme() {
@@ -78,6 +92,13 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	public void initialiser() {
 
+		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
+		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
+		for (int i=0; i<chocolats_filiere.size(); i++) {
+			if(nos_chocolats.contains((chocolats_filiere.get(i)).toString())){
+				chocolats.add(chocolats_filiere.get(i));
+			}
+		}
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -89,7 +110,28 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		
+		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
+		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
+		for (int i=0; i<chocolats_filiere.size(); i++) {
+			if(nos_chocolats.contains((chocolats_filiere.get(i)).toString())){
+				chocolats.add(chocolats_filiere.get(i));
+			}
+		}
+		
+		if (Filiere.LA_FILIERE.getEtape()==1) {
+			for (ChocolatDeMarque marque : chocolats) {
+				stocks.ajouterAuStock(marque, 1.0);
+				journal_stocks.ajouter("Stock de "+marque+" : "+stocks.getStock(marque)+" T");
+			}	}
 
+		//Mise à jour du stock total
+		for (ChocolatDeMarque marque : chocolats) {
+			stock_total += stocks.getStock(marque);
+		}
+		journal_stocks.ajouter("Stock total "+ stock_total+"T");
+
+		//Répertoire de l'activité générale
 		journal_activitegenerale.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
 			for (int i=0; i<this.chocolats.size(); i++) {
@@ -105,16 +147,16 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	//Auteur : Ben Messaoud Karim
 	public String getDescription() {
-		return "Notre acteur, Royal Roast, est un distributeur de chocolat de toutes les gammes qui s'engage à prendre en compte les enjeux de la filière du cacao pour distribuer un produit final qui respecte les normes et répond aux besoins des clients.";
+		return "Royal Roast, un distributeur de chocolat de qualité.";
 	}
 
 	//Auteur : Ben Messaoud Karim
 	//Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
-		List<Variable> res = new ArrayList<Variable>();
-		Variable s= new Variable("stock",this,stocks.getStockGlobal());
-		res.add(s);
 
+		List<Variable> res = new ArrayList<Variable>();
+		Variable s= new Variable("stock",this,stock_total);
+		res.add(s);
 		return res;
 	}
 
@@ -122,7 +164,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	//Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
-
 		return res;
 	}
 
@@ -135,6 +176,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		res.add(journal_ventes);
 		res.add(journal_ContratCadre);
 		res.add(journal_activitegenerale);
+		res.add(journal_stocks);
 		return res;
 	}
 
@@ -263,7 +305,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		int pos = chocolats.indexOf(choco);
 		if (pos >= 0) {
 			this.stocks.retirerDuStock(choco, quantite);
-			journal_stocks.ajouter("retrait d'une quantité de"+ quantite+"T");
+			stock_total-=quantite;
+			journal_stocks.ajouter("retrait d'une quantité de"+ quantite+"T");System.out.println("gggggg");
 			journal_ventes.ajouter("La quantité " + quantite + " a été vendue à" + montant);
 		}
 	}
@@ -273,5 +316,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		// Ajouter un message dans le journal pour indiquer que le rayon est vide
 		journal_activitegenerale.ajouter("Le rayon du chocolat " + choco.getNom() + " est vide.");
 	}
+	public String toString() {
+        return this.getNom();
+    }
 
 }

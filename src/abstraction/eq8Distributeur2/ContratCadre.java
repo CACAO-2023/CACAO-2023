@@ -1,12 +1,14 @@
 package abstraction.eq8Distributeur2;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
@@ -16,15 +18,17 @@ import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 public class ContratCadre extends Distributeur2Acteur implements IAcheteurContratCadre {
+	private List<ExemplaireContratCadre> contratEnCours;
 
 	public void initialiser() {	
 	}
 
 	//Auteur : Marzougui Mariem
 	public boolean achete(IProduit produit) {
-		this.journal_achats.ajouter("on achète le produit"+produit.toString());
+		this.journal_achats.ajouter("achat du produit"+ produit.toString());
 		return true;
 	}
+
 
 	//Auteur : Marzougui Mariem
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
@@ -73,7 +77,8 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	}
 
 	public void next() {
-		super.next();	
+		super.next();
+
 	}
 
 	//Auteur : Marzougui Mariem
