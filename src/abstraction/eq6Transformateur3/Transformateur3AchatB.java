@@ -32,6 +32,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 * @return la quantite en tonnes de feves de type f desiree 
 	 * 
 	 */
+	/**
 	public double demande(Feve f, double cours) {
 		if (f.getGamme()==Gamme.BQ) {if(cours<=this.getCoursmaxBG().getValeur()) {
 													return (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1000.0));}
@@ -45,8 +46,24 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		if (f.getGamme()==Gamme.BQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
 			return (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),10));}}
 		else {return 0;};};};};
-		return 600;
-	}
+	}*/
+	public double demande(Feve f, double cours) {
+		double res = 0.0;
+		if (f.getGamme()==Gamme.BQ) {if(cours<=this.getCoursmaxBG().getValeur()) {
+													res =(max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1000.0));}
+		}
+		else {}
+		if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxMGL().getValeur()) {
+			res = (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),100));}}
+		else {;}
+		if (f.getGamme()==Gamme.MQ) {if(cours<=this.getCoursmaxMG().getValeur()) {
+			res = (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),100));}}
+		else {;}
+		if (f.getGamme()==Gamme.BQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
+			res = (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),10));}}
+		else {;}
+		return res;}
+
 
 	private double max(double d, double e) {
 		// TODO Auto-generated method stub
