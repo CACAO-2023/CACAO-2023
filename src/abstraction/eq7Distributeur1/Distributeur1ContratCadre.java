@@ -39,7 +39,6 @@ public class Distributeur1ContratCadre extends Distributeur1Acteur implements IA
 		for (int etape = stepDebut+1; etape<stepDebut+25; etape++) {
 			int etapemod = etape%24;
 			e.ajouter(previsions.get(etapemod).get(marque));
-			journal.ajouter(""+previsions.get(etapemod).get(marque));
 		}
 		return e;
 	}
