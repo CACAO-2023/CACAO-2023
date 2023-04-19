@@ -5,6 +5,11 @@ import abstraction.eqXRomu.offresAchat.OffreAchat;
 import abstraction.eqXRomu.offresAchat.PropositionVenteOA;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
+/**
+ * @author Fouad 
+ *
+ */
+
 public class DistributeurOA extends DistributeurChocolatDeMarque implements IVendeurOA {
 	
 	public PropositionVenteOA proposerVente(OffreAchat offre) {
