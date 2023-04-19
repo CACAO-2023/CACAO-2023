@@ -39,18 +39,36 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		SuperviseurVentesContratCadre supCCadre = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 		if (chocolats.size()>0) {
 			System.out.print(">>>>0");
-			
-			List<IVendeurContratCadre> vendeursChocolat = supCCadre.getVendeurs(chocolats.get(0));
+			for (int i=0; i<chocolats.size();i++) {
+				List<IVendeurContratCadre> vendeursChocolat = supCCadre.getVendeurs(chocolats.get(i));
+				Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape(),4, 1.0);
+				System.out.println(""+vendeursChocolat.size()+" v");
+				if (vendeursChocolat.size()>0 && stock.getQteStock().get(chocolats.get(i))<10.0 ) {
+					boolean pasAchete=true;
+					for (int j=0; j< vendeursChocolat.size()&&pasAchete;j++) {
+						System.out.println(""+chocolats.get(i)+" demande");
+						ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier , this.cryptogramme, initialise);
+						pasAchete = false;
+					}
+				
+				}
+				
+			}
+			/*List<IVendeurContratCadre> vendeursChocolat = supCCadre.getVendeurs(chocolats.get(0));
 			//creation échéancier
 			List<Double>  quantites = new ArrayList();
 			quantites.add(1.);
-			Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape(),quantites);
+			quantites.add(1.);
+			Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape(),4, 1.0);
+			System.out.println(""+vendeursChocolat.size()+" v");
 			if (vendeursChocolat.size()>0) {
+				
 				for (int i=0; i< vendeursChocolat.size();i++) {
+					System.out.println(""+chocolats.get(0)+" demande");
 					supCCadre.demandeAcheteur(this , vendeursChocolat.get(i), chocolats.get(0),echeancier , this.cryptogramme, initialise);
 				}
 			
-			}
+			}*/
 		}
 		
 
@@ -64,7 +82,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 			return false;
 		}
 		for (ChocolatDeMarque chocolat: chocolats) {
-			if (((ChocolatDeMarque)produit).equals(chocolat)){
+			if (((ChocolatDeMarque)produit).equals(chocolat) && stock.getQteStock().get(chocolat)<10.0){
 				return true;
 			}
 		}
