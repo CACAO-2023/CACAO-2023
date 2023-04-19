@@ -17,7 +17,7 @@ You have a local change that you did not commit.
 
 1. Two options:
    1. commit without pushing your local change, or 
-   2. delete your local change by replacing the changed files/folders with a previous version (right-click on these files or folders -> `Replace with` -> `HEAD Revision`)
+   2. delete your local change by replacing the changed files/folders with a previous version: right-click on these files or folders -> `Replace with` -> `HEAD Revision`
 3. Pull from your team repository
 
 This will maybe result in a conflict, if your team mate changed the same lines. 
@@ -40,7 +40,7 @@ Note that if the files you changed are not Java files, they will be hidden in th
 
 ## `Some checks were not successful`: `Java CI / build (pull_request)`
 
-Not accepting because the code does not pass the tests. You can read the error message by clicking on `Details` near to the failed test at the bottom of your pull request. You can run the same tests on your Eclipse, they are `test/abstraction/FiliereParDefaultTest.java` and `test/presentation/FenetrePrincipaleTest.java`. To run them right-click on `build.xml` -> `Run As` -> `Ant Build`. You will see the error message in the console. Fix the error, then commit and push.
+Not accepting because the code does not pass the tests. You can read the error message by clicking on `Details` near to the failed test at the bottom of your pull request. You can run the same tests on your Eclipse, they are `test/abstraction/FiliereParDefaultTest.java` and `test/presentation/FenetrePrincipaleTest.java`. To run them:  right-click on `build.xml` -> `Run As` -> `Ant Build`. You will see the error message in the console. Fix the error, then commit and push.
 
 ## `This branch is out-of-date with the base branch`
 
