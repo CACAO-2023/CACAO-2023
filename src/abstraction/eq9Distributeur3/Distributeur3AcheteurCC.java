@@ -165,10 +165,10 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		// si il existe deja un stock de ce chocolat, on fait la moyenne des prix pondérés par la quantite acheté et la quantite deja stockee
 		// si il y a du stock
 		if(stock.getStock(choco) != 0) {
-			var qtte_actuelle = stock.getStock(choco);
-			var qtte_apres_achat = qtte_actuelle + contrat.getQuantiteTotale();
+			double qtte_actuelle = stock.getStock(choco);
+			double qtte_apres_achat = qtte_actuelle + contrat.getQuantiteTotale();
 			// proportion de nouveau chocolat
-			var proportion_contrat = contrat.getQuantiteTotale()/qtte_apres_achat;
+			double proportion_contrat = contrat.getQuantiteTotale()/qtte_apres_achat;
 			// ponderation
 			prix_tonne_de_vente_apres_achat = prix_tonne_de_vente_contrat*proportion_contrat +prix_tonne_vente.get(choco)*(1-proportion_contrat) ;
 		}

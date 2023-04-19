@@ -166,7 +166,7 @@ public class Distributeur3Acteur implements IActeur{
 
 	}
 	public void repartition_tete_gondole() {
-		var repartition = new HashMap<ChocolatDeMarque, Double>();
+		HashMap<ChocolatDeMarque, Double> repartition = new HashMap<ChocolatDeMarque, Double>();
 		repartition.put((get_chocolat_with_name("C_HQ_BE_Choc")),1.0);
 		
 		//renvoie une hashmap <marque, quatité>
