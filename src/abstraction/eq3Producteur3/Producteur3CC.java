@@ -94,16 +94,16 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
         if ((Feve)contrat.getProduit() == Feve.F_MQ_BE) {
             // We return a price weing CoutTonne multiplied by a random factor between 1.1 and 1.2
-            if (contrat.getPrix() >= this.CoutTonne * 1.1) {
+            if (contrat.getPrix() >= this.getPrixTonne() * 1.1) {
                 return contrat.getPrix();
             } else {
-                return this.CoutTonne * (1.1 + Math.random() * 0.1);
+                return this.getPrixTonne() * (1.1 + Math.random() * 0.1);
             }
         } else {
-            if (contrat.getPrix() >= this.CoutTonne * 1.2) {
+            if (contrat.getPrix() >= this.getPrixTonne() * 1.2) {
                 return contrat.getPrix();
             } else {
-                return this.CoutTonne * (1.2 + Math.random() * 0.3);
+                return this.getPrixTonne() * (1.2 + Math.random() * 0.3);
             }
         }
     }
