@@ -18,7 +18,8 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	public HashMap<Feve, Double> salaires;
 	public HashMap<Feve, Integer> surface_plantation;
 	public HashMap<Feve, Double> prix;
-	public HashMap<Feve,HashMap<Integer, Integer>> age_hectares; 
+	public HashMap<Feve,HashMap<Integer, Integer>> age_hectares;
+	public HashMap<Feve, Double> cout_parcelle;
 	// Pour age_hectares nous avons un Hashmap dans un autre, ici la première clef fait reference à la Feve car 
 	//Les employes auront differents salaires selon la gamme sur laquelle ils travaillent
 	//La deuxiemes clef est un entirer qui correspond à l'age (en step) des hectares
@@ -33,6 +34,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		this.age_hectares =  new HashMap<Feve,HashMap<Integer, Integer>>();
 		for (Feve f: this.lesFeves)
 			this.age_hectares.put(f, new HashMap<Integer, Integer>());
+		this.cout_parcelle = new HashMap<Feve, Double>();
 		setEmploye(300000, 300000, 250000, 50000);
 		setSalaires(50,50,200,300);
 		setSurface(300000, 300000, 250000, 50000);
@@ -41,6 +43,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		setAge(Feve.F_MQ, 24*3, 300000);
 		setAge(Feve.F_MQ_BE, 24*3, 250000);
 		setAge(Feve.F_HQ_BE, 24*3, 50000);
+		setCout_Parcelle(1000, 2000, 3000, 5000);
 	}
 	// Mise en place des differents setters
 	
@@ -61,6 +64,11 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	public HashMap<Feve,HashMap<Integer, Integer>> get_Age_Hectares(){
 		return this.age_hectares;
 	}
+	
+	public HashMap<Feve,Double> get_Cout_Parcelle(){
+		return this.cout_parcelle;
+	}
+	
 	// Mise en place des differents setters qui pour la version 1 ne sont pas encore tous utilies car seuls les 
 	//plantations et le nombre d'employes evoluent 
 	//
@@ -101,6 +109,13 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	
 	public void setAge(Feve f, int age, int qte) {
 		this.age_hectares.get(f).put(age, qte);
+	}
+	
+	public void setCout_Parcelle(double cout_parcelle_BQ, double cout_parcelle_MQ, double cout_parcelle_MQ_BE, double cout_parcelle_HQ_BE) {
+		this.cout_parcelle.put(Feve.F_BQ, cout_parcelle_BQ);
+		this.cout_parcelle.put(Feve.F_MQ, cout_parcelle_MQ);
+		this.cout_parcelle.put(Feve.F_MQ_BE, cout_parcelle_MQ_BE);
+		this.cout_parcelle.put(Feve.F_HQ_BE, cout_parcelle_HQ_BE);
 	}
 	
 	
@@ -190,7 +205,10 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 				nb_a_planter =(int) + Math.round(Filiere.LA_FILIERE.getEtape()*0.03);
 			}
 			}
-			Planter(f, nb_a_planter);	
+			if (nb_a_planter>0) {
+				Planter(f, nb_a_planter);
+				Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), this.cout_parcelle.get(f)*nb_a_planter);
+			}
 		}
 	}
 	// Une fois les plantation ajustees, sachant qu'un employe s'occupe d'un hectare on adapte le nombre
