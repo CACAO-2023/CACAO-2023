@@ -28,21 +28,12 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 
 	public void initialiser() {
 		super.initialiser();
-		
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 	}
+	
 	public DistributeurContratCadreAcheteur() {
 		super();
-
 		this.mesContratEnTantQuAcheteur=new LinkedList<ExemplaireContratCadre>();
-	}
-
-	
-	
-	public Echeancier echeancier_strat(int stepDebut, int quantite, int nb_step) {
-		Echeancier e = new Echeancier(stepDebut, nb_step, quantite/nb_step);
-		return e;
-		
 	}
 	
 	/**
@@ -54,14 +45,14 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		Echeancier e = new Echeancier(stepDebut);
 		for (int etape = stepDebut+1; etape<stepDebut+25; etape++) {
 			int etapemod = etape%24;
-			e.ajouter(previsions.get(etapemod).get(marque));
+			e.ajouter(previsionsperso.get(etapemod).get(marque)*1.5);
 		}
 		return e;
 	}
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		if (Math.random()<0.1) {
+		if (Math.random()<0.3) {
 			return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
-		} else {//dans 90% des cas on fait une contreproposition pour l'echeancier
+		} else {//dans 70% des cas on fait une contreproposition pour l'echeancier
 			Echeancier e = contrat.getEcheancier();
 			e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut())*2.5);// on souhaite livrer 2.5 fois plus lors de la 1ere livraison... un choix arbitraire, juste pour l'exemple...
 			return e;
@@ -70,9 +61,9 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		
-		if (Math.random()<0.1) {
-			return contrat.getPrix(); // on ne cherche pas a negocier dans 10% des cas
-		} else {//dans 90% des cas on fait une contreproposition differente
+		if (Math.random()<0.3) {
+			return contrat.getPrix(); // on ne cherche pas a negocier dans 30% des cas
+		} else {//dans 70% des cas on fait une contreproposition differente
 			return contrat.getPrix()*0.95;// 5% de moins.
 		}
 	}
@@ -92,7 +83,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implem
 		}
 		this.mesContratEnTantQuAcheteur.removeAll(contratsObsoletes);
 	}
-	List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
+
 
 	
 	/**   
