@@ -97,10 +97,14 @@ public class Producteur3 extends Bourse3  {
 		new Producteur3();		
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * @author Dubus-Chanson Victor
 	 */
 	public Champs getFields() {
+=======
+	protected Champs getFields() {
+>>>>>>> branch 'Desov2suisUnBoulet' of https://github.com/Dahan13/CACAO-2023
 		return this.fields;
 	}
 	
@@ -111,7 +115,9 @@ public class Producteur3 extends Bourse3  {
 		// TODO Auto-generated method stub
 		return this.Stock;
 	}
-  
+	protected Integer getHectaresUt() {
+		return this.HectaresUtilises;
+	}
 
 	/**
 	 * @author BOCQUET Gabriel, Dubus-Chanson Victor, Caugant Corentin

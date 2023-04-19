@@ -17,6 +17,7 @@ public class Producteur3Acteur implements IActeur {
     protected Journal journal_achats;
     protected Journal journal_activitegenerale;
     protected Journal journal_Stock;
+    protected Journal journal_catastrophe;
     protected Stock Stock;
 	protected Double CoutStep; /* Tout nos couts du step, reinitialises a zero au debut de chaque step et payes a la fin du step*/
 	protected Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
@@ -28,6 +29,7 @@ public class Producteur3Acteur implements IActeur {
     journal_achats=new Journal("Journal des Achats de l'"+nom,this);
     journal_activitegenerale=new Journal("Journal général de l'"+nom,this);
     journal_Stock = new Journal("Journal des Stocks de l'"+nom,this);
+    journal_catastrophe = new Journal("Journal des Catastrophes de l'"+nom,this);
 	this.Stock = new Stock();
 	}
 	
@@ -62,10 +64,17 @@ public class Producteur3Acteur implements IActeur {
 	protected Journal getJStock() {
 		return this.journal_Stock;
 	}
+<<<<<<< HEAD
 
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
+=======
+	protected Journal getJCatastrophe() {
+		return this.journal_catastrophe;
+	}
+	
+>>>>>>> branch 'Desov2suisUnBoulet' of https://github.com/Dahan13/CACAO-2023
 	protected int getCryptogramme() {
 		return this.cryptogramme;
 	}
@@ -133,6 +142,7 @@ public class Producteur3Acteur implements IActeur {
 		res.add(journal_ventes);
 		res.add(journal_achats);
 		res.add(journal_Stock);
+		res.add(journal_catastrophe);
 		return res;
 	}
 
