@@ -55,9 +55,10 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		if (this.superviseurVentesCC!=null) {
 			List<IProduit> produits = new LinkedList<IProduit>();
 			produits.addAll(Filiere.LA_FILIERE.getChocolatsProduits());
-			for (Chocolat c : Chocolat.values()) {
-				produits.add(c);
-			}
+			Feve fb = Feve.F_BQ;	
+			Feve fh = Feve.F_HQ_BE;
+			produits.add(fb);
+			produits.add(fh);
 			this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : Tentative de lancer un contrat cadre");
 			this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : Liste de tous les produits "+produits);
 			List<IProduit> produitsVendus = new LinkedList<IProduit>();
@@ -241,10 +242,8 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 			}
 		} 
 		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : doit livrer "+quantite+" de "+produit+" --> livre "+livre);
-		if (livre>0.0) {
-		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);}
+		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);
 		return lot;
-		
 	}
 
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
