@@ -138,8 +138,6 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		}
 		Object produit = contrat.getProduit();
 		double qtok=0;
-		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend(prod="+produit+"  ech="+contrat.getEcheancier());
-
 		if (produit instanceof ChocolatDeMarque) {
 			if (((ChocolatDeMarque) produit).getMarque().equals("Vccotioi") && this.stockChocoMarque.keySet().contains(produit)) {
 				qtok= this.stockChocoMarque.get(produit);
@@ -168,6 +166,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 						this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend --> meme echeancier");
 						return contrat.getEcheancier();
 					} else {
+						this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, (qtok*0.8)/15.0));
 						return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qtok*0.8/15.0);
 					}
 			}
@@ -222,6 +221,9 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 			if (this.stockChocoMarque.keySet().contains(produit)) {
 				stock= this.stockChocoMarque.get(produit);
 				livre = Math.min(stock, quantite);
+				if (livre>stock) {
+					this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  Stock insuffisant pour satisfaire toute la demande");
+				}
 				if (livre>0) {
 					this.stockChocoMarque.put((ChocolatDeMarque)produit, this.stockChocoMarque.get(produit)-livre);
 				}
@@ -231,6 +233,10 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 			if (this.stockChoco.keySet().contains(produit)) {
 				stock= this.stockChoco.get(produit);
 				livre = Math.min(stock, quantite);
+				if (livre>stock) {
+					this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  Stock insuffisant pour satisfaire toute la demande");
+
+				}
 				if (livre>0) {
 					this.stockChoco.put((Chocolat)produit, this.stockChoco.get(produit)-livre);
 				}
