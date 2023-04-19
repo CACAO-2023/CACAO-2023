@@ -40,9 +40,9 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		if (this.peutVendre((IProduit) contrat.getProduit())) {
 		  switch ((Feve)contrat.getProduit()) {
 		  case F_BQ:
-			if (contrat.getEcheancier().getQuantiteTotale()<super.getStockBas().getQuantiteTotale()) {
+			if (contrat.getEcheancier().getQuantiteTotale()<super.getVraiStockB().getQuantiteTotale()) {
 				Echeancier e = contrat.getEcheancier();
-				if (e.getQuantite(e.getStepDebut())>super.getStockBas().getQuantiteTotale()/5) { //Si la quantité demandé au premier step est inferieur au cinquieme de notre stock on negocie
+				if (e.getQuantite(e.getStepDebut())>super.getVraiStockB().getQuantiteTotale()/5) { //Si la quantité demandé au premier step est inferieur au cinquieme de notre stock on negocie
 				    return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
 				} else {
 					e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut())*2);// on livre plus lors de la 1ere livraison... 
@@ -52,9 +52,9 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 				return null; // On s'engage pas si on a pas la quantité demandé
 			}
 		  case F_MQ:
-			  if (contrat.getEcheancier().getQuantiteTotale()<super.getStockMoy().getQuantiteTotale()) {
+			  if (contrat.getEcheancier().getQuantiteTotale()<super.getVraiStockM().getQuantiteTotale()) {
 				  Echeancier e = contrat.getEcheancier();
-					if (e.getQuantite(e.getStepDebut())>super.getStockBas().getQuantiteTotale()/10) { //Si la quantité demandé au premier step est inferieur au dixieme de notre stock on negocie
+					if (e.getQuantite(e.getStepDebut())>super.getVraiStockM().getQuantiteTotale()/10) { //Si la quantité demandé au premier step est inferieur au dixieme de notre stock on negocie
 					    return contrat.getEcheancier(); 
 					} else {
 						e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut())*2);
@@ -117,12 +117,12 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	 switch ((Feve)produi) {
 	 
 	 case F_BQ:
-		double livraisonBQ = Math.min(super.getStockBas().getQuantiteTotale(), quantite);		
+		double livraisonBQ = Math.min(super.getVraiStockB().getQuantiteTotale(), quantite);		
 		Lot lot = new Lot(produi);
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livraisonBQ); // cet exemple ne gere pas la peremption : la marchandise est consideree comme produite au step courant
 		return lot;
 	 case F_MQ:
-		 double livraisonHQ = Math.min(super.getStockMoy().getQuantiteTotale(), quantite);
+		 double livraisonHQ = Math.min(super.getVraiStockM().getQuantiteTotale(), quantite);
 		 Lot lot2 = new Lot(produi);
 		 lot2.ajouter(Filiere.LA_FILIERE.getEtape(), livraisonHQ); // cet exemple ne gere pas la peremption : la marchandise est consideree comme produite au step courant
 		 return lot2;
