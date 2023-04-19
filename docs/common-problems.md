@@ -36,7 +36,7 @@ You are changing files outside of the java package of your team. You can see the
 1. Replace these files in Eclipse with the version from the main repository: right-click on these files or folders -> `Replace with` -> `Branch, Tag or Reference...` -> `Remote tracking` -> select the main repository (not your team repository) -> `Replace`
 2. Commit and push
 
-Note that if the files you changed are not Java files, they will be hidden in the Package Exporer of Eclipse. To see and replace them, click the three dots in the top bar of Package Exporer -> `Filters...` -> uncheck `.* resources`. 
+Note that if the files you changed are not Java files, they will be hidden in the Package Exporer of Eclipse. To see and replace them: click the three dots in the top bar of Package Exporer -> `Filters...` -> uncheck `.* resources`. 
 
 ## `Some checks were not successful`: `Java CI / build (pull_request)`
 
