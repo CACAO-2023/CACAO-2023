@@ -9,6 +9,12 @@ import abstraction.eqXRomu.produits.Lot;
 
 public class Transformateur2VendeurBourseCacao extends  Transformateur2AcheteurBourseCacao implements IVendeurBourse{
 	
+	// Cette classe est pour le moment inutile car on ne vend pas de chocolat en bourse
+	
+	/**
+	 * @author DOUTRE Mathis
+	 */
+	
 	private Feve feve;
 	private Variable stockFeve;
 	
