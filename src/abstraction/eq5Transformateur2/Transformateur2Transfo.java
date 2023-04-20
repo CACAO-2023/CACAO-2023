@@ -19,6 +19,10 @@ public class Transformateur2Transfo extends Transformateur2Acteur implements IFa
 	protected HashMap<ChocolatDeMarque, Double> stockChocoMarque; // Chocolat de marque disponible 
 	protected HashMap<Feve, HashMap<Chocolat, Double>> pourcentageTransfo; // pour les differentes feves, le chocolat qu'elle peuvent contribuer a produire avec le pourcentage de chocolat associé
 	
+	/**
+	 * @author FERHOUT Adam
+	 */
+	
 	public List<ChocolatDeMarque> getChocolatsProduits() { // nous produisons deux chocolats, chocopop et maison doutre
 		if (this.chocosProduits.size()==0) {
 				Chocolat c1 = Chocolat.C_MQ;
@@ -28,6 +32,10 @@ public class Transformateur2Transfo extends Transformateur2Acteur implements IFa
 		}
 		return this.chocosProduits;
 	}
+	
+	/**
+	 * @author FERHOUT Adam
+	 */
 	
 	public void initialiser() {
 		super.initialiser();
@@ -57,6 +65,10 @@ public class Transformateur2Transfo extends Transformateur2Acteur implements IFa
 		this.pourcentageTransfo.put(Feve.F_MQ, new HashMap<Chocolat, Double>());
 		this.pourcentageTransfo.get(Feve.F_MQ).put(Chocolat.C_MQ, conversion);
 	}
+	
+	/**
+	 * @author FERHOUT Adam
+	 */
 	
 	public void next() {
 		super.next();
