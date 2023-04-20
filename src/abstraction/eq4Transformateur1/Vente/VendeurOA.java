@@ -13,7 +13,7 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
  *
  */
 
-public class VendeurOA extends CC_distributeur implements IVendeurOA {
+public class VendeurOA extends DistributeurChocolatDeMarque implements IVendeurOA {
 	
 	public PropositionVenteOA proposerVente(OffreAchat offre) {
 		this.journal_appel.ajouter("proposerVente(offre = "+offre+")");
