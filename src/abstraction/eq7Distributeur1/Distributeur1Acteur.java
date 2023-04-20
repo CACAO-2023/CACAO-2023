@@ -263,16 +263,6 @@ public class Distributeur1Acteur  implements IActeur {
 			previsions.put(24-(i+1), prevtour);
 			previsionsperso.put(24-(i+1), prevtourperso);
 		}
-		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
-		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			stockChocoMarque.put(marque,1.);
-			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
-		}
-	    for(Map.Entry<ChocolatDeMarque, Double> chocolat : stockChocoMarque.entrySet()) {
-	        ChocolatDeMarque marque = chocolat.getKey(); // récupérer l'objet ChocolatDeMarque à partir de la clé
-	        this.liste.add(new VariablePrivee(marque.getNom(), "Stock total de "+ marque.getNom(), this, 0)); // appel de la méthode getNom() sur l'objet ChocolatDeMarque
-	    }
-	    
 	}
 
 	public String getNom() {
