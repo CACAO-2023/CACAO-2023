@@ -49,6 +49,27 @@ public class Distributeur1_stock extends Distributeur1Acteur{
         }
 	}
 	
+	
+	/**
+	 * @author Theo and Ghaly
+	 */
+	public void initialiser() {
+		cout_stockage_distributeur.setValeur(this, Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*16);
+
+		//Initialisation des stocks
+		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			stockChocoMarque.put(marque,100000.);
+			couts.put(marque, 0.);
+			nombre_achats.put(marque, 0.);
+			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
+		}
+		
+		//initialisation des indicateurs de stock
+		initialise_indic_stock();
+	}
+	
+	
 	/**
 	 * @return 
 	 * 

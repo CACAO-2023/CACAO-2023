@@ -223,7 +223,7 @@ public class Distributeur1Acteur  implements IActeur {
 	}
 
 	/**
-	 * 	Actualisation des previsions de vente
+	 * 	Actualisation des previsions de vente pour l'étape normalisée
 
 	 * @author Theo,Ghaly
 	 */
@@ -318,9 +318,6 @@ public class Distributeur1Acteur  implements IActeur {
 	public List<Variable> getIndicateurs() {
 		
 		List<Variable> res = new ArrayList<Variable>();
-		
-
-
 		res.add(totalStocks);
 		res.add(stock_HQ_BE);
 		res.add(stock_MQ_BE);
