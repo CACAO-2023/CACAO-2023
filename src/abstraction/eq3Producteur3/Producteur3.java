@@ -10,9 +10,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import java.util.Timer;
+import java.util.TimerTask;
+
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.Feve;
+
 
 public class Producteur3 extends Bourse3  {
 
@@ -153,8 +156,14 @@ public class Producteur3 extends Bourse3  {
 			}
 				//Greve ?
 				double probaGreve = Math.random();
-				if(probaGreve < 0.02) {
-					this.GreveGeneral();
+				if(probaGreve < 0.02){
+						try {
+							this.GreveGeneral();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 				}
 		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep);
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
@@ -292,6 +301,9 @@ public class Producteur3 extends Bourse3  {
 		        popup.getContentPane().add(label);
 		        popup.pack();
 		        popup.setVisible(true);
+		        Timer timer = new Timer();
+				ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+				timer.schedule(monTimerTask, 3000);
 				for(Integer key : KeyM) {
 					hectarMburnt += FieldsM.get(key)*0.5;
 					FieldsM.put(key,(int) (FieldsM.get(key)*0.5));
@@ -311,6 +323,9 @@ public class Producteur3 extends Bourse3  {
 		        popup.getContentPane().add(label);
 		        popup.pack();
 		        popup.setVisible(true);
+		        Timer timer = new Timer();
+				ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+				timer.schedule(monTimerTask, 3000);
 				for(Integer key : KeyM) {
 					hectarMburnt += FieldsM.get(key)*0.2;
 					FieldsM.put(key,(int) (FieldsM.get(key)*0.8));
@@ -330,6 +345,9 @@ public class Producteur3 extends Bourse3  {
 		        popup.getContentPane().add(label);
 		        popup.pack();
 		        popup.setVisible(true);
+		        Timer timer = new Timer();
+				ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+				timer.schedule(monTimerTask, 3000);
 				for(Integer key : KeyM) {
 					hectarMburnt += FieldsM.get(key)*0.1;
 					FieldsM.put(key,(int) (FieldsM.get(key)*0.9));
@@ -355,6 +373,9 @@ public class Producteur3 extends Bourse3  {
         popup.getContentPane().add(label);
         popup.pack();
         popup.setVisible(true);
+        Timer timer = new Timer();
+		ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+		timer.schedule(monTimerTask, 3000);
 		Champs fields = this.getFields();
 		HashMap<Integer,Integer> FieldH = fields.getChamps().get("H");
 		HashMap<Integer, Integer> FieldM = fields.getChamps().get("M");
@@ -379,17 +400,21 @@ public class Producteur3 extends Bourse3  {
 	
 	/**
 	 * @author BOCQUET Gabriel
+	 *
 	 */
 	//Pour modéliser la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
-	protected void GreveGeneral() {
-		JFrame popup = new JFrame("Grêve des Ouvriers !");
-		
+	protected void GreveGeneral() throws InterruptedException {
+		JFrame popup = new JFrame("Grêve des Ouvriers !");		
 		popup.setLocation(300, 100);
 		ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Greve.gif");
 		JLabel label = new JLabel(icon);
-        popup.getContentPane().add(label);
+
+		popup.getContentPane().add(label);
         popup.pack();
 		popup.setVisible(true);
+		Timer timer = new Timer();
+		ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+		timer.schedule(monTimerTask, 3000);
 		//On a autant d'employé que d'hectare Utilise
 		Integer nbrgreviste = (int) Math.round(this.getHectaresUt()*0.2);
 		//on calcule le ce qu'on aurait du produire avec ces employees
