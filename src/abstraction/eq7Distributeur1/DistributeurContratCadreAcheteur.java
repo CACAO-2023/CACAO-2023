@@ -206,15 +206,29 @@ public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier 
 	/**
 	 * est appelée pour savoir si on a besoin d'un contrat cadre sur la durée d
 	 * On lance un CC seulement si notre stock n'est pas suffisant sur la durée qui suit
+	 * il faut faire attention à ce que un CC > 100T
 	 * @param d : nombre d'étapes 
 	 * @author Ghaly & Theo
 	 */
 	public boolean besoin_de_CC (int d,ChocolatDeMarque marque) {  
 			double previsionannee = 0;
+			int step= Filiere.LA_FILIERE.getEtape();
+			for (int numetape = step+1; numetape < step+d ; numetape++ ) {
+				previsionannee += previsions.get(numetape%24).get(marque);
+				}
+			return (previsionannee > stockChocoMarque.get(marque)+getLivraison(marque)+ quantite_min_cc);
+	};
+	/**
+	 * est appelée pour savoir si de combien on a besoin sur la durée d
+	 * @param d : nombre d'étapes 
+	 * @author Ghaly
+	 */
+	public double quantite_besoin_cc (int d,ChocolatDeMarque marque) {  
+			double previsionannee = 0;
 			for (int numetape = etape+1; numetape < etape+d ; numetape++ ) {
 				previsionannee += previsions.get(numetape%24).get(marque);
 				}
-			return (previsionannee > stockChocoMarque.get(marque)+getLivraison(marque));
+			return previsionannee - stockChocoMarque.get(marque)-getLivraison(marque);
 	};
 
 	
@@ -225,22 +239,21 @@ public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier 
 
 		super.next();
 		enleve_contrats_obsolete();
-		System.out.println("----------------------oulllaaa----------------------------------------------");
 
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 //			for (Integer d : durees_CC) {
 			int d =24;
-//			if(besoin_de_CC ( d,marque)) {					//On va regarder si on a besoin d'un nouveau contrat cadre pour chaque marque
+			if(besoin_de_CC ( d,marque)) {					//On va regarder si on a besoin d'un nouveau contrat cadre pour chaque marque
 //				Echeancier echeancier = echeancier_strat(etape,d,marque);
 							
-				Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10);
+				Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, d, quantite_besoin_cc(d, marque)/d);
 				journal_achat.ajouter("Recherche d'un vendeur aupres de qui acheter "+ marque.getNom());
 				ExemplaireContratCadre cc = getContrat(marque,echeancier);
 				if (cc!=null) {
 					break;
 
 				}
-//				}
+				}
 			};  		
 
 			
@@ -352,13 +365,13 @@ public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		if (nombre_achats.get((ChocolatDeMarque)(contrat.getProduit()))==0) {
-			journal.ajouter("Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix());
-			journal_achat.ajouter("Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix());
+			journal.ajouter(Color.GREEN, Color.BLACK,"Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix());
+			journal_achat.ajouter(Color.GREEN, Color.BLACK,"Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix());
 
 		}
 		else {
-			journal.ajouter("Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix()*100 /couts.get(contrat.getProduit())+ "%");
-			journal_achat.ajouter("Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix());
+			journal.ajouter(Color.RED, Color.BLACK,"Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix()*100 /couts.get(contrat.getProduit())+ "%");
+			journal_achat.ajouter(Color.RED, Color.BLACK,"Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix());
 
 		}
 		

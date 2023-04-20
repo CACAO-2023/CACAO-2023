@@ -55,6 +55,13 @@ public class Distributeur1Acteur  implements IActeur {
 	protected double cout_HQ_BE; 
 	
 	protected int etape;
+	
+	/**
+	 * donne les quantités mini pour un contrat cadre
+	 * @author ghaly
+	 */
+	double quantite_min_cc = SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER;
+
 
 	/**
 	 * La quantité totale de stock de chocolat
