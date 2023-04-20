@@ -1,6 +1,7 @@
 package abstraction.eq5Transformateur2;//Fait par Yassine et Wiem
 
 import java.awt.Color;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,17 +40,14 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		return (produit.getType().equals("Chocolat"));} 
 	
 	public boolean vend(IProduit produit) {
-		if (((produit.getType().equals("Chocolat")))&&((((Chocolat)produit).getGamme()== Gamme.MQ) ||((((Chocolat)produit).getGamme()== Gamme.HQ)&&(((Chocolat)produit).isBioEquitable())))){
+		if ((produit.getType().equals("Chocolat"))&&((((Chocolat)produit).getGamme()== Gamme.MQ) ||((((Chocolat)produit).getGamme()== Gamme.HQ)&&(((Chocolat)produit).isBioEquitable())))){
 		if (this.stockChoco.get(produit)>1000) { 
-			this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous vendons " + produit);
+			this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous vendons du " + produit.getType() + " " + produit);
 			return true;
-			}
-		else { this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous ne vendons pas" + produit);
-			return false;
 			}}
-		else {this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous ne vendons pas de " + produit.getType());
-		return false;}
-		}
+		else {this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous ne vendons pas de " + produit.getType() + " " + produit );
+		}return false;}
+		
 		
 	
 		// On vend du chocolat seulement si le stock est supérieur à 1000
@@ -106,7 +104,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			if (this.stockChocoMarque.keySet().contains(produit)) {
 				stock= this.stockChocoMarque.get(produit);
 				livre = Math.min(stock, quantite);
-				if (livre>0) {
+				if (livre==0) {
 					this.stockChocoMarque.put((ChocolatDeMarque)produit, this.stockChocoMarque.get(produit)-livre);
 				}
 				lot=new Lot((ChocolatDeMarque)produit);
@@ -115,12 +113,12 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			if (this.stockChoco.keySet().contains(produit)) {
 				stock= this.stockChoco.get(produit);
 				livre = Math.min(stock, quantite);
-				if (livre>0) {
+				if (livre==0) {
 					this.stockChoco.put((Chocolat)produit, this.stockChoco.get(produit)-livre);
 				}
 				lot=new Lot((Chocolat)produit);
 			}}
-		this.journalVentes.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : doit livrer "+quantite+" de "+produit+" --> livre "+livre);
+		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : doit livrer "+quantite+" de "+produit+" --> livre "+livre);
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);
 		return lot;
 	}// renvoie la quantite livrée 
