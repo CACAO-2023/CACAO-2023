@@ -43,8 +43,10 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 	 * @author fouad
 	 *
 	 */
-	 
-	public void next() {
+
+	
+	 //next de amine :
+	/*public void next() {
 		super.next();
 
 		// === Lancement si possible d'un contrat cadre
@@ -88,7 +90,39 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 				}
 			}
 		}
-	}
+	}*/
+
+	//next de Fouad :
+	public void next() {
+		super.next();
+
+		// === Lancement si possible d'un contrat cadre
+		if (this.superviseurVentesCC!=null) {
+			// Tentative de lancer un contrat avec tous les acheteurs
+				List<IProduit> produits = new LinkedList<IProduit>();
+				Chocolat cb = Chocolat.C_BQ;	
+				produits.add(cb);
+				for (ChocolatDeMarque c: Filiere.LA_FILIERE.getChocolatsProduits()) {
+					if (c.getMarque().equals("Vccotioi")) {
+						produits.add(c);
+					}
+				}
+				for (IProduit cm : produits) {
+					List<IAcheteurContratCadre> acheteurs = superviseurVentesCC.getAcheteurs(cm);
+					this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLACK, " CCV : tentative de vente de "+cm+" aupres de "+acheteurs);
+					for (IAcheteurContratCadre acheteur : acheteurs) {
+						if (!acheteur.equals(this)) {
+							Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 100);
+							this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative de vente aupres de "+acheteur);
+							ExemplaireContratCadre contrat = superviseurVentesCC.demandeVendeur(acheteur, this, cm, echeancier, this.cryptogramme, false);
+							if (contrat!=null) {
+								this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : contrat signe = "+contrat);
+							}
+						}
+				}
+			}
+			}
+		}
 	
 	public boolean vend(IProduit produit) {
 		boolean res=false;
@@ -221,7 +255,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 			if (this.stockChocoMarque.keySet().contains(produit)) {
 				stock= this.stockChocoMarque.get(produit);
 				livre = Math.min(stock, quantite);
-				if (livre>stock) {
+				if (quantite>stock) {
 					this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  Stock insuffisant pour satisfaire toute la demande");
 				}
 				if (livre>0) {
@@ -233,7 +267,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 			if (this.stockChoco.keySet().contains(produit)) {
 				stock= this.stockChoco.get(produit);
 				livre = Math.min(stock, quantite);
-				if (livre>stock) {
+				if (quantite>stock) {
 					this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  Stock insuffisant pour satisfaire toute la demande");
 
 				}
