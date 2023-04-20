@@ -64,7 +64,8 @@ public class Distributeur1_stock extends Distributeur1Acteur{
 			nombre_achats.put(marque, 0.);
 			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
 		}
-		
+		super.initialiser();
+
 		//initialisation des indicateurs de stock
 		initialise_indic_stock();
 	}
@@ -77,6 +78,8 @@ public class Distributeur1_stock extends Distributeur1Acteur{
 	public void next() {
 		super.next();
 		
+		//initialisation des indicateurs de stocks
+		initialise_indic_stock();
 		//Actualisation du stock total
 		double newstock = 0.;
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
@@ -91,7 +94,7 @@ public class Distributeur1_stock extends Distributeur1Acteur{
 			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
 		}
 		
-		
+		System.out.print(totalStocks.getValeur()==(stock_BQ.getValeur()+stock_HQ_BE.getValeur()+stock_MQ.getValeur()+stock_MQ_BE.getValeur()));
 		//Prise en compte des couts de stockage
 		if (totalStocks.getValeur()*cout_stockage_distributeur.getValeur() > 0) {
 			double cout_STOCK =  totalStocks.getValeur()*cout_stockage_distributeur.getValeur();

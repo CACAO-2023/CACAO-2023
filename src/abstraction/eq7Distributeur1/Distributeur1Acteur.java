@@ -242,16 +242,7 @@ public class Distributeur1Acteur  implements IActeur {
 	 * @author Theo and Ghaly
 	 */
 	public void initialiser() {
-		cout_stockage_distributeur.setValeur(this, Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*16);
-
-		//Initialisation des stocks
-		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
-		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			stockChocoMarque.put(marque,100000.);
-			couts.put(marque, 0.);
-			nombre_achats.put(marque, 0.);
-			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
-		}
+		
 		
 		//Initialisation des previsions
 		//le probleme est ici que ces previsions concernent l'ensemble de la filiere et non pas juste notre acteur
@@ -294,10 +285,6 @@ public class Distributeur1Acteur  implements IActeur {
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			actualiser_prevision( marque,  etape);
 		}
-
-		
-		
-
 
 
 	}
