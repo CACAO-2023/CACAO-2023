@@ -1,12 +1,11 @@
 package abstraction.eq7Distributeur1;
-
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-
+import java.util.Map.Entry;
+import java.util.Set;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
@@ -15,8 +14,14 @@ import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Gamme;
 
-public class Distributeur1Acteur implements IActeur {
+
+
+
+
+
+public class Distributeur1Acteur  implements IActeur {
 	////////////////////////////////////////////////
 	//declaration des variables
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
@@ -31,51 +36,86 @@ public class Distributeur1Acteur implements IActeur {
 	protected Journal journal_achat;
 	protected Journal journal_stock;
 
-//	private Variable qualiteHaute;  // La qualite d'un chocolat de gamme haute 
-//	private Variable qualiteMoyenne;// La qualite d'un chocolat de gamme moyenne  
-//	private Variable qualiteBasse;  // La qualite d'un chocolat de gamme basse
-//	private Variable pourcentageRSEmax;//Le pourcentage de reversion RSE pour un impact max sur la qualite percue
-//	private Variable partRSEQualitePercue;//L'impact de pourcentageRSEmax% du prix consacres aux RSE dans la qualite percue du chocolat
-//	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
+
+	/**
+	 * Cout d'1t de chocolat basse gamme
+	 */
+	protected double cout_BQ; 
+	/**
+	 * Cout d'1t de chocolat moyenne gamme labellise
+	 */
+	protected double cout_MQ_BE; 
+	/**
+	 * Cout d'1t de chocolat moyenne gamme non labellise
+	 */
+	protected double cout_MQ;
+	/**
+	 * Cout d'1t de chocolat haute gamme labellise
+	 */
+	protected double cout_HQ_BE; 
 	
-//	protected int totalStocksCB;  // La quantité totale de stock de chocolat bas de gamme 
-//	protected int totalStocksCML;  // La quantité totale de stock de chocolat moyenne gamme labellise
-//	protected int totalStocksCMNL;  // La quantité totale de stock de chocolat moyenne gamme non labellise
-//	protected int totalStocksCH;  // La quantité totale de stock de chocolat haute gamme
-	protected Variable totalStocks;  // La quantité totale de stock de chocolat
+	protected int etape;
+
+	/**
+	 * La quantité totale de stock de chocolat
+	 */
+	protected Variable totalStocks;  
 	
-	protected double coutCB; //Cout d'1t de chocolat basse gamme
-	protected double coutCML; //Cout d'1t de chocolat moyenne gamme labellise
-	protected double coutCMNL; //Cout d'1t de chocolat moyenne gamme non labellise
-	protected double coutCH; //Cout d'1t de chocolat haute gamme labellise
-	
-	////////////////////////////////////////
 	protected HashMap<Chocolat, Double> stockChoco;
-	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; //stock de chaque marque en tonne
-	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsions; //previsions de ventes de la filiere globale
-	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsionsperso; //previsions de vente perso
+
+	/**
+	 * stock de chaque marque en tonne
+	 */
+	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; 
 	
-	protected Variable stock_BQ = new VariablePrivee("Eq7stock_BQ", "Stock total de chocolat de basse qualité", this, 0);
-	protected Variable stock_MQ = new VariablePrivee("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
-	protected Variable stock_MQ_BE = new VariablePrivee("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
-	protected Variable stock_HQ_BE = new VariablePrivee("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
+	
+	/**
+	 * previsions de ventes de la filiere globale pour chaque etape_normalisee
+	 * prevision etape -> marque -> valeur
+	 */
+	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsions; 
+	
+	/**
+	 * previsions de vente de l'equipe 7
+	 * on suppose qu'on vend à chaque étape
+	 * prevision etape -> marque -> valeur
+
+	 */
+	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsionsperso; 
+	
+	/**
+	 * couts: couts d'achat à travers les contrats cadres
+	 */
+	protected HashMap<ChocolatDeMarque,Double> couts = new HashMap<ChocolatDeMarque,Double>(); 
+	
+	/**
+	 * nombre d'achat en contrat cadre, ça servira à calculer la moyenne des couts
+	 */
+	protected HashMap<ChocolatDeMarque,Double> nombre_achats = new HashMap<ChocolatDeMarque,Double>();; 
+
+	protected Variable stock_BQ = new Variable("Eq7stock_BQ", "Stock total de chocolat de basse qualité", this, 0);
+	protected Variable stock_MQ = new Variable("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
+	protected Variable stock_MQ_BE = new Variable("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
+	protected Variable stock_HQ_BE = new Variable("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
+	
+	protected Variable cout_stockage_distributeur = new Variable("cout moyen stockage distributeur", this);
 	
 	protected LinkedList<VariablePrivee> liste = new LinkedList<VariablePrivee>();
 	protected int cryptogramme;
 	
 
 	public Distributeur1Acteur() {
-		this.coutCB = 3;
-		this.coutCH = 3;
-		this.coutCML = 3;
-		this.coutCMNL = 3;
+		this.cout_BQ = 3;
+		this.cout_HQ_BE = 3;
+		this.cout_MQ_BE = 3;
+		this.cout_MQ = 3;
 		this.totalStocks = new VariablePrivee("Eq7TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
 		this.journal = new Journal("Journal "+this.getNom(), this);
 	    this.journal_achat=new Journal("Journal des Achats de l'" + this.getNom(),this);
 	    this.journal_stock = new Journal("Journal des Stocks del'" + this.getNom(),this);
-
-
 	}
+	
+
 	
 	////////////////////////////////////////////////////////
 	//         Methodes principales				          //
@@ -85,32 +125,118 @@ public class Distributeur1Acteur implements IActeur {
 	 * @author Theo
 	 * Renvoie les previsions, actualisees à chaque tour
 	 */
-	protected double previsions(ChocolatDeMarque marque, Integer etape) {
+	protected double getPrevisions(ChocolatDeMarque marque, Integer etape) {
 		return previsions.get(etape).get(marque);
 	}
-	
-	protected double previsionsperso(ChocolatDeMarque marque, Integer etape) {
+	/**
+	 * @author Theo
+	 * Renvoie les previsions, actualisees à chaque tour
+	 */
+	protected double getPrevisionsperso(ChocolatDeMarque marque, Integer etape) {
 		return previsionsperso.get(etape).get(marque);
+	}
+	
+	/**
+	 * @author ghaly
+	 * actualise la moyenne des couts d'un chocolat de marque a une etape donnée
+	 */
+	protected void actualise_cout(Double nv_cout) {
+		Double n;
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+				n= nombre_achats.get(marque);
+				couts.replace(marque,(couts.get(marque)*(n-1)+nv_cout)/n);}
 	}
 
 	/**
-	 * @author Theo
-	 * Actualise les couts (par tonne)
+	 * @author ghaly
+	 * renvois le cout moyen de la gamme
+	 */	
+	protected double getCout_gamme(Gamme gamme) {
+		int n = 0;
+		double s = 0;
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			if (marque.getGamme()==gamme) {
+
+				n++;
+				s+= couts.get(marque);
+			}
+		}
+		return s/n;
+		
+	}
+	
+
+	/**
+	 * @author Ghaly
+	 * @return le prix de la marque 
 	 */
-	protected void couts(ChocolatDeMarque marque, double nvcout) {
+	protected double getCout(ChocolatDeMarque produit) {
+		return couts.get(produit);
+	}
+	
+	/**
+	 * @author Theo
+	 * @return le prix de la gamme associée à marque
+	 */
+	protected double getCout_gamme(ChocolatDeMarque marque) {
 		Chocolat gamme = marque.getChocolat();
 		if (gamme == Chocolat.C_BQ) {
-			coutCB = nvcout;
+			return cout_BQ;
 		}
 		if (gamme == Chocolat.C_MQ) {
-			coutCMNL = nvcout;
+			return cout_MQ;
 		}
 		if (gamme == Chocolat.C_MQ_BE) {
-			coutCML = nvcout;
+			return cout_MQ_BE;
 		}
 		if (gamme == Chocolat.C_HQ_BE) {
-			coutCH = nvcout;
+			return cout_HQ_BE;
 		}
+		return cout_BQ;
+	}
+	
+	/**
+	 * @author Theo-ghaly
+	 * Actualise les couts (par tonne)
+	 */
+	protected void actualise_couts(ChocolatDeMarque marque) {
+		Gamme gamme = marque.getGamme();
+		double nv_prix = getCout_gamme(gamme);
+		if (gamme== Gamme.BQ ) {
+			cout_BQ = nv_prix;
+		}
+		if (gamme ==  Gamme.MQ && marque.isBioEquitable()) {
+			cout_MQ_BE = nv_prix;
+		}
+		if (gamme ==  Gamme.MQ && !marque.isBioEquitable()) {
+			cout_MQ = nv_prix;
+		}
+		if (gamme ==  Gamme.HQ) {
+			cout_HQ_BE = nv_prix;
+		}
+	}
+	
+	/**
+	 * @author Ghaly
+	 * renvoit le cout total de stockage actuel de la marque à l'instant t
+	 */
+	public double get_cout_stockage(ChocolatDeMarque marque) {
+		return cout_stockage_distributeur.getValeur() * stockChocoMarque.get(marque);
+	}
+
+	/**
+	 * 	Actualisation des previsions de vente pour l'étape normalisée
+
+	 * @author Theo,Ghaly
+	 */
+	public void actualiser_prevision(ChocolatDeMarque marque, int etape) {
+
+		int etapepreced = etape-1;
+		int etapenormalisee = (etapepreced+24)%24;
+		HashMap<ChocolatDeMarque,Double> prevetap = previsions.get(etapenormalisee);
+		
+		prevetap.replace(marque, (prevetap.get(marque)*etapepreced+Filiere.LA_FILIERE.getVentes(marque, etapepreced))/etape);
+		previsions.replace(etapenormalisee, prevetap);
 	}
 	
 	
@@ -118,10 +244,7 @@ public class Distributeur1Acteur implements IActeur {
 	 * @author Theo and Ghaly
 	 */
 	public void initialiser() {
-//		SuperviseurVentesContratCadre superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
-
 		
-		//Initialisation des stocks
 
 		
 		//Initialisation des previsions
@@ -129,6 +252,7 @@ public class Distributeur1Acteur implements IActeur {
 		//il faut creer un autre fonction car notre part de vente depend de la marque et plus generalement de la gamme
 		this.previsions = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>();
 		this.previsionsperso = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 
+		
 		for (int i=0;i<24;i++) {
 			HashMap<ChocolatDeMarque,Double> prevtour = new HashMap<ChocolatDeMarque,Double>();
 			HashMap<ChocolatDeMarque,Double> prevtourperso = new HashMap<ChocolatDeMarque,Double>();
@@ -162,27 +286,20 @@ public class Distributeur1Acteur implements IActeur {
 		return this.getNom();
 		}
 	
+
+	/**
+	 * @author Romain,Ghaly et Theo
+	 */
 	public void next() {
 		
-		//Actualisation des previsions
-		int etapepreced = Filiere.LA_FILIERE.getEtape()-1;
-		int etapenormalisee = (etapepreced+24)%24;
+		int etape = Filiere.LA_FILIERE.getEtape();
+		
+		
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			HashMap<ChocolatDeMarque,Double> prevetap = previsions.get(etapenormalisee);
-			prevetap.replace(marque, (prevetap.get(marque)+Filiere.LA_FILIERE.getVentes(marque, etapepreced))/2);
-			previsions.replace(etapenormalisee, prevetap);
+			actualiser_prevision( marque,  etape);
 		}
-		//Actualisation du stock total
-		double newstock = 0.;
-		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			newstock += stockChocoMarque.get(marque);
-		}
-		totalStocks.setValeur(this, newstock, this.cryptogramme);
 
-		//Journaux
-		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
-		}
+
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -193,39 +310,32 @@ public class Distributeur1Acteur implements IActeur {
 		return "Bla bla bla";
 	}
 
-	// Renvoie les indicateurs
-	public List<Variable> getIndicateurs() {
+
+	/**
+	 * Renvoie les indicateurs
+	 * @author Ghaly 
+	 */
+	public List<Variable> getIndicateurs() {		
 		List<Variable> res = new ArrayList<Variable>();
-//		res.add(totalStocks);
-//		res.add(stock_HQ_BE);
-//		res.add(stock_MQ_BE);
-//		res.add(stock_BQ);
-//		res.add(stock_MQ);
-		for (VariablePrivee v : liste) {
-			res.add(v);
-		}
-//		res.add(totalStocks);
-//		res.add(stock_HQ_BE);
-//		res.add(stock_MQ_BE);
-//		res.add(stock_BQ);
-//		res.add(stock_MQ);
+		res.add(totalStocks);
+		res.add(stock_HQ_BE);
+		res.add(stock_MQ_BE);
+		res.add(stock_BQ);
+		res.add(stock_MQ);
+	
 		return res;
 	}
-	/**
-	 * @author Romain et Ghaly
-	 */
-	
-	// Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
+		res.add(cout_stockage_distributeur);
 		return res;
 	}
 
-	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(this.journal);
 		res.add(this.journal_achat);
+		res.add(this.journal_stock);
 		return res;
 	}
 
@@ -233,30 +343,36 @@ public class Distributeur1Acteur implements IActeur {
 	//               En lien avec la Banque               //
 	////////////////////////////////////////////////////////
 
-	// Appelee en debut de simulation pour vous communiquer 
-	// votre cryptogramme personnel, indispensable pour les
-	// transactions.
+/**
+ * Methode appelee par la banque apres la creation du compte bancaire de l'acteur afin de lui communiquer le cryptogramme
+ *  qui lui sera necessaire pour les operations bancaires
+ */
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
 
 	}
-
-	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
-	// afin de vous en informer.
+	
+	/**
+	 * Appelee lorsqu'un acteur fait faillite (potentiellement vous afin de vous en informer.
+	 * @author Ghaly 
+	 */
 	public void notificationFaillite(IActeur acteur) {
 		if (this==acteur) {
 			System.out.println("They killed Chocorama... ");
 		} else {
-			System.out.println("try again "+acteur.getNom()+"... We will not miss you. "+this.getNom());
+			System.out.println("try again "+acteur.getNom()+"... We ("+this.getNom()+") will not miss you.");
 		}
 	}
 
-	// Apres chaque operation sur votre compte bancaire, cette
-	// operation est appelee pour vous en informer
+	/**
+	 * Apres chaque operation sur votre compte bancaire, cette operation est appelee pour vous en informer
+	 */
 	public void notificationOperationBancaire(double montant) {
 	}
 	
-	// Renvoie le solde actuel de l'acteur
+	/**
+	 *  Renvoie le solde actuel de l'acteur
+	 */
 	public double getSolde() {
 		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme);
 	}
@@ -265,13 +381,17 @@ public class Distributeur1Acteur implements IActeur {
 	//        Pour la creation de filieres de test        //
 	////////////////////////////////////////////////////////
 
-	// Renvoie la liste des filieres proposees par l'acteur
+	/**
+	 *  Renvoie la liste des filieres proposees par l'acteur
+	 */
 	public List<String> getNomsFilieresProposees() {
 		ArrayList<String> filieres = new ArrayList<String>();
 		return(filieres);
 	}
 
-	// Renvoie une instance d'une filiere d'apres son nom
+	/**
+	 *  Renvoie une instance d'une filiere d'apres son nom
+	 */
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
 	}

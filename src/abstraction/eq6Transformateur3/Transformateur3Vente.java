@@ -17,6 +17,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	protected LinkedList<ExemplaireContratCadre> listeCC ;
 
 	
+	
 	public Transformateur3Vente() {
 		super();
 		listeCC=new LinkedList<ExemplaireContratCadre>();
@@ -108,11 +109,14 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
+		super.journal.ajouter("Nouveau contrat cadre : Prix = "+ contrat.getPrix()+", Quantite totale = "+contrat.getQuantiteTotale()+", Nb de steps : "+contrat.getEcheancier().getNbEcheances());
 		this.listeCC.add(contrat);
 		
 	}
 	
+	
 	public void next() {
+		super.next();
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.listeCC) {
 			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
@@ -124,14 +128,17 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 
 	@Override
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
+		if (super.getLotChocolat(produit)!=null) {
 		double livre = Math.min(super.getLotChocolat(produit).getQuantiteTotale(), quantite);
 		if (livre>0.0) {
 			super.retirerChocolat((ChocolatDeMarque)produit, livre);
 		}
 		Lot lot = new Lot(produit);
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); 
-		return lot;
+		return lot;}
+		else {
+			Lot l=new Lot(produit);
+			return l; 
+		}
 	}
-
-
 }

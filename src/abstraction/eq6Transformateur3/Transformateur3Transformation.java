@@ -205,6 +205,9 @@ protected double BesoinStep(int Step, Feve f) {
 } 
 	return 100;
 }
+	public void next() {
+		super.next();
+	}
 } 
 
 
