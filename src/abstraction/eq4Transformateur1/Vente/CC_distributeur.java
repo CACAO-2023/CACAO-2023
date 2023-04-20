@@ -93,13 +93,13 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 	public boolean vend(IProduit produit) {
 		boolean res=false;
 		if (produit instanceof ChocolatDeMarque) {
-			this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+(this.stockChocoMarque.keySet().contains(produit)?" dans keySet "+this.stockChocoMarque.get(produit):"pas dans keySet"));
+			//this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+(this.stockChocoMarque.keySet().contains(produit)?" dans keySet "+this.stockChocoMarque.get(produit):"pas dans keySet"));
 			res=this.stockChocoMarque.keySet().contains(produit) && this.stockChocoMarque.get(produit)>200;
 		} else if (produit instanceof Chocolat) {
-			this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+(this.stockChoco.keySet().contains(produit)?" dans keySet "+this.stockChoco.get(produit):"pas dans keySet"));
+			//this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+(this.stockChoco.keySet().contains(produit)?" dans keySet "+this.stockChoco.get(produit):"pas dans keySet"));
 			res=this.stockChoco.keySet().contains(produit) && this.stockChoco.get(produit)>200;
 		}
-		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+res);
+		//this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : vend("+produit+") --> "+res);
 		return res;
 	}
 	
@@ -250,8 +250,8 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 	}
 	
 
-	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
+	/*public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nouveau cc conclu "+contrat);
-	}
+	}*/
 }
 
