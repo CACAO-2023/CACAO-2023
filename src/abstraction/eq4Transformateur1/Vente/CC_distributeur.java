@@ -99,6 +99,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		// === Lancement si possible d'un contrat cadre
 		if (this.superviseurVentesCC!=null) {
 			// Tentative de lancer un contrat avec tous les acheteurs
+			if (Filiere.LA_FILIERE.getEtape()==3) {
 				List<IProduit> produits = new LinkedList<IProduit>();
 				Chocolat cb = Chocolat.C_BQ;	
 				produits.add(cb);
@@ -122,6 +123,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 				}
 			}
 			}
+		}
 		}
 	
 	public boolean vend(IProduit produit) {
