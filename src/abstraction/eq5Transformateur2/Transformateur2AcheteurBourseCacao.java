@@ -9,19 +9,26 @@ import abstraction.eqXRomu.produits.Lot;
 
 public class Transformateur2AcheteurBourseCacao extends Transformateur2VendeurCC implements IAcheteurBourse {
 
+	/**
+	 * @author FERHOUT Adam
+	 */
+	
 	private double coursMaxMQ;
 	private double coursMinMQ;
 	
 	private double coursMaxHQ;
 	private double coursMinHQ;
 	
-	public Transformateur2AcheteurBourseCacao() {
+	public Transformateur2AcheteurBourseCacao() { // on utilisera ces variables plus tard dans la V2.
 		this.coursMinMQ = 10;
 		this.coursMaxMQ = 20;
 
 	}
 
-	@Override
+	/**
+	 * @author FERHOUT Adam
+	 */
+	
 	public double demande(Feve f, double cours) {
 		/*if (this.getFeve().equals(f)) {
 			BourseCacao bourse = (BourseCacao)(Filiere.LA_FILIERE.getActeur("BourseCacao"));
@@ -38,7 +45,11 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2VendeurCC
 		}}*/
 
 
-	@Override
+	
+	/**
+	 * @author FERHOUT Adam
+	 */
+	
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
 		Feve feve_concernee = ((Feve) l.getProduit());
 		double quantite = l.getQuantiteTotale();
