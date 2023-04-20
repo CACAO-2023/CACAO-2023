@@ -1,4 +1,4 @@
-package abstraction.eq5Transformateur2; ///WIEM LABBAOUI
+package abstraction.eq5Transformateur2; ///code écrit par WIEM LABBAOUI
 
 import java.awt.Color;
 
