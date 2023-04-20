@@ -39,25 +39,8 @@ public class Distributeur3Acteur implements IActeur{
 	protected HashMap<ChocolatDeMarque, Double> prix_tonne_vente;
 	protected Variable variable_stock;
 	public Distributeur3Acteur() {
-		/*if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
-			throw new IllegalArgumentException("creation d'une instance de ExempleAbsDistributeurChocolatMarqe avec des arguments non valides");
-		}		
-		NB_INSTANCES++;
-		this.numero=NB_INSTANCES;*/
-		
-		
-		// Ici pour tester on se créé un stock de chocolat à partir de rien (william)
-		// ChocolatDeMarque(Chocolat chocolat, String marque, int pourcentageCacao, int pourcentageRSE)
-
-		// william
-
 
 		this.chocosProduits = new LinkedList<ChocolatDeMarque>();
-		
-
-		
-
-		
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
 		
 		// william : pour pouvoir acheter le chocolat qui nous intéresse (HQ BE, MQ BE, MQ)
@@ -123,21 +106,11 @@ public class Distributeur3Acteur implements IActeur{
 
 	public void next() {
 		
-		// lancer un contrat seuil et repondre 
-		
-
-
-
-		// il va falloir faire la comparaison de contrats cadres par rapport à un seuil puis choisir le plus interessant
-
-
 		journal_activitegenerale.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		journal_activitegenerale.ajouter("Solde="+getSolde()+"€");
 		etat_ventes();
-
 	}
 
-	
 	
 	public void etat_ventes(){
 		//william
@@ -150,30 +123,9 @@ public class Distributeur3Acteur implements IActeur{
 			}
 		}
 	}
-	public void achat_stock(){
-		
-		
-
-		/* 
-		 en fonction de lookat_results(), l�acteur devra réaliser des contrats
-		 
-		cadres ou des appels d'offres ou accepter des offres pour certaines 
-		gammes base sur leur priorité.
-		
-		William
-		
-		*/
 
 
-	}
-	public void contrat_cadre(){}
-	public void appels_offres(){}
-	public void offres(){}
-	public void calcul_prix_de_vente() {
-		// pour chaque gamme, renvoie une hashmap <marque, prix>       
-		// (prendre en compte la rentabilité, le positionnement des autres marques)
-
-	}
+	
 	public void repartition_tete_gondole() {
 		HashMap<ChocolatDeMarque, Double> repartition = new HashMap<ChocolatDeMarque, Double>();
 		repartition.put((get_chocolat_with_name("C_HQ_BE_Choc")),1.0);
@@ -205,13 +157,7 @@ public class Distributeur3Acteur implements IActeur{
 	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		/*
-		 * Ici il faut adapter la récupération de l'indicateur stock de l'exemple avec notre classe stock
-		 * 
-		for (int i=0; i<this.chocolats.size(); i++) {
-			res.add(stock.getStock(chocolats.get(i)));
-		}*/
-//		
+
 		res.add(variable_stock);
 		return res;
 		
@@ -256,6 +202,8 @@ public class Distributeur3Acteur implements IActeur{
 	// Apres chaque operation sur votre compte bancaire, cette
 	// operation est appelee pour vous en informer
 	public void notificationOperationBancaire(double montant) {
+		journal_operationsbancaires.ajouter("Operation de " + montant + " €");
+
 	}
 	
 	// Renvoie le solde actuel de l'acteur
@@ -281,30 +229,5 @@ public class Distributeur3Acteur implements IActeur{
 	public double getStock(ChocolatDeMarque c) {
 		return this.stock.getStock(c);
 	}
-	
-	/*
-
-	@Override
-	public List<ChocolatDeMarque> getChocolatsProduits() {
-		if (this.chocosProduits.size()==0) {
-			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
-			this.chocosProduits.add(c1);
-		}
-		return this.chocosProduits;
-	}
-*/
-	/*
-	  @Override
-	public List<String> getMarquesChocolat() {
-		LinkedList<String> marques = new LinkedList<String>();
-		marques.add("Choc");
-		return marques;
-	}
-
-	
-*/
-	
-
-	
 
 }
