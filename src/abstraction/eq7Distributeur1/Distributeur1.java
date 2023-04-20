@@ -60,16 +60,16 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		double coef = 1-(((10/3)*qualite)/100)+0.1;
 		double promo = prixPromotion(choco);
 		if (choco.getChocolat()==Chocolat.C_BQ) {
-			return (cout_BQ/1000)*promo/coef;
+			return (cout_BQ)*promo/coef;
 		}
 		else if (choco.getChocolat()==Chocolat.C_MQ) {
-			return (cout_MQ_BE/1000)*promo/coef;
+			return (cout_MQ_BE)*promo/coef;
 		}
 		else if (choco.getChocolat()==Chocolat.C_MQ_BE) {
-			return (cout_MQ/1000)*promo/coef;
+			return (cout_MQ)*promo/coef;
 		}
 		else if (choco.getChocolat()==Chocolat.C_HQ_BE) {
-			return (cout_HQ_BE/1000)*promo/coef;
+			return (cout_HQ_BE)*promo/coef;
 		}
 		return 2.0;
 	}

@@ -55,6 +55,13 @@ public class Distributeur1Acteur  implements IActeur {
 	protected double cout_HQ_BE; 
 	
 	protected int etape;
+	
+	/**
+	 * donne les quantités mini pour un contrat cadre
+	 * @author ghaly
+	 */
+	double quantite_min_cc = SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER;
+
 
 	/**
 	 * La quantité totale de stock de chocolat
@@ -283,7 +290,9 @@ public class Distributeur1Acteur  implements IActeur {
 	public void next() {
 		
 		int etape = Filiere.LA_FILIERE.getEtape();
-		
+		journal.ajouter("============================== étape "+etape+" ==============================");
+		journal_achat.ajouter("============================== étape "+etape+" ==============================");
+		journal_stock.ajouter("============================== étape "+etape+" ==============================");
 		
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			actualiser_prevision( marque,  etape);
