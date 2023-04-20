@@ -249,7 +249,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
      * @param contrat     
      * @author Ghaly sentissi
      */
-	public double step_nego (ExemplaireContratCadre contrat) {
+	public Integer step_nego (ExemplaireContratCadre contrat) {
 		return contrat.getListePrix().size()/2;
 	}
 	

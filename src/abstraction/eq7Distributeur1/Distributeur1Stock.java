@@ -72,7 +72,7 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			stockChocoMarque.put(marque,100000.);
-			nombre_achats.put(marque, 0.);
+			nombre_achats.put(marque, 0);
 			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
 		}
 		super.initialiser();

@@ -92,7 +92,7 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 							nouveauStock+=this.stockChocoMarque.get(pRetenue.getChocolatDeMarque());
 						}
 						stockChocoMarque.replace(pRetenue.getChocolatDeMarque(), nouveauStock);
-						journal.ajouter("   Achat par offre d'achat de "+pRetenue+" --> quantite en stock = "+nouveauStock);
+						journal_achat.ajouter("Achat par offre d'achat de "+pRetenue+" --> quantite en stock = "+nouveauStock);
 
 		////////////////////////////////////////////////				
 						//						couts(m,pRetenue.getPrixT()/pRetenue.getOffre().getQuantiteT());

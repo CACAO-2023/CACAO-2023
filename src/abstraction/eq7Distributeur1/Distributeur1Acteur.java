@@ -74,7 +74,7 @@ public class Distributeur1Acteur  implements IActeur {
 	/**
 	 * nombre d'achat en contrat cadre, ça servira à calculer la moyenne des couts
 	 */
-	protected HashMap<ChocolatDeMarque,Double> nombre_achats = new HashMap<ChocolatDeMarque,Double>();; 
+	protected HashMap<ChocolatDeMarque,Integer> nombre_achats = new HashMap<ChocolatDeMarque,Integer>();; 
 
 	protected Variable cout_stockage_distributeur = new Variable("cout moyen stockage distributeur", this);
 	
@@ -116,7 +116,7 @@ public class Distributeur1Acteur  implements IActeur {
 	 * actualise la moyenne des couts d'un chocolat de marque a une etape donnée
 	 */
 	protected void actualise_cout(Double nv_cout) {
-		Double n;
+		Integer n;
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 				n= nombre_achats.get(marque);
 				couts.replace(marque,(couts.get(marque)*n+nv_cout)/(n+1));}
