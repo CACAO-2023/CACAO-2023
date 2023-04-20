@@ -7,7 +7,7 @@ import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Transformateur2VendeurBourseCacao extends Transformateur2AcheteurBourseCacao implements IVendeurBourse{
+public class Transformateur2VendeurBourseCacao extends  Transformateur2AcheteurBourseCacao implements IVendeurBourse{
 	
 	private Feve feve;
 	private Variable stockFeve;
