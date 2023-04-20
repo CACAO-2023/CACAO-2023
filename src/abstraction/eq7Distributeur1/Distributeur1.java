@@ -62,8 +62,8 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		double qualite = choco.qualitePercue();
 		double coef = 1-(((10/3)*qualite)/100)+0.1;
 		double promo = prixPromotion(choco);
-		double cout_gamme = getCout_gamme(choco);
-		return (cout_gamme/1000)*promo/coef;
+		double cout = getCout(choco);
+		return (cout/1000)*promo/coef;
 	}
 	
 	/**

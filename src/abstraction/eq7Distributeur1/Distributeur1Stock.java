@@ -72,8 +72,6 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			stockChocoMarque.put(marque,100000.);
-			Chocolat gamme = marque.getChocolat();
-			couts.put(marque, getCout_gamme(marque));
 			nombre_achats.put(marque, 0.);
 			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
 		}
@@ -107,7 +105,7 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
 		}
 		
-		System.out.print(totalStocks.getValeur()==(stock_BQ.getValeur()+stock_HQ_BE.getValeur()+stock_MQ.getValeur()+stock_MQ_BE.getValeur()));
+		//System.out.print(totalStocks.getValeur()==(stock_BQ.getValeur()+stock_HQ_BE.getValeur()+stock_MQ.getValeur()+stock_MQ_BE.getValeur()));
 		//Prise en compte des couts de stockage
 		if (totalStocks.getValeur()*cout_stockage_distributeur.getValeur() > 0) {
 			double cout_STOCK =  totalStocks.getValeur()*cout_stockage_distributeur.getValeur();

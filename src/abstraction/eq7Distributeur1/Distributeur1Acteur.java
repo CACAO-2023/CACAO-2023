@@ -119,7 +119,7 @@ public class Distributeur1Acteur  implements IActeur {
 		Double n;
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 				n= nombre_achats.get(marque);
-				couts.replace(marque,(couts.get(marque)*(n-1)+nv_cout)/n);}
+				couts.replace(marque,(couts.get(marque)*n+nv_cout)/(n+1));}
 	}
 
 	/**
@@ -221,6 +221,11 @@ public class Distributeur1Acteur  implements IActeur {
 	public void initialiser() {
 		
 		cout_stockage_distributeur.setValeur(this, Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*16);
+		
+		//Initialisation des couts
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			couts.put(marque, getCout_gamme(marque));
+		}
 		
 		//Initialisation des previsions
 		this.previsions = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>();
