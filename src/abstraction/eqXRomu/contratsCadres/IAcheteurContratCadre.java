@@ -50,7 +50,7 @@ public interface IAcheteurContratCadre extends IActeur {
 
 	/**
 	 * Methode appelee par le SuperviseurVentesContratCadre lors des negociations
-	 * sur le prix au Kg afin de connaitre la contreproposition de l'acheteur.
+	 * sur le prix a la tonne afin de connaitre la contreproposition de l'acheteur.
 	 * L'acheteur peut consulter les precedentes propositions via un appel a la
 	 * methode getListePrix() sur le contrat. En particulier la methode getPrix()
 	 * appelee sur contrat indique la derniere proposition faite par le vendeur.

@@ -1,19 +1,46 @@
+/*/ Page redigee par Adam FERHOUT /*/
+
 package abstraction.eq5Transformateur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.general.VariablePrivee;
 
-public class Transformateur2Acteur implements IActeur {
+
+public class Transformateur2Acteur implements IActeur, IMarqueChocolat {
 	
 	protected int cryptogramme;
+	protected Journal journal;
+	protected Journal journalVentes;
+	protected Journal journalAchats;
+	protected Variable totalStocksFeves;  // La qualite totale de stock de feves 
+	protected Variable totalStocksChoco;  // La qualite totale de stock de chocolat 
+	protected Variable totalStocksChocoMarque;  // La qualite totale de stock de chocolat de marque 
+
+	public static Color COLOR_LLGRAY = new Color(238,238,238);
+	public static Color COLOR_BROWN  = new Color(141,100,  7);
+	public static Color COLOR_PURPLE = new Color(100, 10,115);
+	public static Color COLOR_LPURPLE= new Color(155, 89,182);
+	public static Color COLOR_GREEN  = new Color(  6,162, 37);
+	public static Color COLOR_LGREEN = new Color(  6,255, 37);
+	public static Color COLOR_LBLUE = new Color(  6,130,230);
 
 	public Transformateur2Acteur() {
+		this.journal = new Journal("Journal "+this.getNom(), this);
+		this.journalVentes = new Journal("Journal des ventes "+this.getNom(), this);
+		this.journalAchats = new Journal("Journal des achats "+this.getNom(), this);
+		this.totalStocksFeves = new VariablePrivee("Eq5StockFeves", "<html>Quantite totale de feves en stock</html>",this, 0.0, 1000000.0, 0.0);
+		this.totalStocksChoco = new VariablePrivee("Eq5StockChoco", "<html>Quantite totale de chocolat en stock</html>",this, 0.0, 1000000.0, 0.0);
+		this.totalStocksChocoMarque = new VariablePrivee("Eq5StockChocoMarque", "<html>Quantite totale de chocolat de marque en stock</html>",this, 0.0, 1000000.0, 0.0);
+
 	}
 	
 	public void initialiser() {
@@ -35,12 +62,15 @@ public class Transformateur2Acteur implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Bla bla bla";
+		return ("Transformateur ayant deux marques : ChocoPop et Maison Doutre");
 	}
 
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+		res.add(this.totalStocksFeves);
+		res.add(this.totalStocksChoco);
+		res.add(this.totalStocksChocoMarque);
 		return res;
 	}
 
@@ -53,6 +83,9 @@ public class Transformateur2Acteur implements IActeur {
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
+		res.add(journal);
+		res.add(journalVentes);
+		res.add(journalAchats);
 		return res;
 	}
 
@@ -70,6 +103,11 @@ public class Transformateur2Acteur implements IActeur {
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
+		if (this==acteur) {
+			System.out.println("Il en est fini de nous");
+		} else {
+			System.out.println("L'acteur "+acteur.getNom()+" a fait faillite ");
+		}
 	}
 
 	// Apres chaque operation sur votre compte bancaire, cette
@@ -95,6 +133,13 @@ public class Transformateur2Acteur implements IActeur {
 	// Renvoie une instance d'une filiere d'apres son nom
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
+	}
+	
+	public List<String> getMarquesChocolat() {
+		LinkedList<String> marques = new LinkedList<String>();
+		marques.add("ChocoPop");
+		marques.add("Maison Doutre");
+		return marques;
 	}
 
 }

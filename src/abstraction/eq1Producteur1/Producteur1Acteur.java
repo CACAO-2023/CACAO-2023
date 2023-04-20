@@ -8,15 +8,47 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.general.VariablePrivee;
+import abstraction.eqXRomu.produits.Lot;
+import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.Gamme;
 
 public class Producteur1Acteur implements IActeur {
 	
 	protected int cryptogramme;
+	protected Journal journal;
+	protected Journal journal_stocks;
+	protected Journal journal_ventes;
+	protected Journal journal_champs;
+	protected int step;
+	protected champ champBas;
+	protected champ champMoy;
+	protected Lot stockFeveBas;
+	protected Lot stockFeveMoy;
+	protected Variable Champ = new Variable("Champ totale en hectare ", "Le nombre d'hectare de champ produisant des fèves de moyenne et basse qualité", this, 250000);
+	protected Variable Stock = new Variable("Stock totale de fèves en tonne", "La quantité en tonne de fèves séchées de moyenne et basse qualité présentes dans nos stocks", this, 2000);
 
 	public Producteur1Acteur() {
+		this.journal = new Journal("Journal "+this.getNom(), this);
+		this.journal_stocks = new Journal("Journal : stocks"+this.getNom(), this);
+		this.journal_ventes = new Journal("Journal : ventes"+this.getNom(), this);
+		this.journal_champs = new Journal("Journal : champs"+this.getNom(), this);
 	}
 	
-	public void initialiser() {
+	public void initialiser() { //elouan et charles
+		this.step = 0;
+		this.champBas = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
+		for (int i=0; i<30; i++) {
+			this.champBas.ajouter(-i, 7500.);
+		}
+		this.champMoy = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
+		for (int i=0; i<30; i++) {
+			this.champMoy.ajouter(-i, 833.33);
+		}
+		this.stockFeveBas = new Lot(Feve.F_BQ);
+		this.stockFeveBas.ajouter(0,1000);
+		this.stockFeveMoy = new Lot(Feve.F_MQ);
+		this.stockFeveMoy.ajouter(0,1000);
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -27,7 +59,24 @@ public class Producteur1Acteur implements IActeur {
 	//         En lien avec l'interface graphique         //
 	////////////////////////////////////////////////////////
 
-	public void next() {
+	public void next() { //elouan
+		this.step = this.step + 1;
+		// maj des journaux
+		this.journal.ajouter("step : "+step);
+		this.journal_stocks.ajouter("===== step : "+step+" =====");
+		this.journal_stocks.ajouter("Stock bas de gamme : "+this.stockFeveBas.getQuantiteTotale());
+		this.journal_stocks.ajouter("Stock moyenne gamme : "+this.stockFeveMoy.getQuantiteTotale());
+		this.journal_champs.ajouter("===== step : "+step+" =====");
+		this.journal_champs.ajouter("---> Qualite : Bas");
+		this.journal_champs.ajouter(this.champBas.toString());
+		this.journal_champs.ajouter("Cela fait en tout "+this.champBas.getNbHectare()+" hectares");
+		this.journal_champs.ajouter("---> Qualite : Moy");
+		this.journal_champs.ajouter(this.champMoy.toString());
+		this.journal_champs.ajouter("Cela fait en tout "+this.champMoy.getNbHectare()+" hectares");
+		this.journal_ventes.ajouter("===== step : "+step+" =====");
+		// maj des indicateurs
+		this.Stock.setValeur(this, this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale());
+		this.Champ.setValeur(this, this.champBas.getNbHectare()+this.champMoy.getNbHectare());
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -41,6 +90,8 @@ public class Producteur1Acteur implements IActeur {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+		res.add(this.Champ);
+		res.add(this.Stock);
 		return res;
 	}
 
@@ -53,6 +104,10 @@ public class Producteur1Acteur implements IActeur {
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
+		res.add(this.journal);
+		res.add(this.journal_ventes);
+		res.add(this.journal_stocks);
+		res.add(this.journal_champs);
 		return res;
 	}
 
@@ -69,7 +124,12 @@ public class Producteur1Acteur implements IActeur {
 
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
-	public void notificationFaillite(IActeur acteur) {
+	public void notificationFaillite(IActeur acteur) { //elouan
+		if (this==acteur) {
+			System.out.println("bye :( ");
+		} else {
+			System.out.println("Force à vous "+acteur.getNom());
+		}
 	}
 
 	// Apres chaque operation sur votre compte bancaire, cette
@@ -96,5 +156,7 @@ public class Producteur1Acteur implements IActeur {
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
 	}
-
+	public String toString() {
+		return this.getNom();
+	}
 }
