@@ -68,6 +68,7 @@ public class Distributeur1Acteur implements IActeur {
 	protected Variable stock_MQ = new Variable("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
 	protected Variable stock_MQ_BE = new Variable("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
 	protected Variable stock_HQ_BE = new Variable("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
+	protected Variable cout_stockage_distributeur = new Variable("cout moyen stockage distributeur", this);
 	protected HashMap<ChocolatDeMarque,VariablePrivee>  indicateurs = new HashMap<ChocolatDeMarque,VariablePrivee>() ;
 	protected int cryptogramme;
 
@@ -257,7 +258,8 @@ public class Distributeur1Acteur implements IActeur {
 	 * @author Theo and Ghaly
 	 */
 	public void initialiser() {
-		
+		cout_stockage_distributeur.setValeur(this, Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*16);
+
 		//Initialisation des stocks
 		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
@@ -326,9 +328,9 @@ public class Distributeur1Acteur implements IActeur {
 		actualise_indic_chocolat_de_marque();
 
 		//Prise en compte des couts de stockage
-		if (totalStocks.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() > 0) {
+		if (totalStocks.getValeur()*cout_stockage_distributeur.getValeur() > 0) {
 			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), totalStocks.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());	
-			journal.ajouter("Cout de stockage : "+totalStocks.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());
+			journal_stock.ajouter("Cout de stockage : "+totalStocks.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());
 		}
 		//Journaux
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
@@ -371,6 +373,7 @@ public class Distributeur1Acteur implements IActeur {
 	// Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
+		res.add(cout_stockage_distributeur);
 		return res;
 	}
 

@@ -184,7 +184,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	 * @param choco, le chocolat de marque dont la quantite en rayon a ete integralement achetee
 	 */
 	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
-		journal.ajouter("Rayon vide pour le chocolat :"+choco);
+		journal_stock.ajouter("Rayon vide pour le chocolat :"+choco);
 	}
 }	
 	
