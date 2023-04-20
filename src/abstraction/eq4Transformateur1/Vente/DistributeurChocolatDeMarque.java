@@ -9,7 +9,7 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
  *
  */
 
-public class DistributeurChocolatDeMarque extends CC_distributeur implements IDistributeurChocolatDeMarque {
+public class DistributeurChocolatDeMarque extends AODistributeur implements IDistributeurChocolatDeMarque {
 
 	public double prix(ChocolatDeMarque choco) {
 		return 17;

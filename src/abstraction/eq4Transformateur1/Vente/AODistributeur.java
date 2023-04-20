@@ -22,8 +22,14 @@ public class AODistributeur extends CC_distributeur implements IVendeurAO {
 	
 	@Override
 	public PropositionAchatAO choisir(List<PropositionAchatAO> propositions) {
-		// TODO Auto-generated method stub
-		return null;
+		double prix=0;
+		PropositionAchatAO propRetenue=null;
+		for (PropositionAchatAO p : propositions) {
+			if (p.getPrixT()>prix) {
+				propRetenue=p;
+			}
+		}
+		return propRetenue;
 	}
 	
 	public void initialiser() {
@@ -34,8 +40,8 @@ public class AODistributeur extends CC_distributeur implements IVendeurAO {
 	public void next() {
 		super.next();
 		for (ChocolatDeMarque c : stockChocoMarque.keySet()) {
-			if (this.stockChocoMarque.get(c)>200) {
-				PropositionAchatAO retenue = superviseur.vendreParAO(this, cryptogramme, c, 200.0, false);
+			if (this.stockChocoMarque.get(c)>2000) {
+				PropositionAchatAO retenue = superviseur.vendreParAO(this, cryptogramme, c, 2000.0, false);
 				if (retenue!=null) {
 					this.totalStocksChocoMarque.ajouter(this,-retenue.getOffre().getQuantiteT() ,this.cryptogramme);
 					this.stockChocoMarque.put(c, this.stockChocoMarque.get(c)-retenue.getOffre().getQuantiteT());
