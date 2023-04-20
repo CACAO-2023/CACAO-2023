@@ -18,7 +18,7 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class DistributeurContratCadreAcheteur extends Distributeur1_stock implements IAcheteurContratCadre{
+public class DistributeurContratCadreAcheteur extends Distributeur1Stock implements IAcheteurContratCadre{
 	protected List<ExemplaireContratCadre> mesContratEnTantQuAcheteur;
 	protected List<ExemplaireContratCadre> historique_de_mes_contrats;
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
@@ -193,6 +193,9 @@ public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier 
 		return somme;
 	}
 	
+	/**
+	 * @return la qte totale livree à ce tour
+	 */
 	public double getLivraisonEtape(IProduit produit) {
 		double somme = 0;
 		for (ExemplaireContratCadre contrat : mesContratEnTantQuAcheteur) {
@@ -327,6 +330,7 @@ public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier 
 	@Override
 	/**
 	 * @author Theo
+	 * Actions necessaires pour actualiser/annoncer
 	 */
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		IProduit produit= lot.getProduit();

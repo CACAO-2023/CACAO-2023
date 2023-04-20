@@ -59,19 +59,8 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		double qualite = choco.qualitePercue();
 		double coef = 1-(((10/3)*qualite)/100)+0.1;
 		double promo = prixPromotion(choco);
-		if (choco.getChocolat()==Chocolat.C_BQ) {
-			return (cout_BQ/1000)*promo/coef;
-		}
-		else if (choco.getChocolat()==Chocolat.C_MQ) {
-			return (cout_MQ_BE/1000)*promo/coef;
-		}
-		else if (choco.getChocolat()==Chocolat.C_MQ_BE) {
-			return (cout_MQ/1000)*promo/coef;
-		}
-		else if (choco.getChocolat()==Chocolat.C_HQ_BE) {
-			return (cout_HQ_BE/1000)*promo/coef;
-		}
-		return 2.0;
+		double cout_gamme = getCout_gamme(choco);
+		return (cout_gamme/1000)*promo/coef;
 	}
 	
 	/**
@@ -149,33 +138,6 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		//Actualisation des previsions persos
 		actualiser_prevision_perso( choco,   quantite);
 
-	}
-	
-	
-	/**
-	 * Actualisation des previsions persos
-	 * @author Theo, Ghaly
-	 */
-	public void actualiser_prevision_perso(ChocolatDeMarque choco,  double quantite) {
-		int etape_annee = Filiere.LA_FILIERE.getEtape()/24;
-		int etapenormalisee = Filiere.LA_FILIERE.getEtape()%24;
-		HashMap<ChocolatDeMarque,Double> prevetapeperso = previsionsperso.get(etapenormalisee);
-		prevetapeperso.replace(choco, (prevetapeperso.get(choco)*etape_annee+quantite)/(etape_annee+1));
-		previsionsperso.replace(etapenormalisee, prevetapeperso);
-	}
-	
-	/**
-	 * Actualisation des previsions persos
-	 * @author Ghaly
-	 */
-	public void actualiser_prevision_generale(ChocolatDeMarque choco) {
-		int etape_annee = Filiere.LA_FILIERE.getEtape()/24;
-		int etapenormalisee = Filiere.LA_FILIERE.getEtape()%24;
-		double quantite = Filiere.LA_FILIERE.getVentes(choco, etapenormalisee);
-		
-		HashMap<ChocolatDeMarque,Double> prevetapeperso = previsionsperso.get(etapenormalisee);
-		prevetapeperso.replace(choco, (prevetapeperso.get(choco)*etape_annee+quantite)/(etape_annee+1));
-		previsionsperso.replace(etapenormalisee, prevetapeperso);
 	}
 	
 	/**

@@ -7,7 +7,7 @@ import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
-public class Distributeur1_stock extends Distributeur1Acteur{
+public class Distributeur1Stock extends Distributeur1Acteur{
 
 	
 	//	protected int totalStocksCB;  // La quantité totale de stock de chocolat bas de gamme 
@@ -38,11 +38,9 @@ public class Distributeur1_stock extends Distributeur1Acteur{
     		}
     		if (gamme == Chocolat.C_MQ) {
     			stock_MQ.ajouter(this, stockChocoMarque.get(marque));
-
     		}
     		if (gamme == Chocolat.C_MQ_BE) {
     			stock_MQ_BE.ajouter(this, stockChocoMarque.get(marque));
-
     		}
     		if (gamme == Chocolat.C_HQ_BE) {
     			stock_HQ_BE.ajouter(this, stockChocoMarque.get(marque));    		
@@ -54,7 +52,6 @@ public class Distributeur1_stock extends Distributeur1Acteur{
 	 * @author Theo and Ghaly
 	 */
 	public void initialiser() {
-		cout_stockage_distributeur.setValeur(this, Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*16);
 
 		//Initialisation des stocks
 		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
@@ -80,6 +77,7 @@ public class Distributeur1_stock extends Distributeur1Acteur{
 		
 		//initialisation des indicateurs de stocks
 		initialise_indic_stock();
+		
 		//Actualisation du stock total
 		double newstock = 0.;
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
