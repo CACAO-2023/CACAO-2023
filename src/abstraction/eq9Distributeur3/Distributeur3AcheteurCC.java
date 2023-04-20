@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
@@ -31,20 +32,20 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	//faire une méthode qui connait le prix d'achat moyen d'un chocolat
 	
 	public Distributeur3AcheteurCC() {//ChocolatDeMarque[] chocos, double[] stocks) {
-		
+		contratEnCours = new LinkedList<ExemplaireContratCadre>();
 		
 	}
 //Mathilde
 	public void next() {
 		super.next();
-		System.out.print("nexxxxxxt");
+		
 		SuperviseurVentesContratCadre supCCadre = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 		if (chocolats.size()>0) {
-			System.out.print(">>>>0");
+			
 			for (int i=0; i<chocolats.size();i++) {
 				List<IVendeurContratCadre> vendeursChocolat = supCCadre.getVendeurs(chocolats.get(i));
-				Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape(),24, 25000.0);
-				System.out.println(""+vendeursChocolat.size()+" v");
+				Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape()+1,24, 25000.0);
+				//System.out.println(""+vendeursChocolat.size()+" v est "+vendeursChocolat.get(0));
 				List<ExemplaireContratCadre> contratAvecChocolat = new ArrayList<ExemplaireContratCadre> ();
 				if (contratEnCours != null) {
 				for (int k = 0;k<contratEnCours.size();k++) {
@@ -55,9 +56,10 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 				}
 				if (vendeursChocolat.size()>0  ) {
 					boolean pasAchete=true;
+					
 					if (contratAvecChocolat.size()==0) {
 					for (int j=0; j< vendeursChocolat.size()&&pasAchete;j++) {
-						System.out.println(""+chocolats.get(i)+" demande");
+						
 						
 						//Echeancier echeancier = new Echeancier (contratEnCours.get(i).getEcheancier().getStepFin(),24, 25000.0);
 						ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier , this.cryptogramme, initialise);
@@ -65,7 +67,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 					}
 					for (int k = 0;k<contratAvecChocolat.size();k++) {
 						for (int j=0; j< vendeursChocolat.size()&&pasAchete;j++) {
-							System.out.println(""+chocolats.get(i)+" demande");
+							
 							
 							Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(),24, 25000.0);
 							ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier2 , this.cryptogramme, initialise);
@@ -105,8 +107,11 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 			return false;
 		}
 		for (ChocolatDeMarque chocolat: chocolats) {
-			if (((ChocolatDeMarque)produit).equals(chocolat) && stock.getQteStock().get(chocolat)<10.0){
+			if (((ChocolatDeMarque)produit).equals(chocolat)){
+			
+				this.journal_achats.ajouter("j'ai achete le chocolat" + produit.toString());
 				return true;
+				
 			}
 		}
 		return false;
@@ -198,7 +203,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
-		this.journal.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "je viens de passer le contrat "+contrat);
+		this.journal_achats.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "je viens de passer le contrat "+contrat);
 		this.contratEnCours.add(contrat);
 	}
 	
