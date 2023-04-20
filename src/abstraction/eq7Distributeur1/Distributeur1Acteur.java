@@ -16,11 +16,6 @@ import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
 
-
-
-
-
-
 public class Distributeur1Acteur  implements IActeur {
 	////////////////////////////////////////////////
 	//declaration des variables
@@ -36,6 +31,12 @@ public class Distributeur1Acteur  implements IActeur {
 	protected Journal journal_achat;
 	protected Journal journal_stock;
 
+	//On est oblige de mettre les variables ici sinon la creation de la filiere est dans un tel ordre que nous n'y avons pas acces assez tot
+	protected Variable totalStocks; //La quantité totale de stock de chocolat
+	protected Variable stock_BQ = new Variable("Eq7stock_BQ", "Stock total de chocolat de basse qualité", this, 0);
+	protected Variable stock_MQ = new Variable("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
+	protected Variable stock_MQ_BE = new Variable("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
+	protected Variable stock_HQ_BE = new Variable("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
 
 	protected double cout_BQ; //Cout d'1t de chocolat basse gamme
 	
@@ -44,13 +45,12 @@ public class Distributeur1Acteur  implements IActeur {
 	protected double cout_MQ; //Cout d'1t de chocolat moyenne gamme non labellise
 
 	protected double cout_HQ_BE; //Cout d'1t de chocolat haute gamme labellise
-
-	protected Variable totalStocks; //La quantité totale de stock de chocolat
 	
-	protected HashMap<Chocolat, Double> stockChoco;
-
-	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; //Stock de chaque marque en tonne
-	
+	/**
+	 * donne les quantités mini pour un contrat cadre
+	 * @author ghaly
+	 */
+	double quantite_min_cc = SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER;
 	
 	/**
 	 * previsions de ventes de la filiere globale pour chaque etape_normalisee
@@ -75,11 +75,6 @@ public class Distributeur1Acteur  implements IActeur {
 	 */
 	protected HashMap<ChocolatDeMarque,Double> nombre_achats = new HashMap<ChocolatDeMarque,Double>();; 
 
-	protected Variable stock_BQ = new Variable("Eq7stock_BQ", "Stock total de chocolat de basse qualité", this, 0);
-	protected Variable stock_MQ = new Variable("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
-	protected Variable stock_MQ_BE = new Variable("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
-	protected Variable stock_HQ_BE = new Variable("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
-	
 	protected Variable cout_stockage_distributeur = new Variable("cout moyen stockage distributeur", this);
 	
 	protected int cryptogramme;
@@ -89,7 +84,6 @@ public class Distributeur1Acteur  implements IActeur {
 		this.cout_HQ_BE = 3;
 		this.cout_MQ_BE = 3;
 		this.cout_MQ = 3;
-		this.totalStocks = new VariablePrivee("Eq7TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
 		this.journal = new Journal("Journal "+this.getNom(), this);
 	    this.journal_achat=new Journal("Journal des Achats de l'" + this.getNom(),this);
 	    this.journal_stock = new Journal("Journal des Stocks del'" + this.getNom(),this);
@@ -192,14 +186,6 @@ public class Distributeur1Acteur  implements IActeur {
 			cout_HQ_BE = nv_prix;
 		}
 	}
-	
-	/**
-	 * @author Ghaly
-	 * renvoit le cout total de stockage actuel de la marque à l'instant t
-	 */
-	public double get_cout_stockage(ChocolatDeMarque marque) {
-		return cout_stockage_distributeur.getValeur() * stockChocoMarque.get(marque);
-	}
 
 	/**
 	 * 	Actualisation des previsions de vente pour l'étape normalisée
@@ -297,8 +283,9 @@ public class Distributeur1Acteur  implements IActeur {
 		res.add(stock_MQ_BE);
 		res.add(stock_BQ);
 		res.add(stock_MQ);
-	
+		
 		return res;
+	
 	}
 
 	public List<Variable> getParametres() {
