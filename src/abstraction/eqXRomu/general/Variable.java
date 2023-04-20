@@ -83,6 +83,9 @@ public class Variable implements Comparable<Variable>{
 	public String getInfobulle() {
 		return this.infobulle;
 	}
+	public void setInfobulle(String s) {
+		this.infobulle=s;
+	}
 	/**
 	 * @return Retourne l'acteur a l'origine de la creation de l'indicateur
 	 */
@@ -94,6 +97,15 @@ public class Variable implements Comparable<Variable>{
 	 */
 	public Historique getHistorique() {
 		return this.historique;
+	}
+	
+	public void cloner(Variable v ) {
+		this.courbe.cloner(v.courbe);
+		this.createur = v.createur;
+		this.historique.cloner(v.historique);
+		this.infobulle = v.infobulle;
+		this.max = v.max;
+		this.min = v.min;
 	}
 	/**
 	 * Version ciblee pour les variables a acces limite.
