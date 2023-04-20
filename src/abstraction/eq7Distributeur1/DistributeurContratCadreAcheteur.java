@@ -18,7 +18,7 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class DistributeurContratCadreAcheteur extends Distributeur1Acteur implements IAcheteurContratCadre{
+public class DistributeurContratCadreAcheteur extends Distributeur1_stock implements IAcheteurContratCadre{
 	protected List<ExemplaireContratCadre> mesContratEnTantQuAcheteur;
 	protected List<ExemplaireContratCadre> historique_de_mes_contrats;
 	protected SuperviseurVentesContratCadre superviseurVentesCC;

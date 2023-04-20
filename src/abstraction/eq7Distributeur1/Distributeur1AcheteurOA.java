@@ -45,7 +45,7 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 	private Boolean besoin() { //Besoin ou non d'un appel d'offre
 		int etapesuiv = (Filiere.LA_FILIERE.getEtape()+1)%24;
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (stockChocoMarque.get(marque) < previsionsperso(marque,etapesuiv)) { //On achete seulement si on prevoit de vendre plus que ce qu'on a
+			if (stockChocoMarque.get(marque) < getPrevisionsperso(marque,etapesuiv)) { //On achete seulement si on prevoit de vendre plus que ce qu'on a
 				return true;
 			}
 		}
@@ -57,8 +57,8 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 		int etapesuiv = (Filiere.LA_FILIERE.getEtape()+1)%24;
 		HashMap<ChocolatDeMarque,Double> qte = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (stockChocoMarque.get(marque)+getLivraisonEtape(marque) < previsionsperso(marque,etapesuiv)) {
-				qte.put(marque,2*(previsionsperso(marque,etapesuiv)-(stockChocoMarque.get(marque))+getLivraisonEtape(marque)));
+			if (stockChocoMarque.get(marque)+getLivraisonEtape(marque) < getPrevisionsperso(marque,etapesuiv)) {
+				qte.put(marque,2*(getPrevisionsperso(marque,etapesuiv)-(stockChocoMarque.get(marque))+getLivraisonEtape(marque)));
 			}
 		}
 		return qte;
@@ -68,7 +68,7 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 		int etapesuiv = (Filiere.LA_FILIERE.getEtape()+1)%24;
 		List<ChocolatDeMarque> liste = new ArrayList<ChocolatDeMarque>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (stockChocoMarque.get(marque)+getLivraisonEtape(marque) < previsionsperso(marque,etapesuiv)) {
+			if (stockChocoMarque.get(marque)+getLivraisonEtape(marque) < getPrevisionsperso(marque,etapesuiv)) {
 				liste.add(marque);
 			}
 		}
