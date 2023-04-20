@@ -26,6 +26,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	
 	public void next() {
 		super.next();
+		int etape = Filiere.LA_FILIERE.getEtape();
 		journal.ajouter("============================== étape "+etape+" ==============================");
 		journal_achat.ajouter("============================== étape "+etape+" ==============================");
 		journal_stock.ajouter("============================== étape "+etape+" ==============================");

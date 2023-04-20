@@ -67,15 +67,13 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 	 * @author Theo and Ghaly
 	 */
 	public void initialiser() {
-
-		this.totalStocks = new VariablePrivee("Eq7TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
 		
 		//Initialisation des stocks
 		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			stockChocoMarque.put(marque,100000.);
 			Chocolat gamme = marque.getChocolat();
-			couts.put(marque, getCout_gamme(gamme));
+			couts.put(marque, getCout_gamme(marque));
 			nombre_achats.put(marque, 0.);
 			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
 		}

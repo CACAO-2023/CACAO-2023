@@ -32,7 +32,8 @@ public class Distributeur1Acteur  implements IActeur {
 	protected Journal journal_stock;
 
 	//On est oblige de mettre les variables ici sinon la creation de la filiere est dans un tel ordre que nous n'y avons pas acces assez tot
-	protected Variable totalStocks; //La quantité totale de stock de chocolat
+	protected Variable totalStocks = new VariablePrivee("Eq7TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
+	//La quantité totale de stock de chocolat 
 	protected Variable stock_BQ = new Variable("Eq7stock_BQ", "Stock total de chocolat de basse qualité", this, 0);
 	protected Variable stock_MQ = new Variable("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
 	protected Variable stock_MQ_BE = new Variable("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
@@ -170,7 +171,7 @@ public class Distributeur1Acteur  implements IActeur {
 	 * @author Theo-ghaly
 	 * Actualise les couts (par tonne)
 	 */
-	protected void actualise_couts(ChocolatDeMarque marque) {
+	protected void actualise_indic_couts(ChocolatDeMarque marque) {
 		Chocolat gamme = marque.getChocolat();
 		double nv_prix = getCout_gamme(gamme);
 		if (gamme== Chocolat.C_BQ ) {

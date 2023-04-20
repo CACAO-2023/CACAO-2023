@@ -77,7 +77,6 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 	
 	public void next() {
 		super.next();
-		journal.ajouter("AcheteurOA");
 		if (supOA==null) {
 			supOA =(SuperviseurVentesOA)(Filiere.LA_FILIERE.getActeur("Sup.OA"));
 		}
