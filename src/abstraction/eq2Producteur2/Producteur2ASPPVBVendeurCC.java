@@ -1,6 +1,5 @@
 package abstraction.eq2Producteur2;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 //Code ecrit par Nino
@@ -22,7 +21,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	private HashMap<Feve, Boolean> echecVentePrix = new HashMap<Feve, Boolean>();  //Permet de savoir si la derniere venet a reussi pour chaque produit
 	private int nbIterationVentePrix; //Compte le nombre d'appel à contrePropositionPrix pour faire évoluer le prix
 	double facteurPrixInit = 1.75;
-	double venteMin = 500;
+	double venteMin;
 	
 	
 	public Producteur2ASPPVBVendeurCC() {
@@ -38,6 +37,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		this.nbEchecVentePrix.put(Feve.F_MQ_BE, 0);
 		this.nbEchecVentePrix.put(Feve.F_HQ_BE, 0);
 		this.nbEchecVentePrix.put(Feve.F_MQ, 0);
+		venteMin = SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER;
 	}
 	
 	/**
@@ -46,19 +46,18 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 */
 	public void next() {
 		super.next();
-		
 		SuperviseurVentesContratCadre sup = ((SuperviseurVentesContratCadre) Filiere.LA_FILIERE.getActeur("Sup."+"CCadre"));
-		/*List<IAcheteurContratCadre> acheteurs = sup.getAcheteurs(Feve.F_MQ_BE);
+		List<IAcheteurContratCadre> acheteurs = sup.getAcheteurs(Feve.F_MQ_BE);
 		HashMap<Integer, Double> hs = getStocksTotTheo(Feve.F_MQ_BE, Filiere.LA_FILIERE.getEtape() + 9);
 		HashMap<Integer, Double> hs2 = getStocksTotTheo(Feve.F_MQ_BE, Filiere.LA_FILIERE.getEtape() + 9);
 		for(IAcheteurContratCadre ach : acheteurs) {
 			boolean testQuantite = true;
-			for(int i = Filiere.LA_FILIERE.getEtape() +1; i<Filiere.LA_FILIERE.getEtape()+9; i++){
+			for(int i = Filiere.LA_FILIERE.getEtape() + 1; i<=Filiere.LA_FILIERE.getEtape()+9; i++){
 				if(hs.get(i)-(i-Filiere.LA_FILIERE.getEtape() +1)*this.venteMin < this.venteMin) {
 					testQuantite = false;
 				}
 			}if(testQuantite) {
-				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape(), 8, hs.get(Filiere.LA_FILIERE.getEtape()+9)/8);
+				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 8, hs.get(Filiere.LA_FILIERE.getEtape()+9)/8);
 				ExemplaireContratCadre ex = sup.demandeVendeur(ach, this, Feve.F_MQ_BE, ech, this.cryptogramme, false);
 				if(ex != null) {
 					this.getContrats().add(ex);
@@ -69,12 +68,12 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		List<IAcheteurContratCadre> acheteurs2 = sup.getAcheteurs(Feve.F_HQ_BE);
 		for(IAcheteurContratCadre ach2 : acheteurs2) {
 			boolean testQuantite2 = true;
-			for(int i = Filiere.LA_FILIERE.getEtape() +1; i<Filiere.LA_FILIERE.getEtape()+9; i++){
+			for(int i = Filiere.LA_FILIERE.getEtape() +1; i<=Filiere.LA_FILIERE.getEtape()+9; i++){
 				if(hs.get(i)-(i-Filiere.LA_FILIERE.getEtape() +1)*this.venteMin/2 < this.venteMin/2) {
 					testQuantite2 = false;
 				}
 			}if(testQuantite2) {
-				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape(), 8, hs2.get(Filiere.LA_FILIERE.getEtape()+9)/8);
+				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 8, hs2.get(Filiere.LA_FILIERE.getEtape()+9)/8);
 				ExemplaireContratCadre ex = sup.demandeVendeur(ach2, this, Feve.F_MQ_BE, ech, this.cryptogramme, false);
 				if(ex != null) {
 					this.getContrats().add(ex);
@@ -92,9 +91,10 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 					this.echecVentePrix.put(Feve.F_MQ, false);
 					this.nbEchecVentePrix.put(Feve.F_MQ, 0);
 				}
-			} *
+			} */
 			
-		}*/
+		}
+		this.journalCC.ajouter("Contrats Cadre en cours : " + this.contrats);
 	}
 	
 	/**
