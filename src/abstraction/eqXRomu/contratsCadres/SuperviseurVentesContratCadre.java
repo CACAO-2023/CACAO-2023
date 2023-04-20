@@ -8,6 +8,7 @@ import java.util.List;
 
 import abstraction.eqXRomu.filiere.*;
 import abstraction.eqXRomu.general.*;
+import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
@@ -116,7 +117,7 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 			return null;			
 		}
 		ContratCadre contrat = new ContratCadre(acheteur, vendeur, produit, echeancier, cryptogramme, tg, pourcentageRSE);
-		journal.ajouter(Journal.texteColore(acheteur, acheteur.getNom())+" lance le contrat #"+contrat.getNumero()+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(vendeur, vendeur.getNom()));
+		journal.ajouter(Journal.texteColore(acheteur, "==>"+acheteur.getNom())+" lance le contrat #"+contrat.getNumero()+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(vendeur, vendeur.getNom()));
 		return negociations(acheteur, vendeur, produit, echeancier, cryptogramme, tg, contrat,acheteur);
 	}
 	// si on ne precise pas le taux de RSE il est (par defaut) de 0
@@ -176,11 +177,15 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 			contrat = new ContratCadre(acheteur, vendeur, produit, echeancier, cryptogramme, tg);
 		}
 		Echeancier contrePropositionA;
-		journal.ajouter(Journal.texteColore(vendeur, vendeur.getNom())+" lance le contrat #"+contrat.getNumero()+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(acheteur, acheteur.getNom()));
+		journal.ajouter(Journal.texteColore(vendeur, "==>"+vendeur.getNom())+" lance le contrat #"+contrat.getNumero()+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(acheteur, acheteur.getNom()));
 		contrePropositionA=acheteur.contrePropositionDeLAcheteur(new ExemplaireContratCadre(contrat));
 		if (contrePropositionA==null) {
 			journal.ajouter("   "+Journal.texteColore(acheteur, acheteur.getNom()+" retourne null pour echeancier : arret des negociations"));
 			journal.ajouter("contrat #"+contrat.getNumero()+Journal.texteColore(Color.RED,  Color.white, " ANNULE "));
+			return null;// arret des negociations
+		}
+		if (contrePropositionA.getQuantiteTotale()<SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER) {
+			journal.ajouter("   "+Journal.texteColore(acheteur, acheteur.getNom()+" retourne un echeancier dont la quantite totale est inferieure a "+SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER)+" Arret des negos");
 			return null;// arret des negociations
 		}
 		contrat.ajouterEcheancier(contrePropositionA);
@@ -342,7 +347,17 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 		}
 	}
 
+	public void quiVendQuoi() {
+		this.journal.ajouter("== Qui vend quoi ===");
+		List<ChocolatDeMarque> c = Filiere.LA_FILIERE.getChocolatsProduits();
+		for (ChocolatDeMarque cm : c) {
+			this.journal.ajouter("produit "+cm);
+			this.journal.ajouter("&nbsp;&nbsp;&nbsp;vendeurs "+getVendeurs(cm));
+			this.journal.ajouter("&nbsp;&nbsp;acheteurs "+getAcheteurs(cm));
+		}
+	}
 	public void next() {
+		quiVendQuoi();
 		recapitulerContratsEnCours();
 		gererLesEcheancesDesContratsEnCours();
 		archiverContrats();

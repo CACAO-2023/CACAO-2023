@@ -1,6 +1,6 @@
 package abstraction.eq2Producteur2;
 
-//Code écrit par Nathan
+//Code écrit par Nathan Rabier
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -21,6 +21,10 @@ public class Producteur2Acteur implements IActeur {
 	
 	protected int cryptogramme;
 	protected Journal journal;
+	protected Journal journalCC;
+	protected Journal journalStocks;
+	protected Journal journalProd;
+	protected Journal journalBourse;
 	
 	protected Variable nbHecBasse = new VariablePrivee("nbHecBasse", "Le nombre d'hectare de fèves de basse qualité", this, 300000);
 	protected Variable nbHecMoy = new VariablePrivee("nbHecMoy", "Le nombre d'hectare de fèves de moyenne qualité", this, 300000);
@@ -52,6 +56,10 @@ public class Producteur2Acteur implements IActeur {
 
 	public Producteur2Acteur() {
 		this.journal = new Journal("Journal " + this.getNom(), this);
+		this.journalCC = new Journal("Journal Contrat Cadre " + this.getNom(), this);
+		this.journalBourse = new Journal("Journal Bourse " + this.getNom(), this);
+		this.journalProd = new Journal("Journal Production " + this.getNom(), this);
+		this.journalStocks = new Journal("Journal Stocks " + this.getNom(), this);
 	}
 	
 	public void initialiser() {
@@ -74,9 +82,6 @@ public class Producteur2Acteur implements IActeur {
 	//               Getters et setters                   //
 	////////////////////////////////////////////////////////
 
-	public Journal getJournal() {
-		return this.journal;
-	}
 	protected Variable getNbHecBasse() {
 		return this.nbHecBasse;
 	}
@@ -109,7 +114,7 @@ public class Producteur2Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
-		this.getJournal().ajouter("Bonjour, nous sommes à l'étape " + Filiere.LA_FILIERE.getEtape() + "et nous n'avons pas encore fait faillite (enfin j'espère).");
+		this.journal.ajouter("Bonjour, nous sommes à l'étape " + Filiere.LA_FILIERE.getEtape() + "et nous n'avons pas encore fait faillite.");
 	}
 	
 	// Renvoie la couleur
@@ -148,7 +153,11 @@ public class Producteur2Acteur implements IActeur {
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
-		res.add(this.getJournal());
+		res.add(this.journal);
+		res.add(this.journalBourse);
+		res.add(this.journalCC);
+		res.add(this.journalProd);
+		res.add(this.journalStocks);
 		return res;
 	}
 
@@ -167,9 +176,9 @@ public class Producteur2Acteur implements IActeur {
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
 		if(acteur.getNom().equals("EQ2")) {
-			this.getJournal().ajouter("Adieu monde cruel !");
+			this.journal.ajouter("Adieu monde cruel !");
 		} else {
-			this.getJournal().ajouter("RIP " + acteur.getNom() + ", nous ne t'oublierons pas.");
+			this.journal.ajouter("RIP " + acteur.getNom() + ", nous ne t'oublierons pas.");
 		}
 	}
 
@@ -214,7 +223,7 @@ public class Producteur2Acteur implements IActeur {
 	}
 	/*Quantité à livrer aux différents steps pour les ventes par contrat cadre pour la Feve feve*/
 	public Echeancier aLivrer(Feve feve) {
-		Echeancier ech = new Echeancier(); /*Il faut peut-etre m'etre un 0 dans la paranthese de newEchancier() en fonction des tests futurs*/
+		Echeancier ech = new Echeancier(); /*Il faut peut-etre mettre un 0 dans la paranthese de newEchancier() en fonction des tests futurs*/
 		for(ExemplaireContratCadre conEx : this.contrats) {
 			Echeancier ech2 = conEx.getEcheancier();
 			if(conEx.getProduit() == feve) {
