@@ -13,6 +13,7 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
@@ -24,12 +25,20 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	}
 
 	//Auteur : Marzougui Mariem
+	
+
 	public boolean achete(IProduit produit) {
-		this.journal_achats.ajouter("achat du produit"+ produit.toString());
-		return true;
+		if (produit instanceof ChocolatDeMarque) {
+			this.journal_achats.ajouter("achat du produit"+ produit.toString());
+			return true;
+		}
+		return false;
 	}
-
-
+	
+	
+	
+	
+	
 	//Auteur : Marzougui Mariem
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
@@ -76,6 +85,8 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 		this.journal_ContratCadre.ajouter("contrat effectué:"+contrat.toString());	
 	}
 
+	
+	
 	public void next() {
 		super.next();
 
@@ -87,6 +98,22 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 		this.journal_stocks.ajouter("ajout d'une quantité de"+lot.getQuantiteTotale()+"T");
 
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
 

@@ -42,6 +42,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	protected Journal journal_stocks;
 	protected Journal journal_ContratCadre;
 	protected Journal journal_activitegenerale;
+	
 
 
 	public Distributeur2Acteur() {
@@ -50,7 +51,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		chocolats =  new ArrayList<ChocolatDeMarque>();
 		prixDeVente = new HashMap<>();
 		stocks = new StockGeneral();
-		stock_total = 0.;
+		stock_total = 1000.0;
 		pourcentagesGamme = new HashMap<>();
 
 		journal_operationsbancaires = new Journal("Journal des Opérations bancaires de l'" + nom, this);
