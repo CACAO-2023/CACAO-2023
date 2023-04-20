@@ -94,10 +94,11 @@ public class Distributeur1_stock extends Distributeur1Acteur{
 			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
 		}
 		
-		System.out.print(totalStocks.getValeur()==(stock_BQ.getValeur()+stock_HQ_BE.getValeur()+stock_MQ.getValeur()+stock_MQ_BE.getValeur()));
+		
 		//Prise en compte des couts de stockage
-		if (totalStocks.getValeur()*cout_stockage_distributeur.getValeur() > 0) {
-			double cout_STOCK =  totalStocks.getValeur()*cout_stockage_distributeur.getValeur();
+		double cout_STOCK =  totalStocks.getValeur()*cout_stockage_distributeur.getValeur();
+
+		if (cout_STOCK > 0) {
 			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme,Filiere.LA_FILIERE.getBanque(),cout_STOCK );	
 			journal_stock.ajouter("Cout de stockage : "+cout_STOCK);
 			}

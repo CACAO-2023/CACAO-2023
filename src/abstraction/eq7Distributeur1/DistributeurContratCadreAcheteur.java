@@ -51,7 +51,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1_stock implem
 	 * @author Theo
 	 * @param stepDebut : debut de livraison
 	 * @param d : nbr_etape
-	 * @return echeancier sur 1 an, base sur les previsions de ventes
+	 * @return echeancier sur d etapes, base sur les previsions de ventes
 	 */
 	//A COMPLETER POUR PRENDRE EN COMPTE VRAIES PREVISIONS PERSO
 	public Echeancier echeancier_strat(int stepDebut, int d, ChocolatDeMarque marque) {
@@ -62,7 +62,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1_stock implem
 		}
 		return e;
 	}
-	
+
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		if (Math.random()<0.3) {
 			return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
@@ -119,7 +119,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1_stock implem
      * @author Ghaly sentissi
      */
 	public ExemplaireContratCadre getContrat(IProduit produit,Echeancier e) {
-
+		System.out.println("-----------------------------------------------------");
 		this.journal_achat.ajouter("Recherche acheteur pour " + produit + "...");
 		List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
 		ExemplaireContratCadre cc = null;
@@ -168,13 +168,13 @@ public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier 
 	
 	//si le contrat est signé 
 	if (cc != null) {
-        this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + acteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
+        this.journal_achat.ajouter(Color.GREEN, Color.BLACK, "Contrat cadre passé avec " + acteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
         actualise_cout (cc.getPrix());        
         mesContratEnTantQuAcheteur.add(cc);
         
     } else {
     //si le contrat est un echec
-        this.journal_achat.ajouter(Color.LIGHT_GRAY, Color.BLACK, "Echec de la négociation de contrat cadre avec " + acteur.getNom() + " pour " + produit + "...");
+        this.journal_achat.ajouter(Color.RED, Color.BLACK, "Echec de la négociation de contrat cadre avec " + acteur.getNom() + " pour " + produit + "...");
     }
     return cc;
 }
@@ -216,35 +216,34 @@ public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier 
 				}
 			return (previsionannee > stockChocoMarque.get(marque)+getLivraison(marque));
 	};
-	/**
-	 * est appelée pour savoir si on a besoin d'un contrat cadre sur la durée de 6 NEXT
-	 * On lance un CC seulement si notre stock n'est pas suffisant sur la durée qui suit
-	 * @author Ghaly
-	 */
-	public boolean besoin_de_CC(ChocolatDeMarque marque) {
-		return besoin_de_CC(6,marque);
-	}
+
 	
 	/**
 	 * @author Ghaly & Theo
 	 */
 	public void next() {
+
 		super.next();
 		enleve_contrats_obsolete();
+		System.out.println("----------------------oulllaaa----------------------------------------------");
+
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			for (Integer d : durees_CC) {
-			if(besoin_de_CC ( d, marque)) {					//On va regarder si on a besoin d'un nouveau contrat cadre pour chaque marque
-				System.out.println("--------------------------------------------------------------------");
-				Echeancier echeancier = echeancier_strat(etape,d,marque);
+//			for (Integer d : durees_CC) {
+			int d =24;
+//			if(besoin_de_CC ( d,marque)) {					//On va regarder si on a besoin d'un nouveau contrat cadre pour chaque marque
+//				Echeancier echeancier = echeancier_strat(etape,d,marque);
+							
+				Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10);
 				journal_achat.ajouter("Recherche d'un vendeur aupres de qui acheter "+ marque.getNom());
 				ExemplaireContratCadre cc = getContrat(marque,echeancier);
 				if (cc!=null) {
 					break;
 
 				}
+//				}
 			};  		
 
-			}}
+			
 		}
 		
 	
@@ -255,9 +254,8 @@ public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier 
 	// A COMPLETER SI ASSEZ DE STOCK (appele si cc initie par vendeur)
 	public boolean achete(IProduit produit) {
 		if (produit instanceof ChocolatDeMarque) {
-			
-			Boolean b = besoin_de_CC ((ChocolatDeMarque)(produit));
-			return b;
+//			Boolean b = besoin_de_CC (d,(ChocolatDeMarque)(produit));
+			return true;
 		}
 		return false;
 	}
@@ -355,10 +353,12 @@ public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier 
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		if (nombre_achats.get((ChocolatDeMarque)(contrat.getProduit()))==0) {
 			journal.ajouter("Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix());
+			journal_achat.ajouter("Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix());
 
 		}
 		else {
 			journal.ajouter("Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix()*100 /couts.get(contrat.getProduit())+ "%");
+			journal_achat.ajouter("Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix());
 
 		}
 		
