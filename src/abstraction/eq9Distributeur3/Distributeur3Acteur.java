@@ -124,14 +124,6 @@ public class Distributeur3Acteur implements IActeur{
 
 
 	
-	public void repartition_tete_gondole() {
-		HashMap<ChocolatDeMarque, Double> repartition = new HashMap<ChocolatDeMarque, Double>();
-		repartition.put((get_chocolat_with_name("C_HQ_BE_Choc")),1.0);
-		
-		//renvoie une hashmap <marque, quatité>
-	}
-
-	
 	
 	public ChocolatDeMarque get_chocolat_with_name(String name) {
 		for(int i =0; i< chocolats.size();i++) {
