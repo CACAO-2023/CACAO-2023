@@ -147,6 +147,8 @@ public class Producteur3Acteur implements IActeur {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+		res.add(new Variable("Equipe3 Stock Haut de gamme", "Represente la quantite de Haut de Gamme en Stock",this,this.Stock.getQuantite(Feve.F_HQ_BE)));
+		res.add(new Variable("Equipe3 Stock Moyen de gamme Labelise", "Represente la quantite de Moyen de Gamme Labelise en Stock",this,this.Stock.getQuantite(Feve.F_MQ_BE)));
 		return res;
 	}
 
