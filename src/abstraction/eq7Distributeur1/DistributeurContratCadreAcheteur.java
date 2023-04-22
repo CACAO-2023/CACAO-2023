@@ -245,9 +245,8 @@ public ExemplaireContratCadre getContractForProduct(IProduit produit,Echeancier 
 			int d =24;
 			if(besoin_de_CC ( d,marque)) {					//On va regarder si on a besoin d'un nouveau contrat cadre pour chaque marque
 //				Echeancier echeancier = echeancier_strat(etape,d,marque);
-							
-				Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, d, quantite_besoin_cc(d, marque)/d);
 				journal_achat.ajouter("Recherche d'un vendeur aupres de qui acheter "+ marque.getNom());
+				Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, d, quantite_besoin_cc(d, marque)/d);
 				ExemplaireContratCadre cc = getContrat(marque,echeancier);
 				if (cc!=null) {
 					break;

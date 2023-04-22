@@ -160,7 +160,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		int etape_annee = Filiere.LA_FILIERE.getEtape()/24;
 		int etapenormalisee = Filiere.LA_FILIERE.getEtape()%24;
 		HashMap<ChocolatDeMarque,Double> prevetapeperso = previsionsperso.get(etapenormalisee);
-		prevetapeperso.replace(choco, (prevetapeperso.get(choco)*etape_annee+quantite)/(etape_annee+1));
+		prevetapeperso.replace(choco, (prevetapeperso.get(choco)*(etape_annee-1)+quantite)/(etape_annee));
 		previsionsperso.replace(etapenormalisee, prevetapeperso);
 	}
 	
@@ -174,7 +174,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		double quantite = Filiere.LA_FILIERE.getVentes(choco, etapenormalisee);
 		
 		HashMap<ChocolatDeMarque,Double> prevetapeperso = previsionsperso.get(etapenormalisee);
-		prevetapeperso.replace(choco, (prevetapeperso.get(choco)*etape_annee+quantite)/(etape_annee+1));
+		prevetapeperso.replace(choco, (prevetapeperso.get(choco)*(etape_annee-1)+quantite)/(etape_annee));
 		previsionsperso.replace(etapenormalisee, prevetapeperso);
 	}
 	
