@@ -135,6 +135,8 @@ public class Producteur2Acteur implements IActeur {
 		res.add(this.stockTotMoy);
 		res.add(this.stockTotMoyBE);
 		res.add(this.stockTotHauteBE);
+		res.add(this.BQquantiteVendueBourse);
+		res.add(this.MQquantiteVendueBourse);
 		res.add(this.coutStockage);
 		res.add(this.coutSalaire);
 		return res;
