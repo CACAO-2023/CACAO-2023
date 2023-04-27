@@ -224,10 +224,17 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   		int date = Filiere.LA_FILIERE.getEtape() ;
   		int perim = date - dureePeremption ;
   		Double quantiteRetiree = this.stockFeveBG.getQuantites().get(perim) ;
-  		this.stockFeveBG.retirer(quantiteRetiree) ; // retire la feve perime
-  		this.stockFeveMG.retirer(this.stockFeveMG.getQuantites().get(perim)) ;
-  		this.stockFeveMGL.retirer(this.stockFeveMGL.getQuantites().get(perim)) ;
-  		this.stockFeveHGL.retirer(this.stockFeveHGL.getQuantites().get(perim)) ;
+  		if(quantiteRetiree >0) {
+  		this.stockFeveBG.retirer(quantiteRetiree) ;} // retire la feve perime
+  		Double quantiteRetiree2 = this.stockFeveMG.getQuantites().get(perim) ;
+  		if(quantiteRetiree2>0) {
+  		this.stockFeveMG.retirer(quantiteRetiree2) ;}
+  		Double quantiteRetiree3 = this.stockFeveMGL.getQuantites().get(perim) ;
+  		if(quantiteRetiree3>0) {  		
+  		this.stockFeveMGL.retirer(quantiteRetiree3) ;}
+  		Double quantiteRetiree4 = this.stockFeveHGL.getQuantites().get(perim) ;
+  		if(quantiteRetiree4>0) { 
+  		this.stockFeveHGL.retirer(quantiteRetiree4) ;}
   		super.journalStock.ajouter(date+" ");
   		super.journalStock.ajouter(" La quantité de feve BG est :"+ this.stockFeveBG.getQuantiteTotale() );
   		super.journalStock.ajouter(" La quantité de feve MG est :"+ this.stockFeveMG.getQuantiteTotale() );
