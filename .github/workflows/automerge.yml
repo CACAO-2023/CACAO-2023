@@ -50,10 +50,11 @@ jobs:
       - name: Check files
         id: check_files
         run: |
-          echo ${{ steps.filter.outputs.changes }}
+          changes_size=$(echo "${{ steps.filter.outputs.changes }}" | jq 'length')
+          echo "::set-output name=size::$changes_size"
 
       - name: Enable auto-merge
-        if: steps.check_files.outcome != 'failure' && contains(github.event.pull_request.changed_files, steps.actorTeams.outputs.teams[0])
+        if: steps.array_size.outputs.size == 1 && contains(github.event.pull_request.changed_files, steps.actorTeams.outputs.teams[0])
         run: gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
