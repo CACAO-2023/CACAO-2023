@@ -184,6 +184,7 @@ public class Variable implements Comparable<Variable>{
 		this.courbe.ajouter(etape, this.getValeur());
 		pcs.firePropertyChange("Value",old,valeur);
 	}
+	
 	/**
 	 * Version ciblee pour les variables a acces limite.
 	 * Dans le cas des Variable l'acces est ouvert a la fois
