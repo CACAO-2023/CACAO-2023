@@ -29,7 +29,7 @@ If the pull request is correct, it is merged automatically (within 5 minutes) an
 
 **Note that there is no need to close and reopen the pull request, you can just fix the problems and push to your repository.**
 
-## `Change Requested`
+## `Changes requested`
 <!-- `Code owner review required` -->
 
 You are changing files outside of the java package of your team. You can see the files that you are changing in the `Files changed` tab of your pull request on the github website. This list must contain only files in your package.
