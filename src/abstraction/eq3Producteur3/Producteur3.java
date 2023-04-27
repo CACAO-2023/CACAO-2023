@@ -30,8 +30,6 @@ public class Producteur3 extends Bourse3  {
 	 * @author Dubus-Chanson Victor, Bocquet Gabriel
 	 */
 
-	private HashMap<String,HashMap> Champs;
-	private Champs fields;
 	private Integer HectaresLibres; /*Repertorie le nombre d'hectares libres que l'on possede*/
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
 	private LinkedList<Double> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
@@ -44,9 +42,7 @@ public class Producteur3 extends Bourse3  {
 	 * @author Dubus-Chanson Victor
 	 */
 	public Producteur3() {
-		super();
-		this.fields = new Champs();
-		
+		super();		
 
 		this.CoutStep = 0.0;
 		this.CoutTonne = 0.;
@@ -97,16 +93,7 @@ public class Producteur3 extends Bourse3  {
 		this.updateListeCout();
 		this.updateCoutTonne();
 	}
-	
-
-	/**
-	 * @author Dubus-Chanson Victor
-	 */
-
-	protected Champs getFields() {
-		return this.fields;
-	}
-	
+		
 
 	/**
 	 * @author Dubus-Chanson Victor
@@ -143,7 +130,8 @@ public class Producteur3 extends Bourse3  {
 		this.updateListeCout();
 		this.updateCoutTonne();
 		// Incendie ?
-				double probaIncendie =  Math.random();
+		//*		
+		double probaIncendie =  Math.random();
 				if(probaIncendie < 0.02) {
 					this.Fire("Big");
 				}
@@ -160,7 +148,7 @@ public class Producteur3 extends Bourse3  {
 			}
 				//Greve ?
 				double probaGreve = Math.random();
-				if(probaGreve < 1){
+				if(probaGreve < 0.02){
 						try {
 							this.GreveGeneral();
 						} catch (InterruptedException e) {
@@ -169,6 +157,7 @@ public class Producteur3 extends Bourse3  {
 						}
 
 				}
+				//*/
 		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep);
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
 				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ this.HectaresUtilises);
@@ -179,6 +168,8 @@ public class Producteur3 extends Bourse3  {
 		super.StockFeveH.setValeur(this, super.Stock.getQuantite(Feve.F_HQ_BE));
 		super.StockFeveM.setValeur(this, super.Stock.getQuantite(Feve.F_MQ_BE));
 		super.StockFeveB.setValeur(this, super.Stock.getQuantite(Feve.F_BQ));
+		super.tailleH.setValeur(this, super.fields.getTaille("H"));
+		super.tailleM.setValeur(this, super.fields.getTaille("M"));
 	}
 	/*
 
@@ -300,9 +291,10 @@ public class Producteur3 extends Bourse3  {
 			Set<Integer> KeyH = FieldsH.keySet();
 			Journal j = this.getJCatastrophe();
 			if(s.equals("Big")) {
+				/*
 				JFrame popup = new JFrame("Gros incendie !");		
 				popup.setLocation(300, 100);
-				ImageIcon icon = new ImageIcon("Gros_incendie.gif");
+				ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Gros_incendie.gif");
 				JLabel label = new JLabel(icon);
 		        popup.getContentPane().add(label);
 		        popup.pack();
@@ -310,6 +302,7 @@ public class Producteur3 extends Bourse3  {
 		        Timer timer = new Timer();
 				ControlTimeGif monTimerTask = new ControlTimeGif(popup);
 				timer.schedule(monTimerTask, 3000);
+				*/
 				for(Integer key : KeyM) {
 					hectarMburnt += FieldsM.get(key)*0.5;
 					FieldsM.put(key,(int) (FieldsM.get(key)*0.5));
@@ -322,9 +315,10 @@ public class Producteur3 extends Bourse3  {
 				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
 			}
 			else if(s.equals("Med")) {
+				/*
 				JFrame popup = new JFrame("Incendie Moyen !");		
 				popup.setLocation(300, 100);
-				ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Incendie_Moyen.gif");
+				ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Incendie_Moyen.gif");
 				JLabel label = new JLabel(icon);
 		        popup.getContentPane().add(label);
 		        popup.pack();
@@ -332,6 +326,7 @@ public class Producteur3 extends Bourse3  {
 		        Timer timer = new Timer();
 				ControlTimeGif monTimerTask = new ControlTimeGif(popup);
 				timer.schedule(monTimerTask, 3000);
+				*/
 				for(Integer key : KeyM) {
 					hectarMburnt += FieldsM.get(key)*0.2;
 					FieldsM.put(key,(int) (FieldsM.get(key)*0.8));
@@ -344,9 +339,10 @@ public class Producteur3 extends Bourse3  {
 				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
 			}
 			else if(s.equals("Lit")) {
+				/*
 				JFrame popup = new JFrame("Petit Incendie !");		
 				popup.setLocation(300, 100);
-				ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Petit_Incendie.gif");
+				ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Petit_Incendie.gif");
 				JLabel label = new JLabel(icon);
 		        popup.getContentPane().add(label);
 		        popup.pack();
@@ -354,6 +350,7 @@ public class Producteur3 extends Bourse3  {
 		        Timer timer = new Timer();
 				ControlTimeGif monTimerTask = new ControlTimeGif(popup);
 				timer.schedule(monTimerTask, 3000);
+				*/
 				for(Integer key : KeyM) {
 					hectarMburnt += FieldsM.get(key)*0.1;
 					FieldsM.put(key,(int) (FieldsM.get(key)*0.9));
@@ -365,16 +362,19 @@ public class Producteur3 extends Bourse3  {
 				}
 				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
 			}
-		
+			//On pense a mettre a jour les champs
+			this.fields.setChampM(FieldsM);
+			this.fields.setChampH(FieldsH);
 	}
 
 	/**
 	 * @author NAVEROS Marine
 	 */	
 	public void Cyclone() {
+		/*
 		JFrame popup = new JFrame("Cyclone !");		
 		popup.setLocation(300, 100);
-		ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Cyclone.gif");
+		ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Cyclone.gif");
 		JLabel label = new JLabel(icon);
         popup.getContentPane().add(label);
         popup.pack();
@@ -382,6 +382,7 @@ public class Producteur3 extends Bourse3  {
         Timer timer = new Timer();
 		ControlTimeGif monTimerTask = new ControlTimeGif(popup);
 		timer.schedule(monTimerTask, 3000);
+		*/
 		Champs fields = this.getFields();
 		HashMap<Integer,Integer> FieldH = fields.getChamps().get("H");
 		HashMap<Integer, Integer> FieldM = fields.getChamps().get("M");
@@ -399,6 +400,8 @@ public class Producteur3 extends Bourse3  {
 			hectarDetruitM += FieldM.get(key)*(0+ Math.random()*0.7);
 			FieldM.put(key, (int)(FieldM.get(key)*(0+ Math.random()*0.7)));
 		}
+		this.fields.setChampM(FieldM);
+		this.fields.setChampH(FieldH);
 		j.ajouter(Color.gray, Color.black, hectarDetruitM+"d'hectares de Moyenne Gamme qui ont été détruits par un cyclone");		
 		}
 			
@@ -410,9 +413,10 @@ public class Producteur3 extends Bourse3  {
 	 */
 	//Pour modéliser la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
 	protected void GreveGeneral() throws InterruptedException {
+		/*
 		JFrame popup = new JFrame("Grêve des Ouvriers !");		
 		popup.setLocation(300, 100);
-		ImageIcon icon = new ImageIcon("Greve.gif");
+		ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Greve.gif");
 		JLabel label = new JLabel(icon);
 
 		popup.getContentPane().add(label);
@@ -421,6 +425,7 @@ public class Producteur3 extends Bourse3  {
 		Timer timer = new Timer();
 		ControlTimeGif monTimerTask = new ControlTimeGif(popup);
 		timer.schedule(monTimerTask, 3000);
+		*/
 		//On a autant d'employé que d'hectare Utilise
 		Integer nbrgreviste = (int) Math.round(this.getHectaresUt()*0.2);
 		//on calcule le ce qu'on aurait du produire avec ces employees
