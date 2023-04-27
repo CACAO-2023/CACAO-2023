@@ -231,6 +231,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	
 	public void initialiser() {
 		super.initialiser();
+		this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
 	}
 	
 	public void next() {
