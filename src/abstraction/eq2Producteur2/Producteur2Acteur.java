@@ -40,6 +40,7 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable MQquantiteVendueBourse = new VariablePrivee("Eq2 MQ quantite vendue en bourse","quantite de fèves Vendue en Bourse en MQ par step", this, 0);
 	protected Variable coutStockage = new VariablePrivee("EQ2 cout stockage", "coût du stockage à chaque étape", this, 0);
 	protected Variable coutSalaire = new VariablePrivee("EQ2 cout salaire", "coût des salaires à chaque étape", this, 0);
+	protected Variable seuilVenteBourseMQ_BE = new VariablePrivee("EQ2 seuil vente en bourse MQ_BE", "seuil d'ancienneté de vente de MQ_BE en bourse", this, 10);
 	protected Producteur2 thisP;
 
 	//Prix provisoires
@@ -147,6 +148,7 @@ public class Producteur2Acteur implements IActeur {
 		List<Variable> res=new ArrayList<Variable>();
 		res.add(this.tempsDegradationFeve);
 		res.add(this.tempsPerimationFeve);
+		res.add(this.seuilVenteBourseMQ_BE);
 		return res;
 	}
 
