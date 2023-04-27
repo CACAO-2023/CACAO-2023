@@ -18,10 +18,12 @@ import java.util.List;
 public class Transformateur3AchatCC extends Transformateur3Transformation  implements IAcheteurContratCadre {
 	
 	private List<ExemplaireContratCadre> ListeContratEnCours;
+	private SuperviseurVentesContratCadre superviseur ;
 	
 	public Transformateur3AchatCC () {
 		super();
 		this.ListeContratEnCours = new LinkedList<ExemplaireContratCadre>();
+		this.superviseur = new SuperviseurVentesContratCadre();
 		
 	}
 	/**
@@ -208,13 +210,20 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	}*/
 	
 /** ecrit par Nathan Claeys
+ * retourne un CC si on a trouvé un acheteur et que la négociation à réussi
+ * return null sinon
  */
 
-	/**public ExemplaireContratCadre getContrat(Feve produit) {
-		Object l = SuperviseurVentesContratCadre.getVendeurs(produit);
-		if (SuperviseurVentesContratCadre.getVendeurs(produit).size()!=0)
-		List<IVendeurContratCadre> vendeurs = SuperviseurVentesContratCadre.getVendeurs(produit);
-	}*/
+	public ExemplaireContratCadre chercheContrat(IProduit produit) {
+		List<IVendeurContratCadre> vendeurs = superviseur.getVendeurs(produit);
+		if (vendeurs.size()!=0) {
+			IVendeurContratCadre vendeur = vendeurs.get(0);
+			ExemplaireContratCadre contrat = superviseur.demandeAcheteur(this, vendeur, produit, new Echeancier(), super.cryptogramme, false);
+			if (contrat != null) {super.journal.ajouter("CC cherché et trouvé :"+contrat.toString());}
+			return contrat;	
+		}
+		else {return null;}
+	}
 
 	/** ecrit par Nathan Claeys
 	 */	
@@ -226,6 +235,10 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 				contratsObsoletes.add(contrat);
 			}
 		}  
-		this.getListeContratEnCours().removeAll(contratsObsoletes);		
+		this.getListeContratEnCours().removeAll(contratsObsoletes);
+		this.chercheContrat(Feve.F_BQ);
+		this.chercheContrat(Feve.F_MQ);
+		this.chercheContrat(Feve.F_MQ_BE);
+		this.chercheContrat(Feve.F_HQ_BE);
 	}  
 }  
