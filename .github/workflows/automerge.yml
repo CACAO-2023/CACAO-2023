@@ -62,14 +62,15 @@ jobs:
             exit 0
           fi
             
-      - uses: tspascoal/get-user-teams-membership@v2
+      - if: failure()
+        uses: tspascoal/get-user-teams-membership@v2
         id: actorTeams
         with:
           username: ${{ github.event.pull_request.user.login }}
           GITHUB_TOKEN: ${{ secrets.PAT }}
 
       - name: Auto-merge PR
-        if: contains(github.event.pull_request.changed_files, steps.actorTeams.outputs.teams[0])
+        if: failure() && contains(github.event.pull_request.changed_files, steps.actorTeams.outputs.teams[0])
         run: gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
