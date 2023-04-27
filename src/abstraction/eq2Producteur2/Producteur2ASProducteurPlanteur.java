@@ -162,6 +162,11 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		this.majSurfaceTot();
 	}
 	
+	protected double Productivite(int step) {
+		double P = 110/(720*Math.sqrt(2*Math.PI))*Math.exp(-1/2*((step-480)/720)^2);
+		return P;
+	}
+	
 	//La fonction ci_dessous prevois les quantities de cacao que l'on sera apte a produire à une step donnée
 	//Avec nos terres actuelles. En effet dans notre cas un hectare met 3 ans pour que les cacaoyers dessus
 	//puissent produire des feves, ils produisent des feves de maniere constante jusqu'a 40 ans
@@ -175,7 +180,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 					qte =+ 0;
 				}
 				if (step-i>=3*24 && step-i<40*24) {
-					qte =+ prodHec.getValeur()*this.age_hectares.get(f).get(i);
+					qte =+ Productivite(step)*this.age_hectares.get(f).get(i);
 				}
 				
 			}
@@ -218,7 +223,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	//une rentabilite superieure a 10%
 	
 	protected boolean Rentabilites(Feve f, Double prix){
-		double rentabilite = prix * prodHec.getValeur()/this.salaires.get(f);
+		double rentabilite = prix * Productivite(Filiere.LA_FILIERE.getEtape())/this.salaires.get(f);
 		if (rentabilite>=1.1) {
 			return true;
 		}

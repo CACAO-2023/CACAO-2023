@@ -26,20 +26,23 @@ public class Producteur2Acteur implements IActeur {
 	protected Journal journalProd;
 	protected Journal journalBourse;
 	
-	protected Variable nbHecBasse = new VariablePrivee("nbHecBasse", "Le nombre d'hectare de fèves de basse qualité", this, 300000);
-	protected Variable nbHecMoy = new VariablePrivee("nbHecMoy", "Le nombre d'hectare de fèves de moyenne qualité", this, 300000);
-	protected Variable nbHecMoyBE = new VariablePrivee("nbHecMoyBE", "Le nombre d'hectare de fèves de moyenne qualité bio-équitable", this, 250000);
-	protected Variable nbHecHauteBE = new VariablePrivee("nbHecHaute", "Le nombre d'hectare de fèves de haute qualité bio_équitable", this, 50000);
-	protected Variable prodHec = new VariablePrivee("prodHec", "La production moyenne de feve en tonne par hectare par récolte", this, 0.56);
-	protected Variable stockTotBasse = new VariablePrivee("stockTotBasse", "Stock total de fèves de basse qualité", this, 0);
-	protected Variable stockTotMoy = new VariablePrivee("stockTotMoy", "Stock total de fèves de moyenne qualité", this, 0);
-	protected Variable stockTotMoyBE = new VariablePrivee("stockTotMoyBE", "stock Total de fèves de moyenne qualité bio-équitable", this, 0);
-	protected Variable stockTotHauteBE = new VariablePrivee("stockTotHauteBE", "stock Total de fèves de haute qualité bio-équitable", this, 0);
-	protected Variable tempsDegradationFeve = new VariablePrivee("tempsDegradationFeve", "Temps (en nombre d'étapes) avant qu'une Feve ne perdent de la qualité", this, 12);
-	protected Variable tempsPerimationFeve = new VariablePrivee("tempsPerimationFeve", "Temps (en nombre d'étapes) avant qu'une Feve ne se périme totalement  après avoir perdu une gamme", this, 6);
-	protected Variable coutMoyenStock = new VariablePrivee("cout moyen stockage", "Cout moyen du stockage d'une tonne de fève pour un step", this, 1.5);
-	protected Variable BQquantiteVendueBourse = new VariablePrivee("BQquantiteVendueBourse","quantite de fèves Vendue en Bourse en BQ par step", this, 0);
-	protected Variable MQquantiteVendueBourse = new VariablePrivee("MQquantiteVendueBourse","quantite de fèves Vendue en Bourse en MQ par step", this, 0);
+	protected Variable nbHecBasse = new VariablePrivee("Eq2 nombre d'hectare BQ", "Le nombre d'hectare de fèves de basse qualité", this, 300000);
+	protected Variable nbHecMoy = new VariablePrivee("Eq2 nombre d'hectare MQ", "Le nombre d'hectare de fèves de moyenne qualité", this, 300000);
+	protected Variable nbHecMoyBE = new VariablePrivee("Eq2 nombre d'hectare MQ_BE", "Le nombre d'hectare de fèves de moyenne qualité bio-équitable", this, 250000);
+	protected Variable nbHecHauteBE = new VariablePrivee("Eq2 nombre d'hectare HQ_BE", "Le nombre d'hectare de fèves de haute qualité bio_équitable", this, 50000);
+	protected Variable stockTotBasse = new VariablePrivee("Eq2 stock tot BQ", "Stock total de fèves de basse qualité", this, 0);
+	protected Variable stockTotMoy = new VariablePrivee("Eq2 stock total MQ", "Stock total de fèves de moyenne qualité", this, 0);
+	protected Variable stockTotMoyBE = new VariablePrivee("Eq2 stock total MQ_BE", "stock Total de fèves de moyenne qualité bio-équitable", this, 0);
+	protected Variable stockTotHauteBE = new VariablePrivee("Eq2 stock total HQ_BE", "stock Total de fèves de haute qualité bio-équitable", this, 0);
+	protected Variable tempsDegradationFeve = new VariablePrivee("Eq2 temps degradation feve", "Temps (en nombre d'étapes) avant qu'une Feve ne perdent de la qualité", this, 12);
+	protected Variable tempsPerimationFeve = new VariablePrivee("Eq2 temps perimation feve", "Temps (en nombre d'étapes) avant qu'une Feve ne se périme totalement  après avoir perdu une gamme", this, 6);
+	protected Variable BQquantiteVendueBourse = new VariablePrivee("Eq2 BQ quantite vendue en bourse","quantite de fèves Vendue en Bourse en BQ par step", this, 0);
+	protected Variable MQquantiteVendueBourse = new VariablePrivee("Eq2 MQ quantite vendue en bourse","quantite de fèves Vendue en Bourse en MQ par step", this, 0);
+	protected Variable coutStockage = new VariablePrivee("EQ2 cout stockage", "coût du stockage à chaque étape", this, 0);
+	protected Variable coutSalaire = new VariablePrivee("EQ2 cout salaire", "coût des salaires à chaque étape", this, 0);
+	protected Variable seuilVenteBourseMQ_BE = new VariablePrivee("EQ2 seuil vente en bourse MQ_BE", "seuil d'ancienneté de vente de MQ_BE en bourse", this, 10);
+	protected Variable seuilVenteBourseMQ = new VariablePrivee("EQ2 seuil vente en bourse MQ", "seuil d'ancienneté de vente obligatoire de MQ en bourse", this, 10);
+	protected Variable seuilVenteBourseBQ = new VariablePrivee("EQ2 seuil vente en bourse BQ", "seuil d'ancienneté de vente obligatoire de MQ_BE en bourse", this, 10);
 	protected Producteur2 thisP;
 
 	//Prix provisoires pour les contrats cadres
@@ -94,9 +97,6 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable getNbHecHauteBE() {
 		return this.nbHecHauteBE;
 	}
-	protected Variable getProdHec() {
-		return this.prodHec;
-	}
 	public HashMap<Feve, Double> getPrixCC(){
 		return this.prixCC;
 	}
@@ -138,6 +138,10 @@ public class Producteur2Acteur implements IActeur {
 		res.add(this.stockTotMoy);
 		res.add(this.stockTotMoyBE);
 		res.add(this.stockTotHauteBE);
+		res.add(this.BQquantiteVendueBourse);
+		res.add(this.MQquantiteVendueBourse);
+		res.add(this.coutStockage);
+		res.add(this.coutSalaire);
 		return res;
 	}
 
@@ -146,7 +150,9 @@ public class Producteur2Acteur implements IActeur {
 		List<Variable> res=new ArrayList<Variable>();
 		res.add(this.tempsDegradationFeve);
 		res.add(this.tempsPerimationFeve);
-		res.add(this.coutMoyenStock);
+		res.add(this.seuilVenteBourseMQ_BE);
+		res.add(this.seuilVenteBourseMQ);
+		res.add(this.seuilVenteBourseBQ);
 		return res;
 	}
 
