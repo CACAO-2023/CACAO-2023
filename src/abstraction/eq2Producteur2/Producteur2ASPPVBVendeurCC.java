@@ -55,10 +55,10 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 			boolean testQuantite = true;
 			for(int i = Filiere.LA_FILIERE.getEtape() +1; i<Filiere.LA_FILIERE.getEtape()+9; i++){
 				if(hs.get(i)-(i-Filiere.LA_FILIERE.getEtape() +1)*this.venteMin < this.venteMin) {
-					testQuantite = false;
+					testQuantite = false; 
 				}
 			}if(testQuantite) {
-				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape(), 8, hs.get(Filiere.LA_FILIERE.getEtape()+9)/8);
+				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 8, Math.min(hs.get(Filiere.LA_FILIERE.getEtape()+9)/8, this.venteMin));
 				ExemplaireContratCadre ex = sup.demandeVendeur(ach, this, Feve.F_MQ_BE, ech, this.cryptogramme, false);
 				if(ex != null) {
 					this.getContrats().add(ex);
@@ -74,7 +74,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 					testQuantite2 = false;
 				}
 			}if(testQuantite2) {
-				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape(), 8, hs2.get(Filiere.LA_FILIERE.getEtape()+9)/8);
+				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 8, hs2.get(Filiere.LA_FILIERE.getEtape()+9)/8);
 				ExemplaireContratCadre ex = sup.demandeVendeur(ach2, this, Feve.F_MQ_BE, ech, this.cryptogramme, false);
 				if(ex != null) {
 					this.getContrats().add(ex);
@@ -116,15 +116,17 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * negocier un contrat cadre pour ce type de produit).
 	 */
 	public boolean vend(IProduit produit) {
-		boolean testQuantite = true;
-		HashMap<Integer, Double> hs = getStocksTotTheo((Feve) produit, Filiere.LA_FILIERE.getEtape() + 9);
-		for(int i = Filiere.LA_FILIERE.getEtape() +1; i<Filiere.LA_FILIERE.getEtape()+13; i++){
-			if(hs.get(i) < this.venteMin) {
-				testQuantite = false;
+		if(produit instanceof Feve) {
+			boolean testQuantite = true;
+			HashMap<Integer, Double> hs = getStocksTotTheo((Feve) produit, Filiere.LA_FILIERE.getEtape() + 12);
+			for(int i = Filiere.LA_FILIERE.getEtape() +1; i<Filiere.LA_FILIERE.getEtape()+13; i++){
+				if(hs.get(i) < this.venteMin) {
+					testQuantite = false;
+				}
 			}
-		}
-		if(produit instanceof Feve && ((Feve) produit).isBioEquitable() && testQuantite) {
-			return true;			
+			if(produit instanceof Feve && ((Feve) produit).isBioEquitable() && testQuantite) {
+				return true;			
+			}
 		}
 		return false;
 	}
