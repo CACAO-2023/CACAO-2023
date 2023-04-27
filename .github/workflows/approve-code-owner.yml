@@ -1,0 +1,20 @@
+name: Auto-approve Code Owners
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  auto_approve:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if author is a code owner
+        id: check_code_owner
+        run: echo ::set-output name=code_owner::$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews" | jq --arg user "${{ github.event.pull_request.user.login }}" 'any(.[]; .user.login == $user and .state == "APPROVED")')
+
+      - name: Auto-approve pull request
+        if: steps.check_code_owner.outputs.code_owner == 'true'
+        uses: reviewdog/action-auto-approve@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
