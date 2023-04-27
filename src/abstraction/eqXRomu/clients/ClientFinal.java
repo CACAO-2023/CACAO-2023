@@ -1,6 +1,8 @@
 package abstraction.eqXRomu.clients;
 
 import java.awt.Color;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,7 +18,7 @@ import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
-public class ClientFinal implements IActeur, IAssermente {
+public class ClientFinal implements IActeur, IAssermente, PropertyChangeListener {
 
 	public static final double POURCENTAGE_MAX_EN_TG = 0.1; // La quantite mise en tete de gondole ne doit pas depasser 10% de la quantite totale mise en vente
 	//	protected double pourcentageConsommationBasseQualite;
@@ -43,6 +45,10 @@ public class ClientFinal implements IActeur, IAssermente {
 	//	{ 3.0, 3.0,11.0, 3.0, 3.0, 3.0, 3.0, 3.0,13.0, 3.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 3.0, 3.0,10.0, 3.0, 3.0,11.0,10.0, },			
 	//	};
 
+	private Variable volumeVente ; // le volume de vente du chocolat de marque selectionne
+	private Variable cmSelectionnee; // l'index du chocolat selectionne
+	private HashMap<ChocolatDeMarque, Variable> venteCM; // le volume de vente de chaque chocolat de marque
+	
 	private Map<ChocolatDeMarque, Double> attractiviteChocolat;// Plus un chocolat a une forte attractivite (compare aux autres chocolats), plus ce chocolat aura une place importante dans la consommation globale de chocolat
 	private Map<ChocolatDeMarque, Map<IDistributeurChocolatDeMarque, Double>> attractiviteDistributeur;// Pour un chocolat donne, plus l'attractivite d'un distributeur est grande (comparee a celle des autres distributeurs) plus sa part de marche sur ce chocolat sera grande
 	private Variable deltaConsoMin, deltaConsoMax, conso, surcoutMemeQualite, surcoutQualitesDifferentes, gainAttractiviteMemeQualite, gainAttractiviteQualiteDifferente;
@@ -84,6 +90,8 @@ public class ClientFinal implements IActeur, IAssermente {
 		this.JournalDistribution= new Journal(this.getNom()+" distribution", this);
 		this.journalAttractivites = new Journal(this.getNom()+" attractivites", this);
 		this.journalPrix = new Journal(this.getNom()+" prix", this);
+		this.volumeVente = new Variable(getNom()+" volume vente CM", null, this, 0.0);
+		this.cmSelectionnee = new Variable(getNom()+" choc. marque select.", "indiquez l'index du chocolat de marque", this, 0.0);
 		this.surcoutMemeQualite = new Variable(getNom()+" surcout meme qualite", null, this, 0.25);
 		this.surcoutQualitesDifferentes = new Variable(getNom()+" surcout qualites differentes", null, this, 1.25);
 		this.gainAttractiviteMemeQualite = new Variable(getNom()+" gain attractivite meme qualite", null, this, 0.005); 
@@ -114,6 +122,14 @@ public class ClientFinal implements IActeur, IAssermente {
 
 		this.chocolatsDeMarquesProduits = Filiere.LA_FILIERE.getChocolatsProduits();
 
+		this.venteCM = new HashMap<ChocolatDeMarque, Variable> ();
+		for (ChocolatDeMarque cm : chocolatsDeMarquesProduits) {
+			this.venteCM.put(cm, new Variable(getNom()+" V.V."+cm, "V.V."+cm, this, 0.0));
+		}
+		this.volumeVente.cloner(this.venteCM.get(chocolatsDeMarquesProduits.get(0))); // initialement c'est le premier chocolat de marque quidont le volume de vente est affiche
+		this.cmSelectionnee.addObserver(this);
+		
+		
 		List<IDistributeurChocolatDeMarque> distributeurs = Filiere.LA_FILIERE.getDistributeurs();
 		for (IDistributeurChocolatDeMarque d : distributeurs) {
 			this.quantiteEnVente.put(d, new HashMap<ChocolatDeMarque, Double>());
@@ -271,6 +287,7 @@ public class ClientFinal implements IActeur, IAssermente {
 				}
 				double enVente = this.quantiteEnVente.get(dist).get(choco);
 				double quantiteAchetee = Math.max(0.0, Math.min(quantiteDesiree, enVente));
+				quantiteAchetee = quantiteAchetee<0.05 ? 0.0 : quantiteAchetee; // En dessous de 50kg la quantite demandee devient 0.0 
 				JournalDistribution.ajouter("&nbsp;&nbsp;&nbsp;&nbsp;pour "+dist.getNom()+" d'attractivite "+Journal.doubleSur(this.attractiviteDistributeur.get(choco).get(dist), 4)+" la quantite desiree est "+Journal.doubleSur(quantiteDesiree,4)+" et quantite en vente ="+Journal.doubleSur(enVente, 4)+" -> quantitee achetee "+Journal.doubleSur(quantiteAchetee, 4));
 				if (quantiteAchetee>0.0) {
 					totalVentes+=quantiteAchetee;
@@ -289,6 +306,7 @@ public class ClientFinal implements IActeur, IAssermente {
 				}
 				journalAttractivites.ajouter("  Attractivite de "+Journal.texteColore(dist, dist.getNom())+" pour "+choco.getNom()+" = "+Journal.doubleSur(attractiviteDistributeur.get(choco).get(dist), 4)+ " (impact rupture="+Journal.doubleSur(impactRupture,  4)+"  impact prix="+Journal.doubleSur(impactPrix,  4)+"  impact TG="+Journal.doubleSur(impactTG,  4)+")");
 			}
+			this.venteCM.get(choco).setValeur(this, totalVentes);
 			ventesEtape.put(choco,totalVentes);
 			this.historiqueVentes.put(Filiere.LA_FILIERE.getEtape(), ventesEtape);
 		}
@@ -341,6 +359,8 @@ public class ClientFinal implements IActeur, IAssermente {
 		res.add(this.conso);
 		res.add(deltaConsoMin);
 		res.add(deltaConsoMax);
+		res.add(this.volumeVente);
+		res.add(this.cmSelectionnee);
 		return res;
 	}
 	public List<Variable> getParametres() {
@@ -486,5 +506,15 @@ public class ClientFinal implements IActeur, IAssermente {
 		} else {
 			throw new IllegalArgumentException("Appel de getQuantiteEnVenteTG de ClientFinal avec un cryptogramme incorrect");
 		}
+	}
+
+	public void propertyChange(PropertyChangeEvent evt) {
+		int index = (int)(this.cmSelectionnee.getValeur());
+		if (index<0 || index>=this.chocolatsDeMarquesProduits.size()) {
+			index=0;
+			this.cmSelectionnee.setValeur(this, index);
+		}
+		this.volumeVente.cloner(this.venteCM.get(this.chocolatsDeMarquesProduits.get(index)));
+		System.out.println("Chocolat de marque selectionne :"+this.chocolatsDeMarquesProduits.get(index));
 	}
 }

@@ -7,48 +7,58 @@ import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Transformateur2AcheteurBourseCacao extends Transformateur2 implements IAcheteurBourse {
+public class Transformateur2AcheteurBourseCacao extends Transformateur2VendeurCC implements IAcheteurBourse {
 
-	private double achatMaxParStep;
-	private Feve feve;
-	private Variable stockFeve;
+	/**
+	 * @author FERHOUT Adam
+	 */
 	
-	public Transformateur2AcheteurBourseCacao(Feve f, Variable s, double a) {
-		super();
-		this.achatMaxParStep = a;
-		this.feve = f;
-		this.stockFeve = s;
-	}
+	private double coursMaxMQ;
+	private double coursMinMQ;
 	
-	public Feve getFeve() {
-		return feve;
+	private double coursMaxHQ;
+	private double coursMinHQ;
+	
+	public Transformateur2AcheteurBourseCacao() { // on utilisera ces variables plus tard dans la V2.
+		this.coursMinMQ = 10;
+		this.coursMaxMQ = 20;
+
 	}
 
-
-	@Override
+	/**
+	 * @author FERHOUT Adam
+	 */
+	
 	public double demande(Feve f, double cours) {
-		/*if (this.getFeve().equals(f)) {
-			BourseCacao bourse = (BourseCacao)(Filiere.LA_FILIERE.getActeur("BourseCacao"));
-			double pourcentage = (bourse.getCours(getFeve()).getMax()-bourse.getCours(getFeve()).getValeur())/(bourse.getCours(getFeve()).getMax()-bourse.getCours(getFeve()).getMin()); // difference de prix avec le max / amplitude totale
-			this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   BOURSEA: demande en bourse de "+achatMaxParStep*pourcentage+" de "+f);
-			return achatMaxParStep*pourcentage;*/
+		// on achete en quantités aléatoires si notre solde le permet
+		if((f.getGamme()==Feve.F_MQ.getGamme())||(f.getGamme()==Feve.F_HQ_BE.getGamme())) {
 			double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
-			double demande = Math.max(0, Math.min( Math.random()*50, solde));
+			double demande = Math.max(0, Math.min( Math.random()*500, solde));
 			this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   BOURSEA: demande en bourse de "+demande+" de "+f);
 			return demande;
-		} /*else {
+		}
+		else {
 			return 0.0;
-		}}*/
+		}
+	}
 
 
-	@Override
+	
+	/**
+	 * @author FERHOUT Adam
+	 */
+	
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
-		this.stockFeve.setValeur(this, this.stockFeve.getValeur()+l.getQuantiteTotale());
+		Feve feve_concernee = ((Feve) l.getProduit());
+		double quantite = l.getQuantiteTotale();
+		//.stockFeves.get(feve_conernee).setValeur(this, this.stockFeves.get(feve_concernee)+l.getQuantiteTotale());
+		this.stockFeves.put(feve_concernee, this.stockFeves.get(feve_concernee)+quantite); // on ajoute nos feves a notre stock
+		this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_GREEN,"Achat de "+feve_concernee.getGamme()+" En quantité "+ quantite);
 	}
 	
 	@Override
 	public void notificationBlackList(int dureeEnStep) {
-		this.journal.ajouter("Aie... je suis blackliste... j'aurais du verifier que j'avais assez d'argent avant de passer une trop grosse commande en bourse...");
+		this.journalAchats.ajouter("Aie... je suis blackliste... j'aurais du verifier que j'avais assez d'argent avant de passer une trop grosse commande en bourse...");
 	
 		
 	}
