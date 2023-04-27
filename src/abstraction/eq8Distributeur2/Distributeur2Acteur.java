@@ -51,7 +51,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		chocolats =  new ArrayList<ChocolatDeMarque>();
 		prixDeVente = new HashMap<>();
 		stocks = new StockGeneral();
-		stock_total = 1000.0;
+		stock_total = 0.0;
 		pourcentagesGamme = new HashMap<>();
 
 		journal_operationsbancaires = new Journal("Journal des Opérations bancaires de l'" + nom, this);
@@ -120,7 +120,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			}
 		}
 		
-		if (Filiere.LA_FILIERE.getEtape()==1) {
+		if (Filiere.LA_FILIERE.getEtape()==0) {
 			for (ChocolatDeMarque marque : chocolats) {
 				stocks.ajouterAuStock(marque, 1.0);
 				journal_stocks.ajouter("Stock de "+marque+" : "+stocks.getStock(marque)+" T");
@@ -204,7 +204,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			System.out.println("try again");
 		}
 
-
 	}
 	//Auteur : Marzougui Mariem
 	// Apres chaque operation sur votre compte bancaire, cette
@@ -243,14 +242,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	}
 
 	//Auteur : Ben Messaoud Karim
-	public  Stock getStock(ChocolatDeMarque choco) {
-		int pos = (((List<Variable>) choco).indexOf(choco));
-		if (pos < 0) {
-			return null;
-
-		} else {
-			return this.getStock(choco);
-		}
+	public  double getStock(ChocolatDeMarque choco) {
+			return this.stocks.getStock(choco);
 	}
 
 	public List<String> getMarquesChocolat() {
@@ -294,7 +287,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			return 0.0;
 		} else {
 			if (choco.getGamme() == Gamme.BQ) {
-				double n = (this.getStock(choco).getQuantite());
+				double n = this.getStock(choco);
 				return n / 10.0;
 			} else {
 				return 0.0;
@@ -307,7 +300,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		if (pos >= 0) {
 			this.stocks.retirerDuStock(choco, quantite);
 			stock_total-=quantite;
-			journal_stocks.ajouter("retrait d'une quantité de"+ quantite+"T");System.out.println("gggggg");
+			journal_stocks.ajouter("retrait d'une quantité de"+ quantite+"T");
 			journal_ventes.ajouter("La quantité " + quantite + " a été vendue à" + montant);
 		}
 	}

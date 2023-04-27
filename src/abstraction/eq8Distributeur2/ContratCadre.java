@@ -25,8 +25,6 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	}
 
 	//Auteur : Marzougui Mariem
-	
-
 	public boolean achete(IProduit produit) {
 		if (produit instanceof ChocolatDeMarque) {
 			this.journal_achats.ajouter("achat du produit"+ produit.toString());
@@ -34,10 +32,6 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 		}
 		return false;
 	}
-	
-	
-	
-	
 	
 	//Auteur : Marzougui Mariem
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
@@ -49,16 +43,19 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			ChocolatDeMarque produit = (ChocolatDeMarque) contrat.getProduit();
-			if (produit != null && this.stocks.getStock(produit) != 0.0) {
+			if (produit != null && this.stocks.getStock(produit) != 0.0 ) {
 				double quantiteEnStock = this.stocks.getStock(produit);
 				if (contrat.getEcheancier().getQuantiteTotale() < quantiteEnStock) {
 					if (Math.random() < 0.1) {
 						this.notificationNouveauContratCadre(contrat);
+						this.journal_ContratCadre.ajouter("effectuation du contrat:"+contrat.toString());
 						return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
+						
 					} else { //dans 90% des cas on fait une contreproposition pour l'echeancier
 						Echeancier e = contrat.getEcheancier();
-						e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut()) / 2.0); // on souhaite livrer deux fois moins lors de la 1ere livraison... un choix arbitraire, juste pour l'exemple...
+						e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut()) / 2.0); // on souhaite livrer deux fois moins lors de la 1ere livraison
 						this.notificationNouveauContratCadre(contrat);
+						this.journal_ContratCadre.ajouter("effectuation du contrat:"+contrat.toString());
 						return e;
 					}
 				} else {
@@ -85,18 +82,14 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 		this.journal_ContratCadre.ajouter("contrat effectué:"+contrat.toString());	
 	}
 
-	
-	
 	public void next() {
 		super.next();
-
 	}
 
 	//Auteur : Marzougui Mariem
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		stocks.ajouterAuStock((ChocolatDeMarque)(contrat.getProduit()),lot.getQuantiteTotale() );
 		this.journal_stocks.ajouter("ajout d'une quantité de"+lot.getQuantiteTotale()+"T");
-
 	}
 	
 	
