@@ -11,34 +11,34 @@ jobs:
         with:
           filters: |
             eq1:
-              - '/src/abstraction/eq1*/**'
+              - 'src/abstraction/eq1*/**'
             eq2:
-              - '/src/abstraction/eq2*/**'
+              - 'src/abstraction/eq2*/**'
             eq3:
-              - '/src/abstraction/eq3*/**'
+              - 'src/abstraction/eq3*/**'
             eq4:
-              - '/src/abstraction/eq4*/**'
+              - 'src/abstraction/eq4*/**'
             eq5:
-              - '/src/abstraction/eq5*/**'
+              - 'src/abstraction/eq5*/**'
             eq6:
-              - '/src/abstraction/eq6*/**'
+              - 'src/abstraction/eq6*/**'
             eq7:
-              - '/src/abstraction/eq7*/**'
+              - 'src/abstraction/eq7*/**'
             eq8:
-              - '/src/abstraction/eq8*/**'
+              - 'src/abstraction/eq8*/**'
             eq9:
-              - '/src/abstraction/eq9*/**'
+              - 'src/abstraction/eq9*/**'
             eqX:
-              - '/src/abstraction/eqX*/**'
+              - 'src/abstraction/eqX*/**'
             root:
-              - '/*'
-              - '/.github/**'
-              - '/.settings/**'
-              - '/docs/**'
-              - '/lib/**'
-              - '/src/controle/**'
-              - '/src/presentation/**'
-              - '/test/**'
+              - '*'
+              - '.github/**'
+              - '.settings/**'
+              - 'docs/**'
+              - 'lib/**'
+              - 'src/controle/**'
+              - 'src/presentation/**'
+              - 'test/**'
               
       - name: Check Condition
         id: condition_check
