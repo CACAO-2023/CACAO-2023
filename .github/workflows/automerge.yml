@@ -66,17 +66,17 @@ jobs:
           
           echo $count
 
-          [ $eq1 = true ] && ((count++))
-          [ $eq2 = true ] && ((count++))
-          [ $eq3 = true ] && ((count++))
-          [ $eq4 = true ] && ((count++))
-          [ $eq5 = true ] && ((count++))
-          [ $eq6 = true ] && ((count++))
-          [ $eq7 = true ] && ((count++))
-          [ $eq8 = true ] && ((count++))
-          [ $eq9 = true ] && ((count++))
-          [ $eqX = true ] && ((count++))
-          [ $root = true ] && ((count++))
+          [ $eq1 = 'true' ] && ((count++))
+          [ $eq2 = 'true' ] && ((count++))
+          [ $eq3 = 'true' ] && ((count++))
+          [ $eq4 = 'true' ] && ((count++))
+          [ $eq5 = 'true' ] && ((count++))
+          [ $eq6 = 'true' ] && ((count++))
+          [ $eq7 = 'true' ] && ((count++))
+          [ $eq8 = 'true' ] && ((count++))
+          [ $eq9 = 'true' ] && ((count++))
+          [ $eqX = 'true' ] && ((count++))
+          [ $root = 'true' ] && ((count++))
 
           echo $count
 
