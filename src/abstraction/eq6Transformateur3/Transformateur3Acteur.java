@@ -104,6 +104,7 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	public void next() {
 		this.journal.ajouter(Filiere.LA_FILIERE.getEtape()+"");
 		this.ListJournal.add(this.journal);
+		this.ListJournal.add(journalStock);
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
