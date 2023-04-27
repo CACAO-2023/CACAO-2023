@@ -1,32 +1,32 @@
-root:
+in-root:
 - any: ['**/*', '!src/abstraction/**/*']
 
-eq1Producteur1: 
+in-eq1Producteur1: 
 - /src/abstraction/eq1Producteur1/**/*
 
-eq2Producteur2:
+in-eq2Producteur2:
 - /src/abstraction/eq2Producteur2/**/*
 
-eq3Producteur3:
+in-eq3Producteur3:
 - /src/abstraction/eq3Producteur3/**/*
 
-eq4Transformateur1:
+in-eq4Transformateur1:
 - /src/abstraction/eq4Transformateur1/**/*
 
-eq5Transformateur2:
+in-eq5Transformateur2:
 - /src/abstraction/eq5Transformateur2/**/*
 
-eq6Transformateur3:
+in-eq6Transformateur3:
 - /src/abstraction/eq6Transformateur3/**/*
 
-eq7Distributeur1:
+in-eq7Distributeur1:
 - /src/abstraction/eq7Distributeur1/**/*
 
-eq8Distributeur2:
+in-eq8Distributeur2:
 - /src/abstraction/eq8Distributeur2/**/*
 
-eq9Distributeur3:
+in-eq9Distributeur3:
 - /src/abstraction/eq9Distributeur3/**/*
 
-eqXRomu:
+in-eqXRomu:
 - /src/abstraction/eqXRomu/**/*
