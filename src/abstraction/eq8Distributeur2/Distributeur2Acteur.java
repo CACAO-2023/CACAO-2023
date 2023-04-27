@@ -1,11 +1,13 @@
+
 package abstraction.eq8Distributeur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-
 import abstraction.eqXRomu.clients.ClientFinal;
 import abstraction.eqXRomu.clients.ExempleDistributeurChocolatMarque;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
@@ -23,55 +25,81 @@ import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
-public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarque, IMarqueChocolat,IAcheteurContratCadre {
-	
+public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarque, IMarqueChocolat {
+
 	protected int cryptogramme;
 	protected String nom;
 	protected ArrayList<ChocolatDeMarque> chocolats;
+	protected LinkedList<String> nos_chocolats;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
-    protected HashMap<ChocolatDeMarque, Variable> stocks;
-    protected HashMap<Gamme, Double> pourcentagesGamme;
-    private double[] prix;
-    private String[] marques;
-   
-	private double stockBasDeGamme;
-	private double stockMoyenDeGamme;
-	private double stockHautDeGamme;
-    protected Journal journal_operationsbancaires;
-    protected Journal journal_ventes;
-    protected Journal journal_achats;
-    protected Journal journal_stocks;
-    protected Journal journal_activitegenerale;
-    
+	protected StockGeneral stocks;
+	protected HashMap<Gamme, Double> pourcentagesGamme;
+	private double stock_total;
+	
+	protected Journal journal_operationsbancaires;
+	protected Journal journal_ventes;
+	protected Journal journal_achats;
+	protected Journal journal_stocks;
+	protected Journal journal_ContratCadre;
+	protected Journal journal_activitegenerale;
+	
+
 
 	public Distributeur2Acteur() {
 		cryptogramme = 0; // valeur par défaut à modifier
-	    nom = "équipe 8";
-	    chocolats =  new ArrayList<ChocolatDeMarque>();
-	    prixDeVente = new HashMap<>();
-	    stocks = new HashMap<>();
-	    pourcentagesGamme = new HashMap<>();
-	    prix = new double[]{0, 0, 0}; // valeurs par défaut à modifier
-	    marques = new String[]{"marque 1", "marque 2", "marque 3"}; // valeurs par défaut à modifier
-	    stockBasDeGamme = 0.0; // valeur par défaut à modifier
-	    stockMoyenDeGamme = 0.0; // valeur par défaut à modifier
-	    stockHautDeGamme = 0.0; // valeur par défaut à modifier
-	    journal_operationsbancaires = new Journal("Journal des Opérations bancaires de l'" + nom, this);
-	    journal_ventes = new Journal("Journal des Ventes de l'" + nom, this);
-	    journal_achats = new Journal("Journal des Achats de l'" + nom, this);
-	    journal_activitegenerale = new Journal("Journal général de l'" + nom, this);
-	    journal_stocks = new Journal("Journal des stocks" + nom, this);
-        initialiserGamme();
+		nom = "équipe 8";
+		chocolats =  new ArrayList<ChocolatDeMarque>();
+		prixDeVente = new HashMap<>();
+		stocks = new StockGeneral();
+		stock_total = 1000.0;
+		pourcentagesGamme = new HashMap<>();
+
+		journal_operationsbancaires = new Journal("Journal des Opérations bancaires de l'" + nom, this);
+		journal_ventes = new Journal("Journal des Ventes de l'" + nom, this);
+		journal_achats = new Journal("Journal des Achats de l'" + nom, this);
+		journal_ContratCadre= new Journal("Journal des Contrats Cadre de l'" + nom, this);
+		journal_activitegenerale = new Journal("Journal général de l'" + nom, this);
+		journal_stocks = new Journal("Journal des stocks " + nom, this);
+		initialiserGamme();
+
+		this.nos_chocolats = new LinkedList<String>();
+		
+		//nos marques de chocolats
+		this.nos_chocolats.add("C_HQ_BE_Vccotioi");
+		this.nos_chocolats.add("C_MQ_ChocoPop");
+		this.nos_chocolats.add("C_MQ_chokchoco");
+		this.nos_chocolats.add("C_MQ_BE_Villors");
+
+		
+	//C_HQ_BE_Vccotioi
+	//C_MQ_ChocoPop
+	//C_HQ_BE_Maison Doutre
+	//C_BQ_eco+ choco
+	//C_MQ_chokchoco
+	//C_MQ_BE_chokchoco bio
+	//C_HQ_BE_Choc
+	//C_HQ_BE_Villors
+	//C_MQ_BE_Villors
+	//C_MQ_Villors
+	//C_BQ_Villors	
+		
 	}
-	
+
 	private void initialiserGamme() {
-		 pourcentagesGamme.put(Gamme.BQ, 0.55);
-	     pourcentagesGamme.put(Gamme.MQ, 0.40);
-	     pourcentagesGamme.put(Gamme.HQ, 0.05);
+		pourcentagesGamme.put(Gamme.BQ, 0.55);
+		pourcentagesGamme.put(Gamme.MQ, 0.40);
+		pourcentagesGamme.put(Gamme.HQ, 0.05);
 	}
 
 	public void initialiser() {
-		
+
+		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
+		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
+		for (int i=0; i<chocolats_filiere.size(); i++) {
+			if(nos_chocolats.contains((chocolats_filiere.get(i)).toString())){
+				chocolats.add(chocolats_filiere.get(i));
+			}
+		}
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -84,6 +112,27 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	public void next() {
 		
+		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
+		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
+		for (int i=0; i<chocolats_filiere.size(); i++) {
+			if(nos_chocolats.contains((chocolats_filiere.get(i)).toString())){
+				chocolats.add(chocolats_filiere.get(i));
+			}
+		}
+		
+		if (Filiere.LA_FILIERE.getEtape()==1) {
+			for (ChocolatDeMarque marque : chocolats) {
+				stocks.ajouterAuStock(marque, 1.0);
+				journal_stocks.ajouter("Stock de "+marque+" : "+stocks.getStock(marque)+" T");
+			}	}
+
+		//Mise à jour du stock total
+		for (ChocolatDeMarque marque : chocolats) {
+			stock_total += stocks.getStock(marque);
+		}
+		journal_stocks.ajouter("Stock total "+ stock_total+"T");
+
+		//Répertoire de l'activité générale
 		journal_activitegenerale.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
 			for (int i=0; i<this.chocolats.size(); i++) {
@@ -94,32 +143,41 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
-		return new Color(209, 179, 221); 
+		return new Color(209, 179, 221);
 	}
 
+	//Auteur : Ben Messaoud Karim
 	public String getDescription() {
-		return "Notre acteur, Royal Roast, est un distributeur de chocolat de toutes les gammes qui s'engage à prendre en compte les enjeux de la filière du cacao pour distribuer un produit final qui respecte les normes et répond aux besoins des clients.";
+		return "Royal Roast, un distributeur de chocolat de qualité.";
 	}
 
-	// Renvoie les indicateurs
+	//Auteur : Ben Messaoud Karim
+	//Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
+
 		List<Variable> res = new ArrayList<Variable>();
+		Variable s= new Variable("stock",this,stock_total);
+		res.add(s);
 		return res;
 	}
 
-	// Renvoie les parametres
+	//Auteur : Marzougui Mariem
+	//Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
 		return res;
 	}
 
-	// Renvoie les journaux
+	//Auteur : Marzougui Mariem
+	//Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(journal_operationsbancaires);
 		res.add(journal_achats);
 		res.add(journal_ventes);
+		res.add(journal_ContratCadre);
 		res.add(journal_activitegenerale);
+		res.add(journal_stocks);
 		return res;
 	}
 
@@ -130,31 +188,41 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	// Appelee en debut de simulation pour vous communiquer 
 	// votre cryptogramme personnel, indispensable pour les
 	// transactions.
+	//Auteur : Ben Messaoud Karim
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
 	}
 
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
+	//Auteur : Ben Messaoud Karim
 	public void notificationFaillite(IActeur acteur) {
-		
-	}
+		if (this==acteur) {
+			System.out.println("oups on est mort");
+		}
+		else {
+			System.out.println("try again");
+		}
 
+
+	}
+	//Auteur : Marzougui Mariem
 	// Apres chaque operation sur votre compte bancaire, cette
 	// operation est appelee pour vous en informer
 	public void notificationOperationBancaire(double montant) {
 		if (montant<0) {
 			double m=montant*(-1);
-			String ch="retrait de "+m;
+			String ch="retrait de "+m+"€";
 			this.journal_operationsbancaires.ajouter(ch);
 		}
 		if (montant>0) {
-			String ch= "dépot de "+montant;
+			String ch= "dépot de "+montant+"€";
 			this.journal_operationsbancaires.ajouter(ch);
 		}
 	}
-	
+
 	// Renvoie le solde actuel de l'acteur
+	//Auteur : Ben Messaoud Karim
 	public double getSolde() {
 		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme);
 	}
@@ -174,115 +242,83 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		return Filiere.LA_FILIERE;
 	}
 
-	public  Variable getStock(ChocolatDeMarque choco) {
-	    int pos = (((List<Variable>) choco).indexOf(choco));
-	    if (pos < 0) {
-	        return null;
-	    } else {
-	        return stocks.get(pos);
-	    }
+	//Auteur : Ben Messaoud Karim
+	public  Stock getStock(ChocolatDeMarque choco) {
+		int pos = (((List<Variable>) choco).indexOf(choco));
+		if (pos < 0) {
+			return null;
+
+		} else {
+			return this.getStock(choco);
+		}
 	}
 
 	public List<String> getMarquesChocolat() {
-		return null;
+		return new ArrayList<String>();
 	}
-//-----------------------------------------------
+	//-----------------------------------------------
 	//La fonction prix() permet de connaître le prix actuel 
 	//d'un kg de chocolat de marque choco. Elle recherche dans 
 	//la HashMap prixDeVente si le chocolat de marque choco est vendu par le distributeur.
 	//Si c'est le cas, la fonction renvoie le prix correspondant à ce 
 	//chocolat de marque. Sinon, la fonction renvoie 0. 
-	
-	
-	@Override
+
+	//Auteur : Ben Messaoud Karim
 	public double prix(ChocolatDeMarque choco) {
 		if(prixDeVente.containsKey(choco)) {
 			return prixDeVente.get(choco);
 		}else {
-			return 0;
+			return 100000000;
+		}
+	}
+	/*tous les next on ajoute dans le journal la quantité en stock*/
+	/*mettre en indicateur que l'on est en rupture de stock */
+
+	//Auteur : Ben Messaoud Karim et Maxime Azzi
+	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
+		if (choco == null || this.stocks.getStock(choco) == 0.0) {
+			return 0.0;
+		} else {
+			double stockGamme;
+			double stockChoco = this.stocks.getStock(choco);
+			stockGamme = this.stocks.getStock(choco);
+
+			return Math.min(stockGamme, stockChoco);
 		}
 	}
 
-	@Override
-    public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
-        int pos = (chocolats.indexOf(choco));
-        if (pos < 0) {
-            return 0.0;
-        } else {
-            double stockGamme;
-            if (choco.getGamme() == Gamme.BQ) {
-                stockGamme = stockBasDeGamme;
-            } else if (choco.getGamme() == Gamme.MQ) {
-                stockGamme = stockMoyenDeGamme;
-            } else {
-                stockGamme = stockHautDeGamme;
-            }
-            return Math.min(stockGamme, this.getStock(choco).getValeur());
-        }
+	//Auteur : Ben Messaoud Karim et Maxime Azzi
+	public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
+		int pos = chocolats.indexOf(choco);
+		if (pos < 0) {
+			return 0.0;
+		} else {
+			if (choco.getGamme() == Gamme.BQ) {
+				double n = (this.getStock(choco).getQuantite());
+				return n / 10.0;
+			} else {
+				return 0.0;
+			}}
+	}
+
+	//Auteur : Ben Messaoud Karim et Maxime Azzi
+	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
+		int pos = chocolats.indexOf(choco);
+		if (pos >= 0) {
+			this.stocks.retirerDuStock(choco, quantite);
+			stock_total-=quantite;
+			journal_stocks.ajouter("retrait d'une quantité de"+ quantite+"T");System.out.println("gggggg");
+			journal_ventes.ajouter("La quantité " + quantite + " a été vendue à" + montant);
+		}
+	}
+
+	//Auteur : Ben Messaoud Karim
+	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
+		// Ajouter un message dans le journal pour indiquer que le rayon est vide
+		journal_activitegenerale.ajouter("Le rayon du chocolat " + choco.getNom() + " est vide.");
+	}
+	public String toString() {
+        return this.getNom();
     }
 
-	@Override
-    public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
-        int pos = chocolats.indexOf(choco);
-        if (pos < 0) {
-            return 0.0;
-        } else {
-            if (choco.getGamme() == Gamme.BQ) {
-                return Math.min(stockBasDeGamme, this.getStock(choco).getValeur()) / 10.0;
-            } else {
-                return 0.0;
-            }}
-        }
-
-	 @Override
-	    public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
-	        int pos = chocolats.indexOf(choco);
-	        if (pos >= 0) {
-	            this.getStock(choco).retirer(this, quantite);
-	        }
-	    }
-
-	@Override
-	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
-		// TODO Auto-generated method stub
-		
-	}
-//-----------------------------------------Partie contrat cadre
-	@Override
-	public boolean achete(IProduit produit) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
-			Echeancier echeancier, long cryptogramme, boolean tg) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		
-	}
-	//-----------------------------------------FIN Partie contrat cadre
 }

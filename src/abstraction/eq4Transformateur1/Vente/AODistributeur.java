@@ -1,35 +1,57 @@
 package abstraction.eq4Transformateur1.Vente;
 
 import abstraction.eqXRomu.offresAchat.IVendeurOA;
+
+import java.util.List;
+
+import abstraction.eqXRomu.appelsOffres.IVendeurAO;
+import abstraction.eqXRomu.appelsOffres.PropositionAchatAO;
+import abstraction.eqXRomu.appelsOffres.SuperviseurVentesAO;
+import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.offresAchat.OffreAchat;
 import abstraction.eqXRomu.offresAchat.PropositionVenteOA;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
-public class AODistributeur extends CC_distributeur implements IVendeurOA {
+/**
+ * @author alexian, verife François
+ *
+ */
 
-	public PropositionVenteOA proposerVente(OffreAchat offre) {
-		this.journal.ajouter("proposerVente(offre = "+offre+")");
-		for (ChocolatDeMarque c : this.stockChocoMarque.keySet()) {
-			this.journal.ajouter("      "+c+" "+(offre.getChocolat().equals(c.getChocolat())?"convient":"ne convient pas")+" "+(offre.getMarque()==null || offre.getMarque().equals(c.getMarque())?" marque ok":" marque pas ok"));
-			if (offre.getChocolat().equals(c.getChocolat()) && (offre.getMarque()==null || offre.getMarque().equals(c.getMarque()))) { // type recherche
-				if (this.stockChocoMarque.get(c)>=offre.getQuantiteT()) {
-					this.journal.ajouter(" "+this.stockChocoMarque.get(c)+" T en stock -> quantite suffisante");
-					return new PropositionVenteOA(offre, this, c, 16.0);
+public class AODistributeur extends CC_distributeur implements IVendeurAO {
+	protected SuperviseurVentesAO superviseur;
+	
+	@Override
+	public PropositionAchatAO choisir(List<PropositionAchatAO> propositions) {
+		double prix=0;
+		PropositionAchatAO propRetenue=null;
+		for (PropositionAchatAO p : propositions) {
+			if (p.getPrixT()>prix) {
+				propRetenue=p;
+			}
+		}
+		return propRetenue;
+	}
+	
+	public void initialiser() {
+		super.initialiser();
+		this.superviseur = (SuperviseurVentesAO)(Filiere.LA_FILIERE.getActeur("Sup.AO"));
+	}
+
+	public void next() {
+		super.next();
+		for (ChocolatDeMarque c : stockChocoMarque.keySet()) {
+			if (this.stockChocoMarque.get(c)>2000) {
+				PropositionAchatAO retenue = superviseur.vendreParAO(this, cryptogramme, c, 2000.0, false);
+				if (retenue!=null) {
+					this.totalStocksChocoMarque.ajouter(this,-retenue.getOffre().getQuantiteT() ,this.cryptogramme);
+					this.stockChocoMarque.put(c, this.stockChocoMarque.get(c)-retenue.getOffre().getQuantiteT());
+					journal.ajouter("vente de "+retenue.getOffre().getQuantiteT()+" T a "+retenue.getAcheteur().getNom());
 				} else {
-					this.journal.ajouter(" "+this.stockChocoMarque.get(c)+" T en stock -> quantite insuffisante");
+					journal.ajouter("pas d'offre retenue");
 				}
 			}
 		}
-		return null;
 	}
 
-	public void notifierAchatOA(PropositionVenteOA propositionRetenue) {
-		double nouveauStock = Math.max(0.0, this.stockChocoMarque.get(propositionRetenue.getChocolatDeMarque())-propositionRetenue.getOffre().getQuantiteT());
-		this.journal.ajouter(" le stock de "+propositionRetenue.getChocolatDeMarque()+" passe a "+nouveauStock+" suite a la vente "+propositionRetenue);
-		this.stockChocoMarque.put(propositionRetenue.getChocolatDeMarque(), nouveauStock);
-	}
-
-	public void notifierPropositionNonRetenueOA(PropositionVenteOA propositionRefusee) {
-	}
 
 }

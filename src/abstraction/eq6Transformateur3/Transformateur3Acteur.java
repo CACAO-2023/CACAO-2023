@@ -8,26 +8,89 @@ import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 
-public class Transformateur3Acteur implements IActeur {
+public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	
-	protected int cryptogramme;
-/** Nathan Claeys*/
 	private List<ChocolatDeMarque> ListeProduits;
 	protected HashMap<Feve, Double> stockFeves;
-	protected HashMap<Chocolat, Double> stockProduit;
-
-	public Transformateur3Acteur() {
-		this.ListeProduits = new LinkedList<ChocolatDeMarque>();
+	protected HashMap<Chocolat, Double> stockChoco;
+	protected int cryptogramme;
+/** Nathan Claeys*/
+	protected Journal journal;
+	protected Journal journalStock;
+	protected List<Journal> ListJournal;
+	protected int pourcentageCacaoBG ;
+	protected int pourcentageCacaoMG ;
+	protected int pourcentageCacaoMGL ;
+	protected int pourcentageCacaoHG ;
+	protected int pourcentageRSE ;
+	protected Variable totalStocksFeves;   
+	protected Variable totalStocksChoco; 
+	protected List<ChocolatDeMarque>chocosProduits;
+	
+	/**Nathan Claeys*/
+	protected Transformateur3Acteur() {
+		this.journal = new Journal("Journal"+this.getNom(),this);
+		this.journalStock = new Journal("Journal des stocks"+this.getNom(),this);
+		this.pourcentageCacaoBG = 50;
+		this.pourcentageCacaoMG = 65;
+		this.pourcentageCacaoMGL = 75;
+		this.pourcentageCacaoHG = 85;
+		this.pourcentageRSE = 10;
+		this.totalStocksFeves = new Variable ("totalStocksFeves","defini l'etat total du stock de feves",this,0.0,1000000.0,0.0);
+		this.totalStocksChoco = new Variable ("totalStocksChoco","defini l'etat total du stock de produit fini",this,0.0,1000000.0,0.0);
+		this.ListJournal = new LinkedList<Journal>();
+		ListJournal.add(this.journal);
+		this.chocosProduits = new LinkedList<ChocolatDeMarque>();
+		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_BQ,"eco+ choco",this.pourcentageCacaoBG,this.pourcentageRSE));
+		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_MQ,"chokchoco",this.pourcentageCacaoMG,this.pourcentageRSE));
+		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_MQ_BE,"chokchoco bio",this.pourcentageCacaoMGL,this.pourcentageRSE));
+		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_HQ_BE,"Choc",this.pourcentageCacaoHG,this.pourcentageRSE));
 	}
 	
-	public void initialiser() {
+	/**
+	 * @return the pourcentageCacaoBG
+	 */
+	public int getPourcentageCacaoBG() {
+		return pourcentageCacaoBG;
 	}
+
+	/**
+	 * @return the pourcentageCacaoMG
+	 */
+	public int getPourcentageCacaoMG() {
+		return pourcentageCacaoMG;
+	}
+
+	/**
+	 * @return the pourcentageCacaoMGL
+	 */
+	public int getPourcentageCacaoMGL() {
+		return pourcentageCacaoMGL;
+	}
+
+	/**
+	 * @return the pourcentageCacaoHG
+	 */
+	public int getPourcentageCacaoHG() {
+		return pourcentageCacaoHG;
+	}
+
+	/**
+	 * @return the pourcentageRSE
+	 */
+	public int getPourcentageRSE() {
+		return pourcentageRSE;
+	}
+
+	public void initialiser() {
+			}
 
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ6";
@@ -36,16 +99,21 @@ public class Transformateur3Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 	//         En lien avec l'interface graphique         //
 	////////////////////////////////////////////////////////
-
+/**ecrit par Nathan Claeys
+ */
 	public void next() {
+		this.journal.ajouter(Filiere.LA_FILIERE.getEtape()+"");
+		this.ListJournal.add(this.journal);
+		this.ListJournal.add(journalStock);
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
 		return new Color(158, 242, 226); 
 	}
-
+/** par Maxime Bedu
+ */
 	public String getDescription() {
-		return "Bla bla bla";
+		return "Eco Choco, le choco est un cadeau !";
 	}
 
 	// Renvoie les indicateurs
@@ -53,7 +121,8 @@ public class Transformateur3Acteur implements IActeur {
 		List<Variable> res = new ArrayList<Variable>();
 		return res;
 	}
-
+/** ecrit par Nathan Claeys
+ */
 	// Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
@@ -62,8 +131,7 @@ public class Transformateur3Acteur implements IActeur {
 
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
-		List<Journal> res=new ArrayList<Journal>();
-		return res;
+		return this.ListJournal;
 	}
 
 	////////////////////////////////////////////////////////
@@ -106,9 +174,20 @@ public class Transformateur3Acteur implements IActeur {
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
 	}
-/** Nathan Claeys */
-	public List<ChocolatDeMarque> getListeProduits() {
-		return ListeProduits;
+	public String toString() {
+		return this.getNom();
+	}
+/** ecrit par Nathan Claeys
+*/
+	@Override
+	public List<String> getMarquesChocolat() {
+		// TODO Auto-generated method stub
+		LinkedList<String> l= new LinkedList<String>();
+		l.add("Choc");
+		l.add("chokchoco bio");
+		l.add("chokchoco");
+		l.add("eco+ choco");
+		return l;
 	}
 
 }

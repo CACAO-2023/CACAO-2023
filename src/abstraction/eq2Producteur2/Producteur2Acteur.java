@@ -1,12 +1,15 @@
 package abstraction.eq2Producteur2;
 
-//Code écrit par Nathan
+//Code écrit par Nathan Rabier
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eqXRomu.contratsCadres.Echeancier;
+import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
@@ -18,11 +21,15 @@ public class Producteur2Acteur implements IActeur {
 	
 	protected int cryptogramme;
 	protected Journal journal;
+	protected Journal journalCC;
+	protected Journal journalStocks;
+	protected Journal journalProd;
+	protected Journal journalBourse;
 	
-	protected Variable nbHecBasse = new VariablePrivee("nbHecBasse", "Le nombre d'hectare de fèves de basse qualité", this, 100);
-	protected Variable nbHecMoy = new VariablePrivee("nbHecMoy", "Le nombre d'hectare de fèves de moyenne qualité", this, 100);
-	protected Variable nbHecMoyBE = new VariablePrivee("nbHecMoyBE", "Le nombre d'hectare de fèves de moyenne qualité bio-équitable", this, 100);
-	protected Variable nbHecHauteBE = new VariablePrivee("nbHecHaute", "Le nombre d'hectare de fèves de basse qualité", this, 100);
+	protected Variable nbHecBasse = new VariablePrivee("nbHecBasse", "Le nombre d'hectare de fèves de basse qualité", this, 300000);
+	protected Variable nbHecMoy = new VariablePrivee("nbHecMoy", "Le nombre d'hectare de fèves de moyenne qualité", this, 300000);
+	protected Variable nbHecMoyBE = new VariablePrivee("nbHecMoyBE", "Le nombre d'hectare de fèves de moyenne qualité bio-équitable", this, 250000);
+	protected Variable nbHecHauteBE = new VariablePrivee("nbHecHaute", "Le nombre d'hectare de fèves de haute qualité bio_équitable", this, 50000);
 	protected Variable prodHec = new VariablePrivee("prodHec", "La production moyenne de feve en tonne par hectare par récolte", this, 0.56);
 	protected Variable stockTotBasse = new VariablePrivee("stockTotBasse", "Stock total de fèves de basse qualité", this, 0);
 	protected Variable stockTotMoy = new VariablePrivee("stockTotMoy", "Stock total de fèves de moyenne qualité", this, 0);
@@ -30,37 +37,41 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable stockTotHauteBE = new VariablePrivee("stockTotHauteBE", "stock Total de fèves de haute qualité bio-équitable", this, 0);
 	protected Variable tempsDegradationFeve = new VariablePrivee("tempsDegradationFeve", "Temps (en nombre d'étapes) avant qu'une Feve ne perdent de la qualité", this, 12);
 	protected Variable tempsPerimationFeve = new VariablePrivee("tempsPerimationFeve", "Temps (en nombre d'étapes) avant qu'une Feve ne se périme totalement  après avoir perdu une gamme", this, 6);
-	
-	public double prixMinBQ = 0.0; //provisoire
-	public double prixMinMQ = 0.0; //provisoire
-	public double prixMinMQBE = 0.0; //provisoire
-	public double prixMinHQ = 0.0; //provisoire
-	public LinkedList<Double> prixMin;
-	public double prixBQ = 1.0; //provisoire
-	public double prixMQ = 2.0; //provisoire
-	public double prixMQBE = 3.0; //provisoire
-	public double prixHQ = 4.0; //provisoire
-	public LinkedList<Double> prix;
+	protected Variable coutMoyenStock = new VariablePrivee("cout moyen stockage", "Cout moyen du stockage d'une tonne de fève pour un step", this, 1.5);
+	protected Variable BQquantiteVendueBourse = new VariablePrivee("BQquantiteVendueBourse","quantite de fèves Vendue en Bourse en BQ par step", this, 0);
+	protected Variable MQquantiteVendueBourse = new VariablePrivee("MQquantiteVendueBourse","quantite de fèves Vendue en Bourse en MQ par step", this, 0);
+	protected Producteur2 thisP;
+
+	//Prix provisoires
+	public double prixBQ = 2000.0;
+	public double prixMQ = 4000.0;
+	public double prixMQBE = 6000.0;
+	public double prixHQ = 8000.0;
+	public HashMap<Feve, Double> prixCC;
+
+	protected LinkedList<ExemplaireContratCadre> contrats;
 	
 	
 	protected Feve[] lesFeves = {Feve.F_BQ, Feve.F_MQ, Feve.F_MQ_BE, Feve.F_HQ_BE};
 
 	public Producteur2Acteur() {
 		this.journal = new Journal("Journal " + this.getNom(), this);
+		this.journalCC = new Journal("Journal Contrat Cadre " + this.getNom(), this);
+		this.journalBourse = new Journal("Journal Bourse " + this.getNom(), this);
+		this.journalProd = new Journal("Journal Production " + this.getNom(), this);
+		this.journalStocks = new Journal("Journal Stocks " + this.getNom(), this);
 	}
 	
 	public void initialiser() {
 		
-		this.prix = new LinkedList<Double>();
-		this.prixMin = new LinkedList<Double>();
-		this.getPrix().add(prixBQ);
-		this.getPrix().add(prixMQ);
-		this.getPrix().add(prixMQBE);
-		this.getPrix().add(prixHQ);
-		this.getPrixMin().add(prixMinBQ);
-		this.getPrixMin().add(prixMinMQ);
-		this.getPrixMin().add(prixMinMQBE);
-		this.getPrixMin().add(prixMinHQ);
+		this.prixCC = new HashMap<Feve, Double>();
+		this.getPrixCC().put(Feve.F_BQ, prixBQ);
+		this.getPrixCC().put(Feve.F_MQ, prixMQ);
+		this.getPrixCC().put(Feve.F_MQ_BE, prixMQBE);
+		this.getPrixCC().put(Feve.F_HQ_BE, prixHQ);
+		
+
+		this.contrats = new LinkedList<ExemplaireContratCadre>();
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -71,9 +82,6 @@ public class Producteur2Acteur implements IActeur {
 	//               Getters et setters                   //
 	////////////////////////////////////////////////////////
 
-	public Journal getJournal() {
-		return this.journal;
-	}
 	protected Variable getNbHecBasse() {
 		return this.nbHecBasse;
 	}
@@ -89,35 +97,16 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable getProdHec() {
 		return this.prodHec;
 	}
-	public double getPrixMinBQ() {
-		return this.prixMinBQ;
+	public HashMap<Feve, Double> getPrixCC(){
+		return this.prixCC;
 	}
-	public double getPrixMinMQ() {
-		return this.prixMinMQ;
+
+	public double getPrixCC(Feve f){
+		return this.prixCC.get(f);
+
 	}
-	public double getPrixMinMQBE() {
-		return this.prixMinMQ;
-	}
-	public double getPrixMinHQ() {
-		return this.prixMinHQ;
-	}
-	public LinkedList<Double> getPrixMin(){
-		return this.prixMin;
-	}
-	public double getPrixBQ() {
-		return this.prixBQ;
-	}
-	public double getPrixMQ() {
-		return this.prixMQ;
-	}
-	public double getPrixMQBE() {
-		return this.prixMQBE;
-	}
-	public double getPrixHQ() {
-		return this.prixHQ;
-	}
-	public LinkedList<Double> getPrix(){
-		return this.prix;
+	public LinkedList<ExemplaireContratCadre> getContrats(){
+		return this.contrats;
 	}
 	
 	////////////////////////////////////////////////////////
@@ -125,13 +114,15 @@ public class Producteur2Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	public void next() {
-		this.getJournal().ajouter("Bonjour, nous sommes à l'étape " + Filiere.LA_FILIERE.getEtape() + "et nous n'avons pas encore fait faillite (enfin j'espère).");
+		this.journal.ajouter("Bonjour, nous sommes à l'étape " + Filiere.LA_FILIERE.getEtape() + "et nous n'avons pas encore fait faillite.");
 	}
-
+	
+	// Renvoie la couleur
 	public Color getColor() {// NE PAS MODIFIER
 		return new Color(244, 198, 156); 
 	}
-
+	
+	// Renvoie la description
 	public String getDescription() {
 		return "La filiere CACAindO represente la beaute du savoir-faire indonesien et des richesses de la culture du cacao dans la region. Entre cacao a un prix abordable et feve d'origine volcanique, il y en a pour tous les gouts.";
 	}
@@ -147,21 +138,26 @@ public class Producteur2Acteur implements IActeur {
 		res.add(this.stockTotMoy);
 		res.add(this.stockTotMoyBE);
 		res.add(this.stockTotHauteBE);
-		res.add(this.tempsDegradationFeve);
-		res.add(this.tempsPerimationFeve);
 		return res;
 	}
 
 	// Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
+		res.add(this.tempsDegradationFeve);
+		res.add(this.tempsPerimationFeve);
+		res.add(this.coutMoyenStock);
 		return res;
 	}
 
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
-		res.add(this.getJournal());
+		res.add(this.journal);
+		res.add(this.journalBourse);
+		res.add(this.journalCC);
+		res.add(this.journalProd);
+		res.add(this.journalStocks);
 		return res;
 	}
 
@@ -179,6 +175,11 @@ public class Producteur2Acteur implements IActeur {
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
+		if(acteur.getNom().equals("EQ2")) {
+			this.journal.ajouter("Adieu monde cruel !");
+		} else {
+			this.journal.ajouter("RIP " + acteur.getNom() + ", nous ne t'oublierons pas.");
+		}
 	}
 
 	// Apres chaque operation sur votre compte bancaire, cette
@@ -208,5 +209,29 @@ public class Producteur2Acteur implements IActeur {
 	
 	public String toString() {
 		return this.getNom();
+	}
+	
+	////////////////////////////////////////////////////////
+	//         Pour prévoir les ventes à venir            //
+	////////////////////////////////////////////////////////
+	//Code par Nino
+	
+	
+	/*Quantité à livrer au step i pour les ventes par contrat cadre pour la Feve feve*/
+	public Double aLivrerStep(int step, Feve feve) {
+		return aLivrer(feve).getQuantite(step);
+	}
+	/*Quantité à livrer aux différents steps pour les ventes par contrat cadre pour la Feve feve*/
+	public Echeancier aLivrer(Feve feve) {
+		Echeancier ech = new Echeancier(); /*Il faut peut-etre mettre un 0 dans la paranthese de newEchancier() en fonction des tests futurs*/
+		for(ExemplaireContratCadre conEx : this.contrats) {
+			Echeancier ech2 = conEx.getEcheancier();
+			if(conEx.getProduit() == feve) {
+				for(int i = ech.getStepDebut(); i<ech2.getStepFin(); i++) {
+					ech.set(i, ech.getQuantite(i) + ech2.getQuantite(i));	
+				}
+			}
+		}
+		return ech;
 	}
 }

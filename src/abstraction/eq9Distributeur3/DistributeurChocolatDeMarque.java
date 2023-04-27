@@ -11,33 +11,36 @@ import abstraction.eqXRomu.clients.ClientFinal;
 import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
-public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements IDistributeurChocolatDeMarque {
+public class DistributeurChocolatDeMarque extends Distributeur3AcheteurCC implements IDistributeurChocolatDeMarque {
 	
-	private double capaciteDeVente;
-	private HashMap<ChocolatDeMarque, Double> prix;
-
-	
-	
+	private double capaciteDeVente = Double.MAX_VALUE;
 	
 
-	public DistributeurChocolatDeMarque(ChocolatDeMarque[] chocos, double[] stocks, double capaciteDeVente, double[] prix, String[] marques) {
+	
+	
+	
 
-
+	public DistributeurChocolatDeMarque() {
 		
-		this.capaciteDeVente = capaciteDeVente;
-		this.prix = new HashMap<ChocolatDeMarque, Double> ();
 	}
+	
 	//william
 	@Override
 	public double prix(ChocolatDeMarque choco) {
-		return 0.0;
+		if(prix_tonne_vente.get(choco) != null) {
+			return prix_tonne_vente.get(choco) +1.0;
+			
+		}
+		// TODO Auto-generated method stub
+		return 10.0;
 	}
 	
 	//baptiste
 	public HashMap<ChocolatDeMarque, Double> quantiteTotale() {
 		HashMap<ChocolatDeMarque, Double> qtVente = new HashMap<ChocolatDeMarque, Double> ();
-		HashMap<ChocolatDeMarque, Double> Stock = stock.getQteStock();
-		
+		journal_ventes.ajouter("Test" + qtVente.toString() );
+		HashMap<ChocolatDeMarque, Double> Stock = this.stock.getQteStock();
+		journal_ventes.ajouter("Voici l'état du stock : " + Stock.toString());
 		for (Entry<ChocolatDeMarque, Double> chocolat : Stock.entrySet()) {
 			qtVente.put(chocolat.getKey(), (double) 0);
 		}
@@ -49,12 +52,14 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 			for (Entry<ChocolatDeMarque, Double> chocolat : Stock.entrySet()) {
 				qtVente.replace(chocolat.getKey(), Math.min(Math.min(this.capaciteDeVente/3, chocolat.getValue()), this.capaciteDeVente - quantiteEnVente));
 			}
+			
 			if (quantiteEnVente == quantiteEnVente_0) {
 				rupture = false;
 			} else {
 				quantiteEnVente_0 = quantiteEnVente;
 			}
 		}
+		journal_ventes.ajouter("On met en vente " + qtVente.toString() + "tonnes de chocolat");
 		return qtVente;
 
 	}
@@ -63,11 +68,18 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
 
 		if (crypto != this.cryptogramme) {
-			journal.ajouter("On essaie de me pirater (RayonVide)");
+			journal_activitegenerale.ajouter("On essaie de me pirater (RayonVide)");
 			return 0;
 		} else {
 			HashMap<ChocolatDeMarque, Double> qtVente = this.quantiteTotale();
-			return qtVente.get(choco);
+			journal_ventes.ajouter("On vend " + qtVente.get(choco) +" "+ choco.getNom());
+			if (qtVente.containsKey(choco)) {
+				return qtVente.get(choco);
+			} else {
+				return 0;
+			}
+			
+			
 
 		}
 	}
@@ -76,15 +88,14 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 	public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
 
 		if (crypto!=this.cryptogramme) {
-			journal.ajouter("Quelqu'un essaye de me pirater !");
+			journal_activitegenerale.ajouter("Quelqu'un essaye de me pirater !");
 			return 0.0;
 		} else {
-			int pos= (chocolats.indexOf(choco));
-			if (pos<0) {
-				return 0.0;
-			} else {
-				HashMap<ChocolatDeMarque, Double> qtVente = this.quantiteTotale();
+			HashMap<ChocolatDeMarque, Double> qtVente = this.quantiteTotale();
+			if (qtVente.containsKey(choco)) {
 				return qtVente.get(choco)/10.0;
+			} else {
+				return 0;
 			}
 
 		}
@@ -95,18 +106,18 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 
 		if (crypto != this.cryptogramme) {
-			journal.ajouter("On essaie de me pirater (RayonVide)");
+			journal_activitegenerale.ajouter("On essaie de me pirater (RayonVide)");
 		} else {
 			String qtte_string = "" + montant/this.prix(choco);
 			String montant_string = "" + montant;
-			journal.ajouter("Vente de " + qtte_string + "tonnes de " +  choco.getNom() + " pour " + montant_string + "€");
+			journal_ventes.ajouter("Vente de " + qtte_string + "tonnes de " +  choco.getNom() + " pour " + montant_string + "€");
 			
 			if( montant/this.prix(choco) >= this.stock.getStock(choco)) { // on vérifie qu'on ai le stock
 				this.stock.ajoutQte(choco, -(montant/this.prix(choco)));
 			}
 			else {
 				// si on a pas le stock
-				journal.ajouter("Vente annulée de " + choco.getNom());
+				journal_ventes.ajouter("Vente annulée de " + choco.getNom());
 
 			}
 			
@@ -119,13 +130,13 @@ public class DistributeurChocolatDeMarque extends Distributeur3Acteur implements
 	@Override
 	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
 
-		journal.ajouter(" Aie... j'aurais du mettre davantage de "+choco.getNom()+" en vente");
+		journal_ventes.ajouter(" Aie... j'aurais du mettre davantage de "+choco.getNom()+" en vente");
 
 
 		if (crypto != this.cryptogramme) {
-			journal.ajouter("On essaie de me pirater (RayonVide)");
+			journal_activitegenerale.ajouter("On essaie de me pirater (RayonVide)");
 		} else {
-			journal.ajouter(" Aie... j'aurais du mettre davantage de "+choco.getNom()+" en vente");
+			journal_ventes.ajouter(" Aie... j'aurais du mettre davantage de "+choco.getNom()+" en vente");
 		}
 			
 
