@@ -159,7 +159,6 @@ public class Producteur3Acteur implements IActeur {
 		this.VentesHG.removeFirst();
 		this.VentesHG.add(0.0);
 
-
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
