@@ -3,7 +3,6 @@ package abstraction.eq2Producteur2;
 //Code écrit par Nathan Rabier
 
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +11,6 @@ import abstraction.eqXRomu.contratsCadres.ContratCadre;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
-
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Lot;
 
@@ -212,7 +210,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	 * @return le coût du stockage
 	 */
 	protected double coutStockage() {
-		return this.coutMoyenStock.getValeur() * this.getStockTotTot();
+		return Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() * this.getStockTotTot();
 	}
 	
 	/**
