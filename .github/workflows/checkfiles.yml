@@ -1,8 +1,8 @@
-name: Automatic Merge Pull Request
+name: Check that files are owned by the team
 on: pull_request_target
 
 jobs:
-  automerge:
+  checkfiles:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
