@@ -50,42 +50,7 @@ jobs:
       - name: Check files
         id: check_files
         run: |
-          eq1=${{ steps.filter.outputs.eq1 }}
-          eq2=${{ steps.filter.outputs.eq2 }}
-          eq3=${{ steps.filter.outputs.eq3 }}
-          eq4=${{ steps.filter.outputs.eq4 }}
-          eq5=${{ steps.filter.outputs.eq5 }}
-          eq6=${{ steps.filter.outputs.eq6 }}
-          eq7=${{ steps.filter.outputs.eq7 }}
-          eq8=${{ steps.filter.outputs.eq8 }}
-          eq9=${{ steps.filter.outputs.eq9 }}
-          eqX=${{ steps.filter.outputs.eqX }}
-          root=${{ steps.filter.outputs.root }}
-          
-          count=0
-          
-          echo $count
-
-          [ $eq1 = 'true' ] && ((count++))
-          [ $eq2 = 'true' ] && ((count++))
-          [ $eq3 = 'true' ] && ((count++))
-          [ $eq4 = 'true' ] && ((count++))
-          [ $eq5 = 'true' ] && ((count++))
-          [ $eq6 = 'true' ] && ((count++))
-          [ $eq7 = 'true' ] && ((count++))
-          [ $eq8 = 'true' ] && ((count++))
-          [ $eq9 = 'true' ] && ((count++))
-          [ $eqX = 'true' ] && ((count++))
-          [ $root = 'true' ] && ((count++))
-
-          echo $count
-
-          if [[ $count -ne 1 ]]; then
-            echo "The pull request involves several teams. Exiting the workflow."
-            exit 1
-          fi
-          
-          exit 0
+          echo ${{ steps.filter.outputs.changes }}
 
       - name: Enable auto-merge
         if: steps.check_files.outcome != 'failure' && contains(github.event.pull_request.changed_files, steps.actorTeams.outputs.teams[0])
