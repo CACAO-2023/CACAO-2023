@@ -1,0 +1,13 @@
+name: "Pull Request Labeler on Teams"
+on:
+  pull_request:
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  team-labeler:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: JulienKode/team-labeler-action@v1.1.0
+      with:
+        repo-token: "${{ secrets.PAT }}"
