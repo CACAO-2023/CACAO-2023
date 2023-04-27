@@ -4,6 +4,7 @@ import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
@@ -208,6 +209,15 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	
 /** ecrit par Nathan Claeys
  */
+
+	/**public ExemplaireContratCadre getContrat(Feve produit) {
+		Object l = SuperviseurVentesContratCadre.getVendeurs(produit);
+		if (SuperviseurVentesContratCadre.getVendeurs(produit).size()!=0)
+		List<IVendeurContratCadre> vendeurs = SuperviseurVentesContratCadre.getVendeurs(produit);
+	}*/
+
+	/** ecrit par Nathan Claeys
+	 */	
 	public void next() {
 		super.next(); 
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
