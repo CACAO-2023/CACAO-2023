@@ -4,6 +4,11 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
@@ -20,12 +25,21 @@ public class Producteur3Acteur implements IActeur {
     protected Journal journal_activitegenerale;
     protected Journal journal_Stock;
     protected Journal journal_catastrophe;
+    protected Journal journal_plantation;
     protected Stock Stock;
 	protected Double CoutStep; /* Tout nos couts du step, reinitialises a zero au debut de chaque step et payes a la fin du step*/
 	protected Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
-
+	
+	public Variable StockFeveH ;
+	public Variable StockFeveM ;
+	public Variable StockFeveB ;
+	public Variable tailleH;
+	public Variable tailleM;
+	
 	protected LinkedList<Double> VentesMG; /*Les 12 quantités des dernières ventes de moyens de gammes*/
 	protected LinkedList<Double> VentesHG; /*Les 12 quantités des dernières ventes de hauts de gammes*/
+	
+	protected Champs fields;
 
 	/**
 	 * @author BOCQUET Gabriel, Corentin Caugant
@@ -33,16 +47,23 @@ public class Producteur3Acteur implements IActeur {
 	public Producteur3Acteur() {
 
 	String nom = "Equipe 3";
+	this.fields = new Champs();
 	journal_operationsbancaires=new Journal("Journal des Opérations bancaires de l'"+nom,this);
     journal_ventes=new Journal("Journal des Ventes de l'"+nom,this);
     journal_achats=new Journal("Journal des Achats de l'"+nom,this);
     journal_activitegenerale=new Journal("Journal général de l'"+nom,this);
     journal_Stock = new Journal("Journal des Stocks de l'"+nom,this);
     journal_catastrophe = new Journal("Journal des Catastrophes de l'"+nom,this);
+    journal_plantation = new Journal("Journal des Plantations de l'"+nom,this);
 	this.Stock = new Stock();
 	this.CoutTonne = 0.0;
 	this.VentesMG = new LinkedList<Double>();
 	this.VentesHG = new LinkedList<Double>();
+	this.StockFeveH = new Variable("Equipe3 Stock Haut de gamme", "Represente la quantite de Haut de Gamme en Stock",this,this.Stock.getQuantite(Feve.F_HQ_BE));
+	this.StockFeveM = new Variable("Equipe3 Stock Moyen de gamme", "Represente la quantite de Moyen de Gamme en Stock",this,this.Stock.getQuantite(Feve.F_MQ_BE));
+	this.StockFeveB = new Variable("Equipe3 Stock Bas de gamme", "Represente la quantite de Bas de Gamme en Stock",this,this.Stock.getQuantite(Feve.F_BQ));
+	this.tailleH = new Variable("Equipe3 Taille Champs H", "Represente la taille de nos champs Hauts de Gamme en Stock",this,this.fields.getTaille("H"));
+	this.tailleM = new Variable("Equipe3 Taille Champs M", "Represente la taille de nos champs Moyens de Gamme en Stock",this,this.fields.getTaille("M"));
 	}
 	
 	/**
@@ -94,6 +115,13 @@ public class Producteur3Acteur implements IActeur {
 	}
 	
 	/**
+	 * @author Dubus-Chanson Victor
+	 */
+	protected Champs getFields() {
+		return this.fields;
+	}
+	
+	/**
 	 * @author BOCQUET Gabriel
 	 */	
 	protected Journal getJOperation() {
@@ -130,6 +158,7 @@ public class Producteur3Acteur implements IActeur {
 		this.VentesMG.add(0.0);
 		this.VentesHG.removeFirst();
 		this.VentesHG.add(0.0);
+
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -144,8 +173,11 @@ public class Producteur3Acteur implements IActeur {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
-		res.add(new Variable("Equipe3 Stock Haut de gamme", "Represente la quantite de Haut de Gamme en Stock",this,this.Stock.getQuantite(Feve.F_HQ_BE)));
-		res.add(new Variable("Equipe3 Stock Moyen de gamme Labelise", "Represente la quantite de Moyen de Gamme Labelise en Stock",this,this.Stock.getQuantite(Feve.F_MQ_BE)));
+		res.add(this.StockFeveH);
+		res.add(this.StockFeveM);
+		res.add(this.StockFeveB);
+		res.add(this.tailleH);
+		res.add(this.tailleM);
 		return res;
 	}
 
@@ -164,6 +196,7 @@ public class Producteur3Acteur implements IActeur {
 		res.add(journal_achats);
 		res.add(journal_Stock);
 		res.add(journal_catastrophe);
+		res.add(journal_plantation);
 		return res;
 	}
 
@@ -181,6 +214,25 @@ public class Producteur3Acteur implements IActeur {
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
+		JFrame popup = new JFrame("L'equipe 3 a fait faillite...Triste");
+		popup.setLocation(300, 100);
+		double proba =Math.random();
+		ImageIcon icon;
+		if(proba<0.5) {
+		icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/faillite1.gif");
+		}
+		else {
+			icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/faillite2.gif");
+		}
+		JLabel label = new JLabel(icon);
+		popup.getContentPane().add(label);
+        popup.pack();
+		popup.setVisible(true);
+		//Timer timer = new Timer();
+		//ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+		//timer.schedule(monTimerTask, 10000);
+		popup.setVisible(true);
+		
 	}
 
 	// Apres chaque operation sur votre compte bancaire, cette

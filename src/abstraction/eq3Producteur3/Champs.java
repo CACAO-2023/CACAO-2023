@@ -35,6 +35,13 @@ public class Champs {
 		return Champs;
 	}
 
+	public void setChampM(HashMap<Integer,Integer> f) {
+		this.Champs.put("M", f);
+	}
+	
+	public void setChampH(HashMap<Integer,Integer> f) {
+		this.Champs.put("H", f);
+	}
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
@@ -188,6 +195,7 @@ public class Champs {
 				HectaresLiberes += ChampsH.get(i);
 				ChampsH.remove(i);
 				break;
+				
 			}
 		}
 		for (Integer i : ChampsM.keySet()) {
@@ -195,6 +203,7 @@ public class Champs {
 				HectaresLiberes += ChampsM.get(i);
 				ChampsM.remove(i);
 				break;
+				
 			}
 		}
 
@@ -324,6 +333,28 @@ public class Champs {
 
 	
 		}
-  	
-	
+  	/**
+  	 * 
+  	 * @param String s
+  	 * @return taille
+  	 * @author BOCQUET Gabriel
+  	 */
+  	//Renvoie la taille du champs de gamme H
+	protected int getTaille(String s) {	
+		HashMap<String,HashMap<Integer,Integer>> field = this.Champs;
+		int taille = 0;
+		if(s=="H") {
+			HashMap<Integer,Integer> fieldH = field.get("H");
+			for(Integer i : fieldH.keySet()) {
+				taille += fieldH.get(i);
+			}
+		}
+		if(s=="M") {
+			HashMap<Integer,Integer> fieldM = field.get("M");
+			for(Integer i : fieldM.keySet()) {
+				taille += fieldM.get(i);
+			}
+	}
+		return taille;
+	}
 }
