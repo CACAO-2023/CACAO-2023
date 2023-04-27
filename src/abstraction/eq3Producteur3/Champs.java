@@ -201,5 +201,129 @@ public class Champs {
 		return HectaresLiberes;
 
 	}
+  	
+  	/**
+  	 * 
+  	 * @param CurrentStep
+  	 * @param Keys
+  	 * @param NbrGreviste
+  	 * @author BOCQUET Gabriel
+  	 */
+  	//Quantitée théorique produite par les gréviste
+  	public LinkedList<Integer> HarvestQuantityG(int CurrentStep, HashMap<String, LinkedList<Integer>> Keys,int NbrGreviste){
+		HashMap<String, HashMap<Integer, Integer>> FieldList =this.getChamps();
+		//On recupere la liste des champs de moyenne gamme
+		HashMap<Integer,Integer> FieldM = FieldList.get("M");
+		//On recupere la liste des clef M
+		LinkedList<Integer> HarvestKeysM = Keys.get("M");
+		int quantiteM=0;
+		HashMap<Integer,Integer> FieldH = FieldList.get("H");
+		//On recupere la liste des clefs H
+		LinkedList<Integer> HarvestKeysH = Keys.get("H");
+		int quantiteH=0;
+		Set<Integer> s1= (FieldM.keySet());
+		LinkedList<Integer> allKeyM = new LinkedList<>(s1);
+		Set<Integer> s2= (FieldH.keySet());
+		LinkedList<Integer> allKeyH = new LinkedList<>(s2);
+		int quantitePerdu = 0;
+		while (quantitePerdu < NbrGreviste && HarvestKeysM.size()!=0 ) {
+			//On regarde si les grevistes travaillaient sur les champs H ou M
+			double MouH = Math.random() ;
+			if(MouH <= 0.5) {
+				double HarvestRateM =  0.9;
+				//On choisit un nombre qui nous donnera la clef du champs ou il va y avoir des grevistes et ils ne travaillent pas forcement sur un champ qui a besoin d'etre recolte.
+				Integer ChampGreve = (int)(Math.random() * (FieldM.size()-1));
+				//on regarde si le champ ou les ouvriers font greve doit etre recolte
+				if(!HarvestKeysM.contains(allKeyM.get(ChampGreve))) {
+					quantitePerdu += FieldM.get(allKeyM.get(ChampGreve));
+				}
+				else {
+				Integer key = allKeyM.get(ChampGreve);
+				HarvestKeysM.remove(HarvestKeysM.indexOf(key)); 
+				if ((CurrentStep-key) <72 && (CurrentStep-key)>=0) {
+					quantiteM += 0; //Champ pas assez vieux
+					quantitePerdu +=FieldM.get(key);
+				}
+				//Le champ M a entre 3 et 7 ans
+				else if((CurrentStep-key) <168 && (CurrentStep-key)>=72) {
+					
+					quantiteM += FieldM.get(key)*0.56*0.5*HarvestRateM; //Champ jeune
+					quantitePerdu +=FieldM.get(key);
+					
+				}
+				//Le champ M a entre 7 et 35 ans
+				else if((CurrentStep-key) <840 && (CurrentStep-key)>=168) {
+					
+					quantiteM += FieldM.get(key)*0.56*HarvestRateM; //Champ convenable
+					quantitePerdu +=FieldM.get(key);
+					
+				}
+				//Le champ a entre 35 et 40 ans
+				else if((CurrentStep-key) <840 && (CurrentStep-key)>=960) {
+					
+					quantiteM += FieldM.get(key)*0.56*0.5*HarvestRateM; //Champ vieux
+					quantitePerdu +=FieldM.get(key);
+				}
+				//L'arbre est trop vieux
+				else {
+					quantiteM +=0;
+					quantitePerdu +=FieldM.get(key);
+				}
+			}
+				
+			}
+			else {
+			//Ce taux permet de prendre en compte l'aspect aleatoire d'une recolte
+			double HarvestRateH =  0.85;
+			//On choisit la clef du champs où il va y avoir des grevistes.
+			Integer ChampGreve = (int)(Math.random() * (FieldH.size()-1));
+			if(!HarvestKeysH.contains(allKeyH.get(ChampGreve))) {
+				quantitePerdu += FieldH.get(allKeyH.get(ChampGreve));
+			}
+			else {
+			Integer keyH = allKeyH.get(ChampGreve);
+			HarvestKeysH.remove(HarvestKeysH.indexOf(keyH));
+				//Le champ M a entre 0 et 3 ans
+				if ((CurrentStep-keyH) <72 && (CurrentStep-keyH)>=0) {
+					quantiteH += 0; //Champ pas assez vieux
+					quantitePerdu +=FieldH.get(keyH);
+				}
+				//Le champ M a entre 3 et 7 ans
+				else if((CurrentStep-keyH) <168 && (CurrentStep-keyH)>=72) {
+					
+					quantiteH += FieldH.get(keyH)*0.56*0.5*HarvestRateH; //Champ jeune
+					quantitePerdu +=FieldH.get(keyH);
+				}
+				//Le champ M a entre 7 et 35 ans
+				else if((CurrentStep-keyH) <840 && (CurrentStep-keyH)>=168) {
+					
+					quantiteH += FieldH.get(keyH)*0.56*HarvestRateH; //Champ convenable
+					quantitePerdu +=FieldH.get(keyH);
+				}
+				//Le champ a entre 35 et 40 ans
+				else if((CurrentStep-keyH) <840 && (CurrentStep-keyH)>=960) {
+					
+					quantiteH += FieldH.get(keyH)*0.56*0.5*HarvestRateH; //Champ vieux
+					quantitePerdu +=FieldH.get(keyH);
+				}
+				//L'arbre est trop vieux
+				else {
+					quantiteH +=0;
+					quantitePerdu +=FieldH.get(keyH);
+				}
+			}
+			}
+
+		}
+			LinkedList<Integer> l = new LinkedList();
+			l.add(quantiteH);
+			l.add(quantiteM);
+			if(l.get(0) >0 && l.get(1) > 0) {
+			}
+			return l;
+
+	
+		}
+  	
 	
 }

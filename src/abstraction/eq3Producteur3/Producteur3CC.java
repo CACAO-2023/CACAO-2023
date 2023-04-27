@@ -131,6 +131,9 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      */
     public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
         this.getContracts().add(contrat);
+
+        // Ajout de la quantite vendu dans la liste gardant une trace des dernières quantités vendus
+        super.addVenteQuantite(contrat.getQuantiteTotale(), (Feve)contrat.getProduit());
         
     }
 

@@ -3,40 +3,39 @@ package abstraction.eq3Producteur3;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Set;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.Feve;
 
+
 public class Producteur3 extends Bourse3  {
-	/*
-	 * ChampsH est un dictionnaire qui contient les champs Haut de Gamme
-	 * On associe a un ensemble d'hectars un int qui correspond  leur step de plantaison 
-	 *
-	 *private HashMap<Integer,String> ChampsH;//UTILE ?
-	 *
-	 * ChampsM est un dictionnaire qui contient les champs Moyen de Gamme
-	 * On associe a un ensemble d'hectars un int qui correspond  leur step de plantaison 
-	 *
-	 *private HashMap<Integer,String> ChampsM;//UTILE ?
-	 *
-	 * On cree un dictionnaire qui associe  la clef H ou M le dico ChampsM ou ChapmsH
+
+
+	
+	
+
+	/**
+	 * @author Dubus-Chanson Victor, Bocquet Gabriel
 	 */
 
-	
-	
 	private HashMap<String,HashMap> Champs;
-	
-
-
 	private Champs fields;
 	private Integer HectaresLibres; /*Repertorie le nombre d'hectares libres que l'on possede*/
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
 	private LinkedList<Double> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
-	
-	/*
-	 * Je n'ai pas trouve le type du champs donc j'ai choisit String. A CHANGER
-	 * Il faudra aussi penser a se mettre d'accord sur les tailles des champs initiaux.
-	 */
+
+	private Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
+
+
 	
 	/**
 	 * @author Dubus-Chanson Victor
@@ -96,10 +95,12 @@ public class Producteur3 extends Bourse3  {
 		this.updateCoutTonne();
 	}
 	
+
 	/**
 	 * @author Dubus-Chanson Victor
 	 */
-	public Champs getFields() {
+
+	protected Champs getFields() {
 		return this.fields;
 	}
 	
@@ -110,7 +111,9 @@ public class Producteur3 extends Bourse3  {
 		// TODO Auto-generated method stub
 		return this.Stock;
 	}
-  
+	protected Integer getHectaresUt() {
+		return this.HectaresUtilises;
+	}
 
 	/**
 	 * @author BOCQUET Gabriel, Dubus-Chanson Victor, Caugant Corentin
@@ -135,6 +138,33 @@ public class Producteur3 extends Bourse3  {
 
 		this.updateListeCout();
 		this.updateCoutTonne();
+		// Incendie ?
+				double probaIncendie =  Math.random();
+				if(probaIncendie < 0.02) {
+					this.Fire("Big");
+				}
+				else if(probaIncendie < 0.05) {
+					this.Fire("Med");
+				}
+				else if(probaIncendie < 0.1) {	
+					this.Fire("Lit");
+				}
+				//Cyclone ou tempete ?
+				double probaCyclone =  Math.random();
+				if(probaCyclone <0.05) {
+					this.Cyclone();
+			}
+				//Greve ?
+				double probaGreve = Math.random();
+				if(probaGreve < 0.02){
+						try {
+							this.GreveGeneral();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+				}
 		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep);
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
 				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ this.HectaresUtilises);
@@ -149,7 +179,6 @@ public class Producteur3 extends Bourse3  {
 
 	
 	/**
-
 	 * @author Dubus-Chanson Victor
 	 */
 	public void addCoutHectaresUtilises() {
@@ -249,4 +278,164 @@ public class Producteur3 extends Bourse3  {
 			this.HectaresLibres = 0;
 		}
 	}
+	
+	//PARTIE CATASTROPHE
+	/**
+	 * @author BOCQUET Gabriel
+	 * @param s
+	 */
+	public void Fire(String s) {
+			Champs fields = this.getFields();
+			HashMap<Integer,Integer> FieldsH = fields.getChamps().get("H");
+			HashMap<Integer,Integer> FieldsM = fields.getChamps().get("M");
+			double hectarMburnt = 0;
+			double hectarHburnt = 0;
+			Set<Integer> KeyM = FieldsM.keySet();
+			Set<Integer> KeyH = FieldsH.keySet();
+			Journal j = this.getJCatastrophe();
+			if(s.equals("Big")) {
+				JFrame popup = new JFrame("Gros incendie !");		
+				popup.setLocation(300, 100);
+				ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Gros_incendie.gif");
+				JLabel label = new JLabel(icon);
+		        popup.getContentPane().add(label);
+		        popup.pack();
+		        popup.setVisible(true);
+		        Timer timer = new Timer();
+				ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+				timer.schedule(monTimerTask, 3000);
+				for(Integer key : KeyM) {
+					hectarMburnt += FieldsM.get(key)*0.5;
+					FieldsM.put(key,(int) (FieldsM.get(key)*0.5));
+				}
+				j.ajouter(Color.gray, Color.black, hectarMburnt + " d'hectares de Moyenne Gamme d'arbres ont brulé");
+				for(Integer key : KeyH) {
+					hectarHburnt = FieldsH.get(key)*0.5;
+					FieldsH.put(key,(int) (FieldsH.get(key)*0.5));
+				}
+				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
+			}
+			else if(s.equals("Med")) {
+				JFrame popup = new JFrame("Incendie Moyen !");		
+				popup.setLocation(300, 100);
+				ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Incendie_Moyen.gif");
+				JLabel label = new JLabel(icon);
+		        popup.getContentPane().add(label);
+		        popup.pack();
+		        popup.setVisible(true);
+		        Timer timer = new Timer();
+				ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+				timer.schedule(monTimerTask, 3000);
+				for(Integer key : KeyM) {
+					hectarMburnt += FieldsM.get(key)*0.2;
+					FieldsM.put(key,(int) (FieldsM.get(key)*0.8));
+				}
+				j.ajouter(Color.gray, Color.black, hectarMburnt + " d'hectares de Moyenne Gamme d'arbres ont brulé");
+				for(Integer key : KeyH) {
+					hectarHburnt = FieldsH.get(key)*0.2;
+					FieldsH.put(key,(int) (FieldsH.get(key)*0.8));
+				}
+				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
+			}
+			else if(s.equals("Lit")) {
+				JFrame popup = new JFrame("Petit Incendie !");		
+				popup.setLocation(300, 100);
+				ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Petit_Incendie.gif");
+				JLabel label = new JLabel(icon);
+		        popup.getContentPane().add(label);
+		        popup.pack();
+		        popup.setVisible(true);
+		        Timer timer = new Timer();
+				ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+				timer.schedule(monTimerTask, 3000);
+				for(Integer key : KeyM) {
+					hectarMburnt += FieldsM.get(key)*0.1;
+					FieldsM.put(key,(int) (FieldsM.get(key)*0.9));
+				}
+				j.ajouter(Color.gray, Color.black, hectarMburnt + " d'hectares de Moyenne Gamme d'arbres ont brulé");
+				for(Integer key : KeyH) {
+					hectarHburnt = FieldsH.get(key)*0.1;
+					FieldsH.put(key,(int) (FieldsH.get(key)*0.9));
+				}
+				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
+			}
+		
+	}
+
+	/**
+	 * @author NAVEROS Marine
+	 */	
+	public void Cyclone() {
+		JFrame popup = new JFrame("Cyclone !");		
+		popup.setLocation(300, 100);
+		ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Cyclone.gif");
+		JLabel label = new JLabel(icon);
+        popup.getContentPane().add(label);
+        popup.pack();
+        popup.setVisible(true);
+        Timer timer = new Timer();
+		ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+		timer.schedule(monTimerTask, 3000);
+		Champs fields = this.getFields();
+		HashMap<Integer,Integer> FieldH = fields.getChamps().get("H");
+		HashMap<Integer, Integer> FieldM = fields.getChamps().get("M");
+		double hectarDetruitH = 0;
+		double hectarDetruitM=0;
+		Set<Integer> KeysH = FieldH.keySet();
+		Set<Integer> KeysM = FieldM.keySet();
+		Journal j = this.getJCatastrophe();
+		for(Integer key: KeysH) {
+			hectarDetruitH += FieldH.get(key)*(0+ Math.random()*0.7);
+			FieldH.put(key, (int)(FieldH.get(key)*(0+ Math.random()*0.7)));	
+		}
+		j.ajouter(Color.yellow, Color.black, hectarDetruitH + "d'hectares de Haute Gamme qui ont été détruits par un cyclone");
+		for (Integer key: KeysM) {
+			hectarDetruitM += FieldM.get(key)*(0+ Math.random()*0.7);
+			FieldM.put(key, (int)(FieldM.get(key)*(0+ Math.random()*0.7)));
+		}
+		j.ajouter(Color.gray, Color.black, hectarDetruitM+"d'hectares de Moyenne Gamme qui ont été détruits par un cyclone");		
+		}
+			
+		
+	
+	/**
+	 * @author BOCQUET Gabriel
+	 *
+	 */
+	//Pour modéliser la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
+	protected void GreveGeneral() throws InterruptedException {
+		JFrame popup = new JFrame("Grêve des Ouvriers !");		
+		popup.setLocation(300, 100);
+		ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Greve.gif");
+		JLabel label = new JLabel(icon);
+
+		popup.getContentPane().add(label);
+        popup.pack();
+		popup.setVisible(true);
+		Timer timer = new Timer();
+		ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+		timer.schedule(monTimerTask, 3000);
+		//On a autant d'employé que d'hectare Utilise
+		Integer nbrgreviste = (int) Math.round(this.getHectaresUt()*0.2);
+		//on calcule le ce qu'on aurait du produire avec ces employees
+		Champs fields = this.getFields();
+		HashMap<String, LinkedList<Integer>> Keys = fields.HarvestKeys(Filiere.LA_FILIERE.getEtape());
+		LinkedList<Integer> quantitePerdues = fields.HarvestQuantityG(Filiere.LA_FILIERE.getEtape(),Keys, nbrgreviste);
+		if(quantitePerdues.get(0) > 0) {
+		super.getStock().retirerVielleFeve(Feve.F_HQ_BE,quantitePerdues.get(0));
+		}
+		if(quantitePerdues.get(1) > 0) {
+		super.getStock().retirerVielleFeve(Feve.F_MQ_BE,quantitePerdues.get(1));
+		}
+		Journal j = super.getJCatastrophe();
+		j.ajouter(Color.red, Color.black, "Il y a "+ nbrgreviste + " qui font grèves ");
+		j.ajouter(Color.gray, Color.black, quantitePerdues.get(1) + " d'hectares de Feves Moyennes Gammes n'ont pas été récolté par les grévistes ");
+		j.ajouter(Color.yellow, Color.black, quantitePerdues.get(0) + " d'hectares de Feves Hautes Gammes n'ont pas été récolté par les grévistes ");
+		
+		
+	}
+	
+	
 }
+
+
