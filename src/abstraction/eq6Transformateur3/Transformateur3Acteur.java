@@ -17,9 +17,13 @@ import abstraction.eqXRomu.produits.Feve;
 
 public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	
+	private List<ChocolatDeMarque> ListeProduits;
+	protected HashMap<Feve, Double> stockFeves;
+	protected HashMap<Chocolat, Double> stockChoco;
 	protected int cryptogramme;
 /** Nathan Claeys*/
 	protected Journal journal;
+	protected Journal journalStock;
 	protected List<Journal> ListJournal;
 	protected int pourcentageCacaoBG ;
 	protected int pourcentageCacaoMG ;
@@ -33,6 +37,7 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	/**Nathan Claeys*/
 	protected Transformateur3Acteur() {
 		this.journal = new Journal("Journal"+this.getNom(),this);
+		this.journalStock = new Journal("Journal des stocks"+this.getNom(),this);
 		this.pourcentageCacaoBG = 50;
 		this.pourcentageCacaoMG = 65;
 		this.pourcentageCacaoMGL = 75;
@@ -47,7 +52,6 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_MQ,"chokchoco",this.pourcentageCacaoMG,this.pourcentageRSE));
 		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_MQ_BE,"chokchoco bio",this.pourcentageCacaoMGL,this.pourcentageRSE));
 		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_HQ_BE,"Choc",this.pourcentageCacaoHG,this.pourcentageRSE));
-
 	}
 	
 	/**
@@ -100,6 +104,7 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	public void next() {
 		this.journal.ajouter(Filiere.LA_FILIERE.getEtape()+"");
 		this.ListJournal.add(this.journal);
+		this.ListJournal.add(journalStock);
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
