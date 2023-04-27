@@ -94,6 +94,12 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	    public ExemplaireContratCadre getContrat(Feve produit) {
 	    	this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit);
 	    	List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
+	    	// code ajoute par romu pour pallier a l'erreur juste apres d'acces a l'element 0 dans une liste vide
+	    	if (vendeurs.size()==0) {
+	    		System.out.println("vendeur size 0");
+	    		return null;
+	    	}
+	    	// fin de code ajoute par romu
 	    	IVendeurContratCadre vendeur = vendeurs.get((int)(Math.random() * vendeurs.size())); //on cherche un vendeur
 	    	
 	    	this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
