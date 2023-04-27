@@ -42,11 +42,11 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable MQquantiteVendueBourse = new VariablePrivee("MQquantiteVendueBourse","quantite de fèves Vendue en Bourse en MQ par step", this, 0);
 	protected Producteur2 thisP;
 
-	//Prix provisoires
-	public double prixBQ = 2000.0;
-	public double prixMQ = 4000.0;
-	public double prixMQBE = 6000.0;
-	public double prixHQ = 8000.0;
+	//Prix provisoires pour les contrats cadres
+	public double prixBQ = 500.0;
+	public double prixMQ = 1000.0;
+	public double prixMQBE = 1500.0;
+	public double prixHQ = 2000.0;
 	public HashMap<Feve, Double> prixCC;
 
 	protected LinkedList<ExemplaireContratCadre> contrats;
