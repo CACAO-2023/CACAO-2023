@@ -26,6 +26,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
     protected Lot stockChocolatMGL; // Chocolat moyenne gamme labelisée
     protected Lot stockChocolatHGL; // Chocolat haute gamme labélisée
     protected List<ChocolatDeMarque> stockProduit;
+    private int dureePeremption = 6; 
 
     /**Mouhamed SOW*/  
   public Transformateur3Stocks(Lot stockFeveBG, Lot stockFeveMG, Lot stockFeveMGL, Lot stockFeveHGL,
@@ -220,6 +221,14 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   }
   	public void next() {
   		super.next();
+  		int date = Filiere.LA_FILIERE.getEtape() ;
+  		int perim = date - dureePeremption ;
+  		Double quantiteRetiree = this.stockFeveBG.getQuantites().get(perim) ;
+  		this.stockFeveBG.retirer(quantiteRetiree) ; // retire la feve perime
+  		this.stockFeveMG.retirer(this.stockFeveMG.getQuantites().get(perim)) ;
+  		this.stockFeveMGL.retirer(this.stockFeveMGL.getQuantites().get(perim)) ;
+  		this.stockFeveHGL.retirer(this.stockFeveHGL.getQuantites().get(perim)) ;
+  		
   	}
 }
     
