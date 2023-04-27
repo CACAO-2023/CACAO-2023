@@ -23,7 +23,11 @@ public class Producteur3Acteur implements IActeur {
     protected Stock Stock;
 	protected Double CoutStep; /* Tout nos couts du step, reinitialises a zero au debut de chaque step et payes a la fin du step*/
 	protected Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
-
+	
+	public Variable StockFeveH ;
+	public Variable StockFeveM ;
+	public Variable StockFeveB ;
+	
 	protected LinkedList<Double> VentesMG; /*Les 12 quantités des dernières ventes de moyens de gammes*/
 	protected LinkedList<Double> VentesHG; /*Les 12 quantités des dernières ventes de hauts de gammes*/
 
@@ -43,6 +47,9 @@ public class Producteur3Acteur implements IActeur {
 	this.CoutTonne = 0.0;
 	this.VentesMG = new LinkedList<Double>();
 	this.VentesHG = new LinkedList<Double>();
+	this.StockFeveH = new Variable("Equipe3 Stock Haut de gamme", "Represente la quantite de Haut de Gamme en Stock",this,this.Stock.getQuantite(Feve.F_HQ_BE));
+	this.StockFeveM = new Variable("Equipe3 Stock Moyen de gamme", "Represente la quantite de Moyen de Gamme en Stock",this,this.Stock.getQuantite(Feve.F_MQ_BE));
+	this.StockFeveB = new Variable("Equipe3 Stock Bas de gamme", "Represente la quantite de Bas de Gamme en Stock",this,this.Stock.getQuantite(Feve.F_BQ));
 	}
 	
 	/**
@@ -147,8 +154,10 @@ public class Producteur3Acteur implements IActeur {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
-		res.add(new Variable("Equipe3 Stock Haut de gamme", "Represente la quantite de Haut de Gamme en Stock",this,this.Stock.getQuantite(Feve.F_HQ_BE)));
-		res.add(new Variable("Equipe3 Stock Moyen de gamme Labelise", "Represente la quantite de Moyen de Gamme Labelise en Stock",this,this.Stock.getQuantite(Feve.F_MQ_BE)));
+		res.add(this.StockFeveH);
+		res.add(this.StockFeveM);
+		res.add(this.StockFeveB);
+		
 		return res;
 	}
 

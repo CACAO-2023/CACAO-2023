@@ -3,6 +3,7 @@ package abstraction.eq3Producteur3;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
@@ -13,7 +14,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
+import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
 
 
@@ -104,6 +107,7 @@ public class Producteur3 extends Bourse3  {
 		return this.fields;
 	}
 	
+
 	/**
 	 * @author Dubus-Chanson Victor
 	 */
@@ -156,7 +160,7 @@ public class Producteur3 extends Bourse3  {
 			}
 				//Greve ?
 				double probaGreve = Math.random();
-				if(probaGreve < 0.02){
+				if(probaGreve < 1){
 						try {
 							this.GreveGeneral();
 						} catch (InterruptedException e) {
@@ -172,7 +176,9 @@ public class Producteur3 extends Bourse3  {
 		Filiere.LA_FILIERE.getBanque().virer(this, super.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), CoutStep);
 		this.getJOperation().ajouter(Color.cyan, Color.BLACK, "On a paye "+ this.CoutStep + "euros de frais divers");
 		this.CoutStep = 0.0;
-
+		super.StockFeveH.setValeur(this, super.Stock.getQuantite(Feve.F_HQ_BE));
+		super.StockFeveM.setValeur(this, super.Stock.getQuantite(Feve.F_MQ_BE));
+		super.StockFeveB.setValeur(this, super.Stock.getQuantite(Feve.F_BQ));
 	}
 	/*
 
@@ -296,7 +302,7 @@ public class Producteur3 extends Bourse3  {
 			if(s.equals("Big")) {
 				JFrame popup = new JFrame("Gros incendie !");		
 				popup.setLocation(300, 100);
-				ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Gros_incendie.gif");
+				ImageIcon icon = new ImageIcon("Gros_incendie.gif");
 				JLabel label = new JLabel(icon);
 		        popup.getContentPane().add(label);
 		        popup.pack();
@@ -406,7 +412,7 @@ public class Producteur3 extends Bourse3  {
 	protected void GreveGeneral() throws InterruptedException {
 		JFrame popup = new JFrame("Grêve des Ouvriers !");		
 		popup.setLocation(300, 100);
-		ImageIcon icon = new ImageIcon("C:\\Users\\Gabriel\\AppData\\Roaming\\SPB_Data\\git\\CACAO-2023\\src\\abstraction\\eq3Producteur3\\Gif\\Greve.gif");
+		ImageIcon icon = new ImageIcon("Greve.gif");
 		JLabel label = new JLabel(icon);
 
 		popup.getContentPane().add(label);
