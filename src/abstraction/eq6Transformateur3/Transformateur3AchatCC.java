@@ -210,11 +210,11 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 /** ecrit par Nathan Claeys
  */
 
-	public ExemplaireContratCadre getContrat(Feve produit) {
+	/**public ExemplaireContratCadre getContrat(Feve produit) {
 		Object l = SuperviseurVentesContratCadre.getVendeurs(produit);
 		if (SuperviseurVentesContratCadre.getVendeurs(produit).size()!=0)
 		List<IVendeurContratCadre> vendeurs = SuperviseurVentesContratCadre.getVendeurs(produit);
-	}
+	}*/
 
 	/** ecrit par Nathan Claeys
 	 */	
