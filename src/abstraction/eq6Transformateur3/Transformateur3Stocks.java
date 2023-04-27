@@ -217,8 +217,11 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  	default :
 	  		throw new IllegalArgumentException("Type de Chocolat invalide");
 	  }
-	    
+    
   }
+  public void initialiser() {
+	  super.initialiser();
+	}
   	public void next() {
   		super.next();
   		int date = Filiere.LA_FILIERE.getEtape() ;

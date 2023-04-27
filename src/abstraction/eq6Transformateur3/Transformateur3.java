@@ -24,6 +24,9 @@ public class Transformateur3 extends Transformateur3AchatB implements IFabricant
 	}
 	public List<String >getMarquesChocolat() {
 		return super.getMarquesChocolat();} 
+	public void initialiser() {
+		super.initialiser();
+	}
 	public void next() {
 		super.next();
 	}

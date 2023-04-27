@@ -116,7 +116,9 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		
 	}
 	
-	
+	public void initialiser() {
+		super.initialiser();
+	}
 	public void next() {
 		super.next();
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();

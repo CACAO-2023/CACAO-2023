@@ -119,6 +119,9 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	
 	/**ecrit par Nathan Claeys
 	 */
+	public void initialiser() {
+		super.initialiser();
+	}
 	public void next() {
 		super.next();
 		this.MaJCours();

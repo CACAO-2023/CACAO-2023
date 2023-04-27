@@ -23,7 +23,6 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	public Transformateur3AchatCC () {
 		super();
 		this.ListeContratEnCours = new LinkedList<ExemplaireContratCadre>();
-		this.superviseur = new SuperviseurVentesContratCadre();
 		
 	}
 	/**
@@ -229,6 +228,11 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 
 	/** ecrit par Nathan Claeys
 	 */	
+	
+	public void initialiser() {
+		super.initialiser();
+	}
+	
 	public void next() {
 		super.next(); 
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
