@@ -23,6 +23,7 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	protected int cryptogramme;
 /** Nathan Claeys*/
 	protected Journal journal;
+	protected Journal journalStock;
 	protected List<Journal> ListJournal;
 	protected int pourcentageCacaoBG ;
 	protected int pourcentageCacaoMG ;
@@ -36,6 +37,7 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	/**Nathan Claeys*/
 	protected Transformateur3Acteur() {
 		this.journal = new Journal("Journal"+this.getNom(),this);
+		this.journalStock = new Journal("Journal des stocks"+this.getNom(),this);
 		this.pourcentageCacaoBG = 50;
 		this.pourcentageCacaoMG = 65;
 		this.pourcentageCacaoMGL = 75;
