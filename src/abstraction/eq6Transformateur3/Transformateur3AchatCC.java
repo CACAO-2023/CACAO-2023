@@ -215,6 +215,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
  */
 
 	public ExemplaireContratCadre chercheContrat(IProduit produit) {
+		if (superviseur != null) {
 		List<IVendeurContratCadre> vendeurs = superviseur.getVendeurs(produit);
 		if (vendeurs.size()!=0) {
 			IVendeurContratCadre vendeur = vendeurs.get(0);
@@ -222,6 +223,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 			if (contrat != null) {super.journal.ajouter("CC cherché et trouvé :"+contrat.toString());}
 			return contrat;	
 		}
+		else {return null;}}
 		else {return null;}
 	}
 
