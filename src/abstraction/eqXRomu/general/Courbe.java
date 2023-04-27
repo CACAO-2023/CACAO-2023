@@ -63,6 +63,15 @@ public class Courbe {
     public int getMarque() {
 	return this.marque;
     }
+    public void cloner(Courbe c) {
+    	this.abscisses=c.abscisses;
+    	this.couleur=c.couleur;
+    	this.margesErreurs=c.margesErreurs;
+    	this.marque=c.marque;
+    	this.ordonnees=c.ordonnees;
+    	this.titre=c.titre;
+    	this.transparence=c.transparence;
+    }
     /**
      * Accesseur permettant de modifier la marque de la courbe.
      * @param m int, l'index de la marque de la courbe ( m doit valoir AUCUNE ou appartenir a [0, Graphique.NB_MARQUES[ ). 
