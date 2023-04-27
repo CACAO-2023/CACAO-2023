@@ -55,15 +55,19 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	/**
 	 * @author Theo
 	 * @param choco, choco!=null
-	 * @return Le prix de vente actuel d'un Kg de chocolat choco
+	 * @return Le prix de vente actuel d'une tonne de chocolat choco
 	 * IMPORTANT : durant une meme etape, la fonction doit toujours retourner la meme valeur pour un chocolat donne.
 	 */
 	public double prix(ChocolatDeMarque choco) {
 		double qualite = choco.qualitePercue();
-		double coef = 1-(((10/3)*qualite)/100)+0.1;
+//		double coef = 1-(((10/3)*qualite)/100)+0.1;
 		double promo = prixPromotion(choco);
 		double cout = getCout(choco);
-		return (cout/1000)*promo/coef;
+//		return (cout/1000)*promo/coef;
+		
+		double prix = (cout)*promo*1.2;
+		System.out.println("---------------------------"+prix);
+		return prix;
 	}
 	
 	/**
@@ -136,7 +140,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 		stockChocoMarque.put(choco, stockChocoMarque.get(choco)-quantite);
 		totalStocks.setValeur(this, totalStocks.getValeur(cryptogramme)-quantite, cryptogramme);
-		this.journal.ajouter("Eq7 a vendu "+quantite+" T de "+choco+ " aux clients finaux ");
+		this.journal.ajouter("Eq7 a vendu "+ (int)Math.floor(quantite)+" T de "+choco+ " aux clients finaux pour un total de " + (int)Math.floor(montant));
 		
 		//Actualisation des previsions persos
 		actualiser_prevision_perso( choco,   quantite);
