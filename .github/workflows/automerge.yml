@@ -2,10 +2,17 @@ name: Automatic Merge Pull Request
 on: pull_request_target
 
 jobs:
-  tests:
+  automerge:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
+      - uses: tspascoal/get-user-teams-membership@v2
+        id: actorTeams
+        with:
+          username: ${{ github.event.pull_request.user.login }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+          
       - uses: dorny/paths-filter@v2
         id: filter
         with:
@@ -40,7 +47,7 @@ jobs:
               - 'src/presentation/**'
               - 'test/**'
               
-      - name: Check Condition
+      - name: check files
         id: condition_check
         run: |
           eq1=${{ steps.filter.outputs.eq1 }}
@@ -58,18 +65,11 @@ jobs:
           sum=$((eq1 + eq2 + eq3 + eq4 + eq5 + eq6 + eq7 + eq8 + eq9 + eqX + root))
 
           if [[ $sum -ne 1 ]]; then
-            echo "The sum of the Booleans is not 1. Exiting the workflow."
+            echo "The pull request involves several teams. Exiting the workflow."
             exit 0
           fi
-            
-      - if: failure()
-        uses: tspascoal/get-user-teams-membership@v2
-        id: actorTeams
-        with:
-          username: ${{ github.event.pull_request.user.login }}
-          GITHUB_TOKEN: ${{ secrets.PAT }}
 
-      - name: Auto-merge PR
+      - name: enable auto-merge
         if: failure() && contains(github.event.pull_request.changed_files, steps.actorTeams.outputs.teams[0])
         run: gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
         env:
