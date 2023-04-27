@@ -138,6 +138,7 @@ public class Producteur3 extends Bourse3  {
 
 		this.updateListeCout();
 		this.updateCoutTonne();
+		/**
 		// Incendie ?
 				double probaIncendie =  Math.random();
 				if(probaIncendie < 0.02) {
@@ -165,6 +166,7 @@ public class Producteur3 extends Bourse3  {
 						}
 
 				}
+		*/
 		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep);
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
 				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ this.HectaresUtilises);
