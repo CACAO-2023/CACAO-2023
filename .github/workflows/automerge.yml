@@ -63,6 +63,8 @@ jobs:
 
           sum=$((eq1 + eq2 + eq3 + eq4 + eq5 + eq6 + eq7 + eq8 + eq9 + eqX + root))
 
+          echo $sum
+
           if [[ $sum -ne 1 ]]; then
             echo "The pull request involves several teams. Exiting the workflow."
             exit 0
