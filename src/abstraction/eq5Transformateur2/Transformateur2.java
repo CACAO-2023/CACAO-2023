@@ -21,6 +21,10 @@ import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 
+/**
+ * @author FERHOUT Adam
+ */
+
 public class Transformateur2 extends Transformateur2VendeurBourseCacao implements IFabricantChocolatDeMarque{
 	
 	private List<ChocolatDeMarque>chocosProduits; // Liste des chocolats de marque produits 
