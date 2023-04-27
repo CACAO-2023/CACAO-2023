@@ -47,11 +47,11 @@ jobs:
          GITHUB_TOKEN: ${{ secrets.PAT }}
 
     - name: Auto-merge PR
-      if: contains(github.event.pull_request.changed_files, steps.actorTeams.outputs.teams[0]) &&
+      if: ${{ contains(github.event.pull_request.changed_files, steps.actorTeams.outputs.teams[0]) &&
           ( steps.filter.outputs.eq1 + steps.filter.outputs.eq2 + steps.filter.outputs.eq3 +
             steps.filter.outputs.eq4 + steps.filter.outputs.eq5 + steps.filter.outputs.eq6 +
             steps.filter.outputs.eq7 + steps.filter.outputs.eq8 + steps.filter.outputs.eq9 +
-            steps.filter.outputs.eqX + steps.filter.outputs.root == 1 )
+            steps.filter.outputs.eqX + steps.filter.outputs.root == 1 ) }}
       run: gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
