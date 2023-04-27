@@ -47,8 +47,7 @@ jobs:
               - 'src/presentation/**'
               - 'test/**'
               
-      - name: check files
-        id: condition_check
+      - name: Check files
         run: |
           eq1=${{ steps.filter.outputs.eq1 }}
           eq2=${{ steps.filter.outputs.eq2 }}
@@ -69,7 +68,7 @@ jobs:
             exit 0
           fi
 
-      - name: enable auto-merge
+      - name: Enable auto-merge
         if: failure() && contains(github.event.pull_request.changed_files, steps.actorTeams.outputs.teams[0])
         run: gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
         env:
