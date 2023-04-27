@@ -37,9 +37,8 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		else {
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme ne pas vouloir acheter le produit "+produit);
 		return false;}
-
-		
-	}
+		}
+	
 
 	@Override
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
