@@ -228,6 +228,16 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   		this.stockFeveMG.retirer(this.stockFeveMG.getQuantites().get(perim)) ;
   		this.stockFeveMGL.retirer(this.stockFeveMGL.getQuantites().get(perim)) ;
   		this.stockFeveHGL.retirer(this.stockFeveHGL.getQuantites().get(perim)) ;
+  		super.journalStock.ajouter(date+" ");
+  		super.journalStock.ajouter(" La quantité de feve BG est :"+ this.stockFeveBG.getQuantiteTotale() );
+  		super.journalStock.ajouter(" La quantité de feve MG est :"+ this.stockFeveMG.getQuantiteTotale() );
+  		super.journalStock.ajouter(" La quantité de feve MGL est :"+ this.stockFeveMGL.getQuantiteTotale() );
+  		super.journalStock.ajouter(" La quantité de feve HGL est :"+ this.stockFeveHGL.getQuantiteTotale() );
+  		super.journalStock.ajouter(" La quantité de Chocolat BG est :"+ this.stockChocolatBG.getQuantiteTotale() );
+  		super.journalStock.ajouter(" La quantité de Chocolat MG est :"+ this.stockChocolatMG.getQuantiteTotale() );
+  		super.journalStock.ajouter(" La quantité de Chocolat MGL est :"+ this.stockChocolatMGL.getQuantiteTotale() );
+  		super.journalStock.ajouter(" La quantité de Chocolat HGL est :"+ this.stockChocolatHGL.getQuantiteTotale() );
+  		
   		
   	}
 }
