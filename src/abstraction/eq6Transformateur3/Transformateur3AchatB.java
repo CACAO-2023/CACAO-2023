@@ -1,5 +1,7 @@
 package abstraction.eq6Transformateur3;
 
+import java.util.List;
+
 import abstraction.eqXRomu.bourseCacao.IAcheteurBourse;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Journal;
@@ -93,7 +95,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 */
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
 		super.ajouterFeve((Feve)l.getProduit(), l.getQuantiteTotale(),Filiere.LA_FILIERE.getEtape());
-		super.journal.ajouter("Stock de "+l.getQuantiteTotale()+""+"tonnes de feves"+((Feve)l.getProduit()).toString()+" acheté en bourse");
+		super.journalAchatB.ajouter("Stock de "+l.getQuantiteTotale()+""+"tonnes de feves"+((Feve)l.getProduit()).toString()+" acheté en bourse");
 		
 	}
 
@@ -107,6 +109,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 */
 	public void notificationBlackList(int dureeEnStep) {
 		// TODO Auto-generated method stub
+		super.journalAchatB.ajouter("on est dans le rouge ça va mal finir");
 		super.journal.ajouter("on est dans le rouge ça va mal finir");
 		
 	}
@@ -116,6 +119,16 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	private void MaJCours () {
 		
 	}
+	/**ecrit par Nathan Claeys
+	   * pour pouvoir rendre les variables qui peuvent aider à la prise de decision
+	   */
+	  public List<Variable> getIndicateurs() {
+			List<Variable> res = super.getIndicateurs();
+			res.add(coursmaxBG);
+			res.add(coursmaxHGL);
+			res.add(coursmaxMG);
+			res.add(coursmaxMGL);
+			return res;}
 	
 	/**ecrit par Nathan Claeys
 	 */

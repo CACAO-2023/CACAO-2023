@@ -1,5 +1,7 @@
 package abstraction.eq6Transformateur3;
 
+import java.util.List;
+
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
@@ -205,6 +207,13 @@ protected double BesoinStep(int Step, Feve f) {
 } 
 	return 100;
 }
+
+/**ecrit par Nathan Claeys
+ * pour pouvoir rendre les variables qui peuvent aider à la prise de decision
+ */
+public List<Variable> getIndicateurs() {
+		List<Variable> res = super.getIndicateurs();
+		return res;}
 
 public void initialiser() {
 	super.initialiser();
