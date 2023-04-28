@@ -102,15 +102,22 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 			if (super.BesoinStep(i,((Feve)contrat.getProduit()))>0) {compt = 0;notreduree=i;}
 			else {compt = compt+1;}			
 		}
-		double commandemin = this.BesoinMaxEntre(stepdebut,notreduree,((Feve)contrat.getProduit()));
+		if (notreduree == stepdebut) {return null;}
+		else {
+		double commandemin = max(101.0,this.BesoinMaxEntre(stepdebut,notreduree,((Feve)contrat.getProduit())));
 		List<Double> res = new LinkedList<Double>();
 		for (int i =stepdebut;i<notreduree;i++) {
-			if (vendeurecheancier.getQuantite(i)>=commandemin) {res.add(vendeurecheancier.getQuantite(i));}
+			if (vendeurecheancier.getQuantite(i)>=commandemin) {res.add(max(vendeurecheancier.getQuantite(i),100.0));}
 			else {res.add(commandemin);}
 		}
-		return new Echeancier(stepdebut,res);
+		return new Echeancier(stepdebut,res);}
 	}
 
+	private double max(double a, double b) {
+		// TODO Auto-generated method stub
+		if (a<b) {return b;}else {
+		return a;}
+	}
 	private double BesoinMaxEntre(int d, int f,Feve feve) {
 		double max =0;
 		for (int i= d;i<f;i++) {
@@ -218,7 +225,8 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		List<IVendeurContratCadre> vendeurs = superviseur.getVendeurs(produit);
 		if (vendeurs.size()!=0) {
 			IVendeurContratCadre vendeur = vendeurs.get(0);
-			ExemplaireContratCadre contrat = superviseur.demandeAcheteur(this, vendeur, produit, new Echeancier(), super.cryptogramme, false);
+			super.journalAchatB.ajouter("on essaie de demander un contrat à l'equipe :"+vendeur.getNom());
+			ExemplaireContratCadre contrat = superviseur.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1,Filiere.LA_FILIERE.getEtape()+5,1001.0), super.cryptogramme, false);
 			if (contrat != null) {super.journalAchatCC.ajouter("CC cherché et trouvé :"+contrat.toString());}
 			return contrat;	
 		}
@@ -247,6 +255,8 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
 				contratsObsoletes.add(contrat);
 			}
+			else {if (contrat.getPaiementAEffectuerAuStep()>0.0) {Filiere.LA_FILIERE.getBanque().virer(contrat.getAcheteur(), super.cryptogramme, contrat.getVendeur(), contrat.getPaiementAEffectuerAuStep());
+			super.journal.ajouter("virement de "+contrat.getPaiementAEffectuerAuStep()+"fait à l'équipe"+contrat.getVendeur().getNom());}}
 		}  
 		
 		this.getListeContratEnCours().removeAll(contratsObsoletes);
