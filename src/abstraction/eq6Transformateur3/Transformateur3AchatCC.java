@@ -248,6 +248,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 				contratsObsoletes.add(contrat);
 			}
 		}  
+		
 		this.getListeContratEnCours().removeAll(contratsObsoletes);
 		this.chercheContrat(Feve.F_BQ);
 		this.chercheContrat(Feve.F_MQ);
