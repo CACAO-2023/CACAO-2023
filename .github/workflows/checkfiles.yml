@@ -17,26 +17,26 @@ jobs:
         id: filter
         with:
           filters: |
-            eq1:
-              - 'src/abstraction/eq1*/**'
-            eq2:
-              - 'src/abstraction/eq2*/**'
-            eq3:
-              - 'src/abstraction/eq3*/**'
-            eq4:
-              - 'src/abstraction/eq4*/**'
-            eq5:
-              - 'src/abstraction/eq5*/**'
-            eq6:
-              - 'src/abstraction/eq6*/**'
-            eq7:
-              - 'src/abstraction/eq7*/**'
-            eq8:
-              - 'src/abstraction/eq8*/**'
-            eq9:
-              - 'src/abstraction/eq9*/**'
-            eqX:
-              - 'src/abstraction/eqX*/**'
+            eq1Producteur1:
+              - 'src/abstraction/eq1Producteur1/**'
+            eq2Producteur2:
+              - 'src/abstraction/eq2Producteur2/**'
+            eq3Producteur3:
+              - 'src/abstraction/eq3Producteur3/**'
+            eq4Transformateur1:
+              - 'src/abstraction/eq4Transformateur1/**'
+            eq5Transformateur2:
+              - 'src/abstraction/eq5Transformateur2/**'
+            eq6Transformateur3:
+              - 'src/abstraction/eq6Transformateur3/**'
+            eq7Distributeur1:
+              - 'src/abstraction/eq7Distributeur1/**'
+            eq8Distributeur2:
+              - 'src/abstraction/eq8Distributeur2/**'
+            eq9Distributeur3:
+              - 'src/abstraction/eq9Distributeur3/**'
+            eqXRomu:
+              - 'src/abstraction/eqXRomu/**'
             root:
               - '*'
               - '.github/**'
@@ -48,7 +48,7 @@ jobs:
               - 'test/**'
 
       - name: Enable auto-merge
-        if: steps.filter.outputs.changes[1] == null && contains(github.event.pull_request.changed_files, steps.actorTeams.outputs.teams[0])
+        if: fromJSON(steps.filter.outputs.changes)[1] == null && fromJSON(steps.filter.outputs.changes)[0] == steps.actorTeams.outputs.teams[0])
         run: |
           echo ${{ fromJSON(steps.filter.outputs.changes)[1] }}
           echo ${{ steps.filter.outputs.changes }}
