@@ -29,7 +29,7 @@ If the pull request is correct, it is merged automatically (within 5 minutes) an
 
 **Note that there is no need to close and reopen the pull request, you can just fix the problems and push to your repository.**
 
-## `Some checks were not successful`: `Check that files are owned by the team`
+## `Some checks were not successful`: `File ownership`
 
 You are changing files outside of the java package of your team. You can see the files that you are changing in the `Files changed` tab of your pull request on the github website. This list must contain only files in your package.
 
@@ -38,7 +38,7 @@ You are changing files outside of the java package of your team. You can see the
 
 Note that if the files you changed are not Java files, they will be hidden in the Package Exporer of Eclipse. To see and replace them: click the three dots in the top bar of Package Exporer -> `Filters...` -> uncheck `.* resources`. 
 
-## `Some checks were not successful`: `Compile and run tests`
+## `Some checks were not successful`: `Test execution`
 
 Not accepting because the code does not pass the tests. You can read the error message by clicking on `Details` near to the failed test at the bottom of your pull request. You can run the same tests on your Eclipse, they are `test/abstraction/FiliereParDefaultTest.java` and `test/presentation/FenetrePrincipaleTest.java`. To run them:  right-click on `build.xml` -> `Run As` -> `Ant Build`. You will see the error message in the console. Fix the error, then commit and push.
 
