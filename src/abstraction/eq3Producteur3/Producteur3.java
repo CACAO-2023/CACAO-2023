@@ -36,6 +36,8 @@ public class Producteur3 extends Bourse3  {
 	private LinkedList<Double> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
 
 
+
+
 	
 	/**
 	 * @author Dubus-Chanson Victor
@@ -93,8 +95,7 @@ public class Producteur3 extends Bourse3  {
 		this.updateListeCout();
 		this.updateCoutTonne();
 	}
-		
-
+	
 	/**
 	 * @author Dubus-Chanson Victor
 	 */
@@ -129,6 +130,7 @@ public class Producteur3 extends Bourse3  {
 
 		this.updateListeCout();
 		this.updateCoutTonne();
+		/**
 		// Incendie ?
 		//*		
 		double probaIncendie =  Math.random();
@@ -157,7 +159,7 @@ public class Producteur3 extends Bourse3  {
 						}
 
 				}
-				//*/
+		*/
 		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep);
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
 				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ this.HectaresUtilises);

@@ -18,24 +18,31 @@ import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
 
 public class Producteur3Acteur implements IActeur {
-	
+
 	protected int cryptogramme;
 	protected Journal journal_operationsbancaires;
-    protected Journal journal_ventes;
-    protected Journal journal_achats;
-    protected Journal journal_activitegenerale;
-    protected Journal journal_Stock;
-    protected Journal journal_catastrophe;
-    protected Journal journal_plantation;
-    protected Stock Stock;
-	protected Double CoutStep; /* Tout nos couts du step, reinitialises a zero au debut de chaque step et payes a la fin du step*/
-	protected Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
-	
-	public Variable StockFeveH ;
-	public Variable StockFeveM ;
-	public Variable StockFeveB ;
+	protected Journal journal_ventes;
+	protected Journal journal_achats;
+	protected Journal journal_activitegenerale;
+	protected Journal journal_Stock;
+	protected Journal journal_catastrophe;
+	protected Journal journal_plantation;
+	protected Stock Stock;
+	protected Double CoutStep; /*
+								 * Tout nos couts du step, reinitialises a zero au debut de chaque step et payes
+								 * a la fin du step
+								 */
+	protected Double CoutTonne; /*
+								 * Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres
+								 * 9 mois), le meme pour toute gamme
+								 */
+
+	public Variable StockFeveH;
+	public Variable StockFeveM;
+	public Variable StockFeveB;
 	public Variable tailleH;
 	public Variable tailleM;
+
 	public Variable coutMoyen;
 	public Variable coutEmployeStep;
 	public Variable coutSalaireTot;
@@ -57,13 +64,13 @@ public class Producteur3Acteur implements IActeur {
 	protected LinkedList<Double> VentesMG; /*Les 12 quantités des dernières ventes de moyens de gammes*/
 	protected LinkedList<Double> VentesHG; /*Les 12 quantités des dernières ventes de hauts de gammes*/
 	
+
 	protected Champs fields;
 
 	/**
 	 * @author BOCQUET Gabriel, Corentin Caugant
 	 */
 	public Producteur3Acteur() {
-	//penser a changer nom dans champs si change Equipe 3
 	String nom = "Equipe 3";
 	this.fields = new Champs();
 	
@@ -102,11 +109,12 @@ public class Producteur3Acteur implements IActeur {
 	this.quantiteBruleM = new Variable("Equipe3 Proportion Champs Brules Incendie M", "Fixe le pourcentage d'arbre brules suite a un incendie M ",this,0.2);
 	this.quantiteBruleL = new Variable("Equipe3 Proportion Champs Brules Incendie L", "Fixe le pourcentage d'arbre brules suite a un incendie L ",this,0.1);
 	this.quantiteDetruiteCyclone = new Variable("Equipe3 Proportion Champs Detruits Cyclone Max", "Fixe le pourcentage maximum d'arbre detruits suite a un Cyclone",this,0.3);
+
 	}
-	
+
 	/**
 	 * @author BOCQUET Gabriel
-	 */	
+	 */
 	public void initialiser() {
 		for (int i = 0; i < 12; i++) {
 			this.VentesMG.add(0.0);
@@ -116,68 +124,70 @@ public class Producteur3Acteur implements IActeur {
 
 	/**
 	 * @author BOCQUET Gabriel
-	 */	
+	 */
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ3";
 	}
 
 	////////////////////////////////////////////////////////
-	//         En lien avec l'interface graphique         //
+	// En lien avec l'interface graphique //
 	////////////////////////////////////////////////////////
-	
+
 	/**
 	 * @author BOCQUET Gabriel
-	 */	
+	 */
 	protected Journal getJGeneral() {
 		return this.journal_activitegenerale;
 	}
-	
+
 	/**
 	 * @author BOCQUET Gabriel
-	 */	
+	 */
 	protected Journal getJStock() {
 		return this.journal_Stock;
 	}
-
+  /**
+	 * @author BOCQUET Gabriel
+	 */
 	protected Variable getDateLimM() {
 		return this.dateLimiteVenteM;
 	}
+
 	/**
 	 * @author BOCQUET Gabriel
-	 */	
+	 */
 	protected Journal getJCatastrophe() {
 		return this.journal_catastrophe;
 	}
 
-
 	protected int getCryptogramme() {
 		return this.cryptogramme;
 	}
-	
+
 	/**
 	 * @author Dubus-Chanson Victor
 	 */
 	protected Champs getFields() {
 		return this.fields;
 	}
-	
+
 	/**
 	 * @author BOCQUET Gabriel
-	 */	
+	 */
 	protected Journal getJOperation() {
 		return this.journal_operationsbancaires;
 	}
-	
+
 	/**
 	 * @author BOCQUET Gabriel
-	 */	
+	 */
 	protected Journal getJVente() {
 		return this.journal_ventes;
 	}
-	
+
 	/**
 	 * @author BOCQUET Gabriel
-	 */	
+	 */
 	protected Journal getJAchats() {
 		return this.journal_achats;
 	}
@@ -187,16 +197,17 @@ public class Producteur3Acteur implements IActeur {
 	}
 	/**
 	 * @author BOCQUET Gabriel
-	 */	
+	 */
 	protected Stock getStock() {
 		return this.Stock;
 	}
 
 	/**
 	 * @author BOCQUET Gabriel
-	 */	
+	 */
 	public void next() {
-		// Removing the first element for both lists and adding a new 0 at the end of both
+		// Removing the first element for both lists and adding a new 0 at the end of
+		// both
 		this.VentesMG.removeFirst();
 		this.VentesMG.add(0.0);
 		this.VentesHG.removeFirst();
@@ -205,10 +216,9 @@ public class Producteur3Acteur implements IActeur {
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
-		return new Color(249, 230, 151); 
+		return new Color(249, 230, 151);
 	}
 
-	
 	public String getDescription() {
 		return "Vendeurs ELITE de cacao, spécialistes de la faillite éclair, de la vente à perte et de la vente de produits de qualité médiocre. Nous sommes les meilleurs !";
 	}
@@ -231,6 +241,7 @@ public class Producteur3Acteur implements IActeur {
 
 	// Renvoie les parametres
 	public List<Variable> getParametres() {
+
 		List<Variable> res=new ArrayList<Variable>();
 		res.add(this.coutEmployeStep);
 		res.add(this.dateLimiteVenteM);
@@ -244,12 +255,13 @@ public class Producteur3Acteur implements IActeur {
 		res.add(quantiteBruleL);
 		res.add(quantiteDetruiteCyclone);
 		res.add(pourcentageGrevise);
+
 		return res;
 	}
 
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
-		List<Journal> res=new ArrayList<Journal>();
+		List<Journal> res = new ArrayList<Journal>();
 		res.add(journal_activitegenerale);
 		res.add(journal_operationsbancaires);
 		res.add(journal_ventes);
@@ -261,10 +273,10 @@ public class Producteur3Acteur implements IActeur {
 	}
 
 	////////////////////////////////////////////////////////
-	//               En lien avec la Banque               //
+	// En lien avec la Banque //
 	////////////////////////////////////////////////////////
 
-	// Appelee en debut de simulation pour vous communiquer 
+	// Appelee en debut de simulation pour vous communiquer
 	// votre cryptogramme personnel, indispensable pour les
 	// transactions.
 	public void setCryptogramme(Integer crypto) {
@@ -274,47 +286,46 @@ public class Producteur3Acteur implements IActeur {
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
-		if(acteur.equals(this)) {
-		JFrame popup = new JFrame("L'equipe 3 a fait faillite...Triste");
-		popup.setLocation(300, 100);
-		double proba =Math.random();
-		ImageIcon icon;
-		if(proba<0.5) {
-		icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/fallite1.gif");
+		if (this == acteur) {
+			JFrame popup = new JFrame("L'equipe 3 a fait faillite...Triste");
+			popup.setLocation(300, 100);
+			double proba = Math.random();
+			ImageIcon icon;
+			if (proba < 0.5) {
+				icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Fallite1.gif");
+			} else {
+				icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/faillite2.gif");
+			}
+			JLabel label = new JLabel(icon);
+			popup.getContentPane().add(label);
+			popup.pack();
+			popup.setVisible(true);
+			Timer timer = new Timer();
+			ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+			timer.schedule(monTimerTask, 2500);
+			popup.setVisible(true);
 		}
-		else {
-			icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/faillite2.gif");
-		}
-		JLabel label = new JLabel(icon);
-		popup.getContentPane().add(label);
-        popup.pack();
-		popup.setVisible(true);
-		Timer timer = new Timer();
-		ControlTimeGif monTimerTask = new ControlTimeGif(popup);
-		timer.schedule(monTimerTask, 10000);
-		popup.setVisible(true);
-		}
-		
+
 	}
 
 	// Apres chaque operation sur votre compte bancaire, cette
 	// operation est appelee pour vous en informer
 	public void notificationOperationBancaire(double montant) {
 	}
-	
+
 	// Renvoie le solde actuel de l'acteur
 	public double getSolde() {
 		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme);
 	}
 
 	////////////////////////////////////////////////////////
-	//        Pour la creation de filieres de test        //
+	// Pour la creation de filieres de test //
 	////////////////////////////////////////////////////////
 
 	// Renvoie la liste des filieres proposees par l'acteur
 	public List<String> getNomsFilieresProposees() {
 		ArrayList<String> filieres = new ArrayList<String>();
-		return(filieres);
+		return (filieres);
 	}
 
 	// Renvoie une instance d'une filiere d'apres son nom
@@ -323,7 +334,7 @@ public class Producteur3Acteur implements IActeur {
 	}
 
 	////////////////////////////////////////////////////////
-	//      Quelques fonction utilitaires diverses        //
+	// Quelques fonction utilitaires diverses //
 	////////////////////////////////////////////////////////
 
 	/**
@@ -333,8 +344,7 @@ public class Producteur3Acteur implements IActeur {
 		if (feve == Feve.F_MQ_BE || feve == Feve.F_MQ) {
 			double newValue = quantite + this.VentesMG.getLast();
 			this.VentesMG.set(11, newValue);
-		}
-		else if (feve == Feve.F_HQ_BE) {
+		} else if (feve == Feve.F_HQ_BE) {
 			double newValue = quantite + this.VentesHG.getLast();
 			this.VentesHG.set(11, newValue);
 		}

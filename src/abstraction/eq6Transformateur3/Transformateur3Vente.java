@@ -40,7 +40,10 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 
 	@Override
 	public boolean vend(IProduit produit) {
-		return true;
+		if (produit instanceof ChocolatDeMarque) {
+			return (((ChocolatDeMarque)produit).getMarque().equals("eco+ choco"))||((ChocolatDeMarque)produit).getMarque().equals("chokchoco")||((ChocolatDeMarque)produit).getMarque().equals("chokchoco bio")||((ChocolatDeMarque)produit).getMarque().equals("Choc");
+		}
+		return false;
 	}
 
 	@Override
@@ -72,7 +75,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 				return 2500;
 			}
 		}
-		return 2000;
+		return 0;
 	}
 
 	@Override
@@ -109,7 +112,6 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		super.journal.ajouter("Nouveau contrat cadre : Prix = "+ contrat.getPrix()+", Quantite totale = "+contrat.getQuantiteTotale()+", Nb de steps : "+contrat.getEcheancier().getNbEcheances());
 		this.listeCC.add(contrat);
 		
 	}

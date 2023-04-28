@@ -107,7 +107,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
                 previousSum += this.acheteursHQfiabilité.get(acheteur);
             }
         }
-        return null;
+        return superviseur.getAcheteurs(Feve.F_HQ_BE).get(0);
     }
 
     /**
