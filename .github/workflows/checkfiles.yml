@@ -1,4 +1,4 @@
-name: Check that files are owned by the team
+name: File ownership
 on: pull_request_target
 
 jobs:
