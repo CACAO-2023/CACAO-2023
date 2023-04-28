@@ -127,6 +127,8 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+		res.add(totalStocksFeves);
+		res.add(totalStocksChoco);
 		return res;
 	}
 /** ecrit par Nathan Claeys
@@ -134,8 +136,6 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	// Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
-		res.add(totalStocksFeves);
-		res.add(totalStocksChoco);
 		return res;
 	}
 
