@@ -1,0 +1,57 @@
+name: File ownership
+on: pull_request_target
+
+jobs:
+  checkfiles:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - uses: tspascoal/get-user-teams-membership@v2
+        id: actorTeams
+        with:
+          username: ${{ github.event.pull_request.user.login }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+          
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            eq1:
+              - 'src/abstraction/eq1*/**'
+            eq2:
+              - 'src/abstraction/eq2*/**'
+            eq3:
+              - 'src/abstraction/eq3*/**'
+            eq4:
+              - 'src/abstraction/eq4*/**'
+            eq5:
+              - 'src/abstraction/eq5*/**'
+            eq6:
+              - 'src/abstraction/eq6*/**'
+            eq7:
+              - 'src/abstraction/eq7*/**'
+            eq8:
+              - 'src/abstraction/eq8*/**'
+            eq9:
+              - 'src/abstraction/eq9*/**'
+            eqX:
+              - 'src/abstraction/eqX*/**'
+            root:
+              - '*'
+              - '.github/**'
+              - '.settings/**'
+              - 'docs/**'
+              - 'lib/**'
+              - 'src/controle/**'
+              - 'src/presentation/**'
+              - 'test/**'
+
+      - name: Enable auto-merge
+        if: steps.filter.outputs.changes[1] == null && contains(github.event.pull_request.changed_files, steps.actorTeams.outputs.teams[0])
+        run: |
+          echo ${{ steps.filter.outputs.changes }}
+          echo ${{ steps.actorTeams.outputs.teams }} 
+          gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
