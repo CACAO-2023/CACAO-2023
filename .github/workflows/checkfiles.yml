@@ -37,26 +37,34 @@ jobs:
               - 'src/abstraction/eq9Distributeur3/**'
             eqXRomu:
               - 'src/abstraction/eqXRomu/**'
+              - 'src/controle/**'
+              - 'src/presentation/**'
             root:
               - '*'
               - '.github/**'
               - '.settings/**'
               - 'docs/**'
               - 'lib/**'
-              - 'src/controle/**'
-              - 'src/presentation/**'
               - 'test/**'
 
       - name: Enable auto-merge
-        if: fromJSON(steps.filter.outputs.changes)[1] == null && fromJSON(steps.filter.outputs.changes)[0] == steps.actorTeams.outputs.teams[0]
+        if: fromJSON(steps.filter.outputs.changes)[1] == null && fromJSON(steps.filter.outputs.changes)[0] == fromJSON(steps.actorTeams.outputs.teams)[0]
         run: |
-          echo ${{ fromJSON(steps.filter.outputs.changes)[1] }}
           echo ${{ steps.filter.outputs.changes }}
-          echo ${{ steps.actorTeams.outputs.teams }} 
+          echo ${{ fromJSON(steps.filter.outputs.changes)[0] }}
+          echo ${{ fromJSON(steps.filter.outputs.changes)[1] }}
+          echo ${{ steps.actorTeams.outputs.teams }}
+          echo ${{ fromJSON(steps.actorTeams.outputs.teams)[0] }} 
           gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
           
       - name: Exit
-        if: fromJSON(steps.filter.outputs.changes)[1] != null || fromJSON(steps.filter.outputs.changes)[0] != steps.actorTeams.outputs.teams[0]
-        run: exit 1
+        if: fromJSON(steps.filter.outputs.changes)[1] != null || fromJSON(steps.filter.outputs.changes)[0] != fromJSON(steps.actorTeams.outputs.teams)[0]
+        run: | 
+          echo ${{ steps.filter.outputs.changes }}
+          echo ${{ fromJSON(steps.filter.outputs.changes)[0] }}
+          echo ${{ fromJSON(steps.filter.outputs.changes)[1] }}
+          echo ${{ steps.actorTeams.outputs.teams }}
+          echo ${{ fromJSON(steps.actorTeams.outputs.teams)[0] }} 
+          exit 1
