@@ -48,7 +48,7 @@ jobs:
               - 'test/**'
 
       - name: Enable auto-merge
-        if: fromJSON(steps.filter.outputs.changes)[1] == null && fromJSON(steps.filter.outputs.changes)[0] == steps.actorTeams.outputs.teams[0])
+        if: fromJSON(steps.filter.outputs.changes)[1] == null && fromJSON(steps.filter.outputs.changes)[0] == steps.actorTeams.outputs.teams[0]
         run: |
           echo ${{ fromJSON(steps.filter.outputs.changes)[1] }}
           echo ${{ steps.filter.outputs.changes }}
