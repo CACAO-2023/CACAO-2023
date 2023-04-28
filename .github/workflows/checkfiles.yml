@@ -50,7 +50,7 @@ jobs:
       - name: Enable auto-merge
         if: steps.filter.outputs.changes[1] == null && contains(github.event.pull_request.changed_files, steps.actorTeams.outputs.teams[0])
         run: |
-          echo ${{ steps.filter.outputs.changes[1] }}
+          echo ${{ fromJSON(steps.filter.outputs.changes)[1] }}
           echo ${{ steps.filter.outputs.changes }}
           echo ${{ steps.actorTeams.outputs.teams }} 
           gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
