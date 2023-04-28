@@ -2,6 +2,7 @@ package abstraction.eq3Producteur3;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
@@ -35,6 +36,23 @@ public class Producteur3Acteur implements IActeur {
 	public Variable StockFeveB ;
 	public Variable tailleH;
 	public Variable tailleM;
+	public Variable coutMoyen;
+	public Variable coutEmployeStep;
+	public Variable coutSalaireTot;
+	public Variable BeneficeH;
+	public Variable BeneficeM;
+	public Variable BeneficeB;
+	public Variable dateLimiteVenteM;
+	public Variable probaIncendiL;
+	public Variable probaIncendiM;
+	public Variable probaIncendiH;
+	public Variable probaGreve;
+	public Variable probaCyclone;
+	public Variable quantiteBruleL;
+	public Variable quantiteBruleM;
+	public Variable quantiteBruleH;
+	public Variable quantiteDetruiteCyclone;
+	public Variable pourcentageGrevise;
 	
 	protected LinkedList<Double> VentesMG; /*Les 12 quantités des dernières ventes de moyens de gammes*/
 	protected LinkedList<Double> VentesHG; /*Les 12 quantités des dernières ventes de hauts de gammes*/
@@ -45,9 +63,10 @@ public class Producteur3Acteur implements IActeur {
 	 * @author BOCQUET Gabriel, Corentin Caugant
 	 */
 	public Producteur3Acteur() {
-
+	//penser a changer nom dans champs si change Equipe 3
 	String nom = "Equipe 3";
 	this.fields = new Champs();
+	
 	journal_operationsbancaires=new Journal("Journal des Opérations bancaires de l'"+nom,this);
     journal_ventes=new Journal("Journal des Ventes de l'"+nom,this);
     journal_achats=new Journal("Journal des Achats de l'"+nom,this);
@@ -55,6 +74,8 @@ public class Producteur3Acteur implements IActeur {
     journal_Stock = new Journal("Journal des Stocks de l'"+nom,this);
     journal_catastrophe = new Journal("Journal des Catastrophes de l'"+nom,this);
     journal_plantation = new Journal("Journal des Plantations de l'"+nom,this);
+    journal_plantation.ajouter(Color.GRAY,Color.BLACK,this.printField("H"));
+    journal_plantation.ajouter(Color.GREEN,Color.BLACK,this.printField("M"));
 	this.Stock = new Stock();
 	this.CoutTonne = 0.0;
 	this.VentesMG = new LinkedList<Double>();
@@ -64,6 +85,23 @@ public class Producteur3Acteur implements IActeur {
 	this.StockFeveB = new Variable("Equipe3 Stock Bas de gamme", "Represente la quantite de Bas de Gamme en Stock",this,this.Stock.getQuantite(Feve.F_BQ));
 	this.tailleH = new Variable("Equipe3 Taille Champs H", "Represente la taille de nos champs Hauts de Gamme en Stock",this,this.fields.getTaille("H"));
 	this.tailleM = new Variable("Equipe3 Taille Champs M", "Represente la taille de nos champs Moyens de Gamme en Stock",this,this.fields.getTaille("M"));
+	this.coutMoyen = new Variable("Equipe3 Cout Moyen par tonne", "Correspond au cout depense par step par tonne de cacao ",this,this.CoutTonne);
+	this.coutEmployeStep = new Variable("Equipe3 Cout par Employe", "Correspond au salaire d'un employe par step ",this,220);
+	this.coutSalaireTot = new Variable("Equipe3 Cout Salaire", "Correspond au total des salaires que nous devons payer ",this,(this.fields.getTaille("M")+this.fields.getTaille("H"))*this.coutEmployeStep.getValeur());
+	this.BeneficeH =  new Variable("Equipe3 Benefice Feves Hautes Gamme", "Correspond au benefice fait sur les feves Hautes Gamme ",this,0);
+	this.BeneficeM = new Variable("Equipe3 Benefice Feves Moyennes  Gamme", "Correspond au benefice fait sur les feves Moyennes Gamme ",this,0);
+	this.BeneficeB = new Variable("Equipe3 Benefice Feves Bas de Gamme", "Correspond au benefice fait sur les feves Bas de Gamme ",this,0);
+	this.dateLimiteVenteM = new Variable("Equipe3 Date limite vente Bouse Feve M", "Fixe la date limite de vente des feves M avant de les vendre en bouse ",this,10);
+	this.probaIncendiL = new Variable("Equipe3 Proba Incendi L", "Fixe la probabilite qu'un incendie de taille L arrive ",this,0.1);
+	this.probaIncendiM = new Variable("Equipe3 Proba Incendi M", "Fixe la probabilite qu'un incendie de taille M arrive ",this,0.05);
+	this.probaIncendiH = new Variable("Equipe3 Proba Incendi H", "Fixe la probabilite qu'un incendie de taille H arrive ",this,0.02);
+	this.probaCyclone = new Variable("Equipe3 Proba Cyclone", "Fixe la probabilite qu'un Cyclone arrive ",this,0.05);
+	this.probaGreve = new Variable("Equipe3 Proba Greve", "Fixe la probabilite qu'une Greve arrive ",this,0.02);
+	this.pourcentageGrevise = new Variable("Equipe3 Pourcentage Greviste", "Fixe la proportion d'ouvrier en Greve ",this,0.2);
+	this.quantiteBruleH = new Variable("Equipe3 Proportion Champs Brules Incendie H", "Fixe le pourcentage d'arbre brules suite a un incendie H ",this,0.5);
+	this.quantiteBruleM = new Variable("Equipe3 Proportion Champs Brules Incendie M", "Fixe le pourcentage d'arbre brules suite a un incendie M ",this,0.2);
+	this.quantiteBruleL = new Variable("Equipe3 Proportion Champs Brules Incendie L", "Fixe le pourcentage d'arbre brules suite a un incendie L ",this,0.1);
+	this.quantiteDetruiteCyclone = new Variable("Equipe3 Proportion Champs Detruits Cyclone Max", "Fixe le pourcentage maximum d'arbre detruits suite a un Cyclone",this,0.3);
 	}
 	
 	/**
@@ -101,7 +139,9 @@ public class Producteur3Acteur implements IActeur {
 		return this.journal_Stock;
 	}
 
-
+	protected Variable getDateLimM() {
+		return this.dateLimiteVenteM;
+	}
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
@@ -141,7 +181,10 @@ public class Producteur3Acteur implements IActeur {
 	protected Journal getJAchats() {
 		return this.journal_achats;
 	}
-
+	
+	protected Journal getJPlantation() {
+		return this.journal_plantation;
+	}
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
@@ -178,12 +221,29 @@ public class Producteur3Acteur implements IActeur {
 		res.add(this.StockFeveB);
 		res.add(this.tailleH);
 		res.add(this.tailleM);
+		res.add(this.coutMoyen);
+		res.add(this.coutSalaireTot);
+		res.add(this.BeneficeB);
+		res.add(this.BeneficeM);
+		res.add(this.BeneficeH);
 		return res;
 	}
 
 	// Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
+		res.add(this.coutEmployeStep);
+		res.add(this.dateLimiteVenteM);
+		res.add(this.probaIncendiH);
+		res.add(this.probaIncendiM);
+		res.add(this.probaIncendiL);
+		res.add(this.probaCyclone);
+		res.add(this.probaGreve);
+		res.add(quantiteBruleH);
+		res.add(quantiteBruleM);
+		res.add(quantiteBruleL);
+		res.add(quantiteDetruiteCyclone);
+		res.add(pourcentageGrevise);
 		return res;
 	}
 
@@ -214,12 +274,13 @@ public class Producteur3Acteur implements IActeur {
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
+		if(acteur.equals(this)) {
 		JFrame popup = new JFrame("L'equipe 3 a fait faillite...Triste");
 		popup.setLocation(300, 100);
 		double proba =Math.random();
 		ImageIcon icon;
 		if(proba<0.5) {
-		icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/faillite1.gif");
+		icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/fallite1.gif");
 		}
 		else {
 			icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/faillite2.gif");
@@ -228,10 +289,11 @@ public class Producteur3Acteur implements IActeur {
 		popup.getContentPane().add(label);
         popup.pack();
 		popup.setVisible(true);
-		//Timer timer = new Timer();
-		//ControlTimeGif monTimerTask = new ControlTimeGif(popup);
-		//timer.schedule(monTimerTask, 10000);
+		Timer timer = new Timer();
+		ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+		timer.schedule(monTimerTask, 10000);
 		popup.setVisible(true);
+		}
 		
 	}
 
@@ -276,5 +338,24 @@ public class Producteur3Acteur implements IActeur {
 			double newValue = quantite + this.VentesHG.getLast();
 			this.VentesHG.set(11, newValue);
 		}
+	}
+	
+	public LinkedList<Double> VentesMH(String s){
+		if(s=="H") {
+			return this.VentesHG;
+		}
+		else if(s=="M"){
+			return this.VentesMG;
+		}
+		return null;
+	}
+	
+	public String printField(String s) {
+		HashMap<Integer,Integer> Field = this.getFields().getChamps().get(s);
+		String st = "{ ";
+		for(Integer i : Field.keySet()) {
+			st+= i + ": " + Field.get(i) +" ,";
+		}
+		return "Etat des champs "+s+": " +st + "}";
 	}
 }
