@@ -138,12 +138,17 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 		List<Variable> res=new ArrayList<Variable>();
 		return res;
 	}
-
+/**ecrit par Nathan Claeys
+ */
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res = new LinkedList<Journal>();
 		res.add(journal);
 		res.add(journalStock);
+		res.add(journalVentes);
+		res.add(journalTransformation);
+		res.add(journalAchatCC);
+		res.add(journalAchatB);
 		return res;
 	}
 
