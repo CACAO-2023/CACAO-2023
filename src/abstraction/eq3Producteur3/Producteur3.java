@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
@@ -34,7 +35,7 @@ public class Producteur3 extends Bourse3  {
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
 	private LinkedList<Double> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
 
-	private Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
+
 
 
 	
@@ -43,7 +44,8 @@ public class Producteur3 extends Bourse3  {
 	 */
 	public Producteur3() {
 		super();		
-
+		this.quantiteVenduBourseB =0.0;
+		this.quantiteVenduBourseM = 0.0;
 		this.CoutStep = 0.0;
 		this.CoutTonne = 0.;
 		this.HectaresLibres= 0;
@@ -87,8 +89,8 @@ public class Producteur3 extends Bourse3  {
 	 */
 	public void initialiser() {
 		super.initialiser();
-
-		this.CoutStep += Stock.getQuantite()*50;
+		
+		this.CoutStep += Stock.getQuantite()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur();
 		this.addCoutHectaresUtilises();
 		this.updateListeCout();
 		this.updateCoutTonne();
@@ -120,9 +122,9 @@ public class Producteur3 extends Bourse3  {
 			changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
 		}
 
-		// We only add the costs to CoutStep if we are not at step one :
+		// We only add the costs to CoutStep if we are not at step zero :
 		if (Filiere.LA_FILIERE.getEtape() > 0) {
-			this.CoutStep += Stock.getQuantite()*50;
+			this.CoutStep += Stock.getQuantite()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur();
 			this.addCoutHectaresUtilises();
 		}
 
@@ -132,23 +134,23 @@ public class Producteur3 extends Bourse3  {
 		// Incendie ?
 		//*		
 		double probaIncendie =  Math.random();
-				if(probaIncendie < 0.02) {
+				if(probaIncendie < this.probaIncendiH.getValeur()) {
 					this.Fire("Big");
 				}
-				else if(probaIncendie < 0.05) {
+				else if(probaIncendie < this.probaIncendiM.getValeur()) {
 					this.Fire("Med");
 				}
-				else if(probaIncendie < 0.1) {	
+				else if(probaIncendie < this.probaIncendiL.getValeur()) {	
 					this.Fire("Lit");
 				}
 				//Cyclone ou tempete ?
 				double probaCyclone =  Math.random();
-				if(probaCyclone <0.05) {
+				if(probaCyclone <this.probaCyclone.getValeur()) {
 					this.Cyclone();
 			}
 				//Greve ?
 				double probaGreve = Math.random();
-				if(probaGreve < 0.02){
+				if(probaGreve < this.probaGreve.getValeur()){
 						try {
 							this.GreveGeneral();
 						} catch (InterruptedException e) {
@@ -165,11 +167,18 @@ public class Producteur3 extends Bourse3  {
 		Filiere.LA_FILIERE.getBanque().virer(this, super.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), CoutStep);
 		this.getJOperation().ajouter(Color.cyan, Color.BLACK, "On a paye "+ this.CoutStep + "euros de frais divers");
 		this.CoutStep = 0.0;
-		super.StockFeveH.setValeur(this, super.Stock.getQuantite(Feve.F_HQ_BE));
-		super.StockFeveM.setValeur(this, super.Stock.getQuantite(Feve.F_MQ_BE));
-		super.StockFeveB.setValeur(this, super.Stock.getQuantite(Feve.F_BQ));
-		super.tailleH.setValeur(this, super.fields.getTaille("H"));
-		super.tailleM.setValeur(this, super.fields.getTaille("M"));
+		this.getJPlantation().ajouter(Color.GRAY,Color.BLACK,this.printField("H"));
+		this.getJPlantation().ajouter(Color.GREEN,Color.BLACK,this.printField("M"));
+		this.StockFeveH.setValeur(this, super.Stock.getQuantite(Feve.F_HQ_BE));
+		this.StockFeveM.setValeur(this, super.Stock.getQuantite(Feve.F_MQ_BE));
+		this.StockFeveB.setValeur(this, super.Stock.getQuantite(Feve.F_BQ));
+		this.tailleH.setValeur(this, super.fields.getTaille("H"));
+		this.tailleM.setValeur(this, super.fields.getTaille("M"));
+		this.coutMoyen.setValeur(this, this.CoutTonne);
+		this.coutSalaireTot.setValeur(this,(this.fields.getTaille("M")+this.fields.getTaille("H"))*this.coutEmployeStep.getValeur());
+		this.BeneficeB.setValeur(this, this.getBenefice("B"));
+		this.BeneficeM.setValeur(this, this.getBenefice("M"));
+		this.BeneficeH.setValeur(this, this.getBenefice("H"));
 	}
 	/*
 
@@ -179,7 +188,7 @@ public class Producteur3 extends Bourse3  {
 	 * @author Dubus-Chanson Victor
 	 */
 	public void addCoutHectaresUtilises() {
-		Integer coutEmployes = this.HectaresUtilises * 220;
+		Integer coutEmployes = this.HectaresUtilises * ((int)this.coutEmployeStep.getValeur());
 		this.CoutStep = this.CoutStep + coutEmployes;
 	}
 	
@@ -260,6 +269,72 @@ public class Producteur3 extends Bourse3  {
 		this.HectaresUtilises -= HectaresLiberes;
 	}
 	
+	/** 
+	 * @param s
+	 * @author BOCQUET Gabriel
+	 * @return argent gagne grace a la vente des feves de qualite s
+	 */
+	//WARNING :J'ai suppose qu'on livre les feves dans l'ordre des contratsCadre
+	protected double getRecetteCC(String s) {
+		Feve f;
+		if(s=="M") {f=Feve.F_MQ_BE;}
+		else {f=Feve.F_HQ_BE;}
+		
+		LinkedList<ExemplaireContratCadre> contracts = this.contracts;
+		LinkedList<ExemplaireContratCadre> contractsGoods = new LinkedList<ExemplaireContratCadre>();
+		for(ExemplaireContratCadre c : contracts) {
+			if(f==((Feve)c.getProduit())){
+				contractsGoods.add(c);
+			}
+		}
+		double argentGagne = 0.0;
+		double stockActuel = this.getStock().getQuantite(f);
+		for(ExemplaireContratCadre c : contractsGoods) {
+			//Si je n'ai plus de feves je ne peux plus rien livre
+			if(stockActuel <=0) {
+				break;
+			}
+			double qAEnvoyer=c.getQuantiteALivrerAuStep();
+			if(qAEnvoyer <= stockActuel) {
+			//WARNING : Renvoie un cout par tonne
+			System.out.println(contractsGoods.size());
+			argentGagne += c.getPrix()*qAEnvoyer;
+			stockActuel = stockActuel - qAEnvoyer;
+			}
+			else {
+				//Suppose que meme si on a pas assez de feve on renvoie ce que l'on a
+				//WARNING : Renvoie un cout par tonne
+				argentGagne +=c.getPaiementAEffectuerAuStep()*stockActuel;
+				stockActuel=0.0;
+			}
+		}
+		return argentGagne;
+	}
+	
+	/** 
+	 * @param s
+	 * @author BOCQUET Gabriel
+	 * @return Benefice gagne suite a la vente des feves de qualite s
+	 */
+	protected double getBenefice(String s) {
+		double coutCurrentStep;
+		double recette;
+		if(s =="H" || s=="M") {
+			Feve f;
+			if(s=="H") {f=Feve.F_HQ_BE;}
+			else {f=Feve.F_MQ_BE;}
+			//CoutStep = CoutStockageFeve + CoutEntretientChamp
+			coutCurrentStep = this.getStock().getQuantite(f)*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() + this.fields.getTaille(s)*this.coutEmployeStep.getValeur();
+		
+			//si on a des Hautes Gammes, this.getQuantiteVenduBourse =0. De plus, on a deja ajoute la quantite vendue en Bourse dans VentesHG ou VentesMG
+			recette = this.getQuantiteVenduBourse(s)*Filiere.LA_FILIERE.getIndicateur("BourseCacao cours M").getValeur() + this.getRecetteCC(s);
+		}
+		else {
+			coutCurrentStep = this.getStock().getQuantite(Feve.F_BQ)*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur();
+			recette = this.getQuantiteVenduBourse(s)*Filiere.LA_FILIERE.getIndicateur("BourseCacao cours B").getValeur();
+		}
+		return recette - coutCurrentStep;
+	}
 	/**
 	 * @author Dubus-Chanson Victor
 	 */
@@ -304,13 +379,13 @@ public class Producteur3 extends Bourse3  {
 				timer.schedule(monTimerTask, 3000);
 				*/
 				for(Integer key : KeyM) {
-					hectarMburnt += FieldsM.get(key)*0.5;
-					FieldsM.put(key,(int) (FieldsM.get(key)*0.5));
+					hectarMburnt += FieldsM.get(key)*this.quantiteBruleH.getValeur();
+					FieldsM.put(key,(int) (FieldsM.get(key)*(1-this.quantiteBruleH.getValeur())));
 				}
 				j.ajouter(Color.gray, Color.black, hectarMburnt + " d'hectares de Moyenne Gamme d'arbres ont brulé");
 				for(Integer key : KeyH) {
-					hectarHburnt = FieldsH.get(key)*0.5;
-					FieldsH.put(key,(int) (FieldsH.get(key)*0.5));
+					hectarHburnt = FieldsH.get(key)*this.quantiteBruleH.getValeur();
+					FieldsH.put(key,(int) (FieldsH.get(key)*(1-this.quantiteBruleH.getValeur())));
 				}
 				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
 			}
@@ -328,13 +403,13 @@ public class Producteur3 extends Bourse3  {
 				timer.schedule(monTimerTask, 3000);
 				*/
 				for(Integer key : KeyM) {
-					hectarMburnt += FieldsM.get(key)*0.2;
-					FieldsM.put(key,(int) (FieldsM.get(key)*0.8));
+					hectarMburnt += FieldsM.get(key)*this.quantiteBruleM.getValeur();
+					FieldsM.put(key,(int) (FieldsM.get(key)*(1-this.quantiteBruleM.getValeur())));
 				}
 				j.ajouter(Color.gray, Color.black, hectarMburnt + " d'hectares de Moyenne Gamme d'arbres ont brulé");
 				for(Integer key : KeyH) {
-					hectarHburnt = FieldsH.get(key)*0.2;
-					FieldsH.put(key,(int) (FieldsH.get(key)*0.8));
+					hectarHburnt = FieldsH.get(key)*this.quantiteBruleM.getValeur();
+					FieldsH.put(key,(int) (FieldsH.get(key)*(1-this.quantiteBruleM.getValeur())));
 				}
 				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
 			}
@@ -352,13 +427,13 @@ public class Producteur3 extends Bourse3  {
 				timer.schedule(monTimerTask, 3000);
 				*/
 				for(Integer key : KeyM) {
-					hectarMburnt += FieldsM.get(key)*0.1;
-					FieldsM.put(key,(int) (FieldsM.get(key)*0.9));
+					hectarMburnt += FieldsM.get(key)*this.quantiteBruleL.getValeur();
+					FieldsM.put(key,(int) (FieldsM.get(key)*(1-this.quantiteBruleL.getValeur())));
 				}
 				j.ajouter(Color.gray, Color.black, hectarMburnt + " d'hectares de Moyenne Gamme d'arbres ont brulé");
 				for(Integer key : KeyH) {
-					hectarHburnt = FieldsH.get(key)*0.1;
-					FieldsH.put(key,(int) (FieldsH.get(key)*0.9));
+					hectarHburnt = FieldsH.get(key)*(this.quantiteBruleL.getValeur());
+					FieldsH.put(key,(int) (FieldsH.get(key)*(1-this.quantiteBruleL.getValeur())));
 				}
 				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
 			}
@@ -392,13 +467,13 @@ public class Producteur3 extends Bourse3  {
 		Set<Integer> KeysM = FieldM.keySet();
 		Journal j = this.getJCatastrophe();
 		for(Integer key: KeysH) {
-			hectarDetruitH += FieldH.get(key)*(0+ Math.random()*0.7);
-			FieldH.put(key, (int)(FieldH.get(key)*(0+ Math.random()*0.7)));	
+			hectarDetruitH += FieldH.get(key)*(0+ Math.random()*(1-this.quantiteDetruiteCyclone.getValeur()));
+			FieldH.put(key, (int)(FieldH.get(key)*(0+ Math.random()*(1-this.quantiteDetruiteCyclone.getValeur()))));	
 		}
 		j.ajouter(Color.yellow, Color.black, hectarDetruitH + "d'hectares de Haute Gamme qui ont été détruits par un cyclone");
 		for (Integer key: KeysM) {
-			hectarDetruitM += FieldM.get(key)*(0+ Math.random()*0.7);
-			FieldM.put(key, (int)(FieldM.get(key)*(0+ Math.random()*0.7)));
+			hectarDetruitM += FieldM.get(key)*(0+ Math.random()*(1-this.quantiteDetruiteCyclone.getValeur()));
+			FieldM.put(key, (int)(FieldM.get(key)*(0+ Math.random()*(1-this.quantiteDetruiteCyclone.getValeur()))));
 		}
 		this.fields.setChampM(FieldM);
 		this.fields.setChampH(FieldH);
@@ -427,7 +502,7 @@ public class Producteur3 extends Bourse3  {
 		timer.schedule(monTimerTask, 3000);
 		*/
 		//On a autant d'employé que d'hectare Utilise
-		Integer nbrgreviste = (int) Math.round(this.getHectaresUt()*0.2);
+		Integer nbrgreviste = (int) Math.round(this.getHectaresUt()*this.pourcentageGrevise.getValeur());
 		//on calcule le ce qu'on aurait du produire avec ces employees
 		Champs fields = this.getFields();
 		HashMap<String, LinkedList<Integer>> Keys = fields.HarvestKeys(Filiere.LA_FILIERE.getEtape());

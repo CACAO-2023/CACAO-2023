@@ -62,7 +62,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
             this.acheteursHQprix.put(acheteursHQ.get(i), PRIX_DEPART_HQ);
         }
     }
-
+    
     /**
      * Chooses a client to sell our beans. We are more likely to choose the client with the highest reliability.
      * @param feve The type of beans we want to sell
