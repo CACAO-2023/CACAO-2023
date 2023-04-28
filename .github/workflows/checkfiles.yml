@@ -37,14 +37,14 @@ jobs:
               - 'src/abstraction/eq9Distributeur3/**'
             eqXRomu:
               - 'src/abstraction/eqXRomu/**'
+              - 'src/controle/**'
+              - 'src/presentation/**'
             root:
               - '*'
               - '.github/**'
               - '.settings/**'
               - 'docs/**'
               - 'lib/**'
-              - 'src/controle/**'
-              - 'src/presentation/**'
               - 'test/**'
 
       - name: Enable auto-merge
