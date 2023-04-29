@@ -78,7 +78,9 @@ jobs:
       with:
         run: ant -noinput -buildfile build.xml
     - name: Auto-merge
-      if: ${{ success() }} && ${{ needs.file_ownership.result == 'success' }}
-      run: gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
+      if: success() && needs.file_ownership.result == 'success'
+      run: | 
+        echo ${{ needs.file_ownership.result }}
+        gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
