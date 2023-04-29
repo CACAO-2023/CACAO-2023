@@ -1,8 +1,8 @@
-name: File ownership
+name: Checks
 on: pull_request_target
 
 jobs:
-  checkfiles:
+  file_ownership:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -68,3 +68,22 @@ jobs:
           echo ${{ steps.actorTeams.outputs.teams }}
           echo ${{ fromJSON(steps.actorTeams.outputs.teams)[0] }} 
           exit 1
+          
+  java_test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v3
+      with:
+        java-version: '18'
+        distribution: 'temurin'
+    - name: Build with Ant
+      uses: coactions/setup-xvfb@v1
+      with:
+        run: ant -noinput -buildfile build.xml
