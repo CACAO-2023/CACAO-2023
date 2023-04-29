@@ -70,6 +70,8 @@ jobs:
           exit 1
           
   java_tests:
+    if: ${{ always() }}
+    needs: file_ownership
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
