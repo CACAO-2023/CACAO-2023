@@ -47,7 +47,7 @@ jobs:
               - 'lib/**'
               - 'test/**'
           
-      - name: Exit
+      - name: Test ownership
         if: fromJSON(steps.filter.outputs.changes)[1] != null || fromJSON(steps.filter.outputs.changes)[0] != fromJSON(steps.actorTeams.outputs.teams)[0]
         run: | 
           echo ${{ steps.filter.outputs.changes }}
@@ -78,7 +78,7 @@ jobs:
       with:
         run: ant -noinput -buildfile build.xml
     - name: Auto-merge
-      if: ${{ success() }}
+      if: ${{ success() }} && ${{ needs.file_ownership.result == 'success' }}
       run: gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
