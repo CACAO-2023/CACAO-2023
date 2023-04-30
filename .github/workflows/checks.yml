@@ -76,7 +76,11 @@ jobs:
     - name: Build with Ant
       uses: coactions/setup-xvfb@v1
       with:
-        run: ant -noinput -buildfile build.xml
+        run: |
+          set -e
+          ant -noinput -buildfile build.xml
+          ant -noinput -buildfile build.xml
+          ant -noinput -buildfile build.xml
     - name: Auto-merge
       if: success() && needs.file_ownership.result == 'success'
       run: | 
