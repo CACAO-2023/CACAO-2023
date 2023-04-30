@@ -7,6 +7,7 @@ import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
@@ -113,10 +114,13 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.listeCC.add(contrat);
+		super.journalVentes.ajouter("Nouveau contrat de vente passé :"+contrat.toString());
 		
 	}
 	
-	
+	public void initialiser() {
+		super.initialiser();
+	}
 	public void next() {
 		super.next();
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
@@ -133,7 +137,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		if (super.getLotChocolat(produit)!=null) {
 		double livre = Math.min(super.getLotChocolat(produit).getQuantiteTotale(), quantite);
 		if (livre>0.0) {
-			super.retirerChocolat((ChocolatDeMarque)produit, livre);
+			super.retirerChocolat((ChocolatDeMarque)produit, livre);//Attention il faut que cela soit possible; verifier la quantité
 		}
 		Lot lot = new Lot(produit);
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); 
@@ -143,4 +147,10 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 			return l; 
 		}
 	}
+	/**ecrit par Nathan Claeys
+	   * pour pouvoir rendre les variables qui peuvent aider à la prise de decision
+	   */
+	  public List<Variable> getIndicateurs() {
+			List<Variable> res = super.getIndicateurs();
+			return res;}
 }
