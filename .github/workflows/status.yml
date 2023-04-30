@@ -23,6 +23,7 @@ jobs:
       uses: coactions/setup-xvfb@v1
       with:
         run: |
+          set -e
           ant -noinput -buildfile build.xml
           ant -noinput -buildfile build.xml
           ant -noinput -buildfile build.xml
