@@ -22,4 +22,7 @@ jobs:
     - name: Build with Ant
       uses: coactions/setup-xvfb@v1
       with:
-        run: ant -noinput -buildfile build.xml
+        run: |
+          ant -noinput -buildfile build.xml
+          ant -noinput -buildfile build.xml
+          ant -noinput -buildfile build.xml
