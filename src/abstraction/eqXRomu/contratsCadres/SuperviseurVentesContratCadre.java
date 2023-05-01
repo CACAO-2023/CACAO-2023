@@ -290,7 +290,25 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 
 	public void gererLesEcheancesDesContratsEnCours() {
 		this.journal.ajouter("Step "+Filiere.LA_FILIERE.getEtape()+" GESTION DES ECHEANCES DES CONTRATS EN COURS ========");
+		HashMap<IVendeurContratCadre, HashMap<IProduit,Double>> engageALivrer = new HashMap<IVendeurContratCadre, HashMap<IProduit,Double>>();
+		HashMap<IAcheteurContratCadre, Double> engageAPayer = new HashMap<IAcheteurContratCadre, Double>();
+		
 		for (ContratCadre cc : this.contratsEnCours) {
+			if (!engageALivrer.keySet().contains(cc.getVendeur())) {
+				engageALivrer.put(cc.getVendeur(), new HashMap<IProduit,Double>());
+			}
+			if (!engageAPayer.keySet().contains(cc.getAcheteur())) {
+				engageAPayer.put(cc.getAcheteur(), 0.0);
+			}
+			double resteALivr=0.0;
+			if (!engageALivrer.get(cc.getVendeur()).keySet().contains(cc.getProduit())) {
+				engageALivrer.get(cc.getVendeur()).put(cc.getProduit(), 0.0);
+			} else {
+				resteALivr = engageALivrer.get(cc.getVendeur()).get(cc.getProduit()).doubleValue();
+			}
+			engageALivrer.get(cc.getVendeur()).put(cc.getProduit(),resteALivr+cc.getQuantiteRestantALivrer());
+			engageAPayer.put(cc.getAcheteur(),engageAPayer.get(cc.getAcheteur())+cc.getMontantRestantARegler());
+			
 			this.journal.ajouter("- contrat :"+cc.oneLineHtml());
 			double aLivrer = cc.getQuantiteALivrerAuStep();
 			if (aLivrer>0.0) {
@@ -329,7 +347,19 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 			}
 			cc.penaliteLivraison();
 			cc.penalitePaiement();
-		}		
+		}
+		this.journal.ajouter("===== RESTE A LIVRER =====");
+		for (IVendeurContratCadre v : engageALivrer.keySet()) {
+			this.journal.ajouter("..== "+v.getNom()+" : ");
+			HashMap<IProduit,Double> ral = engageALivrer.get(v);
+			for (IProduit p : ral.keySet()) {
+				this.journal.ajouter("....-- "+p+" : "+ral.get(p));
+			}
+		}
+		this.journal.ajouter("===== RESTE A PAYER =====");
+		for (IAcheteurContratCadre a : engageAPayer.keySet()) {
+			this.journal.ajouter("..== "+a.getNom()+" : "+engageAPayer.get(a));
+		}
 	}
 
 	public void archiverContrats() {
