@@ -55,7 +55,7 @@ public class ClientFinal implements IActeur, IAssermente, PropertyChangeListener
 	protected HashMap<Chocolat, Double> repartitionInitiale; 
 	protected HashMap<ChocolatDeMarque, Double> repartitionIntentionsAchat; // Associe a chaque chocolat de marque son pourcentage vis a vis des intentions globales d'achat de chocolat 
 	protected Integer cryptogramme;
-	protected Journal JournalDistribution, journalAttractivites, journalPrix;
+	protected Journal JournalDistribution, journalAttractivites, journalPrix, journalAlertes;
 
 	// Evolution de la distribution temporelle de la consommation 
 	private Variable dureeMinTransitionDistribution ;// passer d'une distribution de la consommation a une autre prend au moins ce nombre d'etapes
@@ -90,6 +90,7 @@ public class ClientFinal implements IActeur, IAssermente, PropertyChangeListener
 		this.JournalDistribution= new Journal(this.getNom()+" distribution", this);
 		this.journalAttractivites = new Journal(this.getNom()+" attractivites", this);
 		this.journalPrix = new Journal(this.getNom()+" prix", this);
+		this.journalAlertes = new Journal(this.getNom()+" alertes", this);
 		this.volumeVente = new Variable(getNom()+" volume vente CM", null, this, 0.0);
 		this.cmSelectionnee = new Variable(getNom()+" choc. marque select.", "indiquez l'index du chocolat de marque", this, 0.0);
 		this.surcoutMemeQualite = new Variable(getNom()+" surcout meme qualite", null, this, 0.25);
@@ -228,6 +229,9 @@ public class ClientFinal implements IActeur, IAssermente, PropertyChangeListener
 				pri = qv>0.0 ? distri.prix(choco) : -1.0; // On ne tient pas compte des prix si le distributeur ne met pas de ce produit en vente
 				this.prix.get(distri).get(choco).setValeur(this, pri); 
 				this.journalPrix.ajouter(" "+distri.getNom()+" vend "+choco.getNom()+" au prix de "+Journal.doubleSur(distri.prix(choco), 4));
+				if (pri<1000 || pri>100000.0) {
+					this.journalAlertes.ajouter(" "+distri.getNom()+" vend "+choco.getNom()+" au prix de "+Journal.doubleSur(distri.prix(choco), 4));				
+				}
 				quantiteTG+=qtg;
 			}
 			quantiteTotaleMiseEnVente.put(distri, quantiteTotale);
@@ -274,8 +278,9 @@ public class ClientFinal implements IActeur, IAssermente, PropertyChangeListener
 			}
 			double prixMoyen=prixMoyen(choco);
 			JournalDistribution.ajouter("Distributeurs : "+distributeursDeChoco);
+			//JournalDistribution.ajouter("Total attractivites: "+totalAttractiviteDistris);
 			for (IDistributeurChocolatDeMarque dist : distributeursDeChoco) {
-				double quantiteDesiree = consoStepChoco*this.attractiviteDistributeur.get(choco).get(dist)/totalAttractiviteDistris;
+				double quantiteDesiree = consoStepChoco*this.attractiviteDistributeur.get(choco).get(dist).doubleValue()/totalAttractiviteDistris;
 				// La non disponibilite, les tetes de gondole et le prix vont pouvoir impacter l'attractivite MAIS cela 
 				// influe doucement/a long terme. Or, une augmentation subite du prix peut freiner considerablement les
 				// achats car personne n'achete un chocolat hors de prix/beaucoup plus cher que chez le concurrent.
@@ -283,7 +288,7 @@ public class ClientFinal implements IActeur, IAssermente, PropertyChangeListener
 				// La moitie des ventes n'est pas impactee (achat sans tenir compte du prix pour 50% des achats)
 				double pri = this.prix.get(dist).get(choco).getValeur();
 				if (quantiteDesiree>0 && pri>0.0 && prixMoyen>0.0) { // Si le prixMoyen est negatif c'est qu'aucun distributeur n'est en mesure de fournir ce chocolat
-					quantiteDesiree*= (0.5 + (0.5*prixMoyen/pri));
+					quantiteDesiree*= Math.min(2.0, (0.5 + (0.5*prixMoyen/pri))); // meme si prix tres bas on peut au mieux multiplier par deux la quantitee desiree.
 				}
 				double enVente = this.quantiteEnVente.get(dist).get(choco);
 				double quantiteAchetee = Math.max(0.0, Math.min(quantiteDesiree, enVente));
@@ -378,6 +383,7 @@ public class ClientFinal implements IActeur, IAssermente, PropertyChangeListener
 		j.add(this.journalAttractivites);
 		j.add(this.journalPrix);
 		j.add(this.JournalDistribution);
+		j.add(this.journalAlertes);
 		return j;
 	}
 	public void notificationFaillite(IActeur acteur) {
