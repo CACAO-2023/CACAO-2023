@@ -293,6 +293,11 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 		HashMap<IVendeurContratCadre, HashMap<IProduit,Double>> engageALivrer = new HashMap<IVendeurContratCadre, HashMap<IProduit,Double>>();
 		HashMap<IAcheteurContratCadre, Double> engageAPayer = new HashMap<IAcheteurContratCadre, Double>();
 		
+		double chocoALivrer=0;// au cours de cette etape
+		double chocoLivre=0;  // au cours de cette etape
+		double fevesALivrer=0;// au cours de cette etape
+		double fevesLivrees=0;// au cours de cette etape
+		
 		for (ContratCadre cc : this.contratsEnCours) {
 			if (!engageALivrer.keySet().contains(cc.getVendeur())) {
 				engageALivrer.put(cc.getVendeur(), new HashMap<IProduit,Double>());
@@ -312,6 +317,11 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 			this.journal.ajouter("- contrat :"+cc.oneLineHtml());
 			double aLivrer = cc.getQuantiteALivrerAuStep();
 			if (aLivrer>0.0) {
+				if (cc.getProduit().getType().equals("Feve")) {
+					fevesALivrer+=aLivrer;
+				} else {
+					chocoALivrer+=aLivrer;
+				}
 				IVendeurContratCadre vendeur = cc.getVendeur();
 			//	double effectivementLivre;
 				Lot lotLivre = vendeur.livrer(cc.getProduit(), aLivrer, new ExemplaireContratCadre(cc));
@@ -323,6 +333,11 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
                 }
 				this.journal.ajouter("  a livrer="+String.format("%.3f",aLivrer)+"  livre="+String.format("%.3f",lotLivre.getQuantiteTotale()));
 				if (lotLivre.getQuantiteTotale()>0.0) {
+					if (cc.getProduit().getType().equals("Feve")) {
+						fevesLivrees+=lotLivre.getQuantiteTotale();
+					} else {
+						chocoLivre+=lotLivre.getQuantiteTotale();
+					}
 					IAcheteurContratCadre acheteur = cc.getAcheteur();
 					acheteur.receptionner(lotLivre, new ExemplaireContratCadre(cc));
 					cc.livrer(lotLivre.getQuantiteTotale());
@@ -348,6 +363,10 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 			cc.penaliteLivraison();
 			cc.penalitePaiement();
 		}
+		
+		this.journal.ajouter("==== TOTAL LIVRAISONS ====");
+		this.journal.ajouter(fevesLivrees+" T de feves sur "+fevesALivrer+" a livrer");
+		this.journal.ajouter(chocoLivre+" T de choco sur "+chocoALivrer+" a livrer");
 		this.journal.ajouter("===== RESTE A LIVRER =====");
 		for (IVendeurContratCadre v : engageALivrer.keySet()) {
 			this.journal.ajouter("..== "+v.getNom()+" : ");
