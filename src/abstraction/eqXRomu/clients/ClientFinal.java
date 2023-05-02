@@ -229,7 +229,7 @@ public class ClientFinal implements IActeur, IAssermente, PropertyChangeListener
 				pri = qv>0.0 ? distri.prix(choco) : -1.0; // On ne tient pas compte des prix si le distributeur ne met pas de ce produit en vente
 				this.prix.get(distri).get(choco).setValeur(this, pri); 
 				this.journalPrix.ajouter(" "+distri.getNom()+" vend "+choco.getNom()+" au prix de "+Journal.doubleSur(distri.prix(choco), 4));
-				if (pri<1000 || pri>100000.0) {
+				if (pri<1000 || pri>50000.0) {
 					this.journalAlertes.ajouter(" "+distri.getNom()+" vend "+choco.getNom()+" au prix de "+Journal.doubleSur(distri.prix(choco), 4));				
 				}
 				quantiteTG+=qtg;
@@ -289,6 +289,9 @@ public class ClientFinal implements IActeur, IAssermente, PropertyChangeListener
 				double pri = this.prix.get(dist).get(choco).getValeur();
 				if (quantiteDesiree>0 && pri>0.0 && prixMoyen>0.0) { // Si le prixMoyen est negatif c'est qu'aucun distributeur n'est en mesure de fournir ce chocolat
 					quantiteDesiree*= Math.min(2.0, (0.5 + (0.5*prixMoyen/pri))); // meme si prix tres bas on peut au mieux multiplier par deux la quantitee desiree.
+				}
+				if (pri<1000.0 || pri>37890.1) { // prix douteux / abusifs -> j'achete pas
+					quantiteDesiree=0;
 				}
 				double enVente = this.quantiteEnVente.get(dist).get(choco);
 				double quantiteAchetee = Math.max(0.0, Math.min(quantiteDesiree, enVente));
