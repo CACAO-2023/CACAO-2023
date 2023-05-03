@@ -207,8 +207,9 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 */
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		Object produit = contrat.getProduit();
-		if (produit instanceof Feve && lot.getQuantiteTotale()>0) {super.ajouterFeve(((Feve)produit), contrat.getQuantiteLivree().getQuantite(Filiere.LA_FILIERE.getEtape()),Filiere.LA_FILIERE.getEtape());}
-		super.journalAchatCC.ajouter("nouvel arrivage d'un lot de contrat cadre de "+lot.getQuantites()+"");
+		if (produit instanceof Feve && lot.getQuantiteTotale()>0) {
+			super.ajouterFeve(lot);}
+		super.journalAchatCC.ajouter("nouvel arrivage d'un lot de contrat cadre de "+lot.getQuantiteTotale()+"");
 	}
 	public List<ExemplaireContratCadre> getListeContratEnCoursA() {
 		return ListeContratEnCoursAchat;

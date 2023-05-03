@@ -61,27 +61,27 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
       this.stockProduit = new ArrayList<ChocolatDeMarque>();
   }
   /**Mouhamed SOW*/
-  public void ajouterFeve(Feve feve, Double quantite, int dateDeRecolte) {
-	    if (quantite ==0) {;}
+  public void ajouterFeve(Lot l) {
+	    if (l.getQuantiteTotale() ==0) {;}
 	    else {
-	    switch(feve.getGamme()) {
+	    switch(((Feve)l.getProduit()).getGamme()) {
 	        case BQ:
-	            stockFeveBG.ajouter(dateDeRecolte, quantite);
-	            super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+quantite);
+	            stockFeveBG.ajouter(l);
+	            super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+l.getQuantiteTotale());
 	            break;
 	        case MQ:
-	        	if(feve.isBioEquitable()) {
-	        		stockFeveMGL.ajouter(dateDeRecolte, quantite);
-	        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+quantite);
+	        	if(((Feve) l.getProduit()).isBioEquitable()) {
+	        		stockFeveMGL.ajouter(l);
+	        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+l.getQuantiteTotale());
 	        		break ;
 	        	}else {
-	        		stockFeveMG.ajouter(dateDeRecolte, quantite);
-	        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+quantite);
+	        		stockFeveMG.ajouter(l);
+	        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+l.getQuantiteTotale());
 	                break;
 	        	}
 	        case HQ:
-	        	stockFeveHGL.ajouter(dateDeRecolte, quantite);
-	        	super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+quantite);
+	        	stockFeveHGL.ajouter(l);
+	        	super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+l.getQuantiteTotale());
         		break ;
 	        default:
 	            throw new IllegalArgumentException("Type de fève invalide");
