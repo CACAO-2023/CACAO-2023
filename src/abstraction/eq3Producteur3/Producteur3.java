@@ -85,6 +85,10 @@ public class Producteur3 extends Bourse3  {
 
 		Stock Stock = this.getStock();
 		this.CoutTonne = CoutTotal / Math.max(Stock.getQuantite(), 1);
+		
+		if (this.CoutTonne > 6000) {
+			this.CoutTonne = 6000.;
+		}
 	}
 	
 	/**
@@ -92,7 +96,6 @@ public class Producteur3 extends Bourse3  {
 	 */
 	public void initialiser() {
 		super.initialiser();
-		
 		this.CoutStep += Stock.getQuantite()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur();
 		this.addCoutHectaresUtilises();
 		this.updateListeCout();
@@ -177,9 +180,9 @@ public class Producteur3 extends Bourse3  {
 
 				}
 		*/
-		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep + ", Hectares Achetés : " + this.HectaresAchetes);
+		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep + ", Hectares Achetés : " + this.HectaresAchetes + ", Coût de la tonne : " + this.CoutTonne);
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
-				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ this.HectaresUtilises);
+				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : "+ (this.HectaresUtilises + this.HectaresLibres));
 		
 		Filiere.LA_FILIERE.getBanque().virer(this, super.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), CoutStep);
 		this.getJOperation().ajouter(Color.cyan, Color.BLACK, "On a paye "+ this.CoutStep + "euros de frais divers");
