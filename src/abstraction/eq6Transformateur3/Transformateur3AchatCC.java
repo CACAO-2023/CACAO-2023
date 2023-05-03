@@ -8,6 +8,7 @@ import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 import java.util.LinkedList;
@@ -167,7 +168,8 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 			  if (dernier_prix <= 1.1*mon_dernier_prix) {return dernier_prix;}
 			  else {double proposition =(mon_dernier_prix + (dernier_prix - mon_dernier_prix)/4);
 			  		if (super.getSolde()<proposition) {return super.getSolde();}
-			  		else {return proposition;}}}
+			  		else {return proposition;}}}}
+		return 0.0;
 	}
 
 	/**
