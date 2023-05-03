@@ -40,7 +40,7 @@ public class Distributeur1Acteur  implements IActeur {
 	protected Variable stock_MQ = new Variable("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
 	protected Variable stock_MQ_BE = new Variable("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
 	protected Variable stock_HQ_BE = new Variable("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
-	
+	protected Variable ventes = new Variable("Eq7ventes","ventes totales réalisées lors de ce tour",this,0);
 	/**
 	 * donne les quantités mini pour un contrat cadre
 	 * @author ghaly
@@ -208,6 +208,7 @@ public class Distributeur1Acteur  implements IActeur {
 		res.add(stock_MQ_BE);
 		res.add(stock_BQ);
 		res.add(stock_MQ);
+		res.add(ventes);
 		
 		return res;
 
