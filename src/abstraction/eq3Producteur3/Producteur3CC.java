@@ -156,6 +156,11 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      */
     @Override
     public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
+        if (!this.contracts.contains(contrat)) {
+            System.out.println("\n================\n============\nAttention, le contrat suivant n'est pas dans la liste des contrats du vendeur : " + contrat + ".\n================\n============\n");
+            this.contracts.add(contrat);
+        }
+
         Lot lot = new Lot(produit);
 
         int oldestStep = Stock.getAge((Feve)produit);
@@ -206,10 +211,13 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     @Override
     public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
         Echeancier echeancier = contrat.getEcheancier();
+        if (this.getAvailableQuantity((Feve)contrat.getProduit()) <= 0) {
+            return null;
+        }
 
         // We rework the echeancier to fit the stock
-        if (echeancier.getQuantiteAPartirDe(contrat.getEcheancier().getStepDebut()) > Stock.getQuantite((Feve)contrat.getProduit())) {
-            echeancier.ajouter(Math.max(SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER, Stock.getQuantite((Feve)contrat.getProduit())));
+        if (echeancier.getQuantiteTotale() > this.getAvailableQuantity((Feve)contrat.getProduit())) {
+            echeancier.ajouter(this.getAvailableQuantity((Feve)contrat.getProduit())/(echeancier.getStepFin() - echeancier.getStepDebut()));
         }
 
         return echeancier;
@@ -219,7 +227,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      * @author Corentin Caugant
      */
     public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-        this.getContracts().add(contrat);
+        this.contracts.add(contrat);
         // Ajout de la quantite vendu dans la liste gardant une trace des dernières quantités vendus
         super.addVenteQuantite(contrat.getQuantiteTotale(), (Feve)contrat.getProduit());
 
@@ -252,7 +260,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         // Now making the contract
         this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit + "...");
         int length = ((int) Math.round(Math.random() * 10)) + 1;
-        ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, length, (int) Math.round(this.getStock().getQuantite(produit)/length)), cryptogramme,false);
+        ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, length, (int) Math.round(this.getAvailableQuantity(produit)/length)), cryptogramme,false);
         if (cc != null) {
             this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
         } else {
@@ -265,12 +273,46 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      * @author Corentin Caugant
      */
     public void next() {
+        System.out.println("\n=========\n At step : " + Filiere.LA_FILIERE.getEtape());
         super.next();
-        if (this.getStock().getQuantite(Feve.F_HQ_BE) > 100) {
+
+        List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
+		for (ExemplaireContratCadre contrat : this.contracts) {
+			if (contrat.getQuantiteRestantALivrer()<=0.0 && contrat.getMontantRestantARegler()<=0.0) {
+				contratsObsoletes.add(contrat);
+			} else {
+                
+                System.out.println("Contrat " + contrat + " is not obsolete");
+                System.out.println("Quantite restante a livrer : " + contrat.getQuantiteRestantALivrer());
+            }
+		}
+		this.contracts.removeAll(contratsObsoletes);
+
+
+
+        if (this.getAvailableQuantity(Feve.F_HQ_BE) > 100) {
             this.getContractForProduct(Feve.F_HQ_BE);
         }
-        if (this.getStock().getQuantite(Feve.F_MQ_BE) > 100) {
+        if (this.getAvailableQuantity(Feve.F_MQ_BE) > 100) {
             this.getContractForProduct(Feve.F_MQ_BE);
         }
+    }
+
+    /**
+     * Returns the quantity of beans available for a given quality.
+     * This method takes into account ongoing CCs and the stock to compute the quantity available for sale accurately.
+     * Corentin Caugant
+     */
+    public double getAvailableQuantity(Feve qualite) {
+        double available = this.getStock().getQuantite(qualite);
+        for (ExemplaireContratCadre cc : this.getContracts()) {
+            if ((Feve)cc.getProduit() == qualite) {
+                if (cc.getQuantiteRestantALivrer() >= 0) {
+                    available -= cc.getQuantiteRestantALivrer();
+                }
+            }
+        }
+        System.out.println("\n=======\n Total quantity available for quality " + qualite + " : " + available + "\n=======\n");
+        return available;
     }
 }
