@@ -169,7 +169,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	//Auteur : Ben Messaoud Karim
 	public String getDescription() {
-		return "Royal Roast, un distributeur de chocolat de qualité";
+		return "Royal Roast, un distributeur de chocolat de qualité.";
 	}
 
 	//Auteur : Ben Messaoud Karim
