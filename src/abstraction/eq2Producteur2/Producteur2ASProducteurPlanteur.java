@@ -162,7 +162,8 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		this.majSurfaceTot();
 	}
 	
-	protected double Productivite(int step) {
+	//Entre 3 ans et 40 ans la productivité de nos hectare suivra cette gaussienne
+	protected double Productivite_1_hectare(int step) {
 		double P = 110/(720*Math.sqrt(2*Math.PI))*Math.exp(-1/2*((step-480)/720)^2);
 		return P;
 	}
@@ -180,7 +181,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 					qte =+ 0;
 				}
 				if (step-i>=3*24 && step-i<40*24) {
-					qte =+ Productivite(step)*this.age_hectares.get(f).get(i);
+					qte =+ Productivite_1_hectare(i)*this.age_hectares.get(f).get(i);
 				}
 				
 			}
@@ -223,7 +224,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	//une rentabilite superieure a 10%
 	
 	protected boolean Rentabilites(Feve f, Double prix){
-		double rentabilite = prix * Productivite(Filiere.LA_FILIERE.getEtape())/this.salaires.get(f);
+		double rentabilite = prix * Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f)/this.salaires.get(f);
 		if (rentabilite>=1.1) {
 			return true;
 		}
@@ -269,14 +270,42 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		}
 	}
 	
+	// On renvoie un nombre aléatoire entre une valeur min (incluse)
+	// et une valeur max (exclue)
+	protected double getRandomArbitrary(double min , double max) {
+	  return Math.random() * (max - min) + min;
+	}
+
+	private HashMap<Feve, Double> Production_avec_intmeperies() {
+		HashMap<Feve, Double> prevision = Prevision_Production(Filiere.LA_FILIERE.getEtape());
+		for (Feve f : Prevision_Production(Filiere.LA_FILIERE.getEtape()).keySet()) {
+			if (f == Feve.F_BQ) {
+				prevision.put(f, prevision.get(f)*getRandomArbitrary(0.9, 1.15));
+			}
+			if (f == Feve.F_MQ) {
+				prevision.put(f, prevision.get(f)*getRandomArbitrary(0.9, 1.1));
+			}
+			if (f == Feve.F_MQ_BE) {
+				prevision.put(f, prevision.get(f)*getRandomArbitrary(0.8, 1.1));
+			}
+			if (f == Feve.F_HQ_BE) {
+				prevision.put(f, prevision.get(f)*getRandomArbitrary(0.75, 1.05));
+			}
+	}
+		return prevision;
+	}
+	
+		
+		
+	
 	public void next() {
 		this.journalProd.ajouter("Etat plantation : " + this.age_hectares);
 		this.journalProd.ajouter("Etat Masse Salariale : " + this.employes);
 		super.next();
 		this.majPlantation();
 		for (Feve f : this.age_hectares.keySet()) {
-			if (Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f)>0){
-				this.ajouterStock(f, Filiere.LA_FILIERE.getEtape(), Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f));
+			if (Production_avec_intmeperies().get(f)>0){
+				this.ajouterStock(f, Filiere.LA_FILIERE.getEtape(), Production_avec_intmeperies().get(f));
 			}
 		}
 		this.ajustement_plantation();
