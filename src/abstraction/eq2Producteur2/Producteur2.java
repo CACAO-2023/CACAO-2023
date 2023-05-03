@@ -16,7 +16,7 @@ public class Producteur2 extends Producteur2ASPPVBVendeurCC  {
 		if (this.coutStockage() > 0)
 			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), this.coutStockage());
 		if (this.CoutSalaire() > 0)
-			Filiere.LA_FILIERE.getBanque().virer(thisP, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), this.CoutSalaire());
+			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), this.CoutSalaire());
 		this.coutStockage.setValeur(this, this.coutStockage(), cryptogramme);
 		this.coutSalaire.setValeur(this, this.CoutSalaire(), cryptogramme);
 		
