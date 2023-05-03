@@ -54,10 +54,46 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 
 
 	@Override
+	//Mathis DOUTRE
+	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
+	    double prixMax = 5000.0; // Prix maximum acceptable
+	    double soldeDisponible = super.getSolde(); 
+	    Echeancier echeancierPropose = contrat.getEcheancier();
+	    Echeancier nouvelEcheancier = new Echeancier(echeancierPropose);
+
+	    if (contrat.getPrix() > prixMax) {
+	        // Si le prix proposé est supérieur au prix maximum, annuler les négociations
+	        nouvelEcheancier.vider();
+	        return nouvelEcheancier;
+	    }
+
+	    double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
+
+	    if (coutTotal > soldeDisponible) {
+	        // Si le coût total est supérieur au solde disponible, ajuster les quantités de l'échéancier
+	        double facteurAjustement = soldeDisponible / coutTotal;
+	        for (int step = nouvelEcheancier.getStepDebut(); step <= nouvelEcheancier.getStepFin(); step++) {
+	            double quantiteProposee = nouvelEcheancier.getQuantite(step);
+	            double nouvelleQuantite = quantiteProposee * facteurAjustement;
+	            nouvelEcheancier.set(step, nouvelleQuantite);
+	        }
+	    } else {
+	        // Si le coût total est inférieur ou égal au solde disponible, ajuster les quantités de l'échéancier en les multipliant par un facteur
+	        for (int step = nouvelEcheancier.getStepDebut(); step <= nouvelEcheancier.getStepFin(); step++) {
+	            double quantiteProposee = nouvelEcheancier.getQuantite(step);
+	            double nouvelleQuantite = quantiteProposee * 0.9; // Multiplier par un facteur 0.9
+	            nouvelEcheancier.set(step, nouvelleQuantite);
+	        }
+	    }
+
+	    return nouvelEcheancier;
+	}   
+	/*
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
 		return contrat.getEcheancier(); //pas de négociations 
 	}
+	*/
 		
 
 	
