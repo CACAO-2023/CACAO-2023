@@ -207,7 +207,14 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		Echeancier e = new Echeancier(stepDebut);
 		for (int etape = stepDebut+1; etape<stepDebut+d; etape++) {
 			int etapemod = etape%24;
-			e.ajouter(previsionsperso.get(etapemod).get(marque)*1.5 -getLivraisonEtape(marque, stepDebut+etape));
+			Double q = previsionsperso.get(etapemod).get(marque)*1.5 -getLivraisonEtape(marque, stepDebut+etape);
+			if (q>=0) {
+				e.ajouter(q);
+			}
+			else {
+				e.ajouter(0.);
+			}
+			
 			//faut enlever le stock
 		}
 	
