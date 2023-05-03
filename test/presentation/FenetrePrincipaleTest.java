@@ -30,7 +30,7 @@ public class FenetrePrincipaleTest {
 		try {
 			FileWriter fileWriter = new FileWriter("tempsEquipes.json");
 			PrintWriter printWriter = new PrintWriter(fileWriter);
-			printWriter.print("{");
+			printWriter.print("times={");
 			printWriter.print("\"eq1Producteur1\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ1") +",");
 			printWriter.print("\"eq2Producteur2\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ2") +",");
 			printWriter.print("\"eq3Producteur3\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ3") +",");

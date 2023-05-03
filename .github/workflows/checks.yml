@@ -73,14 +73,10 @@ jobs:
         run: |
           set -e
           ant -noinput -buildfile build.xml
-          ant -noinput -buildfile build.xml
-          ant -noinput -buildfile build.xml
     - name: Pass performance file
       id: perf
       if: success()
-      run: | 
-        echo "times=" >> "$GITHUB_OUTPUT"
-        cat tempsEquipes.json >> "$GITHUB_OUTPUT"
+      run: cat tempsEquipes.json >> "$GITHUB_OUTPUT"
   performance_tests:
     if: ${{ always() }}
     needs: [file_ownership, java_tests]
