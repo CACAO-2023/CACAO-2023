@@ -152,7 +152,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		this.journal_vente.ajouter("Eq7 a vendu "+ (int)Math.floor(quantite)+" T de "+choco+ " aux clients finaux pour un total de " + (int)Math.floor(montant)+"e");
 		//Actualisation des previsions persos
 		actualiser_prevision_perso( choco,   quantite);
-
+		ventes.ajouter(this, montant);
 	}
 
 	
