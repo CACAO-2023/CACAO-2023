@@ -15,7 +15,7 @@ import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.Lot;
 
 /**
- * @author alexian
+ * @author Alexian Bothorel
  *
  */
 

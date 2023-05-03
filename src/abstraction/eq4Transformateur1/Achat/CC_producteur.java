@@ -24,8 +24,6 @@ import abstraction.eqXRomu.produits.Lot;
  *
  */
 
-//François Glavatkii et Alexian Bothorel 
-
 
 
 public class CC_producteur extends Transformateur1Transformateur implements IAcheteurContratCadre{

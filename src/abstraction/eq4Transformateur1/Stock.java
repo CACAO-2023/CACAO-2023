@@ -1,11 +1,9 @@
 package abstraction.eq4Transformateur1;
-// Alexian, verification François
 import java.util.HashMap;
-
 import abstraction.eqXRomu.filiere.Filiere;
 
 /**
- * @author alexian
+ * @author alexian 
  *
  */
 

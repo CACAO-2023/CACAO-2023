@@ -1,6 +1,7 @@
 package abstraction.eq4Transformateur1;
 
 import java.util.LinkedList;
+
 import java.util.List;
 
 import abstraction.eq4Transformateur1.Vente.AODistributeur;
@@ -11,7 +12,11 @@ import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
-//François, Alexian
+
+/**
+ * @author Francois, Alexian 
+ *
+ */
 
 public class Transformateur1 extends VendeurOA implements IFabricantChocolatDeMarque{
 	

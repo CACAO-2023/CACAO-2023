@@ -13,7 +13,7 @@ import abstraction.eqXRomu.offresAchat.PropositionVenteOA;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 /**
- * @author alexian, verife François
+ * @author alexian, verification François
  *
  */
 
