@@ -135,62 +135,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 
 	@Override
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		/*
-		// TODO Auto-generated method stub
-		prix = contrat.getPrix()/contrat.getQuantiteTotale();
-
-
-		journal_ventes.ajouter("achat du chocolat" + contrat.getProduit()+"au prix à la tonne de" + prix);
-
 		
-
-		ChocolatDeMarque choco = (ChocolatDeMarque)contrat.getProduit();
-
-		// william 
-		
-		// on calcule le prix de vente du chocolat du contract en fonction de la gamme
-		
-		
-		double prix_tonne_de_vente_contrat = 0.0;
-		
-		
-		// marge de 80% sur HQ_BE
-		if(choco.getGamme() == Gamme.HQ)  {
-			prix_tonne_de_vente_contrat = prix*5;
-		}
-		// marge de 67% sur MQ_BE
-		if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.MQ && ((ChocolatDeMarque)contrat.getProduit()).isBioEquitable()){
-			prix_tonne_de_vente_contrat = prix*3;
-		}
-		// marge de 50% sur MQ
-		if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.MQ  && !((ChocolatDeMarque)contrat.getProduit()).isBioEquitable()) {
-			prix_tonne_de_vente_contrat = prix*2;
-		}
-		
-		double prix_tonne_de_vente_apres_achat = 0.0;
-		
-		
-
-		// si il existe deja un stock de ce chocolat, on fait la moyenne des prix pondérés par la quantite acheté et la quantite deja stockee
-		// si il y a du stock
-		if(stock.getStock(choco) != 0) {
-			double qtte_actuelle = stock.getStock(choco);
-			double qtte_apres_achat = qtte_actuelle + contrat.getQuantiteTotale();
-			// proportion de nouveau chocolat
-			double proportion_contrat = contrat.getQuantiteTotale()/qtte_apres_achat;
-			// ponderation
-			prix_tonne_de_vente_apres_achat = prix_tonne_de_vente_contrat*proportion_contrat +prix_tonne_vente.get(choco)*(1-proportion_contrat) ;
-		}
-		// il n'y a pas de stock
-		else {
-			prix_tonne_de_vente_apres_achat = prix_tonne_de_vente_contrat;
-		}
-		journal_ventes.ajouter("ancien prix tonne de " + contrat.getProduit()+" est de " + prix_tonne_vente.get(choco) + "€");
-		journal_ventes.ajouter("nouveau prix tonne de " + contrat.getProduit()+" est de " + prix_tonne_de_vente_apres_achat + "€");
-
-		this.prix_tonne_vente.put((ChocolatDeMarque)contrat.getProduit(), prix_tonne_de_vente_apres_achat);
-		*/
-
 		return contrat.getPrix();
 		
 		
@@ -211,7 +156,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		this.journal_achats.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "je viens de passer le contrat "+contrat + "et j'ai achete le chocolat " + contrat.getProduit());
 		this.contratEnCours.add(contrat);
 		
-		
+		notificationOperationBancaire(-1*contrat.getPrix()*contrat.getQuantiteTotale());
 		
 		// william 
 		prix = contrat.getPrix() /*/contrat.getQuantiteTotale() deja à la tonne */;

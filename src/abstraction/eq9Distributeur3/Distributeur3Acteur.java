@@ -115,7 +115,7 @@ public class Distributeur3Acteur implements IActeur{
 		prix = 16*30*q;
 		if(prix > 0.0) {
 			Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ9"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), prix);
-
+			notificationOperationBancaire(-1*prix);
 		}
 
 		
@@ -221,6 +221,10 @@ public class Distributeur3Acteur implements IActeur{
 	// Apres chaque operation sur votre compte bancaire, cette
 	// operation est appelee pour vous en informer
 	public void notificationOperationBancaire(double montant) {
+		
+		//- vous pouvez exploiter la methode notificationOperationBancaire de votre acteur pour afficher dans un journal 
+		//vos entree/sorties d'argent : ça levera le doute sur les prix que vous estimez minimalistes.
+		
 		journal_operationsbancaires.ajouter("Operation de " + montant + " €");
 
 	}
