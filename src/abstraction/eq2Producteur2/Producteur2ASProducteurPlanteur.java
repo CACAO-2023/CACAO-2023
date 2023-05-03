@@ -21,11 +21,15 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	private HashMap<Feve, Double> prix;
 	private HashMap<Feve,HashMap<Integer, Integer>> age_hectares;
 	private HashMap<Feve, Double> cout_parcelle;
-	//private double borne_min_BQ;
-	//private double borne_max_HQ;
-	//private double borne_min_BQ;
-	//private double borne_min_BQ;
-	//private double borne_min_BQ;
+	private double borne_min_BQ;
+	private double borne_max_BQ;
+	private double borne_min_MQ;
+	private double borne_max_MQ;
+	private double borne_min_MQ_BE;
+	private double borne_max_MQ_BE;
+	private double borne_min_HQ_BE;
+	private double borne_max_HQ_BE;
+	
 	
 	// Pour age_hectares nous avons un Hashmap dans un autre, ici la première clef fait reference à la Feve car 
 	//Les employes auront differents salaires selon la gamme sur laquelle ils travaillent
@@ -58,6 +62,15 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		for (int i = -24 * 39; i <= 0; i += 24)
 			setAge(Feve.F_HQ_BE, i, 625);
 		setCout_Parcelle(1000, 2000, 3000, 5000);
+		this.borne_min_BQ = 0.9;
+		this.borne_max_BQ = 1.15;
+		this.borne_min_MQ = 0.9;
+		this.borne_max_MQ = 1.1;
+		this.borne_min_MQ_BE = 0.8;
+		this.borne_max_MQ_BE = 1.1;
+		this.borne_min_HQ_BE = 0.75;
+		this.borne_max_HQ_BE = 1.05;
+		
 	}
 	
 	
@@ -286,35 +299,35 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		HashMap<Feve, Double> prevision = Prevision_Production(Filiere.LA_FILIERE.getEtape());
 		for (Feve f : Prevision_Production(Filiere.LA_FILIERE.getEtape()).keySet()) {
 			if (f == Feve.F_BQ) {
-				prevision.put(f, prevision.get(f)*getRandomArbitrary(0.9, 1.15));
+				prevision.put(f, prevision.get(f)*getRandomArbitrary(this.borne_min_BQ, this.borne_max_BQ));
 			}
 			if (f == Feve.F_MQ) {
-				prevision.put(f, prevision.get(f)*getRandomArbitrary(0.9, 1.1));
+				prevision.put(f, prevision.get(f)*getRandomArbitrary(this.borne_min_MQ, this.borne_max_MQ));
 			}
 			if (f == Feve.F_MQ_BE) {
-				prevision.put(f, prevision.get(f)*getRandomArbitrary(0.8, 1.1));
+				prevision.put(f, prevision.get(f)*getRandomArbitrary(this.borne_min_MQ_BE, this.borne_max_MQ_BE));
 			}
 			if (f == Feve.F_HQ_BE) {
-				prevision.put(f, prevision.get(f)*getRandomArbitrary(0.75, 1.05));
+				prevision.put(f, prevision.get(f)*getRandomArbitrary(this.borne_min_HQ_BE, this.borne_max_HQ_BE));
 			}
 	}
 		return prevision;
 	}
 	
-	private HashMap<Feve, Double> Prevision_Production_minimale(int step) {
+	protected HashMap<Feve, Double> Prevision_Production_minimale(int step) {
 		HashMap<Feve, Double> prevision = Prevision_Production(step);
 		for (Feve f : Prevision_Production(Filiere.LA_FILIERE.getEtape()).keySet()) {
 			if (f == Feve.F_BQ) {
-				prevision.put(f, prevision.get(f)*0.9);
+				prevision.put(f, prevision.get(f)*this.borne_min_MQ);
 			}
 			if (f == Feve.F_MQ) {
-				prevision.put(f, prevision.get(f)*0.9);
+				prevision.put(f, prevision.get(f)*this.borne_min_MQ);
 			}
 			if (f == Feve.F_MQ_BE) {
-				prevision.put(f, prevision.get(f)*0.8);
+				prevision.put(f, prevision.get(f)*this.borne_min_MQ_BE);
 			}
 			if (f == Feve.F_HQ_BE) {
-				prevision.put(f, prevision.get(f)*0.75);
+				prevision.put(f, prevision.get(f)*this.borne_min_HQ_BE);
 			}
 	}
 		return prevision;
