@@ -30,6 +30,7 @@ public class Transformateur2Transfo extends Transformateur2Acteur implements IFa
 				this.chocosProduits.add(new ChocolatDeMarque(c1, "ChocoPop", 70, 0));
 				this.chocosProduits.add(new ChocolatDeMarque(c2, "Maison Doutre", 90, 10));
 		}
+		
 		return this.chocosProduits;
 	}
 	
