@@ -91,6 +91,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 			stockFeveBG.retirer(pourcentageTransfo*qte);
 			super.journalTransformation.ajouter("on retire du BG :"+pourcentageTransfo*qte);
 			super.ajouterChocolat(super.chocosProduits.get(0), qte, Filiere.LA_FILIERE.getEtape());
+			Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), a);
 			//stockChocolatBG.ajouter(Filiere.LA_FILIERE.getEtape(),qte);
 			} else {
 				if (f == Feve.F_MQ) {
@@ -108,6 +109,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 					if (c!=0) {
 						super.ajouterChocolat(super.chocosProduits.get(1), c, Filiere.LA_FILIERE.getEtape());
 					//stockChocolatMG.ajouter(Filiere.LA_FILIERE.getEtape(),c);
+						Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), a);
 					}
 					} else {
 						if (f ==Feve.F_MQ_BE) {
@@ -125,6 +127,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 							if (c!=0) {
 								super.ajouterChocolat(super.chocosProduits.get(2), c, Filiere.LA_FILIERE.getEtape());
 							//stockChocolatMGL.ajouter(Filiere.LA_FILIERE.getEtape(), c);
+								Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), a);
 							}
 							} else {
 								if (f == Feve.F_HQ_BE) {
@@ -144,6 +147,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 									if (d!=0) {
 										super.ajouterChocolat(super.chocosProduits.get(3), d, Filiere.LA_FILIERE.getEtape());
 									//stockChocolatHGL.ajouter(Filiere.LA_FILIERE.getEtape(), d);
+										Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), a);
 									}
 							}
 	
@@ -255,19 +259,19 @@ protected double BesoinStep(int Step, Feve f) {
 protected double CoutMatPremiere(Feve f, double qte) {
 	if (f == Feve.F_BQ) { 
 		double pourcentageTransfo = ((double)this.getPourcentageCacaoBG())/100;
-		return qte*(1-pourcentageTransfo)*400;
+		return qte*(1-pourcentageTransfo)*400+5*qte;
 	} else {
 		if (f == Feve.F_MQ) { 
 			double pourcentageTransfo = ((double)this.getPourcentageCacaoMG())/100;
-			return qte*(1-pourcentageTransfo)*400;
+			return qte*(1-pourcentageTransfo)*400+5*qte;
 	} else {
 		if (f == Feve.F_MQ_BE) { 
 			double pourcentageTransfo = ((double)this.getPourcentageCacaoMGL())/100;
-			return qte*(1-pourcentageTransfo)*400;
+			return qte*(1-pourcentageTransfo)*400+5*qte;
 	} else {
 		if (f == Feve.F_HQ_BE) { 
 			double pourcentageTransfo = ((double)this.getPourcentageCacaoHG())/100;
-			return qte*(1-pourcentageTransfo)*400;
+			return qte*(1-pourcentageTransfo)*400+5*qte;
 	}
 	}
 	}}
