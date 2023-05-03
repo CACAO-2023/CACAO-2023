@@ -49,8 +49,8 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
 
         // Initialisation des HashMaps. Au début tous nos acheteurs ont la même fiabilité.
-        Double PRIX_DEPART_MQ = 50000.0;
-        Double PRIX_DEPART_HQ = 100000.0;
+        Double PRIX_DEPART_MQ = 10000.0;
+        Double PRIX_DEPART_HQ = 30000.0;
 
         List<IAcheteurContratCadre> acheteurs = new LinkedList<IAcheteurContratCadre>();
 		List<IActeur> acteurs = Filiere.LA_FILIERE.getActeursSolvables();
@@ -141,9 +141,13 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      */
     public double propositionPrixIntial(IAcheteurContratCadre acheteur, Feve feve) {
         if (feve == Feve.F_MQ_BE) {
-            return Math.max(this.getPrixTonne() * 1.2, this.acheteursMQprix.get(acheteur) * 1.1);
+            double price = Math.max(this.getPrixTonne() * 1.2, this.acheteursMQprix.get(acheteur) * 1.1);
+            this.acheteursMQprix.put(acheteur, price);
+            return price;
         } else {
-            return Math.max(this.getPrixTonne() * 1.4, this.acheteursHQprix.get(acheteur) * 1.3);
+            double price = Math.max(this.getPrixTonne() * 1.4, this.acheteursHQprix.get(acheteur) * 1.3);
+            this.acheteursHQprix.put(acheteur, price);
+            return price;
         }
     }
 
@@ -171,10 +175,6 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      */
     @Override
     public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
-        if (!this.contracts.contains(contrat)) {
-            System.out.println("\n================\n============\nAttention, le contrat suivant n'est pas dans la liste des contrats du vendeur : " + contrat + ".\n================\n============\n");
-            this.contracts.add(contrat);
-        }
 
         Lot lot = new Lot(produit);
 
@@ -277,6 +277,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         int length = ((int) Math.round(Math.random() * 10)) + 1;
         ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, length, (int) Math.round(this.getAvailableQuantity(produit)/length)), cryptogramme,false);
         if (cc != null) {
+            this.contracts.add(cc);
             this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
         } else {
             this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit + "...");
@@ -288,28 +289,25 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      * @author Corentin Caugant
      */
     public void next() {
-        System.out.println("\n=========\n At step : " + Filiere.LA_FILIERE.getEtape());
         super.next();
 
         List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.contracts) {
 			if (contrat.getQuantiteRestantALivrer()<=0.0 && contrat.getMontantRestantARegler()<=0.0) {
 				contratsObsoletes.add(contrat);
-			} else {
-                
-                System.out.println("Contrat " + contrat + " is not obsolete");
-                System.out.println("Quantite restante a livrer : " + contrat.getQuantiteRestantALivrer());
             }
 		}
 		this.contracts.removeAll(contratsObsoletes);
 
 
 
-        if (this.getAvailableQuantity(Feve.F_HQ_BE) > 100) {
-            this.getContractForProduct(Feve.F_HQ_BE);
-        }
-        if (this.getAvailableQuantity(Feve.F_MQ_BE) > 100) {
-            this.getContractForProduct(Feve.F_MQ_BE);
+        for (int i = 0; i < 5; i++) {
+            if (this.getAvailableQuantity(Feve.F_HQ_BE) > 100) {
+                this.getContractForProduct(Feve.F_HQ_BE);
+            }
+            if (this.getAvailableQuantity(Feve.F_MQ_BE) > 100) {
+                this.getContractForProduct(Feve.F_MQ_BE);
+            }
         }
     }
 
@@ -327,7 +325,8 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
                 }
             }
         }
-        System.out.println("\n=======\n Total quantity available for quality " + qualite + " : " + available + "\n=======\n");
-        return available;
+        
+        int SAFE_MARGIN = 10; // Percentage of the stock we want to keep
+        return Math.min(Math.max(available * (1 - SAFE_MARGIN/100.0), 0.0), 100000);
     }
 }
