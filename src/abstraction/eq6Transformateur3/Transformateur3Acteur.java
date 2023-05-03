@@ -42,7 +42,7 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	protected Transformateur3Acteur() {
 		this.journal = new Journal("Journal"+this.getNom(),this);
 		this.journalStock = new Journal("Journal des stocks"+this.getNom(),this);
-		this.journalVentes = new Journal("Journal des ventess"+this.getNom(),this);
+		this.journalVentes = new Journal("Journal des ventes"+this.getNom(),this);
 		this.journalTransformation = new Journal("Journal des oppérations de transformation"+this.getNom(),this);
 		this.journalAchatCC = new Journal("Journal des achats par contrats cadres"+this.getNom(),this);
 		this.journalAchatB = new Journal("Journal des achats en bourse"+this.getNom(),this);
