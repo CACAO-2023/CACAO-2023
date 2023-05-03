@@ -7,12 +7,16 @@ import abstraction.eqXRomu.appelsOffres.IAcheteurAO;
 import abstraction.eqXRomu.appelsOffres.IVendeurAO;
 import abstraction.eqXRomu.appelsOffres.OffreVente;
 import abstraction.eqXRomu.appelsOffres.PropositionAchatAO;
-
+import abstraction.eqXRomu.produits.Gamme;
 public class Distributeur3AcheteurAO extends ExempleAbsAcheteurAO implements IAcheteurAO {
 	
 	//////////////////////
 	//////  william //////
 	//////////////////////
+	
+	/////////////////////////////////////////////
+	///// largement inspiré du code exemple /////
+	/////////////////////////////////////////////
 	
 	private Distributeur3Acteur a;
 	private Distributeur3AcheteurCC b;
@@ -28,22 +32,22 @@ public class Distributeur3AcheteurAO extends ExempleAbsAcheteurAO implements IAc
 	}
 	
 
+	@SuppressWarnings("unlikely-arg-type")
 	public double proposerPrix(OffreVente offre) {
 		a.journal_AO.ajouter("ProposerPrix("+offre+"):");
 			double px = this.prixInit;
 			if (this.prix.keySet().contains(offre.getVendeur())) {
 				px = this.prix.get(offre.getVendeur());
 			}
-			/*
+			
 			else {
 				// le prix d'achat initial est le prix moyen entre le prix du marche et le prix propose si le prix proposse est superieur au prix moyen
-				if(b.)
-				px = this.prix.get(offre.getVendeur());
+				if(px < b.prixMax.get(offre.getChocolat()))
+				{
+					px = this.prix.get(offre.getVendeur());
 
+				}
 			}
-			
-			*/
-			
 			
 			a.journal_AO.ajouter("   je propose "+px);
 			return px;
