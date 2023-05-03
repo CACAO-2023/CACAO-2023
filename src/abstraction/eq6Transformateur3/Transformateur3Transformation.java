@@ -78,11 +78,25 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 	
 		public void transformationChoco(Feve f, double qte) {
 		if (f == Feve.F_BQ) {
+			double a=CoutMatPremiere(Feve.F_BQ,qte);
+			if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
+				while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
+					qte=qte-1;
+					a=CoutMatPremiere(Feve.F_BQ,qte);
+				}
+			}
 			double pourcentageTransfo = this.getPourcentageCacaoBG();
 			stockFeveBG.retirer(pourcentageTransfo*qte);
 			stockChocolatBG.ajouter(Filiere.LA_FILIERE.getEtape(),qte);
 			} else {
 				if (f == Feve.F_MQ) {
+					double a=CoutMatPremiere(Feve.F_MQ,qte);
+					if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
+						while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
+							qte=qte-1;
+							a=CoutMatPremiere(Feve.F_MQ,qte);
+						}
+					}
 					double pourcentageTransfo = this.getPourcentageCacaoMG();
 					double c=getMQStep1();
 					setMQStep1(qte);
@@ -90,6 +104,13 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 					stockChocolatMG.ajouter(Filiere.LA_FILIERE.getEtape(),c);
 					} else {
 						if (f ==Feve.F_MQ_BE) {
+							double a=CoutMatPremiere(Feve.F_MQ_BE,qte);
+							if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
+								while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
+									qte=qte-1;
+									a=CoutMatPremiere(Feve.F_MQ_BE,qte);
+								}
+							}
 							double pourcentageTransfo = this.getPourcentageCacaoMGL();
 							double c=getMQBEStep1();
 							setMQBEStep1(qte);
@@ -97,6 +118,13 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 							stockChocolatMGL.ajouter(Filiere.LA_FILIERE.getEtape(), c);
 							} else {
 								if (f == Feve.F_HQ_BE) {
+									double a=CoutMatPremiere(Feve.F_HQ_BE,qte);
+									if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
+										while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
+											qte=qte-1;
+											a=CoutMatPremiere(Feve.F_HQ_BE,qte);
+										}
+									}
 									double pourcentageTransfo = this.getPourcentageCacaoHG();
 									double c=getHQBEStep1();
 									setHQBEStep1(qte);
