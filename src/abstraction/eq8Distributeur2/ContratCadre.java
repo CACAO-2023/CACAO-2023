@@ -91,7 +91,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 		stocks.ajouterAuStock((ChocolatDeMarque)(contrat.getProduit()),lot.getQuantiteTotale() );
 		stock_total+=lot.getQuantiteTotale();
 		s.setValeur(this, stock_total, this.cryptogramme);
-		this.journal_stocks.ajouter("ajout d'une quantité de"+lot.getQuantiteTotale()+"T livraison CC "+contrat.getNumero());
+		this.journal_stocks.ajouter("ajout d'une quantité de"+lot.getQuantiteTotale()+"T livraison de CC "+contrat.getNumero());
 	}
 	
 	
