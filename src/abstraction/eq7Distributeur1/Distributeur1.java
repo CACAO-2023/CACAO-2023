@@ -55,15 +55,16 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	/**
 	 * @author Theo
 	 * @param choco, choco!=null
-	 * @return Le prix de vente actuel d'un Kg de chocolat choco
+	 * @return Le prix de vente actuel d'une tonne de chocolat choco
 	 * IMPORTANT : durant une meme etape, la fonction doit toujours retourner la meme valeur pour un chocolat donne.
 	 */
 	public double prix(ChocolatDeMarque choco) {
 		double qualite = choco.qualitePercue();
-		double coef = 1-(((10/3)*qualite)/100)+0.1;
+//		double coef = 1-(((10/3)*qualite)/100)+0.1;
 		double promo = prixPromotion(choco);
-		double cout = getCout(choco);
-		return (cout/1000)*promo/coef;
+		double cout = getCoutTotal(choco);
+		double prix = (cout/1000)*promo/(1-0.1*qualite);
+		return prix;
 	}
 	
 	/**
@@ -72,11 +73,23 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	 */
 	public double prixPromotion(ChocolatDeMarque choco) { 
 		if (((Filiere.LA_FILIERE.getEtape()%3)==0)&&(choco.getChocolat()!=Chocolat.C_BQ)) {
-			return 0.9;
+			return 0.95;
 		}
 		else {
 			return 1;
 		}
+	}
+	
+	/**
+	 * @author Theo
+	 * @param choco
+	 * @return le cout de revient d'1t de chocolat de marque, calcule grace au type de chocolat
+	 */
+	public double getCoutTotal(ChocolatDeMarque choco) {
+		Double cout_i = getCout_gamme(choco);
+		Double cout_s = cout_stockage_distributeur.getValeur();
+		Double cout_m = (cout_main_doeuvre_distributeur.getValeur()*stockChocoMarque.get(choco))/totalStocks.getValeur(); //On pondere par rapport a la qte
+		return (cout_i+cout_s+cout_m);
 	}
 	
 	/**
@@ -136,12 +149,12 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 		stockChocoMarque.put(choco, stockChocoMarque.get(choco)-quantite);
 		totalStocks.setValeur(this, totalStocks.getValeur(cryptogramme)-quantite, cryptogramme);
-		this.journal.ajouter("Eq7 a vendu "+quantite+" T de "+choco+ " aux clients finaux ");
-		
+		this.journal_vente.ajouter("Eq7 a vendu "+ (int)Math.floor(quantite)+" T de "+choco+ " aux clients finaux pour un total de " + (int)Math.floor(montant)+"e");
 		//Actualisation des previsions persos
 		actualiser_prevision_perso( choco,   quantite);
-
+		ventes.ajouter(this, montant);
 	}
+
 	
 	/**
 	 * Methode appelee par le client final lorsque la quantite en rayon de chocolat choco 

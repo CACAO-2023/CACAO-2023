@@ -1,11 +1,14 @@
 package presentation;
 
+import java.util.Map.Entry;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.junit.Test;
 
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.filiere.IActeur;
 
 public class FenetrePrincipaleTest {
 
@@ -20,6 +23,13 @@ public class FenetrePrincipaleTest {
 			((JButton) ((JPanel) fp.getRootPane().getContentPane().getComponent(2)).getComponent(1)).doClick();
 		
 		((JButton) ((JPanel) fp.getRootPane().getContentPane().getComponent(2)).getComponent(2)).doClick();
+		
+		System.out.println("------------- ---------------- ---------------");
+		System.out.println("TEMPS D'EXECUTION PAR EQUIPE");
+		
+		for (Entry<IActeur, Long> entry : Filiere.LA_FILIERE.tempsEquipes.entrySet()) {
+			System.out.println(entry.getKey().getNom() + " : " + entry.getValue());
+		}
 	}
 
 }
