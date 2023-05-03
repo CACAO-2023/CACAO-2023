@@ -85,7 +85,8 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	            nouvelEcheancier.set(step, nouvelleQuantite);
 	        }
 	    }
-
+	    
+	    notificationNouveauContratCadre(contrat);
 	    return nouvelEcheancier;
 	}   
 	/*
@@ -132,6 +133,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		}
 
 		// Retourne la proposition de prix
+		notificationNouveauContratCadre(contrat);
 		return proposition;
 
 
