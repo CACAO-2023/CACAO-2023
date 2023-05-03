@@ -43,6 +43,11 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable seuilVenteBourseMQ_BE = new VariablePrivee("EQ2 seuil vente en bourse MQ_BE", "seuil d'ancienneté de vente de MQ_BE en bourse", this, 10);
 	protected Variable seuilVenteBourseMQ = new VariablePrivee("EQ2 seuil vente en bourse MQ", "seuil d'ancienneté de vente obligatoire de MQ en bourse", this, 10);
 	protected Variable seuilVenteBourseBQ = new VariablePrivee("EQ2 seuil vente en bourse BQ", "seuil d'ancienneté de vente obligatoire de MQ_BE en bourse", this, 10);
+	protected Variable argentVenteBQ = new VariablePrivee("EQ2 argent gagné par la vente de BQ", "montre l'argent gagné par la vente de BQ à chaque tour", this, 0);
+	protected Variable argentVenteMQ = new VariablePrivee("EQ2 argent gagné par la vente de MQ", "montre l'argent gagné par la vente de MQ à chaque tour", this, 0);
+	protected Variable argentVenteMQ_BE = new VariablePrivee("EQ2 argent gagné par la vente de MQ_BE", "montre l'argent gagné par la vente de MQ_BE à chaque tour", this, 0);
+	protected Variable argentVenteHQ_BE = new VariablePrivee("EQ2 argent gagné par la vente de HQ_BE", "montre l'argent gagné par la vente de HQ_BE à chaque tour", this, 0);
+	protected HashMap<Feve, Variable> argentVente = new HashMap<Feve, Variable>();
 	protected Producteur2 thisP;
 
 	//Prix provisoires pour les contrats cadres
@@ -63,6 +68,11 @@ public class Producteur2Acteur implements IActeur {
 		this.journalBourse = new Journal("Journal Bourse " + this.getNom(), this);
 		this.journalProd = new Journal("Journal Production " + this.getNom(), this);
 		this.journalStocks = new Journal("Journal Stocks " + this.getNom(), this);
+		
+		argentVente.put(Feve.F_BQ, this.argentVenteBQ);
+		argentVente.put(Feve.F_MQ, this.argentVenteMQ);
+		argentVente.put(Feve.F_MQ_BE, this.argentVenteMQ_BE);
+		argentVente.put(Feve.F_HQ_BE, this.argentVenteHQ_BE);
 	}
 	
 	public void initialiser() {
@@ -115,6 +125,10 @@ public class Producteur2Acteur implements IActeur {
 
 	public void next() {
 		this.journal.ajouter("Bonjour, nous sommes à l'étape " + Filiere.LA_FILIERE.getEtape() + "et nous n'avons pas encore fait faillite.");
+		this.argentVenteBQ.setValeur(this, 0, this.cryptogramme);
+		this.argentVenteMQ.setValeur(this, 0, this.cryptogramme);
+		this.argentVenteMQ_BE.setValeur(this, 0, this.cryptogramme);
+		this.argentVenteHQ_BE.setValeur(this, 0, this.cryptogramme);
 	}
 	
 	// Renvoie la couleur
@@ -142,6 +156,10 @@ public class Producteur2Acteur implements IActeur {
 		res.add(this.MQquantiteVendueBourse);
 		res.add(this.coutStockage);
 		res.add(this.coutSalaire);
+		res.add(this.argentVenteBQ);
+		res.add(this.argentVenteMQ);
+		res.add(this.argentVenteMQ_BE);
+		res.add(this.argentVenteHQ_BE);
 		return res;
 	}
 
