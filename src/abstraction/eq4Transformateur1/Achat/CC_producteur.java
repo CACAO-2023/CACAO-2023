@@ -5,6 +5,7 @@ package abstraction.eq4Transformateur1.Achat;
 
 import java.awt.Color;
 import java.util.LinkedList;
+import java.util.List;
 
 import abstraction.eq4Transformateur1.Transformateur1Transformateur;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
@@ -14,6 +15,7 @@ import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Chocolat;
+import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
@@ -59,50 +61,26 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 				ventetotB += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
 			} 
 		}
-		if (produit instanceof Feve) {
-			switch ((Feve)produit) {
-			case F_MQ  : return null;
-			case F_MQ_BE :return null;
-			
-			case F_BQ : 
-				
-				if (this.stockFeves.keySet().contains(produit)) {
-					qfeve= this.stockFeves.get(produit);
-					if ((qfeve >= ventetotB/30)){ // si quantité >= vente totale basse qualité / (15 steps * 2) en se disant que nous allons prendre 50% du marché
-						return null;
+
+		List<IProduit> produits = new LinkedList<IProduit>();
+		Feve fb = Feve.F_BQ;	
+		produits.add(fb);
+		Feve fh = Feve.F_HQ_BE;	
+		produits.add(fh);
+		for (IProduit cm : produits ) {
+			List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(cm);
+			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLACK, " CCV : tentative de vente de "+cm+" aupres de "+vendeurs);
+			for (IVendeurContratCadre vendeur : vendeurs) {
+				if (!vendeur.equals(this)) {
+					Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotB/30);
+					this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
+					ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancier, this.cryptogramme, false);
+					if (contrat1!=null) {
+						this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : contrat signe = "+contrat1);
 					}
-					else if (ventetotB/30 > 100){
-						this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotB/30));
-						return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotB/30);
-					}else {
-						this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, 101));
-
-							return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, 101);
-						}
-					}
-				
-			
-			case F_HQ_BE :
-				
-				
-			if (this.stockFeves.keySet().contains(produit)) {
-				
-				qfeve= this.stockFeves.get(produit);
-				if ((qfeve >= ventetotH/30)){
-					return null;
 				}
-
-				else if (ventetotH/30 > 100){
-					this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotH/30));
-					return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotH/30);
-				}else {
-					this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, 101));
-
-						return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, 101);
-				}
-	 
-			}}
 		}
+	}
 		return null;
 		}
 	
