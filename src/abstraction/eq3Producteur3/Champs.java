@@ -51,7 +51,7 @@ public class Champs {
 	public double gaussienne() {
 		Random r = new Random();
 		double sigma = Filiere.LA_FILIERE.getParametre("Ecart-type gaussienne pour production").getValeur();
-		return 110*(1/Math.sqrt(2*Math.PI)*);
+		return 110*(1/Math.sqrt(2*Math.PI)*sigma);
 	}
 	/**
 	 * @author BOCQUET Gabriel
