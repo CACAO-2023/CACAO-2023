@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 public class Producteur1Plantation extends Producteur1Acteur {
 	private Lot stockBasPasSec;
@@ -154,4 +155,90 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		this.journal_stocks.ajouter("Cout de stockage moyenne gamme : "+q1*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());
 		}
 		//===== fin elouan et gab =====	
+	
+	
+	//====== gab : calcul du coût de revient pour une qtté donnée d'un produit 
+	
+	//méthode qui renvoie le coût de revient d'un stock de fève avant de le vendre
+	//feve chgt qualité?
+	public double calculCoutRevient(IProduit produit, double quantite, int step_recolte) {
+		double cout_revient ;
+			
+		//prend en compte la plantation, la main d'oeuvre, le stockage
+			
+		if (produit==Feve.F_BQ) {
+			double nb_hectares_BQ = quantite/(1.025*0.56) ; //moyenne du facteur aléatoire (pas possible de connaître exactement le nombre d'hectares)
+			cout_revient = nb_hectares_BQ*Filiere.LA_FILIERE.getParametre("Cout de replantation").getValeur()/(2080*10) //cout replantation/(durée replantation*nb step pousse)
+					+ nb_hectares_BQ * 30 * 10 //hectare*cout main doeuvre*nb step pousse
+					+ quantite*Filiere.LA_FILIERE.getParametre("cout moyen stockage").getValeur()* (step-step_recolte) ;
+		} else {
+				double nb_hectares_MQ = quantite/(0.95*0.56); //moyenne du facteur aléatoire (pas possible de connaître exactement le nombre d'hectares)
+				cout_revient = nb_hectares_MQ*Filiere.LA_FILIERE.getParametre("Cout de replantation").getValeur()/(2080*12) //cout replantation/(durée replantation*nb step pousse)
+						+ nb_hectares_MQ * 30 * 12 //hectare*cout main doeuvre*nb step pousse
+						+ quantite*Filiere.LA_FILIERE.getParametre("cout moyen stockage").getValeur()* (step-step_recolte) ;
+		}	
+		return cout_revient ;
+			
+		}
+		
+	//méthode qui permet d'obtenir le stock dont on veut calculer le coût de revient
+	public Lot fevesConsiderees(IProduit produit, double quantite) {
+		Lot stockFeve ;
+		if (produit==Feve.F_BQ) {
+			stockFeve = stockFeveBas ;
+		} else {
+			stockFeve=stockFeveMoy ;
+		}
+			
+			
+		Lot lotVente=new Lot(produit);
+		if (quantite<=0) { 
+			throw new IllegalArgumentException("Appel de retirer une qtté <=0");
+		} if (quantite>stockFeve.getQuantiteTotale()+0.001){ //si on a pas assez de stock, on considère que l'on crée tout ce qui manque au step d'après pour prendre en compte ces coûts
+			double quantite_a_produire = quantite-stockFeve.getQuantiteTotale() ;
+			lotVente = fevesConsiderees(produit, stockFeve.getQuantiteTotale()) ;
+			// même si tt est pas prêt au step d'après on livre au fur et à mesure donc pas d'incidence sur les coûts de stockage
+			lotVente.ajouter(step, quantite_a_produire) ;
+				
+		} else {
+			double reste = quantite;
+			for (Integer i : stockFeve.getQuantites().keySet()) {
+				if (reste>0) {
+					if (stockFeve.getQuantites().get(i)>reste) {
+						lotVente.ajouter(i,reste);
+						reste=0;
+					} else {
+						lotVente.ajouter(i,stockFeve.getQuantites().get(i));
+						reste = reste - stockFeve.getQuantites().get(i);
+					}
+				}
+			}
+		}
+		return lotVente ;
+			
 	}
+		
+	//méthode qui renvoie le coût de revient de la production d'une certaine quantité pour un produit donné 
+	//(on souhaite vendre les fèves les plus vieilles)
+	public double coutRevientQuantite(IProduit produit, double quantite) {
+		Lot lotVente = fevesConsiderees(produit, quantite) ;
+		double cout_revient_total = 0;
+			
+		for (Integer j : lotVente.getQuantites().keySet()) {
+			cout_revient_total += calculCoutRevient(produit, lotVente.getQuantites().get(j), j) ;
+		}
+			
+		return cout_revient_total ;
+			
+	}
+	
+	// calcul du coût de revient de la production d'une certaine qqté pour un produit donné avec une marge de 10% pour la vente
+	public double prixMinAvecMarge(IProduit produit, double quantite) {
+		return coutRevientQuantite(produit, quantite)*1.10 ;
+	}
+	
+	
+	
+	//===== fin gab
+	
+}
