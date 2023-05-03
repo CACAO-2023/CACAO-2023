@@ -8,7 +8,7 @@ import abstraction.eqXRomu.produits.Feve;
 
 public class Transformateur3Transformation extends Transformateur3Vente {
 
-	/** Maxime Bedu*/
+	/** écrit par Maxime Bedu*/
 	
 /** processus de transformation : 
 	           unit� de temps de transformation : diff�rent selon les f�ves (in progress) 
@@ -90,7 +90,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 					stockChocolatMG.ajouter(Filiere.LA_FILIERE.getEtape(),c);
 					} else {
 						if (f ==Feve.F_MQ_BE) {
-							double pourcentageTransfo = this.getPourcentageCacaoMG();
+							double pourcentageTransfo = this.getPourcentageCacaoMGL();
 							double c=getMQBEStep1();
 							setMQBEStep1(qte);
 							stockFeveMGL.retirer(pourcentageTransfo*qte);
@@ -207,6 +207,29 @@ protected double BesoinStep(int Step, Feve f) {
 } 
 	return 100;
 }
+
+protected double CoutMatPremiere(Feve f, double qte) {
+	if (f == Feve.F_BQ) { 
+		double pourcentageTransfo = this.getPourcentageCacaoBG();
+		return qte*pourcentageTransfo*400;
+	} else {
+		if (f == Feve.F_MQ) { 
+			double pourcentageTransfo = this.getPourcentageCacaoMG();
+			return qte*pourcentageTransfo*400;
+	} else {
+		if (f == Feve.F_MQ_BE) { 
+			double pourcentageTransfo = this.getPourcentageCacaoMGL();
+			return qte*pourcentageTransfo*400;
+	} else {
+		if (f == Feve.F_HQ_BE) { 
+			double pourcentageTransfo = this.getPourcentageCacaoHG();
+			return qte*pourcentageTransfo*400;
+	}
+	}
+	}}
+	return 0;
+}
+
 
 /**ecrit par Nathan Claeys
  * pour pouvoir rendre les variables qui peuvent aider à la prise de decision

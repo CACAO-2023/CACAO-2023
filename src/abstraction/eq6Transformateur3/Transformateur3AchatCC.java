@@ -19,10 +19,18 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	
 	private List<ExemplaireContratCadre> ListeContratEnCoursAchat;
 	private SuperviseurVentesContratCadre superviseur ;
+	private Variable prixmaxBG;
+	private Variable prixmaxMG;
+	private Variable prixmaxMGL;
+	private Variable prixmaxHG;
 	
 	public Transformateur3AchatCC () {
 		super();
 		this.ListeContratEnCoursAchat = new LinkedList<ExemplaireContratCadre>();
+		this.prixmaxBG = new Variable ("prix maximal BG","prix maximal que l'acteur va accepter pour les feves bas de gamme en CC",this,0.0,6000,4000);
+		this.prixmaxMG = new Variable ("prix maximal MG","prix maximal que l'acteur va accepter pour les feves milieu gamme en CC",this,0.0,7000,5000);
+		this.prixmaxMGL = new Variable ("prix maximal MGL","prix maximal que l'acteur va accepter pour les feves milieu gamme lab en CC",this,0.0,8000,6000);
+		this.prixmaxHG = new Variable ("prix maximal MG","prix maximal que l'acteur va accepter pour les feves haut de gamme en CC",this,0.0,10000,8000);
 		
 	}
 	/**
@@ -238,6 +246,10 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	   */
 	  public List<Variable> getIndicateurs() {
 			List<Variable> res = super.getIndicateurs();
+			res.add(prixmaxBG);
+			res.add(prixmaxHG);
+			res.add(prixmaxMG);
+			res.add(prixmaxMGL);
 			return res;}
 
 	/** ecrit par Nathan Claeys
