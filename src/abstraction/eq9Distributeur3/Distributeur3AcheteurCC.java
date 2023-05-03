@@ -29,7 +29,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 
 	protected Journal journal;
 	private List<ExemplaireContratCadre> contratEnCours;
-	private HashMap<Chocolat, Double> prixMax;
+	public HashMap<Chocolat, Double> prixMax;
 	private HashMap<Chocolat, Double>precedentPrix;
 	//faire une méthode qui connait le prix d'achat moyen d'un chocolat
 
@@ -89,7 +89,9 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 
 							//Echeancier echeancier = new Echeancier (contratEnCours.get(i).getEcheancier().getStepFin(),24, 25000.0);
 							ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier , this.cryptogramme, initialise);
+							if (cc!= null) {
 							pasAchete = false;
+							journal_achats.ajouter("CC "+cc.getNumero()+" achat du chocolat" + chocolats.get(i)+"au prix à la tonne de" + prix);
 						}
 					}
 
@@ -100,7 +102,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 							//Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(),24, 25000.0);
 
 							
-							List<Double> qteVoulue = new LinkedList();
+							List<Double> qteVoulue = new LinkedList<Double>();
 							for (int f = 0; f<24; f++) {
 								qteVoulue.add(f, 25000.0);
 								//on regarde si l'on se trouve dans les périodes de fortes ventes 
@@ -110,9 +112,11 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 							}
 							Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(), qteVoulue);
 							ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier2 , this.cryptogramme, initialise);
-							pasAchete = false;}
+							if (cc!=null) { pasAchete = false; journal_ventes.ajouter("achat du chocolat" + chocolats.get(i)+"au prix à la tonne de" + prix);
+							}
+							}
 					}}
-			}}}}
+			}}}}}
 
 
 
@@ -252,7 +256,7 @@ public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 @Override
 public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 	// TODO Auto-generated method stub
-	this.journal_achats.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "je viens de passer le contrat "+contrat + "et j'ai achete le chocolat " + contrat.getProduit());
+	this.journal_achats.ajouter("cc accepte Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "je viens de passer le contrat "+contrat + "et j'ai achete le chocolat " + contrat.getProduit());
 	this.contratEnCours.add(contrat);
 
 	notificationOperationBancaire(-1*contrat.getPrix()*contrat.getQuantiteTotale());
