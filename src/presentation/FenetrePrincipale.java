@@ -57,7 +57,7 @@ import presentation.secondaire.FenetreJournal;
  * 
  * @author Romuald Debruyne
  */
-public class FenetrePrincipale extends {
+public class FenetrePrincipale extends JFrame {
 
 	public static FenetrePrincipale LA_FENETRE_PRINCIPALE;
 	private static ImageIcon UNCHECKED_IMAGE = new ImageIcon("unche18.gif");
@@ -67,7 +67,7 @@ public class FenetrePrincipale extends {
 
 	private static final long serialVersionUID = 1L;
 
-	private HashMap<IActeur, JButton>boutonsFaillite;
+	private HashMap<IActeur, JButton> boutonsFaillite;
 	private HashMap<IActeur, Integer> cryptos; // Pour acceder aux variables a acces restreint
 	
 	public FenetrePrincipale(String[] args) {
