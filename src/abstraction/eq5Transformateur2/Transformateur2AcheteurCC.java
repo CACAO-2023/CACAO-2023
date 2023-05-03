@@ -98,7 +98,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 
 	
 	//Par Mathis DOUTRE
-
+ 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		double dernierPrix = contrat.getPrix();
 		double soldeDisponible = super.getSolde();
