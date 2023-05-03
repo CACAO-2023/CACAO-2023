@@ -117,9 +117,12 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurCC implem
 		if (crypto != this.cryptogramme) {
 			journal_activitegenerale.ajouter("On essaie de me pirater (RayonVide)");
 		} else {
+
 			journal_ventes.ajouter("Vente de " + quantite + "tonnes de " +  choco.getNom() + " pour " + montant + "€");
 			this.stock.ajoutQte(choco, -quantite);
 			notificationOperationBancaire(montant);
+
+			
 		}
 	}
 

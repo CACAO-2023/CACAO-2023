@@ -29,6 +29,8 @@ public class Distributeur3Acteur implements IActeur{
 	protected Journal journal_stock;
 	protected Journal journal_activitegenerale;
 	protected Journal journal_AO;
+	protected Journal journal_OA;
+
 	protected List<ChocolatDeMarque> chocolats;
 
 	protected HashMap<ChocolatDeMarque, Double[]> prixMoyen;
@@ -53,6 +55,8 @@ public class Distributeur3Acteur implements IActeur{
 		this.journal_operationsbancaires = new Journal(this.getNom()+" operations", this);
 		this.journal_activitegenerale = new Journal(this.getNom()+" activites", this);
 		this.journal_AO = new Journal(this.getNom()+" AO", this);
+		this.journal_OA = new Journal(this.getNom()+" OA", this);
+
 
 		this.journal_stock = new Journal(this.getNom()+" stock", this);
 		this.prixMoyen = new HashMap<ChocolatDeMarque, Double[]>();
@@ -83,7 +87,7 @@ public class Distributeur3Acteur implements IActeur{
 			}
 		
 		}
-		System.out.println(chocolats);
+	
 		// stock initial de 1000 tonnes du premier chocolat de la filiere
 		for (int j=0; j <chocolats.size(); j++) {
 			stock.ajoutQte(chocolats.get(j), 50000);
@@ -154,14 +158,8 @@ public class Distributeur3Acteur implements IActeur{
 		// (prendre en compte la rentabilité, le positionnement des autres marques)
 
 	}
-	/*
-	public void repartition_tete_gondole() {
-		HashMap<ChocolatDeMarque, Double> repartition = new HashMap<ChocolatDeMarque, Double>();
-		repartition.put((get_chocolat_with_name("C_HQ_BE_Choc")),1.0);
-		
-		//renvoie une hashmap <marque, quatité>
-	}
-
+	
+	
 	
 	
 	public ChocolatDeMarque get_chocolat_with_name(String name) {
@@ -172,7 +170,7 @@ public class Distributeur3Acteur implements IActeur{
 		}
 		return null;
 	}
-	*/
+	
 
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -208,6 +206,8 @@ public class Distributeur3Acteur implements IActeur{
 		res.add(journal_activitegenerale);
 		res.add(journal_stock);
 		res.add(journal_AO);
+		res.add(journal_OA);
+
 		
 		return res;
 	}

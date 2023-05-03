@@ -14,6 +14,10 @@ public class Distributeur3AcheteurAO extends ExempleAbsAcheteurAO implements IAc
 	//////  william //////
 	//////////////////////
 	
+	/////////////////////////////////////////////
+	///// largement inspiré du code exemple /////
+	/////////////////////////////////////////////
+	
 	private Distributeur3Acteur a;
 	private Distributeur3AcheteurCC b;
 
