@@ -58,12 +58,15 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		if (transfo>0) {
 			this.stockFeves.put(fb, this.stockFeves.get(fb)-transfo);
 			this.totalStocksFeves.setValeur(this, this.totalStocksFeves.getValeur()-transfo,this.cryptogramme);
-			this.stockChoco.put(cb, this.stockChoco.get(cb)+(transfo)*conversionb);
+//			this.stockChoco.put(cb, this.stockChoco.get(cb)+(transfo)*conversionb);
 			int pourcentageCacao =  42;
-			this.totalStocksChoco.ajouter(this, ((transfo)*conversionb), this.cryptogramme);
+			ChocolatDeMarque cm= new ChocolatDeMarque(cb, "choco", pourcentageCacao, 0);
+			double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;
+			this.stockChocoMarque.put(cm, scm+((transfo)*conversionb));
+			this.totalStocksChocoMarque.ajouter(this, ((transfo)*conversionb), this.cryptogramme);
 			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfo)+" T de "+fb+" en "+transfo*conversionb+" T de "+cb);
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fb+")->"+this.stockFeves.get(fb));
-			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cb+")->"+this.stockChoco.get(cb));
+			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cm+")->"+this.stockChocoMarque.get(cm));
 			this.qteTransfo=transfo;
 		}
 		Feve fh = Feve.F_HQ_BE;
@@ -75,7 +78,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			this.totalStocksFeves.setValeur(this, this.totalStocksFeves.getValeur()-transfoh,this.cryptogramme);
 			// Tous les chocolats sont directement étiquetés "Vccotioi"
 			int pourcentageCacao =  94;
-			ChocolatDeMarque cm= new ChocolatDeMarque(ch, "Vccotioi", pourcentageCacao, 15);
+			ChocolatDeMarque cm= new ChocolatDeMarque(ch, "Vccotioi", pourcentageCacao, 10);
 			double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;
 			this.stockChocoMarque.put(cm, scm+((transfoh)*conversion));
 			this.totalStocksChocoMarque.ajouter(this, ((transfoh)*conversion), this.cryptogramme);
