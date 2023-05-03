@@ -74,7 +74,7 @@ jobs:
         run: |
           set -e
           ant -noinput -buildfile build.xml
-          echo '{"EQ1": 10, "EQ2": "20"}' >> $GITHUB_OUTPUT
+          echo 'tempsEquipes={"EQ1":10,"EQ2":20}' >> $GITHUB_OUTPUT
   performance_tests:
     if: ${{ always() }}
     needs: [file_ownership, java_tests]
