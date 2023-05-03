@@ -48,17 +48,15 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	}
 
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		if (Math.random()<0.3) {
-			return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
-		} else {//dans 70% des cas on fait une contreproposition pour l'echeancier
+	
 			Echeancier e = contrat.getEcheancier();
 			int stepdebut = e.getStepDebut();
 			for (int step = stepdebut; step < e.getStepFin()+1; step++) {
-				e.set(step, e.getQuantite(step)*0.9);
+				e.set(step, e.getQuantite(step)*0.95);
 			}
 			return e;
 		}
-	}
+	
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		ChocolatDeMarque marque = (ChocolatDeMarque) contrat.getProduit();
@@ -123,8 +121,8 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 				cc = superviseurVentesCC.demandeAcheteur((IAcheteurContratCadre)this, (IVendeurContratCadre) vendeur, produit, e, cryptogramme,false);
 				
 				if (cc != null) { //si le contrat est signé 
-			        this.journal_achat.ajouter(Color.GREEN, Color.BLACK,"Contrat cadre passé avec "+vendeur.getNom()+" pour "+produit+"\nDétails : "+cc+"!");     
-			        mesContratEnTantQuAcheteur.add(cc);
+					notificationNouveauContratCadre(cc);
+					mesContratEnTantQuAcheteur.add(cc);
 			        couts.replace((ChocolatDeMarque)(produit), cc.getPrix());
 			    } 
 				else { //si le contrat est un echec
@@ -142,9 +140,9 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	/**
 	 * @author Theo, Ghaly
 	 * @param step : étape
-	 * @return la qte d'un produit devant se faire livrer jusqu'à l'étape step
+	 * @return la quantité totale de livraisons d'un produit devant se faire livrer jusqu'à l'étape step
 	 */
-	public double getLivraison(IProduit produit, int step ) {
+	public double getLivraison_periode(IProduit produit, int step ) {
 		double somme = 0;
 		for (ExemplaireContratCadre contrat : mesContratEnTantQuAcheteur) {
 			if (contrat.getProduit() == produit) {
@@ -158,11 +156,11 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	 * @author ghaly
 	 * @return la qte totale livree à ce tour
 	 */
-	public double getLivraisonEtape(IProduit produit) {
+	public double getLivraisonEtape(ChocolatDeMarque marque, int step) {
 		double somme = 0;
 		for (ExemplaireContratCadre contrat : mesContratEnTantQuAcheteur) {
-			if (contrat.getProduit() == produit) {
-				somme += contrat.getQuantiteALivrerAuStep();
+			if (contrat.getProduit() == marque) {
+				somme += contrat.getEcheancier().getQuantite(step);
 			}
 		}
 		return somme;
@@ -181,7 +179,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 			for (int numetape = step+1; numetape < step+d ; numetape++ ) {
 				previsionannee += previsionsperso.get(numetape%24).get(marque);
 				}
-			return (previsionannee > stockChocoMarque.get(marque)+getLivraison(marque, step + d)+ quantite_min_cc);
+			return (previsionannee > stockChocoMarque.get(marque)+getLivraison_periode(marque, step + d)+ quantite_min_cc);
 	};
 	/**
 	 * est appelée pour savoir si de combien on a besoin sur la durée d
@@ -189,12 +187,12 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	 * @author Ghaly
 	 */
 	public double quantite_besoin_cc (int d,ChocolatDeMarque marque) {  
-			double previsionannee = 0;
+			double prevision = 0;
 			int etape = Filiere.LA_FILIERE.getEtape();
 			for (int numetape = etape+1; numetape < etape+d ; numetape++ ) {
-				previsionannee += previsionsperso.get(numetape%24).get(marque);
+				prevision += previsionsperso.get(numetape%24).get(marque);
 				}
-			return previsionannee - stockChocoMarque.get(marque)-getLivraison(marque, etape + d);
+			return prevision - stockChocoMarque.get(marque)-getLivraison_periode(marque, etape + d);
 	};
 
 	/**
@@ -208,8 +206,10 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		Echeancier e = new Echeancier(stepDebut);
 		for (int etape = stepDebut+1; etape<stepDebut+d; etape++) {
 			int etapemod = etape%24;
-			e.ajouter(previsionsperso.get(etapemod).get(marque)*1.5);
+			e.ajouter(previsionsperso.get(etapemod).get(marque)*1.5 -getLivraisonEtape(marque, stepDebut+etape));
+			//faut enlever le stock
 		}
+	
 		return e;
 	}
 	
@@ -335,7 +335,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 				this.stockChocoMarque.put((ChocolatDeMarque)produit, quantite);
 			}
 			this.totalStocks.ajouter(this, quantite, this.cryptogramme);
-			this.journal.ajouter("Reception de "+quantite+" T de "+produit+". Stock->  "+this.stockChocoMarque.get(produit));
+			this.journal_stock.ajouter("Reception de "+quantite+" T de "+produit+". Stock->  "+this.stockChocoMarque.get(produit));
 		}
 	}
 
@@ -350,15 +350,15 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		if (nombre_achats.get((ChocolatDeMarque)(contrat.getProduit()))==0) {
-			journal.ajouter(Color.GREEN, Color.BLACK,"Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix());
-			journal_achat.ajouter(Color.GREEN, Color.BLACK,"Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix());
-
+		//on separe 2 cas selon si c'est un tout nouvel achat, sinon on montre quel est le % par rapport aux cout moyen
+		String prix = "";
+		if (nombre_achats.get((ChocolatDeMarque)(contrat.getProduit()))!=0) {
+			prix+=" ce qui equivaut à "+ Math.floor( contrat.getPrix()*100 /couts.get(contrat.getProduit()))+ "% du prix de cout moyen ";
 		}
-		else {
-			journal.ajouter(Color.GREEN, Color.BLACK,"Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix()*100 /couts.get(contrat.getProduit())+ "%");
-			journal_achat.ajouter(Color.GREEN, Color.BLACK,"Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix());
-
+		
+		String message="Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+contrat.getPrix()+ prix;
+		journal.ajouter(Color.GREEN, Color.BLACK,message);
+		journal_achat.ajouter(Color.GREEN, Color.BLACK,message);
 		}
 		
 	}
@@ -368,4 +368,4 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 
 
 
-}
+

@@ -30,6 +30,8 @@ public class Distributeur1Acteur  implements IActeur {
 	protected Journal journal;
 	protected Journal journal_achat;
 	protected Journal journal_stock;
+	protected Journal journal_vente;
+	
 	
 	//On est oblige de mettre les variables ici sinon la creation de la filiere est dans un tel ordre que nous n'y avons pas acces assez tot
 	protected Variable totalStocks = new VariablePrivee("Eq7TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
@@ -91,7 +93,9 @@ public class Distributeur1Acteur  implements IActeur {
 		this.cout_MQ = 3;
 		this.journal = new Journal("Journal "+this.getNom(), this);
 	    this.journal_achat=new Journal("Journal des Achats de l'" + this.getNom(),this);
-	    this.journal_stock = new Journal("Journal des Stocks del'" + this.getNom(),this);
+	    this.journal_stock = new Journal("Journal des Stocks de l'" + this.getNom(),this);
+	    this.journal_vente = new Journal("Journal des ventes de l'" + this.getNom(),this);
+	    
 	}
 	
 
@@ -289,6 +293,7 @@ public class Distributeur1Acteur  implements IActeur {
 		res.add(this.journal);
 		res.add(this.journal_achat);
 		res.add(this.journal_stock);
+		res.add(this.journal_vente);
 		return res;
 	}
 

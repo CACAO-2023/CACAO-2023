@@ -138,8 +138,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 		stockChocoMarque.put(choco, stockChocoMarque.get(choco)-quantite);
 		totalStocks.setValeur(this, totalStocks.getValeur(cryptogramme)-quantite, cryptogramme);
-		this.journal.ajouter("Eq7 a vendu "+ (int)Math.floor(quantite)+" T de "+choco+ " aux clients finaux pour un total de " + (int)Math.floor(montant));
-		
+		this.journal_vente.ajouter("Eq7 a vendu "+ (int)Math.floor(quantite)+" T de "+choco+ " aux clients finaux pour un total de " + (int)Math.floor(montant)+"e");
 		//Actualisation des previsions persos
 		actualiser_prevision_perso( choco,   quantite);
 
