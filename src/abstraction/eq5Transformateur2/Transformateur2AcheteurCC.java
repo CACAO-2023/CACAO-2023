@@ -61,7 +61,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	    double soldeDisponible = super.getSolde(); 
 	    Echeancier echeancierPropose = contrat.getEcheancier();
 	    Echeancier nouvelEcheancier = new Echeancier(echeancierPropose);
-
+ 
 	    if (contrat.getPrix() > prixMax) {
 	        // Si le prix proposé est supérieur au prix maximum, annuler les négociations
 	        nouvelEcheancier.vider();
