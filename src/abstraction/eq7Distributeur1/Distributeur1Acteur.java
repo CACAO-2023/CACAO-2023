@@ -38,14 +38,6 @@ public class Distributeur1Acteur  implements IActeur {
 	protected Variable stock_MQ = new Variable("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
 	protected Variable stock_MQ_BE = new Variable("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
 	protected Variable stock_HQ_BE = new Variable("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
-
-	protected double cout_BQ; //Cout d'1t de chocolat basse gamme
-	
-	protected double cout_MQ_BE; //Cout d'1t de chocolat moyenne gamme labellise
-
-	protected double cout_MQ; //Cout d'1t de chocolat moyenne gamme non labellise
-
-	protected double cout_HQ_BE; //Cout d'1t de chocolat haute gamme labellise
 	
 	/**
 	 * donne les quantités mini pour un contrat cadre
@@ -72,6 +64,10 @@ public class Distributeur1Acteur  implements IActeur {
 	protected HashMap<ChocolatDeMarque,Double> moyenne_couts = new HashMap<ChocolatDeMarque,Double>(); 
 	protected HashMap<ChocolatDeMarque,Double> couts = new HashMap<ChocolatDeMarque,Double>(); 
 	
+	/**
+	 * Cout en fonction du chocolat, pour 1t
+	 */
+	protected HashMap<Chocolat,Double> cout_chocolat = new HashMap<Chocolat,Double>();
 	
 	/**
 	 * nombre d'achat en contrat cadre, ça servira à calculer la moyenne des couts
@@ -79,14 +75,11 @@ public class Distributeur1Acteur  implements IActeur {
 	protected HashMap<ChocolatDeMarque,Integer> nombre_achats = new HashMap<ChocolatDeMarque,Integer>();; 
 
 	protected Variable cout_stockage_distributeur = new Variable("cout moyen stockage distributeur", this);
+	protected Variable cout_mainoeuvre = new Variable("cout main d'oeuvre distributeur", this); //Cout main d'oeuvre totale par tour
 	
 	protected int cryptogramme;
 
 	public Distributeur1Acteur() {
-		this.cout_BQ = 3;
-		this.cout_HQ_BE = 3;
-		this.cout_MQ_BE = 3;
-		this.cout_MQ = 3;
 		this.journal = new Journal("Journal "+this.getNom(), this);
 	    this.journal_achat=new Journal("Journal des Achats de l'" + this.getNom(),this);
 	    this.journal_stock = new Journal("Journal des Stocks del'" + this.getNom(),this);
@@ -118,8 +111,8 @@ public class Distributeur1Acteur  implements IActeur {
 	 * actualise la moyenne des couts d'un chocolat de marque a une etape donnée
 	 */
 	protected void actualise_cout(ChocolatDeMarque marque,Double nv_cout) {
-				int n= nombre_achats.get(marque);
-				moyenne_couts.replace(marque,(moyenne_couts.get(marque)*n+nv_cout)/(n+1));
+		int n= nombre_achats.get(marque);
+		moyenne_couts.replace(marque,(moyenne_couts.get(marque)*n+nv_cout)/(n+1));
 	}
 
 	/**
@@ -152,19 +145,7 @@ public class Distributeur1Acteur  implements IActeur {
 	 */
 	protected double getCout_gamme(ChocolatDeMarque marque) {
 		Chocolat gamme = marque.getChocolat();
-		if (gamme == Chocolat.C_BQ) {
-			return cout_BQ;
-		}
-		if (gamme == Chocolat.C_MQ) {
-			return cout_MQ;
-		}
-		if (gamme == Chocolat.C_MQ_BE) {
-			return cout_MQ_BE;
-		}
-		if (gamme == Chocolat.C_HQ_BE) {
-			return cout_HQ_BE;
-		}
-		return cout_BQ;
+		return cout_chocolat.get(gamme);
 	}
 	
 	/**
@@ -174,18 +155,7 @@ public class Distributeur1Acteur  implements IActeur {
 	protected void actualise_indic_couts(ChocolatDeMarque marque) {
 		Chocolat gamme = marque.getChocolat();
 		double nv_prix = getCout_gamme(gamme);
-		if (gamme== Chocolat.C_BQ ) {
-			cout_BQ = nv_prix;
-		}
-		if (gamme ==  Chocolat.C_MQ_BE) {
-			cout_MQ_BE = nv_prix;
-		}
-		if (gamme ==  Chocolat.C_MQ) {
-			cout_MQ = nv_prix;
-		}
-		if (gamme ==  Chocolat.C_HQ_BE) {
-			cout_HQ_BE = nv_prix;
-		}
+		cout_chocolat.put(gamme, nv_prix);
 	}
 
 	/**
@@ -221,6 +191,12 @@ public class Distributeur1Acteur  implements IActeur {
 	public void initialiser() {
 		
 		cout_stockage_distributeur.setValeur(this, Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*16);
+		cout_mainoeuvre.setValeur(this, 1000);
+		cout_chocolat.put(Chocolat.C_HQ_BE, 3000.);
+		cout_chocolat.put(Chocolat.C_MQ_BE, 2500.);
+		cout_chocolat.put(Chocolat.C_MQ, 2000.);
+		cout_chocolat.put(Chocolat.C_BQ, 1000.);
+		
 		
 		//Initialisation des couts
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {

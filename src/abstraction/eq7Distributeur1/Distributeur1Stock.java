@@ -14,7 +14,7 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 	
 	protected HashMap<Chocolat, Double> stockChoco;
 
-	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; //Stock de chaque marque en tonne
+	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; //Stock de chaque chocolat de marque en tonne
 	
 	//	protected int totalStocksCB;  // La quantité totale de stock de chocolat bas de gamme 
 	//	protected int totalStocksCML;  // La quantité totale de stock de chocolat moyenne gamme labellise
@@ -71,7 +71,9 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 		//Initialisation des stocks
 		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			stockChocoMarque.put(marque,100000.);
+			Double valeur_stock_initial = 1000.;
+			stockChocoMarque.put(marque,valeur_stock_initial);
+			totalStocks.setValeur(this, totalStocks.getValeur()+valeur_stock_initial, this.cryptogramme);
 			nombre_achats.put(marque, 0);
 			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
 		}
