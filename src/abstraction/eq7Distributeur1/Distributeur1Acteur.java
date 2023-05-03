@@ -70,7 +70,7 @@ public class Distributeur1Acteur  implements IActeur {
 	 * couts: couts d'achat à travers les contrats cadres
 	 */
 	protected HashMap<ChocolatDeMarque,Double> moyenne_couts = new HashMap<ChocolatDeMarque,Double>(); 
-	protected HashMap<ChocolatDeMarque,Double> couts = new HashMap<ChocolatDeMarque,Double>(); 
+	protected HashMap<ChocolatDeMarque,Double> couts 		 = new HashMap<ChocolatDeMarque,Double>(); 
 	
 	
 	/**
