@@ -224,7 +224,8 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		return cout_revient_total ;
 			
 	}
-		
+	
+	// calcul du coût de revient de la production d'une certaine qqté pour un produit donné avec une marge de 10% pour la vente
 	public double prixMinAvecMarge(IProduit produit, double quantite) {
 		return coutRevientQuantite(produit, quantite)*1.10 ;
 	}
