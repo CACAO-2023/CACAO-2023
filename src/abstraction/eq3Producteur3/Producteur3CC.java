@@ -20,14 +20,6 @@ import abstraction.eqXRomu.produits.Lot;
 public class Producteur3CC extends Producteur3Acteur implements IVendeurContratCadre {
     protected LinkedList<ExemplaireContratCadre> contracts;
     protected SuperviseurVentesContratCadre superviseur;
-
-    // On va garder une trace de la fiabilité de nos acheteurs
-    protected HashMap<IAcheteurContratCadre, Integer> acheteursMQfiabilité;
-    protected HashMap<IAcheteurContratCadre, Integer> acheteursHQfiabilité;
-
-    // On va aussi conserver le prix de la dernière transaction avec chaque acheteur
-    protected HashMap<IAcheteurContratCadre, Double> acheteursMQprix;
-    protected HashMap<IAcheteurContratCadre, Double> acheteursHQprix;
     
     /**
      * @author Corentin Caugant
@@ -35,10 +27,6 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     public Producteur3CC() {
         super();
         this.contracts = new LinkedList<ExemplaireContratCadre>();
-        this.acheteursMQfiabilité = new HashMap<IAcheteurContratCadre, Integer>();
-        this.acheteursHQfiabilité = new HashMap<IAcheteurContratCadre, Integer>();
-        this.acheteursMQprix = new HashMap<IAcheteurContratCadre, Double>();
-        this.acheteursHQprix = new HashMap<IAcheteurContratCadre, Double>();
     }
 
     /**
@@ -91,14 +79,13 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
             for (IAcheteurContratCadre acheteur : this.acheteursMQfiabilité.keySet()) {
                 reliabilitySum += this.acheteursMQfiabilité.get(acheteur);
             }
-            int randomInt = (int)(Math.random() * reliabilitySum);
-
+            double randomInt = Math.random() * reliabilitySum;
             // We iterate through the list of buyers until we find the one corresponding to the random number
-            int currentSum = 0;
-            int previousSum = 0;
+            double currentSum = 0;
+            double previousSum = 0;
             for (IAcheteurContratCadre acheteur : this.acheteursMQfiabilité.keySet()) {
                 currentSum += this.acheteursMQfiabilité.get(acheteur);
-                if (currentSum > randomInt && randomInt <= previousSum) {
+                if (currentSum > randomInt && randomInt >= previousSum) {
                     return acheteur;
                 }
                 previousSum += this.acheteursMQfiabilité.get(acheteur);
@@ -186,6 +173,12 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
             currentQuantite = Stock.getQuantite((Feve)produit); // ! Prepare for trouble, and make it double !
             journal_ventes.ajouter(Color.RED, Color.WHITE, "Attention, rupture de stock de " + contrat.getProduit() + ". Quantité livrée/quantité demandée : " + currentQuantite + "/" + quantite + ".");
             Stock.retirer((Feve)produit, currentQuantite);
+
+            // On modifie également notre variable marge de Stockage, pour essayer d'éviter que cette rupture se reproduise
+            double marge = this.margeStockage.getValeur();
+            if (marge < 0.3) { // On ne veut pas que la marge soit trop grande
+                this.margeStockage.setValeur(this, marge + 0.01, this.cryptogramme);
+            }
         }
 
         if (currentQuantite > 0) {
@@ -254,7 +247,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
             this.acheteursHQfiabilité.put((IAcheteurContratCadre)contrat.getAcheteur(), this.acheteursHQfiabilité.get((IAcheteurContratCadre)contrat.getAcheteur()) + 1);
             this.acheteursHQprix.put((IAcheteurContratCadre)contrat.getAcheteur(), contrat.getPrix());
         }
-        
+        this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + contrat.getAcheteur().getNom() + " pour " + contrat.getProduit() + "\nDétails : " + contrat + "!");
     }
 
     private LinkedList<ExemplaireContratCadre> getContracts() {
@@ -274,10 +267,19 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
 
         // Now making the contract
         this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit + "...");
-        int length = ((int) Math.round(Math.random() * 10)) + 1;
+        int length = ((int) Math.round(Math.random() * 10)) + 2;
         ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, length, (int) Math.round(this.getAvailableQuantity(produit)/length)), cryptogramme,false);
         if (cc != null) {
+
             this.contracts.add(cc);
+            if ((Feve)cc.getProduit() == Feve.F_MQ_BE) {
+                this.acheteursMQfiabilité.put((IAcheteurContratCadre)cc.getAcheteur(), this.acheteursMQfiabilité.get((IAcheteurContratCadre)cc.getAcheteur()) + 1);
+                this.acheteursMQprix.put((IAcheteurContratCadre)cc.getAcheteur(), cc.getPrix());
+            } else if ((Feve)cc.getProduit() == Feve.F_HQ_BE) {
+                this.acheteursHQfiabilité.put((IAcheteurContratCadre)cc.getAcheteur(), this.acheteursHQfiabilité.get((IAcheteurContratCadre)cc.getAcheteur()) + 1);
+                this.acheteursHQprix.put((IAcheteurContratCadre)cc.getAcheteur(), cc.getPrix());
+            }
+
             this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
         } else {
             this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit + "...");
@@ -326,7 +328,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
             }
         }
         
-        int SAFE_MARGIN = 10; // Percentage of the stock we want to keep
-        return Math.min(Math.max(available * (1 - SAFE_MARGIN/100.0), 0.0), 100000);
+        double SAFE_MARGIN = this.margeStockage.getValeur(); // Percentage of the stock we want to keep
+        return Math.min(Math.max(available * (1 - SAFE_MARGIN), 0.0), 100000);
     }
 }
