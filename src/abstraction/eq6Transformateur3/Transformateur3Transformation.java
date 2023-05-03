@@ -239,19 +239,19 @@ protected double BesoinStep(int Step, Feve f) {
 protected double CoutMatPremiere(Feve f, double qte) {
 	if (f == Feve.F_BQ) { 
 		double pourcentageTransfo = this.getPourcentageCacaoBG();
-		return qte*pourcentageTransfo*400;
+		return qte*(1-pourcentageTransfo)*400;
 	} else {
 		if (f == Feve.F_MQ) { 
 			double pourcentageTransfo = this.getPourcentageCacaoMG();
-			return qte*pourcentageTransfo*400;
+			return qte*(1-pourcentageTransfo)*400;
 	} else {
 		if (f == Feve.F_MQ_BE) { 
 			double pourcentageTransfo = this.getPourcentageCacaoMGL();
-			return qte*pourcentageTransfo*400;
+			return qte*(1-pourcentageTransfo)*400;
 	} else {
 		if (f == Feve.F_HQ_BE) { 
 			double pourcentageTransfo = this.getPourcentageCacaoHG();
-			return qte*pourcentageTransfo*400;
+			return qte*(1-pourcentageTransfo)*400;
 	}
 	}
 	}}
