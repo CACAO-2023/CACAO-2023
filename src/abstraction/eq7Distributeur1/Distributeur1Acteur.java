@@ -80,7 +80,9 @@ public class Distributeur1Acteur  implements IActeur {
 	protected Variable cout_stockage_distributeur = new Variable("cout moyen stockage distributeur", this);
 	protected Variable cout_main_doeuvre_distributeur = new Variable("cout moyen de la main d'oeuvre pour les distributeur", this);
 	
+	protected LinkedList<VariablePrivee> liste = new LinkedList<VariablePrivee>();
 	protected int cryptogramme;
+	
 
 	public Distributeur1Acteur() {
 		this.cout_BQ = 3;
@@ -199,7 +201,6 @@ public class Distributeur1Acteur  implements IActeur {
 	 * @author Theo and Ghaly
 	 */
 	public void initialiser() {
-		
 		cout_stockage_distributeur.setValeur(this, Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*16);
 		
 		/////////////////////////////////////
@@ -212,7 +213,6 @@ public class Distributeur1Acteur  implements IActeur {
 			moyenne_couts.put(marque, getCout_gamme(marque));
 			couts.put(marque, getCout_gamme(marque));
 		}
-		
 		//Initialisation des previsions
 		this.previsionsperso = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 
 		
@@ -275,7 +275,7 @@ public class Distributeur1Acteur  implements IActeur {
 		res.add(stock_MQ);
 		
 		return res;
-	
+
 	}
 
 	public List<Variable> getParametres() {
