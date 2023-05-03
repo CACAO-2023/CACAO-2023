@@ -67,7 +67,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 			if (contrat.getPrix()<0.5*getCout_gamme(marque)) {
 				return 0.;
 			}
-			else {
+			else { //Negocier en fonction des couts moyens
 				if (Math.random()<0.3) {
 					return contrat.getPrix(); // on ne cherche pas a negocier dans 30% des cas
 			
