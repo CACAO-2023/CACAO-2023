@@ -256,8 +256,8 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
 				contratsObsoletes.add(contrat);
 			}
-			else {if (contrat.getPaiementAEffectuerAuStep()>0.0 && contrat.getVendeur()!=this) {Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, contrat.getVendeur(), contrat.getPaiementAEffectuerAuStep());
-			super.journal.ajouter("virement de "+contrat.getPaiementAEffectuerAuStep()+"fait à l'équipe"+contrat.getVendeur().getNom());}}
+			else {/**if (contrat.getPaiementAEffectuerAuStep()>0.0 && contrat.getVendeur()!=this) {Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, contrat.getVendeur(), contrat.getPaiementAEffectuerAuStep());
+			super.journal.ajouter("virement de "+contrat.getPaiementAEffectuerAuStep()+"fait à l'équipe"+contrat.getVendeur().getNom());}*/}
 		}  
 		
 		this.getListeContratEnCoursA().removeAll(contratsObsoletes);
