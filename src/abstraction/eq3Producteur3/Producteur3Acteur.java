@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
@@ -61,9 +62,20 @@ public class Producteur3Acteur implements IActeur {
 	public Variable quantiteDetruiteCyclone;
 	public Variable pourcentageGrevise;
 	public Variable HectaresAchetes;
+	public Variable EsperanceGaussienneProduction;
+	public Variable EcartTypeGaussienneProduction;
+	public Variable margeStockage;
 	
 	protected LinkedList<Double> VentesMG; /*Les 12 quantités des dernières ventes de moyens de gammes*/
 	protected LinkedList<Double> VentesHG; /*Les 12 quantités des dernières ventes de hauts de gammes*/
+
+	// On va garder une trace de la fiabilité de nos acheteurs
+    protected HashMap<IAcheteurContratCadre, Integer> acheteursMQfiabilité;
+    protected HashMap<IAcheteurContratCadre, Integer> acheteursHQfiabilité;
+
+    // On va aussi conserver le prix de la dernière transaction avec chaque acheteur
+    protected HashMap<IAcheteurContratCadre, Double> acheteursMQprix;
+    protected HashMap<IAcheteurContratCadre, Double> acheteursHQprix;
 	
 
 	protected Champs fields;
@@ -74,6 +86,11 @@ public class Producteur3Acteur implements IActeur {
 	public Producteur3Acteur() {
 	String nom = "Equipe 3";
 	this.fields = new Champs();
+	
+	this.acheteursMQfiabilité = new HashMap<IAcheteurContratCadre, Integer>();
+	this.acheteursHQfiabilité = new HashMap<IAcheteurContratCadre, Integer>();
+	this.acheteursMQprix = new HashMap<IAcheteurContratCadre, Double>();
+	this.acheteursHQprix = new HashMap<IAcheteurContratCadre, Double>();
 	
 	journal_operationsbancaires=new Journal("Journal des Opérations bancaires de l'"+nom,this);
     journal_ventes=new Journal("Journal des Ventes de l'"+nom,this);
@@ -103,17 +120,22 @@ public class Producteur3Acteur implements IActeur {
 	this.probaIncendiL = new Variable("Equipe3 Proba Incendi L", "Fixe la probabilite qu'un incendie de taille L arrive ",this,0.1);
 	this.probaIncendiM = new Variable("Equipe3 Proba Incendi M", "Fixe la probabilite qu'un incendie de taille M arrive ",this,0.05);
 	this.probaIncendiH = new Variable("Equipe3 Proba Incendi H", "Fixe la probabilite qu'un incendie de taille H arrive ",this,0.02);
-	this.probaCyclone = new Variable("Equipe3 Proba Cyclone", "Fixe la probabilite qu'un Cyclone arrive ",this,0.05);
+	this.probaCyclone = new Variable("Equipe3 Proba Cyclone", "Fixe la probabilite qu'un Cyclone arrive ",this,0);
 	this.probaGreve = new Variable("Equipe3 Proba Greve", "Fixe la probabilite qu'une Greve arrive ",this,0.02);
 	this.pourcentageGrevise = new Variable("Equipe3 Pourcentage Greviste", "Fixe la proportion d'ouvrier en Greve ",this,0.2);
 	this.quantiteBruleH = new Variable("Equipe3 Proportion Champs Brules Incendie H", "Fixe le pourcentage d'arbre brules suite a un incendie H ",this,0.5);
 	this.quantiteBruleM = new Variable("Equipe3 Proportion Champs Brules Incendie M", "Fixe le pourcentage d'arbre brules suite a un incendie M ",this,0.2);
+
 	this.quantiteBruleL = new Variable("Equipe3 Proportion Champs Brules Incendie L", "Fixe le pourcentage d'arbre brules suite a un incendie L ",this,0.1);
 	this.quantiteDetruiteCyclone = new Variable("Equipe3 Proportion Champs Detruits Cyclone Max", "Fixe le pourcentage maximum d'arbre detruits suite a un Cyclone",this,0.3);
 	this.HectaresAchetes = new Variable("Equipe 3 Nombre d'Hectares Achetés", "Affiche le nombre d'hectares achetés par step", this, 0);
 
 	this.VentesMG = new LinkedList<Double>();
 	this.VentesHG = new LinkedList<Double>();
+	this.EsperanceGaussienneProduction = new Variable("Esperance gaussienne pour production", "Fixe l'esperance de la gaussienne permettant d'avoir le pourcentage de feves recoltes",this,480);
+	this.EcartTypeGaussienneProduction = new Variable("Ecart-type gaussienne pour production", "Fixe l'ecart type de la gaussienne permettant d'avoir le pourcentage de feves recoltes",this,720);
+	this.margeStockage = new Variable("Equipe3 Marge de stockage", "Fixe la marge de stockage de nos feves pour parer aux imprévus ",this,0.1);
+
 	}
 
 	/**
@@ -241,6 +263,7 @@ public class Producteur3Acteur implements IActeur {
 		res.add(this.BeneficeM);
 		res.add(this.BeneficeH);
 		res.add(this.HectaresAchetes);
+		res.add(this.margeStockage);
 		return res;
 	}
 
@@ -260,6 +283,9 @@ public class Producteur3Acteur implements IActeur {
 		res.add(quantiteBruleL);
 		res.add(quantiteDetruiteCyclone);
 		res.add(pourcentageGrevise);
+
+		res.add(EsperanceGaussienneProduction);
+		res.add(EcartTypeGaussienneProduction);
 
 		return res;
 	}
@@ -309,6 +335,13 @@ public class Producteur3Acteur implements IActeur {
 			ControlTimeGif monTimerTask = new ControlTimeGif(popup);
 			timer.schedule(monTimerTask, 2500);
 			popup.setVisible(true);
+		} else {
+			if (this.acheteursMQfiabilité.containsKey((IAcheteurContratCadre)acteur)) {
+				this.acheteursMQfiabilité.remove(acteur);
+			}
+			if (this.acheteursHQfiabilité.containsKey((IAcheteurContratCadre)acteur)) {
+				this.acheteursHQfiabilité.remove(acteur);
+			}
 		}
 
 	}
