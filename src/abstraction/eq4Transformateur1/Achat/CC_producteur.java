@@ -190,9 +190,18 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 	}
 
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
+		String[] nomA = new String[3];
+		nomA[0] = "Eq1";
+		nomA[1] = "Eq2";
+		nomA[2] = "Eq3";
+		for(int i =0; i<=2;i++) {
+		if ( contrat.getAcheteur().getNom().equals(nomA[i])) {
 		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc_producteur conclu "+contrat);
+		}else {
+			this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc_distributeur conclu "+contrat);
+			}
+		}
 	}
-
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		IProduit produit= lot.getProduit();
 		double quantite = lot.getQuantiteTotale();
