@@ -63,6 +63,7 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 	 * Ici, on utilise une moyenne arithmetique non ponderee qui prend en compte tous les achats depuis le debut de la simulation
 	 */
 	protected void actualise_cout(ChocolatDeMarque marque,Double cout) {
+		System.out.println(cout);
 		Chocolat gamme = marque.getChocolat();
 		Double stock_gamme = 0.;
 		int nb_total_achats = 0;
