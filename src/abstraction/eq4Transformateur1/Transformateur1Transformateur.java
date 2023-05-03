@@ -19,7 +19,6 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 	
 	protected List<ChocolatDeMarque>chocosProduits;
 	protected double qteTransfo;
-	protected HashMap<Feve, HashMap<Chocolat, Double>> pourcentageTransfo; // pour les differentes feves, le chocolat qu'elle peuvent contribuer a produire avec le ratio
 	
 	public Transformateur1Transformateur() {
 		super();
