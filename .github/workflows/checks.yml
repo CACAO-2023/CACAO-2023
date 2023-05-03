@@ -75,7 +75,7 @@ jobs:
           set -e
           ant -noinput -buildfile build.xml
           ant -noinput -buildfile build.xml
-          /bin/bash -c {ant -noinput -buildfile build.xml | grep "tempsEquipes=" >> "$GITHUB_OUTPUT"}
+          /bin/bash -c "ant -noinput -buildfile build.xml | grep 'tempsEquipes=' >> '$GITHUB_OUTPUT'"
   performance_tests:
     if: ${{ always() }}
     needs: [file_ownership, java_tests]
