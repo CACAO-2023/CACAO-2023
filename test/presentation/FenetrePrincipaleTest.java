@@ -24,6 +24,9 @@ public class FenetrePrincipaleTest {
 		
 		((JButton) ((JPanel) fp.getRootPane().getContentPane().getComponent(2)).getComponent(2)).doClick();
 		
+		System.out.println("------------- ---------------- ---------------");
+		System.out.println("TEMPS D'EXECUTION PAR EQUIPE");
+		
 		for (Entry<IActeur, Long> entry : Filiere.LA_FILIERE.tempsEquipes.entrySet()) {
 			System.out.println(entry.getKey().getNom() + " : " + entry.getValue());
 		}
