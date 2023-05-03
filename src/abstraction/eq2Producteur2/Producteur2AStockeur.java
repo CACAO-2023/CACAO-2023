@@ -214,6 +214,13 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	}
 	
 	/**
+	 * 
+	 */
+	protected double coutStockage(Feve f) {
+		return Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() * this.getStockTot(f).getValeur();
+	}
+	
+	/**
 	 * Renvoie le stock restant théorique à l'étape etape en retirant les contrats cadres et en ajoutant la production théorique.
 	 * La structure du renvoie est : indice 0 -> HashMap donnant la quantité totale en stock en fonction de l'étape
 	 * indice x dans 1 à n - 2 -> HashMap donnant l'état du stock à l'étape x - 1 + Filiere.LA_FILIERE.getEtape() (tel que 1->Filiere.LA_FILIERE.getEtape() et n-2->etape)

@@ -52,6 +52,7 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable coutProMQ_BE = new VariablePrivee("EQ2 coût de production et stockage de MQ_BE", "coût total de production et de stockage de MQ_BE à chaque step", this, 0);
 	protected Variable coutProdHQ_BE = new VariablePrivee("EQ2 coût de production et stockage de HQ_BE", "coût total de production et de stockage de HQ_BE à chaque step", this, 0);
 	protected HashMap<Feve, Variable> argentVente = new HashMap<Feve, Variable>();
+	protected HashMap<Feve, Variable> coutProdFeve = new HashMap<Feve, Variable>();
 	protected Producteur2 thisP;
 
 	//Prix provisoires pour les contrats cadres
@@ -73,10 +74,15 @@ public class Producteur2Acteur implements IActeur {
 		this.journalProd = new Journal("Journal Production " + this.getNom(), this);
 		this.journalStocks = new Journal("Journal Stocks " + this.getNom(), this);
 		
-		argentVente.put(Feve.F_BQ, this.argentVenteBQ);
-		argentVente.put(Feve.F_MQ, this.argentVenteMQ);
-		argentVente.put(Feve.F_MQ_BE, this.argentVenteMQ_BE);
-		argentVente.put(Feve.F_HQ_BE, this.argentVenteHQ_BE);
+		this.argentVente.put(Feve.F_BQ, this.argentVenteBQ);
+		this.argentVente.put(Feve.F_MQ, this.argentVenteMQ);
+		this.argentVente.put(Feve.F_MQ_BE, this.argentVenteMQ_BE);
+		this.argentVente.put(Feve.F_HQ_BE, this.argentVenteHQ_BE);
+		
+		this.coutProdFeve.put(Feve.F_BQ, this.coutProdBQ);
+		this.coutProdFeve.put(Feve.F_MQ, this.coutProdMQ);
+		this.coutProdFeve.put(Feve.F_MQ_BE, this.coutProMQ_BE);
+		this.coutProdFeve.put(Feve.F_HQ_BE, this.coutProdHQ_BE);
 	}
 	
 	public void initialiser() {
