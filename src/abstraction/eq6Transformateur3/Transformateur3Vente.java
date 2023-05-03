@@ -18,7 +18,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	protected LinkedList<ExemplaireContratCadre> listeCC ;
 
 	
-	
+	/**Nathan Salbego*/
 	public Transformateur3Vente() {
 		super();
 		listeCC=new LinkedList<ExemplaireContratCadre>();
@@ -29,6 +29,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	 * @param choco
 	 * @return
 	 */
+	/**Nathan Salbego*/
 	protected double demandeTotStep (int step,Object choco) {
 		double tot=0;
 		for (int i=0;i<listeCC.size();i++) {
@@ -39,6 +40,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	}
 
 	@Override
+	/**Nathan Salbego*/
 	public boolean vend(IProduit produit) {
 		if (produit instanceof ChocolatDeMarque) {
 			return (((ChocolatDeMarque)produit).getMarque().equals("eco+ choco"))||((ChocolatDeMarque)produit).getMarque().equals("chokchoco")||((ChocolatDeMarque)produit).getMarque().equals("chokchoco bio")||((ChocolatDeMarque)produit).getMarque().equals("Choc");
@@ -47,6 +49,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	}
 
 	@Override
+	/**Nathan Salbego*/
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		Echeancier e= contrat.getEcheancier();;
 		double quantite=e.getQuantiteTotale()/e.getNbEcheances();
@@ -60,6 +63,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	}
 
 	@Override
+	/**Nathan Salbego*/
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
@@ -84,6 +88,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	}
 
 	@Override
+	/**Nathan Salbego*/
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			double i=(Math.random()/10);
@@ -125,6 +130,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	}
 
 	@Override
+	/**Nathan Salbego*/
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.listeCC.add(contrat);
 		super.journalVentes.ajouter("Nouveau contrat de vente passé :"+contrat.toString());
@@ -134,6 +140,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	public void initialiser() {
 		super.initialiser();
 	}
+	/**Nathan Salbego*/
 	public void next() {
 		super.next();
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
@@ -146,6 +153,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	}
 
 	@Override
+	/**Nathan Salbego*/
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
 		if (super.getLotChocolat(produit)!=null) {
 		double livre = Math.min(super.getLotChocolat(produit).getQuantiteTotale(), quantite);
