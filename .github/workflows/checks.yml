@@ -55,6 +55,8 @@ jobs:
   java_tests:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    outputs:
+      times: ${{ steps.ant.outputs.tempsEquipes }}
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -66,13 +68,14 @@ jobs:
         java-version: '18'
         distribution: 'temurin'
     - name: Build with Ant
+      id: ant
       uses: coactions/setup-xvfb@v1
       with:
         run: |
           set -e
           ant -noinput -buildfile build.xml
           ant -noinput -buildfile build.xml
-          ant -noinput -buildfile build.xml
+          ant -noinput -buildfile build.xml | grep "tempsEquipes=" >> >> "$GITHUB_OUTPUT"
   performance_tests:
     if: ${{ always() }}
     needs: [file_ownership, java_tests]
