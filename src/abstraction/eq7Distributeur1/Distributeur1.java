@@ -66,7 +66,6 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 //		return (cout/1000)*promo/coef;
 		
 		double prix = (cout)*promo*1.2;
-		System.out.println("---------------------------"+prix);
 		return prix;
 	}
 	

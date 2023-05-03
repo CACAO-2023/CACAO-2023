@@ -57,7 +57,6 @@ public class Distributeur1Acteur  implements IActeur {
 	 * previsions de ventes de la filiere globale pour chaque etape_normalisee
 	 * prevision etape -> marque -> valeur
 	 */
-	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsions; 
 	
 	/**
 	 * previsions de vente de l'equipe 7
@@ -98,13 +97,7 @@ public class Distributeur1Acteur  implements IActeur {
 	//         Methodes principales				          //
 	////////////////////////////////////////////////////////
 	
-	/**
-	 * @author Theo
-	 * Renvoie les previsions de vente de la filiere globale, actualisees à chaque tour
-	 */
-	protected double getPrevisions(ChocolatDeMarque marque, Integer etape) {
-		return previsions.get(etape).get(marque);
-	}
+
 	/**
 	 * @author Theo
 	 * Renvoie les previsions de vente de notre quipe, actualisees à chaque tour
@@ -188,21 +181,7 @@ public class Distributeur1Acteur  implements IActeur {
 		}
 	}
 
-	/**
-	 * 	Actualisation des previsions de vente pour l'étape normalisée
-	 * @author Theo,Ghaly
-	 */
-	public void actualiser_prevision(ChocolatDeMarque marque, int etape) {
 
-		int etapepreced = etape-1;
-		int etapeannee = (etapepreced/24)+1; //+1 car les etapes -1 a -24 constituent bien une annee prise en compte
-		int etapenormalisee = (etapepreced+24)%24;
-		HashMap<ChocolatDeMarque,Double> prevetap = previsions.get(etapenormalisee);
-		//On remplace par la moyenne actualisee
-		prevetap.replace(marque, (prevetap.get(marque)*etapeannee+Filiere.LA_FILIERE.getVentes(marque, etapepreced))/(etapeannee+1));
-		previsions.replace(etapenormalisee, prevetap);
-	}
-	
 	/**
 	 * Actualisation des previsions persos
 	 * @author Theo, Ghaly
@@ -229,7 +208,6 @@ public class Distributeur1Acteur  implements IActeur {
 		}
 		
 		//Initialisation des previsions
-		this.previsions = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>();
 		this.previsionsperso = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 
 		
 		for (int i=0;i<24;i++) {
@@ -240,7 +218,6 @@ public class Distributeur1Acteur  implements IActeur {
 				prevtourperso.put(marque, Filiere.LA_FILIERE.getVentes(marque, -(i+1))*0.5);
 				//Pour l'initialisation, on estime vendre 50% des ventes totales (choix arbitraire pour démarrer
 			}
-			previsions.put(24-(i+1), prevtour);
 			previsionsperso.put(24-(i+1), prevtourperso);
 		}
 	}
@@ -265,7 +242,7 @@ public class Distributeur1Acteur  implements IActeur {
 		int etape = Filiere.LA_FILIERE.getEtape();
 		
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			actualiser_prevision( marque,  etape);
+			actualiser_prevision_perso( marque,  etape);
 		}
 	}
 
