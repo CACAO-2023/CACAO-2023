@@ -42,7 +42,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	public boolean peutVendre(IProduit produit) {
 		return ((produit.getType().equals("Chocolat"))||(produit.getType().equals("ChocolatDeMarque")));} 
 	
-	//fait par wiem : nous vendons du chocolat de moyenne gamme et haute gamme bioéquitable. La vente est possible ssi le stock est supérieur à 100
+	//fait par wiem : nous vendons du chocolat de moyenne gamme et haute gamme bioéquitable. La vente est possible ssi le stock est supérieur à 100T
 	public boolean vend(IProduit produit) {
 		if ((stockChocoMarque.containsKey(produit))&&(produit.getType().equals("ChocolatDeMarque"))&&((((ChocolatDeMarque)produit).getGamme()== Gamme.MQ) ||((((ChocolatDeMarque)produit).getGamme()== Gamme.HQ)&&(((ChocolatDeMarque)produit).isBioEquitable())))){
 			if (this.stockChocoMarque.get(produit)>100) { 
@@ -115,7 +115,12 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 				}
 				lot=new Lot((Chocolat)produit);
 			}}
-		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : doit livrer "+quantite+" de "+produit+" --> livre "+livre);
+		if (stock<quantite) {
+				double prix = this.propositionPrix(contrat)*0.95;
+				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : stock insuffisant ! doit livrer "+quantite+" de "+produit+" --> livre "+livre);
+			}
+		else {
+		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : stock ok ! doit livrer "+quantite+" de "+produit+" --> livre "+livre);}
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);
 		return lot;
 	}
