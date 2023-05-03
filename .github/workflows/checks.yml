@@ -75,7 +75,8 @@ jobs:
           set -e
           ant -noinput -buildfile build.xml
           ant -noinput -buildfile build.xml
-          /bin/bash -c "ant -noinput -buildfile build.xml | grep 'tempsEquipes=' >> '$GITHUB_OUTPUT'"
+          /bin/bash -c "ant -noinput -buildfile build.xml | grep 'tempsEquipes=' >> $GITHUB_OUTPUT"
+          echo $GITHUB_OUTPUT
   performance_tests:
     if: ${{ always() }}
     needs: [file_ownership, java_tests]
@@ -89,7 +90,7 @@ jobs:
     - name: Check performance
       run: |
         echo ${{needs.java_tests.outputs.times}}
-        echo ${{ fromJSON(steps.actorTeams.outputs.teams)[0] }}
+        echo ${{steps.actorTeams.outputs.teams}}
     - name: Auto-merge
       if: success() && needs.java_tests.result == 'success' && needs.file_ownership.result == 'success'
       run: | 
