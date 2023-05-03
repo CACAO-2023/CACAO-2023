@@ -49,15 +49,16 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 */
 	public boolean achete(IProduit produit) {
 		int step = Filiere.LA_FILIERE.getEtape();
-		if (produit instanceof Feve) {List<Double> besoin_prochain = new LinkedList<Double>();
+		if (produit instanceof Feve) {/**List<Double> besoin_prochain = new LinkedList<Double>();
 									  for (int i=1;i<5;i++) {
 										  besoin_prochain.add(super.BesoinStep(step + i,((Feve)produit))- this.getArrivageCCStep(step + i, ((Feve)produit)));}
 									  int b = 0;
-									  /**double max = 0;**/
+									  
 									  for (int i=0;i<4;i++) {
 										  if (((double)besoin_prochain.get(i))>0) {b= b+1;
-										  											/**if (((double)besoin_prochain.get(i))>0) {max = ((double)besoin_prochain.get(i));}**/}	}
-									  if (b>2) {return true;}
+										  											}	}
+									  if (b>2)*/
+									  if (super.totalStocksFeves.getValeur()+this.quantiteEnAttente<super.totalStocksFeves.getMax()-10000){return true;}
 									  else {return true;}//pour le test
 										  
 									  }
