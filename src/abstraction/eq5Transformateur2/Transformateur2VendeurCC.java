@@ -123,7 +123,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	
 	
 
-	//fait par yassine : renvoie la quantité livrée, met à jour les stocks. On ne prend pas encore en compte la pénalité si le stock est inférieur à la quantité demandée
+	//fait par yassine : renvoie la quantité livrée, met à jour les stocks.
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
 		double stock=0.0;
 		double livre=0.0;
@@ -146,12 +146,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 				}
 				lot=new Lot((Chocolat)produit);
 			}}
-		if (stock<quantite) {
-				double prix = this.propositionPrix(contrat)*0.95;
-				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : stock insuffisant ! doit livrer "+quantite+" de "+produit+" --> livre "+livre);
-			}
-		else {
-		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : stock ok ! doit livrer "+quantite+" de "+produit+" --> livre "+livre);}
+		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : doit livrer "+quantite+" de "+produit+" --> livre "+livre);
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);
 		return lot;
 	}
