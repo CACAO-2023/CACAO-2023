@@ -178,7 +178,7 @@ public class Producteur3 extends Bourse3  {
 		this.BeneficeM.setValeur(this, this.getBenefice("M"));
 		this.BeneficeH.setValeur(this, this.getBenefice("H"));
 	}
-	/*
+	
 
 
 	
@@ -272,7 +272,6 @@ public class Producteur3 extends Bourse3  {
 	 * @author BOCQUET Gabriel
 	 * @return argent gagne grace a la vente des feves de qualite s
 	 */
-	//WARNING :J'ai suppose qu'on livre les feves dans l'ordre des contratsCadre
 	protected double getRecetteCC(String s) {
 		Feve f;
 		if(s=="M") {f=Feve.F_MQ_BE;}
@@ -293,19 +292,22 @@ public class Producteur3 extends Bourse3  {
 				break;
 			}
 			double qAEnvoyer=c.getQuantiteALivrerAuStep();
+			int i =0;
 			if(qAEnvoyer <= stockActuel) {
-			//WARNING : Renvoie un cout par tonne
-			System.out.println(contractsGoods.size());
-			argentGagne += c.getPrix()*qAEnvoyer;
+			i+=1;
+			this.journal_activitegenerale.ajouter("L'argent touche au contrat num "+i+" est "+c.getPrix());
+			this.journal_activitegenerale.ajouter("La quantite a envoye est "+qAEnvoyer);
+			argentGagne += c.getPrix();//*qAEnvoyer;
 			stockActuel = stockActuel - qAEnvoyer;
 			}
 			else {
+				this.journal_activitegenerale.ajouter("On est rentre "+i+" dans la boucle if"+"pour "+contractsGoods.size()+"de contrat");
 				//Suppose que meme si on a pas assez de feve on renvoie ce que l'on a
-				//WARNING : Renvoie un cout par tonne
-				argentGagne +=c.getPaiementAEffectuerAuStep()*stockActuel;
+				argentGagne +=c.getPrix()*stockActuel;//c.getQuantiteALivrerAuStep();
 				stockActuel=0.0;
 			}
 		}
+		this.journal_activitegenerale.ajouter("argent gagne step pour "+s +": "+argentGagne);
 		return argentGagne;
 	}
 	
@@ -317,13 +319,13 @@ public class Producteur3 extends Bourse3  {
 	protected double getBenefice(String s) {
 		double coutCurrentStep;
 		double recette;
-		if(s =="H" || s=="M") {
+		if(s.equals("H") || s.equals("M")) {
 			Feve f;
 			if(s=="H") {f=Feve.F_HQ_BE;}
 			else {f=Feve.F_MQ_BE;}
 			//CoutStep = CoutStockageFeve + CoutEntretientChamp
 			coutCurrentStep = this.getStock().getQuantite(f)*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() + this.fields.getTaille(s)*this.coutEmployeStep.getValeur();
-		
+			 
 			//si on a des Hautes Gammes, this.getQuantiteVenduBourse =0. De plus, on a deja ajoute la quantite vendue en Bourse dans VentesHG ou VentesMG
 			recette = this.getQuantiteVenduBourse(s)*Filiere.LA_FILIERE.getIndicateur("BourseCacao cours M").getValeur() + this.getRecetteCC(s);
 		}
@@ -331,6 +333,7 @@ public class Producteur3 extends Bourse3  {
 			coutCurrentStep = this.getStock().getQuantite(Feve.F_BQ)*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur();
 			recette = this.getQuantiteVenduBourse(s)*Filiere.LA_FILIERE.getIndicateur("BourseCacao cours B").getValeur();
 		}
+		this.journal_activitegenerale.ajouter("Cout au step pour " + s + ":" + coutCurrentStep);
 		return recette - coutCurrentStep;
 	}
 	/**

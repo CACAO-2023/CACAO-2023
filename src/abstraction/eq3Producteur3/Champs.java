@@ -2,6 +2,7 @@ package abstraction.eq3Producteur3;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Set;
 
 import abstraction.eqXRomu.filiere.Filiere;
@@ -42,6 +43,15 @@ public class Champs {
 	
 	public void setChampH(HashMap<Integer,Integer> f) {
 		this.Champs.put("H", f);
+	}
+	
+	/**
+	 * 
+	 */
+	public double gaussienne() {
+		Random r = new Random();
+		double sigma = Filiere.LA_FILIERE.getParametre("Ecart-type gaussienne pour production").getValeur();
+		return 110*(1/Math.sqrt(2*Math.PI)*);
 	}
 	/**
 	 * @author BOCQUET Gabriel
