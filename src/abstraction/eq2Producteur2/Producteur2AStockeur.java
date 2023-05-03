@@ -348,7 +348,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	 * @return la quantite de fèves correspondantes
 	 */
 	protected double getStockTotStepTheo(Feve f, int etape) {
-		HashMap<Integer, Double> stockFeve = this.getDescrStocksTheo(Filiere.LA_FILIERE.getEtape()).get(1).get(f);
+		HashMap<Integer, Double> stockFeve = this.getDescrStocksTheo(Filiere.LA_FILIERE.getEtape()).get(0).get(f);
 		double quantiteTot = 0.;
 		for(int i: stockFeve.keySet()) 
 			if (i <= etape) {
