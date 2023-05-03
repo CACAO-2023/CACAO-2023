@@ -28,6 +28,7 @@ public class Producteur3 extends Bourse3  {
 	private HashMap<String,HashMap> Champs;
 	private Double SeuilHG;
 	private Double SeuilMG;
+	private Integer HectaresAchetes;
 
 	private Integer HectaresLibres; /*Repertorie le nombre d'hectares libres que l'on possede*/
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
@@ -44,13 +45,14 @@ public class Producteur3 extends Bourse3  {
 		super();
 		this.fields = new Champs();
 		this.SeuilHG = 0.;
-		this.SeuilMG = 0.;		
-		this.quantiteVenduBourseB =0.0;
+		this.SeuilMG = 0.;
+		this.HectaresAchetes = 0;
+		this.quantiteVenduBourseB = 0.0;
 		this.quantiteVenduBourseM = 0.0;
 		this.CoutStep = 0.0;
 		this.CoutTonne = 0.;
-		this.HectaresLibres= 0;
-		this.HectaresUtilises=950000;
+		this.HectaresLibres = 0;
+		this.HectaresUtilises = 950000;
 		this.ListeCout = new LinkedList<Double>();
 	}
 	
@@ -175,7 +177,7 @@ public class Producteur3 extends Bourse3  {
 
 				}
 		*/
-		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep);
+		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep + ", Hectares Achetés : " + this.HectaresAchetes);
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
 				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ this.HectaresUtilises);
 		
@@ -194,6 +196,7 @@ public class Producteur3 extends Bourse3  {
 		this.BeneficeB.setValeur(this, this.getBenefice("B"));
 		this.BeneficeM.setValeur(this, this.getBenefice("M"));
 		this.BeneficeH.setValeur(this, this.getBenefice("H"));
+		this.HectaresAchetes = 0;
 	}
 	/*
 
@@ -358,6 +361,7 @@ public class Producteur3 extends Bourse3  {
 	 */
 	public void achatHectares(Integer HectaresAAcheter) {
 		Integer coutAchatHectares = HectaresAAcheter * 3250;
+		this.HectaresAchetes = HectaresAAcheter;
 		this.CoutStep = this.CoutStep + coutAchatHectares;
 	}
 	
