@@ -24,18 +24,15 @@ import abstraction.eqXRomu.produits.Feve;
 public class Producteur3 extends Bourse3  {
 
 
-	
-	
 
-	/**
-	 * @author Dubus-Chanson Victor, Bocquet Gabriel
-	 */
+	private Double SeuilHG;
+	private Double SeuilMG;
 
 	private Integer HectaresLibres; /*Repertorie le nombre d'hectares libres que l'on possede*/
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
 	private LinkedList<Double> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
 
-
+	private Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
 
 
 	
@@ -43,13 +40,16 @@ public class Producteur3 extends Bourse3  {
 	 * @author Dubus-Chanson Victor
 	 */
 	public Producteur3() {
-		super();		
-		this.quantiteVenduBourseB =0.0;
+		super();
+		this.fields = new Champs();
+		this.SeuilHG = 0.;
+		this.SeuilMG = 0.;
+		this.quantiteVenduBourseB = 0.0;
 		this.quantiteVenduBourseM = 0.0;
 		this.CoutStep = 0.0;
 		this.CoutTonne = 0.;
-		this.HectaresLibres= 0;
-		this.HectaresUtilises=950000;
+		this.HectaresLibres = 0;
+		this.HectaresUtilises = 950000;
 		this.ListeCout = new LinkedList<Double>();
 	}
 	
@@ -82,6 +82,10 @@ public class Producteur3 extends Bourse3  {
 
 		Stock Stock = this.getStock();
 		this.CoutTonne = CoutTotal / Math.max(Stock.getQuantite(), 1);
+		
+		if (this.CoutTonne > 6000) {
+			this.CoutTonne = 6000.;
+		}
 	}
 	
 	/**
@@ -89,11 +93,17 @@ public class Producteur3 extends Bourse3  {
 	 */
 	public void initialiser() {
 		super.initialiser();
-		
 		this.CoutStep += Stock.getQuantite()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur();
 		this.addCoutHectaresUtilises();
 		this.updateListeCout();
 		this.updateCoutTonne();
+	}
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
+	protected Champs getFields() {
+		return this.fields;
 	}
 	
 	/**
@@ -119,7 +129,14 @@ public class Producteur3 extends Bourse3  {
 		
 		updateHectaresLibres(Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape() % 12 == 0) {
-			changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
+			if (Filiere.LA_FILIERE.getEtape() != 0) {
+				if (Filiere.LA_FILIERE.getEtape() == 12) {
+					changeHectaresAndCoutsLies(variationBesoinHectares(Filiere.LA_FILIERE.getEtape()));
+				}
+				else {
+					changeHectaresAndCoutsLies(variationBesoinHectaresv2(Filiere.LA_FILIERE.getEtape(), VentesMG, VentesHG));
+				}
+			}
 		}
 
 		// We only add the costs to CoutStep if we are not at step zero :
@@ -158,10 +175,12 @@ public class Producteur3 extends Bourse3  {
 						}
 
 				}
-		
-		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep);
+
+		*/
+		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep + ", Hectares Achetés : " + this.HectaresAchetes.getValeur() + ", Coût de la tonne : " + this.CoutTonne);
+
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
-				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ this.HectaresUtilises);
+				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : "+ (this.HectaresUtilises + this.HectaresLibres));
 		
 		Filiere.LA_FILIERE.getBanque().virer(this, super.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), CoutStep);
 		this.getJOperation().ajouter(Color.cyan, Color.BLACK, "On a paye "+ this.CoutStep + "euros de frais divers");
@@ -174,10 +193,11 @@ public class Producteur3 extends Bourse3  {
 		this.tailleH.setValeur(this, super.fields.getTaille("H"));
 		this.tailleM.setValeur(this, super.fields.getTaille("M"));
 		this.coutMoyen.setValeur(this, this.CoutTonne);
-		this.coutSalaireTot.setValeur(this,(this.fields.getTaille("M")+this.fields.getTaille("H"))*this.coutEmployeStep.getValeur());
+		this.coutSalaireTot.setValeur(this,(this.HectaresUtilises + this.HectaresLibres)*this.coutEmployeStep.getValeur());
 		this.BeneficeB.setValeur(this, this.getBenefice("B"));
 		this.BeneficeM.setValeur(this, this.getBenefice("M"));
 		this.BeneficeH.setValeur(this, this.getBenefice("H"));
+		this.HectaresAchetes.setValeur(this, 0);
 	}
 	
 
@@ -187,7 +207,7 @@ public class Producteur3 extends Bourse3  {
 	 * @author Dubus-Chanson Victor
 	 */
 	public void addCoutHectaresUtilises() {
-		Integer coutEmployes = this.HectaresUtilises * ((int)this.coutEmployeStep.getValeur());
+		Integer coutEmployes = (this.HectaresUtilises + this.HectaresLibres) * ((int)this.coutEmployeStep.getValeur());
 		this.CoutStep = this.CoutStep + coutEmployes;
 	}
 	
@@ -252,8 +272,97 @@ public class Producteur3 extends Bourse3  {
 	/**
 	 * @author Dubus-Chanson Victor
 	 */
+	/*Initialise le seuil de HG des 6 premiers mois*/
+	public void setSeuilHG(LinkedList<Double> Liste12DernieresVentesHG) {
+		Double M = 0.;
+		for (Double i : Liste12DernieresVentesHG) {
+			M += i;
+		}
+		this.SeuilHG = M/12;
+	}
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
+	/*Initialise le seuil de MG des 6 premiers mois*/
+	public void setSeuilMG(LinkedList<Double> Liste12DernieresVentesMG) {
+		Double M = 0.;
+		for (Double i : Liste12DernieresVentesMG) {
+			M += i;
+		}
+		this.SeuilMG = M/12;
+	}
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 * @param CurrentStep
+	 * @param Liste12DernieresVentes
+	 * @param Seuil
+	 * @return
+	 */
+	public Integer besoinHectares(Integer CurrentStep, LinkedList<Double> Liste12DernieresVentes, Double Seuil) {
+		Double M12 = 0.;
+		Double M4 = 0.;
+		Integer besoin = 0;
+		Double prix = 0.;
+		for (Double i : Liste12DernieresVentes) {
+			M12 += i;
+		}
+		M4 += Liste12DernieresVentes.get(11);
+		M4 += Liste12DernieresVentes.get(10);
+		M4 += Liste12DernieresVentes.get(9);
+		M4 += Liste12DernieresVentes.get(8);
+		if (M4 < (Seuil + 5000) && M4 > (Seuil - 10000)) {
+			if (M12 > (Seuil + 5000)) {
+				prix = M12 - Seuil;
+				besoin = (int)(prix / 2500.); //2500euros etant ce que l'on considere comme ce qu'un hectare peut nous rapporter par recolte.
+			}
+		}
+		
+		if (M4 > (Seuil + 5000)) {
+			if (M12 > (Seuil - 10000)) {
+				prix = M12 - Seuil;
+				besoin = (int)(prix / 2500.);
+			}
+		}
+		return besoin;
+	}
+	
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 * @param CurrentStep
+	 * @param Liste12DernieresVentesMG
+	 * @param Liste12DernieresVentesHG
+	 * @return
+	 */
+	public Integer variationBesoinHectaresv2(Integer CurrentStep, LinkedList<Double> Liste12DernieresVentesMG, LinkedList<Double> Liste12DernieresVentesHG) {
+		Integer besoinHG = besoinHectares(CurrentStep, Liste12DernieresVentesHG, this.SeuilHG);
+		Integer besoinMG = besoinHectares(CurrentStep, Liste12DernieresVentesHG, this.SeuilMG);
+		
+		if (besoinHG != 0) {
+			this.SeuilHG += besoinHG * 2500.;
+			HashMap<Integer, Integer> ChampsH = this.fields.getChamps().get("H");
+			ChampsH.put(CurrentStep, besoinHG);
+			this.fields.getChamps().put("H", ChampsH);
+		}
+		
+		if (besoinMG != 0) {
+			this.SeuilHG += besoinHG * 2500.;
+			HashMap<Integer, Integer> ChampsM = this.fields.getChamps().get("M");
+			ChampsM.put(CurrentStep, besoinMG);
+			this.fields.getChamps().put("M", ChampsM);
+		}
+		
+		return besoinHG + besoinMG;
+	}
+	
+	/**
+	 * @author Dubus-Chanson Victor
+	 */
 	public void achatHectares(Integer HectaresAAcheter) {
 		Integer coutAchatHectares = HectaresAAcheter * 3250;
+		this.HectaresAchetes.setValeur(this, HectaresAAcheter);
 		this.CoutStep = this.CoutStep + coutAchatHectares;
 	}
 	
@@ -289,7 +398,7 @@ public class Producteur3 extends Bourse3  {
 		double stockActuel = this.getStock().getQuantite(f);
 		int i =0;
 		for(ExemplaireContratCadre c : contractsGoods) {
-			//Si je n'ai plus de feves je ne peux plus rien livre
+			//Si je n'ai plus de feves je ne peux plus rien livrer
 			if(stockActuel <=0) {
 				break;
 			}

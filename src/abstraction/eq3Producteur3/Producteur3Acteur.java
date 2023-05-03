@@ -61,10 +61,10 @@ public class Producteur3Acteur implements IActeur {
 	public Variable quantiteBruleH;
 	public Variable quantiteDetruiteCyclone;
 	public Variable pourcentageGrevise;
+	public Variable HectaresAchetes;
 	public Variable EsperanceGaussienneProduction;
 	public Variable EcartTypeGaussienneProduction;
 	public Variable margeStockage;
-
 	
 	protected LinkedList<Double> VentesMG; /*Les 12 quantités des dernières ventes de moyens de gammes*/
 	protected LinkedList<Double> VentesHG; /*Les 12 quantités des dernières ventes de hauts de gammes*/
@@ -125,12 +125,17 @@ public class Producteur3Acteur implements IActeur {
 	this.pourcentageGrevise = new Variable("Equipe3 Pourcentage Greviste", "Fixe la proportion d'ouvrier en Greve ",this,0.2);
 	this.quantiteBruleH = new Variable("Equipe3 Proportion Champs Brules Incendie H", "Fixe le pourcentage d'arbre brules suite a un incendie H ",this,0.5);
 	this.quantiteBruleM = new Variable("Equipe3 Proportion Champs Brules Incendie M", "Fixe le pourcentage d'arbre brules suite a un incendie M ",this,0.2);
+
+
 	this.quantiteBruleL = new Variable("Equipe3 Proportion Champs Brules Incendie L", "Fixe le pourcentage d'arbre brules suite a un incendie L ",this,0.1);
-	this.quantiteDetruiteCyclone = new Variable("Equipe3 Proportion Champs Detruit Cyclone", "Fixe le pourcentage d'arbre detruit suite a un Cyclone ",this,0.05);
+	this.quantiteDetruiteCyclone = new Variable("Equipe3 Proportion Champs Detruits Cyclone Max", "Fixe le pourcentage maximum d'arbre detruits suite a un Cyclone",this,0.3);
+	this.HectaresAchetes = new Variable("Equipe 3 Nombre d'Hectares Achetés", "Affiche le nombre d'hectares achetés par step", this, 0);
+
+	this.VentesMG = new LinkedList<Double>();
+	this.VentesHG = new LinkedList<Double>();
 	this.EsperanceGaussienneProduction = new Variable("Esperance gaussienne pour production", "Fixe l'esperance de la gaussienne permettant d'avoir le pourcentage de feves recoltes",this,480);
 	this.EcartTypeGaussienneProduction = new Variable("Ecart-type gaussienne pour production", "Fixe l'ecart type de la gaussienne permettant d'avoir le pourcentage de feves recoltes",this,720);
 	this.margeStockage = new Variable("Equipe3 Marge de stockage", "Fixe la marge de stockage de nos feves pour parer aux imprévus ",this,0.1);
-
 
 	}
 
@@ -258,6 +263,7 @@ public class Producteur3Acteur implements IActeur {
 		res.add(this.BeneficeB);
 		res.add(this.BeneficeM);
 		res.add(this.BeneficeH);
+		res.add(this.HectaresAchetes);
 		res.add(this.margeStockage);
 		return res;
 	}
@@ -331,10 +337,10 @@ public class Producteur3Acteur implements IActeur {
 			timer.schedule(monTimerTask, 2500);
 			popup.setVisible(true);
 		} else {
-			if (this.acheteursMQfiabilité.containsKey((IAcheteurContratCadre)acteur)) {
+			if (acteur instanceof IAcheteurContratCadre && this.acheteursMQfiabilité.containsKey((IAcheteurContratCadre)acteur)) {
 				this.acheteursMQfiabilité.remove(acteur);
 			}
-			if (this.acheteursHQfiabilité.containsKey((IAcheteurContratCadre)acteur)) {
+			if (acteur instanceof IAcheteurContratCadre && this.acheteursHQfiabilité.containsKey((IAcheteurContratCadre)acteur)) {
 				this.acheteursHQfiabilité.remove(acteur);
 			}
 		}
