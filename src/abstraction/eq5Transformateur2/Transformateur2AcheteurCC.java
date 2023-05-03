@@ -60,10 +60,42 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	}
 		
 
-	@Override
+	
+	//Par Mathis DOUTRE
+
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-			return contrat.getPrix(); //pas de négociations
+		double dernierPrix = contrat.getPrix();
+		double soldeDisponible = super.getSolde();
+		double proposition = 0;
+		
+		
+		// Si c'est la première offre, propose un prix inférieur de 15%
+		if (contrat.getListePrix().size() == 1) {
+		    proposition = dernierPrix * 0.85;
+		} 
+		// Sinon, calcule la proposition en fonction des deux derniers prix
+		else {
+		    double avantDernierPrix = contrat.getListePrix().get(contrat.getListePrix().size() - 2);
+		    
+		    // Si le dernier prix est inférieur ou égal à 15% plus élevé que le précédent, accepte le prix
+		    if (dernierPrix <= avantDernierPrix * 1.15) {
+		        proposition = dernierPrix;
+		    } 
+		    // Sinon, propose un prix entre les deux derniers prix avec une réduction de 50%
+		    else {
+		        proposition = avantDernierPrix + (dernierPrix - avantDernierPrix) * 0.50;
+		    }
+		}
+
+		// Si la proposition est supérieure au solde disponible, propose le maximum possible
+		if (proposition > soldeDisponible) {
+		    proposition = soldeDisponible;
+		}
+
+		// Retourne la proposition de prix
+		return proposition;
+
+		
 	}
 
 	@Override
