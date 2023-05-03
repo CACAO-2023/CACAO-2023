@@ -51,7 +51,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 				for (int k = 0;k<contratEnCours.size();k++) {
 					if (chocolats.get(i).equals((ChocolatDeMarque)((contratEnCours.get(k).getProduit())))) {
 						contratAvecChocolat.add(contratEnCours.get(k));
-					}
+					}//ajoute les contrats avec le chocolat qui nous interesse 
 				}
 				}
 				if (vendeursChocolat.size()>0  ) {
@@ -70,8 +70,15 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 					for (int k = 0;k<contratAvecChocolat.size();k++) {
 						for (int j=0; j< vendeursChocolat.size()&&pasAchete;j++) {
 							
-							
-							Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(),24, 25000.0);
+							List<Double> qteVoulue = new LinkedList();
+							for (int f = 0; f<24; f++) {
+								qteVoulue.add(f, 25000.0);
+								//on regarde si l'on se trouve dans les périodes de fortes ventes 
+								if ((contratAvecChocolat.get(k).getEcheancier().getStepFin()+f)%24==3 || (contratAvecChocolat.get(k).getEcheancier().getStepFin()+f)%24==6 || (contratAvecChocolat.get(k).getEcheancier().getStepFin()+f)%24==23) {
+									qteVoulue.add(f, 35000.0);
+								}
+							}
+							Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(), qteVoulue);
 							ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier2 , this.cryptogramme, initialise);
 							pasAchete = false;}
 						}}
@@ -126,11 +133,35 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		// TODO Auto-generated method stub
 		return 0;
 	}
-//Mathilde 
+//Mathilde
+	// Dans cette contreproposition j'essaye de renvoyer un échéancier sur 12 mois avec au total un peu plus de 25000 
+	// tablettes de chocolats achetées. Je chercher à savoir à chaque fois si ma quantité de chocolat est assez grande 
+	// à chaque step (25000/24 environ = 1050)(dernier if) 
 	@Override
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
-		return contrat.getEcheancier();
+		if (contrat.getProduit() instanceof ChocolatDeMarque) {
+			Echeancier e = contrat.getEcheancier();
+			ChocolatDeMarque chocolat = (ChocolatDeMarque)contrat.getProduit();
+			//double qte = this.stock.getStock(chocolat);
+			//double qteProp = e.getQuantiteTotale();
+			
+				double qtechocstep = 0.0;
+				for(int j=0; j< e.getNbEcheances(); j++){
+				for(int i =0; i<contratEnCours.size();i++) {
+					
+					qtechocstep = qtechocstep +  contratEnCours.get(i).getEcheancier().getQuantite(j);}
+					
+				if ((qtechocstep + e.getQuantite(j)) < 1050.0) {
+						e.set(j, 1050-(qtechocstep+e.getQuantite(j)));
+				}
+				
+			
+		}
+			return e;
+			}
+		
+		return null; 
 	}
 
 	@Override
