@@ -55,7 +55,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 						Echeancier e = contrat.getEcheancier();
 						e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut()) / 2.0); // on souhaite livrer deux fois moins lors de la 1ere livraison
 						this.notificationNouveauContratCadre(contrat);
-						this.journal_ContratCadre.ajouter("effectuation du contrat:"+contrat.toString());
+						this.journal_ContratCadre.ajouter("effectuation du contrat:"+contrat.toString()+contrePropositionPrixAcheteur(contrat));
 						return e;
 					}
 				} else {
@@ -74,12 +74,12 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	//Auteur : Marzougui Mariem
 	//On retourne le prix sans négociation
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		return contrat.getPrix();
+		return contrat.getPrix()*0.95;
 	}
 
 	//Auteur : Marzougui Mariem
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		this.journal_ContratCadre.ajouter("contrat effectué:"+contrat.toString());	
+		this.journal_ContratCadre.ajouter("contrat effectué:"+contrat.toString()+contrePropositionPrixAcheteur(contrat));	
 	}
 
 	public void next() {
