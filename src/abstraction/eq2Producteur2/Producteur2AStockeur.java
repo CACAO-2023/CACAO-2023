@@ -349,7 +349,12 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	 */
 	protected double getStockTotStepTheo(Feve f, int etape) {
 		HashMap<Integer, Double> stockFeve = this.getDescrStocksTheo(Filiere.LA_FILIERE.getEtape()).get(0).get(f);
-		return stockFeve.get(etape);
+		double quantiteTot = 0.;
+		for(int i: stockFeve.keySet()) 
+			if (i <= etape) {
+				quantiteTot += stockFeve.get(i);
+			}
+		return quantiteTot;
 	}
 	
 	/**
