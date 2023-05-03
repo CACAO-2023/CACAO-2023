@@ -68,14 +68,15 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 				return 0.;
 			}
 			else {
-				
-		if (Math.random()<0.3) {
-			return contrat.getPrix(); // on ne cherche pas a negocier dans 30% des cas
+				if (Math.random()<0.3) {
+					return contrat.getPrix(); // on ne cherche pas a negocier dans 30% des cas
 			
-		} else {//dans 70% des cas on fait une contreproposition differente
+				} else {//dans 70% des cas on fait une contreproposition differente
 			
-			return contrat.getPrix()*0.95;// 5% de moins.
-		}}}
+					return contrat.getPrix()*0.95;// 5% de moins.
+				}
+			}
+		}
 	}
 	
 	
@@ -207,15 +208,13 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		Echeancier e = new Echeancier(stepDebut);
 		for (int etape = stepDebut+1; etape<stepDebut+d; etape++) {
 			int etapemod = etape%24;
-			Double q = previsionsperso.get(etapemod).get(marque)*1.5 -getLivraisonEtape(marque, stepDebut+etape);
+			Double q = previsionsperso.get(etapemod).get(marque)*1.5 -getLivraisonEtape(marque, stepDebut+etape) -stockChocoMarque.get(marque)/d;
 			if (q>=0) {
 				e.ajouter(q);
 			}
 			else {
 				e.ajouter(0.);
 			}
-			
-			//faut enlever le stock
 		}
 	
 		return e;
