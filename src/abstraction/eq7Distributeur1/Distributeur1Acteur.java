@@ -60,8 +60,8 @@ public class Distributeur1Acteur  implements IActeur {
 	/**
 	 * couts: couts d'achat à travers les contrats cadres
 	 */
-	protected HashMap<ChocolatDeMarque,Double> moyenne_couts = new HashMap<ChocolatDeMarque,Double>(); 
-	protected HashMap<ChocolatDeMarque,Double> couts 		 = new HashMap<ChocolatDeMarque,Double>(); 
+	//protected HashMap<ChocolatDeMarque,Double> moyenne_couts = new HashMap<ChocolatDeMarque,Double>(); 
+	protected HashMap<ChocolatDeMarque,Double> cout_marque = new HashMap<ChocolatDeMarque,Double>(); 
 	
 	/**
 	 * Cout en fonction du chocolat, pour 1t
@@ -103,39 +103,6 @@ public class Distributeur1Acteur  implements IActeur {
 	}
 	
 	/**
-	 * @author ghaly
-	 * actualise la moyenne des couts d'un chocolat de marque a une etape donnée
-	 */
-	protected void actualise_cout(ChocolatDeMarque marque,Double nv_cout) {
-		int n= nombre_achats.get(marque);
-		moyenne_couts.replace(marque,(moyenne_couts.get(marque)*n+nv_cout)/(n+1));
-	}
-
-	/**
-	 * @author ghaly
-	 * renvois le cout moyen de la gamme
-	 */	
-	protected double getCout_gamme(Chocolat gamme) {
-		int n = 0;
-		double s = 0;
-		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (marque.getChocolat()==gamme) {
-				n++;
-				s+= moyenne_couts.get(marque);
-			}
-		}
-		return s/n;
-	}
-
-	/**
-	 * @author Ghaly
-	 * @return le prix de la marque 
-	 */
-	protected double getCout(ChocolatDeMarque produit) {
-		return couts.get(produit);
-	}
-	
-	/**
 	 * @author Theo
 	 * @return le prix de la gamme associée à marque (par tonne)
 	 */
@@ -143,17 +110,6 @@ public class Distributeur1Acteur  implements IActeur {
 		Chocolat gamme = marque.getChocolat();
 		return cout_chocolat.get(gamme);
 	}
-	
-	/**
-	 * @author Theo-ghaly
-	 * Actualise les couts (par tonne)
-	 */
-	protected void actualise_indic_couts(ChocolatDeMarque marque) {
-		Chocolat gamme = marque.getChocolat();
-		double nv_prix = getCout_gamme(gamme);
-		cout_chocolat.put(gamme, nv_prix);
-	}
-
 
 	/**
 	 * Actualisation des previsions persos
@@ -173,10 +129,10 @@ public class Distributeur1Acteur  implements IActeur {
 	public void initialiser() {
 		cout_stockage_distributeur.setValeur(this, Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*16);
 		cout_main_doeuvre_distributeur.setValeur(this, 1000);
-		cout_chocolat.put(Chocolat.C_HQ_BE, 3000.);
-		cout_chocolat.put(Chocolat.C_MQ_BE, 2500.);
-		cout_chocolat.put(Chocolat.C_MQ, 2000.);
-		cout_chocolat.put(Chocolat.C_BQ, 1000.);
+		cout_chocolat.put(Chocolat.C_HQ_BE, 4000.);
+		cout_chocolat.put(Chocolat.C_MQ_BE, 3500.);
+		cout_chocolat.put(Chocolat.C_MQ, 3000.);
+		cout_chocolat.put(Chocolat.C_BQ, 2000.);
 		
 		
 		/////////////////////////////////////
@@ -186,8 +142,7 @@ public class Distributeur1Acteur  implements IActeur {
 		
 		//Initialisation des couts
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			moyenne_couts.put(marque, getCout_gamme(marque));
-			couts.put(marque, getCout_gamme(marque));
+			cout_marque.put(marque, getCout_gamme(marque));
 		}
 		//Initialisation des previsions
 		this.previsionsperso = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 

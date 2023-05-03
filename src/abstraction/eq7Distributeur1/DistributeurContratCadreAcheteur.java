@@ -66,7 +66,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 			return contrat.getPrix();
 		}
 		else {
-			if (contrat.getPrix()<0.5*getCout(marque)) {
+			if (contrat.getPrix()<0.5*getCout_gamme(marque)) {
 				return 0.;
 			}
 			else {
@@ -125,7 +125,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 				if (cc != null) { //si le contrat est signé 
 			        this.journal_achat.ajouter(Color.GREEN, Color.BLACK,"Contrat cadre passé avec "+vendeur.getNom()+" pour "+produit+"\nDétails : "+cc+"!");     
 			        mesContratEnTantQuAcheteur.add(cc);
-			        couts.replace((ChocolatDeMarque)(produit), cc.getPrix());
 			    } 
 				else { //si le contrat est un echec
 			        this.journal_achat.ajouter(Color.RED, Color.BLACK,"Echec de la négociation de contrat cadre avec "+vendeur.getNom()+" pour "+produit+"...");
@@ -232,7 +231,8 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 				ExemplaireContratCadre cc = getContrat(marque,echeancier);
 				if (cc!=null) {
 					nombre_achats.replace(marque, nombre_achats.get(marque)+1);
-					actualise_cout (marque, cc.getPrix()/cc.getQuantiteTotale());  
+					actualise_cout (marque, cc.getPrix()); 
+					actualise_cout_marque(marque, cc.getPrix());
 					break;
 
 				}
@@ -356,7 +356,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 
 		}
 		else {
-			journal.ajouter(Color.GREEN, Color.BLACK,"Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix()*100 /couts.get(contrat.getProduit())+ "%");
+			journal.ajouter(Color.GREEN, Color.BLACK,"Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix()*100 /cout_marque.get(contrat.getProduit())+ "%");
 			journal_achat.ajouter(Color.GREEN, Color.BLACK,"Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+ contrat.getPrix());
 
 		}

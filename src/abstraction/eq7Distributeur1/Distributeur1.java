@@ -86,8 +86,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	 * @return le cout de revient d'1t de chocolat de marque, calcule grace au type de chocolat
 	 */
 	public double getCoutTotal(ChocolatDeMarque choco) {
-		Chocolat gamme = choco.getChocolat();
-		Double cout_i = getCout_gamme(gamme);
+		Double cout_i = getCout_gamme(choco);
 		Double cout_s = cout_stockage_distributeur.getValeur();
 		Double cout_m = (cout_main_doeuvre_distributeur.getValeur()*stockChocoMarque.get(choco))/totalStocks.getValeur();
 		return (cout_i+cout_s+cout_m);

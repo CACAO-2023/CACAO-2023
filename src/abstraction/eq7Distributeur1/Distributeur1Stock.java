@@ -56,6 +56,32 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 	}
 	
 	/**
+	 * @author ghaly,theo
+	 * actualise la moyenne des couts d'un chocolat de marque a une etape donnée
+	 * La formule employee pour la moyenne est importante, il faut donc bien l'expliquer
+	 * Ici, on utilise une moyenne arithmetique non ponderee qui prend en compte tous les achats depuis le debut de la simulation
+	 */
+	protected void actualise_cout(ChocolatDeMarque marque,Double cout) {
+		Chocolat gamme = marque.getChocolat();
+		Double stock_gamme = 0.;
+		int nb_total_achats = 0;
+		for (ChocolatDeMarque choco : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			nb_total_achats += nombre_achats.get(choco);
+			if (choco.getChocolat()==gamme) {
+				stock_gamme += stockChocoMarque.get(choco);
+			}
+
+		}
+		Double nv_cout = (cout_chocolat.get(gamme)*nb_total_achats + cout)/(nb_total_achats+1);
+		cout_chocolat.replace(gamme, nv_cout);
+	}
+
+	protected void actualise_cout_marque(ChocolatDeMarque choco, Double cout) {
+		int n = nombre_achats.get(choco);
+		cout_marque.replace(choco, (cout_marque.get(choco)*n+cout)/(n+1));
+	}
+	
+	/**
 	 * @author Ghaly
 	 * renvoit le cout total de stockage actuel de la marque à l'instant t
 	 */
