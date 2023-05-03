@@ -77,10 +77,10 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			cp = ((ChocolatDeMarque)contrat.getProduit()).getChocolat();
 		}
 		if (cp == Chocolat.C_MQ ) {
-			prix = 70.0; }
+			prix = 30000; }
 		if ( cp 
 				== Chocolat.C_HQ_BE ) {
-		prix = 110.0 ; }
+		prix = 40000; }
 		return prix; }
 		
 

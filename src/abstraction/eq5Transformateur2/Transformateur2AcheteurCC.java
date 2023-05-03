@@ -44,110 +44,111 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	@Override
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
-		/*if ((( ((ChocolatDeMarque) produit).getMarque())) == "Maison Doutre") {
+
+		if ((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable())) {
 			return 10; } //1O% de RSE pour la marque "Maison Doutre"
-		else { */
-		return 0; } // 0% pour la marque "ChocoPop"
-	// }
-
-	// TODO Auto-generated method stub
-
-
-	@Override
-	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
-		return contrat.getEcheancier(); //pas de négociations 
+		else { 
+			return 0; }// 0% pour la marque "ChocoPop"
 	}
+	
+
+
+		@Override
+		public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
+			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
+			return contrat.getEcheancier(); //pas de négociations 
+		}
 
 
 
-	//Par Mathis DOUTRE
+		//Par Mathis DOUTRE
 
-	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		double dernierPrix = contrat.getPrix();
-		double soldeDisponible = super.getSolde();
-		double proposition = 0;
+		public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
+			double dernierPrix = contrat.getPrix();
+			double soldeDisponible = super.getSolde();
+			double proposition = 0;
 
 
-		// Si c'est la première offre, propose un prix inférieur de 15%
-		if (contrat.getListePrix().size() == 1) {
-			proposition = dernierPrix * 0.85;
-		} 
-		// Sinon, calcule la proposition en fonction des deux derniers prix
-		else {
-			double avantDernierPrix = contrat.getListePrix().get(contrat.getListePrix().size() - 2);
-
-			// Si le dernier prix est inférieur ou égal à 15% plus élevé que le précédent, accepte le prix
-			if (dernierPrix <= avantDernierPrix * 1.15) {
-				proposition = dernierPrix;
+			// Si c'est la première offre, propose un prix inférieur de 15%
+			if (contrat.getListePrix().size() == 1) {
+				proposition = dernierPrix * 0.85;
 			} 
-			// Sinon, propose un prix entre les deux derniers prix avec une réduction de 50%
+			// Sinon, calcule la proposition en fonction des deux derniers prix
 			else {
-				proposition = avantDernierPrix + (dernierPrix - avantDernierPrix) * 0.50;
+				double avantDernierPrix = contrat.getListePrix().get(contrat.getListePrix().size() - 2);
+
+				// Si le dernier prix est inférieur ou égal à 15% plus élevé que le précédent, accepte le prix
+				if (dernierPrix <= avantDernierPrix * 1.15) {
+					proposition = dernierPrix;
+				} 
+				// Sinon, propose un prix entre les deux derniers prix avec une réduction de 50%
+				else {
+					proposition = avantDernierPrix + (dernierPrix - avantDernierPrix) * 0.50;
+				}
 			}
+
+			// Si la proposition est supérieure au solde disponible, propose le maximum possible
+			if (proposition > soldeDisponible) {
+				proposition = soldeDisponible;
+			}
+
+			// Retourne la proposition de prix
+			return proposition;
+
+
 		}
 
-		// Si la proposition est supérieure au solde disponible, propose le maximum possible
-		if (proposition > soldeDisponible) {
-			proposition = soldeDisponible;
-		}
+		@Override
+		public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
+			// TODO Auto-generated method stub
+			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
+		} //réussite des négociations sur le contrat précisé en paramètre dans tous les cas 
 
-		// Retourne la proposition de prix
-		return proposition;
+		@Override
+		public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
+			// TODO Auto-generated method stub
+			IProduit produit= lot.getProduit();
+			double quantite = lot.getQuantiteTotale();
+			if (produit instanceof Feve) {
+				if (this.stockFeves.keySet().contains(produit)) {
+					this.stockFeves.put((Feve)produit, this.stockFeves.get(produit)+quantite);
+				} else {
+					this.stockFeves.put((Feve)produit, quantite);
+				}
+				this.totalStocksFeves.ajouter(this, quantite, this.cryptogramme);
+				this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de feves "+produit+". Stock->  "+this.stockFeves.get(produit));
+			}
+			else {
+				this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception d'un produit de type surprenant... "+produit);
+			}}//mise à jour du stock de fèves après reception d'une livraison
 
 
-	}
 
-	@Override
-	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
-	} //réussite des négociations sur le contrat précisé en paramètre dans tous les cas 
+		public ExemplaireContratCadre getContrat(Feve produit) {
+			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit);
+			List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
+			// code ajoute par romu pour pallier a l'erreur juste apres d'acces a l'element 0 dans une liste vide
+			if (vendeurs.size()==0) {
+				return null;
+			}
+			// fin de code ajoute par romu
+			IVendeurContratCadre vendeur = vendeurs.get((int)(Math.random() * vendeurs.size())); //on cherche un vendeur
 
-	@Override
-	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		IProduit produit= lot.getProduit();
-		double quantite = lot.getQuantiteTotale();
-		if (produit instanceof Feve) {
-			if (this.stockFeves.keySet().contains(produit)) {
-				this.stockFeves.put((Feve)produit, this.stockFeves.get(produit)+quantite);
+			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
+			ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
+			if (cc != null) {   
+				this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + vendeur.getNom() + " pour " + produit + "CC : " + cc);
 			} else {
-				this.stockFeves.put((Feve)produit, quantite);
+				this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
 			}
-			this.totalStocksFeves.ajouter(this, quantite, this.cryptogramme);
-			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de feves "+produit+". Stock->  "+this.stockFeves.get(produit));
+			return cc; //on établit le contrat
 		}
-		else {
-			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception d'un produit de type surprenant... "+produit);
-		}}//mise à jour du stock de fèves après reception d'une livraison
+
+		public void next() {
+			super.next();
+			this.getContrat(Feve.F_MQ);
+			this.getContrat(Feve.F_HQ_BE);
 
 
-	public ExemplaireContratCadre getContrat(Feve produit) {
-		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit);
-		List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
-		// code ajoute par romu pour pallier a l'erreur juste apres d'acces a l'element 0 dans une liste vide
-		if (vendeurs.size()==0) {
-			return null;
 		}
-		// fin de code ajoute par romu
-		IVendeurContratCadre vendeur = vendeurs.get((int)(Math.random() * vendeurs.size())); //on cherche un vendeur
-
-		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
-		ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
-		if (cc != null) {   
-			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + vendeur.getNom() + " pour " + produit + "CC : " + cc);
-		} else {
-			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
-		}
-		return cc; //on établit le contrat
 	}
-
-	public void next() {
-		super.next();
-		this.getContrat(Feve.F_MQ);
-		this.getContrat(Feve.F_HQ_BE);
-
-
-	}
-}
