@@ -82,7 +82,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	
     /**
      * 	enleve les contrats obsolete (nous pourrions vouloir les conserver pour "archive"...)
-     * @author Ghaly sentissi
+     * @author Ghaly sentissi & Romain
      */
 
 	public void enleve_contrats_obsolete() {
