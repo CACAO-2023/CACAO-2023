@@ -121,7 +121,6 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		else {
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception d'un produit de type surprenant... "+produit);
 		}}//mise à jour du stock de fèves après reception d'une livraison
-	//si la quantité livrée est inférieure à la quantité prévue, on achète le lot 5% moins cher
 
 
 	public ExemplaireContratCadre getContrat(Feve produit) {
