@@ -26,7 +26,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	private List<Object> negociations = new ArrayList<>();
 	private double minNego=5;
 	protected LinkedList<Integer> durees_CC ; 
-	
+
 	
 	public void initialiser() {
 		super.initialiser();

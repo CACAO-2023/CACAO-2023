@@ -30,7 +30,7 @@ public class Distributeur1Acteur  implements IActeur {
 	protected Journal journal;
 	protected Journal journal_achat;
 	protected Journal journal_stock;
-
+	
 	//On est oblige de mettre les variables ici sinon la creation de la filiere est dans un tel ordre que nous n'y avons pas acces assez tot
 	protected Variable totalStocks = new VariablePrivee("Eq7TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
 	//La quantité totale de stock de chocolat 
