@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
@@ -269,8 +270,18 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  	default :
 	  		throw new IllegalArgumentException("Type de Chocolat invalide");
 	  }
-	    
+    
   }
+  /**ecrit par Nathan Claeys
+   * pour pouvoir rendre les variables qui peuvent aider à la prise de decision
+   */
+  public List<Variable> getIndicateurs() {
+		List<Variable> res = super.getIndicateurs();
+		return res;}
+  
+  public void initialiser() {
+	  super.initialiser();
+	}
   	public void next() {
   		super.next();
   		int date = Filiere.LA_FILIERE.getEtape() ;
