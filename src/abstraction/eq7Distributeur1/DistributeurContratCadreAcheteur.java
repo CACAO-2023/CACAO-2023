@@ -30,7 +30,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	
 	public void initialiser() {
 		super.initialiser();
-
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 		initiate_durees();
 	}
@@ -72,7 +71,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 			}
 			else {
 				
-		if (Math.random()<0.1) {
+		if (Math.random()<0.3) {
 			return contrat.getPrix(); // on ne cherche pas a negocier dans 30% des cas
 			
 		} else {//dans 70% des cas on fait une contreproposition differente
@@ -156,6 +155,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	}
 	
 	/**
+	 * @author ghaly
 	 * @return la qte totale livree à ce tour
 	 */
 	public double getLivraisonEtape(IProduit produit) {
@@ -299,9 +299,14 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 //		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
 //			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(produit)) {
 //				ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur((IAcheteurContratCadre)this, (IVendeurContratCadre) acteur, produit,e, cryptogramme,false);
-//			}}
+//				double prix_au_min_nego = cc.getListePrix().get(2*(int)(minNego)-1);
+//				res.put(acteur, prix_au_min_nego);
+//			} else {
+//			}
+//				return "0";
+//				}
 //		
-//		return "ok";
+//		return "pas de vendeur trouvé" ;
 //	}
 	
 //	public static Integer obtenirValeurMinimale(HashMap<String, Integer> hashMap) {
