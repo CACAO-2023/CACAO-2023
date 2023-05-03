@@ -16,6 +16,7 @@ import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
@@ -29,12 +30,33 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	protected Journal journal;
 	private List<ExemplaireContratCadre> contratEnCours;
 	
+	public HashMap<Chocolat, Double> prixMax;
+	private HashMap<Chocolat, Double>precedentPrix;
 	//faire une méthode qui connait le prix d'achat moyen d'un chocolat
 	
 	public Distributeur3AcheteurCC() {//ChocolatDeMarque[] chocos, double[] stocks) {
 		contratEnCours = new LinkedList<ExemplaireContratCadre>();
+		this.precedentPrix = new HashMap<Chocolat, Double>();
+		this.prixMax = new HashMap<Chocolat, Double>();
 		
 	}
+	public void initialiser() {
+		super.initialiser();
+		for (Chocolat c :  Chocolat.values()) {
+			double prixGamme =0;
+			Gamme g;
+			switch (c.getGamme()) {
+			case HQ : prixGamme=40000;break;
+			case MQ : prixGamme=25000;break;
+			case BQ : prixGamme=10000;break;
+			
+			}
+			this.prixMax.put(c, prixGamme+(c.isBioEquitable()? 3000 : 0));
+			this.precedentPrix.put(c, 1000.0);
+		}
+	}
+		
+
 //Mathilde
 	public void next() {
 		super.next();
@@ -164,27 +186,30 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		return null; 
 	}
 
-	@Override
-	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		/*
-		// TODO Auto-generated method stub
-		prix = contrat.getPrix()/contrat.getQuantiteTotale();
-
-
-		journal_ventes.ajouter("achat du chocolat" + contrat.getProduit()+"au prix à la tonne de" + prix);
-
-		
-
+//Sami
+	
+	/*public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
+		prix = contrat.getPrix();
+		journal_ventes.ajouter("proposition d'achat du chocolat" + contrat.getProduit()+"au prix à la tonne de" + prix);
 		ChocolatDeMarque choco = (ChocolatDeMarque)contrat.getProduit();
-
-		// william 
+		Chocolat c = choco.getChocolat();
 		
-		// on calcule le prix de vente du chocolat du contract en fonction de la gamme
+		double prec = precedentPrix.get(choco.getChocolat());
 		
 		
 		double prix_tonne_de_vente_contrat = 0.0;
+		/*Je regarde d'abord la taille de la liste des prix proposés. Si la liste est de longueur 6 ou plus,
+		j'accepte le contrat s'il est dans la fourchette prixMin, prixMax car on risque de perdre le contrat*/
+		/*if(precedentPrix.size()>=6) {
+			if(prix<prixMax.get(c) && prix>1000) {
+			return contrat.getPrix();
+		}
+			else {
 		
 		
+		
+		
+		/*
 		// marge de 80% sur HQ_BE
 		if(choco.getGamme() == Gamme.HQ)  {
 			prix_tonne_de_vente_contrat = prix*5;
@@ -200,7 +225,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		
 		double prix_tonne_de_vente_apres_achat = 0.0;
 		
-		
+		/*
 
 		// si il existe deja un stock de ce chocolat, on fait la moyenne des prix pondérés par la quantite acheté et la quantite deja stockee
 		// si il y a du stock
@@ -222,10 +247,20 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		this.prix_tonne_vente.put((ChocolatDeMarque)contrat.getProduit(), prix_tonne_de_vente_apres_achat);
 		*/
 
+		/*return contrat.getPrix();
+			}
+		}
+=======
+
+	@Override
+	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
+		
 		return contrat.getPrix();
+>>>>>>> branch 'main' of https://github.com/BaptisteBAYLE/CACAO-2023
 		
 		
-	}
+	}*/
+
 
 	
 
@@ -242,7 +277,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		this.journal_achats.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "je viens de passer le contrat "+contrat + "et j'ai achete le chocolat " + contrat.getProduit());
 		this.contratEnCours.add(contrat);
 		
-		
+		notificationOperationBancaire(-1*contrat.getPrix()*contrat.getQuantiteTotale());
 		
 		// william 
 		prix = contrat.getPrix() /*/contrat.getQuantiteTotale() deja à la tonne */;
@@ -298,6 +333,11 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 			}
 		}
 		
+	}
+	@Override
+	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 

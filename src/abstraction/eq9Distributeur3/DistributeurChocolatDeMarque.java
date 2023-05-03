@@ -114,6 +114,8 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurCC implem
 			
 			if( montant/this.prix(choco) >= this.stock.getStock(choco)) { // on vérifie qu'on ai le stock
 				this.stock.ajoutQte(choco, -(montant/this.prix(choco)));
+				notificationOperationBancaire(montant);
+
 			}
 			else {
 				// si on a pas le stock

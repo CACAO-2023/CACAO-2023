@@ -28,8 +28,11 @@ public class Distributeur3Acteur implements IActeur{
 	protected Journal journal_operationsbancaires;
 	protected Journal journal_stock;
 	protected Journal journal_activitegenerale;
+	protected Journal journal_AO;
+	protected Journal journal_OA;
+
 	protected List<ChocolatDeMarque> chocolats;
-	protected List<String> chocolats_cible_noms;
+
 	protected HashMap<ChocolatDeMarque, Double[]> prixMoyen;
 	protected boolean initialise = true;
 	protected double prix;
@@ -42,14 +45,7 @@ public class Distributeur3Acteur implements IActeur{
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
 		
 		// william : pour pouvoir acheter le chocolat qui nous intéresse (HQ BE, MQ BE, MQ)
-		this.chocolats_cible_noms = new LinkedList<String>();
-		this.chocolats_cible_noms.add("C_HQ_BE_Vccotioi");
-		this.chocolats_cible_noms.add("C_HQ_BE_Maison_Doutre");
-		this.chocolats_cible_noms.add("C_HQ_BE_Choc");
-		this.chocolats_cible_noms.add("C_MQ_BE chokchoco bio");
-		this.chocolats_cible_noms.add("C_HQ_BE_Villors");
-		this.chocolats_cible_noms.add("C_MQ_BE_Villors");
-		this.chocolats_cible_noms.add("C_BQ_Villors");
+	
 
 		//this.chocolats.add(c1);
 		//this.stock.ajoutQte(c1, 1000);
@@ -58,6 +54,10 @@ public class Distributeur3Acteur implements IActeur{
 		this.journal_achats = new Journal(this.getNom()+" achats", this);
 		this.journal_operationsbancaires = new Journal(this.getNom()+" operations", this);
 		this.journal_activitegenerale = new Journal(this.getNom()+" activites", this);
+		this.journal_AO = new Journal(this.getNom()+" AO", this);
+		this.journal_OA = new Journal(this.getNom()+" OA", this);
+
+
 		this.journal_stock = new Journal(this.getNom()+" stock", this);
 		this.prixMoyen = new HashMap<ChocolatDeMarque, Double[]>();
 		
@@ -69,23 +69,27 @@ public class Distributeur3Acteur implements IActeur{
 	}
 	
 	public void initialiser() {
+		// william désormais on n'utilise plus une liste de String avec les chocolats qui nous intéressent, on sélectionne seulement à la gamme
+		
+		
+		
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
 		for (int i=0; i<chocolats_filiere.size(); i++) {
-
-			if(chocolats_cible_noms.contains((chocolats_filiere.get(i)).toString())){
+			
+			if(chocolats_filiere.get(i).getGamme() == Gamme.HQ) {
 				chocolats.add(chocolats_filiere.get(i));
 				stock.QteStock.put(chocolats_filiere.get(i),0.0);
 			}
+			else if (chocolats_filiere.get(i).getGamme() == Gamme.MQ) {
+				chocolats.add(chocolats_filiere.get(i));
+				stock.QteStock.put(chocolats_filiere.get(i),0.0);
+			}
+		
 		}
 		System.out.println(chocolats);
-	//	for (int i = 0; i< this.chocolats.size(); i++) {
-		//	this.stock.ajoutQte(chocolats.get(i), 100000000);
-		//	this.prix_tonne_vente.put(chocolats.get(i), 10000.0);
-		//}
-		
-		
-		
+		// stock initial de 1000 tonnes du premier chocolat de la filiere
+		stock.ajoutQte(chocolats.get(0), 1000);
 		
 	}
 	
@@ -104,12 +108,30 @@ public class Distributeur3Acteur implements IActeur{
 
 	public void next() {
 		
-		
+		cout_stockage();
 		
 		journal_activitegenerale.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		journal_activitegenerale.ajouter("Solde="+getSolde()+"€");
+		journal_stock.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "Etat du stock Total : "+stock.qteStockTOT()); 
+
 		etat_ventes();
 	}
+	
+	public void cout_stockage() {
+
+		//william
+		//cout du stockage
+		double q = stock.qteStockTOT();
+		prix = 16*30*q;
+		if(prix > 0.0) {
+			Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ9"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), prix);
+			notificationOperationBancaire(-1*prix);
+		}
+
+		
+	}
+	
+	
 
 	
 	public void etat_ventes(){
@@ -132,6 +154,7 @@ public class Distributeur3Acteur implements IActeur{
 		// (prendre en compte la rentabilité, le positionnement des autres marques)
 
 	}
+	/*
 	public void repartition_tete_gondole() {
 		HashMap<ChocolatDeMarque, Double> repartition = new HashMap<ChocolatDeMarque, Double>();
 		repartition.put((get_chocolat_with_name("C_HQ_BE_Choc")),1.0);
@@ -143,13 +166,13 @@ public class Distributeur3Acteur implements IActeur{
 	
 	public ChocolatDeMarque get_chocolat_with_name(String name) {
 		for(int i =0; i< chocolats.size();i++) {
-			if( (chocolats.get(i)).toString() == name) {
+			if( (chocolats.get(i)).toString().equals(name)) {
 				return chocolats.get(i);
 			}
 		}
 		return null;
 	}
-	
+	*/
 
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -184,6 +207,9 @@ public class Distributeur3Acteur implements IActeur{
 		res.add(journal_operationsbancaires);
 		res.add(journal_activitegenerale);
 		res.add(journal_stock);
+		res.add(journal_AO);
+		res.add(journal_OA);
+
 		
 		return res;
 	}
@@ -208,6 +234,10 @@ public class Distributeur3Acteur implements IActeur{
 	// Apres chaque operation sur votre compte bancaire, cette
 	// operation est appelee pour vous en informer
 	public void notificationOperationBancaire(double montant) {
+		
+		//- vous pouvez exploiter la methode notificationOperationBancaire de votre acteur pour afficher dans un journal 
+		//vos entree/sorties d'argent : ça levera le doute sur les prix que vous estimez minimalistes.
+		
 		journal_operationsbancaires.ajouter("Operation de " + montant + " €");
 
 	}
