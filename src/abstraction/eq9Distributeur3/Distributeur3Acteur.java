@@ -104,12 +104,30 @@ public class Distributeur3Acteur implements IActeur{
 
 	public void next() {
 		
-		
+		cout_stockage();
 		
 		journal_activitegenerale.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		journal_activitegenerale.ajouter("Solde="+getSolde()+"€");
+		journal_stock.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "Etat du stock Total : "+stock.qteStockTOT()); 
+
 		etat_ventes();
 	}
+	
+	public void cout_stockage() {
+
+		//william
+		//cout du stockage
+		double q = stock.qteStockTOT();
+		prix = 16*30*q;
+		if(prix > 0.0) {
+			Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ9"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), prix);
+
+		}
+
+		
+	}
+	
+	
 
 	
 	public void etat_ventes(){
