@@ -268,7 +268,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         // Now making the contract
         this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit + "...");
         int length = ((int) Math.round(Math.random() * 10)) + 2;
-        ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, length, (int) Math.round(this.getAvailableQuantity(produit)/length)), cryptogramme,false);
+        ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, length,(((int) Math.round(this.getAvailableQuantity(produit)/length))) + 1), cryptogramme,false);
         if (cc != null) {
 
             this.contracts.add(cc);
