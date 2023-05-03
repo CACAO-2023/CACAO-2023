@@ -138,7 +138,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 
   /**Mouhamed SOW*/
   public void retirerFeve(Feve feve, double quantite) {
-	   if(quantite==0.0) {;}
+	   if(quantite<=0.0) {;}
 	   else {
 	  switch(feve.getGamme()) {
         case BQ:
@@ -197,7 +197,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 /**Mouhamed SOW*/
   public void ajouterChocolat(ChocolatDeMarque choco,Double quantite,int dateProduction) {
 	  Lot lot ;
-	  if (quantite == 0) {;}
+	  if (quantite <= 0) {;}
 	  else {
 	  switch(choco.getGamme()) {
 	  	case BQ :
@@ -312,7 +312,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   		super.journalStock.ajouter(" La quantité de Chocolat MGL est :"+ this.stockChocolatMGL.getQuantiteTotale() );
   		super.journalStock.ajouter(" La quantité de Chocolat HGL est :"+ this.stockChocolatHGL.getQuantiteTotale() );
   		double coutFeve=super.totalStocksFeves.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() ;
-  		double coutChoco=super.totalStocksFeves.getValeur(date)*0.25*Filiere.LA_FILIERE.getParametre("cout moyen stockage distributeur").getValeur() ;
+  		double coutChoco=super.totalStocksFeves.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() ;
   		if(coutFeve>0) {
   		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), coutFeve) ;
   		super.journalStock.ajouter(" on a payé :"+ coutChoco+" pour le cout de stockage des feves" );
