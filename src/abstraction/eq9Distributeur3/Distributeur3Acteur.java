@@ -87,7 +87,7 @@ public class Distributeur3Acteur implements IActeur{
 			}
 		
 		}
-		System.out.println(chocolats);
+	
 		// stock initial de 1000 tonnes du premier chocolat de la filiere
 		stock.ajoutQte(chocolats.get(0), 1000);
 		
@@ -154,14 +154,8 @@ public class Distributeur3Acteur implements IActeur{
 		// (prendre en compte la rentabilité, le positionnement des autres marques)
 
 	}
-	/*
-	public void repartition_tete_gondole() {
-		HashMap<ChocolatDeMarque, Double> repartition = new HashMap<ChocolatDeMarque, Double>();
-		repartition.put((get_chocolat_with_name("C_HQ_BE_Choc")),1.0);
-		
-		//renvoie une hashmap <marque, quatité>
-	}
-
+	
+	
 	
 	
 	public ChocolatDeMarque get_chocolat_with_name(String name) {
@@ -172,7 +166,7 @@ public class Distributeur3Acteur implements IActeur{
 		}
 		return null;
 	}
-	*/
+	
 
 
 	public Color getColor() {// NE PAS MODIFIER
