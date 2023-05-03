@@ -194,10 +194,12 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 * @param contrat
 	 */
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
+		if (contrat.getAcheteur()==this) {
 			this.getListeContratEnCoursA().add(contrat);
 			this.quantiteEnAttente = this.quantiteEnAttente+contrat.getQuantiteTotale();
 			super.journalAchatCC.ajouter("nouvelle valeur en attente : "+quantiteEnAttente+" et tot stock : "+super.totalStocksFeves.getValeur());
-			super.journalAchatCC.ajouter("Un nouveau contrat cadre a été passé : "+contrat.toString());
+			super.journalAchatCC.ajouter("Un nouveau contrat cadre a été passé : "+contrat.toString());}
+		else {super.notificationNouveauContratCadre(contrat);}
 	}
 
 	/**
