@@ -58,7 +58,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 										  if (((double)besoin_prochain.get(i))>0) {b= b+1;
 										  											/**if (((double)besoin_prochain.get(i))>0) {max = ((double)besoin_prochain.get(i));}**/}	}
 									  if (b>2) {return true;}
-									  else {return false;}
+									  else {return true;}//pour le test
 										  
 									  }
 		else {return false;}
