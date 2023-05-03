@@ -74,7 +74,8 @@ jobs:
         run: |
           set -e
           ant -noinput -buildfile build.xml
-          echo 'tempsEquipes={"eq1Producteur1":10,"eq2Producteur2":20}' >> $GITHUB_OUTPUT
+          GITHUB_OUTPUT="tempsEquipes={'eq1Producteur1':10,'eq2Producteur2':20}"
+          echo $GITHUB_OUTPUT
   performance_tests:
     if: ${{ always() }}
     needs: [file_ownership, java_tests]
