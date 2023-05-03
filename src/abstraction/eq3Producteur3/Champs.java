@@ -120,7 +120,6 @@ public class Champs {
 		//Ce taux permet de prendre en compte l'aspect aleatoire d'une recolte
 		for (Integer key : HarvestKeys) {
 			double HarvestRate = this.gaussienne(CurrentStep-key);
-			System.out.println(HarvestRate);
 			quantite +=Field.get(key)*HarvestRate;
 		}
 			
@@ -129,8 +128,10 @@ public class Champs {
 			return l;
 
 	}
-	
-	
+	
+
+	
+
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
