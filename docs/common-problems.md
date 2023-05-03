@@ -42,6 +42,10 @@ Note that if the files you changed are not Java files, they will be hidden in th
 
 Not accepting because the code does not pass the tests. You can read the error message by clicking on `Details` near to the failed test at the bottom of your pull request. You can run the same tests on your Eclipse, they are `test/abstraction/FiliereParDefaultTest.java` and `test/presentation/FenetrePrincipaleTest.java`. To run them:  right-click on `build.xml` -> `Run As` -> `Ant Build`. You will see the error message in the console. Fix the error, then commit and push.
 
+## `Some checks were not successful`: `Checks / performance_tests`
+
+TBD
+
 ## `This branch is out-of-date with the base branch`
 
 Your team repository is not up-to-date with the changes that happened on the main repository. 
