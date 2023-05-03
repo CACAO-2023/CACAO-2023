@@ -126,6 +126,7 @@ public class Producteur3Acteur implements IActeur {
 	this.quantiteBruleH = new Variable("Equipe3 Proportion Champs Brules Incendie H", "Fixe le pourcentage d'arbre brules suite a un incendie H ",this,0.5);
 	this.quantiteBruleM = new Variable("Equipe3 Proportion Champs Brules Incendie M", "Fixe le pourcentage d'arbre brules suite a un incendie M ",this,0.2);
 
+
 	this.quantiteBruleL = new Variable("Equipe3 Proportion Champs Brules Incendie L", "Fixe le pourcentage d'arbre brules suite a un incendie L ",this,0.1);
 	this.quantiteDetruiteCyclone = new Variable("Equipe3 Proportion Champs Detruits Cyclone Max", "Fixe le pourcentage maximum d'arbre detruits suite a un Cyclone",this,0.3);
 	this.HectaresAchetes = new Variable("Equipe 3 Nombre d'Hectares Achetés", "Affiche le nombre d'hectares achetés par step", this, 0);
