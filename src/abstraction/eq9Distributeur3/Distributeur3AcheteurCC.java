@@ -174,8 +174,11 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 					
 					qtechocstep = qtechocstep +  contratEnCours.get(i).getEcheancier().getQuantite(j);}
 					
-				if ((qtechocstep + e.getQuantite(j)) < 1050.0) {
-						e.set(e.getStepDebut()+j, 1050-(qtechocstep+e.getQuantite(j)));
+				if ((qtechocstep + e.getQuantite(j)) < 25000.0) {
+					if ((e.getStepDebut()+j)%24 ==3 || (e.getStepDebut()+j)%24 == 6 || (e.getStepDebut()+j)%24 == 23) {
+						e.set(e.getStepDebut()+j, 35000.0-(qtechocstep+e.getQuantite(j)));
+					}
+					else {	e.set(e.getStepDebut()+j, 25000.0-(qtechocstep+e.getQuantite(j)));}
 				}
 				
 			
