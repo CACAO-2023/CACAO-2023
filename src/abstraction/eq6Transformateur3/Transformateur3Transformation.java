@@ -89,9 +89,11 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 			}
 			double pourcentageTransfo =((double) this.getPourcentageCacaoBG())/100;
 			stockFeveBG.retirer(pourcentageTransfo*qte);
-			super.journalTransformation.ajouter("on retire du BG :"+pourcentageTransfo*qte);
+			super.journalTransformation.ajouter("on retire du stock de fève BG :"+pourcentageTransfo*qte);
 			super.ajouterChocolat(super.chocosProduits.get(0), qte, Filiere.LA_FILIERE.getEtape());
+			super.journalTransformation.ajouter("on ajoute au stock de chocolat BG :"+qte);
 			Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), a);
+			super.journalTransformation.ajouter("On a payé :"+a+"les matières premières et ouvriers pour la transfo BG");
 			//stockChocolatBG.ajouter(Filiere.LA_FILIERE.getEtape(),qte);
 			} else {
 				if (f == Feve.F_MQ) {
@@ -104,13 +106,15 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 					double pourcentageTransfo = ((double)this.getPourcentageCacaoMG())/100;
 					double c=getMQStep1();
 					setMQStep1(qte);
-					super.journalTransformation.ajouter("qte :"+qte);
 					stockFeveMG.retirer(pourcentageTransfo*qte);
+					super.journalTransformation.ajouter("on retire du stock de fève MG :"+pourcentageTransfo*qte);
 					if (c!=0) {
 						super.ajouterChocolat(super.chocosProduits.get(1), c, Filiere.LA_FILIERE.getEtape());
+					}
+					super.journalTransformation.ajouter("on ajoute au stock de chocolat MG :"+c);
 					//stockChocolatMG.ajouter(Filiere.LA_FILIERE.getEtape(),c);
 						Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), a);
-					}
+						super.journalTransformation.ajouter("On a payé :"+a+"les matières premières et ouvriers pour la transfo MG");
 					} else {
 						if (f ==Feve.F_MQ_BE) {
 							double a=CoutMatPremiere(Feve.F_MQ_BE,qte);
@@ -124,11 +128,14 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 							double c=getMQBEStep1();
 							setMQBEStep1(qte);
 							stockFeveMGL.retirer(pourcentageTransfo*qte);
+							super.journalTransformation.ajouter("on retire du stock de fève MGL :"+pourcentageTransfo*qte);
 							if (c!=0) {
 								super.ajouterChocolat(super.chocosProduits.get(2), c, Filiere.LA_FILIERE.getEtape());
+							}
+							super.journalTransformation.ajouter("on ajoute au stock de chocolat MGL :"+c);
 							//stockChocolatMGL.ajouter(Filiere.LA_FILIERE.getEtape(), c);
 								Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), a);
-							}
+								super.journalTransformation.ajouter("On a payé :"+a+"les matières premières et ouvriers pour la transfo MGL");
 							} else {
 								if (f == Feve.F_HQ_BE) {
 									double a=CoutMatPremiere(Feve.F_HQ_BE,qte);
@@ -144,11 +151,14 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 									double d = getHQBEStep2();
 									setHQBEStep2(c);
 									stockFeveHGL.retirer(pourcentageTransfo*qte);
+									super.journalTransformation.ajouter("on retire du stock de fève HG :"+pourcentageTransfo*qte);
 									if (d!=0) {
 										super.ajouterChocolat(super.chocosProduits.get(3), d, Filiere.LA_FILIERE.getEtape());
+									}
+									super.journalTransformation.ajouter("on ajoute au stock de chocolat HG :"+c);
 									//stockChocolatHGL.ajouter(Filiere.LA_FILIERE.getEtape(), d);
 										Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), a);
-									}
+										super.journalTransformation.ajouter("On a payé :"+a+"les matières premières et ouvriers pour la transfo HG");
 							}
 	
 }
