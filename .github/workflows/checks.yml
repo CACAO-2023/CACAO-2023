@@ -76,6 +76,9 @@ jobs:
           ant -noinput -buildfile build.xml
           ant -noinput -buildfile build.xml
           ant -noinput -buildfile build.xml
+    - name: Pass performance file
+      if: success()
+      run: cat tempsEquipes.json
   performance_tests:
     if: ${{ always() }}
     needs: [file_ownership, java_tests]

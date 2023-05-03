@@ -1,6 +1,9 @@
 package presentation;
 
 import java.util.Map.Entry;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -24,17 +27,28 @@ public class FenetrePrincipaleTest {
 		
 		((JButton) ((JPanel) fp.getRootPane().getContentPane().getComponent(2)).getComponent(2)).doClick();
 		
-		System.out.print("tempsEquipes={");
-		System.out.print("\"eq1Producteur1\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ1") +",");
-		System.out.print("\"eq2Producteur2\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ2") +",");
-		System.out.print("\"eq3Producteur3\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ3") +",");
-		System.out.print("\"eq4Transformateur1\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ4") +",");
-		System.out.print("\"eq5Transformateur2\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ5") +",");
-		System.out.print("\"eq6Transformateur3\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ6") +",");
-		System.out.print("\"eq7Distributeur1\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ7") +",");
-		System.out.print("\"eq8Distributeur2\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ8") +",");
-		System.out.print("\"eq9Distributeur3\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ9") +"}");
-		System.out.println();
+		try {
+			FileWriter fileWriter = new FileWriter("tempsEquipes.json");
+			PrintWriter printWriter = new PrintWriter(fileWriter);
+			printWriter.print("{");
+			printWriter.print("\"eq1Producteur1\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ1") +",");
+			printWriter.print("\"eq2Producteur2\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ2") +",");
+			printWriter.print("\"eq3Producteur3\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ3") +",");
+			printWriter.print("\"eq4Transformateur1\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ4") +",");
+			printWriter.print("\"eq5Transformateur2\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ5") +",");
+			printWriter.print("\"eq6Transformateur3\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ6") +",");
+			printWriter.print("\"eq7Distributeur1\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ7") +",");
+			printWriter.print("\"eq8Distributeur2\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ8") +",");
+			printWriter.print("\"eq9Distributeur3\":"+ Filiere.LA_FILIERE.tempsEquipes.get("EQ9") +"}");
+			printWriter.println();
+		    printWriter.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
 		
 	}
 
