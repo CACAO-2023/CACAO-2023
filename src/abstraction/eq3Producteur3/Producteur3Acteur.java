@@ -322,10 +322,10 @@ public class Producteur3Acteur implements IActeur {
 			timer.schedule(monTimerTask, 2500);
 			popup.setVisible(true);
 		} else {
-			if (this.acheteursMQfiabilité.containsKey((IAcheteurContratCadre)acteur)) {
+			if (acteur instanceof IAcheteurContratCadre && this.acheteursMQfiabilité.containsKey((IAcheteurContratCadre)acteur)) {
 				this.acheteursMQfiabilité.remove(acteur);
 			}
-			if (this.acheteursHQfiabilité.containsKey((IAcheteurContratCadre)acteur)) {
+			if (acteur instanceof IAcheteurContratCadre && this.acheteursHQfiabilité.containsKey((IAcheteurContratCadre)acteur)) {
 				this.acheteursHQfiabilité.remove(acteur);
 			}
 		}
