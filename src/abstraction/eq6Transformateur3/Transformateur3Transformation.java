@@ -34,6 +34,8 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 	private double HQBEStep1;
 	private double HQBEStep2;
 	
+	/** écrit par Maxime Bedu*/
+	
 	public Transformateur3Transformation() {
 		super();
 		this.MQStep1=0;
@@ -74,7 +76,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 		HQBEStep2 = a;
 	}
 
-	
+	/** écrit par Maxime Bedu*/
 	
 		public void transformationChoco(Feve f, double qte) {
 		if (f == Feve.F_BQ) {
@@ -140,7 +142,8 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 	}
 
 
- 
+		/** écrit par Maxime Bedu*/
+		
 protected double BesoinStep(int Step, Feve f) {
 	int Stepi=Filiere.LA_FILIERE.getEtape();
 	if (f == Feve.F_BQ) {
@@ -235,6 +238,8 @@ protected double BesoinStep(int Step, Feve f) {
 } 
 	return 100;
 }
+
+/** écrit par Maxime Bedu*/
 
 protected double CoutMatPremiere(Feve f, double qte) {
 	if (f == Feve.F_BQ) { 
