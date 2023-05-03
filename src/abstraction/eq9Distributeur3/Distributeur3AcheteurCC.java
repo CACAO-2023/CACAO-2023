@@ -65,19 +65,23 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 						ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier , this.cryptogramme, initialise);
 						pasAchete = false;
 					}
+					}
+				
 					for (int k = 0;k<contratAvecChocolat.size();k++) {
 						for (int j=0; j< vendeursChocolat.size()&&pasAchete;j++) {
 							
 							
 							Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(),24, 25000.0);
 							ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier2 , this.cryptogramme, initialise);
-							pasAchete = false;
-					}
-					}
+							pasAchete = false;}
+						}}
+					}}}
+					
+					
 				
-				}
 				
-			}
+				
+			
 			/*List<IVendeurContratCadre> vendeursChocolat = supCCadre.getVendeurs(chocolats.get(0));
 			//creation échéancier
 			List<Double>  quantites = new ArrayList();
@@ -93,12 +97,11 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 				}
 			
 			}*/
-			}
-		}
+			
+		
 		
 
 		
-	}
 	
 // Mathilde : on accepte les chocolats qu'on vend
 	public boolean achete(IProduit produit) {
@@ -109,7 +112,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		for (ChocolatDeMarque chocolat: chocolats) {
 			if (((ChocolatDeMarque)produit).equals(chocolat)){
 			
-				this.journal_achats.ajouter("j'ai achete le chocolat" + produit.toString());
+				this.journal_achats.ajouter("j'affirme etre acheteur de " + produit.toString());
 				return true;
 				
 			}
@@ -205,7 +208,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
-		this.journal_achats.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "je viens de passer le contrat "+contrat);
+		this.journal_achats.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "je viens de passer le contrat "+contrat + "et j'ai achete le chocolat " + contrat.getProduit());
 		this.contratEnCours.add(contrat);
 		
 		
