@@ -62,7 +62,7 @@ public class FenetrePrincipale extends JFrame {
 	public static FenetrePrincipale LA_FENETRE_PRINCIPALE;
 	private static ImageIcon UNCHECKED_IMAGE = new ImageIcon("unche18.gif");
 	private static ImageIcon CHECKED_IMAGE = new ImageIcon("checkd18.gif");
-	private static ImageIcon CHART_IMAGE  = new ImageIcon("chart.png");
+	private static ImageIcon CHART_IMAGE = new ImageIcon("chart.png");
 	private static ImageIcon HISTORY_IMAGE= new ImageIcon("history.png");
 
 	private static final long serialVersionUID = 1L;

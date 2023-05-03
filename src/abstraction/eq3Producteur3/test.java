@@ -9,10 +9,8 @@ import abstraction.eqXRomu.produits.Lot;
 
 public class test {
 
-	public static void main2(String[] args) {
-		System.out.println(true);
-	}
 	public static void main(String[] args) {
-		System.out.println(false);
+		Feve f= Feve.F_MQ_BE;
+		System.out.println(Feve.F_HQ_BE ==f);
 	}
 }

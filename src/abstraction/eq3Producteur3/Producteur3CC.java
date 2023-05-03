@@ -12,6 +12,7 @@ import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
@@ -50,19 +51,33 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         // Initialisation des HashMaps. Au début tous nos acheteurs ont la même fiabilité.
         Double PRIX_DEPART_MQ = 50000.0;
         Double PRIX_DEPART_HQ = 100000.0;
+
+        List<IAcheteurContratCadre> acheteurs = new LinkedList<IAcheteurContratCadre>();
+		List<IActeur> acteurs = Filiere.LA_FILIERE.getActeursSolvables();
+		for (IActeur acteur : acteurs) {
+			if (acteur instanceof IAcheteurContratCadre) {
+				acheteurs.add(((IAcheteurContratCadre)acteur));
+			}
+		}
+        
         List<IAcheteurContratCadre> acheteursMQ = superviseur.getAcheteurs(Feve.F_MQ_BE);
         for (int i = 0; i < acheteursMQ.size(); i++) {
-            this.acheteursMQfiabilité.put(acheteursMQ.get(i), 1);
-            this.acheteursMQprix.put(acheteursMQ.get(i), PRIX_DEPART_MQ);
+            this.acheteursMQfiabilité.put(acheteursMQ.get(i), 1); 
         }
 
         List<IAcheteurContratCadre> acheteursHQ = superviseur.getAcheteurs(Feve.F_HQ_BE);
         for (int i = 0; i < acheteursHQ.size(); i++) {
             this.acheteursHQfiabilité.put(acheteursHQ.get(i), 1);
-            this.acheteursHQprix.put(acheteursHQ.get(i), PRIX_DEPART_HQ);
+        }
+
+        for (int i = 0; i < acheteurs.size(); i++) {
+            this.acheteursMQprix.put(acheteurs.get(i), PRIX_DEPART_MQ);
+            this.acheteursHQprix.put(acheteurs.get(i), PRIX_DEPART_HQ);
         }
     }
 
+
+    
     /**
      * Chooses a client to sell our beans. We are more likely to choose the client with the highest reliability.
      * @param feve The type of beans we want to sell
