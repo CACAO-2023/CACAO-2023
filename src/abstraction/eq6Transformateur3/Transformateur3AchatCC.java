@@ -151,25 +151,27 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 */
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
+		double res = 1;
 		switch(((Feve)contrat.getProduit()).getGamme()) {//On ne veut pas accepter des prix trop haut
 	  	case BQ :
-	  		if (contrat.getPrix()>prixmaxBG.getValeur()) {return 0.0;};
+	  		if (contrat.getPrix()>prixmaxBG.getValeur()) {res =0.0;};
         case MQ:
             if (((Feve)contrat.getProduit()).isBioEquitable()) {
-            	if (contrat.getPrix()>prixmaxMGL.getValeur()) {return 0.0;};
+            	if (contrat.getPrix()>prixmaxMGL.getValeur()) {res = 0.0;};
             } else {
-            	if (contrat.getPrix()>prixmaxMG.getValeur()) {return 0.0;};
+            	if (contrat.getPrix()>prixmaxMG.getValeur()) {res = 0.0;};
             }
         case HQ:
-        	if (contrat.getPrix()>prixmaxHG.getValeur()) {return 0.0;}
+        	if (contrat.getPrix()>prixmaxHG.getValeur()) {res = 0.0;}
+        if (res==1) {
 		double dernier_prix = contrat.getPrix();
-		if (contrat.getListePrix().size()==1) {return 0.9*dernier_prix;}
+		if (contrat.getListePrix().size()==1) {res = 0.9*dernier_prix;}
 		else {double mon_dernier_prix = contrat.getListePrix().get(contrat.getListePrix().size()-2);
-			  if (dernier_prix <= 1.1*mon_dernier_prix) {return dernier_prix;}
+			  if (dernier_prix <= 1.1*mon_dernier_prix) {res = dernier_prix;}
 			  else {double proposition =(mon_dernier_prix + (dernier_prix - mon_dernier_prix)/4);
-			  		if (super.getSolde()<proposition) {return super.getSolde();}
-			  		else {return proposition;}}}}
-		return 0.0;
+			  		if (super.getSolde()<proposition) {res = super.getSolde();}
+			  		else {res = proposition;}}}}}
+		return res;
 	}
 
 	/**
