@@ -208,14 +208,15 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		Chocolat c = choco.getChocolat();
 		double prix_max = prixMax.get(c);
 		double prix_min=1000;
-
 		double prec = precedentPrix.get(choco.getChocolat());
-
+		journal_ventes.ajouter("ancien prix tonne de " + contrat.getProduit()+" est de " + prec + "€");
 
 		/*On regarde d'abord la taille de la liste des prix proposés. Si la liste est de longueur 6 ou plus,
 		on accepte le contrat s'il est dans la fourchette prixMin, prixMax car on risque de perdre le contrat*/
 		if(contrat.getListePrix().size()>=6) {
 			if(prix<prix_max && prix>prix_min) {
+				prec=prix;
+				journal_ventes.ajouter("nouveau prix tonne de " + contrat.getProduit()+" est de " + prix + "€");
 				return prix;
 			}
 			else {
@@ -229,15 +230,15 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 			if(prix<prix_max && prix>prix_min) {
 				//On pourra peut etre rajouter un comportement selon le comportement de l'autre partie (s'il fait pas d'ffort on s'adapte par exemple)
 				prix=prix*0.8;
+				prec=prix;
+				journal_ventes.ajouter("nouveau prix tonne de " + contrat.getProduit()+" est de " + prix + "€");
 				return prix;
 			}
-
-		/*journal_ventes.ajouter("ancien prix tonne de " + contrat.getProduit()+" est de " + prec + "€");
-		journal_ventes.ajouter("nouveau prix tonne de " + contrat.getProduit()+" est de " + prix + "€");*/
-
-
+			else {
+				return 0.0;
+			}
 		}
-		return 0.0;
+		
 	}
 
 
