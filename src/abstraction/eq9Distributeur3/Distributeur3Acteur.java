@@ -166,9 +166,7 @@ public class Distributeur3Acteur implements IActeur{
 
 
 	}
-	public void contrat_cadre(){}
-	public void appels_offres(){}
-	public void offres(){}
+
 	public void calcul_prix_de_vente() {
 		// pour chaque gamme, renvoie une hashmap <marque, prix>       
 		// (prendre en compte la rentabilité, le positionnement des autres marques)
