@@ -30,7 +30,7 @@ public class Distributeur1Acteur  implements IActeur {
 	protected Journal journal;
 	protected Journal journal_achat;
 	protected Journal journal_stock;
-
+	
 	//On est oblige de mettre les variables ici sinon la creation de la filiere est dans un tel ordre que nous n'y avons pas acces assez tot
 	protected Variable totalStocks = new VariablePrivee("Eq7TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
 	//La quantité totale de stock de chocolat 
@@ -74,7 +74,8 @@ public class Distributeur1Acteur  implements IActeur {
 	protected HashMap<ChocolatDeMarque,Integer> nombre_achats = new HashMap<ChocolatDeMarque,Integer>();; 
 
 	protected Variable cout_stockage_distributeur = new Variable("cout moyen stockage distributeur", this);
-	protected Variable cout_mainoeuvre = new Variable("cout main d'oeuvre distributeur", this); //Cout main d'oeuvre totale par tour
+	protected Variable cout_main_doeuvre_distributeur = new Variable("cout de la main d'oeuvre pour les distributeur", this); //cout total par tour
+
 	
 	protected LinkedList<VariablePrivee> liste = new LinkedList<VariablePrivee>();
 	protected int cryptogramme;
@@ -171,12 +172,17 @@ public class Distributeur1Acteur  implements IActeur {
 	 */
 	public void initialiser() {
 		cout_stockage_distributeur.setValeur(this, Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*16);
-		cout_mainoeuvre.setValeur(this, 1000);
+		cout_main_doeuvre_distributeur.setValeur(this, 1000);
 		cout_chocolat.put(Chocolat.C_HQ_BE, 3000.);
 		cout_chocolat.put(Chocolat.C_MQ_BE, 2500.);
 		cout_chocolat.put(Chocolat.C_MQ, 2000.);
 		cout_chocolat.put(Chocolat.C_BQ, 1000.);
 		
+		
+		/////////////////////////////////////
+		//POTENTIELLEMENT à Changer
+		cout_main_doeuvre_distributeur.setValeur(this, 1);
+		///////////////////////////////////////
 		
 		//Initialisation des couts
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {

@@ -63,7 +63,6 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 //		double coef = 1-(((10/3)*qualite)/100)+0.1;
 		double promo = prixPromotion(choco);
 		double cout = getCoutTotal(choco);
-
 		double prix = (cout/1000)*promo/qualite;
 		return prix;
 	}
@@ -90,7 +89,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		Chocolat gamme = choco.getChocolat();
 		Double cout_i = getCout_gamme(gamme);
 		Double cout_s = cout_stockage_distributeur.getValeur();
-		Double cout_m = (cout_mainoeuvre.getValeur()*stockChocoMarque.get(choco))/totalStocks.getValeur();
+		Double cout_m = (cout_main_doeuvre_distributeur.getValeur()*stockChocoMarque.get(choco))/totalStocks.getValeur();
 		return (cout_i+cout_s+cout_m);
 	}
 	
