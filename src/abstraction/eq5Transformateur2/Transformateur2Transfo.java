@@ -11,12 +11,9 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 
-public class Transformateur2Transfo extends Transformateur2Acteur implements IFabricantChocolatDeMarque {
+public class Transformateur2Transfo extends Transformateur2Stocks implements IFabricantChocolatDeMarque {
 	
 	private List<ChocolatDeMarque>chocosProduits; // Liste des chocolats de marque produits 
-	protected HashMap<Feve, Double> stockFeves; // Feves disponible (en stock)
-	protected HashMap<Chocolat, Double> stockChoco; // Chocolat disponible
-	protected HashMap<ChocolatDeMarque, Double> stockChocoMarque; // Chocolat de marque disponible 
 	protected HashMap<Feve, HashMap<Chocolat, Double>> pourcentageTransfo; // pour les differentes feves, le chocolat qu'elle peuvent contribuer a produire avec le pourcentage de chocolat associé
 	
 	/**
@@ -37,28 +34,9 @@ public class Transformateur2Transfo extends Transformateur2Acteur implements IFa
 	/**
 	 * @author FERHOUT Adam
 	 */
-	
+
 	public void initialiser() {
 		super.initialiser();
-		this.stockFeves=new HashMap<Feve,Double>();
-		for (Feve f : Feve.values()) { // on ajoute par défaut un certain stock de feves (10000 de chaque type)
-			this.stockFeves.put(f, 10000.0);
-			this.totalStocksFeves.ajouter(this, 10000.0, this.cryptogramme);
-			this.journal.ajouter("ajout de 10000 de "+f+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
-		}
-		
-		this.stockChoco=new HashMap<Chocolat,Double>(); // de meme avec les differents chocolats
-		for (Chocolat c : Chocolat.values()) {
-			this.stockChoco.put(c, 1000.0);
-			this.totalStocksChoco.ajouter(this, 1000.0, this.cryptogramme);
-			this.journal.ajouter("ajout de 1000 de "+c+" au stock de chocolat --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
-		}
-		
-		this.stockChocoMarque=new HashMap<ChocolatDeMarque,Double>();
-		ChocolatDeMarque Chocopop = new ChocolatDeMarque(Chocolat.C_MQ, "ChocoPop", 75, 0);
-		this.stockChocoMarque.put(Chocopop, 0.0);
-		ChocolatDeMarque MaisonDou = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Maison Doutre", 90, 10);
-		this.stockChocoMarque.put(MaisonDou, 0.0);
 		
 		// on référence les differents pourcentages en cacao nécéssaires pour les chocolats produits
 		
@@ -133,6 +111,6 @@ public class Transformateur2Transfo extends Transformateur2Acteur implements IFa
 					
 			}
 		}
-		}
+	}
 	
 }
