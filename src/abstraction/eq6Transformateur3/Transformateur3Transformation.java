@@ -90,27 +90,29 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 			double pourcentageTransfo =((double) this.getPourcentageCacaoBG())/100;
 			stockFeveBG.retirer(pourcentageTransfo*qte);
 			super.journalTransformation.ajouter("on retire du BG :"+pourcentageTransfo*qte);
-			stockChocolatBG.ajouter(Filiere.LA_FILIERE.getEtape(),qte);
+			super.ajouterChocolat(super.chocosProduits.get(0), qte, Filiere.LA_FILIERE.getEtape());
+			//stockChocolatBG.ajouter(Filiere.LA_FILIERE.getEtape(),qte);
 			} else {
 				if (f == Feve.F_MQ) {
 					double a=CoutMatPremiere(Feve.F_MQ,qte);
-					if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) && qte>1) {
-						while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
+					if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) ) {
+						while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)&& qte>1) {
 							qte=qte-1;
-							a=CoutMatPremiere(Feve.F_MQ,qte);
 						}
 					}
 					double pourcentageTransfo = ((double)this.getPourcentageCacaoMG())/100;
 					double c=getMQStep1();
 					setMQStep1(qte);
+					super.journalTransformation.ajouter("qte :"+qte);
 					stockFeveMG.retirer(pourcentageTransfo*qte);
 					if (c!=0) {
-					stockChocolatMG.ajouter(Filiere.LA_FILIERE.getEtape(),c);
+						super.ajouterChocolat(super.chocosProduits.get(1), c, Filiere.LA_FILIERE.getEtape());
+					//stockChocolatMG.ajouter(Filiere.LA_FILIERE.getEtape(),c);
 					}
 					} else {
 						if (f ==Feve.F_MQ_BE) {
 							double a=CoutMatPremiere(Feve.F_MQ_BE,qte);
-							if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) && qte>1) {
+							if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
 								while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) && qte>1) {
 									qte=qte-1;
 									a=CoutMatPremiere(Feve.F_MQ_BE,qte);
@@ -121,13 +123,14 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 							setMQBEStep1(qte);
 							stockFeveMGL.retirer(pourcentageTransfo*qte);
 							if (c!=0) {
-							stockChocolatMGL.ajouter(Filiere.LA_FILIERE.getEtape(), c);
+								super.ajouterChocolat(super.chocosProduits.get(2), c, Filiere.LA_FILIERE.getEtape());
+							//stockChocolatMGL.ajouter(Filiere.LA_FILIERE.getEtape(), c);
 							}
 							} else {
 								if (f == Feve.F_HQ_BE) {
 									double a=CoutMatPremiere(Feve.F_HQ_BE,qte);
-									if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) && qte>1) {
-										while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
+									if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) ) {
+										while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)&& qte>1) {
 											qte=qte-1;
 											a=CoutMatPremiere(Feve.F_HQ_BE,qte);
 										}
@@ -139,7 +142,8 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 									setHQBEStep2(c);
 									stockFeveHGL.retirer(pourcentageTransfo*qte);
 									if (d!=0) {
-									stockChocolatHGL.ajouter(Filiere.LA_FILIERE.getEtape(), d);
+										super.ajouterChocolat(super.chocosProduits.get(3), d, Filiere.LA_FILIERE.getEtape());
+									//stockChocolatHGL.ajouter(Filiere.LA_FILIERE.getEtape(), d);
 									}
 							}
 	

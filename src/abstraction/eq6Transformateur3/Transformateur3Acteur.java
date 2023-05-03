@@ -17,7 +17,7 @@ import abstraction.eqXRomu.produits.Feve;
 
 public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	
-	private List<ChocolatDeMarque> ListeProduits;
+	protected List<ChocolatDeMarque> ListeProduits;
 	protected HashMap<Feve, Double> stockFeves;
 	protected HashMap<Chocolat, Double> stockChoco;
 	protected int cryptogramme;
