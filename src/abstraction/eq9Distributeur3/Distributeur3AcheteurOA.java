@@ -14,7 +14,16 @@ import abstraction.eqXRomu.offresAchat.SuperviseurVentesOA;
 import abstraction.eqXRomu.produits.Chocolat;
 
 public class Distributeur3AcheteurOA extends Distributeur3Acteur implements IAcheteurOA {
-
+	
+	//////////////////////
+	//////  william //////
+	//////////////////////
+	
+	
+	/////////////////////////////////////////////
+	///// largement inspiré du code exemple /////
+	/////////////////////////////////////////////
+	
 	private SuperviseurVentesOA supOA;
 
 	public PropositionVenteOA choisirPV(List<PropositionVenteOA> propositions) {
