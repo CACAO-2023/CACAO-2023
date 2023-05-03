@@ -28,6 +28,7 @@ public class Distributeur3Acteur implements IActeur{
 	protected Journal journal_operationsbancaires;
 	protected Journal journal_stock;
 	protected Journal journal_activitegenerale;
+	protected Journal journal_AO;
 	protected List<ChocolatDeMarque> chocolats;
 
 	protected HashMap<ChocolatDeMarque, Double[]> prixMoyen;
@@ -51,6 +52,8 @@ public class Distributeur3Acteur implements IActeur{
 		this.journal_achats = new Journal(this.getNom()+" achats", this);
 		this.journal_operationsbancaires = new Journal(this.getNom()+" operations", this);
 		this.journal_activitegenerale = new Journal(this.getNom()+" activites", this);
+		this.journal_AO = new Journal(this.getNom()+" AO", this);
+
 		this.journal_stock = new Journal(this.getNom()+" stock", this);
 		this.prixMoyen = new HashMap<ChocolatDeMarque, Double[]>();
 		
@@ -63,6 +66,8 @@ public class Distributeur3Acteur implements IActeur{
 	
 	public void initialiser() {
 		// william désormais on n'utilise plus une liste de String avec les chocolats qui nous intéressent, on sélectionne seulement à la gamme
+		
+		
 		
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
@@ -79,7 +84,8 @@ public class Distributeur3Acteur implements IActeur{
 		
 		}
 		System.out.println(chocolats);
-	
+		// stock initial de 1000 tonnes du premier chocolat de la filiere
+		stock.ajoutQte(chocolats.get(0), 1000);
 		
 	}
 	
@@ -197,6 +203,7 @@ public class Distributeur3Acteur implements IActeur{
 		res.add(journal_operationsbancaires);
 		res.add(journal_activitegenerale);
 		res.add(journal_stock);
+		res.add(journal_AO);
 		
 		return res;
 	}
