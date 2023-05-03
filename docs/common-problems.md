@@ -44,7 +44,7 @@ Not accepting because the code does not pass the tests. You can read the error m
 
 ## `Some checks were not successful`: `Checks / performance_tests`
 
-TBD
+Not accepting because your update makes the simulatio too slow.
 
 ## `This branch is out-of-date with the base branch`
 
