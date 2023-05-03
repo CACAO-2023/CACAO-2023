@@ -164,7 +164,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		// TODO Auto-generated method stub
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			Echeancier e = contrat.getEcheancier();
-			ChocolatDeMarque chocolat = (ChocolatDeMarque)contrat.getProduit();
+			//ChocolatDeMarque chocolat = (ChocolatDeMarque)contrat.getProduit();
 			//double qte = this.stock.getStock(chocolat);
 			//double qteProp = e.getQuantiteTotale();
 			
@@ -175,7 +175,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 					qtechocstep = qtechocstep +  contratEnCours.get(i).getEcheancier().getQuantite(j);}
 					
 				if ((qtechocstep + e.getQuantite(j)) < 1050.0) {
-						e.set(j, 1050-(qtechocstep+e.getQuantite(j)));
+						e.set(e.getStepDebut()+j, 1050-(qtechocstep+e.getQuantite(j)));
 				}
 				
 			
