@@ -85,7 +85,11 @@ public class Distributeur3Acteur implements IActeur{
 		}
 		System.out.println(chocolats);
 		// stock initial de 1000 tonnes du premier chocolat de la filiere
-		stock.ajoutQte(chocolats.get(0), 1000);
+		for (int j=0; j <chocolats.size(); j++) {
+			stock.ajoutQte(chocolats.get(j), 50000);
+		}
+		
+		
 		
 	}
 	
