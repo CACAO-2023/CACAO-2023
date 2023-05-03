@@ -36,6 +36,7 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 	 * actualise les indicateurs de stock pour chaque gamme
 	 * @author Ghaly
 	 */
+	
 	protected void actualise_indic_stock() {
 		initialise_indic_stock();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {

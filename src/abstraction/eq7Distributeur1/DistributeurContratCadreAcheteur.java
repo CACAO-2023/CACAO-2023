@@ -60,24 +60,25 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		ChocolatDeMarque marque = (ChocolatDeMarque) contrat.getProduit();
-		if (nombre_achats.get(marque)==0) {
+		if (cout_marque.get(marque)*1.5	< contrat.getPrix()) {
+			return 0.0;
+		} else if (nombre_achats.get(marque)==0) {
 			return contrat.getPrix();
-		}
-		else {
+		} else {
 			if (contrat.getPrix()<0.5*getCout_gamme(marque)) {
 				return 0.;
 			}
 			else {
-				
-		if (Math.random()<0.3) {
-			return contrat.getPrix(); // on ne cherche pas a negocier dans 30% des cas
-			
-		} else {//dans 70% des cas on fait une contreproposition differente
+				if (Math.random()<0.3) {
+					return contrat.getPrix(); // on ne cherche pas a negocier dans 30% des cas
+				} else {//dans 70% des cas on fait une contreproposition differente
 			
 			return contrat.getPrix()*0.95;// 5% de moins.
-		}}}
+				}
+			}
+		}
 	}
-	
+
 	
     /**
      * 	enleve les contrats obsolete (nous pourrions vouloir les conserver pour "archive"...)
@@ -207,14 +208,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		Echeancier e = new Echeancier(stepDebut);
 		for (int etape = stepDebut+1; etape<stepDebut+d; etape++) {
 			int etapemod = etape%24;
-			Double q = previsionsperso.get(etapemod).get(marque)*1.5 -getLivraisonEtape(marque, stepDebut+etape);
-			if (q>=0) {
-				e.ajouter(q);
-			}
-			else {
-				e.ajouter(0.);
-			}
-			
+			e.ajouter(previsionsperso.get(etapemod).get(marque)*1.5 -getLivraisonEtape(marque, stepDebut+etape));
 			//faut enlever le stock
 		}
 	
