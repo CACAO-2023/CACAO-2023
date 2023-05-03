@@ -2,6 +2,8 @@ package abstraction.eq1Producteur1;
 
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import abstraction.eqXRomu.filiere.Filiere;
@@ -52,12 +54,12 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		HashMap<Integer, Double> quantiteFeveM = lot_moy.getQuantites();
 		champ cm = this.getChampMoy();
 		if (cm!=null) {
+			HashMap<Integer,Double> aretirerM = new HashMap<Integer,Double>();
 			for (Integer i : cm.getQuantite().keySet()) {
 				double q = cm.getQuantite().get(i);
 				Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), this.coutmaindoeuvre.getValeur()*q);
-				if (step-i%2080==0) { //supprime l'hectar quand il produit plus, au bout de 40 ans pour la v1
-					cm.supprimer(i);
-					cm.ajouter(step, q); //on le replante quand il périme : v2 à améliorer
+				if (step-i==2080) { //supprime l'hectar quand il produit plus, au bout de 40 ans pour la v1
+					aretirerM.put(i,q); //on les stock dans une liste pour les retirer plus tard, sinon on a une erreur
 					Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), this.coutreplantation.getValeur()*q);
 					this.journal_champs.ajouter("Un champ de "+q+" hectares a été planté");
 				}
@@ -77,7 +79,10 @@ public class Producteur1Plantation extends Producteur1Acteur {
 				//ajouter lot moyen et cout replantation 
 						}
 				}
-			}
+		for (Integer i : aretirerM.keySet()) {
+			cm.supprimer(i);
+			cm.ajouter(i, aretirerM.get(i));}
+		}
 		this.journal_champs.ajouter(this.champMoy.toString());
 		this.journal_champs.ajouter("Cela fait en tout "+this.champMoy.getNbHectare()+" hectares");
 		this.journal_champs.ajouter("---> Qualite : Bas");
@@ -97,12 +102,12 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		Lot lot_bas_sec = this.getVraiStockB();
 		champ cb = this.getChampBas();
 		if (cb!=null) {
+			HashMap<Integer,Double> aretirerB = new HashMap<Integer,Double>();
 			for (Integer i : cb.getQuantite().keySet()) {
 				double q = cb.getQuantite().get(i);
 				Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), q*this.coutmaindoeuvre.getValeur());
 				if (step-i%2080==0) { //supprime l'hectar quand il produit plus, au bout de 40 ans pour la v1
-					cb.supprimer(i);
-					cb.ajouter(step, q); //on le replante quand il périme : v2 à améliorer
+					aretirerB.put(i,q); //on les stock dans une liste pour les retirer plus tard, sinon on a une erreur
 					Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), q*this.coutreplantation.getValeur());
 					this.journal_champs.ajouter("Un champ de "+q+" hectares a été planté");
 				}
@@ -121,6 +126,9 @@ public class Producteur1Plantation extends Producteur1Acteur {
 						}
 					}
 				}
+			for (Integer i : aretirerB.keySet()) {
+				cb.supprimer(i);
+				cb.ajouter(i, aretirerB.get(i));}
 			}
 		this.journal_champs.ajouter(this.champBas.toString());
 		this.journal_champs.ajouter("Cela fait en tout "+this.champBas.getNbHectare()+" hectares");
@@ -141,7 +149,6 @@ public class Producteur1Plantation extends Producteur1Acteur {
 			{q1=lot_moy_sec.getQuantiteTotale();}
 		if (lot_bas_sec!=null) 
 			{q2=lot_moy_sec.getQuantiteTotale();}
-
 		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), (q1+q2)*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());
 		this.journal_stocks.ajouter("Cout de stockage bas de gamme : "+q2*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());
 		this.journal_stocks.ajouter("Cout de stockage moyenne gamme : "+q1*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());

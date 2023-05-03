@@ -15,12 +15,12 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 	// On repère les fêves qui vont périmées pour pouvoir les vendre.
 	
 	public Double feveBQPeri() { //Elouan
-		if (this.stockFeveBas.getQuantites().get(step)==null)
+		if (this.stockFeveBas.getQuantites().get(step-11)==null)
 			{
 			return 0.;
 			}
 		else {
-			return this.stockFeveBas.getQuantites().get(step);
+			return this.stockFeveBas.getQuantites().get(step-11);
 		}
 	}
 
@@ -33,12 +33,12 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 		}*/
 	
 	public Double feveMQPeri() { //Elouan
-		if (this.stockFeveMoy.getQuantites().get(step)==null)
+		if (this.stockFeveMoy.getQuantites().get(step-11)==null)
 			{
 			return 0.;
 			}
 		else {
-			return this.stockFeveMoy.getQuantites().get(step);
+			return this.stockFeveMoy.getQuantites().get(step-11);
 		}
 	}
 	
