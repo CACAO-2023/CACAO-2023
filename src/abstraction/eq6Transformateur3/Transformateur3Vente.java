@@ -166,6 +166,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); 
 		return lot;}
 		else {
+			super.journalVentes.ajouter("On ne livre pas");
 			Lot l=new Lot(produit);
 			return l; 
 		}
