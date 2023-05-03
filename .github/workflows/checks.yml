@@ -89,8 +89,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PAT }}
     - name: Check performance
       run: |
-        echo ${{needs.java_tests.outputs.times}}
-        echo ${{ fromJSON(steps.actorTeams.outputs.teams)[0] }} 
+        echo ${{ fromJSON(needs.java_tests.outputs.times)["eq1Producteur1"] }}
     - name: Auto-merge
       if: success() && needs.java_tests.result == 'success' && needs.file_ownership.result == 'success'
       run: | 
