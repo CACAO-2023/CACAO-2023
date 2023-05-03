@@ -104,6 +104,8 @@ public class Distributeur3Acteur implements IActeur{
 
 	public void next() {
 		
+		
+		
 		journal_activitegenerale.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		journal_activitegenerale.ajouter("Solde="+getSolde()+"€");
 		etat_ventes();

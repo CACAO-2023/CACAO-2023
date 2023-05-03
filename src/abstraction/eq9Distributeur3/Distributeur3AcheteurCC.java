@@ -215,7 +215,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		journal_ventes.ajouter("achat du chocolat" + contrat.getProduit()+"au prix à la tonne de" + prix);
 		ChocolatDeMarque choco = (ChocolatDeMarque)contrat.getProduit();
 
-		// on calcule le prix de vente du chocolat du contract en fonction de la gamme
+		// on calcule le prix de vente du chocolat dus contract en fonction de la gamme
 		double prix_tonne_de_vente_contrat = 0.0;
 		
 		// marge de 80% sur HQ_BE
