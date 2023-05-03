@@ -56,7 +56,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	@Override
 	//Mathis DOUTRE
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		
+		 
 	    double prixMax = 5000.0; // Prix maximum acceptable
 	    double soldeDisponible = super.getSolde(); 
 	    Echeancier echeancierPropose = contrat.getEcheancier();
