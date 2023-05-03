@@ -64,19 +64,19 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
 				super.journalVentes.ajouter("Proposition de prix: "+2000+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-				return 2000;
+				return 20;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco")) {
 				super.journalVentes.ajouter("Proposition de prix: "+2100+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-				return 2100;
+				return 21;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco bio")) {
 				super.journalVentes.ajouter("Proposition de prix: "+2300+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-				return 2300;
+				return 23;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("Choc")) {
 				super.journalVentes.ajouter("Proposition de prix: "+2500+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-				return 2500;
+				return 25;
 			}
 		}
 		super.journalVentes.ajouter("Proposition de prix: "+0+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
