@@ -295,8 +295,24 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		return prevision;
 	}
 	
-		
-		
+	private HashMap<Feve, Double> Prevision_Production_minimale() {
+		HashMap<Feve, Double> prevision = Prevision_Production(Filiere.LA_FILIERE.getEtape());
+		for (Feve f : Prevision_Production(Filiere.LA_FILIERE.getEtape()).keySet()) {
+			if (f == Feve.F_BQ) {
+				prevision.put(f, prevision.get(f)*0.9);
+			}
+			if (f == Feve.F_MQ) {
+				prevision.put(f, prevision.get(f)*0.9);
+			}
+			if (f == Feve.F_MQ_BE) {
+				prevision.put(f, prevision.get(f)*0.8);
+			}
+			if (f == Feve.F_HQ_BE) {
+				prevision.put(f, prevision.get(f)*0.75);
+			}
+	}
+		return prevision;
+	}
 	
 	public void next() {
 		this.journalProd.ajouter("Etat plantation : " + this.age_hectares);
