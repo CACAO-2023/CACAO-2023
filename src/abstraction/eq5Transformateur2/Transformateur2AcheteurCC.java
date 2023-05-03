@@ -51,7 +51,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 			// }
 
 		// TODO Auto-generated method stub
-
+ 
 
 	@Override
 	//Mathis DOUTRE
