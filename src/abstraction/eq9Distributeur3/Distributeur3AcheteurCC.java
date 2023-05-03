@@ -69,18 +69,16 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 				//System.out.println(""+vendeursChocolat.size()+" v est "+vendeursChocolat.get(0));
 				List<ExemplaireContratCadre> contratAvecChocolat = new ArrayList<ExemplaireContratCadre> ();
 				if (contratEnCours != null) {
-<<<<<<< HEAD
 					for (int k = 0;k<contratEnCours.size();k++) {
 						if (chocolats.get(i).equals((ChocolatDeMarque)((contratEnCours.get(k).getProduit())))) {
 							contratAvecChocolat.add(contratEnCours.get(k));
 						}
 					}
-=======
 				for (int k = 0;k<contratEnCours.size();k++) {
 					if (chocolats.get(i).equals((ChocolatDeMarque)((contratEnCours.get(k).getProduit())))) {
 						contratAvecChocolat.add(contratEnCours.get(k));
 					}//ajoute les contrats avec le chocolat qui nous interesse 
->>>>>>> branch 'main' of https://github.com/BaptisteBAYLE/CACAO-2023
+
 				}
 				if (vendeursChocolat.size()>0  ) {
 					boolean pasAchete=true;
@@ -97,11 +95,10 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 
 					for (int k = 0;k<contratAvecChocolat.size();k++) {
 						for (int j=0; j< vendeursChocolat.size()&&pasAchete;j++) {
-<<<<<<< HEAD
 
 
-							Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(),24, 25000.0);
-=======
+							//Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(),24, 25000.0);
+
 							
 							List<Double> qteVoulue = new LinkedList();
 							for (int f = 0; f<24; f++) {
@@ -112,11 +109,10 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 								}
 							}
 							Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(), qteVoulue);
->>>>>>> branch 'main' of https://github.com/BaptisteBAYLE/CACAO-2023
 							ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier2 , this.cryptogramme, initialise);
 							pasAchete = false;}
 					}}
-			}}}
+			}}}}
 
 
 
@@ -167,14 +163,12 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		// TODO Auto-generated method stub
 		return 0;
 	}
-<<<<<<< HEAD
-	//Mathilde 
-=======
+
 //Mathilde
 	// Dans cette contreproposition j'essaye de renvoyer un échéancier sur 12 mois avec au total un peu plus de 25000 
 	// tablettes de chocolats achetées. Je chercher à savoir à chaque fois si ma quantité de chocolat est assez grande 
 	// à chaque step (25000/24 environ = 1050)(dernier if) 
->>>>>>> branch 'main' of https://github.com/BaptisteBAYLE/CACAO-2023
+
 	@Override
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
