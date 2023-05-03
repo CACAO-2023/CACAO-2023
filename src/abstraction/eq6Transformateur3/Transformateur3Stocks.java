@@ -138,7 +138,8 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 
   /**Mouhamed SOW*/
   public void retirerFeve(Feve feve, double quantite) {
-	    
+	   if(quantite==0.0) {;}
+	   else {
 	  switch(feve.getGamme()) {
         case BQ:
             if(stockFeveBG.getQuantiteTotale()>=quantite) {
@@ -189,7 +190,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
         default:
             throw new IllegalArgumentException("Type de fève invalide");
     }
-	    
+	}   
 	}
 
 
@@ -224,6 +225,8 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   }
  /**Mouhamed SOW*/
   public void retirerChocolat(ChocolatDeMarque chocolat,Double quantite) {
+	  if(quantite==0.0) {;}
+	  else {
 	    switch(chocolat.getGamme()) {
 	  	case BQ :
 	  		if(stockChocolatBG.getQuantiteTotale()>=quantite) {
@@ -270,6 +273,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  	default :
 	  		throw new IllegalArgumentException("Type de Chocolat invalide");
 	  }
+	  }
     
   }
   /**ecrit par Nathan Claeys
@@ -307,12 +311,17 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   		super.journalStock.ajouter(" La quantité de Chocolat MG est :"+ this.stockChocolatMG.getQuantiteTotale() );
   		super.journalStock.ajouter(" La quantité de Chocolat MGL est :"+ this.stockChocolatMGL.getQuantiteTotale() );
   		super.journalStock.ajouter(" La quantité de Chocolat HGL est :"+ this.stockChocolatHGL.getQuantiteTotale() );
-  		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), super.totalStocksFeves.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()) ;
-  		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), super.totalStocksChoco.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage distributeur").getValeur()) ;
   		double coutFeve=super.totalStocksFeves.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() ;
   		double coutChoco=super.totalStocksFeves.getValeur(date)*0.25*Filiere.LA_FILIERE.getParametre("cout moyen stockage distributeur").getValeur() ;
+  		if(coutFeve>0) {
+  		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), coutFeve) ;
   		super.journalStock.ajouter(" on a payé :"+ coutChoco+" pour le cout de stockage des feves" );
+  		}
+  		if(coutChoco>0) {
+  		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), coutChoco) ;
   		super.journalStock.ajouter(" on a payé :"+ coutChoco+" pour le cout de stockage des chocolats" );
+  		}
+  		
   		
   	}
 }
