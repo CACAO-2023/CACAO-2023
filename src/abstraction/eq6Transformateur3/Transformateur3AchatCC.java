@@ -24,6 +24,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	private Variable prixmaxMG;
 	private Variable prixmaxMGL;
 	private Variable prixmaxHG;
+	private double quantiteEnAttente ;
 	
 	public Transformateur3AchatCC () {
 		super();
@@ -32,6 +33,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		this.prixmaxMG = new Variable ("prix maximal MG","prix maximal que l'acteur va accepter pour les feves milieu gamme en CC",this,0.0,7000,5000);
 		this.prixmaxMGL = new Variable ("prix maximal MGL","prix maximal que l'acteur va accepter pour les feves milieu gamme lab en CC",this,0.0,8000,6000);
 		this.prixmaxHG = new Variable ("prix maximal HG","prix maximal que l'acteur va accepter pour les feves haut de gamme en CC",this,0.0,10000,8000);
+		this.quantiteEnAttente = 0.0;
 		
 	}
 	/**
@@ -114,13 +116,17 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		if (notreduree == 0) {return null;}
 		else {
 		double c = max(101.0,this.BesoinMaxEntre(stepdebut,notreduree,((Feve)contrat.getProduit())));
-		double commandemin = Math.min(c, 10000.0);
+		super.journalAchatCC.ajouter("besoin calculé pour l'eatape "+stepdebut+" à "+notreduree+ " est "+this.BesoinMaxEntre(stepdebut,notreduree,((Feve)contrat.getProduit())));
+		double commandemin = Math.min(c, 1000.0);
 		List<Double> res = new LinkedList<Double>();
 		for (int i =stepdebut;i<=notreduree;i++) {
-			if (vendeurecheancier.getQuantite(i)>=commandemin) {res.add(max(vendeurecheancier.getQuantite(i),100.0));}
+			if (vendeurecheancier.getQuantite(i)>=commandemin&&vendeurecheancier.getQuantite(i)<1000) {res.add(max(vendeurecheancier.getQuantite(i),100.0));}
 			else {res.add(commandemin);}
 		}
-		return new Echeancier(stepdebut,res);}
+		Echeancier ech = new Echeancier(stepdebut,res);
+		super.journalAchatCC.ajouter("valeur tot du stock après ce contrat : "+ech.getQuantiteTotale()+super.totalStocksFeves.getValeur()+this.quantiteEnAttente);
+		if (ech.getQuantiteTotale()+super.totalStocksFeves.getValeur()+this.quantiteEnAttente>super.totalStocksFeves.getMax()) {return null;}
+		else {return ech;}}
 	}
 
 	private double max(double a, double b) {
@@ -188,6 +194,8 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 */
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 			this.getListeContratEnCoursA().add(contrat);
+			this.quantiteEnAttente = this.quantiteEnAttente+contrat.getQuantiteTotale();
+			super.journalAchatCC.ajouter("nouvelle valeur en attente : "+quantiteEnAttente+" et tot stock : "+super.totalStocksFeves.getValeur());
 			super.journalAchatCC.ajouter("Un nouveau contrat cadre a été passé : "+contrat.toString());
 	}
 
@@ -209,7 +217,9 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		Object produit = contrat.getProduit();
 		if (produit instanceof Feve && lot.getQuantiteTotale()>0) {
 			super.ajouterFeve(lot);}
+		this.quantiteEnAttente = this.quantiteEnAttente - lot.getQuantiteTotale();
 		super.journalAchatCC.ajouter("nouvel arrivage d'un lot de contrat cadre de "+lot.getQuantiteTotale()+"");
+		super.journalAchatCC.ajouter("nouvelle valeur en attente : "+quantiteEnAttente+" et tot stock : "+super.totalStocksFeves.getValeur());
 	}
 	public List<ExemplaireContratCadre> getListeContratEnCoursA() {
 		return ListeContratEnCoursAchat;
@@ -252,7 +262,10 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 			for (IVendeurContratCadre vendeur : vendeurs) {
 			super.journalAchatCC.ajouter("on essaie de demander un contrat à l'equipe :"+vendeur.getNom());
 			ExemplaireContratCadre contrat = superviseur.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1,Filiere.LA_FILIERE.getEtape()+5,100.0), super.cryptogramme, false);
-			if (contrat != null) {super.journalAchatCC.ajouter("CC cherché et trouvé :"+contrat.toString());}}}}
+			if (contrat != null) {super.journalAchatCC.ajouter("CC cherché et trouvé :"+contrat.toString());
+									this.quantiteEnAttente=this.quantiteEnAttente+contrat.getQuantiteTotale();
+									super.journalAchatCC.ajouter("nouvelle valeur en attente : "+quantiteEnAttente+" et tot stock : "+super.totalStocksFeves.getValeur());}}}}
+		
 	}
 	/**ecrit par Nathan Claeys
 	   * pour pouvoir rendre les variables qui peuvent aider à la prise de decision
@@ -286,9 +299,13 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		}  
 		
 		this.getListeContratEnCoursA().removeAll(contratsObsoletes);
-		this.chercheContrat(Feve.F_BQ);
-		this.chercheContrat(Feve.F_MQ);
-		this.chercheContrat(Feve.F_MQ_BE);
-		this.chercheContrat(Feve.F_HQ_BE);
+		if (super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente<1000) {
+		this.chercheContrat(Feve.F_BQ);}
+		if (super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente<1000) {
+		this.chercheContrat(Feve.F_MQ);}
+		if (super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente<1000) {
+		this.chercheContrat(Feve.F_MQ_BE);}
+		if (super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente<1000) {
+		this.chercheContrat(Feve.F_HQ_BE);}
 	}  
 }  
