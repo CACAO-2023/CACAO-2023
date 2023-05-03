@@ -211,7 +211,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		
 		
 		// william 
-		prix = contrat.getPrix()/contrat.getQuantiteTotale();
+		prix = contrat.getPrix() /*/contrat.getQuantiteTotale() deja à la tonne */;
 		journal_ventes.ajouter("achat du chocolat" + contrat.getProduit()+"au prix à la tonne de" + prix);
 		ChocolatDeMarque choco = (ChocolatDeMarque)contrat.getProduit();
 
