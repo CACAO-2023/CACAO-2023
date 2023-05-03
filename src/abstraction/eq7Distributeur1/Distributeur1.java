@@ -62,9 +62,8 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		double qualite = choco.qualitePercue();
 //		double coef = 1-(((10/3)*qualite)/100)+0.1;
 		double promo = prixPromotion(choco);
-		double cout = getCout(choco);
-//		return (cout/1000)*promo/coef;
-		double prix = (cout)*promo*1.2;
+		double cout = getCoutTotal(choco);
+		double prix = (cout/1000)*promo/qualite;
 		return prix;
 	}
 	
@@ -74,11 +73,24 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	 */
 	public double prixPromotion(ChocolatDeMarque choco) { 
 		if (((Filiere.LA_FILIERE.getEtape()%3)==0)&&(choco.getChocolat()!=Chocolat.C_BQ)) {
-			return 0.9;
+			return 0.95;
 		}
 		else {
 			return 1;
 		}
+	}
+	
+	/**
+	 * @author Theo
+	 * @param choco
+	 * @return le cout de revient d'1t de chocolat de marque, calcule grace au type de chocolat
+	 */
+	public double getCoutTotal(ChocolatDeMarque choco) {
+		Chocolat gamme = choco.getChocolat();
+		Double cout_i = getCout_gamme(gamme);
+		Double cout_s = cout_stockage_distributeur.getValeur();
+		Double cout_m = (cout_main_doeuvre_distributeur.getValeur()*stockChocoMarque.get(choco))/totalStocks.getValeur();
+		return (cout_i+cout_s+cout_m);
 	}
 	
 	/**
