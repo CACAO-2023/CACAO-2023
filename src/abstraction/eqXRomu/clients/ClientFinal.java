@@ -93,8 +93,8 @@ public class ClientFinal implements IActeur, IAssermente, PropertyChangeListener
 		this.journalAlertes = new Journal(this.getNom()+" alertes", this);
 		this.volumeVente = new Variable(getNom()+" volume vente CM", null, this, 0.0);
 		this.cmSelectionnee = new Variable(getNom()+" choc. marque select.", "indiquez l'index du chocolat de marque", this, 0.0);
-		this.surcoutMemeQualite = new Variable(getNom()+" surcout meme qualite", null, this, 0.25);
-		this.surcoutQualitesDifferentes = new Variable(getNom()+" surcout qualites differentes", null, this, 1.25);
+		this.surcoutMemeQualite = new Variable(getNom()+" surcout meme qualite", null, this, 350.0);//0.25);
+		this.surcoutQualitesDifferentes = new Variable(getNom()+" surcout qualites differentes", null, this, 1450.0);//1.25);
 		this.gainAttractiviteMemeQualite = new Variable(getNom()+" gain attractivite meme qualite", null, this, 0.005); 
 		this.gainAttractiviteQualiteDifferente = new Variable(getNom()+" gain attractivite qualite differentes", null, this, 0.05);
 		this.repartitionInitiale = repartitionInitiale;
@@ -296,7 +296,7 @@ public class ClientFinal implements IActeur, IAssermente, PropertyChangeListener
 				double enVente = this.quantiteEnVente.get(dist).get(choco);
 				double quantiteAchetee = Math.max(0.0, Math.min(quantiteDesiree, enVente));
 				quantiteAchetee = quantiteAchetee<0.05 ? 0.0 : quantiteAchetee; // En dessous de 50kg la quantite demandee devient 0.0 
-				JournalDistribution.ajouter("&nbsp;&nbsp;&nbsp;&nbsp;pour "+dist.getNom()+" d'attractivite "+Journal.doubleSur(this.attractiviteDistributeur.get(choco).get(dist), 4)+" la quantite desiree est "+Journal.doubleSur(quantiteDesiree,4)+" et quantite en vente ="+Journal.doubleSur(enVente, 4)+" -> quantitee achetee "+Journal.doubleSur(quantiteAchetee, 4));
+				JournalDistribution.ajouter("&nbsp;&nbsp;&nbsp;&nbsp;pour "+Journal.texteColore(dist, dist.getNom()+" d'attractivite "+Journal.doubleSur(this.attractiviteDistributeur.get(choco).get(dist), 4)+" (avec prix="+Journal.doubleSur(pri, 4) +") la quantite desiree est "+Journal.doubleSur(quantiteDesiree,4)+" et quantite en vente ="+Journal.doubleSur(enVente, 4)+" -> quantitee achetee "+Journal.doubleSur(quantiteAchetee, 4)));
 				if (quantiteAchetee>0.0) {
 					totalVentes+=quantiteAchetee;
 					Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, dist, quantiteAchetee*dist.prix(choco));
@@ -306,7 +306,7 @@ public class ClientFinal implements IActeur, IAssermente, PropertyChangeListener
 					dist.notificationRayonVide(choco, this.cryptos.get(dist));
 				}
 				double impactRupture = (quantiteDesiree>enVente ? -0.03 : 0.01); // si le client n'a pas trouve tout ce qu'il souhaite la penalite est de -3%, sinon l'attractivite augmente de 1%
-				double impactPrix = ((prixMoyen-pri)/prixMoyen)/10.0; // 10% du pourcentage d'ecart de prix avec la moyenne.
+				double impactPrix = (pri<1000.0 || pri>37890.1) ? 0.0 : ((prixMoyen-pri)/prixMoyen)/10.0; // 10% du pourcentage d'ecart de prix avec la moyenne.
 				double impactTG = quantiteTotaleMiseEnVente.get(dist)==0 ? 0.0 : (this.quantiteEnTG.get(dist).get(choco)/quantiteTotaleMiseEnVente.get(dist))/5.0; // 2% au plus repartis sur les differents chocolats mis en tete de gondole
 				attractiviteDistributeur.get(choco).put(dist,attractiviteDistributeur.get(choco).get(dist)*(1.0+impactRupture+impactPrix+impactTG));
 				if (impactTG!=0.0) {
