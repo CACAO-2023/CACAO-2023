@@ -67,17 +67,21 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	    switch(feve.getGamme()) {
 	        case BQ:
 	            stockFeveBG.ajouter(dateDeRecolte, quantite);
+	            super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+quantite);
 	            break;
 	        case MQ:
 	        	if(feve.isBioEquitable()) {
 	        		stockFeveMGL.ajouter(dateDeRecolte, quantite);
+	        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+quantite);
 	        		break ;
 	        	}else {
 	        		stockFeveMG.ajouter(dateDeRecolte, quantite);
+	        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+quantite);
 	                break;
 	        	}
 	        case HQ:
 	        	stockFeveHGL.ajouter(dateDeRecolte, quantite);
+	        	super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+quantite);
         		break ;
 	        default:
 	            throw new IllegalArgumentException("Type de fève invalide");
@@ -134,56 +138,85 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 
   /**Mouhamed SOW*/
   public void retirerFeve(Feve feve, double quantite) {
-	    
+	   if(quantite<=0.0) {;}
+	   else {
 	  switch(feve.getGamme()) {
         case BQ:
             if(stockFeveBG.getQuantiteTotale()>=quantite) {
-        	stockFeveBG.retirer(quantite); break ;}
+        	stockFeveBG.retirer(quantite); 
+        	super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-quantite);
+        	break ;
+        	}
             else {stockFeveBG.retirer(stockFeveBG.getQuantiteTotale());
-            break;}
+            super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-stockFeveBG.getQuantiteTotale());
+            super.journalStock.ajouter(" La quantité de feve BG est nulle" );
+            break;
+            }
         case MQ:
         	if(feve.isBioEquitable()) {
         		if(stockFeveMGL.getQuantiteTotale()>=quantite) {
-        		stockFeveMGL.retirer(quantite);break;}
+        		stockFeveMGL.retirer(quantite);
+        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-quantite);
+        		break;
+        		}
         		else {stockFeveMGL.retirer(stockFeveMGL.getQuantiteTotale());
-        		break ;}
+        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-stockFeveMGL.getQuantiteTotale());
+        		super.journalStock.ajouter(" La quantité de feve MGL est nulle" );
+        		break ;
+        		}
         	}else {
         		if(stockFeveMG.getQuantiteTotale()>=quantite) {
-            		stockFeveMG.retirer(quantite);break;}
+            		stockFeveMG.retirer(quantite);
+            		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-quantite);
+            		break;
+            		}
             		else {stockFeveMG.retirer(stockFeveMG.getQuantiteTotale());
-            		break ;}
+            		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-stockFeveMG.getQuantiteTotale());
+            		super.journalStock.ajouter(" La quantité de feve MG est nulle" );
+            		break ;
+            		}
         	}
         case HQ:
         	if(stockFeveHGL.getQuantiteTotale()>=quantite) {
-        		stockFeveHGL.retirer(quantite);break;}
+        		stockFeveHGL.retirer(quantite);
+        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-quantite);
+        		break;
+        		}
         		else {stockFeveHGL.retirer(stockFeveHGL.getQuantiteTotale());
-        		break ;}
+        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-stockFeveHGL.getQuantiteTotale());
+        		super.journalStock.ajouter(" La quantité de feve HGL est nulle" );
+        		break ;
+        		}
         default:
             throw new IllegalArgumentException("Type de fève invalide");
     }
-	    
+	}   
 	}
 
 
 /**Mouhamed SOW*/
   public void ajouterChocolat(ChocolatDeMarque choco,Double quantite,int dateProduction) {
 	  Lot lot ;
-	  if (quantite == 0) {;}
+	  if (quantite <= 0) {;}
 	  else {
 	  switch(choco.getGamme()) {
 	  	case BQ :
-	  		this.stockChocolatBG.ajouter(dateProduction, quantite); ;
+	  		this.stockChocolatBG.ajouter(dateProduction, quantite); 
+	  		super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()+quantite);
 	  		break ;
 	  	case MQ :
 	  		if(choco.isBioEquitable()) {
-	  			this.stockChocolatMGL.ajouter(dateProduction, quantite); ;
+	  			this.stockChocolatMGL.ajouter(dateProduction, quantite);
+	  			super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()+quantite);
 	  			break ;
 	  		}else {
-	  			this.stockChocolatMG.ajouter(dateProduction, quantite); ;
+	  			this.stockChocolatMG.ajouter(dateProduction, quantite); 
+	  			super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()+quantite);
 	  			break ;
 	  		}
 	  	case HQ :
-	  		this.stockChocolatHGL.ajouter(dateProduction, quantite); ;
+	  		this.stockChocolatHGL.ajouter(dateProduction, quantite); 
+	  		super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()+quantite);
 	  		break ;
 	  	default :
 	  		throw new IllegalArgumentException("Type de Chocolat invalide");
@@ -192,31 +225,54 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   }
  /**Mouhamed SOW*/
   public void retirerChocolat(ChocolatDeMarque chocolat,Double quantite) {
+	  if(quantite==0.0) {;}
+	  else {
 	    switch(chocolat.getGamme()) {
 	  	case BQ :
 	  		if(stockChocolatBG.getQuantiteTotale()>=quantite) {
-	  			stockChocolatBG.retirer(quantite);break;}
+	  			stockChocolatBG.retirer(quantite);
+	  			super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-quantite);
+	  			break;
+	  			}
         		else {stockChocolatBG.retirer(stockChocolatBG.getQuantiteTotale());
-        		break ;}
+        		super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-stockChocolatBG.getQuantiteTotale());
+        		break ;
+        		}
 	  	case MQ :
 	  		if(chocolat.isBioEquitable()) {
 	  			if(stockChocolatMGL.getQuantiteTotale()>=quantite) {
-		  			stockChocolatMGL.retirer(quantite);break;}
+		  			stockChocolatMGL.retirer(quantite);
+		  			super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-quantite);
+		  			break;
+		  			}
 	        		else {stockChocolatMGL.retirer(stockChocolatMGL.getQuantiteTotale());
-	        		break ;}
+	        		super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-stockChocolatMGL.getQuantiteTotale());
+	        		break ;
+	        		}
 	  		}else {
 	  			if(stockChocolatMG.getQuantiteTotale()>=quantite) {
-		  			stockChocolatMG.retirer(quantite);break;}
+		  			stockChocolatMG.retirer(quantite);
+		  			super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-quantite);
+		  			break;
+		  			}
 	        		else {stockChocolatMG.retirer(stockChocolatMG.getQuantiteTotale());
-	        		break ;}
+	        		super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-stockChocolatMG.getQuantiteTotale());
+	        		break ;
+	        		}
 	  		}
 	  	case HQ :
 	  		if(stockChocolatHGL.getQuantiteTotale()>=quantite) {
-	  			stockChocolatHGL.retirer(quantite);break;}
+	  			stockChocolatHGL.retirer(quantite);
+	  			super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-quantite);
+	  			break;
+	  			}
         		else {stockChocolatHGL.retirer(stockChocolatHGL.getQuantiteTotale());
-        		break ;}
+        		super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-stockChocolatHGL.getQuantiteTotale());
+        		break ;
+        		}
 	  	default :
 	  		throw new IllegalArgumentException("Type de Chocolat invalide");
+	  }
 	  }
     
   }
@@ -255,6 +311,16 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   		super.journalStock.ajouter(" La quantité de Chocolat MG est :"+ this.stockChocolatMG.getQuantiteTotale() );
   		super.journalStock.ajouter(" La quantité de Chocolat MGL est :"+ this.stockChocolatMGL.getQuantiteTotale() );
   		super.journalStock.ajouter(" La quantité de Chocolat HGL est :"+ this.stockChocolatHGL.getQuantiteTotale() );
+  		double coutFeve=super.totalStocksFeves.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() ;
+  		double coutChoco=super.totalStocksFeves.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() ;
+  		if(coutFeve>0) {
+  		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), coutFeve) ;
+  		super.journalStock.ajouter(" on a payé :"+ coutChoco+" pour le cout de stockage des feves" );
+  		}
+  		if(coutChoco>0) {
+  		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), coutChoco) ;
+  		super.journalStock.ajouter(" on a payé :"+ coutChoco+" pour le cout de stockage des chocolats" );
+  		}
   		
   		
   	}

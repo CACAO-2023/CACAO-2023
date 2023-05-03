@@ -19,7 +19,6 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 	
 	protected List<ChocolatDeMarque>chocosProduits;
 	protected double qteTransfo;
-	protected HashMap<Feve, HashMap<Chocolat, Double>> pourcentageTransfo; // pour les differentes feves, le chocolat qu'elle peuvent contribuer a produire avec le ratio
 	
 	public Transformateur1Transformateur() {
 		super();
@@ -58,7 +57,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		double conversionb = 1.58;
 		if (transfo>0) {
 			this.stockFeves.put(fb, this.stockFeves.get(fb)-transfo);
-			this.totalStocksFeves.retirer(this, transfo, this.cryptogramme);
+			this.totalStocksFeves.setValeur(this, this.totalStocksFeves.getValeur()-transfo,this.cryptogramme);
 			this.stockChoco.put(cb, this.stockChoco.get(cb)+(transfo)*conversionb);
 			int pourcentageCacao =  42;
 			this.totalStocksChoco.ajouter(this, ((transfo)*conversionb), this.cryptogramme);
@@ -73,7 +72,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		double conversion = 1.06;
 		if (transfoh>0) {
 			this.stockFeves.put(fh, this.stockFeves.get(fh)-transfoh);
-			this.totalStocksFeves.retirer(this, transfoh, this.cryptogramme);
+			this.totalStocksFeves.setValeur(this, this.totalStocksFeves.getValeur()-transfoh,this.cryptogramme);
 			// Tous les chocolats sont directement étiquetés "Vccotioi"
 			int pourcentageCacao =  94;
 			ChocolatDeMarque cm= new ChocolatDeMarque(ch, "Vccotioi", pourcentageCacao, 15);
