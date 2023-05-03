@@ -59,11 +59,11 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 						return e;
 					}
 				} else {
-					this.journal_ContratCadre.ajouter("rejet du contrat:"+contrat.toString());
+					this.journal_ContratCadre.ajouter("rejet du contrat:"+contrat.toString()+"frileux"+contrat.getProduit()+"    "+quantiteEnStock);
 					return null; // on est frileux : on ne s'engage dans un contrat cadre que si on a toute la quantite en stock (on pourrait accepter même si nous n'avons pas tout car nous pouvons produire/acheter pour tenir les engagements)
 				}
 			} else {
-				this.journal_ContratCadre.ajouter("rejet du contrat:"+contrat.toString());
+				this.journal_ContratCadre.ajouter("rejet du contrat:"+contrat.toString()+"on ne vend pas de ce produit"+contrat.getProduit());
 				return null; // on ne vend pas de ce produit
 			}}else {
 				this.journal_ContratCadre.ajouter("le produit de ce contrat ne correspond pas à une marque de chocolat"+contrat.toString());
@@ -89,7 +89,9 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	//Auteur : Marzougui Mariem
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		stocks.ajouterAuStock((ChocolatDeMarque)(contrat.getProduit()),lot.getQuantiteTotale() );
-		this.journal_stocks.ajouter("ajout d'une quantité de"+lot.getQuantiteTotale()+"T");
+		this.stock_total+=lot.getQuantiteTotale();
+		s.setValeur(this, stock_total, this.cryptogramme);
+		this.journal_stocks.ajouter("ajout d'une quantité de"+lot.getQuantiteTotale()+"T livraison CC "+contrat.getNumero());
 	}
 	
 	

@@ -20,6 +20,7 @@ import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
 import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
@@ -30,12 +31,12 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	protected int cryptogramme;
 	protected String nom;
 	protected ArrayList<ChocolatDeMarque> chocolats;
-	protected LinkedList<String> nos_chocolats;
+	//protected LinkedList<String> nos_chocolats;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
 	protected StockGeneral stocks;
 	protected HashMap<Gamme, Double> pourcentagesGamme;
-	private double stock_total;
-	
+	protected double stock_total;
+	protected Variable s;
 	protected Journal journal_operationsbancaires;
 	protected Journal journal_ventes;
 	protected Journal journal_achats;
@@ -52,7 +53,9 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		prixDeVente = new HashMap<>();
 		stocks = new StockGeneral();
 		stock_total = 0.0;
+		s= new VariablePrivee("Eq8 TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
 		pourcentagesGamme = new HashMap<>();
+		
 
 		journal_operationsbancaires = new Journal("Journal des Opérations bancaires de l'" + nom, this);
 		journal_ventes = new Journal("Journal des Ventes de l'" + nom, this);
@@ -62,13 +65,13 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		journal_stocks = new Journal("Journal des stocks " + nom, this);
 		initialiserGamme();
 
-		this.nos_chocolats = new LinkedList<String>();
+		//this.nos_chocolats = new LinkedList<String>();
 		
 		//nos marques de chocolats
-		this.nos_chocolats.add("C_HQ_BE_Vccotioi");
-		this.nos_chocolats.add("C_MQ_ChocoPop");
-		this.nos_chocolats.add("C_MQ_chokchoco");
-		this.nos_chocolats.add("C_MQ_BE_Villors");
+		//this.nos_chocolats.add("C_HQ_BE_Vccotioi");
+		//this.nos_chocolats.add("C_MQ_ChocoPop");
+		//this.nos_chocolats.add("C_MQ_chokchoco");
+		//this.nos_chocolats.add("C_MQ_BE_Villors");
 
 		
 	//C_HQ_BE_Vccotioi
@@ -92,14 +95,23 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	}
 
 	public void initialiser() {
-
+		
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
-		for (int i=0; i<chocolats_filiere.size(); i++) {
-			if(nos_chocolats.contains((chocolats_filiere.get(i)).toString())){
-				chocolats.add(chocolats_filiere.get(i));
+			for (ChocolatDeMarque marque : chocolats_filiere) {
+				chocolats.add(marque);
+				
+				if (marque.getGamme()==Gamme.HQ) {
+					prixDeVente.put(marque,1200.);
+				}
+				if (marque.getGamme()==Gamme.MQ) {
+					prixDeVente.put(marque,900.);
+				}
+				if (marque.getGamme()==Gamme.BQ) {
+					prixDeVente.put(marque,700.);
+				}
 			}
-		}
+		
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -114,21 +126,30 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
-		for (int i=0; i<chocolats_filiere.size(); i++) {
-			if(nos_chocolats.contains((chocolats_filiere.get(i)).toString())){
-				chocolats.add(chocolats_filiere.get(i));
+			for (ChocolatDeMarque marque : chocolats_filiere) {
+				chocolats.add(marque);
+				
+				if (marque.getGamme()==Gamme.HQ) {
+					prixDeVente.put(marque,1200.);
+				}
+				if (marque.getGamme()==Gamme.MQ) {
+					prixDeVente.put(marque,900.);
+				}
+				if (marque.getGamme()==Gamme.BQ) {
+					prixDeVente.put(marque,700.);
+				}
 			}
-		}
 		
 		if (Filiere.LA_FILIERE.getEtape()==0) {
 			for (ChocolatDeMarque marque : chocolats) {
-				stocks.ajouterAuStock(marque, 1.0);
+				stocks.ajouterAuStock(marque, 30000.0);
 				journal_stocks.ajouter("Stock de "+marque+" : "+stocks.getStock(marque)+" T");
 			}	}
 
 		//Mise à jour du stock total
 		for (ChocolatDeMarque marque : chocolats) {
 			stock_total += stocks.getStock(marque);
+			s.setValeur(this, stock_total, this.cryptogramme);
 		}
 		journal_stocks.ajouter("Stock total "+ stock_total+"T");
 
@@ -148,16 +169,15 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	//Auteur : Ben Messaoud Karim
 	public String getDescription() {
-		return "Royal Roast, un distributeur de chocolat de qualité.";
+		return "Royal Roast, un distributeur de chocolat de qualité";
 	}
 
 	//Auteur : Ben Messaoud Karim
 	//Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
-
 		List<Variable> res = new ArrayList<Variable>();
-		Variable s= new Variable("stock",this,stock_total);
 		res.add(s);
+		
 		return res;
 	}
 
@@ -267,16 +287,13 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	/*tous les next on ajoute dans le journal la quantité en stock*/
 	/*mettre en indicateur que l'on est en rupture de stock */
 
-	//Auteur : Ben Messaoud Karim et Maxime Azzi
+	//Auteur : Ben Messaoud Karim 
 	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
 		if (choco == null || this.stocks.getStock(choco) == 0.0) {
 			return 0.0;
 		} else {
-			double stockGamme;
 			double stockChoco = this.stocks.getStock(choco);
-			stockGamme = this.stocks.getStock(choco);
-
-			return Math.min(stockGamme, stockChoco);
+			return  stockChoco ;
 		}
 	}
 
@@ -300,6 +317,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		if (pos >= 0) {
 			this.stocks.retirerDuStock(choco, quantite);
 			stock_total-=quantite;
+			s.setValeur(this, stock_total, this.cryptogramme);
 			journal_stocks.ajouter("retrait d'une quantité de"+ quantite+"T");
 			journal_ventes.ajouter("La quantité " + quantite + " a été vendue à" + montant);
 		}
