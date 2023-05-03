@@ -69,7 +69,9 @@ public class Distributeur1Acteur  implements IActeur {
 	/**
 	 * couts: couts d'achat à travers les contrats cadres
 	 */
+	protected HashMap<ChocolatDeMarque,Double> moyenne_couts = new HashMap<ChocolatDeMarque,Double>(); 
 	protected HashMap<ChocolatDeMarque,Double> couts = new HashMap<ChocolatDeMarque,Double>(); 
+	
 	
 	/**
 	 * nombre d'achat en contrat cadre, ça servira à calculer la moyenne des couts
@@ -115,11 +117,9 @@ public class Distributeur1Acteur  implements IActeur {
 	 * @author ghaly
 	 * actualise la moyenne des couts d'un chocolat de marque a une etape donnée
 	 */
-	protected void actualise_cout(Double nv_cout) {
-		Integer n;
-		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-				n= nombre_achats.get(marque);
-				couts.replace(marque,(couts.get(marque)*n+nv_cout)/(n+1));}
+	protected void actualise_cout(ChocolatDeMarque marque,Double nv_cout) {
+				int n= nombre_achats.get(marque);
+				moyenne_couts.replace(marque,(moyenne_couts.get(marque)*n+nv_cout)/(n+1));
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class Distributeur1Acteur  implements IActeur {
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			if (marque.getChocolat()==gamme) {
 				n++;
-				s+= couts.get(marque);
+				s+= moyenne_couts.get(marque);
 			}
 		}
 		return s/n;
@@ -224,6 +224,7 @@ public class Distributeur1Acteur  implements IActeur {
 		
 		//Initialisation des couts
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			moyenne_couts.put(marque, getCout_gamme(marque));
 			couts.put(marque, getCout_gamme(marque));
 		}
 		
