@@ -1,6 +1,12 @@
 package abstraction.eqXRomu.bourseCacao;
 
 import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,11 +15,13 @@ import abstraction.eqXRomu.filiere.Banque;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.filiere.IAssermente;
+import abstraction.eqXRomu.general.Courbe;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.general.VariableReadOnly;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Lot;
+import presentation.secondaire.FenetreGraphique;
 
 public class BourseCacao implements IActeur, IAssermente {
 	private HashMap<IActeur, Integer> cryptos;
@@ -25,7 +33,16 @@ public class BourseCacao implements IActeur, IAssermente {
 	private HashMap<IAcheteurBourse, Integer> blackListA; //nombre de steps pendant lequel l'acheteur ne peut plus acheter (car a fait une demande qu'il n'a pas pu honorer)
 	private HashMap<IVendeurBourse, Integer> blackListV; //nombre de steps pendant lequel l'acheteur ne peut plus acheter (car a fait une demande qu'il n'a pas pu honorer)
 
+	private HashMap<Feve, HashMap<IAcheteurBourse, Courbe>> souhaitsA;
+	private HashMap<Feve, HashMap<IAcheteurBourse, Courbe>> obtenusA;
+	private HashMap<Feve, HashMap<IVendeurBourse, Courbe>> souhaitsV;
+	private HashMap<Feve, HashMap<IVendeurBourse, Courbe>> obtenusV;
+	private HashMap<Feve, Courbe> totalSouhaitsA, totalSouhaitsV;
+	private HashMap<Feve, FenetreGraphique> graphique;
+	private Variable affichageGraphiques;	
+
 	public BourseCacao() {
+		this.affichageGraphiques = new Variable(getNom()+" Aff.Graph.","0=pas d'affichage",this,0.0,1.0,0.0);
 		this.journal = new HashMap<Feve, Journal>();
 		this.cours=new HashMap<Feve, Variable>();
 		// 1472 euros = 1600 dollars prix min du cours du cacao par tonne (1830 sur les 20 dernieres annees)
@@ -83,6 +100,7 @@ public class BourseCacao implements IActeur, IAssermente {
 				res.add(this.cours.get(f));
 			}
 		}
+		res.add(affichageGraphiques);
 		return res;
 	}
 
@@ -122,7 +140,9 @@ public class BourseCacao implements IActeur, IAssermente {
 		}
 	}
 
+
 	public void initialiser() {
+		int numMarque=3;
 		this.vendeurs = new LinkedList<IVendeurBourse>();
 		this.acheteurs = new LinkedList<IAcheteurBourse>();
 		List<IActeur> acteurs = Filiere.LA_FILIERE.getActeurs();
@@ -136,9 +156,78 @@ public class BourseCacao implements IActeur, IAssermente {
 				this.blackListA.put((IAcheteurBourse)acteur, 0);
 			}
 		}
+		this.graphique=new HashMap<Feve, FenetreGraphique>();
+		this.totalSouhaitsA=new HashMap<Feve,Courbe>();
+		this.totalSouhaitsV=new HashMap<Feve,Courbe>();
+		this.souhaitsA=new HashMap<Feve, HashMap<IAcheteurBourse, Courbe>>();
+		this.obtenusA=new HashMap<Feve, HashMap<IAcheteurBourse, Courbe>>();
+		this.souhaitsV=new HashMap<Feve, HashMap<IVendeurBourse, Courbe>>();
+		this.obtenusV=new HashMap<Feve, HashMap<IVendeurBourse, Courbe>>();
+		for (Feve f : Feve.values()) {
+			if (!f.isBioEquitable()) {
+				this.graphique.put(f, new FenetreGraphique("Offres et demandes de "+f, 500,400));
+				Courbe ctsa = new Courbe("Total souhaits A ");
+				ctsa.setCouleur(Color.BLACK);
+				ctsa.setMarque(numMarque);
+				numMarque++;
+				this.totalSouhaitsA.put(f, ctsa);
+				Courbe ctsv = new Courbe("Total souhaits V ");
+				ctsv.setCouleur(Color.BLACK);
+				ctsa.setMarque(numMarque);
+				numMarque++;
+				this.totalSouhaitsV.put(f, ctsv);
+				this.graphique.get(f).ajouter(ctsa);
+				this.graphique.get(f).ajouter(ctsv);
+				this.souhaitsV.put(f, new HashMap<IVendeurBourse, Courbe>());
+				this.obtenusV.put(f, new HashMap<IVendeurBourse, Courbe>());
+				this.souhaitsA.put(f, new HashMap<IAcheteurBourse, Courbe>());
+				this.obtenusA.put(f, new HashMap<IAcheteurBourse, Courbe>());
+				for (IActeur acteur : acteurs) {
+					if (acteur instanceof IVendeurBourse) {
+						Courbe cs = new Courbe("souhaits v "+acteur.getNom());
+						cs.setCouleur(acteur.getColor());
+						cs.setMarque(numMarque);
+						numMarque++;
+						souhaitsV.get(f).put((IVendeurBourse)acteur, cs);
+						graphique.get(f).ajouter(cs);
+						Courbe co = new Courbe("obtenus v "+acteur.getNom());
+						co.setCouleur(acteur.getColor());
+						co.setMarque(numMarque);
+						numMarque++;
+						obtenusV.get(f).put((IVendeurBourse)acteur, co);
+						graphique.get(f).ajouter(co);
+					}
+					if (acteur instanceof IAcheteurBourse) {
+						Courbe cs = new Courbe("souhaits a "+acteur.getNom());
+						cs.setCouleur(acteur.getColor());
+						cs.setMarque(numMarque);
+						numMarque++;
+						souhaitsA.get(f).put((IAcheteurBourse)acteur, cs);
+						graphique.get(f).ajouter(cs);
+						Courbe co = new Courbe("obtenus a "+acteur.getNom());
+						co.setCouleur(acteur.getColor());
+						co.setMarque(numMarque);
+						numMarque++;
+						//co.setTransparence(50);
+						obtenusA.get(f).put((IAcheteurBourse)acteur, co);
+						graphique.get(f).ajouter(co);
+					}
+				}
+
+			}
+		}
 	}
 
+
+	//	private HashMap<Feve, HashMap<IAcheteurBourse, Courbe>> souhaitsA;
+	//	private HashMap<Feve, HashMap<IAcheteurBourse, Courbe>> obtenusA;
+	//	private HashMap<Feve, HashMap<IVendeurBourse, Courbe>> souhaitsV;
+	//	private HashMap<Feve, HashMap<IVendeurBourse, Courbe>> obtenusV;
+	//	private HashMap<Feve, Courbe> totalSouhaitsA, totalSouhaitsV;
+	//	private HashMap<Feve, FenetreGraphique> graphique;
+
 	public void next() {
+		int etape=Filiere.LA_FILIERE.getEtape();
 		Banque banque = Filiere.LA_FILIERE.getBanque();
 		for (Feve f : Feve.values()) {
 			if (!f.isBioEquitable()) {
@@ -148,6 +237,7 @@ public class BourseCacao implements IActeur, IAssermente {
 				for (IAcheteurBourse acheteur : this.acheteurs) {
 					if (blackListA.get(acheteur)==0) {
 						double demande = acheteur.demande(f, cours);
+						souhaitsA.get(f).get(acheteur).ajouter(etape, demande);
 						journal.get(f).ajouter(Journal.texteColore((IActeur)acheteur, ((IActeur)acheteur).getNom()+" souhaite acheter "+Journal.doubleSur(demande, 2)+" T de "+f));
 						if (demande>0) {
 							if (banque.verifierCapacitePaiement((IActeur)acheteur, cryptos.get((IActeur)acheteur), cours*demande)) {
@@ -167,6 +257,7 @@ public class BourseCacao implements IActeur, IAssermente {
 				for (IVendeurBourse vendeur : this.vendeurs) {
 					if (blackListV.get(vendeur)==0) {
 						double offre = vendeur.offre(f, cours);
+						souhaitsV.get(f).get(vendeur).ajouter(etape, offre);
 						journal.get(f).ajouter(Journal.texteColore((IActeur)vendeur, ((IActeur)vendeur).getNom()+" souhaite vendre  "+Journal.doubleSur(offre, 2)+" T de "+f));
 						if (offre>0) {
 							offres.put(vendeur, offre);
@@ -177,6 +268,8 @@ public class BourseCacao implements IActeur, IAssermente {
 					}
 				}
 
+				this.totalSouhaitsV.get(f).ajouter(etape, totalOffres);
+				this.totalSouhaitsA.get(f).ajouter(etape, totalDemandes);
 				if (totalOffres>=totalDemandes && totalDemandes>0.0) { // Les acheteurs vont obtenir la quantite souhaitee et vendeurs vendre au prorata de l'offre qu'ils ont faite
 					Lot lotGlobal = new Lot(f);
 					journal.get(f).ajouter("l'offre ("+Journal.doubleSur(totalOffres, 2)+") est superieure a la demande ("+Journal.doubleSur(totalDemandes, 2)+")");
@@ -184,6 +277,7 @@ public class BourseCacao implements IActeur, IAssermente {
 						// La quantite vendue est au prorata de la quantite mis en vente
 						double quantite = (totalDemandes*offres.get(v))/totalOffres; 
 						Lot lot = v.notificationVente(f, quantite,cours);
+						obtenusV.get(f).get(v).ajouter(etape, quantite);
 						if (lot!=null && lot.getProduit().equals(f) && lot.getQuantiteTotale()>=quantite) {
 							banque.virer(this, crypto, (IActeur)v,cours*quantite);
 							lotGlobal.ajouter(lot);
@@ -197,6 +291,7 @@ public class BourseCacao implements IActeur, IAssermente {
 					for (IAcheteurBourse a : demandes.keySet()){
 						// S'il demeure plus d'offres que de demande la demande est honoree, sinon c'est au prorata
 						double quantite = totalOffres>=totalDemandes ? demandes.get(a) : (totalOffres*demandes.get(a))/totalDemandes;
+						obtenusA.get(f).get(a).ajouter(etape, quantite);
 						boolean virementOk = banque.virer((IActeur)a, cryptos.get((IActeur)a), this,cours*quantite);
 						if (virementOk) {
 							Lot lot = lotGlobal.retirer(quantite);
@@ -213,6 +308,7 @@ public class BourseCacao implements IActeur, IAssermente {
 					for (IVendeurBourse v : offres.keySet()){
 						// Chaque vendeur vend tout ce qu'il a annonce vouloir vendre
 						double quantite = offres.get(v); 
+						obtenusV.get(f).get(v).ajouter(etape, quantite);
 						Lot lot = v.notificationVente(f, quantite,cours);
 						if (lot!=null && lot.getProduit().equals(f) && lot.getQuantiteTotale()>=quantite) {
 							banque.virer(this, crypto, (IActeur)v,cours*quantite);
@@ -227,6 +323,7 @@ public class BourseCacao implements IActeur, IAssermente {
 					for (IAcheteurBourse a : demandes.keySet()){
 						// La quantite achetee est au prorata de la quantite demandee
 						double quantite = (totalOffres*demandes.get(a))/totalDemandes; 
+						obtenusA.get(f).get(a).ajouter(etape, quantite);
 						if (cours*quantite>0) {
 							boolean virementOk = banque.virer((IActeur)a, cryptos.get((IActeur)a), this,cours*quantite);
 							if (virementOk) { // normalement c'est le cas vu qu'on a verifie auparavant
@@ -279,5 +376,47 @@ public class BourseCacao implements IActeur, IAssermente {
 				journal.get(f).ajouter("--> Le cours de la feve "+f+" passe a :"+Journal.doubleSur(cours, 4));
 			}
 		}
+		if (this.affichageGraphiques.getValeur()!=0.0) {
+			for (Feve f : Feve.values()) {
+				if (!f.isBioEquitable()) {
+					this.graphique.get(f).setVisible(true);
+
+					try {
+						PrintWriter aEcrire= new PrintWriter(new BufferedWriter(new FileWriter("docs"+File.separator+"B_"+f+".csv")));
+						Collection<IAcheteurBourse> ab=obtenusA.get(f).keySet();
+						Collection<IVendeurBourse> vb=obtenusV.get(f).keySet();
+						String s="Etape;";
+						IActeur unActeur=null;
+						for (IAcheteurBourse a : ab) {
+							s=s+"Souhait "+((IActeur)a).getNom()+";";
+							s=s+"Obtenus "+((IActeur)a).getNom()+";";
+							unActeur=((IActeur)a);
+						}
+						for (IVendeurBourse a : vb) {
+							s=s+"Souhait "+((IActeur)a).getNom()+";";
+							s=s+"Obtenus "+((IActeur)a).getNom()+";";
+						}
+						aEcrire.println( s );
+						int nbPoints = obtenusA.get(f).get(unActeur).getNbPoints();
+						for (int i=0; i<nbPoints; i++) {
+							s=i+";";
+							for (IAcheteurBourse a : ab) {
+								s=s+souhaitsA.get(f).get(a).getY(i)+";";
+								s=s+obtenusA.get(f).get(a).getY(i)+";";
+							}
+							for (IVendeurBourse a : vb) {
+								s=s+souhaitsV.get(f).get(a).getY(i)+";";
+								s=s+obtenusV.get(f).get(a).getY(i)+";";
+							}
+							aEcrire.println( s );
+						}
+						aEcrire.close();
+					}
+					catch (IOException e) {
+						System.out.println("Une operation sur les fichiers a leve l'exception "+e) ;
+					}
+				}
+			}
+		}
 	}
-}
+	}
