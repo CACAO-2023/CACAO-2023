@@ -45,7 +45,7 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 	private Boolean besoin() { //Besoin ou non d'un appel d'offre
 		int etapesuiv = (Filiere.LA_FILIERE.getEtape()+1)%24;
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (stockChocoMarque.get(marque) < prevision(marque,etapesuiv)) { //On achete seulement si on prevoit de vendre plus que ce qu'on a
+			if (stockChocoMarque.get(marque) < getPrevisionsperso(marque,etapesuiv)) { //On achete seulement si on prevoit de vendre plus que ce qu'on a
 				return true;
 			}
 		}
@@ -57,8 +57,8 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 		int etapesuiv = (Filiere.LA_FILIERE.getEtape()+1)%24;
 		HashMap<ChocolatDeMarque,Double> qte = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (stockChocoMarque.get(marque) < prevision(marque,etapesuiv)) {
-				qte.put(marque,1.5*(prevision(marque,etapesuiv)-stockChocoMarque.get(marque)));
+			if (stockChocoMarque.get(marque)+getLivraisonEtape(marque) < getPrevisionsperso(marque,etapesuiv)) {
+				qte.put(marque,2*(getPrevisionsperso(marque,etapesuiv)-(stockChocoMarque.get(marque))+getLivraisonEtape(marque)));
 			}
 		}
 		return qte;
@@ -68,7 +68,7 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 		int etapesuiv = (Filiere.LA_FILIERE.getEtape()+1)%24;
 		List<ChocolatDeMarque> liste = new ArrayList<ChocolatDeMarque>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (stockChocoMarque.get(marque) < prevision(marque,etapesuiv)) {
+			if (stockChocoMarque.get(marque)+getLivraisonEtape(marque) < getPrevisionsperso(marque,etapesuiv)) {
 				liste.add(marque);
 			}
 		}
@@ -77,15 +77,14 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 	
 	public void next() {
 		super.next();
-		journal.ajouter("AcheteurOA");
 		if (supOA==null) {
 			supOA =(SuperviseurVentesOA)(Filiere.LA_FILIERE.getActeur("Sup.OA"));
 		}
-		if (besoin()!=null) { //Si on manque à l'instant t de stock, on lance cette méthode d'achat car l'effet est immediat
+		if (besoin()==true) { //Si on manque à l'instant t de stock, on lance cette méthode d'achat car l'effet est immediat
 			List<ChocolatDeMarque> marque = besoinMarque();
 			HashMap<ChocolatDeMarque,Double> qte = besoinQte();
 			for (ChocolatDeMarque m : marque) {
-				if (qte.get(m) > 2.0) {
+				if (qte.get(m) > 2.0) { //On ne peut pas lancer d'appel d'offre de moins de 2 tonnes
 					PropositionVenteOA pRetenue = supOA.acheterParAO(this, cryptogramme,m.getChocolat(), m.getMarque(), qte.get(m), false); //acteur,crypto,choco,marque,qté,TG
 					if (pRetenue!=null) { //Update des paramètres etc
 						double nouveauStock = pRetenue.getOffre().getQuantiteT();
@@ -93,8 +92,12 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 							nouveauStock+=this.stockChocoMarque.get(pRetenue.getChocolatDeMarque());
 						}
 						stockChocoMarque.replace(pRetenue.getChocolatDeMarque(), nouveauStock);
-						journal.ajouter("   Achat par offre d'achat de "+pRetenue+" --> quantite en stock = "+nouveauStock);
-						couts(m,pRetenue.getPrixT()/pRetenue.getOffre().getQuantiteT());
+						journal_achat.ajouter("Achat par offre d'achat de "+pRetenue+" --> quantite en stock = "+nouveauStock);
+
+		////////////////////////////////////////////////				
+						//						couts(m,pRetenue.getPrixT()/pRetenue.getOffre().getQuantiteT());
+		//je ne sais pas si cest pertinent d'enregistrer le cout d'une OA vu qu'elle coute cher de base
+						////////////////////////////////////////////////////////////////////
 					}
 				}
 				
