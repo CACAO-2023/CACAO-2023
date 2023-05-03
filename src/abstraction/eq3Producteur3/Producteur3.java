@@ -360,14 +360,18 @@ public class Producteur3 extends Bourse3  {
 	//PARTIE CATASTROPHE
 	/**
 	 * @author BOCQUET Gabriel
+	 * @author NAVEROS Marine
 	 * @param s
 	 */
 	public void Fire(String s) {
 			Champs fields = this.getFields();
 			HashMap<Integer,Integer> FieldsH = fields.getChamps().get("H");
 			HashMap<Integer,Integer> FieldsM = fields.getChamps().get("M");
+			HashMap<Integer, Integer> Fields =fields.getChamps().get("C");
 			double hectarMburnt = 0;
 			double hectarHburnt = 0;
+			double Degat =0;
+			
 			Set<Integer> KeyM = FieldsM.keySet();
 			Set<Integer> KeyH = FieldsH.keySet();
 			Journal j = this.getJCatastrophe();
@@ -384,18 +388,10 @@ public class Producteur3 extends Bourse3  {
 				ControlTimeGif monTimerTask = new ControlTimeGif(popup);
 				timer.schedule(monTimerTask, 3000);
 				*/
-				for(Integer key : KeyM) {
-					hectarMburnt += FieldsM.get(key)*this.quantiteBruleH.getValeur();
-					FieldsM.put(key,(int) (FieldsM.get(key)*(1-this.quantiteBruleH.getValeur())));
-				}
-				j.ajouter(Color.gray, Color.black, hectarMburnt + " d'hectares de Moyenne Gamme d'arbres ont brulé");
-				for(Integer key : KeyH) {
-					hectarHburnt = FieldsH.get(key)*this.quantiteBruleH.getValeur();
-					FieldsH.put(key,(int) (FieldsH.get(key)*(1-this.quantiteBruleH.getValeur())));
-				}
-				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
+			 Degat=quantiteBruleH.getValeur();		
+				
 			}
-			else if(s.equals("Med")) {
+			if(s.equals("Med")){
 				/*
 				JFrame popup = new JFrame("Incendie Moyen !");		
 				popup.setLocation(300, 100);
@@ -408,18 +404,10 @@ public class Producteur3 extends Bourse3  {
 				ControlTimeGif monTimerTask = new ControlTimeGif(popup);
 				timer.schedule(monTimerTask, 3000);
 				*/
-				for(Integer key : KeyM) {
-					hectarMburnt += FieldsM.get(key)*this.quantiteBruleM.getValeur();
-					FieldsM.put(key,(int) (FieldsM.get(key)*(1-this.quantiteBruleM.getValeur())));
-				}
-				j.ajouter(Color.gray, Color.black, hectarMburnt + " d'hectares de Moyenne Gamme d'arbres ont brulé");
-				for(Integer key : KeyH) {
-					hectarHburnt = FieldsH.get(key)*this.quantiteBruleM.getValeur();
-					FieldsH.put(key,(int) (FieldsH.get(key)*(1-this.quantiteBruleM.getValeur())));
-				}
-				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
+				 Degat=quantiteBruleM.getValeur();
 			}
-			else if(s.equals("Lit")) {
+			if(s.equals("Lit")) {
+				Degat=quantiteBruleL.getValeur();
 				/*
 				JFrame popup = new JFrame("Petit Incendie !");		
 				popup.setLocation(300, 100);
@@ -432,17 +420,20 @@ public class Producteur3 extends Bourse3  {
 				ControlTimeGif monTimerTask = new ControlTimeGif(popup);
 				timer.schedule(monTimerTask, 3000);
 				*/
-				for(Integer key : KeyM) {
-					hectarMburnt += FieldsM.get(key)*this.quantiteBruleL.getValeur();
-					FieldsM.put(key,(int) (FieldsM.get(key)*(1-this.quantiteBruleL.getValeur())));
-				}
-				j.ajouter(Color.gray, Color.black, hectarMburnt + " d'hectares de Moyenne Gamme d'arbres ont brulé");
-				for(Integer key : KeyH) {
-					hectarHburnt = FieldsH.get(key)*(this.quantiteBruleL.getValeur());
-					FieldsH.put(key,(int) (FieldsH.get(key)*(1-this.quantiteBruleL.getValeur())));
-				}
-				j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
+				
 			}
+			
+			for(Integer key : KeyM) {
+				hectarMburnt += FieldsM.get(key)*Degat;
+				FieldsM.put(key,(int) (FieldsM.get(key)*(1-Degat)));
+			}
+			j.ajouter(Color.gray, Color.black, hectarMburnt + " d'hectares de Moyenne Gamme d'arbres ont brulé");
+			for(Integer key : KeyH) {
+				hectarHburnt = FieldsH.get(key)*Degat;
+				FieldsH.put(key,(int) (FieldsH.get(key)*(1-Degat)));
+			}
+			j.ajouter(Color.yellow, Color.black, hectarHburnt + " d'hectares de Haute Gamme d'arbres ont brulé");
+			
 			//On pense a mettre a jour les champs
 			this.fields.setChampM(FieldsM);
 			this.fields.setChampH(FieldsH);
@@ -481,6 +472,7 @@ public class Producteur3 extends Bourse3  {
 			hectarDetruitM += FieldM.get(key)*(0+ Math.random()*(1-this.quantiteDetruiteCyclone.getValeur()));
 			FieldM.put(key, (int)(FieldM.get(key)*(0+ Math.random()*(1-this.quantiteDetruiteCyclone.getValeur()))));
 		}
+		//mise à jour des champs après le cyclone
 		this.fields.setChampM(FieldM);
 		this.fields.setChampH(FieldH);
 		j.ajouter(Color.gray, Color.black, hectarDetruitM+"d'hectares de Moyenne Gamme qui ont été détruits par un cyclone");		
