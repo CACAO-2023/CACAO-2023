@@ -397,7 +397,7 @@ public class Producteur3 extends Bourse3  {
 		double argentGagne = 0.0;
 		double stockActuel = this.getStock().getQuantite(f);
 		for(ExemplaireContratCadre c : contractsGoods) {
-			//Si je n'ai plus de feves je ne peux plus rien livre
+			//Si je n'ai plus de feves je ne peux plus rien livrer
 			if(stockActuel <=0) {
 				break;
 			}
