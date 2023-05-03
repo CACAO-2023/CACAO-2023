@@ -30,7 +30,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	protected Journal journal;
 	private List<ExemplaireContratCadre> contratEnCours;
 	
-	private HashMap<Chocolat, Double> prixMax;
+	public HashMap<Chocolat, Double> prixMax;
 	private HashMap<Chocolat, Double>precedentPrix;
 	//faire une méthode qui connait le prix d'achat moyen d'un chocolat
 	
