@@ -63,7 +63,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 //		double coef = 1-(((10/3)*qualite)/100)+0.1;
 		double promo = prixPromotion(choco);
 		double cout = getCoutTotal(choco);
-		double prix = (cout/1000)*promo/qualite;
+		double prix = (cout/1000)*promo/(1-0.1*qualite);
 		return prix;
 	}
 	
