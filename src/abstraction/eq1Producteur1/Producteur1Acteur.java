@@ -39,16 +39,16 @@ public class Producteur1Acteur implements IActeur {
 		this.step = 0;
 		this.champBas = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
 		for (int i=0; i<30; i++) {
-			this.champBas.ajouter(-i, 7500.);
+			this.champBas.ajouter(-i, 6666.67);
 		}
 		this.champMoy = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
 		for (int i=0; i<30; i++) {
-			this.champMoy.ajouter(-i, 833.33);
+			this.champMoy.ajouter(-i, 1666.67);
 		}
 		this.stockFeveBas = new Lot(Feve.F_BQ);
-		this.stockFeveBas.ajouter(0,1000);
+		this.stockFeveBas.ajouter(0,1200);
 		this.stockFeveMoy = new Lot(Feve.F_MQ);
-		this.stockFeveMoy.ajouter(0,1000);
+		this.stockFeveMoy.ajouter(0,300);
 	}
 
 	public String getNom() {// NE PAS MODIFIER
