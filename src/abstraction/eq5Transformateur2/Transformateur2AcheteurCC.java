@@ -66,7 +66,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	        nouvelEcheancier.vider();
 	        return nouvelEcheancier;
 	    }
-
+ 
 	    double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
 
 	    if (coutTotal > soldeDisponible) {
