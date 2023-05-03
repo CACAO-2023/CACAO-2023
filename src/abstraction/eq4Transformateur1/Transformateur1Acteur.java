@@ -113,6 +113,9 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	public Color getColor() {// NE PAS MODIFIER
 		return new Color(229, 243, 157); 
 	}
+	public String toString() {
+		return this.getNom();
+	}
 
 	public String getDescription() {
 		return "Pour les produits bas de gamme vendus sous marque distributeur, notre objectif est de maximiser les ventes en proposant des prix comp�titifs. Nous comparons les prix propos�s par tous les producteurs et la bourse afin d'acheter le cacao au meilleur prix. Les producteurs sont s�lectionnes par contrat cadre ainsi que les distributeurs. Nous envisageons �galement des principes de solde et de promotion pour �couler les stocks plus rapidement, � choisir entre la p�riode des f�tes ou non.\r\n"

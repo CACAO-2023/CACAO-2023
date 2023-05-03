@@ -240,6 +240,8 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 	}
 
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
+		System.out.println(" type produit "+contrat.getProduit());
+
 		double prixInit=contrat.getListePrix().get(0);
 		double prix = contrat.getPrix();
 		if (prix>0.0 && (prixInit-prix)/prixInit<=0.049) {

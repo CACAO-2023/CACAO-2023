@@ -168,6 +168,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 	
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		double prix=1500.0;
+//		System.out.println(" type produit "+contrat.getProduit());
 		double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
 		Object produit = contrat.getProduit();
 		if (produit instanceof Feve) {
