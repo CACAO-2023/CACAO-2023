@@ -86,7 +86,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	@Override
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
-			double i=(10+Math.random()/10);
+			double i=(Math.random()/10);
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
 				if(contrat.getPrix()<1800) {
 					super.journalVentes.ajouter("Contre proposition de prix: "+2000*(1-i)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
