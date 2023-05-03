@@ -113,7 +113,8 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		}
 		if (notreduree == 0) {return null;}
 		else {
-		double commandemin = max(101.0,this.BesoinMaxEntre(stepdebut,notreduree,((Feve)contrat.getProduit())));
+		double c = max(101.0,this.BesoinMaxEntre(stepdebut,notreduree,((Feve)contrat.getProduit())));
+		double commandemin = Math.min(c, 10000.0);
 		List<Double> res = new LinkedList<Double>();
 		for (int i =stepdebut;i<=notreduree;i++) {
 			if (vendeurecheancier.getQuantite(i)>=commandemin) {res.add(max(vendeurecheancier.getQuantite(i),100.0));}
@@ -243,18 +244,14 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
  * return null sinon
  */
 
-	public ExemplaireContratCadre chercheContrat(IProduit produit) {
+	public void chercheContrat(IProduit produit) {
 		if (superviseur != null) {
 		List<IVendeurContratCadre> vendeurs = superviseur.getVendeurs(produit);
 		if (vendeurs.size()!=0) {
-			IVendeurContratCadre vendeur = vendeurs.get(Math.subtractExact(0, vendeurs.size()));
+			for (IVendeurContratCadre vendeur : vendeurs) {
 			super.journalAchatB.ajouter("on essaie de demander un contrat à l'equipe :"+vendeur.getNom());
 			ExemplaireContratCadre contrat = superviseur.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1,Filiere.LA_FILIERE.getEtape()+5,100.0), super.cryptogramme, false);
-			if (contrat != null) {super.journalAchatCC.ajouter("CC cherché et trouvé :"+contrat.toString());}
-			return contrat;	
-		}
-		else {return null;}}
-		else {return null;}
+			if (contrat != null) {super.journalAchatCC.ajouter("CC cherché et trouvé :"+contrat.toString());}}}}
 	}
 	/**ecrit par Nathan Claeys
 	   * pour pouvoir rendre les variables qui peuvent aider à la prise de decision
