@@ -21,6 +21,12 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	private HashMap<Feve, Double> prix;
 	private HashMap<Feve,HashMap<Integer, Integer>> age_hectares;
 	private HashMap<Feve, Double> cout_parcelle;
+	//private double borne_min_BQ;
+	//private double borne_max_HQ;
+	//private double borne_min_BQ;
+	//private double borne_min_BQ;
+	//private double borne_min_BQ;
+	
 	// Pour age_hectares nous avons un Hashmap dans un autre, ici la première clef fait reference à la Feve car 
 	//Les employes auront differents salaires selon la gamme sur laquelle ils travaillent
 	//La deuxiemes clef est un entirer qui correspond à l'age (en step) des hectares
@@ -276,7 +282,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	  return Math.random() * (max - min) + min;
 	}
 
-	private HashMap<Feve, Double> Production_avec_intmeperies() {
+	private HashMap<Feve, Double> Production_avec_intemperies() {
 		HashMap<Feve, Double> prevision = Prevision_Production(Filiere.LA_FILIERE.getEtape());
 		for (Feve f : Prevision_Production(Filiere.LA_FILIERE.getEtape()).keySet()) {
 			if (f == Feve.F_BQ) {
@@ -295,8 +301,8 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		return prevision;
 	}
 	
-	private HashMap<Feve, Double> Prevision_Production_minimale() {
-		HashMap<Feve, Double> prevision = Prevision_Production(Filiere.LA_FILIERE.getEtape());
+	private HashMap<Feve, Double> Prevision_Production_minimale(int step) {
+		HashMap<Feve, Double> prevision = Prevision_Production(step);
 		for (Feve f : Prevision_Production(Filiere.LA_FILIERE.getEtape()).keySet()) {
 			if (f == Feve.F_BQ) {
 				prevision.put(f, prevision.get(f)*0.9);
@@ -320,8 +326,8 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		super.next();
 		this.majPlantation();
 		for (Feve f : this.age_hectares.keySet()) {
-			if (Production_avec_intmeperies().get(f)>0){
-				this.ajouterStock(f, Filiere.LA_FILIERE.getEtape(), Production_avec_intmeperies().get(f));
+			if (Production_avec_intemperies().get(f)>0){
+				this.ajouterStock(f, Filiere.LA_FILIERE.getEtape(), Production_avec_intemperies().get(f));
 			}
 		}
 		this.ajustement_plantation();
