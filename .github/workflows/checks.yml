@@ -73,6 +73,8 @@ jobs:
         run: |
           set -e
           ant -noinput -buildfile build.xml
+          ant -noinput -buildfile build.xml
+          ant -noinput -buildfile build.xml
     - name: Pass performance file
       id: perf
       if: success()
