@@ -4,6 +4,7 @@ import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
@@ -16,11 +17,12 @@ import java.util.List;
 
 public class Transformateur3AchatCC extends Transformateur3Transformation  implements IAcheteurContratCadre {
 	
-	private List<ExemplaireContratCadre> ListeContratEnCours;
+	private List<ExemplaireContratCadre> ListeContratEnCoursAchat;
+	private SuperviseurVentesContratCadre superviseur ;
 	
 	public Transformateur3AchatCC () {
 		super();
-		this.ListeContratEnCours = new LinkedList<ExemplaireContratCadre>();
+		this.ListeContratEnCoursAchat = new LinkedList<ExemplaireContratCadre>();
 		
 	}
 	/**
@@ -100,15 +102,22 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 			if (super.BesoinStep(i,((Feve)contrat.getProduit()))>0) {compt = 0;notreduree=i;}
 			else {compt = compt+1;}			
 		}
-		double commandemin = this.BesoinMaxEntre(stepdebut,notreduree,((Feve)contrat.getProduit()));
+		if (notreduree == 0) {return null;}
+		else {
+		double commandemin = max(101.0,this.BesoinMaxEntre(stepdebut,notreduree,((Feve)contrat.getProduit())));
 		List<Double> res = new LinkedList<Double>();
-		for (int i =stepdebut;i<notreduree;i++) {
-			if (vendeurecheancier.getQuantite(i)>=commandemin) {res.add(vendeurecheancier.getQuantite(i));}
+		for (int i =stepdebut;i<=notreduree;i++) {
+			if (vendeurecheancier.getQuantite(i)>=commandemin) {res.add(max(vendeurecheancier.getQuantite(i),100.0));}
 			else {res.add(commandemin);}
 		}
-		return new Echeancier(stepdebut,res);
+		return new Echeancier(stepdebut,res);}
 	}
 
+	private double max(double a, double b) {
+		// TODO Auto-generated method stub
+		if (a<b) {return b;}else {
+		return a;}
+	}
 	private double BesoinMaxEntre(int d, int f,Feve feve) {
 		double max =0;
 		for (int i= d;i<f;i++) {
@@ -154,8 +163,8 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 * @param contrat
 	 */
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-			this.getListeContratEnCours().add(contrat);
-			super.journal.ajouter("Un nouveau contrat cadre a été passé : "+contrat.toString());
+			this.getListeContratEnCoursA().add(contrat);
+			super.journalAchatCC.ajouter("Un nouveau contrat cadre a été passé : "+contrat.toString());
 	}
 
 	/**
@@ -175,10 +184,10 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		Object produit = contrat.getProduit();
 		if (produit instanceof Feve && lot.getQuantiteTotale()>0) {super.ajouterFeve(((Feve)produit), contrat.getQuantiteLivree().getQuantite(Filiere.LA_FILIERE.getEtape()),Filiere.LA_FILIERE.getEtape());}
-		super.journal.ajouter("nouvel arrivage d'un lot de contrat cadre de "+lot.getQuantites()+"");
+		super.journalAchatCC.ajouter("nouvel arrivage d'un lot de contrat cadre de "+lot.getQuantites()+"");
 	}
-	public List<ExemplaireContratCadre> getListeContratEnCours() {
-		return ListeContratEnCours;
+	public List<ExemplaireContratCadre> getListeContratEnCoursA() {
+		return ListeContratEnCoursAchat;
 	}
 	/**Cette fonction donne la quantit� de feves qui doit arriver par contrat � un step suivant
 	 * Elle doit permettre d'�valuer si un contrat cadre est n�cessaire
@@ -187,7 +196,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 */
 	protected double getArrivageCCStep(int step,Feve f) {
 		double res = 0;
-		for (ExemplaireContratCadre contrat: this.getListeContratEnCours()) {
+		for (ExemplaireContratCadre contrat: this.getListeContratEnCoursA()) {
 			if (contrat.getProduit() instanceof Feve 
 					&& ((Feve)contrat.getProduit()).getGamme().equals(f.getGamme()) 
 					&& ((Feve)contrat.getProduit()).isBioEquitable()==(f.isBioEquitable())) {
@@ -207,15 +216,54 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	}*/
 	
 /** ecrit par Nathan Claeys
+ * retourne un CC si on a trouvé un acheteur et que la négociation à réussi
+ * return null sinon
  */
+
+	public ExemplaireContratCadre chercheContrat(IProduit produit) {
+		if (superviseur != null) {
+		List<IVendeurContratCadre> vendeurs = superviseur.getVendeurs(produit);
+		if (vendeurs.size()!=0) {
+			IVendeurContratCadre vendeur = vendeurs.get(0);
+			super.journalAchatB.ajouter("on essaie de demander un contrat à l'equipe :"+vendeur.getNom());
+			ExemplaireContratCadre contrat = superviseur.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1,Filiere.LA_FILIERE.getEtape()+5,1001.0), super.cryptogramme, false);
+			if (contrat != null) {super.journalAchatCC.ajouter("CC cherché et trouvé :"+contrat.toString());}
+			return contrat;	
+		}
+		else {return null;}}
+		else {return null;}
+	}
+	/**ecrit par Nathan Claeys
+	   * pour pouvoir rendre les variables qui peuvent aider à la prise de decision
+	   */
+	  public List<Variable> getIndicateurs() {
+			List<Variable> res = super.getIndicateurs();
+			return res;}
+
+	/** ecrit par Nathan Claeys
+	 */	
+	
+	public void initialiser() {
+		super.initialiser();
+		this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
+	}
+	
 	public void next() {
 		super.next(); 
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
-		for (ExemplaireContratCadre contrat : this.getListeContratEnCours()) {
+		for (ExemplaireContratCadre contrat : this.getListeContratEnCoursA()) {
+			super.journalAchatCC.ajouter(contrat.toString());
 			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
 				contratsObsoletes.add(contrat);
 			}
+			else {/**if (contrat.getPaiementAEffectuerAuStep()>0.0 && contrat.getVendeur()!=this) {Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, contrat.getVendeur(), contrat.getPaiementAEffectuerAuStep());
+			super.journal.ajouter("virement de "+contrat.getPaiementAEffectuerAuStep()+"fait à l'équipe"+contrat.getVendeur().getNom());}*/}
 		}  
-		this.getListeContratEnCours().removeAll(contratsObsoletes);		
+		
+		this.getListeContratEnCoursA().removeAll(contratsObsoletes);
+		this.chercheContrat(Feve.F_BQ);
+		this.chercheContrat(Feve.F_MQ);
+		this.chercheContrat(Feve.F_MQ_BE);
+		this.chercheContrat(Feve.F_HQ_BE);
 	}  
 }  

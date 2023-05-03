@@ -36,6 +36,8 @@ public class Producteur3 extends Bourse3  {
 	private LinkedList<Double> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
 
 
+
+
 	
 	/**
 	 * @author Dubus-Chanson Victor
@@ -93,8 +95,7 @@ public class Producteur3 extends Bourse3  {
 		this.updateListeCout();
 		this.updateCoutTonne();
 	}
-		
-
+	
 	/**
 	 * @author Dubus-Chanson Victor
 	 */
@@ -129,6 +130,7 @@ public class Producteur3 extends Bourse3  {
 
 		this.updateListeCout();
 		this.updateCoutTonne();
+		/**
 		// Incendie ?
 		//*		
 		double probaIncendie =  Math.random();
@@ -157,7 +159,7 @@ public class Producteur3 extends Bourse3  {
 						}
 
 				}
-				//*/
+		*/
 		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep);
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
 				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ this.HectaresUtilises);
@@ -286,24 +288,27 @@ public class Producteur3 extends Bourse3  {
 		}
 		double argentGagne = 0.0;
 		double stockActuel = this.getStock().getQuantite(f);
+		int i =0;
 		for(ExemplaireContratCadre c : contractsGoods) {
 			//Si je n'ai plus de feves je ne peux plus rien livre
 			if(stockActuel <=0) {
 				break;
 			}
 			double qAEnvoyer=c.getQuantiteALivrerAuStep();
-			int i =0;
+			
 			if(qAEnvoyer <= stockActuel) {
+
 			i+=1;
 			this.journal_activitegenerale.ajouter("L'argent touche au contrat num "+i+" est "+c.getPrix());
 			this.journal_activitegenerale.ajouter("La quantite a envoye est "+qAEnvoyer);
-			argentGagne += c.getPrix();//*qAEnvoyer;
+			argentGagne += c.getPrix()*qAEnvoyer;//*qAEnvoyer;
+
 			stockActuel = stockActuel - qAEnvoyer;
 			}
 			else {
 				this.journal_activitegenerale.ajouter("On est rentre "+i+" dans la boucle if"+"pour "+contractsGoods.size()+"de contrat");
 				//Suppose que meme si on a pas assez de feve on renvoie ce que l'on a
-				argentGagne +=c.getPrix()*stockActuel;//c.getQuantiteALivrerAuStep();
+				argentGagne +=c.getPrix()*c.getQuantiteALivrerAuStep();//c.getQuantiteALivrerAuStep();
 				stockActuel=0.0;
 			}
 		}

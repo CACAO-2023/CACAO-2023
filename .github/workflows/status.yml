@@ -1,16 +1,12 @@
 # This workflow will build a Java project with Ant
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-ant
 
-name: Java CI
+name: Status 
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: push
 
 jobs:
-  build:
+  java_tests:
 
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -26,4 +22,8 @@ jobs:
     - name: Build with Ant
       uses: coactions/setup-xvfb@v1
       with:
-        run: ant -noinput -buildfile build.xml
+        run: |
+          set -e
+          ant -noinput -buildfile build.xml
+          ant -noinput -buildfile build.xml
+          ant -noinput -buildfile build.xml

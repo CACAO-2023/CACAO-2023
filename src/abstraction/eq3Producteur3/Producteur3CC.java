@@ -12,6 +12,7 @@ import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
@@ -48,20 +49,34 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
 
         // Initialisation des HashMaps. Au début tous nos acheteurs ont la même fiabilité.
-        Double PRIX_DEPART_MQ = 50000.0;
-        Double PRIX_DEPART_HQ = 100000.0;
+        Double PRIX_DEPART_MQ = 10000.0;
+        Double PRIX_DEPART_HQ = 30000.0;
+
+        List<IAcheteurContratCadre> acheteurs = new LinkedList<IAcheteurContratCadre>();
+		List<IActeur> acteurs = Filiere.LA_FILIERE.getActeursSolvables();
+		for (IActeur acteur : acteurs) {
+			if (acteur instanceof IAcheteurContratCadre) {
+				acheteurs.add(((IAcheteurContratCadre)acteur));
+			}
+		}
+        
         List<IAcheteurContratCadre> acheteursMQ = superviseur.getAcheteurs(Feve.F_MQ_BE);
         for (int i = 0; i < acheteursMQ.size(); i++) {
-            this.acheteursMQfiabilité.put(acheteursMQ.get(i), 1);
-            this.acheteursMQprix.put(acheteursMQ.get(i), PRIX_DEPART_MQ);
+            this.acheteursMQfiabilité.put(acheteursMQ.get(i), 1); 
         }
 
         List<IAcheteurContratCadre> acheteursHQ = superviseur.getAcheteurs(Feve.F_HQ_BE);
         for (int i = 0; i < acheteursHQ.size(); i++) {
             this.acheteursHQfiabilité.put(acheteursHQ.get(i), 1);
-            this.acheteursHQprix.put(acheteursHQ.get(i), PRIX_DEPART_HQ);
+        }
+
+        for (int i = 0; i < acheteurs.size(); i++) {
+            this.acheteursMQprix.put(acheteurs.get(i), PRIX_DEPART_MQ);
+            this.acheteursHQprix.put(acheteurs.get(i), PRIX_DEPART_HQ);
         }
     }
+
+
     
     /**
      * Chooses a client to sell our beans. We are more likely to choose the client with the highest reliability.
@@ -107,7 +122,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
                 previousSum += this.acheteursHQfiabilité.get(acheteur);
             }
         }
-        return null;
+        return superviseur.getAcheteurs(Feve.F_HQ_BE).get(0);
     }
 
     /**
@@ -126,9 +141,13 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      */
     public double propositionPrixIntial(IAcheteurContratCadre acheteur, Feve feve) {
         if (feve == Feve.F_MQ_BE) {
-            return Math.max(this.getPrixTonne() * 1.2, this.acheteursMQprix.get(acheteur) * 1.1);
+            double price = Math.max(this.getPrixTonne() * 1.2, this.acheteursMQprix.get(acheteur) * 1.1);
+            this.acheteursMQprix.put(acheteur, price);
+            return price;
         } else {
-            return Math.max(this.getPrixTonne() * 1.4, this.acheteursHQprix.get(acheteur) * 1.3);
+            double price = Math.max(this.getPrixTonne() * 1.4, this.acheteursHQprix.get(acheteur) * 1.3);
+            this.acheteursHQprix.put(acheteur, price);
+            return price;
         }
     }
 
@@ -156,6 +175,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      */
     @Override
     public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
+
         Lot lot = new Lot(produit);
 
         int oldestStep = Stock.getAge((Feve)produit);
@@ -206,10 +226,13 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     @Override
     public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
         Echeancier echeancier = contrat.getEcheancier();
+        if (this.getAvailableQuantity((Feve)contrat.getProduit()) <= 0) {
+            return null;
+        }
 
         // We rework the echeancier to fit the stock
-        if (echeancier.getQuantiteAPartirDe(contrat.getEcheancier().getStepDebut()) > Stock.getQuantite((Feve)contrat.getProduit())) {
-            echeancier.ajouter(Math.max(SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER, Stock.getQuantite((Feve)contrat.getProduit())));
+        if (echeancier.getQuantiteTotale() > this.getAvailableQuantity((Feve)contrat.getProduit())) {
+            echeancier.ajouter(this.getAvailableQuantity((Feve)contrat.getProduit())/(echeancier.getStepFin() - echeancier.getStepDebut()));
         }
 
         return echeancier;
@@ -219,7 +242,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      * @author Corentin Caugant
      */
     public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-        this.getContracts().add(contrat);
+        this.contracts.add(contrat);
         // Ajout de la quantite vendu dans la liste gardant une trace des dernières quantités vendus
         super.addVenteQuantite(contrat.getQuantiteTotale(), (Feve)contrat.getProduit());
 
@@ -252,8 +275,9 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         // Now making the contract
         this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit + "...");
         int length = ((int) Math.round(Math.random() * 10)) + 1;
-        ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, length, (int) Math.round(this.getStock().getQuantite(produit)/length)), cryptogramme,false);
+        ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, length, (int) Math.round(this.getAvailableQuantity(produit)/length)), cryptogramme,false);
         if (cc != null) {
+            this.contracts.add(cc);
             this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
         } else {
             this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit + "...");
@@ -266,11 +290,43 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      */
     public void next() {
         super.next();
-        if (this.getStock().getQuantite(Feve.F_HQ_BE) > 100) {
-            this.getContractForProduct(Feve.F_HQ_BE);
+
+        List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
+		for (ExemplaireContratCadre contrat : this.contracts) {
+			if (contrat.getQuantiteRestantALivrer()<=0.0 && contrat.getMontantRestantARegler()<=0.0) {
+				contratsObsoletes.add(contrat);
+            }
+		}
+		this.contracts.removeAll(contratsObsoletes);
+
+
+
+        for (int i = 0; i < 5; i++) {
+            if (this.getAvailableQuantity(Feve.F_HQ_BE) > 100) {
+                this.getContractForProduct(Feve.F_HQ_BE);
+            }
+            if (this.getAvailableQuantity(Feve.F_MQ_BE) > 100) {
+                this.getContractForProduct(Feve.F_MQ_BE);
+            }
         }
-        if (this.getStock().getQuantite(Feve.F_MQ_BE) > 100) {
-            this.getContractForProduct(Feve.F_MQ_BE);
+    }
+
+    /**
+     * Returns the quantity of beans available for a given quality.
+     * This method takes into account ongoing CCs and the stock to compute the quantity available for sale accurately.
+     * Corentin Caugant
+     */
+    public double getAvailableQuantity(Feve qualite) {
+        double available = this.getStock().getQuantite(qualite);
+        for (ExemplaireContratCadre cc : this.getContracts()) {
+            if ((Feve)cc.getProduit() == qualite) {
+                if (cc.getQuantiteRestantALivrer() >= 0) {
+                    available -= cc.getQuantiteRestantALivrer();
+                }
+            }
         }
+        
+        int SAFE_MARGIN = 10; // Percentage of the stock we want to keep
+        return Math.min(Math.max(available * (1 - SAFE_MARGIN/100.0), 0.0), 100000);
     }
 }

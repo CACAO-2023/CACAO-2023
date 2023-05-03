@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
@@ -26,6 +27,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
     protected Lot stockChocolatMGL; // Chocolat moyenne gamme labelisée
     protected Lot stockChocolatHGL; // Chocolat haute gamme labélisée
     protected List<ChocolatDeMarque> stockProduit;
+    private int dureePeremption = 6; 
 
     /**Mouhamed SOW*/  
   public Transformateur3Stocks(Lot stockFeveBG, Lot stockFeveMG, Lot stockFeveMGL, Lot stockFeveHGL,
@@ -60,28 +62,28 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   }
   /**Mouhamed SOW*/
   public void ajouterFeve(Feve feve, Double quantite, int dateDeRecolte) {
-	    Lot lot;
 	    if (quantite ==0) {;}
 	    else {
 	    switch(feve.getGamme()) {
 	        case BQ:
-	            lot = stockFeveBG;
+	            stockFeveBG.ajouter(dateDeRecolte, quantite);
 	            break;
 	        case MQ:
 	        	if(feve.isBioEquitable()) {
-	        		lot = stockFeveMGL;
+	        		stockFeveMGL.ajouter(dateDeRecolte, quantite);
 	        		break ;
 	        	}else {
-	        		lot = stockFeveMG;
+	        		stockFeveMG.ajouter(dateDeRecolte, quantite);
 	                break;
 	        	}
 	        case HQ:
-	        	lot = stockFeveHGL;
+	        	stockFeveHGL.ajouter(dateDeRecolte, quantite);
         		break ;
 	        default:
 	            throw new IllegalArgumentException("Type de fève invalide");
 	    }
-	    lot.ajouter(dateDeRecolte, quantite);}
+	    }
+	    
 	}
   /**Mouhamed SOW*/
   /**methode pour savoir ou il faut ajouter la feve*/
@@ -132,83 +134,129 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 
   /**Mouhamed SOW*/
   public void retirerFeve(Feve feve, double quantite) {
-	    Lot lot = getLotFeve(feve);
-	    HashMap<Integer, Double> quantites = lot.getQuantites();
-
-	    // Tri des clés dans l'ordre décroissant (les plus vieilles feves en premier)
-	    List<Integer> keys = new ArrayList<Integer>(quantites.keySet());
-	    Collections.sort(keys, Collections.reverseOrder());
-
-	    double quantiteRetiree = 0;
-	    for (int key : keys) {
-	        if (quantiteRetiree == quantite) {
-	            break;
-	        }
-	        if (key >= 0 && key <= 6) { // On retire uniquement les feves périmées (plus de 6 mois)
-	            double quantiteRestante = quantites.get(key);
-	            if (quantiteRestante >= quantite - quantiteRetiree) {
-	                quantites.put(key, quantiteRestante - (quantite - quantiteRetiree));
-	                quantiteRetiree = quantite;
-	            } else {
-	                quantites.remove(key);
-	                quantiteRetiree += quantiteRestante;
-	            }
-	        }
-	    }
+	    
+	  switch(feve.getGamme()) {
+        case BQ:
+            if(stockFeveBG.getQuantiteTotale()>=quantite) {
+        	stockFeveBG.retirer(quantite); break ;}
+            else {stockFeveBG.retirer(stockFeveBG.getQuantiteTotale());
+            break;}
+        case MQ:
+        	if(feve.isBioEquitable()) {
+        		if(stockFeveMGL.getQuantiteTotale()>=quantite) {
+        		stockFeveMGL.retirer(quantite);break;}
+        		else {stockFeveMGL.retirer(stockFeveMGL.getQuantiteTotale());
+        		break ;}
+        	}else {
+        		if(stockFeveMG.getQuantiteTotale()>=quantite) {
+            		stockFeveMG.retirer(quantite);break;}
+            		else {stockFeveMG.retirer(stockFeveMG.getQuantiteTotale());
+            		break ;}
+        	}
+        case HQ:
+        	if(stockFeveHGL.getQuantiteTotale()>=quantite) {
+        		stockFeveHGL.retirer(quantite);break;}
+        		else {stockFeveHGL.retirer(stockFeveHGL.getQuantiteTotale());
+        		break ;}
+        default:
+            throw new IllegalArgumentException("Type de fève invalide");
+    }
+	    
 	}
-  /**Mouhamed SOW*/
+
+
+/**Mouhamed SOW*/
   public void ajouterChocolat(ChocolatDeMarque choco,Double quantite,int dateProduction) {
 	  Lot lot ;
 	  if (quantite == 0) {;}
 	  else {
 	  switch(choco.getGamme()) {
 	  	case BQ :
-	  		lot=this.stockChocolatBG ;
+	  		this.stockChocolatBG.ajouter(dateProduction, quantite); ;
 	  		break ;
 	  	case MQ :
 	  		if(choco.isBioEquitable()) {
-	  			lot=this.stockChocolatMGL ;
+	  			this.stockChocolatMGL.ajouter(dateProduction, quantite); ;
 	  			break ;
 	  		}else {
-	  			lot=this.stockChocolatMG ;
+	  			this.stockChocolatMG.ajouter(dateProduction, quantite); ;
 	  			break ;
 	  		}
 	  	case HQ :
-	  		lot=this.stockChocolatHGL ;
+	  		this.stockChocolatHGL.ajouter(dateProduction, quantite); ;
 	  		break ;
 	  	default :
 	  		throw new IllegalArgumentException("Type de Chocolat invalide");
 	  }
-	  lot.ajouter(dateProduction,quantite);}
+	  }
   }
  /**Mouhamed SOW*/
   public void retirerChocolat(ChocolatDeMarque chocolat,Double quantite) {
-	  Lot lot=this.getLotChocolat(chocolat) ;
-	  HashMap<Integer, Double> quantites = lot.getQuantites();
-
-	    // Tri des clés dans l'ordre décroissant (les plus vieux choco en premier)
-	    List<Integer> keys = new ArrayList<Integer>(quantites.keySet());
-	    Collections.sort(keys, Collections.reverseOrder());
-
-	    double quantiteRetiree = 0;
-	    for (int key : keys) {
-	        if (quantiteRetiree == quantite) {
-	            break;
-	        }
-	        if (key >= 0 && key <= 6) { // On retire uniquement les choco périmés (plus de 6 mois)
-	            double quantiteRestante = quantites.get(key);
-	            if (quantiteRestante >= quantite - quantiteRetiree) {
-	                quantites.put(key, quantiteRestante - (quantite - quantiteRetiree));
-	                quantiteRetiree = quantite;
-	            } else {
-	                quantites.remove(key);
-	                quantiteRetiree += quantiteRestante;
-	            }
-	        }
-	    }
+	    switch(chocolat.getGamme()) {
+	  	case BQ :
+	  		if(stockChocolatBG.getQuantiteTotale()>=quantite) {
+	  			stockChocolatBG.retirer(quantite);break;}
+        		else {stockChocolatBG.retirer(stockChocolatBG.getQuantiteTotale());
+        		break ;}
+	  	case MQ :
+	  		if(chocolat.isBioEquitable()) {
+	  			if(stockChocolatMGL.getQuantiteTotale()>=quantite) {
+		  			stockChocolatMGL.retirer(quantite);break;}
+	        		else {stockChocolatMGL.retirer(stockChocolatMGL.getQuantiteTotale());
+	        		break ;}
+	  		}else {
+	  			if(stockChocolatMG.getQuantiteTotale()>=quantite) {
+		  			stockChocolatMG.retirer(quantite);break;}
+	        		else {stockChocolatMG.retirer(stockChocolatMG.getQuantiteTotale());
+	        		break ;}
+	  		}
+	  	case HQ :
+	  		if(stockChocolatHGL.getQuantiteTotale()>=quantite) {
+	  			stockChocolatHGL.retirer(quantite);break;}
+        		else {stockChocolatHGL.retirer(stockChocolatHGL.getQuantiteTotale());
+        		break ;}
+	  	default :
+	  		throw new IllegalArgumentException("Type de Chocolat invalide");
+	  }
+    
   }
+  /**ecrit par Nathan Claeys
+   * pour pouvoir rendre les variables qui peuvent aider à la prise de decision
+   */
+  public List<Variable> getIndicateurs() {
+		List<Variable> res = super.getIndicateurs();
+		return res;}
+  
+  public void initialiser() {
+	  super.initialiser();
+	}
   	public void next() {
   		super.next();
+  		int date = Filiere.LA_FILIERE.getEtape() ;
+  		int perim = date - dureePeremption ;
+  		Object quantiteRetiree = this.stockFeveBG.getQuantites().get(perim) ;
+  		if(quantiteRetiree!=null && quantiteRetiree instanceof Double && ((Double)quantiteRetiree) >0) {
+  		this.stockFeveBG.retirer(((Double)quantiteRetiree)) ;} // retire la feve perime
+  		Object quantiteRetiree2 = this.stockFeveMG.getQuantites().get(perim) ;
+  		if(quantiteRetiree2!=null && quantiteRetiree2 instanceof Double &&((Double)quantiteRetiree2)>0) {
+  		this.stockFeveMG.retirer(((Double)quantiteRetiree2)) ;}
+  		Object quantiteRetiree3 = this.stockFeveMGL.getQuantites().get(perim) ;
+  		if(quantiteRetiree3!=null && quantiteRetiree3 instanceof Double &&((Double)quantiteRetiree3)>0) {  		
+  		this.stockFeveMGL.retirer(((Double)quantiteRetiree3)) ;}
+  		Object quantiteRetiree4 = this.stockFeveHGL.getQuantites().get(perim) ;
+  		if(quantiteRetiree4!=null && quantiteRetiree4 instanceof Double && ((Double)quantiteRetiree4)>0) { 
+  		this.stockFeveHGL.retirer(((Double)quantiteRetiree4)) ;}
+  		super.journalStock.ajouter(date+" ");
+  		super.journalStock.ajouter(" La quantité de feve BG est :"+ this.stockFeveBG.getQuantiteTotale() );
+  		super.journalStock.ajouter(" La quantité de feve MG est :"+ this.stockFeveMG.getQuantiteTotale() );
+  		super.journalStock.ajouter(" La quantité de feve MGL est :"+ this.stockFeveMGL.getQuantiteTotale() );
+  		super.journalStock.ajouter(" La quantité de feve HGL est :"+ this.stockFeveHGL.getQuantiteTotale() );
+  		super.journalStock.ajouter(" La quantité de Chocolat BG est :"+ this.stockChocolatBG.getQuantiteTotale() );
+  		super.journalStock.ajouter(" La quantité de Chocolat MG est :"+ this.stockChocolatMG.getQuantiteTotale() );
+  		super.journalStock.ajouter(" La quantité de Chocolat MGL est :"+ this.stockChocolatMGL.getQuantiteTotale() );
+  		super.journalStock.ajouter(" La quantité de Chocolat HGL est :"+ this.stockChocolatHGL.getQuantiteTotale() );
+  		
+  		
   	}
 }
     
