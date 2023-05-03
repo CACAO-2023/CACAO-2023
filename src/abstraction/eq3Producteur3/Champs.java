@@ -105,7 +105,6 @@ public class Champs {
 	
 	/**
 	 * @author BOCQUET Gabriel
-	 * Gaussienne ?
 	 */	
 	public LinkedList<Integer> HarvestQuantity(int CurrentStep, HashMap<String, LinkedList<Integer>> Keys){
 		String[] Gamme = {"H","M"};
@@ -200,7 +199,6 @@ public class Champs {
 			//On regarde si les grevistes travaillaient sur les champs H ou M
 			double MouH = Math.random() ;
 			if(MouH <= 0.5) {
-				double HarvestRateM =  0.9;
 				//On choisit un nombre qui nous donnera la clef du champs ou il va y avoir des grevistes et ils ne travaillent pas forcement sur un champ qui a besoin d'etre recolte.
 				Integer ChampGreve = (int)(Math.random() * (FieldM.size()-1));
 				//on regarde si le champ ou les ouvriers font greve doit etre recolte
@@ -209,42 +207,14 @@ public class Champs {
 				}
 				else {
 				Integer key = allKeyM.get(ChampGreve);
-				HarvestKeysM.remove(HarvestKeysM.indexOf(key)); 
-				if ((CurrentStep-key) <72 && (CurrentStep-key)>=0) {
-					quantiteM += 0; //Champ pas assez vieux
-					quantitePerdu +=FieldM.get(key);
-				}
-				//Le champ M a entre 3 et 7 ans
-				else if((CurrentStep-key) <168 && (CurrentStep-key)>=72) {
-					
-					quantiteM += FieldM.get(key)*0.56*0.5*HarvestRateM; //Champ jeune
-					quantitePerdu +=FieldM.get(key);
-					
-				}
-				//Le champ M a entre 7 et 35 ans
-				else if((CurrentStep-key) <840 && (CurrentStep-key)>=168) {
-					
-					quantiteM += FieldM.get(key)*0.56*HarvestRateM; //Champ convenable
-					quantitePerdu +=FieldM.get(key);
-					
-				}
-				//Le champ a entre 35 et 40 ans
-				else if((CurrentStep-key) <840 && (CurrentStep-key)>=960) {
-					
-					quantiteM += FieldM.get(key)*0.56*0.5*HarvestRateM; //Champ vieux
-					quantitePerdu +=FieldM.get(key);
-				}
-				//L'arbre est trop vieux
-				else {
-					quantiteM +=0;
-					quantitePerdu +=FieldM.get(key);
-				}
+				HarvestKeysM.remove(HarvestKeysM.indexOf(key));
+				double HarvestRateM = this.gaussienne(CurrentStep-key);
+				quantiteM +=FieldM.get(key)*HarvestRateM;
+				quantitePerdu +=FieldM.get(key);
+			}	
 			}
-				
-			}
+			
 			else {
-			//Ce taux permet de prendre en compte l'aspect aleatoire d'une recolte
-			double HarvestRateH =  0.85;
 			//On choisit la clef du champs où il va y avoir des grevistes.
 			Integer ChampGreve = (int)(Math.random() * (FieldH.size()-1));
 			if(!HarvestKeysH.contains(allKeyH.get(ChampGreve))) {
@@ -253,46 +223,26 @@ public class Champs {
 			else {
 			Integer keyH = allKeyH.get(ChampGreve);
 			HarvestKeysH.remove(HarvestKeysH.indexOf(keyH));
-				//Le champ M a entre 0 et 3 ans
-				if ((CurrentStep-keyH) <72 && (CurrentStep-keyH)>=0) {
-					quantiteH += 0; //Champ pas assez vieux
-					quantitePerdu +=FieldH.get(keyH);
-				}
-				//Le champ M a entre 3 et 7 ans
-				else if((CurrentStep-keyH) <168 && (CurrentStep-keyH)>=72) {
-					
-					quantiteH += FieldH.get(keyH)*0.56*0.5*HarvestRateH; //Champ jeune
-					quantitePerdu +=FieldH.get(keyH);
-				}
-				//Le champ M a entre 7 et 35 ans
-				else if((CurrentStep-keyH) <840 && (CurrentStep-keyH)>=168) {
-					
-					quantiteH += FieldH.get(keyH)*0.56*HarvestRateH; //Champ convenable
-					quantitePerdu +=FieldH.get(keyH);
-				}
-				//Le champ a entre 35 et 40 ans
-				else if((CurrentStep-keyH) <840 && (CurrentStep-keyH)>=960) {
-					
-					quantiteH += FieldH.get(keyH)*0.56*0.5*HarvestRateH; //Champ vieux
-					quantitePerdu +=FieldH.get(keyH);
-				}
-				//L'arbre est trop vieux
-				else {
-					quantiteH +=0;
-					quantitePerdu +=FieldH.get(keyH);
-				}
-			}
+			double HarvestRateH = this.gaussienne(CurrentStep-keyH);
+			quantiteH +=FieldH.get(keyH)*HarvestRateH;
+			quantitePerdu +=FieldH.get(keyH);
+				
 			}
 
+		}
 		}
 			LinkedList<Integer> l = new LinkedList();
 			l.add(quantiteH);
 			l.add(quantiteM);
-			if(l.get(0) >0 && l.get(1) > 0) {
+			if(l.get(0) < 0 || l.get(1) < 0 ) {
+				LinkedList<Integer> f = new LinkedList<Integer>();
+				f.add(0);
+				f.add(0);
+				return f;
 			}
 			return l;
 
-	
+		
 		}
   	/**
   	 * 

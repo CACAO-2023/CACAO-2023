@@ -130,9 +130,8 @@ public class Producteur3 extends Bourse3  {
 
 		this.updateListeCout();
 		this.updateCoutTonne();
-		/**
-		// Incendie ?
-		//*		
+		
+		// Incendie ?	
 		double probaIncendie =  Math.random();
 				if(probaIncendie < this.probaIncendiH.getValeur()) {
 					this.Fire("Big");
@@ -159,7 +158,7 @@ public class Producteur3 extends Bourse3  {
 						}
 
 				}
-		*/
+		
 		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep);
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
 				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : Pas encore calculé"+ this.HectaresUtilises);
@@ -299,9 +298,9 @@ public class Producteur3 extends Bourse3  {
 			if(qAEnvoyer <= stockActuel) {
 
 			i+=1;
-			this.journal_activitegenerale.ajouter("L'argent touche au contrat num "+i+" est "+c.getPrix());
+			this.journal_activitegenerale.ajouter("L'argent touche au contrat "+s+" num "+i+" est "+c.getPrix());
 			this.journal_activitegenerale.ajouter("La quantite a envoye est "+qAEnvoyer);
-			argentGagne += c.getPrix()*qAEnvoyer;//*qAEnvoyer;
+			argentGagne += c.getPrix()*qAEnvoyer;
 
 			stockActuel = stockActuel - qAEnvoyer;
 			}

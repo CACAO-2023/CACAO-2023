@@ -125,7 +125,6 @@ public class Producteur3Acteur implements IActeur {
 	this.pourcentageGrevise = new Variable("Equipe3 Pourcentage Greviste", "Fixe la proportion d'ouvrier en Greve ",this,0.2);
 	this.quantiteBruleH = new Variable("Equipe3 Proportion Champs Brules Incendie H", "Fixe le pourcentage d'arbre brules suite a un incendie H ",this,0.5);
 	this.quantiteBruleM = new Variable("Equipe3 Proportion Champs Brules Incendie M", "Fixe le pourcentage d'arbre brules suite a un incendie M ",this,0.2);
-
 	this.quantiteBruleL = new Variable("Equipe3 Proportion Champs Brules Incendie L", "Fixe le pourcentage d'arbre brules suite a un incendie L ",this,0.1);
 	this.quantiteDetruiteCyclone = new Variable("Equipe3 Proportion Champs Detruit Cyclone", "Fixe le pourcentage d'arbre detruit suite a un Cyclone ",this,0.05);
 	this.EsperanceGaussienneProduction = new Variable("Esperance gaussienne pour production", "Fixe l'esperance de la gaussienne permettant d'avoir le pourcentage de feves recoltes",this,480);
