@@ -102,13 +102,13 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 				chocolats.add(marque);
 				
 				if (marque.getGamme()==Gamme.HQ) {
-					prixDeVente.put(marque,1200.);
+					prixDeVente.put(marque,4500.);
 				}
 				if (marque.getGamme()==Gamme.MQ) {
-					prixDeVente.put(marque,900.);
+					prixDeVente.put(marque,3500.);
 				}
 				if (marque.getGamme()==Gamme.BQ) {
-					prixDeVente.put(marque,700.);
+					prixDeVente.put(marque,2500.);
 				}
 			}
 		
@@ -130,13 +130,13 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 				chocolats.add(marque);
 				
 				if (marque.getGamme()==Gamme.HQ) {
-					prixDeVente.put(marque,1200.);
+					prixDeVente.put(marque,4500.);
 				}
 				if (marque.getGamme()==Gamme.MQ) {
-					prixDeVente.put(marque,900.);
+					prixDeVente.put(marque,3500.);
 				}
 				if (marque.getGamme()==Gamme.BQ) {
-					prixDeVente.put(marque,700.);
+					prixDeVente.put(marque,2500.);
 				}
 			}
 		
@@ -144,15 +144,15 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			for (ChocolatDeMarque marque : chocolats) {
 				stocks.ajouterAuStock(marque, 30000.0);
 				journal_stocks.ajouter("Stock de "+marque+" : "+stocks.getStock(marque)+" T");
-			}	}
-
-		//Mise à jour du stock total
-		for (ChocolatDeMarque marque : chocolats) {
-			stock_total += stocks.getStock(marque);
+			}	
+			for (ChocolatDeMarque marque : chocolats) {
+				stock_total += stocks.getStock(marque);
+			}
 			s.setValeur(this, stock_total, this.cryptogramme);
-		}
+			}
+		
 		journal_stocks.ajouter("Stock total "+ stock_total+"T");
-
+		
 		//Répertoire de l'activité générale
 		journal_activitegenerale.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
@@ -225,7 +225,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		}
 
 	}
-	//Auteur : Marzougui Mariem
+	// Auteur : Marzougui Mariem
 	// Apres chaque operation sur votre compte bancaire, cette
 	// operation est appelee pour vous en informer
 	public void notificationOperationBancaire(double montant) {
@@ -243,7 +243,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	// Renvoie le solde actuel de l'acteur
 	//Auteur : Ben Messaoud Karim
 	public double getSolde() {
-		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme);
+		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme)-16*30*stock_total;
 	}
 
 	////////////////////////////////////////////////////////
@@ -315,6 +315,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 		int pos = chocolats.indexOf(choco);
 		if (pos >= 0) {
+			
 			this.stocks.retirerDuStock(choco, quantite);
 			stock_total-=quantite;
 			s.setValeur(this, stock_total, this.cryptogramme);
