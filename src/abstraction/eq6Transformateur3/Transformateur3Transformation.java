@@ -276,6 +276,10 @@ public void initialiser() {
 }
 	public void next() {
 		super.next();
+		this.transformationChoco(Feve.F_BQ, stockFeveBG.getQuantiteTotale());
+		this.transformationChoco(Feve.F_MQ, stockFeveMG.getQuantiteTotale());
+		this.transformationChoco(Feve.F_MQ_BE, stockFeveMGL.getQuantiteTotale());
+		this.transformationChoco(Feve.F_HQ_BE, stockFeveHGL.getQuantiteTotale());
 	}
 } 
 
