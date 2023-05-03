@@ -25,7 +25,6 @@ public class Producteur3 extends Bourse3  {
 
 
 
-	private HashMap<String,HashMap> Champs;
 	private Double SeuilHG;
 	private Double SeuilMG;
 
