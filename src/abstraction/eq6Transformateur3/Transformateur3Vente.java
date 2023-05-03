@@ -132,8 +132,9 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	@Override
 	/**Nathan Salbego*/
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
+		if (contrat.getVendeur()==this) {
 		this.listeCC.add(contrat);
-		super.journalVentes.ajouter("Nouveau contrat de vente passé :"+contrat.toString());
+		super.journalVentes.ajouter("Nouveau contrat de vente passé :"+contrat.toString());}
 		
 	}
 	
