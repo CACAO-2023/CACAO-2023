@@ -63,20 +63,20 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
-				super.journalVentes.ajouter("Proposition de prix: "+2000+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-				return 2000;
+				super.journalVentes.ajouter("Proposition de prix: "+20+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+				return 20;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco")) {
-				super.journalVentes.ajouter("Proposition de prix: "+2100+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-				return 2100;
+				super.journalVentes.ajouter("Proposition de prix: "+21+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+				return 21;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco bio")) {
-				super.journalVentes.ajouter("Proposition de prix: "+2300+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-				return 2300;
+				super.journalVentes.ajouter("Proposition de prix: "+23+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+				return 23;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("Choc")) {
-				super.journalVentes.ajouter("Proposition de prix: "+2500+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-				return 2500;
+				super.journalVentes.ajouter("Proposition de prix: "+25+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+				return 25;
 			}
 		}
 		super.journalVentes.ajouter("Proposition de prix: "+0+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
@@ -86,7 +86,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	@Override
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
-			double i=(10+Math.random()/10);
+			double i=(Math.random()/10);
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
 				if(contrat.getPrix()<1800) {
 					super.journalVentes.ajouter("Contre proposition de prix: "+2000*(1-i)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
