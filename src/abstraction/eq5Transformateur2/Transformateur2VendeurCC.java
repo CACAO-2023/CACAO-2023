@@ -63,13 +63,13 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		return contrat.getEcheancier(); } 
 
 
-	//fait par wiem : p
+	//fait par wiem : prix sans reel sens, juste indicatifs
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		double prix = 0;
 		if ((Chocolat)contrat.getProduit() == Chocolat.C_MQ ) {
-			prix = 7.0; }
+			prix = 70.0; }
 		if ((Chocolat)contrat.getProduit() == Chocolat.C_HQ_BE ) {
-		prix = 11.0 ; }
+		prix = 110.0 ; }
 		return prix; }
 		
 		/*double prix=0.0;

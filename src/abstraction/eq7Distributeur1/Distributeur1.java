@@ -26,12 +26,19 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	
 	public void next() {
 		super.next();
-		
+		int etape = Filiere.LA_FILIERE.getEtape();
+		journal.ajouter("============================== étape "+etape+" ==============================");
+		journal_achat.ajouter("============================== étape "+etape+" ==============================");
+		journal_stock.ajouter("============================== étape "+etape+" ==============================");
 	}
 	
 	private void strategie() {
 	}
 	
+	/**
+	 * @author Theo
+	 * @return notre meilleure vente à ce tour
+	 */
 	protected ChocolatDeMarque topvente() {
 		int etape = Filiere.LA_FILIERE.getEtape();
 		int etapenormalisee = (etape+24)%24;
@@ -48,30 +55,21 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	/**
 	 * @author Theo
 	 * @param choco, choco!=null
-	 * @return Le prix actuel d'un Kg de chocolat choco
+	 * @return Le prix de vente actuel d'un Kg de chocolat choco
 	 * IMPORTANT : durant une meme etape, la fonction doit toujours retourner la meme valeur pour un chocolat donne.
 	 */
 	public double prix(ChocolatDeMarque choco) {
 		double qualite = choco.qualitePercue();
 		double coef = 1-(((10/3)*qualite)/100)+0.1;
 		double promo = prixPromotion(choco);
-		if (choco.getChocolat()==Chocolat.C_BQ) {
-			return (coutCB/1000)*promo/coef;
-		}
-		else if (choco.getChocolat()==Chocolat.C_MQ) {
-			return (coutCMNL/1000)*promo/coef;
-		}
-		else if (choco.getChocolat()==Chocolat.C_MQ_BE) {
-			return (coutCML/1000)*promo/coef;
-		}
-		else if (choco.getChocolat()==Chocolat.C_HQ_BE) {
-			return (coutCH/1000)*promo/coef;
-		}
-		return 2.0;
+		double cout = getCout(choco);
+		return (cout/1000)*promo/coef;
 	}
 	
 	/**
-	 * @author Theo	 */
+	 * @author Theo	 
+	 * @return Le coeff de promo : une fois toutes les 3 etapes, on applique une promotion
+	 */
 	public double prixPromotion(ChocolatDeMarque choco) { 
 		if (((Filiere.LA_FILIERE.getEtape()%3)==0)&&(choco.getChocolat()!=Chocolat.C_BQ)) {
 			return 0.9;
@@ -84,7 +82,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	/**
 	 * @author Theo
 	 * @param choco, choco!=null
-	 * @return Retourne la quantite totale (rayon+tete de gondole) en Kg de chocolat de type choco 
+	 * @return Retourne la quantite totale (rayon+tete de gondole) en tonne de chocolat de type choco 
 	 * actuellement disponible a la vente (pour un achat immediat --> le distributeur a 
 	 * au moins cette quantite en stock)
 	 */
@@ -141,11 +139,8 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		this.journal.ajouter("Eq7 a vendu "+quantite+" T de "+choco+ " aux clients finaux ");
 		
 		//Actualisation des previsions persos
-		int etapepreced = Filiere.LA_FILIERE.getEtape();
-		int etapenormalisee = (etapepreced+24)%24;
-		HashMap<ChocolatDeMarque,Double> prevetapeperso = previsionsperso.get(etapenormalisee);
-		prevetapeperso.replace(choco, (prevetapeperso.get(choco)+quantite)/2);
-		previsionsperso.replace(etapenormalisee, prevetapeperso);
+		actualiser_prevision_perso( choco,   quantite);
+
 	}
 	
 	/**
@@ -154,7 +149,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	 * @param choco, le chocolat de marque dont la quantite en rayon a ete integralement achetee
 	 */
 	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
-		journal.ajouter("Rayon vide pour le chocolat :"+choco);
+		journal_stock.ajouter("Rayon vide pour le chocolat :"+choco);
 	}
 }	
 	

@@ -15,6 +15,7 @@ import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
 import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
@@ -36,7 +37,7 @@ public class Distributeur3Acteur implements IActeur{
 	protected double prix;
 	private List<ChocolatDeMarque>chocosProduits;
 	protected HashMap<ChocolatDeMarque, Double> prix_tonne_vente;
-
+	protected Variable variable_stock;
 	public Distributeur3Acteur() {
 		/*if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
 			throw new IllegalArgumentException("creation d'une instance de ExempleAbsDistributeurChocolatMarqe avec des arguments non valides");
@@ -56,7 +57,7 @@ public class Distributeur3Acteur implements IActeur{
 
 		
 
-		this.stock = new Stock();
+		
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
 		
 		// william : pour pouvoir acheter le chocolat qui nous intéresse (HQ BE, MQ BE, MQ)
@@ -64,9 +65,11 @@ public class Distributeur3Acteur implements IActeur{
 		this.chocolats_cible_noms.add("C_HQ_BE_Vccotioi");
 		this.chocolats_cible_noms.add("C_HQ_BE_Maison_Doutre");
 		this.chocolats_cible_noms.add("C_HQ_BE_Choc");
+		this.chocolats_cible_noms.add("C_MQ_BE chokchoco bio");
 		this.chocolats_cible_noms.add("C_HQ_BE_Villors");
 		this.chocolats_cible_noms.add("C_MQ_BE_Villors");
-		
+		this.chocolats_cible_noms.add("C_BQ_Villors");
+
 		//this.chocolats.add(c1);
 		//this.stock.ajoutQte(c1, 1000);
 		
@@ -78,18 +81,30 @@ public class Distributeur3Acteur implements IActeur{
 		this.prixMoyen = new HashMap<ChocolatDeMarque, Double[]>();
 		
 		this.prix_tonne_vente = new HashMap<ChocolatDeMarque, Double> ();
-
 		
+		this.stock = new Stock(this);
+		variable_stock = new VariablePrivee("Eq9StockTablettes", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
+
 	}
 	
 	public void initialiser() {
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
 		for (int i=0; i<chocolats_filiere.size(); i++) {
+
 			if(chocolats_cible_noms.contains((chocolats_filiere.get(i)).toString())){
 				chocolats.add(chocolats_filiere.get(i));
+				stock.QteStock.put(chocolats_filiere.get(i),0.0);
 			}
 		}
+		System.out.println(chocolats);
+	//	for (int i = 0; i< this.chocolats.size(); i++) {
+		//	this.stock.ajoutQte(chocolats.get(i), 100000000);
+		//	this.prix_tonne_vente.put(chocolats.get(i), 10000.0);
+		//}
+		
+		
+		
 		
 	}
 	
@@ -129,15 +144,9 @@ public class Distributeur3Acteur implements IActeur{
 		journal_ventes.ajouter("Etat des ventes : "+"\n");
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
 			for (int i=0; i<this.chocolats.size(); i++) {
-				if(Filiere.LA_FILIERE.getEtape()-1 > 1) 
-				{
 				journal_activitegenerale.ajouter("Le prix moyen du chocolat \""+chocolats.get(i).getNom()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyen(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-1));
 				journal_activitegenerale.ajouter("Les ventes de chocolat \""+chocolats.get(i)+" a l'etape precedente etaient de "+Filiere.LA_FILIERE.getVentes(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-1));
-				}
-				
 
-			
-			
 			}
 		}
 	}
@@ -202,6 +211,8 @@ public class Distributeur3Acteur implements IActeur{
 		for (int i=0; i<this.chocolats.size(); i++) {
 			res.add(stock.getStock(chocolats.get(i)));
 		}*/
+//		
+		res.add(variable_stock);
 		return res;
 		
 	}

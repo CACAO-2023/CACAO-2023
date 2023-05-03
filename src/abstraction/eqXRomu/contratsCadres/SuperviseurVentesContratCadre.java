@@ -117,6 +117,7 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 			return null;			
 		}
 		ContratCadre contrat = new ContratCadre(acheteur, vendeur, produit, echeancier, cryptogramme, tg, pourcentageRSE);
+		journal.ajouter(Journal.texteColore(acheteur, "==>"+acheteur.getNom())+" lance le contrat #"+contrat.getNumero()+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(vendeur, vendeur.getNom()));
 		return negociations(acheteur, vendeur, produit, echeancier, cryptogramme, tg, contrat,acheteur);
 	}
 	// si on ne precise pas le taux de RSE il est (par defaut) de 0
@@ -176,7 +177,7 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 			contrat = new ContratCadre(acheteur, vendeur, produit, echeancier, cryptogramme, tg);
 		}
 		Echeancier contrePropositionA;
-		journal.ajouter(Journal.texteColore(vendeur, vendeur.getNom())+" lance le contrat #"+contrat.getNumero()+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(acheteur, acheteur.getNom()));
+		journal.ajouter(Journal.texteColore(vendeur, "==>"+vendeur.getNom())+" lance le contrat #"+contrat.getNumero()+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(acheteur, acheteur.getNom()));
 		contrePropositionA=acheteur.contrePropositionDeLAcheteur(new ExemplaireContratCadre(contrat));
 		if (contrePropositionA==null) {
 			journal.ajouter("   "+Journal.texteColore(acheteur, acheteur.getNom()+" retourne null pour echeancier : arret des negociations"));
@@ -198,7 +199,7 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 
 		// NEGOCIATIONS SUR L'ECHEANCIER
 		Echeancier contrePropositionV, contrePropositionA;
-		journal.ajouter(Journal.texteColore(acheteur, acheteur.getNom())+" lance le contrat #"+contrat.getNumero()+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(vendeur, vendeur.getNom()));
+		journal.ajouter(" negociations echeancier contrat #"+contrat.getNumero()+" vendeur="+Journal.texteColore(vendeur, vendeur.getNom())+" acheteur="+Journal.texteColore(acheteur, acheteur.getNom())+" de "+contrat.getQuantiteTotale()+" T de "+contrat.getProduit()+" a "+Journal.texteColore(vendeur, vendeur.getNom()));
 		int numNego=0;
 		do { 
 			numNego++;
@@ -289,10 +290,38 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 
 	public void gererLesEcheancesDesContratsEnCours() {
 		this.journal.ajouter("Step "+Filiere.LA_FILIERE.getEtape()+" GESTION DES ECHEANCES DES CONTRATS EN COURS ========");
+		HashMap<IVendeurContratCadre, HashMap<IProduit,Double>> engageALivrer = new HashMap<IVendeurContratCadre, HashMap<IProduit,Double>>();
+		HashMap<IAcheteurContratCadre, Double> engageAPayer = new HashMap<IAcheteurContratCadre, Double>();
+		
+		double chocoALivrer=0;// au cours de cette etape
+		double chocoLivre=0;  // au cours de cette etape
+		double fevesALivrer=0;// au cours de cette etape
+		double fevesLivrees=0;// au cours de cette etape
+		
 		for (ContratCadre cc : this.contratsEnCours) {
+			if (!engageALivrer.keySet().contains(cc.getVendeur())) {
+				engageALivrer.put(cc.getVendeur(), new HashMap<IProduit,Double>());
+			}
+			if (!engageAPayer.keySet().contains(cc.getAcheteur())) {
+				engageAPayer.put(cc.getAcheteur(), 0.0);
+			}
+			double resteALivr=0.0;
+			if (!engageALivrer.get(cc.getVendeur()).keySet().contains(cc.getProduit())) {
+				engageALivrer.get(cc.getVendeur()).put(cc.getProduit(), 0.0);
+			} else {
+				resteALivr = engageALivrer.get(cc.getVendeur()).get(cc.getProduit()).doubleValue();
+			}
+			engageALivrer.get(cc.getVendeur()).put(cc.getProduit(),resteALivr+cc.getQuantiteRestantALivrer());
+			engageAPayer.put(cc.getAcheteur(),engageAPayer.get(cc.getAcheteur())+cc.getMontantRestantARegler());
+			
 			this.journal.ajouter("- contrat :"+cc.oneLineHtml());
 			double aLivrer = cc.getQuantiteALivrerAuStep();
 			if (aLivrer>0.0) {
+				if (cc.getProduit().getType().equals("Feve")) {
+					fevesALivrer+=aLivrer;
+				} else {
+					chocoALivrer+=aLivrer;
+				}
 				IVendeurContratCadre vendeur = cc.getVendeur();
 			//	double effectivementLivre;
 				Lot lotLivre = vendeur.livrer(cc.getProduit(), aLivrer, new ExemplaireContratCadre(cc));
@@ -304,6 +333,11 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
                 }
 				this.journal.ajouter("  a livrer="+String.format("%.3f",aLivrer)+"  livre="+String.format("%.3f",lotLivre.getQuantiteTotale()));
 				if (lotLivre.getQuantiteTotale()>0.0) {
+					if (cc.getProduit().getType().equals("Feve")) {
+						fevesLivrees+=lotLivre.getQuantiteTotale();
+					} else {
+						chocoLivre+=lotLivre.getQuantiteTotale();
+					}
 					IAcheteurContratCadre acheteur = cc.getAcheteur();
 					acheteur.receptionner(lotLivre, new ExemplaireContratCadre(cc));
 					cc.livrer(lotLivre.getQuantiteTotale());
@@ -328,7 +362,23 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 			}
 			cc.penaliteLivraison();
 			cc.penalitePaiement();
-		}		
+		}
+		
+		this.journal.ajouter("==== TOTAL LIVRAISONS ====");
+		this.journal.ajouter(fevesLivrees+" T de feves sur "+fevesALivrer+" a livrer");
+		this.journal.ajouter(chocoLivre+" T de choco sur "+chocoALivrer+" a livrer");
+		this.journal.ajouter("===== RESTE A LIVRER =====");
+		for (IVendeurContratCadre v : engageALivrer.keySet()) {
+			this.journal.ajouter("..== "+v.getNom()+" : ");
+			HashMap<IProduit,Double> ral = engageALivrer.get(v);
+			for (IProduit p : ral.keySet()) {
+				this.journal.ajouter("....-- "+p+" : "+ral.get(p));
+			}
+		}
+		this.journal.ajouter("===== RESTE A PAYER =====");
+		for (IAcheteurContratCadre a : engageAPayer.keySet()) {
+			this.journal.ajouter("..== "+a.getNom()+" : "+engageAPayer.get(a));
+		}
 	}
 
 	public void archiverContrats() {
@@ -347,15 +397,16 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 	}
 
 	public void quiVendQuoi() {
+		this.journal.ajouter("== Qui vend quoi ===");
 		List<ChocolatDeMarque> c = Filiere.LA_FILIERE.getChocolatsProduits();
 		for (ChocolatDeMarque cm : c) {
 			this.journal.ajouter("produit "+cm);
-			this.journal.ajouter("   vendeurs "+getVendeurs(cm));
-			this.journal.ajouter("  acheteurs "+getAcheteurs(cm));
+			this.journal.ajouter("&nbsp;&nbsp;&nbsp;vendeurs "+getVendeurs(cm));
+			this.journal.ajouter("&nbsp;&nbsp;acheteurs "+getAcheteurs(cm));
 		}
 	}
 	public void next() {
-	//	quiVendQuoi();
+		quiVendQuoi();
 		recapitulerContratsEnCours();
 		gererLesEcheancesDesContratsEnCours();
 		archiverContrats();

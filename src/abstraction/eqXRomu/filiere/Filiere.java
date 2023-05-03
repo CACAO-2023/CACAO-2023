@@ -54,7 +54,6 @@ public class Filiere implements IAssermente {
 	//en vente en tete de gondole alors la marque est ajoutee a cette liste. Seuls les 100 derniers ajouts sont conserves.
 	private HashMap<String, Integer> nbPresencesEnTg; // nombre d'occurrence de la marque dans la liste presenceEnTG;
 	private HashMap<IActeur, Integer> cryptos;
-	public Object journal;
 
 	/**
 	 * Initialise la filiere de sorte que le numero d'etape soit 0, 
