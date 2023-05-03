@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import abstraction.eqXRomu.contratsCadres.ContratCadre;
+import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
@@ -268,7 +269,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 				Feve f = (Feve) exCC.getProduit();
 				varQuantite2.put(f, varQuantite2.get(f) - exCC.getEcheancier().getQuantite(curEtape));
 			}
-			HashMap<Feve, Double> prod = thisP.Prevision_Production(curEtape);
+			HashMap<Feve, Double> prod = thisP.Prevision_Production_minimale(curEtape);
 			for (Feve f: varQuantite2.keySet()) {
 				varQuantite2.put(f, varQuantite2.get(f) + prod.get(f) - quantiteRetard.get(f) * (1 + ContratCadre.PENALITE_LIVRAISON));
 			}
@@ -355,7 +356,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	 * @return la quantite de fèves correspondantes
 	 */
 	protected double getStockTotStepTheo(Feve f, int etape) {
-		HashMap<Integer, Double> stockFeve = this.getDescrStocksTheo(Filiere.LA_FILIERE.getEtape()).get(0).get(f);
+		HashMap<Integer, Double> stockFeve = this.getDescrStocksTheo(Filiere.LA_FILIERE.getEtape()).get(1).get(f);
 		double quantiteTot = 0.;
 		for(int i: stockFeve.keySet()) 
 			if (i <= etape) {
@@ -404,6 +405,25 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	protected HashMap<Integer, Double> getStocksTotTheo(Feve f, int etape) {
 		return getStocksTotTheo(etape).get(f);
 	}
+	
+	
+	protected HashMap<Feve, Echeancier> getEcheancierMax(int etape){
+		HashMap<Feve, Echeancier> echeanciersMax = new HashMap<Feve, Echeancier>();
+		ArrayList<HashMap<Feve,HashMap<Integer, Double>>> stockTheo = this.getDescrStocksTheo(etape);
+		HashMap<Feve, HashMap<Integer, Double>> declasse = stockTheo.get(stockTheo.size() - 2);
+		HashMap<Feve, HashMap<Integer, Double>> perime = stockTheo.get(stockTheo.size() - 1);
+		HashMap<Feve, HashMap<Integer, Double>> stockTot = stockTheo.get(0);
+		for (Feve f : this.lesFeves) {
+			Echeancier echeancier = new Echeancier();
+			for (int i = Filiere.LA_FILIERE.getEtape() + 1; i < etape; i++) {
+				
+			}
+		}
+		
+		return echeanciersMax;
+	}
+	
+	
 	
 	/**
 	 * Ajoute le lot au stock
