@@ -143,10 +143,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurCC implem
 
 	}
 	
-	public void notificationRayonVide(ChocolatDeMarque choco) {
-		notificationRayonVide(choco, this.cryptogramme);
-	}
-	
+
 	
 	
 
