@@ -45,52 +45,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 	 */
 
 	
-	 //next de amine :
-	/*public void next() {
-		super.next();
-
-		// === Lancement si possible d'un contrat cadre
-		if (this.superviseurVentesCC!=null) {
-			List<IProduit> produits = new LinkedList<IProduit>();
-			Chocolat cb = Chocolat.C_BQ;	
-			produits.add(cb);
-			for (ChocolatDeMarque c: Filiere.LA_FILIERE.getChocolatsProduits()) {
-				if (c.getMarque().equals("Vccotioi")) {
-					produits.add(c);
-				}
-				}
-			this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : Tentative de lancer un contrat cadre");
-			this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : Liste de tous les produits "+produits);
-			List<IProduit> produitsAcheteur = new LinkedList<IProduit>();
-			List<IProduit> produits2Acheteurs = new LinkedList<IProduit>();
-			for (IProduit prod : produits) {
-				if (superviseurVentesCC.getAcheteurs(prod).size()>0) {
-					produitsAcheteur.add(prod);
-					if (superviseurVentesCC.getAcheteurs(prod).size()>1) {
-						produits2Acheteurs.add(prod);
-					}
-				}
-			}
-			this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : Liste de tous les produits pour lesquels il existe au moins 1 acheteur  "+produitsAcheteur);
-			this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : Liste de tous les produits pour lesquels il existe au moins 2 acheteurs "+produits2Acheteurs);
-			if (produitsAcheteur.size()>0) {
-				IProduit produit = produitsAcheteur.get((int)(Math.random()*produitsAcheteur.size()));
-				this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : Produit tire au sort = "+produit);
-				List<IAcheteurContratCadre> acheteurs = superviseurVentesCC.getAcheteurs(produit);
-				this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : Les acheteurs de "+produit+" sont : "+acheteurs);
-				if (acheteurs.size()>0) {
-					IAcheteurContratCadre acheteur = acheteurs.get((int)(Math.random()*acheteurs.size()));
-					if (acheteur!=this) { // on ne peut pas passer de contrat avec soi meme
-						this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : Acheteur tire au sort = "+acheteur);
-						ExemplaireContratCadre contrat = superviseurVentesCC.demandeVendeur(acheteur, this, produit, this.propositionDuVendeur(produit), this.cryptogramme.intValue(), false);
-						if (contrat!=null) {
-							this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : contrat signe = "+contrat);
-						}
-					}
-				}
-			}
-		}
-	}*/
+	
 
 	//next de Fouad :
 	public void next() {
