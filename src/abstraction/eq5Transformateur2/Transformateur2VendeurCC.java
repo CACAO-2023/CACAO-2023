@@ -63,6 +63,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 	//fait par yassine : pas de négociations
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
+		if 
 		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : j'accepte l'echeancier "+contrat.getEcheancier());
 		return contrat.getEcheancier(); } 
 
@@ -85,9 +86,39 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		
 
 	
-	//fait par yassine : pas de négociations
+	//fait par yassine 
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		return contrat.getPrix(); 
+		double dernierPrix = contrat.getPrix();
+		double soldeDisponible = super.getSolde();
+		double proposition = 0;
+
+		// Si c'est la première offre, propose un prix supérieur de 15%
+		if (contrat.getListePrix().size() == 1) {
+		    proposition = dernierPrix * 1.15;
+		    {this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous vous proposons tant " +contrat.getPrix() + "" +proposition);
+		}} 
+		// Sinon, calcule la proposition en fonction des deux derniers prix
+		else {
+		    double avantDernierPrix = contrat.getListePrix().get(contrat.getListePrix().size() - 2);
+
+		    // Si le dernier prix est inférieur ou égal à 15% plus élevé que le précédent, accepte le prix
+		    if (dernierPrix <= avantDernierPrix * 1.15) {
+		        proposition = dernierPrix;
+		    } 
+		    // Sinon, propose un prix entre les deux derniers prix avec une augmentation de 50%
+		    else {
+		        proposition = avantDernierPrix + (dernierPrix - avantDernierPrix) * 1.50;
+		    }
+		}
+
+		// Si la proposition est supérieure à ce que l'acheteur peut payer, propose le maximum possible
+		if (proposition > soldeDisponible) {
+		    proposition = soldeDisponible;
+		}
+
+		// Retourne la proposition de prix
+		return proposition;
+		/*return contrat.getPrix(); */
 	}
 	
 	
