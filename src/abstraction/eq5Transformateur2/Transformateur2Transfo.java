@@ -55,6 +55,10 @@ public class Transformateur2Transfo extends Transformateur2Acteur implements IFa
 		}
 		
 		this.stockChocoMarque=new HashMap<ChocolatDeMarque,Double>();
+		ChocolatDeMarque Chocopop = new ChocolatDeMarque(Chocolat.C_MQ, "ChocoPop", 75, 0);
+		this.stockChocoMarque.put(Chocopop, 0.0);
+		ChocolatDeMarque MaisonDou = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Maison Doutre", 90, 10);
+		this.stockChocoMarque.put(MaisonDou, 0.0);
 		
 		// on référence les differents pourcentages en cacao nécéssaires pour les chocolats produits
 		
