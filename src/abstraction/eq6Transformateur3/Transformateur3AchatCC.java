@@ -113,7 +113,8 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		}
 		if (notreduree == 0) {return null;}
 		else {
-		double commandemin = max(101.0,this.BesoinMaxEntre(stepdebut,notreduree,((Feve)contrat.getProduit())));
+		double c = max(101.0,this.BesoinMaxEntre(stepdebut,notreduree,((Feve)contrat.getProduit())));
+		double commandemin = Math.min(c, 10000.0);
 		List<Double> res = new LinkedList<Double>();
 		for (int i =stepdebut;i<=notreduree;i++) {
 			if (vendeurecheancier.getQuantite(i)>=commandemin) {res.add(max(vendeurecheancier.getQuantite(i),100.0));}
