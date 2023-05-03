@@ -46,9 +46,11 @@ public class Distributeur3AcheteurOA extends Distributeur3Acteur implements IAch
 	public void next() {
 		super.next();
 		if (supOA==null) {
+			this.journal_OA.ajouter("Superviseur Offre d'Achat trouvé");
 			supOA =(SuperviseurVentesOA)(Filiere.LA_FILIERE.getActeur("Sup.OA"));
 		}
 		if (supOA!=null && Math.random()<0.1) { // 1 fois sur 10 en moyenne
+			this.journal_OA.ajouter("Offre d'Achat initiée");
 			PropositionVenteOA pRetenue = supOA.acheterParAO(this, this.cryptogramme, Chocolat.C_MQ, null, 3, false);
 			if (pRetenue!=null) {
 				double nouveauStock = pRetenue.getOffre().getQuantiteT();
