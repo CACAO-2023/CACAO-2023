@@ -19,6 +19,7 @@ public class RomuATransformateur extends RomuActeur implements IFabricantChocola
 	protected HashMap<Chocolat, Double> stockChoco;
 	protected HashMap<ChocolatDeMarque, Double> stockChocoMarque;
 	protected HashMap<Feve, HashMap<Chocolat, Double>> pourcentageTransfo; // pour les differentes feves, le chocolat qu'elle peuvent contribuer a produire avec le ratio
+	protected List<ChocolatDeMarque> chocolatsVillors;
 
 
 	public RomuATransformateur() {
@@ -45,15 +46,15 @@ public class RomuATransformateur extends RomuActeur implements IFabricantChocola
 		super.initialiser();
 		this.stockFeves=new HashMap<Feve,Double>();
 		for (Feve f : this.lesFeves) {
-			this.stockFeves.put(f, 10000.0);
-			this.totalStocksFeves.ajouter(this, 10000.0, this.cryptogramme);
-			this.journal.ajouter("ajout de 10000 de "+f+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
+			this.stockFeves.put(f, 20000.0);
+			this.totalStocksFeves.ajouter(this, 20000.0, this.cryptogramme);
+			this.journal.ajouter("ajout de 20000 de "+f+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
 		}
 		this.stockChoco=new HashMap<Chocolat,Double>();
 		for (Chocolat c : Chocolat.values()) {
-			this.stockChoco.put(c, 1000.0);
-			this.totalStocksChoco.ajouter(this, 1000.0, this.cryptogramme);
-			this.journal.ajouter("ajout de 1000 de "+c+" au stock de chocolat --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
+			this.stockChoco.put(c, 20000.0);
+			this.totalStocksChoco.ajouter(this, 20000.0, this.cryptogramme);
+			this.journal.ajouter("ajout de 20000 de "+c+" au stock de chocolat --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
 		}
 		this.stockChocoMarque=new HashMap<ChocolatDeMarque,Double>();
 		this.pourcentageTransfo = new HashMap<Feve, HashMap<Chocolat, Double>>();
@@ -68,7 +69,22 @@ public class RomuATransformateur extends RomuActeur implements IFabricantChocola
 		this.pourcentageTransfo.put(Feve.F_BQ, new HashMap<Chocolat, Double>());
 		conversion = 1.0 + (100.0 - Filiere.LA_FILIERE.getParametre("pourcentage min cacao BQ").getValeur())/100.0;
 		this.pourcentageTransfo.get(Feve.F_BQ).put(Chocolat.C_BQ, conversion);
+
+		this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Stock initial chocolat de marque : ");
+		this.chocolatsVillors=new LinkedList<ChocolatDeMarque>();
+		for (Feve f : Feve.values()) {
+			for (Chocolat c : this.pourcentageTransfo.get(f).keySet()) {
+				int pourcentageCacao =  (int) (Filiere.LA_FILIERE.getParametre("pourcentage min cacao "+c.getGamme()).getValeur());
+				ChocolatDeMarque cm= new ChocolatDeMarque(c, "Villors", pourcentageCacao, 0);
+				this.chocolatsVillors.add(cm);
+				this.stockChocoMarque.put(cm, 40000.0);
+				this.totalStocksChocoMarque.ajouter(this, 40000.0, this.cryptogramme);
+				this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cm+")->"+this.stockChocoMarque.get(cm));
+			}
+		}
 	}
+
+
 
 	public void next() {
 		super.next();

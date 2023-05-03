@@ -1,5 +1,8 @@
 package abstraction.eq7Distributeur1;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import abstraction.eqXRomu.clients.ClientFinal;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
@@ -11,58 +14,75 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 
-public class Distributeur1 extends Distributeur1Acteur implements IDistributeurChocolatDeMarque {
+public class Distributeur1 extends Distributeur1AcheteurOA implements IDistributeurChocolatDeMarque {
 	
 	public Distributeur1() {
 		super();
 	}
 	
+	public void initialiser() {
+		super.initialiser();
+	}
+	
+	public void next() {
+		super.next();
+		int etape = Filiere.LA_FILIERE.getEtape();
+		journal.ajouter("============================== étape "+etape+" ==============================");
+		journal_achat.ajouter("============================== étape "+etape+" ==============================");
+		journal_stock.ajouter("============================== étape "+etape+" ==============================");
+	}
+	
 	private void strategie() {
-		
 	}
-	
-	protected double prevision(ChocolatDeMarque marque) { //prevoit les qtes vendues au tour suivant
-		return 0;
-	}
-	
-	
 	
 	/**
+	 * @author Theo
+	 * @return notre meilleure vente à ce tour
+	 */
+	protected ChocolatDeMarque topvente() {
+		int etape = Filiere.LA_FILIERE.getEtape();
+		int etapenormalisee = (etape+24)%24;
+		ChocolatDeMarque topmarque = Filiere.LA_FILIERE.getChocolatsProduits().get(0);
+		double topvente = previsionsperso.get(etapenormalisee).get(topmarque);
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			if (previsionsperso.get(etapenormalisee).get(marque) > topvente) {
+				topmarque = marque;
+			}
+		}
+		return topmarque;
+	}
+	
+	/**
+	 * @author Theo
 	 * @param choco, choco!=null
-	 * @return Le prix actuel d'un Kg de chocolat choco
+	 * @return Le prix de vente actuel d'un Kg de chocolat choco
 	 * IMPORTANT : durant une meme etape, la fonction doit toujours retourner la meme valeur pour un chocolat donne.
 	 */
 	public double prix(ChocolatDeMarque choco) {
 		double qualite = choco.qualitePercue();
 		double coef = 1-(((10/3)*qualite)/100)+0.1;
-		if (choco.getChocolat()==Chocolat.C_BQ) {
-			return coutCB/coef;
-		}
-		else if (choco.getChocolat()==Chocolat.C_MQ) {
-			return coutCMNL/coef;
-		}
-		else if (choco.getChocolat()==Chocolat.C_MQ_BE) {
-			return coutCML/coef;
-		}
-		else if (choco.getChocolat()==Chocolat.C_HQ_BE) {
-			return coutCH/0.8;
-		}
-		return 2;
+		double promo = prixPromotion(choco);
+		double cout = getCout(choco);
+		return (cout/1000)*promo/coef;
 	}
 	
-	public double prixPromotion(ChocolatDeMarque choco) {
-		double p = prix(choco);
-		if (((Filiere.LA_FILIERE.getEtape()%2)==0)&&(choco.getChocolat()!=Chocolat.C_BQ)) {
-			return p*0.9;
+	/**
+	 * @author Theo	 
+	 * @return Le coeff de promo : une fois toutes les 3 etapes, on applique une promotion
+	 */
+	public double prixPromotion(ChocolatDeMarque choco) { 
+		if (((Filiere.LA_FILIERE.getEtape()%3)==0)&&(choco.getChocolat()!=Chocolat.C_BQ)) {
+			return 0.9;
 		}
 		else {
-			return p;
+			return 1;
 		}
 	}
 	
 	/**
+	 * @author Theo
 	 * @param choco, choco!=null
-	 * @return Retourne la quantite totale (rayon+tete de gondole) en Kg de chocolat de type choco 
+	 * @return Retourne la quantite totale (rayon+tete de gondole) en tonne de chocolat de type choco 
 	 * actuellement disponible a la vente (pour un achat immediat --> le distributeur a 
 	 * au moins cette quantite en stock)
 	 */
@@ -72,14 +92,10 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 //			double qStock = stockChocoMarque7.get(choco);
 //			return qStock/2.0;
 //		} else {
-		return 0.0;
+		return stockChocoMarque.get(choco);
 //		}
 	}
 	
-//	public void demande_contrat_cadre(IVendeurContratCadre vendeur) {
-//		qql = new demandeAcheteur(this,  vendeur, IProduit produit, Echeancier echeancier, int cryptogramme, boolean tg) {
-//		return 
-//	}
 	
 	/**
 	 * @param choco, choco!=null
@@ -89,15 +105,20 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 * Remarque : La somme des quantites en vente en tete de gondole ne peut 
 	 * pas depasser 10% de la somme totale des quantites mises en vente. 
 	 */
+	
+	/**
+	 * @author Theo
+	 * Pour la V1, on mettra seulement en tête de gondole le produit le plus vendu, pour booster ses ventes
+	 * La mise en place d'une contrepartie avec le transformateur sera mise en place lors de la V2
+	 */
 	public double quantiteEnVenteTG(ChocolatDeMarque choco, int crypto) {
-		//recopie de l'exemple de romu
-//		if (stockChocoMarque7.keySet().contains(choco)) {
-//			double qStock = stockChocoMarque7.get(choco);
-//			return qStock/20.0;
-//		} else {
+
+		ChocolatDeMarque topmarque = topvente();
 		double seuil = Filiere.SEUIL_EN_TETE_DE_GONDOLE_POUR_IMPACT;
+		if ((choco==topmarque)&&(stockChocoMarque.get(topmarque)>0)) {
+			return stockChocoMarque.get(topmarque)/10;
+		}
 		return 0.0;
-//		}
 	}
 	
 	/**
@@ -110,10 +131,16 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 * @param choco, choco!=null
 	 * @param quantite, quantite>0.0 et quantite<=quantiteEnVente(choco)
 	 * @param montant, le montant correspondant a la transaction que le client a deja verse sur le compte du distributeur
+	 * @author Theo
 	 */
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
-//		stockChocoMarque7.put(choco, stockChocoMarque7.get(choco)-quantite);
-//		totalStocks.setValeur(this, totalStocks.getValeur(cryptogramme)-quantite, cryptogramme);
+		stockChocoMarque.put(choco, stockChocoMarque.get(choco)-quantite);
+		totalStocks.setValeur(this, totalStocks.getValeur(cryptogramme)-quantite, cryptogramme);
+		this.journal.ajouter("Eq7 a vendu "+quantite+" T de "+choco+ " aux clients finaux ");
+		
+		//Actualisation des previsions persos
+		actualiser_prevision_perso( choco,   quantite);
+
 	}
 	
 	/**
@@ -122,7 +149,7 @@ public class Distributeur1 extends Distributeur1Acteur implements IDistributeurC
 	 * @param choco, le chocolat de marque dont la quantite en rayon a ete integralement achetee
 	 */
 	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
-		
+		journal_stock.ajouter("Rayon vide pour le chocolat :"+choco);
 	}
 }	
 	

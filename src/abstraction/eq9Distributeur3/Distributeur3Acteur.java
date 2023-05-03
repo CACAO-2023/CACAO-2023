@@ -2,25 +2,42 @@ package abstraction.eq9Distributeur3;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eqXRomu.clients.ClientFinal;
+import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
+import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
+import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
 
-public class Distributeur3Acteur implements IActeur {
+public class Distributeur3Acteur implements IActeur{
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	protected int numero;
 	protected Integer cryptogramme;
 	protected Stock stock;
-	protected Journal journal;
+	protected Journal journal_ventes;
+	protected Journal journal_achats;
+	protected Journal journal_operationsbancaires;
+	protected Journal journal_stock;
+	protected Journal journal_activitegenerale;
 	protected List<ChocolatDeMarque> chocolats;
-
+	protected List<String> chocolats_cible_noms;
+	protected HashMap<ChocolatDeMarque, Double[]> prixMoyen;
+	protected boolean initialise = true;
+	protected double prix;
+	private List<ChocolatDeMarque>chocosProduits;
+	protected HashMap<ChocolatDeMarque, Double> prix_tonne_vente;
+	protected Variable variable_stock;
 	public Distributeur3Acteur() {
 		/*if (chocos==null || chocos.length<1 || stocks==null || stocks.length!=chocos.length) {
 			throw new IllegalArgumentException("creation d'une instance de ExempleAbsDistributeurChocolatMarqe avec des arguments non valides");
@@ -31,19 +48,64 @@ public class Distributeur3Acteur implements IActeur {
 		
 		// Ici pour tester on se créé un stock de chocolat à partir de rien (william)
 		// ChocolatDeMarque(Chocolat chocolat, String marque, int pourcentageCacao, int pourcentageRSE)
-		ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "marque", 50, 20);
-		Stock stock = new Stock();
-		this.stock = stock;
+
+		// william
+
+
+		this.chocosProduits = new LinkedList<ChocolatDeMarque>();
+		
+
+		
+
 		
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
-		this.chocolats.add(c1);
-		this.stock.ajoutQte(c1, 1000);
 		
-		this.journal = new Journal(this.getNom()+" activites", this);
+		// william : pour pouvoir acheter le chocolat qui nous intéresse (HQ BE, MQ BE, MQ)
+		this.chocolats_cible_noms = new LinkedList<String>();
+		this.chocolats_cible_noms.add("C_HQ_BE_Vccotioi");
+		this.chocolats_cible_noms.add("C_HQ_BE_Maison_Doutre");
+		this.chocolats_cible_noms.add("C_HQ_BE_Choc");
+		this.chocolats_cible_noms.add("C_MQ_BE chokchoco bio");
+		this.chocolats_cible_noms.add("C_HQ_BE_Villors");
+		this.chocolats_cible_noms.add("C_MQ_BE_Villors");
+		this.chocolats_cible_noms.add("C_BQ_Villors");
+
+		//this.chocolats.add(c1);
+		//this.stock.ajoutQte(c1, 1000);
 		
+		this.journal_ventes = new Journal(this.getNom()+" ventes", this);
+		this.journal_achats = new Journal(this.getNom()+" achats", this);
+		this.journal_operationsbancaires = new Journal(this.getNom()+" operations", this);
+		this.journal_activitegenerale = new Journal(this.getNom()+" activites", this);
+		this.journal_stock = new Journal(this.getNom()+" stock", this);
+		this.prixMoyen = new HashMap<ChocolatDeMarque, Double[]>();
+		
+		this.prix_tonne_vente = new HashMap<ChocolatDeMarque, Double> ();
+		
+		this.stock = new Stock(this);
+		variable_stock = new VariablePrivee("Eq9StockTablettes", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
+
 	}
 	
 	public void initialiser() {
+		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
+		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
+		for (int i=0; i<chocolats_filiere.size(); i++) {
+
+			if(chocolats_cible_noms.contains((chocolats_filiere.get(i)).toString())){
+				chocolats.add(chocolats_filiere.get(i));
+				stock.QteStock.put(chocolats_filiere.get(i),0.0);
+			}
+		}
+		System.out.println(chocolats);
+	//	for (int i = 0; i< this.chocolats.size(); i++) {
+		//	this.stock.ajoutQte(chocolats.get(i), 100000000);
+		//	this.prix_tonne_vente.put(chocolats.get(i), 10000.0);
+		//}
+		
+		
+		
+		
 	}
 	
 	public String toString() {
@@ -53,56 +115,50 @@ public class Distributeur3Acteur implements IActeur {
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ9";
 	}
+	
 
 	////////////////////////////////////////////////////////
 	//         En lien avec l'interface graphique         //
 	////////////////////////////////////////////////////////
 
 	public void next() {
-
-
+		
 		// lancer un contrat seuil et repondre 
+		
 
-		
-		
+
+
 		// il va falloir faire la comparaison de contrats cadres par rapport à un seuil puis choisir le plus interessant
 
 
-		journal.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
-		if (Filiere.LA_FILIERE.getEtape()>=1) {
-			for (int i=0; i<this.chocolats.size(); i++) {
-		//	journal.ajouter("Le prix moyen du chocolat \""+chocolats.get(i).getNom()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyen(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-1));
-			//journal.ajouter("Les ventes de chocolat \""+chocolats.get(i)+" il y a un an etaient de "+Filiere.LA_FILIERE.getVentes(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-24));
-			
-			
-			}
-		}
+		journal_activitegenerale.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
+		journal_activitegenerale.ajouter("Solde="+getSolde()+"€");
+		etat_ventes();
 
 	}
 
 	
 	
 	public void etat_ventes(){
-		/*
-		Ils peuvent par contre connaître les volumes de ventes passés. En effet, pour tout chocolat de
-		marque choco, Filiere.LA_FILIERE.getVentes(choco, etape) retourne la quantité totale (tous
-		distributeurs cumulés) des ventes de choco à l’étape etape (avec etape dans [-24,
-		Filire.LA_FILIERE.getEtape()
-		
-		regarder les stocks de chaque gamme (moyen, moyen BE, haut), 
-		regarder nos ventes et les ventes du marché pour savoir ce 
-		qu'il faut acheter par ordre de priorité
+		//william
+		journal_ventes.ajouter("Etat des ventes : "+"\n");
+		if (Filiere.LA_FILIERE.getEtape()>=1) {
+			for (int i=0; i<this.chocolats.size(); i++) {
+				journal_activitegenerale.ajouter("Le prix moyen du chocolat \""+chocolats.get(i).getNom()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyen(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-1));
+				journal_activitegenerale.ajouter("Les ventes de chocolat \""+chocolats.get(i)+" a l'etape precedente etaient de "+Filiere.LA_FILIERE.getVentes(chocolats.get(i), Filiere.LA_FILIERE.getEtape()-1));
 
-		William
-		*/
+			}
+		}
 	}
 	public void achat_stock(){
+		
+		
 
 		/* 
 		 en fonction de lookat_results(), l�acteur devra réaliser des contrats
 		 
 		cadres ou des appels d'offres ou accepter des offres pour certaines 
-		gammes bas� sur leur priorité.
+		gammes base sur leur priorité.
 		
 		William
 		
@@ -119,19 +175,22 @@ public class Distributeur3Acteur implements IActeur {
 
 	}
 	public void repartition_tete_gondole() {
+		HashMap<ChocolatDeMarque, Double> repartition = new HashMap<ChocolatDeMarque, Double>();
+		repartition.put((get_chocolat_with_name("C_HQ_BE_Choc")),1.0);
+		
 		//renvoie une hashmap <marque, quatité>
 	}
-	public void cout_stock() {
-				//, calcul le coût de stockage.
 
+	
+	
+	public ChocolatDeMarque get_chocolat_with_name(String name) {
+		for(int i =0; i< chocolats.size();i++) {
+			if( (chocolats.get(i)).toString() == name) {
+				return chocolats.get(i);
+			}
+		}
+		return null;
 	}
-	public void quantite_rayon() {
-
-				//déterminer quel part du stock est mise en rayon
-
-	}
-	public void cout_masse_salariale() {}
-
 	
 
 
@@ -140,12 +199,9 @@ public class Distributeur3Acteur implements IActeur {
 	}
 
 	public String getDescription() {
-		
 		return "Des ingrédients d'exception pour un chocolat unique";
 	}
 
-
-	
 	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
@@ -155,6 +211,8 @@ public class Distributeur3Acteur implements IActeur {
 		for (int i=0; i<this.chocolats.size(); i++) {
 			res.add(stock.getStock(chocolats.get(i)));
 		}*/
+//		
+		res.add(variable_stock);
 		return res;
 		
 	}
@@ -167,7 +225,14 @@ public class Distributeur3Acteur implements IActeur {
 
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
+		
 		List<Journal> res=new ArrayList<Journal>();
+		res.add(journal_ventes);
+		res.add(journal_achats);
+		res.add(journal_operationsbancaires);
+		res.add(journal_activitegenerale);
+		res.add(journal_stock);
+		
 		return res;
 	}
 
@@ -178,6 +243,7 @@ public class Distributeur3Acteur implements IActeur {
 	// Appelee en debut de simulation pour vous communiquer 
 	// votre cryptogramme personnel, indispensable pour les
 	// transactions.
+	
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
 	}
@@ -215,6 +281,29 @@ public class Distributeur3Acteur implements IActeur {
 	public double getStock(ChocolatDeMarque c) {
 		return this.stock.getStock(c);
 	}
+	
+	/*
+
+	@Override
+	public List<ChocolatDeMarque> getChocolatsProduits() {
+		if (this.chocosProduits.size()==0) {
+			ChocolatDeMarque c1 = new ChocolatDeMarque(Chocolat.C_HQ_BE, "Choc", 50, 20);
+			this.chocosProduits.add(c1);
+		}
+		return this.chocosProduits;
+	}
+*/
+	/*
+	  @Override
+	public List<String> getMarquesChocolat() {
+		LinkedList<String> marques = new LinkedList<String>();
+		marques.add("Choc");
+		return marques;
+	}
+
+	
+*/
+	
 
 	
 
