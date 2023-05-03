@@ -62,6 +62,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		ChocolatDeMarque marque = (ChocolatDeMarque) contrat.getProduit();
 		if (cout_marque.get(marque)*1.5	< contrat.getPrix()) {
 			return 0.0;
+// cette ligne est à supprimer
 		} else if (nombre_achats.get(marque)==0) {
 			return contrat.getPrix();
 		} else {
