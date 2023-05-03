@@ -257,9 +257,32 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		return 1.1*CoutProd().get(f)/Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f);
 	}
 	
+	protected boolean mauvais_resultat(Feve f, int debut, int fin) {
+		double CA = 0;
+		double cout = 0;		
+		for (int i=debut; i<=fin; i++ ) {
+			CA = CA + argentVente.get(f).getValeur(i);
+			cout = cout + coutProdFeve.get(f).getValeur(i);
+		}
+		if (cout > CA) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	//
 	private void ajustement_plantation() {
 		for (Feve f : this.salaires.keySet()) {
+			if (Filiere.LA_FILIERE.getEtape()>24*3) {
+				if (mauvais_resultat(f, Filiere.LA_FILIERE.getEtape()-3*24, Filiere.LA_FILIERE.getEtape())) {
+					for (int age : this.age_hectares.get(f).keySet()) {
+						int nb_plantation = this.age_hectares.get(f).get(age);
+						this.age_hectares.get(f).put(age,(int) Math.round(0.8*nb_plantation));
+					}
+				}
+			}
+			
 			int nb_a_planter = 0;
 			if (this.age_hectares.get(f).containsKey(Filiere.LA_FILIERE.getEtape() - 37*24)) {
 				nb_a_planter = this.age_hectares.get(f).get(Filiere.LA_FILIERE.getEtape() - 37*24);
@@ -275,6 +298,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 			}
 		}
 	}
+	
 	// Une fois les plantation ajustees, sachant qu'un employe s'occupe d'un hectare on adapte le nombre
 	//d'employes aux nombres d'hectares
 	private void ajustement_employes () {
