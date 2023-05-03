@@ -136,6 +136,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
 		if (super.getLotChocolat(produit)!=null) {
 		double livre = Math.min(super.getLotChocolat(produit).getQuantiteTotale(), quantite);
+		super.journalVentes.ajouter("On livre : "+livre+"de : "+produit.getType());
 		if (livre>0.0) {
 			super.retirerChocolat((ChocolatDeMarque)produit, livre);//Attention il faut que cela soit possible; verifier la quantité
 		}
@@ -146,6 +147,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 			Lot l=new Lot(produit);
 			return l; 
 		}
+
 	}
 	/**ecrit par Nathan Claeys
 	   * pour pouvoir rendre les variables qui peuvent aider à la prise de decision
