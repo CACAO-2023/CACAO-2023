@@ -297,7 +297,6 @@ public class Producteur3 extends Bourse3  {
 			double qAEnvoyer=c.getQuantiteALivrerAuStep();
 			if(qAEnvoyer <= stockActuel) {
 			//WARNING : Renvoie un cout par tonne
-			System.out.println(contractsGoods.size());
 			argentGagne += c.getPrix()*qAEnvoyer;
 			stockActuel = stockActuel - qAEnvoyer;
 			}
