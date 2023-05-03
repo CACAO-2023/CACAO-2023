@@ -150,17 +150,17 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 */
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
-		switch(((Feve)contrat.getProduit()).getGamme()) {
+		switch(((Feve)contrat.getProduit()).getGamme()) {//On ne veut pas accepter des prix trop haut
 	  	case BQ :
 	  		if (contrat.getPrix()>prixmaxBG.getValeur()) {return 0.0;};
         case MQ:
-            if (feve.isBioEquitable()) {
-                return stockFeveMGL;
+            if (((Feve)contrat.getProduit()).isBioEquitable()) {
+            	if (contrat.getPrix()>prixmaxMGL.getValeur()) {return 0.0;};
             } else {
-                return stockFeveMG;
+            	if (contrat.getPrix()>prixmaxMG.getValeur()) {return 0.0;};
             }
         case HQ:
-            return stockFeveHGL;
+        	if (contrat.getPrix()>prixmaxHG.getValeur()) {return 0.0;}
 		double dernier_prix = contrat.getPrix();
 		if (contrat.getListePrix().size()==1) {return 0.9*dernier_prix;}
 		else {double mon_dernier_prix = contrat.getListePrix().get(contrat.getListePrix().size()-2);
