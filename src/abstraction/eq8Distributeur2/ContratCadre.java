@@ -89,7 +89,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	//Auteur : Marzougui Mariem
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		stocks.ajouterAuStock((ChocolatDeMarque)(contrat.getProduit()),lot.getQuantiteTotale() );
-		this.stock_total+=lot.getQuantiteTotale();
+		stock_total+=lot.getQuantiteTotale();
 		s.setValeur(this, stock_total, this.cryptogramme);
 		this.journal_stocks.ajouter("ajout d'une quantité de"+lot.getQuantiteTotale()+"T livraison CC "+contrat.getNumero());
 	}
