@@ -47,6 +47,10 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable argentVenteMQ = new VariablePrivee("EQ2 argent gagné par la vente de MQ", "montre l'argent gagné par la vente de MQ à chaque tour", this, 0);
 	protected Variable argentVenteMQ_BE = new VariablePrivee("EQ2 argent gagné par la vente de MQ_BE", "montre l'argent gagné par la vente de MQ_BE à chaque tour", this, 0);
 	protected Variable argentVenteHQ_BE = new VariablePrivee("EQ2 argent gagné par la vente de HQ_BE", "montre l'argent gagné par la vente de HQ_BE à chaque tour", this, 0);
+	protected Variable coutProdBQ = new VariablePrivee("EQ2 coût de production et stockage de BQ", "coût total de production et de stockage de BQ à chaque step", this, 0);
+	protected Variable coutProdMQ = new VariablePrivee("EQ2 coût de production et stockage de MQ", "coût total de production et de stockage de MQ à chaque step", this, 0);
+	protected Variable coutProMQ_BE = new VariablePrivee("EQ2 coût de production et stockage de MQ_BE", "coût total de production et de stockage de MQ_BE à chaque step", this, 0);
+	protected Variable coutProdHQ_BE = new VariablePrivee("EQ2 coût de production et stockage de HQ_BE", "coût total de production et de stockage de HQ_BE à chaque step", this, 0);
 	protected HashMap<Feve, Variable> argentVente = new HashMap<Feve, Variable>();
 	protected Producteur2 thisP;
 
@@ -160,6 +164,10 @@ public class Producteur2Acteur implements IActeur {
 		res.add(this.argentVenteMQ);
 		res.add(this.argentVenteMQ_BE);
 		res.add(this.argentVenteHQ_BE);
+		res.add(this.coutProdBQ);
+		res.add(this.coutProdMQ);
+		res.add(this.coutProMQ_BE);
+		res.add(this.coutProdHQ_BE);
 		return res;
 	}
 
