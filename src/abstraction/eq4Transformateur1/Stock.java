@@ -61,5 +61,8 @@ public class Stock extends Transformateur1Acteur{
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(cm+"", 15)+" = "+this.stockChocoMarque.get(cm));
 			
 		}
+		this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"StockFevesTotal="+this.totalStocksFeves.getValeur());
+		this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"StockChocolatTotal="+this.totalStocksChoco.getValeur());
+		this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"StockChocoDeMarqueTotal="+this.totalStocksChocoMarque.getValeur());
 	}
 }
