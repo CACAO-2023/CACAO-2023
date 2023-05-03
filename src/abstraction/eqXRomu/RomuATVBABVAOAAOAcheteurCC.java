@@ -41,7 +41,7 @@ public class RomuATVBABVAOAAOAcheteurCC extends RomuATVBABVAOAcheteurAppelOffre 
 		return contrat.getEcheancier();
 	}
 
-	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
+	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) { 
 		double prix=0.0;
 		double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
 		Object produit = contrat.getProduit();
