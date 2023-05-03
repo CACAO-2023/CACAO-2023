@@ -22,7 +22,7 @@ public class AODistributeur extends CC_distributeur implements IVendeurAO {
 	
 	@Override
 	public PropositionAchatAO choisir(List<PropositionAchatAO> propositions) {
-		double prix=0;
+		double prix=1000;
 		PropositionAchatAO propRetenue=null;
 		for (PropositionAchatAO p : propositions) {
 			if (p.getPrixT()>prix) {

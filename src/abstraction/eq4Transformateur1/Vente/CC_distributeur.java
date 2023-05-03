@@ -231,8 +231,8 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		}
 		if (produit instanceof Chocolat) {
 			switch ((Chocolat)produit) {
-			case C_HQ_BE   : prix= 11.55;break;
-			case C_BQ      : prix=  5.25;break;
+			case C_HQ_BE   : prix= 4000;break;
+			case C_BQ      : prix=  2000;break;
 			}
 		}
 		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propose prix de "+prix+" pour "+produit);
