@@ -78,6 +78,7 @@ public class Distributeur1Acteur  implements IActeur {
 	protected HashMap<ChocolatDeMarque,Integer> nombre_achats = new HashMap<ChocolatDeMarque,Integer>();; 
 
 	protected Variable cout_stockage_distributeur = new Variable("cout moyen stockage distributeur", this);
+	protected Variable cout_main_doeuvre_distributeur = new Variable("cout moyen de la main d'oeuvre pour les distributeur", this);
 	
 	protected int cryptogramme;
 
@@ -200,6 +201,11 @@ public class Distributeur1Acteur  implements IActeur {
 	public void initialiser() {
 		
 		cout_stockage_distributeur.setValeur(this, Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*16);
+		
+		/////////////////////////////////////
+		//POTENTIELLEMENT à Changer
+		cout_main_doeuvre_distributeur.setValeur(this, 1);
+		///////////////////////////////////////
 		
 		//Initialisation des couts
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {

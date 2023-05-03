@@ -64,7 +64,6 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		double promo = prixPromotion(choco);
 		double cout = getCout(choco);
 //		return (cout/1000)*promo/coef;
-		
 		double prix = (cout)*promo*1.2;
 		return prix;
 	}

@@ -103,7 +103,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
      * @author Ghaly sentissi
      */
 	public ExemplaireContratCadre getContrat(IProduit produit,Echeancier e) {
-		this.journal_achat.ajouter("Recherche de vendeur CC pour le produit : " + produit + "...");
+		this.journal_achat.ajouter(Color.gray, Color.BLACK,"Recherche de vendeur CC pour le produit : " + produit + "...");
 		List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
 		ExemplaireContratCadre cc = null;
 		
