@@ -28,7 +28,6 @@ public class Producteur3 extends Bourse3  {
 	private HashMap<String,HashMap> Champs;
 	private Double SeuilHG;
 	private Double SeuilMG;
-	private Integer HectaresAchetes;
 
 	private Integer HectaresLibres; /*Repertorie le nombre d'hectares libres que l'on possede*/
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
@@ -46,7 +45,6 @@ public class Producteur3 extends Bourse3  {
 		this.fields = new Champs();
 		this.SeuilHG = 0.;
 		this.SeuilMG = 0.;
-		this.HectaresAchetes = 0;
 		this.quantiteVenduBourseB = 0.0;
 		this.quantiteVenduBourseM = 0.0;
 		this.CoutStep = 0.0;
@@ -180,7 +178,7 @@ public class Producteur3 extends Bourse3  {
 
 				}
 		*/
-		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep + ", Hectares Achetés : " + this.HectaresAchetes + ", Coût de la tonne : " + this.CoutTonne);
+		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep + ", Hectares Achetés : " + this.HectaresAchetes.getValeur() + ", Coût de la tonne : " + this.CoutTonne);
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
 				"Step Actuelle : " + Filiere.LA_FILIERE.getEtape()+", Taille total des Champs utilisés : "+ this.HectaresUtilises+", Taille des champs libres" + this.HectaresLibres + ", Nombre d'employe : "+ (this.HectaresUtilises + this.HectaresLibres));
 		
@@ -199,7 +197,7 @@ public class Producteur3 extends Bourse3  {
 		this.BeneficeB.setValeur(this, this.getBenefice("B"));
 		this.BeneficeM.setValeur(this, this.getBenefice("M"));
 		this.BeneficeH.setValeur(this, this.getBenefice("H"));
-		this.HectaresAchetes = 0;
+		this.HectaresAchetes.setValeur(this, 0);
 	}
 	/*
 
@@ -364,7 +362,7 @@ public class Producteur3 extends Bourse3  {
 	 */
 	public void achatHectares(Integer HectaresAAcheter) {
 		Integer coutAchatHectares = HectaresAAcheter * 3250;
-		this.HectaresAchetes = HectaresAAcheter;
+		this.HectaresAchetes.setValeur(this, HectaresAAcheter);
 		this.CoutStep = this.CoutStep + coutAchatHectares;
 	}
 	
