@@ -42,7 +42,7 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable coutSalaire = new VariablePrivee("EQ2 cout salaire", "coût des salaires à chaque étape", this, 0);
 	protected Variable stepsVecuesPourBourseMQ_BE = new VariablePrivee("EQ2 seuil age vente en bourse MQ_BE", "seuil d'ancienneté de vente de MQ_BE en bourse", this, 10);
 	protected Variable stepsVecuesPourBourseMQ = new VariablePrivee("EQ2 seuil age vente en bourse MQ", "seuil d'ancienneté de vente obligatoire de MQ en bourse", this, 10);
-	protected Variable stepsVecuesPourBourseBQ = new VariablePrivee("EQ2 seuil age vente en bourse BQ", "seuil d'ancienneté de vente obligatoire de MQ_BE en bourse", this, 10);
+	protected Variable stepsVecuesPourBourseBQ = new VariablePrivee("EQ2 seuil age vente en bourse BQ", "seuil d'ancienneté de vente obligatoire de BQ en bourse", this, 10);
 	protected Variable argentVenteBQ = new VariablePrivee("EQ2 argent gagné par la vente de BQ", "montre l'argent gagné par la vente de BQ à chaque tour", this, 0);
 	protected Variable argentVenteMQ = new VariablePrivee("EQ2 argent gagné par la vente de MQ", "montre l'argent gagné par la vente de MQ à chaque tour", this, 0);
 	protected Variable argentVenteMQ_BE = new VariablePrivee("EQ2 argent gagné par la vente de MQ_BE", "montre l'argent gagné par la vente de MQ_BE à chaque tour", this, 0);

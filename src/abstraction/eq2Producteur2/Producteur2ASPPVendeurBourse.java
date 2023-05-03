@@ -21,19 +21,18 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 	public double stock_mis_en_bourse(Feve f) {
 		if (f==Feve.F_BQ) {
 			return this.getStocksTotTheo(Feve.F_BQ, Filiere.LA_FILIERE.getEtape()).get(Filiere.LA_FILIERE.getEtape());//renvoie le stock dispo pour la bourse à l'étape actuelle
-		}
+		} 
 		if (f==Feve.F_MQ) {
 			return this.getStocksTotTheo(Feve.F_MQ, Filiere.LA_FILIERE.getEtape()).get(Filiere.LA_FILIERE.getEtape());
 		}
 		if (f==Feve.F_MQ_BE) {
-			return this.getStockTotTime(Feve.F_MQ_BE, (int)this.stepsVecuesPourBourseMQ_BE.getValeur());
-		}//la fonction getStockTotTime renvoie pour le type de fève mis en premier argument, la quantité de fève dont le step d'âge est au-moins celui mis en 2e argument
+			return this.getStockTotTimeTheo(Feve.F_MQ_BE, (int)this.stepsVecuesPourBourseMQ_BE.getValeur());
+		}//la fonction getStockTotTimeTheo renvoie pour le type de fève mis en premier argument, la quantité de fève disponibles dont le step d'âge est au-moins celui mis en 2e argument
 		
 		return 0;
 	}
 		
 	// Cette fonction en-dessous doit servir à déterminer la quantité de chaque fève mis en bourse en fonction du cours de la bourse et des quantités disponible,
-	// attention à bien décrémenter le stock entre les étapes, notamment celui du contrat cadre.
 	
 	
 	public double offre(Feve f, double cours_de_f) {
@@ -41,17 +40,16 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 			// regarder en focntion du cours de F et de la fève  un seuil à partir duquel il est acceptable de vendre, et en quelles quantités
 			// celà passe par la création de 2 prix seuil, un à partir duquel on commence à vendre, et un autre à partir duquel on vend tout le stock
 			// avec une continuité linéaire de la relation prix/proportion_vendue entre ces 2 points
-			// prix_seuil_1=1, prix_seuil_2=10, ces prix sont pour l'instant arbitraires
 			float prix_seuil_1=2000;
 			float prix_seuil_2=2500;
-			if (cours_de_f < prix_seuil_1 || this.Rentabilites(f, cours_de_f)==false) {
+			if (cours_de_f < prix_seuil_1 && this.Rentabilites(f, cours_de_f)==false) {
 				return 0;
 			}
 			if (this.Rentabilites(f, cours_de_f)==true && cours_de_f < prix_seuil_1) { //si le cours permet de faire au moins 10% de profit, on ne met en vente que les fèves 
-				return this.getStockTotTime(Feve.F_BQ, (int)this.stepsVecuesPourBourseBQ.getValeur()); //BQ qui vont bientôt disparaître
+				return this.getStockTotTimeTheo(Feve.F_BQ, (int)this.stepsVecuesPourBourseBQ.getValeur()); //BQ qui vont bientôt disparaître
 			}
 			if (cours_de_f >= prix_seuil_1 && cours_de_f <= prix_seuil_2) { // si le prix est suffisemment élevé, on met en vente aussi les fèves de MQ qui ne sont pas proches d'être déclassées
-				return (stock_mis_en_bourse(f)-this.getStockTotTime(Feve.F_BQ, (int)this.stepsVecuesPourBourseBQ.getValeur()))*(cours_de_f - prix_seuil_1)/(prix_seuil_2 - prix_seuil_1) + this.getStockTotTime(Feve.F_BQ, (int)this.stepsVecuesPourBourseBQ.getValeur());
+				return (stock_mis_en_bourse(f)-this.getStockTotTimeTheo(Feve.F_BQ, (int)this.stepsVecuesPourBourseBQ.getValeur()))*(cours_de_f - prix_seuil_1)/(prix_seuil_2 - prix_seuil_1) + this.getStockTotTimeTheo(Feve.F_BQ, (int)this.stepsVecuesPourBourseBQ.getValeur());
 			}
 			if(cours_de_f >= prix_seuil_2) {
 				return stock_mis_en_bourse(f);
@@ -60,20 +58,20 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 		if (f==Feve.F_MQ) {
 			float prix_seuil_1=2400;
 			float prix_seuil_2=3000;
-			if (cours_de_f < prix_seuil_1 || this.Rentabilites(f, cours_de_f)==false) { //si le cours de f est trop bas, où que le cours n'assure pas les 10% minimum de rentabilités on n'en met pas en bourse
+			if (cours_de_f < prix_seuil_1 && this.Rentabilites(f, cours_de_f)==false) { //si le cours de f est trop bas, où que le cours n'assure pas les 10% minimum de rentabilités on n'en met pas en bourse
 				return 0;
 			}
 			if (this.Rentabilites(f, cours_de_f)==true && cours_de_f < prix_seuil_1) { //si le cours permet de faire au moins 10% de profit, on ne met en vente que les fèves 
-				return this.getStockTotTime(Feve.F_MQ, (int)this.stepsVecuesPourBourseMQ.getValeur()); //MQ qui vont bientôt se déclasser en BQ
+				return this.getStockTotTimeTheo(Feve.F_MQ, (int)this.stepsVecuesPourBourseMQ.getValeur()); //MQ qui vont bientôt se déclasser en BQ
 			}
 			if (cours_de_f >= prix_seuil_1 && cours_de_f <= prix_seuil_2) { // si le prix est suffisemment élevé, on met en vente aussi les fèves de MQ qui ne sont pas proches d'être déclassées
-				return (stock_mis_en_bourse(f)-this.getStockTotTime(Feve.F_MQ,(int)this.stepsVecuesPourBourseMQ.getValeur()))*(cours_de_f - prix_seuil_1)/(prix_seuil_2 - prix_seuil_1) + this.getStockTotTime(Feve.F_MQ, (int)this.stepsVecuesPourBourseMQ.getValeur());
+				return (stock_mis_en_bourse(f)-this.getStockTotTimeTheo(Feve.F_MQ,(int)this.stepsVecuesPourBourseMQ.getValeur()))*(cours_de_f - prix_seuil_1)/(prix_seuil_2 - prix_seuil_1) + this.getStockTotTimeTheo(Feve.F_MQ, (int)this.stepsVecuesPourBourseMQ.getValeur());
 			}
 			if(cours_de_f >= prix_seuil_2) {
 				return stock_mis_en_bourse(f);
 			}
 		}	
-		//		           ON NE VEUT VENDRE EN BOURSE QUE DES FEVES BQ ET MQ ou des feves MQ BE proches de la date de péremption 
+//		            ON NE VEUT VENDRE EN BOURSE QUE DES FEVES BQ ET MQ ou des feves MQ BE proches de la date de péremption 
 //					c'est à dire des fèves MQ BE ayant plus de 10 steps d'âge (et des fèves HQ BE ayant plus de 12 steps d'âges
 //					car elles ont rétrogradé en fève MQ BE proches de la destruction)
 		if (f==Feve.F_MQ_BE ){ 
@@ -101,7 +99,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 		double quantiteLivre = 0.;
 		if (f == Feve.F_BQ) {
 			quantiteLivre = Math.min(quantiteEnT, this.getStockTot(f).getValeur());//on renvoie le min entre ce qu'on a et ce qu'on a promis
-			this.BQquantiteVendueBourse.setValeur(null, quantiteLivre);
+			this.BQquantiteVendueBourse.setValeur(null, quantiteLivre, this.cryptogramme);
 		}
 		if (f == Feve.F_MQ) { //
 			if (this.getStockTotTime(Feve.F_MQ_BE, (int)this.stepsVecuesPourBourseMQ_BE.getValeur()) > 0) {
@@ -109,7 +107,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 				this.convertStockMQ_BE(quantiteBEDeclassee);
 			}
 			quantiteLivre = Math.min(quantiteEnT, this.getStockTot(f).getValeur());//on renvoie le min entre ce qu'on a et ce qu'on a promis
-			this.MQquantiteVendueBourse.setValeur(null, quantiteLivre);
+			this.MQquantiteVendueBourse.setValeur(null, quantiteLivre, this.cryptogramme);
 		}
 		if (f == Feve.F_BQ)
             this.argentVenteBQ.ajouter(this, quantiteLivre * coursEnEuroParT, this.cryptogramme);
