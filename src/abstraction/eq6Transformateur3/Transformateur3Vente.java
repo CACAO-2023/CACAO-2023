@@ -35,8 +35,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 			if (listeCC.get(i).getProduit().equals(choco)) 
 			tot+=listeCC.get(i).getQuantiteALivrerAuStep();
 		}
-		if (tot == 0){return 100;}
-		else{return tot;}
+		return tot;
 	}
 
 	@Override
@@ -64,18 +63,23 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
+				super.journalVentes.ajouter("Proposition de prix: "+2000+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
 				return 2000;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco")) {
+				super.journalVentes.ajouter("Proposition de prix: "+2100+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
 				return 2100;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco bio")) {
+				super.journalVentes.ajouter("Proposition de prix: "+2300+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
 				return 2300;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("Choc")) {
+				super.journalVentes.ajouter("Proposition de prix: "+2500+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
 				return 2500;
 			}
 		}
+		super.journalVentes.ajouter("Proposition de prix: "+0+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
 		return 0;
 	}
 
