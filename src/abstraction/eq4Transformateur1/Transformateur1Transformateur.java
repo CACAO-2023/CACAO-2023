@@ -18,7 +18,7 @@ import abstraction.eqXRomu.produits.Feve;
 public class Transformateur1Transformateur extends Stock implements IFabricantChocolatDeMarque  {
 	
 	protected List<ChocolatDeMarque>chocosProduits;
-
+	protected double qteTransfo;
 	protected HashMap<Feve, HashMap<Chocolat, Double>> pourcentageTransfo; // pour les differentes feves, le chocolat qu'elle peuvent contribuer a produire avec le ratio
 	
 	public Transformateur1Transformateur() {
@@ -65,6 +65,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfo)+" T de "+fb+" en "+transfo*conversionb+" T de "+cb);
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fb+")->"+this.stockFeves.get(fb));
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cb+")->"+this.stockChoco.get(cb));
+			this.qteTransfo=transfo;
 		}
 		Feve fh = Feve.F_HQ_BE;
 		Chocolat ch = Chocolat.C_HQ_BE;
@@ -82,6 +83,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfoh)+" T de "+fh+" en "+transfoh*conversion+" T de "+ch);
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fh+")->"+this.stockFeves.get(fh));
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cm+")->"+this.stockChocoMarque.get(cm));
+			this.qteTransfo+=transfoh;
 		}
 	}
 }
