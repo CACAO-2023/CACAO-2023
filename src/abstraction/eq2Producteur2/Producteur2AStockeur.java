@@ -406,25 +406,39 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		return getStocksTotTheo(etape).get(f);
 	}
 	
-	
+	/**
+	 * Calcule la quantité maximale de chaque type de fèves que l'on peut vendre.
+	 * Cette valeur est la quantité de fèves qui sera déclassé dans un temps tempsDegradationFeve.
+	 * @param etape l'étape d'arrêt de l'échéancier
+	 * @return un échéancier par type de fève, correspoondant au max que l'on peut fournir en vente.
+	 */
 	protected HashMap<Feve, Echeancier> getEcheancierMax(int etape){
 		HashMap<Feve, Echeancier> echeanciersMax = new HashMap<Feve, Echeancier>();
-		ArrayList<HashMap<Feve,HashMap<Integer, Double>>> stockTheo = this.getDescrStocksTheo(etape);
+		ArrayList<HashMap<Feve,HashMap<Integer, Double>>> stockTheo = this.getDescrStocksTheo(etape + (int) this.tempsDegradationFeve.getValeur());
 		HashMap<Feve, HashMap<Integer, Double>> declasse = stockTheo.get(stockTheo.size() - 2);
 		HashMap<Feve, HashMap<Integer, Double>> perime = stockTheo.get(stockTheo.size() - 1);
-		HashMap<Feve, HashMap<Integer, Double>> stockTot = stockTheo.get(0);
 		for (Feve f : this.lesFeves) {
 			Echeancier echeancier = new Echeancier();
-			for (int i = Filiere.LA_FILIERE.getEtape() + 1; i < etape; i++) {
-				
+			double perim = 0.; //On ajoute les quantitées qui périment du stock à ce qu'on peut vendre
+			for (int i = Filiere.LA_FILIERE.getEtape() + 1; i < Filiere.LA_FILIERE.getEtape() + this.tempsPerimationFeve.getValeur() + 1; i ++) {
+				perim += perime.get(f).get(i);
 			}
+			double declas = 0.;
+			for (int i = Filiere.LA_FILIERE.getEtape() + 1; i < Filiere.LA_FILIERE.getEtape() + this.tempsDegradationFeve.getValeur() + 1; i ++) {
+				perim += perime.get(f).get(i);
+			}
+			echeancier.ajouter(perim + declas);
+			for (int i = Filiere.LA_FILIERE.getEtape() + 2; i <= etape; i++) {
+				echeancier.ajouter(declasse.get(f).get(i + (int)this.tempsDegradationFeve.getValeur()));
+				//On n'ajoute pas ce qui périme, car avant de périmer, les fèves sont déclassées et sont donc déjà comptées pour un autre type de fève.
+			}
+			echeanciersMax.put(f, echeancier);
 		}
 		
 		return echeanciersMax;
 	}
 	
-	
-	
+
 	/**
 	 * Ajoute le lot au stock
 	 * @param lot le lot à ajouter au stock
