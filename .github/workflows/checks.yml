@@ -88,7 +88,7 @@ jobs:
         username: ${{ github.event.pull_request.user.login }}
         GITHUB_TOKEN: ${{ secrets.PAT }}
     - name: Auto-merge
-      if: fromJSON(needs.java_tests.outputs.times)['eq1Producteur1'] < 20000 && needs.java_tests.result == 'success' && needs.file_ownership.result == 'success'
+      if: fromJSON(needs.java_tests.outputs.times)[fromJSON(steps.actorTeams.outputs.teams)[0]] < 20000 && needs.java_tests.result == 'success' && needs.file_ownership.result == 'success'
       run: | 
         gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
       env:
