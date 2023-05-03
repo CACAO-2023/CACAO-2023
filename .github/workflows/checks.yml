@@ -87,6 +87,9 @@ jobs:
       with:
         username: ${{ github.event.pull_request.user.login }}
         GITHUB_TOKEN: ${{ secrets.PAT }}
+    - name: Performance results
+      run: |
+        echo ${{ needs.java_tests.outputs.times }}
     - name: Auto-merge
       if: fromJSON(needs.java_tests.outputs.times)[fromJSON(steps.actorTeams.outputs.teams)[0]] < 20000 && needs.java_tests.result == 'success' && needs.file_ownership.result == 'success'
       run: | 
