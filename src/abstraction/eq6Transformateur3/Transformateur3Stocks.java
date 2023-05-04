@@ -30,20 +30,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
     private int dureePeremption = 6; 
 
     /**Mouhamed SOW*/  
-  public Transformateur3Stocks(Lot stockFeveBG, Lot stockFeveMG, Lot stockFeveMGL, Lot stockFeveHGL,
-			Lot stockChocolatBG, Lot stockChocolatMG, Lot stockChocolatMGL, Lot stockChocolatHGL,
-			List<ChocolatDeMarque> stockProduit) {
-	  	super();
-		this.stockFeveBG = stockFeveBG;
-		this.stockFeveMG = stockFeveMG;
-		this.stockFeveMGL = stockFeveMGL;
-		this.stockFeveHGL = stockFeveHGL;
-		this.stockChocolatBG = stockChocolatBG;
-		this.stockChocolatMG = stockChocolatMG;
-		this.stockChocolatMGL = stockChocolatMGL;
-		this.stockChocolatHGL = stockChocolatHGL;
-		this.stockProduit = stockProduit;
-	}
+
  /**Il faut ecrire la fonction constructeur sans param c'est celle là que Romu appelle *
   * dans le code de la filière il faut donc construire les feves et les lots et ensuite 
   * utiliser les constructeur avec le constructeur déjà ecrit
