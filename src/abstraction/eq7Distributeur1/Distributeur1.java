@@ -30,6 +30,11 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		journal.ajouter("============================== étape "+etape+" ==============================");
 		journal_achat.ajouter("============================== étape "+etape+" ==============================");
 		journal_stock.ajouter("============================== étape "+etape+" ==============================");
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			Var_Stock_choco.get(marque).setValeur(this, stockChocoMarque.get(marque));
+			Var_Cout_Choco.get(marque).setValeur(this, getCoutTotal(marque));
+			Var_Marge_Choco.get(marque).setValeur(this, prix(marque)-getCoutTotal(marque));
+		}
 	}
 	
 	private void strategie() {
