@@ -41,6 +41,8 @@ public class Distributeur1Acteur  implements IActeur {
 	protected Variable stock_MQ_BE = new Variable("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
 	protected Variable stock_HQ_BE = new Variable("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
 	protected Variable ventes = new Variable("Eq7ventes","ventes totales réalisées lors de ce tour",this,0);
+	protected Variable cmSelectionnee; // l'index du chocolat selectionne
+
 	/**
 	 * donne les quantités mini pour un contrat cadre
 	 * @author ghaly
@@ -88,7 +90,8 @@ public class Distributeur1Acteur  implements IActeur {
 	    this.journal_achat=new Journal("Journal des Achats de l'" + this.getNom(),this);
 	    this.journal_stock = new Journal("Journal des Stocks de l'" + this.getNom(),this);
 	    this.journal_vente = new Journal("Journal des ventes de l'" + this.getNom(),this);
-	    
+		this.cmSelectionnee = new Variable(getNom()+" choc. marque select.", "indiquez l'index du chocolat de marque", this, 0.0);
+
 	}
 	
 
