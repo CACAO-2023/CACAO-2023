@@ -80,7 +80,6 @@ jobs:
       if: success()
       run: cat tempsEquipes.json >> "$GITHUB_OUTPUT"
   performance_tests:
-    if: ${{ always() }}
     needs: [file_ownership, java_tests]
     runs-on: ubuntu-latest
     steps:
@@ -93,7 +92,7 @@ jobs:
       run: |
         echo ${{ needs.java_tests.outputs.times }}
     - name: Auto-merge
-      if: fromJSON(needs.java_tests.outputs.times)[fromJSON(steps.actorTeams.outputs.teams)[0]] < 20000 && needs.java_tests.result == 'success' && needs.file_ownership.result == 'success'
+      if: fromJSON(needs.java_tests.outputs.times)[fromJSON(steps.actorTeams.outputs.teams)[0]] < 20000
       run: | 
         gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
       env:
