@@ -1,5 +1,7 @@
 package abstraction.eq7Distributeur1;
 import java.awt.Color;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,7 +18,7 @@ import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
 
-public class Distributeur1Acteur  implements IActeur {
+public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	////////////////////////////////////////////////
 	//declaration des variables
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
@@ -42,6 +44,10 @@ public class Distributeur1Acteur  implements IActeur {
 	protected Variable stock_HQ_BE = new Variable("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
 	protected Variable ventes = new Variable("Eq7ventes","ventes totales réalisées lors de ce tour",this,0);
 	protected Variable cmSelectionnee; // l'index du chocolat selectionne
+	private HashMap<ChocolatDeMarque, Variable> Var_Stock_choco; // le stock de chaque chocolat de marque
+
+	protected Variable stock_Choco_marque_selectionnee = new Variable("Equ7_stock_Choco_marque_selectionnee", "stock Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
+	private List<ChocolatDeMarque>chocolatsDeMarquesProduits; // init dans initialiser
 
 	/**
 	 * donne les quantités mini pour un contrat cadre
@@ -61,6 +67,8 @@ public class Distributeur1Acteur  implements IActeur {
 	 */
 	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsionsperso; 
 	
+	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; //Stock de chaque chocolat de marque en tonne
+
 	/**
 	 * couts: couts d'achat à travers les contrats cadres
 	 */
@@ -90,7 +98,7 @@ public class Distributeur1Acteur  implements IActeur {
 	    this.journal_achat=new Journal("Journal des Achats de l'" + this.getNom(),this);
 	    this.journal_stock = new Journal("Journal des Stocks de l'" + this.getNom(),this);
 	    this.journal_vente = new Journal("Journal des ventes de l'" + this.getNom(),this);
-		this.cmSelectionnee = new Variable(getNom()+" choc. marque select.", "indiquez l'index du chocolat de marque", this, 0.0);
+		this.cmSelectionnee = new Variable(getNom()+" chocolat de marque selectionné", "indiquez l'index du chocolat de marque", this, 0.0);
 
 	}
 	
@@ -141,6 +149,14 @@ public class Distributeur1Acteur  implements IActeur {
 		cout_chocolat.put(Chocolat.C_MQ, 3000.);
 		cout_chocolat.put(Chocolat.C_BQ, 2000.);
 		
+		this.chocolatsDeMarquesProduits = Filiere.LA_FILIERE.getChocolatsProduits();
+
+		this.Var_Stock_choco = new HashMap<ChocolatDeMarque, Variable> ();
+		for (ChocolatDeMarque cm : chocolatsDeMarquesProduits) {
+			this.Var_Stock_choco.put(cm, new Variable("le stock de la marque "+cm.getNom(), "le stock de la marque "+cm.getNom(), this, 0.0));
+		}
+		this.stock_Choco_marque_selectionnee.cloner(this.Var_Stock_choco.get(chocolatsDeMarquesProduits.get(0))); // initialement c'est le premier chocolat de marque qui dont le stock est affiche
+		this.cmSelectionnee.addObserver(this);
 		
 		/////////////////////////////////////
 		//POTENTIELLEMENT à Changer
@@ -187,6 +203,7 @@ public class Distributeur1Acteur  implements IActeur {
 		
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			actualiser_prevision_perso( marque,  etape);
+			this.Var_Stock_choco.get(marque).setValeur(this, stockChocoMarque.get(marque));
 		}
 	}
 
@@ -206,13 +223,14 @@ public class Distributeur1Acteur  implements IActeur {
 	public List<Variable> getIndicateurs() {
 		
 		List<Variable> res = new ArrayList<Variable>();
+		res.add(cmSelectionnee);
 		res.add(totalStocks);
 		res.add(stock_HQ_BE);
 		res.add(stock_MQ_BE);
 		res.add(stock_BQ);
 		res.add(stock_MQ);
 		res.add(ventes);
-		
+		res.add(stock_Choco_marque_selectionnee);
 		return res;
 
 	}
@@ -288,5 +306,17 @@ public class Distributeur1Acteur  implements IActeur {
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
 	}
-
+	
+	/**
+	 * @author ghaly
+	 */
+	public void propertyChange(PropertyChangeEvent evt) {
+		int index = (int)(this.cmSelectionnee.getValeur());
+		if (index<0 || index>=Filiere.LA_FILIERE.getChocolatsProduits().size()) {
+			index=0;
+			this.cmSelectionnee.setValeur(this, index);
+		}
+		this.stock_Choco_marque_selectionnee.cloner(this.Var_Stock_choco.get(this.chocolatsDeMarquesProduits.get(index)));
+		System.out.println("Chocolat de marque selectionne :"+this.chocolatsDeMarquesProduits.get(index));
+	}
 }
