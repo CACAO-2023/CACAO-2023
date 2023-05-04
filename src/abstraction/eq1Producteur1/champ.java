@@ -14,7 +14,10 @@ public class champ {
 		return this.quantite;
 	}
 	public void ajouter(int i, Double d) {
-		this.quantite.put(i, d);
+		Double q = d;
+		if (this.quantite.containsKey(i)) {
+			q = q+this.quantite.get(i);}
+		this.quantite.put(i, q);
 	}
 	public double getNbHectare() {
 		double q=0;
