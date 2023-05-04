@@ -45,7 +45,11 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	protected Variable ventes = new Variable("Eq7ventes","ventes totales réalisées lors de ce tour",this,0);
 	protected Variable cmSelectionnee; // l'index du chocolat selectionne
 	private HashMap<ChocolatDeMarque, Variable> Var_Stock_choco; // le stock de chaque chocolat de marque
+	private HashMap<ChocolatDeMarque, Variable> Var_Cout_Choco; // le cout de chaque chocolat de marque
+	private HashMap<ChocolatDeMarque, Variable> Var_Marge_Choco; // la marge de chaque chocolat de marque
 
+	protected Variable marge_Choco_marque_selectionnee = new Variable("Equ7_stock_Choco_marque_selectionnee", "stock Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
+	protected Variable cout_Choco_marque_selectionnee = new Variable("Equ7_stock_Choco_marque_selectionnee", "stock Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);	
 	protected Variable stock_Choco_marque_selectionnee = new Variable("Equ7_stock_Choco_marque_selectionnee", "stock Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
 	private List<ChocolatDeMarque>chocolatsDeMarquesProduits; // init dans initialiser
 
