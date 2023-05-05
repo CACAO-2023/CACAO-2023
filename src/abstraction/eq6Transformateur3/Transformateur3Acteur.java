@@ -36,6 +36,7 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	protected Variable totalStocksFeves;   
 	protected Variable totalStocksChoco; 
 	protected List<ChocolatDeMarque>chocosProduits;
+	protected double capTransMax = 1000.0;
 	
 	/**Nathan Claeys*/
 	protected Transformateur3Acteur() {
@@ -58,7 +59,12 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_MQ_BE,"chokchoco bio",this.pourcentageCacaoMGL,this.pourcentageRSE));
 		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_HQ_BE,"Choc",this.pourcentageCacaoHG,this.pourcentageRSE));
 	}
-	
+	public void setcapTransMax(double m) {
+		this.capTransMax = m;
+	}
+	public double getcapTransMax() {
+		return this.capTransMax;
+	}
 	/**
 	 * @return the pourcentageCacaoBG
 	 */
