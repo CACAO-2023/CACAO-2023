@@ -206,12 +206,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		IProduit produit= lot.getProduit();
 		double quantite = lot.getQuantiteTotale();
 		if (produit instanceof Feve) {
-			if (this.stockFeves.keySet().contains(produit)) {
-				this.stockFeves.put((Feve)produit, this.stockFeves.get(produit)+quantite);
-			} else {
-				this.stockFeves.put((Feve)produit, quantite);
-			}
-			this.totalStocksFeves.ajouter(this, quantite, this.cryptogramme);
+			this.ajouter(produit, quantite);
 			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de feves "+produit+". Stock->  "+this.stockFeves.get(produit));
 		} else {
 			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception d'un produit de type surprenant... "+produit);

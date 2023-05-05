@@ -56,14 +56,10 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		int transfo = (int) (Math.min(this.stockFeves.get(fb), Math.random()*1000));
 		double conversionb = 1.58;
 		if (transfo>0) {
-			this.stockFeves.put(fb, this.stockFeves.get(fb)-transfo);
-			this.totalStocksFeves.setValeur(this, this.totalStocksFeves.getValeur()-transfo,this.cryptogramme);
-//			this.stockChoco.put(cb, this.stockChoco.get(cb)+(transfo)*conversionb);
+			this.retirer(fb,transfo);
 			int pourcentageCacao =  42;
 			ChocolatDeMarque cm= new ChocolatDeMarque(cb, "choco", pourcentageCacao, 0);
-			double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;
-			this.stockChocoMarque.put(cm, scm+((transfo)*conversionb));
-			this.totalStocksChocoMarque.ajouter(this, ((transfo)*conversionb), this.cryptogramme);
+			this.ajouter(cm, transfo*conversionb);
 			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfo)+" T de "+fb+" en "+transfo*conversionb+" T de "+cb);
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fb+")->"+this.stockFeves.get(fb));
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cm+")->"+this.stockChocoMarque.get(cm));
@@ -74,14 +70,11 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		int transfoh = (int) (Math.min(this.stockFeves.get(fh), Math.random()*1000));
 		double conversion = 1.06;
 		if (transfoh>0) {
-			this.stockFeves.put(fh, this.stockFeves.get(fh)-transfoh);
-			this.totalStocksFeves.setValeur(this, this.totalStocksFeves.getValeur()-transfoh,this.cryptogramme);
+			this.retirer(fh,transfoh);
 			// Tous les chocolats sont directement étiquetés "Vccotioi"
 			int pourcentageCacao =  94;
 			ChocolatDeMarque cm= new ChocolatDeMarque(ch, "Vccotioi", pourcentageCacao, 10);
-			double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;
-			this.stockChocoMarque.put(cm, scm+((transfoh)*conversion));
-			this.totalStocksChocoMarque.ajouter(this, ((transfoh)*conversion), this.cryptogramme);
+			this.ajouter(cm, transfoh*conversion);
 			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfoh)+" T de "+fh+" en "+transfoh*conversion+" T de "+ch);
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fh+")->"+this.stockFeves.get(fh));
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cm+")->"+this.stockChocoMarque.get(cm));
