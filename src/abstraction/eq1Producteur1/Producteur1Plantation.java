@@ -52,55 +52,51 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		champ champm = this.getChampMoy();
 		champ champb = this.getChampBas();
 		this.journal_evenements.ajouter("===== step : "+step+" =====");
-		//on se limite à une catastrophe par next(). c'est le role que va jouer b. 
-		//l'ordre dans lequel nous codons les apparitions a son importance : les premieres codees sont celles plus suceptibles d'apparaitre en cote d'ivoire (pas forcement les plus sucptibles d'apparaitre dans la simu selon la valeur des parametres)
 		boolean b = true;
+		boolean g = false;
 		double greve = Math.random();
-		if (b&&greve<Filiere.LA_FILIERE.getParametre("Equipe3 Proba Greve").getValeur()) { //les greves peuvent apparaitre assez frequement 
+		if (greve<Filiere.LA_FILIERE.getParametre("Equipe3 Proba Greve").getValeur()) { //les greves peuvent apparaitre assez frequement 
 			b = false;
+			g = true;
 			this.journal_evenements.ajouter(Filiere.LA_FILIERE.getParametre("Equipe3 Pourcentage Greviste").getValeur()*100+"% de notre main d'oeuvre fait grève.");
-			recolte(true);
 		}
 		double incendieL = Math.random();
-		if (b&&incendieL<Filiere.LA_FILIERE.getParametre("Equipe3 Proba Incendi L").getValeur()) { 
-			this.journal_champs.ajouter("ATTENTION : un incendie a eu lieu");
+		if (incendieL<Filiere.LA_FILIERE.getParametre("Equipe3 Proba Incendi L").getValeur()) { 
 			b = false;
+			this.journal_champs.ajouter("ATTENTION : un incendie a eu lieu");
 			this.journal_evenements.ajouter("Petit incendie : "+Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie L").getValeur()*100+"% des champs sont détruits");
 			champm.supprimer(champm.getNbHectare()*Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie L").getValeur());
 			champb.supprimer(champb.getNbHectare()*Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie L").getValeur());
-			recolte(false);
 		}
 		double incendieM = Math.random();
-		if (b&&incendieM<Filiere.LA_FILIERE.getParametre("Equipe3 Proba Incendi M").getValeur()) { 
-			this.journal_champs.ajouter("ATTENTION : un incendie a eu lieu");
+		if (incendieM<Filiere.LA_FILIERE.getParametre("Equipe3 Proba Incendi M").getValeur()) { 
 			b = false;
+			this.journal_champs.ajouter("ATTENTION : un incendie a eu lieu");
 			this.journal_evenements.ajouter("Moyen incendie :"+Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie M").getValeur()*100+"% des champs sont détruits");
 			champm.supprimer(champm.getNbHectare()*Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie M").getValeur());
 			champb.supprimer(champb.getNbHectare()*Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie M").getValeur());
-			recolte(false);
 		}
 		double incendieH = Math.random();
-		if (b&&incendieH<Filiere.LA_FILIERE.getParametre("Equipe3 Proba Incendi H").getValeur()) { 
+		if (incendieH<Filiere.LA_FILIERE.getParametre("Equipe3 Proba Incendi H").getValeur()) { 
 			this.journal_champs.ajouter("ATTENTION : un incendie a eu lieu");
 			b = false;
-			this.journal_evenements.ajouter("Moyen incendie :"+Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie H").getValeur()*100+"% des champs sont détruits");
+			this.journal_evenements.ajouter("Fort incendie :"+Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie H").getValeur()*100+"% des champs sont détruits");
 			champm.supprimer(champm.getNbHectare()*Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie H").getValeur());
 			champb.supprimer(champb.getNbHectare()*Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie H").getValeur());
-			recolte(false);
 		}
 		double cyclone = Math.random();
-		if (b&&cyclone<Filiere.LA_FILIERE.getParametre("Equipe3 Proba Cyclone").getValeur()) { //cyclone peu fréquent
+		if (cyclone<Filiere.LA_FILIERE.getParametre("Equipe3 Proba Cyclone").getValeur()) {
+			b = false;
 			this.journal_champs.ajouter("ATTENTION : un cyclone est passé par nos champs");
 			double random = ThreadLocalRandom.current().nextDouble(0.0, Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Detruits Cyclone Max").getValeur());
 			this.journal_evenements.ajouter("Cyclone : "+random*100+"% des champs sont détruits");
 			champm.supprimer(champm.getNbHectare()*random);
 			champb.supprimer(champb.getNbHectare()*random);
-			recolte(false);
 		}
 		if(b) {
 			this.journal_evenements.ajouter("Rien à signaler");
-			recolte(false);
 		}
+		recolte(g);
 
 	}
 
