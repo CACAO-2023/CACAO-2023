@@ -51,15 +51,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	@Override
 	/**Nathan Salbego*/
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
-		Echeancier e= contrat.getEcheancier();;
-		double quantite=e.getQuantiteTotale()/e.getNbEcheances();
-		if (vend((IProduit)contrat.getProduit())) {
-			e.ajouter(quantite);
-			e.ajouter(quantite);
-			return e;
-			}
-		
-		return null;
+		return contrat.getEcheancier();
 	}
 
 	@Override
