@@ -152,6 +152,51 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 * Il faut verifier que la duree nous convient et que chaque livraison proposée est sup à ce que l'on souhaite avoir
 	 */
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
+		Echeancier vendeurecheancier = contrat.getEcheancier();
+		Echeancier res;
+		int stepdebut = vendeurecheancier.getStepDebut();
+		int duree = vendeurecheancier.getNbEcheances();
+		boolean cbon = true;
+		double stock = 0.0;
+		double stockMax = 0.0;
+		int dureeMax = duree;
+		switch (((Feve)contrat.getProduit()).getGamme()) {
+		case BQ:
+			stock = super.stockChocolatBG.getQuantiteTotale();
+			stockMax = this.quantBQMax;
+		case MQ:
+			if (((Feve)contrat.getProduit()).isBioEquitable()) {
+				stock = super.stockChocolatMGL.getQuantiteTotale();
+				stockMax = this.quantMQLMax;
+			}
+			else {stock = super.stockChocolatMG.getQuantiteTotale();
+				  stockMax = this.quantMQMax;}
+		case HQ:
+			stock = super.stockChocolatHGL.getQuantiteTotale();
+			stockMax = this.quantHQMax;
+		}
+		for (int i = stepdebut;i<stepdebut+duree;i++) {
+			stock = stock+this.getArrivageCCStep(i, ((Feve)contrat.getProduit()));
+			if (stock>stockMax) {cbon=false;dureeMax = i-1-stepdebut;}
+		}
+		if (dureeMax<duree) {
+			if (dureeMax>0) {
+				LinkedList<Double> l = new LinkedList<Double>();
+				for (int i=0;i<dureeMax;i++) {
+					l.add(vendeurecheancier.getQuantite(stepdebut+i));
+				}
+				Echeancier ech = new Echeancier(stepdebut,l);
+			}
+			else {Echeancier ech = null;}}
+		else {Echeancier ech = vendeurecheancier;}
+		
+		
+		return ech;
+	}
+	
+	
+	
+	public Echeancier contrePropositionDeLAcheteurV1(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
 		Echeancier vendeurecheancier = contrat.getEcheancier();
 		int stepdebut = vendeurecheancier.getStepDebut();
