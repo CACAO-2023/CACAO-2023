@@ -307,9 +307,13 @@ public void initialiser() {
 
 	public void next() {
 		super.next();
-		if (stockFeveBG.getQuantiteTotale()>0) {
-			super.journalTransformation.ajouter("on veut obtenir"+stockFeveBG.getQuantiteTotale()+"de Chocolat BG");
+		if (stockFeveBG.getQuantiteTotale()>0 && super.partTransBQ*super.capTransMax<250) {
+			super.journalTransformation.ajouter("on veut obtenir"+stockFeveBG.getQuantiteTotale()/((double)this.getPourcentageCacaoBG())/100+"de Chocolat BG");
 		this.transformationChoco(Feve.F_BQ, stockFeveBG.getQuantiteTotale());
+		} else { 
+			if (super.partTransBQ*super.capTransMax>=250) {
+				super.journalTransformation.ajouter("on veut obtenir"+250/((double)this.getPourcentageCacaoBG())/100+"de Chocolat BG");
+			}
 		}
 		if (stockFeveMG.getQuantiteTotale()>0) {
 			super.journalTransformation.ajouter("on veut transformer"+stockFeveMG.getQuantiteTotale()+"de Feves MG");
