@@ -248,7 +248,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 				prix=prix*0.8;
 				prec=prix;
 				journal_ventes.ajouter("7nouveau prix tonne de " + contrat.getProduit()+" est de " + prix + "€");
-				return prix;
+				return prix ;
 			}
 			else {
 				return 0.0;
