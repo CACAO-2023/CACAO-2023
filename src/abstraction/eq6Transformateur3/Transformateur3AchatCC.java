@@ -59,19 +59,27 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 * Si il n'est pas à sa valeur max on va essayer de le compéter sinon on ne prend pas.
 	 */
 	public boolean achete(IProduit produit) {
+		double stock = 0.0;
+		boolean res =false;
 		switch(((Feve)produit).getGamme()) {
 		case BQ:
+			stock = super.stockChocolatBG.getQuantiteTotale();
+			if (stock<quantBQMax-500) {res= true;}
 		case MQ:
 			if (((Feve)produit).isBioEquitable()) {
-				
+				stock = super.stockChocolatMGL.getQuantiteTotale();
+				if (stock<quantMQLMax-500) {res= true;}
 			}
-			else {}
+			else {stock = super.stockChocolatMG.getQuantiteTotale();
+			if (stock<quantMQMax-500) {res= true;}}
 		case HQ:
+			stock = super.stockChocolatHGL.getQuantiteTotale();
+			if (stock<quantHQMax-500) {res= true;}
 		}
-		return false;
+		return res;
 	}
 	
-	public boolean acheteV(IProduit produit) {
+	public boolean acheteV1(IProduit produit) {
 		int step = Filiere.LA_FILIERE.getEtape();
 		if (produit instanceof Feve) {/**List<Double> besoin_prochain = new LinkedList<Double>();
 									  for (int i=1;i<5;i++) {
