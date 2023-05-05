@@ -139,7 +139,7 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 			double cout_STOCK =  totalStocks.getValeur()*cout_stockage_distributeur.getValeur();
 			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme,Filiere.LA_FILIERE.getBanque(),cout_STOCK );	
 			journal_stock.ajouter("Cout de stockage : "+cout_STOCK);
-			}
+		}
 	}
 	
 }
