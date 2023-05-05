@@ -183,6 +183,8 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		return 10; // --> j'afficherai un taux de RSE de 10% sur mes chocolats de marque produits
 	}
 
+// Par Fouad:
+	
 	 public void next() {
 			super.next();
 			int ventetotH = 0;
