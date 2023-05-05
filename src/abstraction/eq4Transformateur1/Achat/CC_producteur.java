@@ -72,7 +72,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLACK, " CCV : tentative de vente de "+cm+" aupres de "+vendeurs);
 			for (IVendeurContratCadre vendeur : vendeurs) {
 				if (!vendeur.equals(this)) {
-					Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotB/30);
+					Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotB/2);
 					this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
 					ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancier, this.cryptogramme, false);
 					if (contrat1!=null) {
@@ -121,7 +121,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		if (f.getGamme().equals(Gamme.HQ)) {
 			
 			 if (ventetotH/30 > 100){
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotH/30));
+				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotH/2));
 				return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotH/30);
 			}else {
 				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, 101));
@@ -131,7 +131,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		
 		if (f.getGamme().equals(Gamme.BQ)) {
 			if (ventetotB/30 > 100){
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotB/30));
+				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotB/2));
 				return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotB/30);
 			}else {
 				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, 101));
