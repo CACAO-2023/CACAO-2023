@@ -39,6 +39,9 @@ public class Distributeur3Acteur implements IActeur{
 	private List<ChocolatDeMarque>chocosProduits;
 	protected HashMap<ChocolatDeMarque, Double> prix_tonne_vente;
 	protected Variable variable_stock;
+	protected Distributeur3AcheteurOA d;
+	
+	
 	public Distributeur3Acteur() {
 
 		this.chocosProduits = new LinkedList<ChocolatDeMarque>();
@@ -65,14 +68,13 @@ public class Distributeur3Acteur implements IActeur{
 		
 		this.stock = new Stock(this);
 		variable_stock = new VariablePrivee("Eq9StockTablettes", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
-
 	}
 	
 	public void initialiser() {
 		// william désormais on n'utilise plus une liste de String avec les chocolats qui nous intéressent, on sélectionne seulement à la gamme
 		
 		
-		
+
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
 		for (int i=0; i<chocolats_filiere.size(); i++) {
