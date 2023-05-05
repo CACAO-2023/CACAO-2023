@@ -14,7 +14,6 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 	
 	protected HashMap<Chocolat, Double> stockChoco;
 
-	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; //Stock de chaque chocolat de marque en tonne
 	
 	//	protected int totalStocksCB;  // La quantité totale de stock de chocolat bas de gamme 
 	//	protected int totalStocksCML;  // La quantité totale de stock de chocolat moyenne gamme labellise
