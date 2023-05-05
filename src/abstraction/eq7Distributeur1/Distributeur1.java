@@ -44,7 +44,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		Double cout_total_mise_en_rayon = qte_totale_en_vente * Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur();
 		if (cout_total_mise_en_rayon > 0) {
 			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme,Filiere.LA_FILIERE.getBanque(),cout_total_mise_en_rayon );	
-			journal_vente.ajouter("Cout de stockage : "+cout_total_mise_en_rayon);
+			journal_vente.ajouter("Cout de main d'oeuvre : "+cout_total_mise_en_rayon);
 				}
 		
 	}
@@ -106,7 +106,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		Double cout_i = getCout_gamme(choco);
 		Double cout_s = cout_stockage_distributeur.getValeur();
 		Double cout_m = Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur(); //Cout de mise en rayon d'1T de chocolat
-		return (cout_i+cout_s+cout_m*quantiteEnVente(choco,cryptogramme));
+		return (cout_i+cout_s+cout_m);
 	}
 	
 	/**
@@ -122,7 +122,11 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 //			double qStock = stockChocoMarque7.get(choco);
 //			return qStock/2.0;
 //		} else {
+		int etape = Filiere.LA_FILIERE.getEtape()%24;
+		Double previsions = previsionsperso.get(etape).get(choco);
+		
 		return stockChocoMarque.get(choco);
+		
 //		}
 	}
 	
