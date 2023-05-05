@@ -1,4 +1,4 @@
- package abstraction.eqXRomu.offresAchat;
+package abstraction.eqXRomu.offresAchat;
 
 import java.awt.Color;
 import java.util.Collections;

@@ -40,11 +40,11 @@ Note that if the files you changed are not Java files, they will be hidden in th
 
 ## `Some checks were not successful`: `Checks / java_tests`
 
-Not accepting because the code does not pass the tests. You can read the error message by clicking on `Details` near to the failed test at the bottom of your pull request. You can run the same tests on your Eclipse, they are `test/abstraction/FiliereParDefaultTest.java` and `test/presentation/FenetrePrincipaleTest.java`. To run them:  right-click on `build.xml` -> `Run As` -> `Ant Build`. You will see the error message in the console. Fix the error, then commit and push.
+Not accepting because the code does not pass the tests. You can read the error message by clicking on `Details` near to the failed check. Then click on `Build with Ant` to see the output of the test execution. You can run the same tests on your Eclipse, they are `test/abstraction/FiliereParDefaultTest.java` and `test/presentation/FenetrePrincipaleTest.java`. To run them:  right-click on `build.xml` -> `Run As` -> `Ant Build`. You will see the error message in the console. Fix the error, then commit and push.
 
 ## `Some checks were not successful`: `Checks / performance_tests`
 
-Not accepting because your update makes the simulatio too slow.
+Not accepting because your update makes the simulation too slow. You can read the results of the performance tests by clicking on `Details` near to the failed check. If you click on `Performance results` you will see how much time (in milliseconds) each team takes when the button `Next` is clicked 300 times. The maximum time allowed per team is 20 seconds.
 
 ## `This branch is out-of-date with the base branch`
 
