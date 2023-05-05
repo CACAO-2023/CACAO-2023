@@ -170,12 +170,12 @@ public class Producteur1Plantation extends Producteur1Acteur {
 			double nb_hectares_BQ = quantite/(1.025*0.56) ; //moyenne du facteur aléatoire (pas possible de connaître exactement le nombre d'hectares)
 			cout_revient = nb_hectares_BQ*Filiere.LA_FILIERE.getParametre("Cout de replantation").getValeur()/(2080*10) //cout replantation/(durée replantation*nb step pousse)
 					+ nb_hectares_BQ * 30 * 10 //hectare*cout main doeuvre*nb step pousse
-					+ quantite*Filiere.LA_FILIERE.getParametre("cout moyen stockage").getValeur()* (step-step_recolte) ;
+					+ quantite*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()* (step-step_recolte) ;
 		} else {
 			double nb_hectares_MQ = quantite/(0.95*0.56); //moyenne du facteur aléatoire (pas possible de connaître exactement le nombre d'hectares)
 			cout_revient = nb_hectares_MQ*Filiere.LA_FILIERE.getParametre("Cout de replantation").getValeur()/(2080*12) //cout replantation/(durée replantation*nb step pousse)
 					+ nb_hectares_MQ * 30 * 12 //hectare*cout main doeuvre*nb step pousse
-					+ quantite*Filiere.LA_FILIERE.getParametre("cout moyen stockage").getValeur()* (step-step_recolte) ;
+					+ quantite*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()* (step-step_recolte) ;
 		}	
 		return cout_revient ;
 
@@ -236,6 +236,8 @@ public class Producteur1Plantation extends Producteur1Acteur {
 	public double prixMinAvecMarge(IProduit produit, double quantite) {
 		return coutRevientQuantite(produit, quantite)*1.10 ;
 	}
+	
+	
 
 
 
