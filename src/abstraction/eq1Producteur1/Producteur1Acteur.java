@@ -16,6 +16,8 @@ import abstraction.eqXRomu.produits.Gamme;
 public class Producteur1Acteur implements IActeur {
 	
 	protected int cryptogramme;
+	protected Variable coutreplantation = new Variable("Cout de replantation", "Cout de replantation pour un hectare, peu importe sa gamme", this, 1000); //choisi arbitrairement
+	protected Variable coutmaindoeuvre = new Variable("Cout de la main d'oeuvre", "Cout de la main d'oeuvre par hectare par step", this, 30);
 	protected Journal journal;
 	protected Journal journal_stocks;
 	protected Journal journal_ventes;
@@ -38,12 +40,12 @@ public class Producteur1Acteur implements IActeur {
 	public void initialiser() { //elouan et charles
 		this.step = 0;
 		this.champBas = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
-		for (int i=0; i<30; i++) {
-			this.champBas.ajouter(-i, 6666.67);
+		for (int i=0; i<40; i++) {
+			this.champBas.ajouter(-i*51, 5000.);
 		}
 		this.champMoy = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
-		for (int i=0; i<30; i++) {
-			this.champMoy.ajouter(-i, 1666.67);
+		for (int i=0; i<40; i++) {
+			this.champMoy.ajouter(-i*51, 1250.);
 		}
 		this.stockFeveBas = new Lot(Feve.F_BQ);
 		this.stockFeveBas.ajouter(0,1200);
@@ -66,13 +68,6 @@ public class Producteur1Acteur implements IActeur {
 		this.journal_stocks.ajouter("===== step : "+step+" =====");
 		this.journal_stocks.ajouter("Stock bas de gamme : "+this.stockFeveBas.getQuantiteTotale());
 		this.journal_stocks.ajouter("Stock moyenne gamme : "+this.stockFeveMoy.getQuantiteTotale());
-		this.journal_champs.ajouter("===== step : "+step+" =====");
-		this.journal_champs.ajouter("---> Qualite : Bas");
-		this.journal_champs.ajouter(this.champBas.toString());
-		this.journal_champs.ajouter("Cela fait en tout "+this.champBas.getNbHectare()+" hectares");
-		this.journal_champs.ajouter("---> Qualite : Moy");
-		this.journal_champs.ajouter(this.champMoy.toString());
-		this.journal_champs.ajouter("Cela fait en tout "+this.champMoy.getNbHectare()+" hectares");
 		this.journal_ventes.ajouter("===== step : "+step+" =====");
 		// maj des indicateurs
 		this.Stock.setValeur(this, this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale());
@@ -98,6 +93,8 @@ public class Producteur1Acteur implements IActeur {
 	// Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
+		res.add(this.coutmaindoeuvre);
+		res.add(this.coutreplantation);
 		return res;
 	}
 

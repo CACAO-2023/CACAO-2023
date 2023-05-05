@@ -68,14 +68,15 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 				return 0.;
 			}
 			else {
-				
-		if (Math.random()<0.3) {
-			return contrat.getPrix(); // on ne cherche pas a negocier dans 30% des cas
+				if (Math.random()<0.3) {
+					return contrat.getPrix(); // on ne cherche pas a negocier dans 30% des cas
 			
-		} else {//dans 70% des cas on fait une contreproposition differente
+				} else {//dans 70% des cas on fait une contreproposition differente
 			
-			return contrat.getPrix()*0.95;// 5% de moins.
-		}}}
+					return contrat.getPrix()*0.95;// 5% de moins.
+				}
+			}
+		}
 	}
 	
 	
@@ -101,6 +102,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
      * @author Ghaly sentissi
      */
 	public ExemplaireContratCadre getContrat(IProduit produit,Echeancier e) {
+		this.journal_achat.ajouter(Color.white,Color.black,"--------------------------------------------------------------------------------");
 		this.journal_achat.ajouter(Color.gray, Color.BLACK,"Recherche de vendeur CC pour le produit : " + produit + "...");
 		List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
 		ExemplaireContratCadre cc = null;
@@ -121,7 +123,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 				cc = superviseurVentesCC.demandeAcheteur((IAcheteurContratCadre)this, (IVendeurContratCadre) vendeur, produit, e, cryptogramme,false);
 				
 				if (cc != null) { //si le contrat est signé 
-			        this.journal_achat.ajouter(Color.GREEN, Color.BLACK,"Contrat cadre passé avec "+vendeur.getNom()+" pour "+produit+"\nDétails : "+cc+"!");     
 			        mesContratEnTantQuAcheteur.add(cc);
 					notificationNouveauContratCadre(cc);
 					mesContratEnTantQuAcheteur.add(cc);
@@ -129,11 +130,11 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 				else { //si le contrat est un echec
 			        this.journal_achat.ajouter(Color.RED, Color.BLACK,"Echec de la négociation de contrat cadre avec "+vendeur.getNom()+" pour "+produit+"...");
 			    }
-			}
+			}}
 		if (cc ==null) {
-			journal.ajouter("On a cherché à établir un contrat cadre de durée "+e.getNbEcheances()+ " mais on a pas trouvé de vendeur");
+			journal_achat.ajouter("On a cherché à établir un contrat cadre pour le produit "+produit+" de durée "+e.getNbEcheances()+ " mais on a pas trouvé de vendeur");
 		}
-	}
+	
 		return cc;
 
 		}
@@ -207,15 +208,13 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		Echeancier e = new Echeancier(stepDebut);
 		for (int etape = stepDebut+1; etape<stepDebut+d; etape++) {
 			int etapemod = etape%24;
-			Double q = previsionsperso.get(etapemod).get(marque)*1.5 -getLivraisonEtape(marque, stepDebut+etape);
+			Double q = previsionsperso.get(etapemod).get(marque)*1.5 -getLivraisonEtape(marque, stepDebut+etape) -stockChocoMarque.get(marque)/d;
 			if (q>=0) {
 				e.ajouter(q);
 			}
 			else {
 				e.ajouter(0.);
 			}
-			
-			//faut enlever le stock
 		}
 	
 		return e;
@@ -367,6 +366,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		String message="Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+contrat.getPrix()+ prix;
 		journal.ajouter(Color.GREEN, Color.BLACK,message);
 		journal_achat.ajouter(Color.GREEN, Color.BLACK,message);
+		journal_achat.ajouter(Color.white,Color.black,"--------------------------------------------------------------------------------");
 
 		}
 		
