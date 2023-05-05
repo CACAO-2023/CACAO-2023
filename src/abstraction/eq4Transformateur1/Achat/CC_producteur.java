@@ -61,30 +61,6 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 				ventetotB += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
 			} 
 		}
-
-<<<<<<< HEAD
-		
-=======
-		List<IProduit> produits = new LinkedList<IProduit>();
-		Feve fb = Feve.F_BQ;	
-		produits.add(fb);
-		Feve fh = Feve.F_HQ_BE;	
-		produits.add(fh);
-		for (IProduit cm : produits ) {
-			List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(cm);
-			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLACK, " CCV : tentative d'achat de "+cm+" aupres de "+vendeurs);
-			for (IVendeurContratCadre vendeur : vendeurs) {
-				if (!vendeur.equals(this)) {
-					Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotB/2);
-					this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
-					ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancier, this.cryptogramme, false);
-					if (contrat1!=null) {
-						this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : contrat signe = "+contrat1);
-					}
-				}
-		}
-	}
->>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4/
 		return null;
 	
 		}
@@ -98,26 +74,18 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		int duree = echeancier.getNbEcheances();
 		double quantitetot = echeancier.getQuantiteTotale();
 		
-		int ventetotH = 0;
-		int ventetotB = 0;
+		int ventetotX = 0;
 		for (abstraction.eqXRomu.produits.ChocolatDeMarque c : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (c.getGamme().equals(Gamme.HQ)){
-				ventetotH += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
+			if(c.getGamme().equals(((Feve)contrat.getProduit()).getGamme())) {
+				ventetotX += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
 			}
-			if (c.getGamme().equals(Gamme.BQ)){
-				ventetotB += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
-			} 
 		}
-		if (( duree >= 15) && ( quantitetot <= ventetotH) && ( quantitetot >= 10000)) {
+		if (( duree >= 15) && ( quantitetot <= ventetotX) && ( quantitetot >= 10000)) {
 			
 			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
 			return contrat.getEcheancier();
 		}
-		if (( duree >= 15) && ( quantitetot <= ventetotB) && ( quantitetot >= 10000)) {
-			
-			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
-			return contrat.getEcheancier();
-		}
+
 		Feve f = (Feve) contrat.getProduit();
 		if (f.getGamme().equals(Gamme.MQ)) {
 			return null;
@@ -125,39 +93,30 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		
 		if (f.getGamme().equals(Gamme.HQ)) {
 			
-			 if (ventetotH/30 > 100){
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotH/2));
-				return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotH/30);
+			 if (ventetotX/2 > 100){
+				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotX/2));
+				return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotX/2);
 			}else {
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, 101));
+				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotX/2));
 
-					return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, 101);
-		}}
+					return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotX/2);
+		}  
+			 }
 		
-		if (f.getGamme().equals(Gamme.BQ)) {
-			if (ventetotB/30 > 100){
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotB/2));
-				return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotB/30);
-			}else {
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, 101));
-
-					return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, 101);
-				}
-		}
 		return null;
 		
 	}
 	
 	
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		double prix=1500.0;
+		double prix=3000.0;
 //		System.out.println(" type produit "+contrat.getProduit());
 		double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
 		Object produit = contrat.getProduit();
 		if (produit instanceof Feve) {
 			switch ((Feve)produit) {
-			case F_HQ_BE : prix= 3125;break;
-			case F_BQ : prix= 1106;break;
+			case F_HQ_BE : prix= 3500;break;
+			case F_BQ : prix= 1506;break;
 			}
 		}
 		int nbPas=0;
@@ -207,6 +166,8 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		return 10; // --> j'afficherai un taux de RSE de 10% sur mes chocolats de marque produits
 	}
 
+	// François et Fouad
+	
 	 public void next() {
 			super.next();
 			List<IProduit> produits = new LinkedList<IProduit>();
