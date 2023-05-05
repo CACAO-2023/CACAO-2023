@@ -262,6 +262,12 @@ public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 	notificationOperationBancaire(-1*contrat.getPrix()*contrat.getQuantiteTotale());
 
 	// william 
+	adapter_prix_vente(contrat);
+
+}
+
+//william 
+public void adapter_prix_vente(ExemplaireContratCadre contrat) {
 	prix = contrat.getPrix() /*/contrat.getQuantiteTotale() deja à la tonne */;
 	journal_ventes.ajouter("achat du chocolat" + contrat.getProduit()+"au prix à la tonne de" + prix);
 	ChocolatDeMarque choco = (ChocolatDeMarque)contrat.getProduit();
@@ -294,16 +300,20 @@ public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		// ponderation
 		prix_tonne_de_vente_apres_achat = prix_tonne_de_vente_contrat*proportion_contrat +prix_tonne_vente.get(choco)*(1-proportion_contrat) ;
 	}
-	// il n'y a pas de stock
+	// si il n'y a pas de stock
 	else {
 		prix_tonne_de_vente_apres_achat = prix_tonne_de_vente_contrat;
 	}
-	journal_ventes.ajouter("ancien prix tonne de " + contrat.getProduit()+" est de " + prix_tonne_vente.get(choco) + "€");
-	journal_ventes.ajouter("nouveau prix tonne de " + contrat.getProduit()+" est de " + prix_tonne_de_vente_apres_achat + "€");
+	this.journal_prix_vente.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " +"ancien prix tonne de " + contrat.getProduit()+" est de " + prix_tonne_vente.get(choco) + "€");
+	this.journal_prix_vente.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " +"nouveau prix tonne de " + contrat.getProduit()+" est de " + prix_tonne_de_vente_apres_achat + "€");
 
 	this.prix_tonne_vente.put((ChocolatDeMarque)contrat.getProduit(), prix_tonne_de_vente_apres_achat);
-
 }
+
+
+
+
+
 
 // mettre à jour dans notification et next
 public void prixMoyen (ChocolatDeMarque choc) {
