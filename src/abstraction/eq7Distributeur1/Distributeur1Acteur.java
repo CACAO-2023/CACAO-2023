@@ -152,7 +152,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		cout_chocolat.put(Chocolat.C_MQ_BE, 7500.);
 		cout_chocolat.put(Chocolat.C_MQ, 5000.);
 		cout_chocolat.put(Chocolat.C_BQ, 3000.);
-		
+
 		this.chocolatsDeMarquesProduits = Filiere.LA_FILIERE.getChocolatsProduits();
 
 		this.Var_Stock_choco = new HashMap<ChocolatDeMarque, Variable> ();
