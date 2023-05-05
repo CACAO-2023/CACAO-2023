@@ -45,8 +45,8 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 			double prixGamme =0;
 			Gamme g;
 			switch (c.getGamme()) {
-			case HQ : prixGamme=50000;break;
-			case MQ : prixGamme=25000;break;
+			case HQ : prixGamme=40000;break;
+			case MQ : prixGamme=20000;break;
 			case BQ : prixGamme=10000;break;
 
 			}
