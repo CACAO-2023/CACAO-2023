@@ -34,6 +34,10 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	private double quantMQMax = 250000.0;
 	private double quantMQLMax = 250000.0;
 	private double quantHQMax = 250000.0;
+	protected double prixMoyBQ = 0.0;
+	protected double prixMoyMQ = 0.0;
+	protected double prixMoyMQL = 0.0;
+	protected double prixMoyHQ = 0.0;
 	
 	
 	public Transformateur3AchatCC () {
@@ -45,6 +49,9 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		this.prixmaxHG = new Variable ("prix maximal HG","prix maximal que l'acteur va accepter pour les feves haut de gamme en CC",this,0.0,10000,8000);
 		this.quantiteEnAttente = 0.0;
 		
+	}
+	public void setprixMoyBQ(double p) {
+		this.prixMoyBQ = p;
 	}
 	/**
 	 * ecrit par Nathan Claeys
