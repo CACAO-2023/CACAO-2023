@@ -35,7 +35,6 @@ public class Producteur1Acteur implements IActeur {
 		this.journal_stocks = new Journal("Journal : stocks"+this.getNom(), this);
 		this.journal_ventes = new Journal("Journal : ventes"+this.getNom(), this);
 		this.journal_champs = new Journal("Journal : champs"+this.getNom(), this);
-		
 	}
 	
 	public void initialiser() { //elouan et charles
