@@ -308,7 +308,7 @@ public void initialiser() {
 	public void next() {
 		super.next();
 		if (stockFeveBG.getQuantiteTotale()>0) {
-			super.journalTransformation.ajouter("on veut transformer"+stockFeveBG.getQuantiteTotale()+"de Feves BG");
+			super.journalTransformation.ajouter("on veut obtenir"+stockFeveBG.getQuantiteTotale()+"de Chocolat BG");
 		this.transformationChoco(Feve.F_BQ, stockFeveBG.getQuantiteTotale());
 		}
 		if (stockFeveMG.getQuantiteTotale()>0) {
