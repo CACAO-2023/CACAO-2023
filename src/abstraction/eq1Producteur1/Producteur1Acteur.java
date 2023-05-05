@@ -52,7 +52,6 @@ public class Producteur1Acteur implements IActeur {
 		this.stockFeveMoy = new Lot(Feve.F_MQ);
 		this.stockFeveMoy.ajouter(0,300);
 	}
-
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ1";
 	}
