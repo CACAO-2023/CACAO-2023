@@ -47,6 +47,9 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		this.mesContratEnTantQuAcheteur=new LinkedList<ExemplaireContratCadre>();
 	}
 
+	/**
+	 * @author Ghaly
+	 */
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 	
 			Echeancier e = contrat.getEcheancier();
@@ -60,22 +63,18 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		ChocolatDeMarque marque = (ChocolatDeMarque) contrat.getProduit();
-		if (cout_marque.get(marque)*1.5	< contrat.getPrix()) {
-			return 0.0;
-		} else if (nombre_achats.get(marque)==0) {
-			return contrat.getPrix();
-		} else {
-			if (contrat.getPrix()<0.5*getCout_gamme(marque)) {
-				return 0.;
-			}
-			else { //Negocier en fonction des couts moyens
+		if (nombre_achats.get(marque)==0) {
+			return contrat.getPrix();		
+		} else if ((cout_marque.get(marque)*1.5	< contrat.getPrix()) || (contrat.getPrix()<0.5*getCout_gamme(marque))) {
+			return 0.;
+		}
+		else { //Negocier en fonction des couts moyens
 				if (Math.random()<0.3) {
 					return contrat.getPrix(); // on ne cherche pas a negocier dans 30% des cas
 				} else {//dans 70% des cas on fait une contreproposition differente
 
 			return contrat.getPrix()*0.95;// 5% de moins.
 				}
-			}
 		}
 	}
 

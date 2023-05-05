@@ -88,7 +88,8 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	public double getCoutTotal(ChocolatDeMarque choco) {
 		Double cout_i = getCout_gamme(choco);
 		Double cout_s = cout_stockage_distributeur.getValeur();
-		Double cout_m = (cout_main_doeuvre_distributeur.getValeur()*stockChocoMarque.get(choco))/totalStocks.getValeur(); //On pondere par rapport a la qte
+		Double cout_m = Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur();
+//		Double cout_m = (cout_main_doeuvre_distributeur.getValeur()*stockChocoMarque.get(choco))/totalStocks.getValeur(); //On pondere par rapport a la qte
 		return (cout_i+cout_s+cout_m);
 	}
 	
