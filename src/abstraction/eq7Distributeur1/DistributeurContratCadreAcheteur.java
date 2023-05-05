@@ -68,9 +68,11 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		ChocolatDeMarque marque = (ChocolatDeMarque) contrat.getProduit();
 		if (nombre_achats.get(marque)==0) {
 			return contrat.getPrix();		
-		} else if ((cout_marque.get(marque)*1.5	< contrat.getPrix()) || (contrat.getPrix()<0.5*getCout_gamme(marque))) {
-			return 0.;
-		}
+		} 
+//		else if ((cout_marque.get(marque)*1.5	< contrat.getPrix()) || (contrat.getPrix()<0.5*getCout_gamme(marque))) {
+//			journal_achat.ajouter("le prix est hors prévision donc on a du refuser");
+//			return 0.;
+//		}
 		else { //Negocier en fonction des couts moyens
 				if (Math.random()<0.3) {
 					return contrat.getPrix(); // on ne cherche pas a negocier dans 30% des cas

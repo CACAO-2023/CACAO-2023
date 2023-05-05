@@ -103,10 +103,11 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	 * @return le cout de revient d'1t de chocolat de marque, calcule grace au type de chocolat
 	 */
 	public double getCoutTotal(ChocolatDeMarque choco) {
-		Double cout_i = getCout_gamme(choco);
+		Double cout_i = cout_marque.get(choco);
 		Double cout_s = cout_stockage_distributeur.getValeur();
 		Double cout_m = Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur(); //Cout de mise en rayon d'1T de chocolat
-		return (cout_i+cout_s+cout_m*quantiteEnVente(choco,cryptogramme));
+//		System.out.println("cout mise en rayon "+cout_i);
+		return (cout_i+cout_s+cout_m);
 	}
 	
 	/**
