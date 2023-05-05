@@ -48,7 +48,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	}
 
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-	
+		if (Math.random()<0) {
 			Echeancier e = contrat.getEcheancier();
 			int stepdebut = e.getStepDebut();
 			for (int step = stepdebut; step < e.getStepFin()+1; step++) {
@@ -56,7 +56,10 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 			}
 			return e;
 		}
-	
+		else {
+			return contrat.getEcheancier();
+		}
+	}
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		ChocolatDeMarque marque = (ChocolatDeMarque) contrat.getProduit();
@@ -128,8 +131,9 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 					mesContratEnTantQuAcheteur.add(cc);
 			    } 
 				else { //si le contrat est un echec
+				
 			        this.journal_achat.ajouter(Color.RED, Color.BLACK,"Echec de la négociation de contrat cadre avec "+vendeur.getNom()+" pour "+produit+"...");
-			    }
+				}
 			}}
 		if (cc ==null) {
 			journal_achat.ajouter("On a cherché à établir un contrat cadre pour le produit "+produit+" de durée "+e.getNbEcheances()+ " mais on a pas trouvé de vendeur");
@@ -208,10 +212,9 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		Echeancier e = new Echeancier(stepDebut);
 		for (int etape = stepDebut+1; etape<stepDebut+d; etape++) {
 			int etapemod = etape%24;
-			e.ajouter(previsionsperso.get(etapemod).get(marque)*1.5 -getLivraisonEtape(marque, stepDebut+etape));
 			//faut enlever le stock
-			Double q = previsionsperso.get(etapemod).get(marque)*1.5 -getLivraisonEtape(marque, stepDebut+etape) -stockChocoMarque.get(marque)/d;
-			if (q>=0) {
+			Double q = previsionsperso.get(etapemod).get(marque) -getLivraisonEtape(marque, stepDebut+etape) -stockChocoMarque.get(marque)/d;
+			if (q>0) {
 				e.ajouter(q);
 			}
 			else {
@@ -236,8 +239,9 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 
 			if(besoin_de_CC ( d,marque)) {	//On va regarder si on a besoin d'un nouveau contrat cadre pour chaque marque
 							
-				//Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, d, quantite_besoin_cc(d, marque)/d);
+//				Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, d, quantite_besoin_cc(d, marque)/d);
 				Echeancier echeancier = echeancier_strat(Filiere.LA_FILIERE.getEtape()+1,d,marque);
+				
 				ExemplaireContratCadre cc = getContrat(marque,echeancier);
 				if (cc!=null) {
 					nombre_achats.replace(marque, nombre_achats.get(marque)+1);
