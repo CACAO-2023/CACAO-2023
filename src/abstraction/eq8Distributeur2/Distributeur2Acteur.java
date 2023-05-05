@@ -43,7 +43,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	protected Journal journal_stocks;
 	protected Journal journal_ContratCadre;
 	protected Journal journal_activitegenerale;
-	
+	protected double coutDeMainDoeuvre;
 
 
 	public Distributeur2Acteur() {
@@ -56,7 +56,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		s= new VariablePrivee("Eq8 TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
 		pourcentagesGamme = new HashMap<>();
 		
-
+		coutDeMainDoeuvre = 10;
 		journal_operationsbancaires = new Journal("Journal des Opérations bancaires de l'" + nom, this);
 		journal_ventes = new Journal("Journal des Ventes de l'" + nom, this);
 		journal_achats = new Journal("Journal des Achats de l'" + nom, this);
@@ -94,6 +94,12 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		pourcentagesGamme.put(Gamme.HQ, 0.05);
 	}
 
+	public double coutDeMainDoeuvre() {
+		double coutMD = Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur();
+		
+		return coutMD;
+	}
+	
 	public void initialiser() {
 		
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
@@ -117,6 +123,18 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ8";
 	}
+	//karim
+	public double getTotalCoutMainDoeuvre() {
+	    double totalCout = 0;
+	    for (ChocolatDeMarque marque : chocolats) {
+	        double stock = stocks.getStock(marque);
+	        
+	        totalCout += stock * coutDeMainDoeuvre();
+	    }
+	    return totalCout;
+	}
+	
+
 
 	////////////////////////////////////////////////////////
 	//         En lien avec l'interface graphique         //
@@ -125,6 +143,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	public void next() {
 		
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
+		
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
 			for (ChocolatDeMarque marque : chocolats_filiere) {
 				chocolats.add(marque);
@@ -139,6 +158,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 					prixDeVente.put(marque,2500.);
 				}
 			}
+			
 		
 		if (Filiere.LA_FILIERE.getEtape()==0) {
 			for (ChocolatDeMarque marque : chocolats) {
@@ -243,7 +263,9 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	// Renvoie le solde actuel de l'acteur
 	//Auteur : Ben Messaoud Karim
 	public double getSolde() {
-		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme)-16*30*stock_total;
+		
+		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme)-16*30*stock_total-getTotalCoutMainDoeuvre();
+		
 	}
 
 	////////////////////////////////////////////////////////
@@ -318,6 +340,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			
 			this.stocks.retirerDuStock(choco, quantite);
 			stock_total-=quantite;
+			
 			s.setValeur(this, stock_total, this.cryptogramme);
 			journal_stocks.ajouter("retrait d'une quantité de"+ quantite+"T");
 			journal_ventes.ajouter("La quantité " + quantite + " a été vendue à" + montant);
