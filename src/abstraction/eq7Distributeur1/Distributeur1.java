@@ -124,7 +124,12 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 //		} else {
 		int etape = Filiere.LA_FILIERE.getEtape()%24;
 		Double previsions = previsionsperso.get(etape).get(choco);
-		
+		if (stockChocoMarque.get(choco) < previsions*1.5) {
+			return stockChocoMarque.get(choco);
+		}
+		if (stockChocoMarque.get(choco) >= previsions*1.5) {
+			return previsions*1.5;
+		}
 		return stockChocoMarque.get(choco);
 		
 //		}
@@ -150,7 +155,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		ChocolatDeMarque topmarque = topvente();
 		double seuil = Filiere.SEUIL_EN_TETE_DE_GONDOLE_POUR_IMPACT;
 		if ((choco==topmarque)&&(stockChocoMarque.get(topmarque)>0)) {
-			return stockChocoMarque.get(topmarque)/10;
+			return quantiteEnVente(topmarque,cryptogramme)/10;
 		}
 		return 0.0;
 	}
