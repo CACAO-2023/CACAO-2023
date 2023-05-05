@@ -51,8 +51,8 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 		this.pourcentageCacaoMGL = 75;
 		this.pourcentageCacaoHG = 85;
 		this.pourcentageRSE = 10;
-		this.totalStocksFeves = new Variable ("totalStocksFeves","defini l'etat total du stock de feves",this,0.0,1000000.0,0.0);
-		this.totalStocksChoco = new Variable ("totalStocksChoco","defini l'etat total du stock de produit fini",this,0.0,1000000.0,0.0);
+		this.totalStocksFeves = new Variable ("totalStocksFeves","defini l'etat total du stock de feves",this,0.0,2000000.0,0.0);
+		this.totalStocksChoco = new Variable ("totalStocksChoco","defini l'etat total du stock de produit fini",this,0.0,2000000.0,0.0);
 		this.chocosProduits = new LinkedList<ChocolatDeMarque>();
 		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_BQ,"eco+ choco",this.pourcentageCacaoBG,this.pourcentageRSE));
 		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_MQ,"chokchoco",this.pourcentageCacaoMG,this.pourcentageRSE));
