@@ -41,20 +41,20 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 
 	public double demande(Feve f, double cours) {
 		super.journalAchatB.ajouter("on nous demande si on veut des"+f.getType()+"avec le cours : "+cours);
-		double res = 6.0;
+		double res = 106.0;
 		if (f.getGamme()==Gamme.BQ) {if(cours<=this.getCoursmaxBG().getValeur()) {
 													res =(max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1.0));}
 		}
-		else {res = 0.0;}
+		else {res = 100.0;}
 		if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxMGL().getValeur()) {
 			res = (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1));}}
-		else {res = 0.0;}
+		else {res = 100.0;}
 		if (f.getGamme()==Gamme.MQ) {if(cours<=this.getCoursmaxMG().getValeur()) {
 			res = (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1));}}
-		else {res = 0.0;}
+		else {res = 100.0;}
 		if (f.getGamme()==Gamme.BQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
 			res = (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1));}}
-		else {res =0.0;}
+		else {res =100.0;}
 		super.journalAchatB.ajouter("on dit qu'on en veut :"+res);
 		return res;}
 

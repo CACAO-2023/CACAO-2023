@@ -52,7 +52,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	/**Nathan Salbego*/
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		Echeancier e=contrat.getEcheancier();
-		for (int i=contrat.getEcheancier().getStepDebut();i<contrat.getEcheancier().getStepFin();i++) {
+		for (int i=contrat.getEcheancier().getStepDebut();i<contrat.getEcheancier().getStepFin()+1;i++) {
 			if(demandeTotStep(i,contrat.getProduit())<super.capTransMax/4) {
 				return null;
 			}
