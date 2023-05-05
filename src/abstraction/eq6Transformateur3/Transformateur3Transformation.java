@@ -83,7 +83,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 			double a=CoutMatPremiere(Feve.F_BQ,qte);
 			if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
 				while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) && qte>1) {
-					qte=qte-1;
+					qte=qte/2;
 					a=CoutMatPremiere(Feve.F_BQ,qte);
 				}
 			}
@@ -100,7 +100,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 					double a=CoutMatPremiere(Feve.F_MQ,qte);
 					if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) ) {
 						while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)&& qte>1) {
-							qte=qte-1;
+							qte=qte/2;
 						}
 					}
 					double pourcentageTransfo = ((double)this.getPourcentageCacaoMG())/100;
@@ -120,7 +120,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 							double a=CoutMatPremiere(Feve.F_MQ_BE,qte);
 							if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
 								while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) && qte>1) {
-									qte=qte-1;
+									qte=qte/2;
 									a=CoutMatPremiere(Feve.F_MQ_BE,qte);
 								}
 							}
@@ -141,7 +141,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 									double a=CoutMatPremiere(Feve.F_HQ_BE,qte);
 									if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) ) {
 										while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)&& qte>1) {
-											qte=qte-1;
+											qte=qte/2;
 											a=CoutMatPremiere(Feve.F_HQ_BE,qte);
 										}
 									}

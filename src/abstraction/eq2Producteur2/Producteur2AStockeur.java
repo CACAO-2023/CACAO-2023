@@ -3,16 +3,15 @@ package abstraction.eq2Producteur2;
 //Code écrit par Nathan Rabier
 
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 import abstraction.eqXRomu.contratsCadres.ContratCadre;
+import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
-
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Lot;
 
@@ -212,7 +211,14 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	 * @return le coût du stockage
 	 */
 	protected double coutStockage() {
-		return this.coutMoyenStock.getValeur() * this.getStockTotTot();
+		return Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() * this.getStockTotTot();
+	}
+	
+	/**
+	 * 
+	 */
+	protected double coutStockage(Feve f) {
+		return Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() * this.getStockTot(f).getValeur();
 	}
 	
 	/**
@@ -263,7 +269,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 				Feve f = (Feve) exCC.getProduit();
 				varQuantite2.put(f, varQuantite2.get(f) - exCC.getEcheancier().getQuantite(curEtape));
 			}
-			HashMap<Feve, Double> prod = thisP.Prevision_Production(curEtape);
+			HashMap<Feve, Double> prod = thisP.Prevision_Production_minimale(curEtape);
 			for (Feve f: varQuantite2.keySet()) {
 				varQuantite2.put(f, varQuantite2.get(f) + prod.get(f) - quantiteRetard.get(f) * (1 + ContratCadre.PENALITE_LIVRAISON));
 			}
@@ -400,6 +406,39 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		return getStocksTotTheo(etape).get(f);
 	}
 	
+	/**
+	 * Calcule la quantité maximale de chaque type de fèves que l'on peut vendre.
+	 * Cette valeur est la quantité de fèves qui sera déclassé dans un temps tempsDegradationFeve.
+	 * @param etape l'étape d'arrêt de l'échéancier
+	 * @return un échéancier par type de fève, correspoondant au max que l'on peut fournir en vente.
+	 */
+	protected HashMap<Feve, Echeancier> getEcheancierMax(int etape){
+		HashMap<Feve, Echeancier> echeanciersMax = new HashMap<Feve, Echeancier>();
+		ArrayList<HashMap<Feve,HashMap<Integer, Double>>> stockTheo = this.getDescrStocksTheo(etape + (int) this.tempsDegradationFeve.getValeur());
+		HashMap<Feve, HashMap<Integer, Double>> declasse = stockTheo.get(stockTheo.size() - 2);
+		HashMap<Feve, HashMap<Integer, Double>> perime = stockTheo.get(stockTheo.size() - 1);
+		for (Feve f : this.lesFeves) {
+			Echeancier echeancier = new Echeancier();
+			double perim = 0.; //On ajoute les quantitées qui périment du stock à ce qu'on peut vendre
+			for (int i = Filiere.LA_FILIERE.getEtape() + 1; i < Filiere.LA_FILIERE.getEtape() + this.tempsPerimationFeve.getValeur() + 1; i ++) {
+				perim += perime.get(f).get(i);
+			}
+			double declas = 0.;
+			for (int i = Filiere.LA_FILIERE.getEtape() + 1; i < Filiere.LA_FILIERE.getEtape() + this.tempsDegradationFeve.getValeur() + 1; i ++) {
+				perim += perime.get(f).get(i);
+			}
+			echeancier.ajouter(perim + declas);
+			for (int i = Filiere.LA_FILIERE.getEtape() + 2; i <= etape; i++) {
+				echeancier.ajouter(declasse.get(f).get(i + (int)this.tempsDegradationFeve.getValeur()));
+				//On n'ajoute pas ce qui périme, car avant de périmer, les fèves sont déclassées et sont donc déjà comptées pour un autre type de fève.
+			}
+			echeanciersMax.put(f, echeancier);
+		}
+		
+		return echeanciersMax;
+	}
+	
+
 	/**
 	 * Ajoute le lot au stock
 	 * @param lot le lot à ajouter au stock

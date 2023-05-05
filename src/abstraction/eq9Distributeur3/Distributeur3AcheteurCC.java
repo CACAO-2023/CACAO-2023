@@ -26,15 +26,18 @@ import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 
 public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAcheteurContratCadre{
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
-
+	protected boolean pasAchete=true;
+	protected int cpt;
 	protected Journal journal;
 	private List<ExemplaireContratCadre> contratEnCours;
 	public HashMap<Chocolat, Double> prixMax;
 	private HashMap<Chocolat, Double>precedentPrix;
+	private HashMap<IVendeurContratCadre, Double> prixEnCours;
 	//faire une méthode qui connait le prix d'achat moyen d'un chocolat
 
 	public Distributeur3AcheteurCC() {//ChocolatDeMarque[] chocos, double[] stocks) {
 		contratEnCours = new LinkedList<ExemplaireContratCadre>();
+		prixEnCours = new HashMap<IVendeurContratCadre, Double>();
 		this.precedentPrix = new HashMap<Chocolat, Double>();
 		this.prixMax = new HashMap<Chocolat, Double>();
 
@@ -46,7 +49,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 			Gamme g;
 			switch (c.getGamme()) {
 			case HQ : prixGamme=50000;break;
-			case MQ : prixGamme=30000;break;
+			case MQ : prixGamme=25000;break;
 			case BQ : prixGamme=10000;break;
 
 			}
@@ -81,12 +84,12 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 
 				}
 				if (vendeursChocolat.size()>0  ) {
-					boolean pasAchete=true;
+					pasAchete=true;
 
 					if (contratAvecChocolat.size()==0) {
 						for (int j=0; j< vendeursChocolat.size()&&pasAchete;j++) {
 
-
+							cpt=3;
 							//Echeancier echeancier = new Echeancier (contratEnCours.get(i).getEcheancier().getStepFin(),24, 25000.0);
 							ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier , this.cryptogramme, initialise);
 							if (cc!= null) {
@@ -110,6 +113,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 									qteVoulue.add(f, 35000.0);
 								}
 							}
+							cpt=3;
 							Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(), qteVoulue);
 							ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier2 , this.cryptogramme, initialise);
 							if (cc!=null) { pasAchete = false; journal_ventes.ajouter("achat du chocolat" + chocolats.get(i)+"au prix à la tonne de" + prix);
@@ -207,6 +211,11 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	@Override
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		prix = contrat.getPrix();
+		prixEnCours.put(contrat.getVendeur(), contrat.getPrix());
+		cpt--;
+		if (pasAchete) {
+			return 0.0;
+		}
 		journal_ventes.ajouter("proposition d'achat du chocolat" + contrat.getProduit()+"au prix à la tonne de" + prix);
 		ChocolatDeMarque choco = (ChocolatDeMarque)contrat.getProduit();
 		Chocolat c = choco.getChocolat();
