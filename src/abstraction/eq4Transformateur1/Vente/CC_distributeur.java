@@ -99,6 +99,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 	
 	public Echeancier propositionDuVendeur(IProduit produit){
 		double qtok=0;
+		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  Salut c moi tchoupi");
 		if (produit instanceof ChocolatDeMarque) {
 			if (this.stockChocoMarque.keySet().contains(produit)) {
 				qtok= this.stockChocoMarque.get(produit);
@@ -184,8 +185,8 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		}
 		if (produit instanceof Chocolat) {
 			switch ((Chocolat)produit) {
-			case C_HQ_BE   : prix= 4000;break;
-			case C_BQ      : prix=  2000;break;
+			case C_HQ_BE   : prix= 49999;break;
+			case C_BQ      : prix= 15000;break;
 			}
 		}
 		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propose prix de "+prix+" pour "+produit);
@@ -193,6 +194,8 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 	}
 
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
+		System.out.println(" type produit "+contrat.getProduit());
+
 		double prixInit=contrat.getListePrix().get(0);
 		double prix = contrat.getPrix();
 		if (prix>0.0 && (prixInit-prix)/prixInit<=0.049) {
