@@ -55,6 +55,7 @@ public class Producteur1Acteur implements IActeur {
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ1";
 	}
+	
 
 	////////////////////////////////////////////////////////
 	//         En lien avec l'interface graphique         //
