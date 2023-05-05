@@ -25,6 +25,16 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	private Variable prixmaxMGL;
 	private Variable prixmaxHG;
 	private double quantiteEnAttente ;
+	//Les var ci dessous indiquent la tranche dans laquelle on veut que les stocks restent
+	private double quantBQMin = 10000.0;
+	private double quantMQMin = 10000.0;
+	private double quantMQLMin = 10000.0;
+	private double quantHQMin = 10000.0;
+	private double quantBQMax = 250000.0;
+	private double quantMQMax = 250000.0;
+	private double quantMQLMax = 250000.0;
+	private double quantHQMax = 250000.0;
+	
 	
 	public Transformateur3AchatCC () {
 		super();
@@ -45,9 +55,23 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 * @return Retourne false si l'acheteur ne souhaite pas etablir de contrat a
 	 *         cette etape pour ce type de produit (retourne true si il est pret a
 	 *         negocier un contrat cadre pour ce type de produit).
-	 * La r�ponse va d�pendre de la valeur de la valeur du stock du produit et de si il y a un contrat sur ce produit
+	 * Dans cette fonction on va regarder pour chaque type de feves si leur stock est bien dans l'encadrement souhaité.
+	 * Si il n'est pas à sa valeur max on va essayer de le compéter sinon on ne prend pas.
 	 */
 	public boolean achete(IProduit produit) {
+		switch(((Feve)produit).getGamme()) {
+		case BQ:
+		case MQ:
+			if (((Feve)produit).isBioEquitable()) {
+				
+			}
+			else {}
+		case HQ:
+		}
+		return false;
+	}
+	
+	public boolean acheteV(IProduit produit) {
 		int step = Filiere.LA_FILIERE.getEtape();
 		if (produit instanceof Feve) {/**List<Double> besoin_prochain = new LinkedList<Double>();
 									  for (int i=1;i<5;i++) {
