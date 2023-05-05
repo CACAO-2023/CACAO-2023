@@ -33,6 +33,8 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 	private double MQBEStep1;
 	private double HQBEStep1;
 	private double HQBEStep2;
+	private double CoutAdditifs = 400;
+	private double CoutTransfo=10;       //Cout de main d'oeuvre, électricité, maintien des machines...
 	
 	/** écrit par Maxime Bedu*/
 	
@@ -80,11 +82,11 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 	
 		public void transformationChoco(Feve f, double qte) {
 		if (f == Feve.F_BQ) {
-			double a=CoutMatPremiere(Feve.F_BQ,qte);
+			double a=CoutTotaux(Feve.F_BQ,qte);
 			if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
 				while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) && qte>1) {
 					qte=qte/2;
-					a=CoutMatPremiere(Feve.F_BQ,qte);
+					a=CoutTotaux(Feve.F_BQ,qte);
 				}
 			}
 			double pourcentageTransfo =((double) this.getPourcentageCacaoBG())/100;
@@ -97,7 +99,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 			//stockChocolatBG.ajouter(Filiere.LA_FILIERE.getEtape(),qte);
 			} else {
 				if (f == Feve.F_MQ) {
-					double a=CoutMatPremiere(Feve.F_MQ,qte);
+					double a=CoutTotaux(Feve.F_MQ,qte);
 					if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) ) {
 						while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)&& qte>1) {
 							qte=qte/2;
@@ -117,11 +119,11 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 						super.journalTransformation.ajouter("On a payé :"+a+"les matières premières et ouvriers pour la transfo MG");
 					} else {
 						if (f ==Feve.F_MQ_BE) {
-							double a=CoutMatPremiere(Feve.F_MQ_BE,qte);
+							double a=CoutTotaux(Feve.F_MQ_BE,qte);
 							if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
 								while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) && qte>1) {
 									qte=qte/2;
-									a=CoutMatPremiere(Feve.F_MQ_BE,qte);
+									a=CoutTotaux(Feve.F_MQ_BE,qte);
 								}
 							}
 							double pourcentageTransfo = ((double)this.getPourcentageCacaoMGL())/100;
@@ -138,11 +140,11 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 								super.journalTransformation.ajouter("On a payé :"+a+"les matières premières et ouvriers pour la transfo MGL");
 							} else {
 								if (f == Feve.F_HQ_BE) {
-									double a=CoutMatPremiere(Feve.F_HQ_BE,qte);
+									double a=CoutTotaux(Feve.F_HQ_BE,qte);
 									if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) ) {
 										while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)&& qte>1) {
 											qte=qte/2;
-											a=CoutMatPremiere(Feve.F_HQ_BE,qte);
+											a=CoutTotaux(Feve.F_HQ_BE,qte);
 										}
 									}
 									double pourcentageTransfo = ((double)this.getPourcentageCacaoHG())/100;
@@ -167,7 +169,10 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 	}
 
 
-		/** écrit par Maxime Bedu*/
+		/** écrit par Maxime Bedu
+		
+		On met de côté la fonction BesoinStep qu'on utilisera plus. On aurait pu faire par itération mais 
+		cela rendrait le code plus lourd encore
 		
 protected double BesoinStep(int Step, Feve f) {
 	int Stepi=Filiere.LA_FILIERE.getEtape();
@@ -264,29 +269,27 @@ protected double BesoinStep(int Step, Feve f) {
 	return 100;
 }
 
+*/
+
 /** écrit par Maxime Bedu*/
 
-protected double CoutMatPremiere(Feve f, double qte) {
-	if (f == Feve.F_BQ) { 
-		double pourcentageTransfo = ((double)this.getPourcentageCacaoBG())/100;
-		return qte*(1-pourcentageTransfo)*400+5*qte;
-	} else {
-		if (f == Feve.F_MQ) { 
-			double pourcentageTransfo = ((double)this.getPourcentageCacaoMG())/100;
-			return qte*(1-pourcentageTransfo)*400+5*qte;
-	} else {
-		if (f == Feve.F_MQ_BE) { 
-			double pourcentageTransfo = ((double)this.getPourcentageCacaoMGL())/100;
-			return qte*(1-pourcentageTransfo)*400+5*qte;
-	} else {
-		if (f == Feve.F_HQ_BE) { 
-			double pourcentageTransfo = ((double)this.getPourcentageCacaoHG())/100;
-			return qte*(1-pourcentageTransfo)*400+5*qte;
+protected double CoutTotaux(Feve f, double qte) {
+	double pourcentageTransfo=0.0;
+	switch(f.getGamme()) {
+	case BQ:
+		pourcentageTransfo=((double)this.getPourcentageCacaoBG())/100;
+	case MQ:
+		if (f.isBioEquitable()) {
+			pourcentageTransfo=((double)this.getPourcentageCacaoMGL())/100;
+		} else {
+			pourcentageTransfo=((double)this.getPourcentageCacaoMG())/100;
+		}
+	case HQ:
+		pourcentageTransfo=((double)this.getPourcentageCacaoHG())/100;
 	}
-	}
-	}}
-	return 0;
+	return qte*(1-pourcentageTransfo)*CoutAdditifs+qte*CoutTransfo;
 }
+
 
 
 /**ecrit par Nathan Claeys
