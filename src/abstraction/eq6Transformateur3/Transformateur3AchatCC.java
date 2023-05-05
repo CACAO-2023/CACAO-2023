@@ -53,6 +53,15 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	public void setprixMoyBQ(double p) {
 		this.prixMoyBQ = p;
 	}
+	public void setprixMoyMQ(double p) {
+		this.prixMoyMQ = p;
+	}	
+	public void setprixMoyMQL(double p) {
+		this.prixMoyMQL = p;
+	}
+	public void setprixMoyHQ(double p) {
+		this.prixMoyHQ = p;
+	}
 	/**
 	 * ecrit par Nathan Claeys
 	 * Methode appelee par le superviseur afin de savoir si l'acheteur est pret a
@@ -150,7 +159,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		int compt = 0; /**si il y a 3 step à la suite sans besoin on reduit le contrat**/
 		int notreduree = 0;
 		for (int i=stepdebut;i<stepdebut+duree && compt<3;i++) {
-			if (super.BesoinStep(i,((Feve)contrat.getProduit()))>0) {compt = 0;notreduree=i;}
+			if (1>0) {compt = 0;notreduree=i;}//a refaire
 			else {compt = compt+1;}			
 		}
 		if (notreduree == 0) {return null;}
@@ -177,7 +186,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	private double BesoinMaxEntre(int d, int f,Feve feve) {
 		double max =0;
 		for (int i= d;i<f;i++) {
-			double besoin = super.BesoinStep(i, feve);
+			double besoin = 100;// a faire
 			if (besoin>max) {max = besoin;}
 		}
 		return max;
