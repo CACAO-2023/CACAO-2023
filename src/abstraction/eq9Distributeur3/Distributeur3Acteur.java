@@ -30,6 +30,8 @@ public class Distributeur3Acteur implements IActeur{
 	protected Journal journal_activitegenerale;
 	protected Journal journal_AO;
 	protected Journal journal_OA;
+	protected Journal journal_prix_vente;
+
 
 	protected List<ChocolatDeMarque> chocolats;
 
@@ -59,6 +61,7 @@ public class Distributeur3Acteur implements IActeur{
 		this.journal_activitegenerale = new Journal(this.getNom()+" activites", this);
 		this.journal_AO = new Journal(this.getNom()+" AO", this);
 		this.journal_OA = new Journal(this.getNom()+" OA", this);
+		this.journal_prix_vente = new Journal(this.getNom() + " prix vente ",this);
 
 
 		this.journal_stock = new Journal(this.getNom()+" stock", this);
@@ -186,6 +189,7 @@ public class Distributeur3Acteur implements IActeur{
 	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
+		variable_stock = new VariablePrivee("Eq9StockTablettes", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 10000000.0, stock.qteStockTOT());
 
 		res.add(variable_stock);
 		return res;
@@ -209,6 +213,7 @@ public class Distributeur3Acteur implements IActeur{
 		res.add(journal_stock);
 		res.add(journal_AO);
 		res.add(journal_OA);
+		res.add(journal_prix_vente);
 
 		
 		return res;
