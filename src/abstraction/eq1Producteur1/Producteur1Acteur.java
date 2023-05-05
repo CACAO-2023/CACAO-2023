@@ -18,7 +18,7 @@ public class Producteur1Acteur implements IActeur {
 	protected int cryptogramme;
 	protected Variable coutreplantation = new Variable("Cout de replantation", "Cout de replantation pour un hectare, peu importe sa gamme", this, 1000); //choisi arbitrairement
 	protected Variable coutmaindoeuvre = new Variable("Cout de la main d'oeuvre", "Cout de la main d'oeuvre par hectare par step", this, 30);
-	protected Journal journal;
+	protected Journal journal_evenements;
 	protected Journal journal_stocks;
 	protected Journal journal_ventes;
 	protected Journal journal_champs;
@@ -31,7 +31,7 @@ public class Producteur1Acteur implements IActeur {
 	protected Variable Stock = new Variable("Stock totale de fèves en tonne", "La quantité en tonne de fèves séchées de moyenne et basse qualité présentes dans nos stocks", this, 2000);
 
 	public Producteur1Acteur() {
-		this.journal = new Journal("Journal "+this.getNom(), this);
+		this.journal_evenements = new Journal("Journal : évenements"+this.getNom(), this);
 		this.journal_stocks = new Journal("Journal : stocks"+this.getNom(), this);
 		this.journal_ventes = new Journal("Journal : ventes"+this.getNom(), this);
 		this.journal_champs = new Journal("Journal : champs"+this.getNom(), this);
@@ -64,7 +64,6 @@ public class Producteur1Acteur implements IActeur {
 	public void next() { //elouan
 		this.step = this.step + 1;
 		// maj des journaux
-		this.journal.ajouter("step : "+step);
 		this.journal_stocks.ajouter("===== step : "+step+" =====");
 		this.journal_stocks.ajouter("Stock bas de gamme : "+this.stockFeveBas.getQuantiteTotale());
 		this.journal_stocks.ajouter("Stock moyenne gamme : "+this.stockFeveMoy.getQuantiteTotale());
@@ -101,7 +100,7 @@ public class Producteur1Acteur implements IActeur {
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
-		res.add(this.journal);
+		res.add(this.journal_evenements);
 		res.add(this.journal_ventes);
 		res.add(this.journal_stocks);
 		res.add(this.journal_champs);
