@@ -44,6 +44,7 @@ public class RomuActeur implements IActeur, IMarqueChocolat {
 	private Variable pourcentageRSEmax;//Le pourcentage de reversion RSE pour un impact max sur la qualite percue
 	private Variable partRSEQualitePercue;//L'impact de pourcentageRSEmax% du prix consacres aux RSE dans la qualite percue du chocolat
 	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
+	private Variable coutMiseEnRayon;//Le cout moyen pour la mise en rayon d'une tonne de chocolat
 
 	protected Variable totalStocksFeves;  // La qualite totale de stock de feves 
 	protected Variable totalStocksChoco;  // La qualite totale de stock de chocolat 
@@ -66,11 +67,12 @@ public class RomuActeur implements IActeur, IMarqueChocolat {
 		this.pourcentageRSEmax    = new VariableReadOnly("pourcentage rse max", "<html>Le pourcentage de reversion RSE pour un impact max sur la qualite percue</html>",this, 5.0, 30.0, 20.0);
 		this.partRSEQualitePercue = new VariableReadOnly("impact rse qualite percue", "<html>L'impact de 25% du prix consacres aux RSE dans la qualite percue du chocolat</html>",this, 0.0, 0.5, 0.3);
 
-		this.coutStockageProducteur = new VariableReadOnly("cout moyen stockage producteur", "<html>Le cout moyen du stockage d'une Tomme de produit chez un producteur</html>",this, 0.0, 3.0, 1.5);
+		this.coutStockageProducteur = new VariableReadOnly("cout moyen stockage producteur", "<html>Le cout moyen du stockage d'une Tomme de produit chez un producteur</html>",this, 0.0, 100.0, 7.5);
 		this.journal = new Journal("Journal "+this.getNom(), this);
 		this.totalStocksFeves = new VariablePrivee("EqXStockFeves", "<html>Quantite totale de feves en stock</html>",this, 0.0, 1000000.0, 0.0);
 		this.totalStocksChoco = new VariablePrivee("EqXStockChoco", "<html>Quantite totale de chocolat en stock</html>",this, 0.0, 1000000.0, 0.0);
 		this.totalStocksChocoMarque = new VariablePrivee("EqXStockChocoMarque", "<html>Quantite totale de chocolat de marque en stock</html>",this, 0.0, 1000000.0, 0.0);
+		this.coutMiseEnRayon  = new VariableReadOnly("cout mise en rayon", "<html>Le cout pour la mise en rayon d'une tonne de chocolat</html>",this, 0.0, 1000.0, 34.19);
 	}
 
 	//========================================================
@@ -131,6 +133,7 @@ public class RomuActeur implements IActeur, IMarqueChocolat {
 		p.add(this.pourcentageRSEmax);
 		p.add(this.partRSEQualitePercue);
 		p.add(this.coutStockageProducteur);
+		p.add(this.coutMiseEnRayon);
 		return p;
 	}
 
