@@ -97,7 +97,7 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 
 	
 	public void notificationBlackList(int dureeEnStep) {
-		this.journal.ajouter("Aie... blackliste pendant 6 steps");
+		this.journal_evenements.ajouter("Aie... blackliste pendant 6 steps");
 	}
 	
 }
