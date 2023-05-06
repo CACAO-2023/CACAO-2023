@@ -38,6 +38,8 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	protected double prixMoyMQ = 0.0;
 	protected double prixMoyMQL = 0.0;
 	protected double prixMoyHQ = 0.0;
+	protected double[][] prixCC=new double[3][3];
+	
 	
 	
 	public Transformateur3AchatCC () {
@@ -219,6 +221,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 			  		if (super.getSolde()<proposition) {res = super.getSolde();}
 			  		else {res = proposition;}}}}}
 		return res;
+		
 	}
 
 	/**
@@ -331,6 +334,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	
 	public void next() {
 		super.next(); 
+		this.actualisePrixMoyenCC();
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.getListeContratEnCoursA()) {
 			super.journalAchatCC.ajouter(contrat.toString());
@@ -350,5 +354,24 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		this.chercheContrat(Feve.F_MQ_BE);}
 		if (super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente<1000) {
 		this.chercheContrat(Feve.F_HQ_BE);}
+		
+		
+		
 	}  
+	public void actualisePrixMoyenCC() {
+	}
+	
+	public boolean privilegieCC(Feve f, double coursBourse) {
+		switch(f.getGamme()) {
+	  	case BQ : return prixMoyBQ<coursBourse;
+	  	case MQ :
+	  		if ((f.isBioEquitable())){
+	  			return prixMoyMQL<coursBourse;
+	  		}
+	  		else {return prixMoyMQ<coursBourse;}
+	  	case HQ : return prixMoyHQ<coursBourse;
+	  	
+	}
+		return true;}
+	
 }  
