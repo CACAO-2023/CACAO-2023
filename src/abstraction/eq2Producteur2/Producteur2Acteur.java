@@ -110,18 +110,7 @@ public class Producteur2Acteur implements IActeur {
 	//               Getters et setters                   //
 	////////////////////////////////////////////////////////
 
-	protected Variable getNbHecBasse() {
-		return this.nbHecBasse;
-	}
-	protected Variable getNbHecMoy() {
-		return this.nbHecMoy;
-	}
-	protected Variable getNbHecMoyBE() {
-		return this.nbHecMoyBE;
-	}
-	protected Variable getNbHecHauteBE() {
-		return this.nbHecHauteBE;
-	}
+	
 	public HashMap<Feve, Double> getPrixCC(){
 		return this.prixCC;
 	}

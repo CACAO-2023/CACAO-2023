@@ -23,11 +23,16 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	private HashMap<Feve, Variable> stocksTot;// Est composé des indicateurs de stock,
 											  // que l'on tiens à jour à chaque modification
 											  // des stocks
-	
+	/**
+	 * Constructeur de Producteur2AStockeur
+	 */
 	public Producteur2AStockeur() {
 		super();
 	}
 	
+	/**
+	 * Initialise les stocks ainsi que les variables de suivi du stock total par type de fève
+	 */
 	public void initialiser() {
 		super.initialiser();
 		
@@ -91,6 +96,9 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		}
 	}
 	
+	/**
+	 * fonction next, mets à jour les stocks en périmant et déclassant les fèves qui le doivent
+	 */
 	public void next() {
 		this.journalStocks.ajouter("Stocks début step " + this.stocksString());
 		super.next();
@@ -202,7 +210,8 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	}
 	
 	/**
-	 * 
+	 * Calcule le coût de stockage du stock actuel de fève de type f
+	 * @return le coût du stockage
 	 */
 	protected double coutStockage(Feve f) {
 		return Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() * this.getStockTot(f).getValeur();
