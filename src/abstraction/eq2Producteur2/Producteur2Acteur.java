@@ -51,6 +51,7 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable coutProdMQ = new VariablePrivee("EQ2 coût de production et stockage de MQ", "coût total de production et de stockage de MQ à chaque step", this, 0);
 	protected Variable coutProMQ_BE = new VariablePrivee("EQ2 coût de production et stockage de MQ_BE", "coût total de production et de stockage de MQ_BE à chaque step", this, 0);
 	protected Variable coutProdHQ_BE = new VariablePrivee("EQ2 coût de production et stockage de HQ_BE", "coût total de production et de stockage de HQ_BE à chaque step", this, 0);
+	protected HashMap<Feve, Variable> stepsVecuesPourBourse = new HashMap<Feve, Variable>();
 	protected HashMap<Feve, Variable> argentVente = new HashMap<Feve, Variable>();
 	protected HashMap<Feve, Variable> coutProdFeve = new HashMap<Feve, Variable>();
 	protected Producteur2 thisP;
@@ -73,6 +74,10 @@ public class Producteur2Acteur implements IActeur {
 		this.journalBourse = new Journal("Journal Bourse " + this.getNom(), this);
 		this.journalProd = new Journal("Journal Production " + this.getNom(), this);
 		this.journalStocks = new Journal("Journal Stocks " + this.getNom(), this);
+		
+		this.stepsVecuesPourBourse.put(Feve.F_BQ, this.stepsVecuesPourBourseBQ);
+		this.stepsVecuesPourBourse.put(Feve.F_MQ, this.stepsVecuesPourBourseMQ);
+		this.stepsVecuesPourBourse.put(Feve.F_MQ_BE, this.stepsVecuesPourBourseMQ_BE);
 		
 		this.argentVente.put(Feve.F_BQ, this.argentVenteBQ);
 		this.argentVente.put(Feve.F_MQ, this.argentVenteMQ);
