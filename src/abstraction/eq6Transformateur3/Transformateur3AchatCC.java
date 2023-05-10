@@ -38,6 +38,10 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	protected double prixMoyMQ = 0.0;
 	protected double prixMoyMQL = 0.0;
 	protected double prixMoyHQ = 0.0;
+	protected boolean prioriteCCBG = true;
+	protected boolean prioriteCCMG = true;
+	protected boolean prioriteCCMGL =true;
+	protected boolean prioriteCCHG =true;
 	
 	
 	public Transformateur3AchatCC () {
@@ -400,16 +404,16 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		
 		this.getListeContratEnCoursA().removeAll(contratsObsoletes);
 		if (super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantBQMax 
-				&& this.prioriteCC) {
+				&& this.prioriteCCBG) {
 		this.chercheContrat(Feve.F_BQ);}
 		if (super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantMQMax
-				&& this.prioriteCC) {
+				&& this.prioriteCCMG) {
 		this.chercheContrat(Feve.F_MQ);}
 		if (super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantMQLMax
-				&& this.prioriteCC) {
+				&& this.prioriteCCMGL) {
 		this.chercheContrat(Feve.F_MQ_BE);}
 		if (super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantHQMax
-				&& this.prioriteCC) {
+				&& this.prioriteCCHG) {
 		this.chercheContrat(Feve.F_HQ_BE);}
 		
 		
@@ -419,16 +423,18 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	}
 	
 	public boolean privilegieCC(Feve f, double coursBourse) {
-		switch(f.getGamme()) {
-	  	case BQ : return prixMoyBQ<coursBourse;
-	  	case MQ :
-	  		if ((f.isBioEquitable())){
-	  			return prixMoyMQL<coursBourse;
-	  		}
-	  		else {return prixMoyMQ<coursBourse;}
-	  	case HQ : return prixMoyHQ<coursBourse;
+		boolean res = false;
+		switch (f.getGamme()) {
+			case BQ:
+		res = this.prixMoyBQ<coursBourse;
+			case MQ:
+				if (f.isBioEquitable()) {
+	  	res = this.prixMoyMQL<coursBourse;}
+				else {
+	  	res = this.prixMoyMQ<coursBourse;}
+			case HQ:
+	  	res = this.prixMoyHQ <coursBourse;
 	  	
-	}
-		return true;}
+	}return res;}
 	
 }  
