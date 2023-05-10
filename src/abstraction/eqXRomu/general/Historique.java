@@ -31,6 +31,10 @@ public class Historique {
 		this.dernieresModifs=new LinkedList<Entree>();
 		this.pcs = new  PropertyChangeSupport(this);
 	}
+	public void cloner(Historique h) {
+		this.dernieresModifs=h.dernieresModifs;
+		this.valeurAuStep=h.valeurAuStep;
+	}
 	public void ajouter(IActeur auteur, int etape, double valeur) {
 		double old = this.getValeur();
 		Entree e = new Entree( auteur,  etape,  valeur);

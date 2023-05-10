@@ -1,0 +1,99 @@
+name: Checks
+on: pull_request_target
+jobs:
+  file_ownership:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: tspascoal/get-user-teams-membership@v2
+        id: actorTeams
+        with:
+          username: ${{ github.event.pull_request.user.login }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            eq1Producteur1:
+              - 'src/abstraction/eq1Producteur1/**'
+            eq2Producteur2:
+              - 'src/abstraction/eq2Producteur2/**'
+            eq3Producteur3:
+              - 'src/abstraction/eq3Producteur3/**'
+            eq4Transformateur1:
+              - 'src/abstraction/eq4Transformateur1/**'
+            eq5Transformateur2:
+              - 'src/abstraction/eq5Transformateur2/**'
+            eq6Transformateur3:
+              - 'src/abstraction/eq6Transformateur3/**'
+            eq7Distributeur1:
+              - 'src/abstraction/eq7Distributeur1/**'
+            eq8Distributeur2:
+              - 'src/abstraction/eq8Distributeur2/**'
+            eq9Distributeur3:
+              - 'src/abstraction/eq9Distributeur3/**'
+            eqXRomu:
+              - 'src/abstraction/eqXRomu/**'
+              - 'src/controle/**'
+              - 'src/presentation/**'
+            root:
+              - '*'
+              - '.github/**'
+              - '.settings/**'
+              - 'docs/**'
+              - 'lib/**'
+              - 'test/**'
+      - name: Test ownership
+        if: fromJSON(steps.filter.outputs.changes)[1] != null || fromJSON(steps.filter.outputs.changes)[0] != fromJSON(steps.actorTeams.outputs.teams)[0]
+        run: | 
+          echo ${{ steps.filter.outputs.changes }}
+          echo ${{ fromJSON(steps.filter.outputs.changes)[0] }}
+          echo ${{ fromJSON(steps.filter.outputs.changes)[1] }}
+          echo ${{ steps.actorTeams.outputs.teams }}
+          echo ${{ fromJSON(steps.actorTeams.outputs.teams)[0] }} 
+          exit 1
+  java_tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      times: ${{ steps.perf.outputs.times }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v3
+      with:
+        java-version: '18'
+        distribution: 'temurin'
+    - name: Build with Ant
+      uses: coactions/setup-xvfb@v1
+      with:
+        run: |
+          set -e
+          ant -noinput -buildfile build.xml
+          ant -noinput -buildfile build.xml
+          ant -noinput -buildfile build.xml
+    - name: Pass performance file
+      id: perf
+      if: success()
+      run: cat tempsEquipes.json >> "$GITHUB_OUTPUT"
+  performance_tests:
+    needs: [file_ownership, java_tests]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: tspascoal/get-user-teams-membership@v2
+      id: actorTeams
+      with:
+        username: ${{ github.event.pull_request.user.login }}
+        GITHUB_TOKEN: ${{ secrets.PAT }}
+    - name: Performance results
+      run: |
+        echo ${{ needs.java_tests.outputs.times }}
+    - name: Auto-merge
+      if: fromJSON(needs.java_tests.outputs.times)[fromJSON(steps.actorTeams.outputs.teams)[0]] < 20000
+      run: | 
+        gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT }}

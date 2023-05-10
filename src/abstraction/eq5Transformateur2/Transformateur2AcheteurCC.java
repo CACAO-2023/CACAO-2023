@@ -1,4 +1,4 @@
-package abstraction.eq5Transformateur2; ///WIEM LABBAOUI
+package abstraction.eq5Transformateur2; ///code écrit par WIEM LABBAOUI
 
 import java.awt.Color;
 
@@ -95,11 +95,16 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	    public ExemplaireContratCadre getContrat(Feve produit) {
 	    	this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit);
 	    	List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
+	    	// code ajoute par romu pour pallier a l'erreur juste apres d'acces a l'element 0 dans une liste vide
+	    	if (vendeurs.size()==0) {
+	    		System.out.println("vendeur size 0");
+	    		return null;
+	    	}
+	    	// fin de code ajoute par romu
 	    	IVendeurContratCadre vendeur = vendeurs.get((int)(Math.random() * vendeurs.size())); //on cherche un vendeur
 	    	
 	    	this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
 	        ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
-	        	//demandeAcheteur(acheteur, vendeur, produit, echeancier, cryptogramme, tg, 0);
 	        if (cc != null) {   
 	        		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + vendeur.getNom() + " pour " + produit + "CC : " + cc);
 	        	} else {
