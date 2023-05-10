@@ -8,6 +8,7 @@ import abstraction.eqXRomu.bourseCacao.BourseCacao;
 import abstraction.eqXRomu.bourseCacao.IVendeurBourse;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVendeurBourse {
@@ -35,7 +36,7 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 	public Double feveMQPeri() { //Elouan
 		if (this.stockFeveMoy.getQuantites().get(step-11)==null)
 			{
-			return 0.;
+			return 0.0;
 			}
 		else {
 			return this.stockFeveMoy.getQuantites().get(step-11);
@@ -57,23 +58,27 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 	public double offre(Feve f, double cours) {
 		
 		BourseCacao bourse = (BourseCacao)(Filiere.LA_FILIERE.getActeur("BourseCacao"));
-			
+		int quantite = 1;
 		if (f==Feve.F_BQ) {
 			Double FeveBQPeri = this.feveBQPeri();
-			if (this.getStockBas().getQuantiteTotale()!=0.0 && 
-			   ((this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale())*50) >= (this.stockFeveBas.getQuantiteTotale()*bourse.getCours(Feve.F_BQ).getValeur()+this.stockFeveMoy.getQuantiteTotale()*bourse.getCours(Feve.F_MQ).getValeur())/10 ) {
-				return this.getStockBas().getQuantiteTotale()/10+FeveBQPeri;
+			if ((this.getStockBas().getQuantiteTotale()!=0.0) && 
+			   (bourse.getCours(Feve.F_BQ).getValeur() >= prixMinAvecMarge( f, quantite))) {
+				int pourcentage = (int) (bourse.getCours(Feve.F_BQ).getValeur()/(prixMinAvecMarge( f, quantite)))/100;
+					return (this.getStockBas().getQuantiteTotale()*(pourcentage*10))+FeveBQPeri;
+				
 			}
 			return FeveBQPeri;
 		}
 		
 		if (f==Feve.F_MQ) {
 			Double FeveMQPeri = this.feveMQPeri();
-			if (this.getStockMoy().getQuantiteTotale()!=0.0 && 
-			   ((this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale())*50) >= (this.stockFeveBas.getQuantiteTotale()*bourse.getCours(Feve.F_BQ).getValeur()+this.stockFeveMoy.getQuantiteTotale()*bourse.getCours(Feve.F_MQ).getValeur())/10  ) {
-			return this.getStockMoy().getQuantiteTotale()/10+ FeveMQPeri;
+			if ((this.getStockMoy().getQuantiteTotale()!=0.0 && 
+			   (bourse.getCours(Feve.F_MQ).getValeur() >= prixMinAvecMarge( f, quantite)))) {
+				int pourcentage = (int) (10*(bourse.getCours(Feve.F_BQ).getValeur()/(prixMinAvecMarge( f, quantite))));
+				
+					return (this.getStockMoy().getQuantiteTotale()*(pourcentage*10))+FeveMQPeri;
 			}
-
+	
 			return FeveMQPeri;
 		}
 		return 0;

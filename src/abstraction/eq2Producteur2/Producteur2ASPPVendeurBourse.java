@@ -38,8 +38,8 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 	
 	public double offre(Feve f, double cours_de_f) {
 		if (f==Feve.F_BQ) {
-			// regarder en focntion du cours de F et de la fève  un seuil à partir duquel il est acceptable de vendre, et en quelles quantités
-			// celà passe par la création de 2 prix seuil, un à partir duquel on commence à vendre, et un autre à partir duquel on vend tout le stock
+			// Regarder en fonction du cours de F et de la fève  un seuil à partir duquel il est acceptable de vendre, et en quelles quantités
+			// cela passe par la création de 2 prix seuil, un à partir duquel on commence à vendre, et un autre à partir duquel on vend tout le stock
 			// avec une continuité linéaire de la relation prix/proportion_vendue entre ces 2 points
 			// prix_seuil_1=1, prix_seuil_2=10, ces prix sont pour l'instant arbitraires
 			float prix_seuil_1=2000;
@@ -101,15 +101,15 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 		double quantiteLivre = 0.;
 		if (f == Feve.F_BQ) {
 			quantiteLivre = Math.min(quantiteEnT, this.getStockTot(f).getValeur());//on renvoie le min entre ce qu'on a et ce qu'on a promis
-			this.BQquantiteVendueBourse.setValeur(null, quantiteLivre);
+			this.BQquantiteVendueBourse.setValeur(this, quantiteLivre, this.cryptogramme);
 		}
-		if (f == Feve.F_MQ) { //
+		if (f == Feve.F_MQ) {
 			if (this.getStockTotTime(Feve.F_MQ_BE, (int)this.stepsVecuesPourBourseMQ_BE.getValeur()) > 0) {
 				double quantiteBEDeclassee = Math.min(quantiteEnT, this.getStockTotTime(Feve.F_MQ_BE,(int)this.stepsVecuesPourBourseMQ_BE.getValeur()));
 				this.convertStockMQ_BE(quantiteBEDeclassee);
 			}
 			quantiteLivre = Math.min(quantiteEnT, this.getStockTot(f).getValeur());//on renvoie le min entre ce qu'on a et ce qu'on a promis
-			this.MQquantiteVendueBourse.setValeur(null, quantiteLivre);
+			this.MQquantiteVendueBourse.setValeur(this, quantiteLivre, this.cryptogramme);
 		}
 		if (f == Feve.F_BQ)
             this.argentVenteBQ.ajouter(this, quantiteLivre * coursEnEuroParT, this.cryptogramme);
@@ -131,7 +131,11 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 		this.journal.ajouter("Aie... blackliste pendant 6 steps");
 	}
 
-	
+	public void next() {
+		super.next();
+		this.BQquantiteVendueBourse.setValeur(this, 0, this.cryptogramme);
+		this.MQquantiteVendueBourse.setValeur(this, 0, this.cryptogramme);
+	}
 	
 
 }
