@@ -50,7 +50,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme vouloir acheter le produit "+produit);
 			return true;} //on achète seulement les fèves haute gamme bio équitable et les fèves moyenne gamme
 		else {
-			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme ne pas vouloir acheter le produit "+produit);
+			
 			return false;}
 
 
