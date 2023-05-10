@@ -198,7 +198,7 @@ public class Champs {
 		while (quantitePerdu < NbrGreviste ||( HarvestKeysM.size() != 0 && HarvestKeysH.size() !=0  )) {
 			//On regarde si les grevistes travaillaient sur les champs H ou M
 			double MouH = Math.random() ;
-			if(MouH <= 0.5) {
+			if(MouH <= 0.5  ) {
 				//On choisit un nombre qui nous donnera la clef du champs ou il va y avoir des grevistes et ils ne travaillent pas forcement sur un champ qui a besoin d'etre recolte.
 				Integer ChampGreve = (int)(Math.random() * (FieldM.size()-1));
 				//on regarde si le champ ou les ouvriers font greve doit etre recolte
