@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
@@ -78,6 +79,7 @@ public class Producteur3Acteur implements IActeur {
 	
     protected int nbr_popup;
 	protected Champs fields;
+	protected LinkedList<ExemplaireContratCadre> contractprecedent; /*Cette variable corresponds aux contrats que l'on avait au step précedent
 
 	/**
 	 * @author BOCQUET Gabriel, Corentin Caugant
