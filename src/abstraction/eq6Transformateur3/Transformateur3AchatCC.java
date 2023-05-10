@@ -449,12 +449,14 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	}
 	
 	public double moyList(List<Double> l) {
-		int n = Math.max(1, l.size());
+		int n =  l.size();
+		if (n == 0) {return 0.0;}
+		else{
 		double res = 0.0;
 		for (int i =0;i<n;i++) {
 			res = res + l.get(i);
 		}
-		return res/n;
+		return res/n;}
 	}
 	/** ecrit par Nathan Salbego
 	 */	
