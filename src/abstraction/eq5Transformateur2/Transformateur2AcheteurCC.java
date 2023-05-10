@@ -85,7 +85,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	            nouvelEcheancier.set(step, nouvelleQuantite);
 	        }
 	    }
-
+ 
 	    return nouvelEcheancier;
 	}   
 	/*

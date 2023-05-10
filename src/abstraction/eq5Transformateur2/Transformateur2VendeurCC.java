@@ -52,7 +52,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 				return false;}}
 		else if ((produit.getType().equals("Chocolat"))&&((((Chocolat)produit).getGamme()== Gamme.MQ) ||((((Chocolat)produit).getGamme()== Gamme.HQ)&&(((Chocolat)produit).isBioEquitable())))){
 			if (this.stockChoco.get(produit)>100) { 
-				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous vendons du " + produit.getType() + " " + produit);
+				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous declarons pouvoir vendre du " + produit.getType() + " " + produit);
 				return true;
 			}
 			else {this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous ne vendons pas de " + produit.getType() + " " + produit );
@@ -63,7 +63,28 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 	//fait par yassine : pas de négociations
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
-		if 
+			 
+		    double prixMin = 1000.0; // Prix minimum acceptable
+		    double soldeDisponible = super.getSolde(); // Solde disponible pour le vendeur
+		    double quantiteStock = 0 /*super.getStock()*/; // Quantité de produits en stock
+		    double prixNegociation = 1.0; // Coefficient de négociation initial
+		    Echeancier echeancierPropose = contrat.getEcheancier(); // Echéancier proposé par l'acheteur
+		    Echeancier nouvelEcheancier = new Echeancier(echeancierPropose);
+		    
+		    // Appliquer le coefficient de négociation en fonction de la quantité de produits en stock
+		    if (quantiteStock > 6000.0) {
+		        prixNegociation = 0.8; // Réduction de 20% si la quantité de stock est supérieure à 1000
+		    }
+
+		    double prixPropose = contrat.getPrix() * prixNegociation; // Prix proposé avec le coefficient de négociation
+		    
+		    if (prixPropose < prixMin ) {
+		        // Si le prix proposé est inférieur au prix minimum, annuler les négociations
+		        nouvelEcheancier.vider();
+		        return nouvelEcheancier;
+		    }
+		    
+		
 		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : j'accepte l'echeancier "+contrat.getEcheancier());
 		return contrat.getEcheancier(); } 
 
