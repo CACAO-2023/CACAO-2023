@@ -127,7 +127,8 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 				lot=new Lot((Chocolat)produit);
 			}}
 		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : doit livrer "+quantite+" de "+produit+" --> livre "+livre);
-		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);
+		if (livre != 0) {
+		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);}
 		return lot;
 	}
 	
