@@ -1,7 +1,7 @@
 package abstraction.eq5Transformateur2;//Fait par Yassine et Wiem
 
 import java.awt.Color;
-
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,7 +22,8 @@ import abstraction.eqXRomu.produits.Lot;
 public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implements IVendeurContratCadre {
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
-	protected LinkedList<ExemplaireContratCadre> contrats;
+	//protected LinkedList<ExemplaireContratCadre> contrats;
+	protected HashMap<ExemplaireContratCadre, String> ContratsVendeur;
 	private IProduit produit;
 	
 	//fait par yassine
@@ -35,24 +36,34 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	
 	public Transformateur2VendeurCC() {
 		super();  
-		this.contrats=new LinkedList<ExemplaireContratCadre>();
+		this.ContratsVendeur =new HashMap<>();
 	}
 	 
 	//fait par wiem : nous vendons du chocolat sans et avec marque
 	public boolean peutVendre(IProduit produit) {
-		return ((produit.getType().equals("Chocolat"))||(produit.getType().equals("ChocolatDeMarque")));} 
+		if (produit.getType().equals("Chocolat")) {
+			if (((((Chocolat)produit).getGamme()== Gamme.MQ))||(((Chocolat)produit).getGamme()== Gamme.HQ)&&(((Chocolat)produit).isBioEquitable())) {
+				return true;}
+			return false;}
+		else if ((produit.getType().equals("ChocolatDeMarque"))) {
+			if (((ChocolatDeMarque)produit).getNom()=="ChocoPop" ||(((ChocolatDeMarque)produit).getNom()== "MaisonDoutre")) {
+				return true;}
+			return false;}
+		return false; }
+			 
+		
 	
 	//fait par wiem : nous vendons du chocolat de moyenne gamme et haute gamme bioéquitable. La vente est possible ssi le stock est supérieur à 100T
 	public boolean vend(IProduit produit) {
 		if ((stockChocoMarque.containsKey(produit))&&(produit.getType().equals("ChocolatDeMarque"))&&((((ChocolatDeMarque)produit).getGamme()== Gamme.MQ) ||((((ChocolatDeMarque)produit).getGamme()== Gamme.HQ)&&(((ChocolatDeMarque)produit).isBioEquitable())))){
 			if (this.stockChocoMarque.get(produit)>100) { 
-				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous vendons du " + produit.getType() + " " + produit);
+				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous déclarons pouvoir vendre du " + produit.getType() + " " + produit);
 				return true;}
 			else {this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous ne vendons pas de " + produit.getType() + " " + produit );
 				return false;}}
-		else if ((produit.getType().equals("Chocolat"))&&((((Chocolat)produit).getGamme()== Gamme.MQ) ||((((Chocolat)produit).getGamme()== Gamme.HQ)&&(((Chocolat)produit).isBioEquitable())))){
+		else if ((((stockChoco.containsKey(produit))&& (produit.getType().equals("Chocolat"))&&((((Chocolat)produit).getGamme()== Gamme.MQ) ||((((Chocolat)produit).getGamme()== Gamme.HQ)&&(((Chocolat)produit).isBioEquitable())))))){
 			if (this.stockChoco.get(produit)>100) { 
-				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous vendons du " + produit.getType() + " " + produit);
+				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous déclarons pouvoir vendre du " + produit.getType() + " " + produit);
 				return true;
 			}
 			else {this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous ne vendons pas de " + produit.getType() + " " + produit );
@@ -137,7 +148,8 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
         ExemplaireContratCadre cc = superviseurVentesCC.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
         if (cc != null) {   
         		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "CC : " + cc);
-        	} else {
+        	this.ContratsVendeur.put(cc,  acheteur.getNom());
+        } else {
         		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
         	}
         	return cc; 
