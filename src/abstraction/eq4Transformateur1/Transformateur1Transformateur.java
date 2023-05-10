@@ -31,12 +31,13 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 
 	public List<ChocolatDeMarque> getChocolatsProduits() {
 		if (this.chocosProduits.size()==0) {
-			for (Chocolat c : Chocolat.values()) {
-				int pourcentageCacao =  (int) (Filiere.LA_FILIERE.getParametre("pourcentage min cacao "+c.getGamme()).getValeur());
-				this.chocosProduits.add(new ChocolatDeMarque(c, "Vccotioi", pourcentageCacao, 0));
+			for (ChocolatDeMarque c : Filiere.LA_FILIERE.getChocolatsProduits()) {
+				if(c.getMarque().equals("Vccotioi") || c.getMarque().equals("Yocttotoa") ) {
+					chocosProduits.add(c);
+				}
 			}
 		}
-		return this.chocosProduits;
+		return this.chocosProduits ;
 	}
 
 	public void initialiser() {
