@@ -420,6 +420,37 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		
 	}  
 	public void actualisePrixMoyenCC() {
+		LinkedList<Double> listBQ = new LinkedList<Double>();
+		LinkedList<Double> listMQ = new LinkedList<Double>();
+		LinkedList<Double> listMQL = new LinkedList<Double>();
+		LinkedList<Double> listHQ = new LinkedList<Double>();
+		for (ExemplaireContratCadre contrat : this.ListeContratEnCoursAchat) {
+			switch (((Feve)contrat.getProduit()).getGamme()) {
+			case BQ:
+				listBQ.add(contrat.getPrix());
+			case MQ:
+				if(((Feve)contrat.getProduit()).isBioEquitable()) {
+					listMQL.add(contrat.getPrix());
+				}else {
+					listMQ.add(contrat.getPrix());
+				}
+			case HQ:
+				listHQ.add(contrat.getPrix());
+			}
+		}
+		this.prixMoyBQ = this.moyList(listBQ);
+		this.prixMoyMQ = this.moyList(listMQ);
+		this.prixMoyMQL = this.moyList(listMQL);
+		this.prixMoyHQ = this.moyList(listHQ);
+	}
+	
+	public double moyList(List<Double> l) {
+		int n = Math.max(1, l.size());
+		double res = 0.0;
+		for (int i =0;i<n;i++) {
+			res = res + l.get(i);
+		}
+		return res/n;
 	}
 	
 	public boolean privilegieCC(Feve f, double coursBourse) {
@@ -427,13 +458,17 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		switch (f.getGamme()) {
 			case BQ:
 		res = this.prixMoyBQ<coursBourse;
+		this.prioriteCCBG = res;
 			case MQ:
 				if (f.isBioEquitable()) {
-	  	res = this.prixMoyMQL<coursBourse;}
+	  	res = this.prixMoyMQL<coursBourse;
+	  	this.prioriteCCMGL = res;}
 				else {
-	  	res = this.prixMoyMQ<coursBourse;}
+	  	res = this.prixMoyMQ<coursBourse;
+	  	this.prioriteCCMG = res;}
 			case HQ:
 	  	res = this.prixMoyHQ <coursBourse;
+	  	this.prioriteCCHG = res;
 	  	
 	}return res;}
 	
