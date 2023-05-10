@@ -134,8 +134,12 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 								pm = prixEnCours.get(v);
 								vmin = v ; 
 							}
-							//Comment garder l'echeancier ???? -> tjrs le même à la fin 
-							ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vmin, chocolats.get(i), echeancier , this.cryptogramme, initialise);
+							if(vmin !=null) {
+								//Comment garder l'echeancier ???? -> tjrs le même à la fin 
+								ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vmin, chocolats.get(i), echeancier , this.cryptogramme, initialise);
+
+							}
+							
 						}
 					}
 					}

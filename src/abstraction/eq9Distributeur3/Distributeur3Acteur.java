@@ -41,7 +41,10 @@ public class Distributeur3Acteur implements IActeur{
 	private List<ChocolatDeMarque>chocosProduits;
 	protected HashMap<ChocolatDeMarque, Double> prix_tonne_vente;
 	protected Variable variable_stock;
+	protected Variable quanitite_cible_totale_OA;
 	protected Distributeur3AcheteurOA d;
+	
+	public Double qte_cible_OA_TOT;
 	
 	
 	public Distributeur3Acteur() {
@@ -71,6 +74,9 @@ public class Distributeur3Acteur implements IActeur{
 		
 		this.stock = new Stock(this);
 		variable_stock = new VariablePrivee("Eq9StockTablettes", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
+		qte_cible_OA_TOT = 0.0;
+		quanitite_cible_totale_OA  = new VariablePrivee("Eq9QteCibleOA", "<html>Quantite ciblée (à atteindre) via les OA</html>",this, 0.0, 1000000.0, 0.0);
+
 	}
 	
 	public void initialiser() {
@@ -81,6 +87,7 @@ public class Distributeur3Acteur implements IActeur{
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
 		for (int i=0; i<chocolats_filiere.size(); i++) {
+			prix_tonne_vente.put(chocolats_filiere.get(i), 1.0);
 			
 			if(chocolats_filiere.get(i).getGamme() == Gamme.HQ) {
 				chocolats.add(chocolats_filiere.get(i));
@@ -95,7 +102,7 @@ public class Distributeur3Acteur implements IActeur{
 	
 		// stock initial de 1000 tonnes du premier chocolat de la filiere
 		for (int j=0; j <chocolats.size(); j++) {
-			stock.ajoutQte(chocolats.get(j), 50000);
+			stock.ajoutQte(chocolats.get(j), 10);
 		}
 		
 		
@@ -124,6 +131,12 @@ public class Distributeur3Acteur implements IActeur{
 		journal_stock.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "Etat du stock Total : "+stock.qteStockTOT()); 
 
 		etat_ventes();
+		
+		variable_stock = new VariablePrivee("Eq9StockTablettes", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 10000000.0, stock.qteStockTOT());
+
+		quanitite_cible_totale_OA  = new VariablePrivee("Eq9QteCibleOA", "<html>Quantite ciblée (à atteindre) via les OA</html>",this, 0.0, 1000000.0, qte_cible_OA_TOT);
+
+		
 	}
 	
 	public void cout_stockage() {
@@ -189,9 +202,10 @@ public class Distributeur3Acteur implements IActeur{
 	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		variable_stock = new VariablePrivee("Eq9StockTablettes", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 10000000.0, stock.qteStockTOT());
-
+		
+		
 		res.add(variable_stock);
+		res.add(quanitite_cible_totale_OA);
 		return res;
 		
 	}

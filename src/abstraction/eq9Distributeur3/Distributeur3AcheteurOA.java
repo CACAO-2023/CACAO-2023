@@ -49,14 +49,16 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 		// l'on a en stock pour savoir ce qu'il faut ajouter en plus pour ne pas avoit de repture de stock
 		// et cela pour chaque chocolat que l'on vend
 		// on fait l'hypothèse que on peut vendre 3000 de chaque chocolat (très peu réaliste)
-		
-		for(int i =0; i <  chocolats.size();i++) {
-			if(stock.getStock(chocolats.get(i)) < 3000) {
-				double cible = 3000 - stock.getStock(chocolats.get(i));
-				qte_cible.put(chocolats.get(i), cible);
+		System.out.print("determination_qte_cible");
+		for(int i =0; i <  this.chocolats.size();i++) {
+
+			if(stock.getStock(this.chocolats.get(i)) < 3000) {
+				double cible = 3000 - stock.getStock(this.chocolats.get(i));
+				qte_cible.put(this.chocolats.get(i), cible);
+				System.out.print(this.chocolats.get(i) + " needs an OA of qte : "+ cible);
 			}
 			else {
-				qte_cible.put(chocolats.get(i), 0.0);
+				qte_cible.put(this.chocolats.get(i), 0.0);
 			}
 		}
 	}
@@ -124,12 +126,12 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 			
 			this.journal_OA.ajouter("Offre d'Achat initiée");
 			
-			for(int i =0; i < chocolats.size();i++) {
+			for(int i =0; i < this.chocolats.size();i++) {
 				
-				if( qte_cible.get(chocolats.get(i)) > 2.0) {
+				if( qte_cible.get(this.chocolats.get(i)) > 2.0) {
 					
 				
-					PropositionVenteOA pRetenue = supOA.acheterParAO(this, this.cryptogramme, chocolats.get(i).getChocolat(), chocolats.get(i).getMarque(), qte_cible.get(chocolats.get(i)), false);
+					PropositionVenteOA pRetenue = supOA.acheterParAO(this, this.cryptogramme, this.chocolats.get(i).getChocolat(), this.chocolats.get(i).getMarque(), qte_cible.get(chocolats.get(i)), false);
 
 			
 					if (pRetenue!=null) {
@@ -149,7 +151,19 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 				}
 			}
 		}
+		System.out.print("on actualise qte cible tot");
+		qte_cible_tot();
 		
+	}
+	
+	public void qte_cible_tot() {
+		double qte_cible_TOT = 0.0;
+		for(int i =0; i < this.qte_cible.size();i++) {
+			
+			qte_cible_TOT += this.qte_cible.get(this.chocolats.get(i));
+		}
+		this.qte_cible_OA_TOT = qte_cible_TOT;
+		System.out.print("qte cible tot : " + qte_cible_TOT);
 	}
 	
 	
@@ -186,7 +200,7 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 			// proportion de nouveau chocolat
 			double proportion_contrat = proposition.getOffre().getQuantiteT()/qtte_apres_achat;
 			// ponderation
-			prix_tonne_de_vente_apres_achat = prix_tonne_de_vente_contrat*proportion_contrat +prix_tonne_vente.get(choco)*(1-proportion_contrat) ;
+			prix_tonne_de_vente_apres_achat = prix_tonne_de_vente_contrat*proportion_contrat +this.prix_tonne_vente.get(choco)*(1-proportion_contrat) ;
 		}
 		// il n'y a pas de stock
 		else {
