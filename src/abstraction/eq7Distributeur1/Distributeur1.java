@@ -30,6 +30,23 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		journal.ajouter("============================== étape "+etape+" ==============================");
 		journal_achat.ajouter("============================== étape "+etape+" ==============================");
 		journal_stock.ajouter("============================== étape "+etape+" ==============================");
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			Var_Stock_choco.get(marque).setValeur(this, stockChocoMarque.get(marque));
+			Var_Cout_Choco.get(marque).setValeur(this, getCoutTotal(marque));
+			Var_Marge_Choco.get(marque).setValeur(this, prix(marque)-getCoutTotal(marque));
+		}
+		
+		//Prise en compte des couts de main doeuvre
+		Double qte_totale_en_vente = 0.;
+		for (ChocolatDeMarque choco : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			qte_totale_en_vente += quantiteEnVente(choco,cryptogramme);
+		}
+		Double cout_total_mise_en_rayon = qte_totale_en_vente * Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur();
+		if (cout_total_mise_en_rayon > 0) {
+			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme,Filiere.LA_FILIERE.getBanque(),cout_total_mise_en_rayon );	
+			journal_vente.ajouter("Cout de main d'oeuvre : "+cout_total_mise_en_rayon);
+				}
+		
 	}
 	
 	private void strategie() {
@@ -63,7 +80,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 //		double coef = 1-(((10/3)*qualite)/100)+0.1;
 		double promo = prixPromotion(choco);
 		double cout = getCoutTotal(choco);
-		double prix = (cout/1000)*promo/(1-0.1*qualite);
+		double prix = cout*promo/(1-0.1*qualite);
 		return prix;
 	}
 	
@@ -88,7 +105,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	public double getCoutTotal(ChocolatDeMarque choco) {
 		Double cout_i = getCout_gamme(choco);
 		Double cout_s = cout_stockage_distributeur.getValeur();
-		Double cout_m = (cout_main_doeuvre_distributeur.getValeur()*stockChocoMarque.get(choco))/totalStocks.getValeur(); //On pondere par rapport a la qte
+		Double cout_m = Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur(); //Cout de mise en rayon d'1T de chocolat
 		return (cout_i+cout_s+cout_m);
 	}
 	
@@ -105,7 +122,16 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 //			double qStock = stockChocoMarque7.get(choco);
 //			return qStock/2.0;
 //		} else {
+		int etape = Filiere.LA_FILIERE.getEtape()%24;
+		Double previsions = previsionsperso.get(etape).get(choco);
+		if (stockChocoMarque.get(choco) < previsions*1.5) {
+			return stockChocoMarque.get(choco);
+		}
+		if (stockChocoMarque.get(choco) >= previsions*1.5) {
+			return previsions*1.5;
+		}
 		return stockChocoMarque.get(choco);
+		
 //		}
 	}
 	
@@ -129,7 +155,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		ChocolatDeMarque topmarque = topvente();
 		double seuil = Filiere.SEUIL_EN_TETE_DE_GONDOLE_POUR_IMPACT;
 		if ((choco==topmarque)&&(stockChocoMarque.get(topmarque)>0)) {
-			return stockChocoMarque.get(topmarque)/10;
+			return quantiteEnVente(topmarque,cryptogramme)/10;
 		}
 		return 0.0;
 	}
