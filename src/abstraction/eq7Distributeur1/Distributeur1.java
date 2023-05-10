@@ -70,7 +70,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	}
 	
 	/**
-	 * @author Theo
+	 * @author Theo, Ahmed
 	 * @param choco, choco!=null
 	 * @return Le prix de vente actuel d'une tonne de chocolat choco
 	 * IMPORTANT : durant une meme etape, la fonction doit toujours retourner la meme valeur pour un chocolat donne.
@@ -98,7 +98,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	}
 	
 	/**
-	 * @author Theo
+	 * @author Theo, Ahmed
 	 * @param choco
 	 * @return le cout de revient d'1t de chocolat de marque, calcule grace au type de chocolat
 	 */
