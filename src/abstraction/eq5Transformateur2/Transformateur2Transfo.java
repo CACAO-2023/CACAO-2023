@@ -84,14 +84,14 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 				double cout = 0;
 				
 				if (f.getGamme()==Gamme.MQ) {
-					qtefeve = this.stockFeves.get(f)*0.15 ; //15% des feves moyenne gamme sont transformées en ChocoPop, 25% sans marque
-					proportion_marque = 0.75;
+					qtefeve = this.stockFeves.get(f)*0.9 ; //15% des feves moyenne gamme sont transformées en ChocoPop, 25% sans marque
+					proportion_marque = 0.8;
 					Marque = "ChocoPop";
 					cacao = 70;
 				}
 				
 				if((c.getGamme()==Gamme.HQ) && (c.isBioEquitable())) {
-					qtefeve = this.stockFeves.get(f)*0.10 ; //10% des feves haute gamme sont transformées en ChocoPop
+					qtefeve = this.stockFeves.get(f)*0.9 ; //10% des feves haute gamme sont transformées en ChocoPop
 					proportion_marque = 1;
 					Marque = "Maison Doutre";
 					cacao = 90;
