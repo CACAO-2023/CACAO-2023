@@ -63,8 +63,8 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 			Double FeveBQPeri = this.feveBQPeri();
 			if ((this.getStockBas().getQuantiteTotale()!=0.0) && 
 			   (bourse.getCours(Feve.F_BQ).getValeur() >= prixMinAvecMarge( f, quantite))) {
-				
-				return (this.getStockBas().getQuantiteTotale()/10)+FeveBQPeri;
+				int pourcentage = (int) (bourse.getCours(Feve.F_BQ).getValeur()/(prixMinAvecMarge( f, quantite)))/100;
+					return (this.getStockBas().getQuantiteTotale()*(pourcentage*10))+FeveBQPeri;
 				
 			}
 			return FeveBQPeri;
@@ -74,8 +74,9 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 			Double FeveMQPeri = this.feveMQPeri();
 			if ((this.getStockMoy().getQuantiteTotale()!=0.0 && 
 			   (bourse.getCours(Feve.F_MQ).getValeur() >= prixMinAvecMarge( f, quantite)))) {
+				int pourcentage = (int) (10*(bourse.getCours(Feve.F_BQ).getValeur()/(prixMinAvecMarge( f, quantite))));
 				
-				return (this.getStockMoy().getQuantiteTotale()/10)+FeveMQPeri;
+					return (this.getStockMoy().getQuantiteTotale()*(pourcentage*10))+FeveMQPeri;
 			}
 	
 			return FeveMQPeri;
