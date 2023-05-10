@@ -63,7 +63,7 @@ public class Transformateur2Stocks extends Transformateur2Acteur {
 				// dans le CdCf il a été convenu que le cout de stockage pour une feve était 4x celui des producteurs
 				double cout = stockfeve*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*4;
 				Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), cout);
-				this.journal.ajouter("Couts de stockage de la feve "+f+" ! On perd "+cout+" euros");
+				this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "Couts de stockage de la feve "+f+" ! On perd "+cout+" euros");
 		}}
 		
 		for(Chocolat c : Chocolat.values()) {
