@@ -25,6 +25,20 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	private Variable prixmaxMGL;
 	private Variable prixmaxHG;
 	private double quantiteEnAttente ;
+	//Les var ci dessous indiquent la tranche dans laquelle on veut que les stocks restent
+	private double quantBQMin = 10000.0;
+	private double quantMQMin = 10000.0;
+	private double quantMQLMin = 10000.0;
+	private double quantHQMin = 10000.0;
+	private double quantBQMax = 250000.0;
+	private double quantMQMax = 250000.0;
+	private double quantMQLMax = 250000.0;
+	private double quantHQMax = 250000.0;
+	protected double prixMoyBQ = 0.0;
+	protected double prixMoyMQ = 0.0;
+	protected double prixMoyMQL = 0.0;
+	protected double prixMoyHQ = 0.0;
+	
 	
 	public Transformateur3AchatCC () {
 		super();
@@ -36,6 +50,18 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		this.quantiteEnAttente = 0.0;
 		
 	}
+	public void setprixMoyBQ(double p) {
+		this.prixMoyBQ = p;
+	}
+	public void setprixMoyMQ(double p) {
+		this.prixMoyMQ = p;
+	}	
+	public void setprixMoyMQL(double p) {
+		this.prixMoyMQL = p;
+	}
+	public void setprixMoyHQ(double p) {
+		this.prixMoyHQ = p;
+	}
 	/**
 	 * ecrit par Nathan Claeys
 	 * Methode appelee par le superviseur afin de savoir si l'acheteur est pret a
@@ -45,9 +71,32 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 * @return Retourne false si l'acheteur ne souhaite pas etablir de contrat a
 	 *         cette etape pour ce type de produit (retourne true si il est pret a
 	 *         negocier un contrat cadre pour ce type de produit).
-	 * La r�ponse va d�pendre de la valeur de la valeur du stock du produit et de si il y a un contrat sur ce produit
+	 * Dans cette fonction on va regarder pour chaque type de feves si leur stock est bien dans l'encadrement souhaité.
+	 * Si il n'est pas à sa valeur max on va essayer de le compéter sinon on ne prend pas.
 	 */
 	public boolean achete(IProduit produit) {
+		double stock = 0.0;
+		boolean res =false;
+		if (produit.getType() == "Feve") {
+		switch(((Feve)produit).getGamme()) {
+		case BQ:
+			stock = super.stockChocolatBG.getQuantiteTotale();
+			if (stock<quantBQMax-500) {res= true;}
+		case MQ:
+			if (((Feve)produit).isBioEquitable()) {
+				stock = super.stockChocolatMGL.getQuantiteTotale();
+				if (stock<quantMQLMax-500) {res= true;}
+			}
+			else {stock = super.stockChocolatMG.getQuantiteTotale();
+			if (stock<quantMQMax-500) {res= true;}}
+		case HQ:
+			stock = super.stockChocolatHGL.getQuantiteTotale();
+			if (stock<quantHQMax-500) {res= true;}
+		}}
+		return res;
+	}
+	
+	public boolean acheteV1(IProduit produit) {
 		int step = Filiere.LA_FILIERE.getEtape();
 		if (produit instanceof Feve) {/**List<Double> besoin_prochain = new LinkedList<Double>();
 									  for (int i=1;i<5;i++) {
@@ -104,6 +153,51 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 * Il faut verifier que la duree nous convient et que chaque livraison proposée est sup à ce que l'on souhaite avoir
 	 */
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
+		Echeancier vendeurecheancier = contrat.getEcheancier();
+		Echeancier res = null;
+		int stepdebut = vendeurecheancier.getStepDebut();
+		int duree = vendeurecheancier.getNbEcheances();
+		boolean cbon = true;
+		double stock = 0.0;
+		double stockMax = 0.0;
+		int dureeMax = duree;
+		switch (((Feve)contrat.getProduit()).getGamme()) {
+		case BQ:
+			stock = super.stockChocolatBG.getQuantiteTotale();
+			stockMax = this.quantBQMax;
+		case MQ:
+			if (((Feve)contrat.getProduit()).isBioEquitable()) {
+				stock = super.stockChocolatMGL.getQuantiteTotale();
+				stockMax = this.quantMQLMax;
+			}
+			else {stock = super.stockChocolatMG.getQuantiteTotale();
+				  stockMax = this.quantMQMax;}
+		case HQ:
+			stock = super.stockChocolatHGL.getQuantiteTotale();
+			stockMax = this.quantHQMax;
+		}
+		for (int i = stepdebut;i<stepdebut+duree;i++) {
+			stock = stock+this.getArrivageCCStep(i, ((Feve)contrat.getProduit()));
+			if (stock>stockMax) {cbon=false;dureeMax = i-1-stepdebut;}
+		}
+		if (dureeMax<duree) {
+			if (dureeMax>0) {
+				LinkedList<Double> l = new LinkedList<Double>();
+				for (int i=0;i<dureeMax;i++) {
+					l.add(vendeurecheancier.getQuantite(stepdebut+i));
+				}
+				Echeancier ech = new Echeancier(stepdebut,l);
+			}
+			else {res = null;}}
+		else {res = vendeurecheancier;}
+		
+		
+		return res;
+	}
+	
+	
+	
+	public Echeancier contrePropositionDeLAcheteurV1(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
 		Echeancier vendeurecheancier = contrat.getEcheancier();
 		int stepdebut = vendeurecheancier.getStepDebut();
@@ -111,7 +205,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		int compt = 0; /**si il y a 3 step à la suite sans besoin on reduit le contrat**/
 		int notreduree = 0;
 		for (int i=stepdebut;i<stepdebut+duree && compt<3;i++) {
-			if (super.BesoinStep(i,((Feve)contrat.getProduit()))>0) {compt = 0;notreduree=i;}
+			if (1>0) {compt = 0;notreduree=i;}//a refaire
 			else {compt = compt+1;}			
 		}
 		if (notreduree == 0) {return null;}
@@ -138,7 +232,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	private double BesoinMaxEntre(int d, int f,Feve feve) {
 		double max =0;
 		for (int i= d;i<f;i++) {
-			double besoin = super.BesoinStep(i, feve);
+			double besoin = 100;// a faire
 			if (besoin>max) {max = besoin;}
 		}
 		return max;
@@ -266,6 +360,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 			super.journalAchatCC.ajouter("on essaie de demander un contrat à l'equipe :"+vendeur.getNom());
 			ExemplaireContratCadre contrat = superviseur.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1,Filiere.LA_FILIERE.getEtape()+5,100.0), super.cryptogramme, false);
 			if (contrat != null) {super.journalAchatCC.ajouter("CC cherché et trouvé :"+contrat.toString());
+									this.ListeContratEnCoursAchat.add(contrat);
 									this.quantiteEnAttente=this.quantiteEnAttente+contrat.getQuantiteTotale();
 									super.journalAchatCC.ajouter("nouvelle valeur en attente : "+quantiteEnAttente+" et tot stock : "+super.totalStocksFeves.getValeur());}}}}
 		
