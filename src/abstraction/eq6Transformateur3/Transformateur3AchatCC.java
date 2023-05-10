@@ -26,14 +26,14 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	private Variable prixmaxHG;
 	private double quantiteEnAttente ;
 	//Les var ci dessous indiquent la tranche dans laquelle on veut que les stocks restent
-	private double quantBQMin = 10000.0;
-	private double quantMQMin = 10000.0;
-	private double quantMQLMin = 10000.0;
-	private double quantHQMin = 10000.0;
-	private double quantBQMax = 250000.0;
-	private double quantMQMax = 250000.0;
-	private double quantMQLMax = 250000.0;
-	private double quantHQMax = 250000.0;
+	protected double quantBQMin = 10000.0;
+	protected double quantMQMin = 10000.0;
+	protected double quantMQLMin = 10000.0;
+	protected double quantHQMin = 10000.0;
+	protected double quantBQMax = 250000.0;
+	protected double quantMQMax = 250000.0;
+	protected double quantMQLMax = 250000.0;
+	protected double quantHQMax = 250000.0;
 	protected double prixMoyBQ = 0.0;
 	protected double prixMoyMQ = 0.0;
 	protected double prixMoyMQL = 0.0;
