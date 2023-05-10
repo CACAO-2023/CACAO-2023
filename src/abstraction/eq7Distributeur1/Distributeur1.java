@@ -77,6 +77,8 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	 */
 	public double prix(ChocolatDeMarque choco) {
 		double qualite = choco.qualitePercue();
+		if (qualite <1) {
+			qualite = 1.0; }
 //		double coef = 1-(((10/3)*qualite)/100)+0.1;
 		double promo = prixPromotion(choco);
 		double cout = getCoutTotal(choco);
