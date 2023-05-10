@@ -43,7 +43,6 @@ public class Producteur3Acteur implements IActeur {
 	public Variable StockFeveB;
 	public Variable tailleH;
 	public Variable tailleM;
-
 	public Variable coutMoyen;
 	public Variable coutEmployeStep;
 	public Variable coutSalaireTot;
@@ -77,7 +76,7 @@ public class Producteur3Acteur implements IActeur {
     protected HashMap<IAcheteurContratCadre, Double> acheteursMQprix;
     protected HashMap<IAcheteurContratCadre, Double> acheteursHQprix;
 	
-
+    protected int nbr_popup;
 	protected Champs fields;
 
 	/**
@@ -122,7 +121,7 @@ public class Producteur3Acteur implements IActeur {
 	this.probaIncendiH = new Variable("Equipe3 Proba Incendi H", "Fixe la probabilite qu'un incendie de taille H arrive ",this,0.02);
 	this.probaCyclone = new Variable("Equipe3 Proba Cyclone", "Fixe la probabilite qu'un Cyclone arrive ",this,0);
 	this.probaGreve = new Variable("Equipe3 Proba Greve", "Fixe la probabilite qu'une Greve arrive ",this,0.02);
-	this.pourcentageGrevise = new Variable("Equipe3 Pourcentage Greviste", "Fixe la proportion d'ouvrier en Greve ",this,0.2);
+	this.pourcentageGrevise = new Variable("Equipe3 Pourcentage Perte Greviste", "Fixe la proportion d'ouvrier en Greve ",this,0.2);
 	this.quantiteBruleH = new Variable("Equipe3 Proportion Champs Brules Incendie H", "Fixe le pourcentage d'arbre brules suite a un incendie H ",this,0.5);
 	this.quantiteBruleM = new Variable("Equipe3 Proportion Champs Brules Incendie M", "Fixe le pourcentage d'arbre brules suite a un incendie M ",this,0.2);
 
@@ -219,6 +218,12 @@ public class Producteur3Acteur implements IActeur {
 		return this.journal_achats;
 	}
 	
+	public void setNbrpopup(int i) {
+		this.nbr_popup = i;
+	}
+	public int getNbrpopup() {
+		return this.nbr_popup;
+	}
 	protected Journal getJPlantation() {
 		return this.journal_plantation;
 	}
@@ -319,6 +324,7 @@ public class Producteur3Acteur implements IActeur {
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
 		if (this == acteur) {
+			this.nbr_popup +=1;
 			JFrame popup = new JFrame("L'equipe 3 a fait faillite...Triste");
 			popup.setLocation(300, 100);
 			double proba = Math.random();
