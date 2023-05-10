@@ -72,6 +72,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 			if (f.getGamme()==Gamme.HQ) {
 				res= Math.max(0,super.quantHQMax-super.stockFeveHGL.getQuantiteTotale()-super.quantiteEnAttente-1000);
 			}
+		return res;
 		}
 		}
 	
