@@ -51,16 +51,18 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	@Override
 	/**Nathan Salbego*/
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
-		Echeancier e= contrat.getEcheancier();;
-		double quantite=e.getQuantiteTotale()/e.getNbEcheances();
-		if (vend((IProduit)contrat.getProduit())) {
-			e.ajouter(quantite);
-			e.ajouter(quantite);
-			return e;
+		Echeancier e=contrat.getEcheancier();
+		for (int i=contrat.getEcheancier().getStepDebut();i<contrat.getEcheancier().getStepFin()+1;i++) {
+			if(demandeTotStep(i,contrat.getProduit())<super.capTransMax/4) {
+				return null;
 			}
-		
-		return null;
+			else {
+			if (demandeTotStep(i,contrat.getProduit())+contrat.getEcheancier().getQuantite(i)>super.capTransMax/4) {
+				e.set(i,super.capTransMax/4-demandeTotStep(i,contrat.getProduit()));
+				}}
 	}
+		return e;
+		}
 
 	@Override
 	/**Nathan Salbego*/
@@ -156,6 +158,10 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	@Override
 	/**Nathan Salbego*/
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
+		super.journalVentes.ajouter("Stock HGL="+this.stockChocolatHGL.getQuantiteTotale());
+		super.journalVentes.ajouter("Stock MGL="+this.stockChocolatMGL.getQuantiteTotale());
+		super.journalVentes.ajouter("Stock MG="+this.stockChocolatMG.getQuantiteTotale());
+		super.journalVentes.ajouter("Stock BG="+this.stockChocolatBG.getQuantiteTotale());
 		if (super.getLotChocolat(produit)!=null) {
 		double livre = Math.min(super.getLotChocolat(produit).getQuantiteTotale(), quantite);
 		super.journalVentes.ajouter("On livre : "+livre+"de : "+produit.getType());
@@ -166,6 +172,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); 
 		return lot;}
 		else {
+			super.journalVentes.ajouter("On ne livre pas");
 			Lot l=new Lot(produit);
 			return l; 
 		}
