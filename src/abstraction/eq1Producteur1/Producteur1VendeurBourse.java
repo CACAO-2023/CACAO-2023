@@ -56,14 +56,13 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 	// On vend nos fêves qui vont périmées ainsi que les fêves en surplus (si les coûts de stockage deviennent trop importants --> coûts de stockage >= bénéfices / 2).
 	
 	public double offre(Feve f, double cours) {
-		
 		BourseCacao bourse = (BourseCacao)(Filiere.LA_FILIERE.getActeur("BourseCacao"));
 		int quantite = 1;
 		if (f==Feve.F_BQ) {
 			Double FeveBQPeri = this.feveBQPeri();
 			if ((this.getStockBas().getQuantiteTotale()!=0.0) && 
-			   (bourse.getCours(Feve.F_BQ).getValeur() >= prixMinAvecMarge( f, quantite))) {
-				int pourcentage = (int) (bourse.getCours(Feve.F_BQ).getValeur()/(prixMinAvecMarge( f, quantite)))/100;
+			   (bourse.getCours(f).getValeur() >= prixMinAvecMarge( f, quantite))) {
+				double pourcentage = ((bourse.getCours(f).getValeur()/(prixMinAvecMarge( f, quantite)))/100.0);
 					return (this.getStockBas().getQuantiteTotale()*(pourcentage*10))+FeveBQPeri;
 				
 			}
@@ -73,11 +72,12 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 		if (f==Feve.F_MQ) {
 			Double FeveMQPeri = this.feveMQPeri();
 			if ((this.getStockMoy().getQuantiteTotale()!=0.0 && 
-			   (bourse.getCours(Feve.F_MQ).getValeur() >= prixMinAvecMarge( f, quantite)))) {
-				int pourcentage = (int) (10*(bourse.getCours(Feve.F_BQ).getValeur()/(prixMinAvecMarge( f, quantite))));
+			   (bourse.getCours(f).getValeur() >= prixMinAvecMarge( f, quantite)))) {
+				int pourcentage = (int) (10*(bourse.getCours(f).getValeur()/(prixMinAvecMarge( f, quantite))));
 				
 					return (this.getStockMoy().getQuantiteTotale()*(pourcentage*10))+FeveMQPeri;
 			}
+			
 	
 			return FeveMQPeri;
 		}
