@@ -1,6 +1,7 @@
 package abstraction.eq1Producteur1;
 
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,6 +50,7 @@ public class Producteur1Plantation extends Producteur1Acteur {
 	//on utilise les parametres de l'equipe 3 pour les chances d'apparition comme convenue
 	public void next() {
 		super.next();
+		this.journal_champs.ajouter("===== step : "+step+" =====");
 		champ champm = this.getChampMoy();
 		champ champb = this.getChampBas();
 		this.journal_evenements.ajouter("===== step : "+step+" =====");
@@ -59,11 +61,13 @@ public class Producteur1Plantation extends Producteur1Acteur {
 			b = false;
 			g = true;
 			this.journal_evenements.ajouter(Filiere.LA_FILIERE.getParametre("Equipe3 Pourcentage Greviste").getValeur()*100+"% de notre main d'oeuvre fait grève.");
+			this.journal_champs.ajouter(Color.WHITE, Color.RED,"ATTENTION : une grève a lieu");
+			this.journal_stocks.ajouter(Color.WHITE, Color.RED,"ATTENTION : une grève a lieu");
 		}
 		double incendieL = Math.random();
 		if (incendieL<Filiere.LA_FILIERE.getParametre("Equipe3 Proba Incendi L").getValeur()) { 
 			b = false;
-			this.journal_champs.ajouter("ATTENTION : un incendie a eu lieu");
+			this.journal_champs.ajouter(Color.WHITE, Color.RED,"ATTENTION : un incendie a eu lieu");
 			this.journal_evenements.ajouter("Petit incendie : "+Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie L").getValeur()*100+"% des champs sont détruits");
 			champm.supprimer(champm.getNbHectare()*Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie L").getValeur());
 			champb.supprimer(champb.getNbHectare()*Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie L").getValeur());
@@ -71,14 +75,14 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		double incendieM = Math.random();
 		if (incendieM<Filiere.LA_FILIERE.getParametre("Equipe3 Proba Incendi M").getValeur()) { 
 			b = false;
-			this.journal_champs.ajouter("ATTENTION : un incendie a eu lieu");
+			this.journal_champs.ajouter(Color.WHITE, Color.RED,"ATTENTION : un incendie a eu lieu");
 			this.journal_evenements.ajouter("Moyen incendie :"+Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie M").getValeur()*100+"% des champs sont détruits");
 			champm.supprimer(champm.getNbHectare()*Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie M").getValeur());
 			champb.supprimer(champb.getNbHectare()*Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie M").getValeur());
 		}
 		double incendieH = Math.random();
 		if (incendieH<Filiere.LA_FILIERE.getParametre("Equipe3 Proba Incendi H").getValeur()) { 
-			this.journal_champs.ajouter("ATTENTION : un incendie a eu lieu");
+			this.journal_champs.ajouter(Color.WHITE, Color.RED,"ATTENTION : un incendie a eu lieu");
 			b = false;
 			this.journal_evenements.ajouter("Fort incendie :"+Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie H").getValeur()*100+"% des champs sont détruits");
 			champm.supprimer(champm.getNbHectare()*Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Brules Incendie H").getValeur());
@@ -87,7 +91,7 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		double cyclone = Math.random();
 		if (cyclone<Filiere.LA_FILIERE.getParametre("Equipe3 Proba Cyclone").getValeur()) {
 			b = false;
-			this.journal_champs.ajouter("ATTENTION : un cyclone est passé par nos champs");
+			this.journal_champs.ajouter(Color.WHITE, Color.RED,"ATTENTION : un cyclone est passé par nos champs");
 			double random = ThreadLocalRandom.current().nextDouble(0.0, Filiere.LA_FILIERE.getParametre("Equipe3 Proportion Champs Detruits Cyclone Max").getValeur());
 			this.journal_evenements.ajouter("Cyclone : "+random*100+"% des champs sont détruits");
 			champm.supprimer(champm.getNbHectare()*random);
@@ -100,11 +104,9 @@ public class Producteur1Plantation extends Producteur1Acteur {
 
 	}
 
-
 	public void recolte(boolean greve) {
 		//===== début Elouan =====
 		//cette methode est notre next V1, mais n'est pas toujours appele (en cas de greve par exemple)
-		this.journal_champs.ajouter("===== step : "+step+" =====");
 		this.journal_champs.ajouter("---> Qualite : Moy");
 		Lot lot_moy = this.getStockMoy();
 		Lot lot_moy_sec = this.getVraiStockM();
@@ -214,13 +216,19 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		if (lot_moy_sec!=null) 
 		{q1=lot_moy_sec.getQuantiteTotale();}
 		if (lot_bas_sec!=null) 
-		{q2=lot_moy_sec.getQuantiteTotale();}
+		{q2=lot_bas_sec.getQuantiteTotale();}
 		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), (q1+q2)*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());
 		this.journal_stocks.ajouter("Cout de stockage bas de gamme : "+q2*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());
 		this.journal_stocks.ajouter("Cout de stockage moyenne gamme : "+q1*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());
+		//on replante les champs détruits pour toujours rester au dessus de 250kHa pour notre production de masse
+		if (cm.getNbHectare()<50000) {
+			cm.ajouter(step, 50000-cm.getNbHectare());
+		}
+		if (cb.getNbHectare()<200000) {
+			cb.ajouter(step, 200000-cb.getNbHectare());
+		}
 	}
 //===== fin elouan et gab =====	
-
 
 //====== gab : calcul du coût de revient pour une qtté donnée d'un produit 
 
