@@ -8,12 +8,14 @@ import java.util.Map.Entry;
 
 
 import abstraction.eqXRomu.clients.ClientFinal;
+import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implements IDistributeurChocolatDeMarque {
 	
 	private double capaciteDeVente = Double.MAX_VALUE;
+	private double prixRayon = 1.0;
 	
 
 	
@@ -75,6 +77,9 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 			
 			if (qtVente.containsKey(choco)) {
 				journal_ventes.ajouter("On vend " + qtVente.get(choco) +" "+ choco.getNom());
+				if (qtVente.get(choco) != 0) {
+				Filiere.LA_FILIERE.getBanque().virer(this, crypto, Filiere.LA_FILIERE.getActeur("Banque"), qtVente.get(choco)*prixRayon);
+				}
 				return qtVente.get(choco);
 			} else {
 				return 0;
