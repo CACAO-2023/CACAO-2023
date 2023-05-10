@@ -31,7 +31,6 @@ public class Producteur3 extends Bourse3  {
 	private Integer HectaresLibres; /*Repertorie le nombre d'hectares libres que l'on possede*/
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
 	private LinkedList<Double> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
-	private LinkedList<ExemplaireContratCadre> contractprecedent; /*Cette variable corresponds aux contrats que l'on avait au step précedent
 
 	private Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
 
@@ -172,6 +171,7 @@ public class Producteur3 extends Bourse3  {
 
 				}
 
+
 		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep + ", Hectares Achetés : " + this.HectaresAchetes.getValeur() + ", Coût de la tonne : " + this.CoutTonne);
 
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
@@ -192,11 +192,10 @@ public class Producteur3 extends Bourse3  {
 		this.BeneficeB.setValeur(this, this.getBenefice("B"));
 		this.BeneficeM.setValeur(this, this.getBenefice("M"));
 		this.BeneficeH.setValeur(this, this.getBenefice("H"));
-		this.contractprecedent = this.contracts;
 		this.HectaresAchetes.setValeur(this, 0);
 	}
 	
-
+	
 
 	
 	/**
