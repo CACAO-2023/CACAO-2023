@@ -153,7 +153,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 */
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		Echeancier vendeurecheancier = contrat.getEcheancier();
-		Echeancier res;
+		Echeancier res = null;
 		int stepdebut = vendeurecheancier.getStepDebut();
 		int duree = vendeurecheancier.getNbEcheances();
 		boolean cbon = true;
@@ -187,11 +187,11 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 				}
 				Echeancier ech = new Echeancier(stepdebut,l);
 			}
-			else {Echeancier ech = null;}}
-		else {Echeancier ech = vendeurecheancier;}
+			else {res = null;}}
+		else {res = vendeurecheancier;}
 		
 		
-		return ech;
+		return res;
 	}
 	
 	
