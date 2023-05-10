@@ -9,7 +9,6 @@ public class ControlTimeGif extends TimerTask{
 	
 	public ControlTimeGif(JFrame popup) {
         this.popup = popup;
-        popup.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 	
 	public void run() {
