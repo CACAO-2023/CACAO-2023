@@ -38,8 +38,6 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	protected double prixMoyMQ = 0.0;
 	protected double prixMoyMQL = 0.0;
 	protected double prixMoyHQ = 0.0;
-	protected double[][] prixCC=new double[3][3];
-	
 	
 	
 	public Transformateur3AchatCC () {
@@ -79,6 +77,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	public boolean achete(IProduit produit) {
 		double stock = 0.0;
 		boolean res =false;
+		if (produit.getType() == "Feve") {
 		switch(((Feve)produit).getGamme()) {
 		case BQ:
 			stock = super.stockChocolatBG.getQuantiteTotale();
@@ -93,7 +92,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		case HQ:
 			stock = super.stockChocolatHGL.getQuantiteTotale();
 			if (stock<quantHQMax-500) {res= true;}
-		}
+		}}
 		return res;
 	}
 	
@@ -400,13 +399,17 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		}  
 		
 		this.getListeContratEnCoursA().removeAll(contratsObsoletes);
-		if (super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente<1000) {
+		if (super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente<this.quantBQMax 
+				&& this.prioriteCC) {
 		this.chercheContrat(Feve.F_BQ);}
-		if (super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente<1000) {
+		if (super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente<this.quantMQMax
+				&& this.prioriteCC) {
 		this.chercheContrat(Feve.F_MQ);}
-		if (super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente<1000) {
+		if (super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente<this.quantMQLMax
+				&& this.prioriteCC) {
 		this.chercheContrat(Feve.F_MQ_BE);}
-		if (super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente<1000) {
+		if (super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente<this.quantHQMax
+				&& this.prioriteCC) {
 		this.chercheContrat(Feve.F_HQ_BE);}
 		
 		
