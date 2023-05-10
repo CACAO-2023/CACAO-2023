@@ -191,11 +191,11 @@ public class Champs {
 		LinkedList<Integer> HarvestKeysH = Keys.get("H");
 		int quantiteH=0;
 		Set<Integer> s1= (FieldM.keySet());
-		LinkedList<Integer> allKeyM = new LinkedList<>(s1);
+		LinkedList<Integer> allKeyM = new LinkedList<Integer>(s1);
 		Set<Integer> s2= (FieldH.keySet());
-		LinkedList<Integer> allKeyH = new LinkedList<>(s2);
+		LinkedList<Integer> allKeyH = new LinkedList<Integer>(s2);
 		int quantitePerdu = 0;
-		while (quantitePerdu < NbrGreviste && HarvestKeysM.size()!=0 ) {
+		while (quantitePerdu < NbrGreviste ||( HarvestKeysM.size() != 0 && HarvestKeysH.size() !=0  )) {
 			//On regarde si les grevistes travaillaient sur les champs H ou M
 			double MouH = Math.random() ;
 			if(MouH <= 0.5) {
@@ -234,12 +234,6 @@ public class Champs {
 			LinkedList<Integer> l = new LinkedList();
 			l.add(quantiteH);
 			l.add(quantiteM);
-			if(l.get(0) < 0 || l.get(1) < 0 ) {
-				LinkedList<Integer> f = new LinkedList<Integer>();
-				f.add(0);
-				f.add(0);
-				return f;
-			}
 			return l;
 
 		

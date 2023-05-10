@@ -152,7 +152,7 @@ public class Stock {
 			Collections.reverse(keyList);
 			double reste = quantite;
 			for (Integer i : keyList) {
-				if (reste>0) {
+				if (reste > 0.0) {
 					if (this.getStock().get(f).getQuantites().get(i)>=reste) {
 						res.ajouter(i,reste);
 						this.getStock().get(f).getQuantites().put(i,this.getStock().get(f).getQuantites().get(i)-reste);
