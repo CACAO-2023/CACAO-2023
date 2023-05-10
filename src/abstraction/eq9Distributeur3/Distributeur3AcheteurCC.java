@@ -77,73 +77,83 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 							contratAvecChocolat.add(contratEnCours.get(k));
 						}
 					}
-				for (int k = 0;k<contratEnCours.size();k++) {
-					if (chocolats.get(i).equals((ChocolatDeMarque)((contratEnCours.get(k).getProduit())))) {
-						contratAvecChocolat.add(contratEnCours.get(k));
-					}//ajoute les contrats avec le chocolat qui nous interesse 
+					for (int k = 0;k<contratEnCours.size();k++) {
+						if (chocolats.get(i).equals((ChocolatDeMarque)((contratEnCours.get(k).getProduit())))) {
+							contratAvecChocolat.add(contratEnCours.get(k));
+						}//ajoute les contrats avec le chocolat qui nous interesse 
 
-				}
-				if (vendeursChocolat.size()>0  ) {
-					pasAchete=true;
-
-					if (contratAvecChocolat.size()==0) {
-						for (int j=0; j< vendeursChocolat.size()&&pasAchete;j++) {
-
-							
-							//Echeancier echeancier = new Echeancier (contratEnCours.get(i).getEcheancier().getStepFin(),24, 25000.0);
-							ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier , this.cryptogramme, initialise);
-							if (cc!= null) {
-							pasAchete = false;
-							journal_achats.ajouter("1CC "+cc.getNumero()+" achat du chocolat" + chocolats.get(i)+"au prix à la tonne de" + prix);
-						}
 					}
+					if (vendeursChocolat.size()>1  ) {
+						pasAchete=true;
 
-					for (int k = 0;k<contratAvecChocolat.size();k++) {
-						for (int j=0; j< vendeursChocolat.size()&&pasAchete;j++) {
+						if (contratAvecChocolat.size()==0) {
+							for (int j=0; j< vendeursChocolat.size()&&pasAchete;j++) {
 
 
-							//Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(),24, 25000.0);
-
-							
-							List<Double> qteVoulue = new LinkedList<Double>();
-							for (int f = 0; f<24; f++) {
-								qteVoulue.add(f, 25000.0);
-								//on regarde si l'on se trouve dans les périodes de fortes ventes 
-								if ((contratAvecChocolat.get(k).getEcheancier().getStepFin()+f)%24==3 || (contratAvecChocolat.get(k).getEcheancier().getStepFin()+f)%24==6 || (contratAvecChocolat.get(k).getEcheancier().getStepFin()+f)%24==23) {
-									qteVoulue.add(f, 35000.0);
+								//Echeancier echeancier = new Echeancier (contratEnCours.get(i).getEcheancier().getStepFin(),24, 25000.0);
+								ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier , this.cryptogramme, initialise);
+								if (cc!= null) {
+									pasAchete = false;
+									journal_achats.ajouter("1CC "+cc.getNumero()+" achat du chocolat" + chocolats.get(i)+"au prix à la tonne de" + prix);
 								}
 							}
-							
-							
-							Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(), qteVoulue);
-							ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier2 , this.cryptogramme, initialise);
-							if (cc!=null) 
-							{ 
-								pasAchete = false; journal_ventes.ajouter("2achat du chocolat" + chocolats.get(i)+"au prix à la tonne de" + prix);
-								adapter_prix_vente(cc);
-							}
-							}
-						
-					}
-					if (prixEnCours.keySet().size()!=0) {
-						double pm = 100000000000000000000.0;
-						IVendeurContratCadre vmin=null;
-						
-						for (IVendeurContratCadre v : prixEnCours.keySet()) {
-							if (prixEnCours.get(v)<pm){
-								pm = prixEnCours.get(v);
-								vmin = v ; 
-							}
-							if(vmin !=null) {
-								//Comment garder l'echeancier ???? -> tjrs le même à la fin 
-								ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vmin, chocolats.get(i), echeancier , this.cryptogramme, initialise);
+
+							for (int k = 0;k<contratAvecChocolat.size();k++) {
+								for (int j=0; j< vendeursChocolat.size()&&pasAchete;j++) {
+
+
+									//Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(),24, 25000.0);
+
+
+									List<Double> qteVoulue = new LinkedList<Double>();
+									for (int f = 0; f<24; f++) {
+										qteVoulue.add(f, 25000.0);
+										//on regarde si l'on se trouve dans les périodes de fortes ventes 
+										if ((contratAvecChocolat.get(k).getEcheancier().getStepFin()+f)%24==3 || (contratAvecChocolat.get(k).getEcheancier().getStepFin()+f)%24==6 || (contratAvecChocolat.get(k).getEcheancier().getStepFin()+f)%24==23) {
+											qteVoulue.add(f, 35000.0);
+										}
+									}
+
+
+									Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(), qteVoulue);
+									ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier2 , this.cryptogramme, initialise);
+									if (cc!=null) 
+									{ 
+										pasAchete = false; journal_ventes.ajouter("2achat du chocolat" + chocolats.get(i)+"au prix à la tonne de" + prix);
+										adapter_prix_vente(cc);
+									}
+								}
 
 							}
-							
+							if (prixEnCours.keySet().size()!=0) {
+								double pm = 100000000000000000000.0;
+								IVendeurContratCadre vmin=null;
+
+								for (IVendeurContratCadre v : prixEnCours.keySet()) {
+									if (prixEnCours.get(v)<pm){
+										pm = prixEnCours.get(v);
+										vmin = v ; 
+									}
+									if(vmin !=null) {
+										//Comment garder l'echeancier ???? -> tjrs le même à la fin 
+										ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vmin, chocolats.get(i), echeancier , this.cryptogramme, initialise);
+
+									}
+
+								}
+							}
 						}
 					}
+					else if (vendeursChocolat.size()==1  ){
+						pasAchete=false;
+						ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(0), chocolats.get(i), echeancier , this.cryptogramme, initialise);
+						journal_achats.ajouter("1CC "+cc.getNumero()+" achat du chocolat" + chocolats.get(i)+"au prix à la tonne de" + prix);
+
 					}
-			}}}}}
+				}
+			}
+		}
+	}
 
 
 
@@ -171,7 +181,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		return 0;
 	}
 
-//Mathilde
+	//Mathilde
 	// Dans cette contreproposition j'essaye de renvoyer un échéancier sur 12 mois avec au total un peu plus de 25000 
 	// tablettes de chocolats achetées. Je chercher à savoir à chaque fois si ma quantité de chocolat est assez grande 
 	// à chaque step (25000/24 environ = 1050)(dernier if) 
@@ -184,25 +194,25 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 			//ChocolatDeMarque chocolat = (ChocolatDeMarque)contrat.getProduit();
 			//double qte = this.stock.getStock(chocolat);
 			//double qteProp = e.getQuantiteTotale();
-			
-				double qtechocstep = 0.0;
-				for(int j=0; j< e.getNbEcheances(); j++){
+
+			double qtechocstep = 0.0;
+			for(int j=0; j< e.getNbEcheances(); j++){
 				for(int i =0; i<contratEnCours.size();i++) {
-					
+
 					qtechocstep = qtechocstep +  contratEnCours.get(i).getEcheancier().getQuantite(j);}
-					
+
 				if ((qtechocstep + e.getQuantite(j)) < 25000.0) {
 					if ((e.getStepDebut()+j)%24 ==3 || (e.getStepDebut()+j)%24 == 6 || (e.getStepDebut()+j)%24 == 23) {
 						e.set(e.getStepDebut()+j, 35000.0-(qtechocstep+e.getQuantite(j)));
 					}
 					else {	e.set(e.getStepDebut()+j, 25000.0-(qtechocstep+e.getQuantite(j)));}
 				}
-				
-			
-		}
-			return e;
+
+
 			}
-		
+			return e;
+		}
+
 		return null; 
 	}
 
@@ -249,90 +259,90 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 				return 0.0;
 			}
 		}
-		
+
 	}
 
 
-@Override
-public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
-	IProduit nt;
-	this.journal_achats = new Journal("8On receptionne du chocolat : " + contrat.getProduit() + " en quantite : " + lot.getQuantiteTotale(), this);
-	stock.ajoutQte(((ChocolatDeMarque)(contrat.getProduit())), lot.getQuantiteTotale());
-}
-
-@Override
-public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-	// TODO Auto-generated method stub
-	this.journal_achats.ajouter("9cc accepte Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "je viens de passer le contrat "+contrat + "et j'ai achete le chocolat " + contrat.getProduit());
-	this.contratEnCours.add(contrat);
-
-	notificationOperationBancaire(-1*contrat.getPrix()*contrat.getQuantiteTotale());
-
-	// william 
-	adapter_prix_vente(contrat);
-
-}
-
-//william 
-public void adapter_prix_vente(ExemplaireContratCadre contrat) {
-	prix = contrat.getPrix() /*/contrat.getQuantiteTotale() deja à la tonne */;
-	journal_ventes.ajouter("10achat du chocolat" + contrat.getProduit()+"au prix à la tonne de" + prix);
-	ChocolatDeMarque choco = (ChocolatDeMarque)contrat.getProduit();
-
-	// on calcule le prix de vente du chocolat dus contract en fonction de la gamme
-	double prix_tonne_de_vente_contrat = 0.0;
-
-	// marge de 80% sur HQ_BE
-	if(choco.getGamme() == Gamme.HQ)  {
-		prix_tonne_de_vente_contrat = prix*5;
-	}
-	// marge de 67% sur MQ_BE
-	if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.MQ && ((ChocolatDeMarque)contrat.getProduit()).isBioEquitable()){
-		prix_tonne_de_vente_contrat = prix*3;
-	}
-	// marge de 50% sur MQ
-	if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.MQ  && !((ChocolatDeMarque)contrat.getProduit()).isBioEquitable()) {
-		prix_tonne_de_vente_contrat = prix*2;
+	@Override
+	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
+		IProduit nt;
+		this.journal_achats = new Journal("8On receptionne du chocolat : " + contrat.getProduit() + " en quantite : " + lot.getQuantiteTotale(), this);
+		stock.ajoutQte(((ChocolatDeMarque)(contrat.getProduit())), lot.getQuantiteTotale());
 	}
 
-	double prix_tonne_de_vente_apres_achat = 0.0;
+	@Override
+	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
+		// TODO Auto-generated method stub
+		this.journal_achats.ajouter("9cc accepte Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "je viens de passer le contrat "+contrat + "et j'ai achete le chocolat " + contrat.getProduit());
+		this.contratEnCours.add(contrat);
 
-	// si il existe deja un stock de ce chocolat, on fait la moyenne des prix pondérés par la quantite acheté et la quantite deja stockee
-	// si il y a du stock
-	if(stock.getStock(choco) != 0) {
-		double qtte_actuelle = stock.getStock(choco);
-		double qtte_apres_achat = qtte_actuelle + contrat.getQuantiteTotale();
-		// proportion de nouveau chocolat
-		double proportion_contrat = contrat.getQuantiteTotale()/qtte_apres_achat;
-		// ponderation
-		prix_tonne_de_vente_apres_achat = prix_tonne_de_vente_contrat*proportion_contrat +prix_tonne_vente.get(choco)*(1-proportion_contrat) ;
+		notificationOperationBancaire(-1*contrat.getPrix()*contrat.getQuantiteTotale());
+
+		// william 
+		adapter_prix_vente(contrat);
+
 	}
-	// si il n'y a pas de stock
-	else {
-		prix_tonne_de_vente_apres_achat = prix_tonne_de_vente_contrat;
-	}
-	this.journal_prix_vente.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " +"ancien prix tonne de " + contrat.getProduit()+" est de " + prix_tonne_vente.get(choco) + "€");
-	this.journal_prix_vente.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " +"nouveau prix tonne de " + contrat.getProduit()+" est de " + prix_tonne_de_vente_apres_achat + "€");
 
-	this.prix_tonne_vente.put((ChocolatDeMarque)contrat.getProduit(), prix_tonne_de_vente_apres_achat);
-}
+	//william 
+	public void adapter_prix_vente(ExemplaireContratCadre contrat) {
+		prix = contrat.getPrix() /*/contrat.getQuantiteTotale() deja à la tonne */;
+		journal_ventes.ajouter("10achat du chocolat" + contrat.getProduit()+"au prix à la tonne de" + prix);
+		ChocolatDeMarque choco = (ChocolatDeMarque)contrat.getProduit();
 
+		// on calcule le prix de vente du chocolat dus contract en fonction de la gamme
+		double prix_tonne_de_vente_contrat = 0.0;
 
-
-
-
-
-// mettre à jour dans notification et next
-public void prixMoyen (ChocolatDeMarque choc) {
-	double prixMoy = 0.0;
-	for (Entry<ChocolatDeMarque, Double[]> chocolat : prixMoyen.entrySet()) {
-		if (chocolat.equals(choc) && achete(choc)) {
-			prixMoyen.replace(choc, prixMoyen.get(choc), prixMoyen.get(choc) );
-			// sur la quantité
+		// marge de 80% sur HQ_BE
+		if(choco.getGamme() == Gamme.HQ)  {
+			prix_tonne_de_vente_contrat = prix*5;
 		}
+		// marge de 67% sur MQ_BE
+		if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.MQ && ((ChocolatDeMarque)contrat.getProduit()).isBioEquitable()){
+			prix_tonne_de_vente_contrat = prix*3;
+		}
+		// marge de 50% sur MQ
+		if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.MQ  && !((ChocolatDeMarque)contrat.getProduit()).isBioEquitable()) {
+			prix_tonne_de_vente_contrat = prix*2;
+		}
+
+		double prix_tonne_de_vente_apres_achat = 0.0;
+
+		// si il existe deja un stock de ce chocolat, on fait la moyenne des prix pondérés par la quantite acheté et la quantite deja stockee
+		// si il y a du stock
+		if(stock.getStock(choco) != 0) {
+			double qtte_actuelle = stock.getStock(choco);
+			double qtte_apres_achat = qtte_actuelle + contrat.getQuantiteTotale();
+			// proportion de nouveau chocolat
+			double proportion_contrat = contrat.getQuantiteTotale()/qtte_apres_achat;
+			// ponderation
+			prix_tonne_de_vente_apres_achat = prix_tonne_de_vente_contrat*proportion_contrat +prix_tonne_vente.get(choco)*(1-proportion_contrat) ;
+		}
+		// si il n'y a pas de stock
+		else {
+			prix_tonne_de_vente_apres_achat = prix_tonne_de_vente_contrat;
+		}
+		this.journal_prix_vente.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " +"ancien prix tonne de " + contrat.getProduit()+" est de " + prix_tonne_vente.get(choco) + "€");
+		this.journal_prix_vente.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " +"nouveau prix tonne de " + contrat.getProduit()+" est de " + prix_tonne_de_vente_apres_achat + "€");
+
+		this.prix_tonne_vente.put((ChocolatDeMarque)contrat.getProduit(), prix_tonne_de_vente_apres_achat);
 	}
 
-}
+
+
+
+
+
+	// mettre à jour dans notification et next
+	public void prixMoyen (ChocolatDeMarque choc) {
+		double prixMoy = 0.0;
+		for (Entry<ChocolatDeMarque, Double[]> chocolat : prixMoyen.entrySet()) {
+			if (chocolat.equals(choc) && achete(choc)) {
+				prixMoyen.replace(choc, prixMoyen.get(choc), prixMoyen.get(choc) );
+				// sur la quantité
+			}
+		}
+
+	}
 
 
 }
