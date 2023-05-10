@@ -41,7 +41,8 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 
 	public double demande(Feve f, double cours) {
 		super.journalAchatB.ajouter("on nous demande si on veut des"+f.getType()+"avec le cours : "+cours);
-		double res = 106.0;
+		double res = 0;
+		if (privilegieCC(f,cours)) {
 		if (f.getGamme()==Gamme.BQ) {if(cours<=this.getCoursmaxBG().getValeur()) {
 													res =(100);}
 		}
@@ -58,6 +59,22 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 
 		super.journalAchatB.ajouter("on dit qu'on en veut :"+res);
 		return res;}
+		else {
+			if (f.getGamme()==Gamme.BQ) {
+				res= Math.max(0,super.quantBQMax-super.stockFeveBG.getQuantiteTotale()-super.quantiteEnAttente-1000);
+			}
+			if (f.getGamme()==Gamme.MQ) {
+				res= Math.max(0,super.quantMQMax-super.stockFeveMG.getQuantiteTotale()-super.quantiteEnAttente-1000);
+			}
+			if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {
+				res= Math.max(0,super.quantMQLMax-super.stockFeveMGL.getQuantiteTotale()-super.quantiteEnAttente-1000);
+			}
+			if (f.getGamme()==Gamme.HQ) {
+				res= Math.max(0,super.quantHQMax-super.stockFeveHGL.getQuantiteTotale()-super.quantiteEnAttente-1000);
+			}
+		}
+		}
+	
 	
 
 
