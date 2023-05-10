@@ -2,6 +2,7 @@ package abstraction.eq3Producteur3;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Set;
 
 import abstraction.eqXRomu.filiere.Filiere;
@@ -42,6 +43,17 @@ public class Champs {
 	
 	public void setChampH(HashMap<Integer,Integer> f) {
 		this.Champs.put("H", f);
+	}
+	
+	/**
+	 * @author BOCQUET Gabriel
+	 * Cette fonction nous donne le taux de recolte en fonction de l'age des arbres. Les valeurs ont été trouvé par Florian de l'equipe 2
+	 */
+	public double gaussienne(double x) {
+		Random r = new Random();
+		double sigma = Filiere.LA_FILIERE.getParametre("Ecart-type gaussienne pour production").getValeur();
+		double esperance = Filiere.LA_FILIERE.getParametre("Esperance gaussienne pour production").getValeur();
+		return (600/(Math.sqrt(2*Math.PI)*sigma))*Math.exp(-(x-esperance)*(x-esperance)/(2*sigma*sigma));
 	}
 	/**
 	 * @author BOCQUET Gabriel
@@ -106,33 +118,9 @@ public class Champs {
 		LinkedList<Integer> HarvestKeys = Keys.get(s);
 		int quantite=0;
 		//Ce taux permet de prendre en compte l'aspect aleatoire d'une recolte
-		double HarvestRate = (Math.random() * (1.1- 0.9)) + 0.9;
 		for (Integer key : HarvestKeys) {
-			//Le champ a entre 0 et 3 ans
-			if ((CurrentStep-key) <72 && (CurrentStep-key)>=0) {
-				quantite += 0; //Champ pas assez vieux
-			}
-			//Le champ a entre 3 et 7 ans
-			else if((CurrentStep-key) <168 && (CurrentStep-key)>=72) {
-				
-				quantite += Field.get(key)*0.56*0.5*HarvestRate; //Champ jeune
-				
-			}
-			//Le champ a entre 7 et 35 ans
-			else if((CurrentStep-key) <840 && (CurrentStep-key)>=168) {
-				
-				quantite += Field.get(key)*0.56*HarvestRate; //Champ convenable
-				
-			}
-			//Le champ a entre 35 et 40 ans
-			else if((CurrentStep-key) <840 && (CurrentStep-key)>=960) {
-				
-				quantite += Field.get(key)*0.56*0.5*HarvestRate; //Champ vieux
-			}
-			//L'arbre est trop vieux
-			else {
-				quantite +=0;
-			}
+			double HarvestRate = this.gaussienne(CurrentStep-key);
+			quantite +=Field.get(key)*HarvestRate;
 		}
 			
 			l.add(quantite);
@@ -140,8 +128,10 @@ public class Champs {
 			return l;
 
 	}
-	
-	
+	
+
+	
+
 	/**
 	 * @author BOCQUET Gabriel
 	 */	

@@ -149,12 +149,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		IProduit produit= lot.getProduit();
 		double quantite = lot.getQuantiteTotale();
 		if (produit instanceof Feve) {
-			if (this.stockFeves.keySet().contains(produit)) {
-				this.stockFeves.put((Feve)produit, this.stockFeves.get(produit)+quantite);
-			} else {
-				this.stockFeves.put((Feve)produit, quantite);
-			}
-			this.totalStocksFeves.ajouter(this, quantite, this.cryptogramme);
+			this.ajouter(produit, quantite);
 			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de feves "+produit+". Stock->  "+this.stockFeves.get(produit));
 		} else {
 			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception d'un produit de type surprenant... "+produit);
@@ -167,27 +162,48 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 	}
 
 	// François et Fouad
-	
+
 	 public void next() {
 			super.next();
-			List<IProduit> produits = new LinkedList<IProduit>();
+			int ventetotH = 0;
+			int ventetotB = 0;
+			for (abstraction.eqXRomu.produits.ChocolatDeMarque c : Filiere.LA_FILIERE.getChocolatsProduits()) {
+				if (c.getGamme().equals(Gamme.HQ)){
+					ventetotH += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
+				}
+				if (c.getGamme().equals(Gamme.BQ)){
+					ventetotB += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
+				} 
+			}
+			List<Feve> produits = new LinkedList<Feve>();
 			Feve fb = Feve.F_BQ;	
 			produits.add(fb);
 			Feve fh = Feve.F_HQ_BE;	
 			produits.add(fh);
-			for (IProduit cm : produits ) {
+			for (Feve cm : produits ) {
 				List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(cm);
 				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLACK, " CCV : tentative d'achat de "+cm+" aupres de "+vendeurs);
 				for (IVendeurContratCadre vendeur : vendeurs) {
 					if (!vendeur.equals(this)) {
-						Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, 500/2);
-						this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
-						ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancier, this.cryptogramme, false);
-						if (contrat1!=null) {
-							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : contrat signe = "+contrat1);
+						if (cm.getGamme().equals(Gamme.BQ)){
+							Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotB/2);
+							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
+							ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancier, this.cryptogramme, false);
+							if (contrat1!=null) {
+								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : contrat signe = "+contrat1);
+						}
+						if (cm.getGamme().equals(Gamme.BQ)){
+							Echeancier echeancierB = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotB/2);
+							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
+							ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancierB, this.cryptogramme, false);
+							if (contrat2!=null) {
+								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : contrat signe = "+contrat2);
+						}
+
 						}
 					}
 			}
 		}
 		}
+	 }
 }

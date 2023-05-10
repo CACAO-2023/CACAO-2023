@@ -11,6 +11,7 @@ import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.IProduit;
 
 public class Stock extends Transformateur1Acteur{
 	protected HashMap<Feve, Double> stockFeves;
@@ -44,6 +45,39 @@ public class Stock extends Transformateur1Acteur{
 					this.totalStocksChocoMarque.ajouter(this, 1000.0, this.cryptogramme);
 					this.journal.ajouter("ajout de 1000 de "+c+" au stock de chocolat de marque "+c.getMarque() +" +--> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
 			}
+		}
+	}
+	
+	public void ajouter(IProduit produit, double quantite) {
+		if (produit.getType().equals("Feve")) {
+			if (this.stockFeves.keySet().contains(produit)) {
+				this.stockFeves.put((Feve)produit,this.stockFeves.get((Feve)produit)+quantite);
+				}
+			else {
+				this.stockFeves.put((Feve)produit,quantite);
+				
+			}
+			this.totalStocksFeves.ajouter(this,quantite,this.cryptogramme);
+			}
+		else if(produit.getType().equals("ChocoDeMarque")) {
+			if (this.stockChocoMarque.keySet().contains(produit)) {
+				this.stockChocoMarque.put((ChocolatDeMarque)produit,this.stockChocoMarque.get((ChocolatDeMarque)produit)+quantite);
+				}
+			else {
+				this.stockChocoMarque.put((ChocolatDeMarque)produit,quantite);
+			}
+			this.totalStocksChocoMarque.ajouter(this,quantite,this.cryptogramme);
+		}
+	}
+	
+	public void retirer(IProduit produit, double quantite) {
+		if (produit.getType().equals("Feve") && this.stockFeves.keySet().contains(produit)) {
+			this.stockFeves.put((Feve)produit,this.stockFeves.get((Feve)produit)-quantite);
+			this.totalStocksFeves.setValeur(this,this.totalStocksFeves.getValeur()-quantite,this.cryptogramme);
+			}
+		else if(produit.getType().equals("ChocoDeMarque") && this.stockChocoMarque.keySet().contains(produit)) {
+			this.stockChocoMarque.put((ChocolatDeMarque)produit,this.stockChocoMarque.get((ChocolatDeMarque)produit)-quantite);
+			this.totalStocksChocoMarque.setValeur(this,this.totalStocksFeves.getValeur()-quantite,this.cryptogramme);
 		}
 	}
 	

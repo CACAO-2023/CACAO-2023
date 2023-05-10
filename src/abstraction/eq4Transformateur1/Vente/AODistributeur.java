@@ -43,8 +43,7 @@ public class AODistributeur extends CC_distributeur implements IVendeurAO {
 			if (this.stockChocoMarque.get(c)>2000) {
 				PropositionAchatAO retenue = superviseur.vendreParAO(this, cryptogramme, c, 2000.0, false);
 				if (retenue!=null) {
-					this.totalStocksChocoMarque.ajouter(this,-retenue.getOffre().getQuantiteT() ,this.cryptogramme);
-					this.stockChocoMarque.put(c, this.stockChocoMarque.get(c)-retenue.getOffre().getQuantiteT());
+					this.retirer(c, retenue.getOffre().getQuantiteT());
 					journal.ajouter("vente de "+retenue.getOffre().getQuantiteT()+" T a "+retenue.getAcheteur().getNom());
 				} else {
 					journal.ajouter("pas d'offre retenue");

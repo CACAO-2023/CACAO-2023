@@ -45,7 +45,7 @@ public class Transformateur1 extends VendeurOA implements IFabricantChocolatDeMa
 	
 	public void next() {
 		super.next();
-		double coutStock = 4*Filiere.LA_FILIERE.getParametre("cout moyen stockage").getValeur()*(this.totalStocksChocoMarque.getValeur()+this.totalStocksFeves.getValeur());
+		double coutStock = 4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*(this.totalStocksChocoMarque.getValeur()+this.totalStocksFeves.getValeur());
 		double coutMainDOeuvre = 5*this.qteTransfo;
 		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), coutStock+coutMainDOeuvre);
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LGREEN,"Le coût de stockage à ce step s'élève à : "+coutStock+" et le coût de la main d'oeuvre  à : "+coutMainDOeuvre);
