@@ -43,18 +43,33 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		super.journalAchatB.ajouter("on nous demande si on veut des"+f.getType()+"avec le cours : "+cours);
 		double res = 106.0;
 		if (f.getGamme()==Gamme.BQ) {if(cours<=this.getCoursmaxBG().getValeur()) {
-													res =(max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1.0));}
+													res =(100);}
 		}
 		else {res = 100.0;}
 		if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxMGL().getValeur()) {
+<<<<<<< HEAD
 			res = (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1));}}
 		else {res = 100.0;}
+=======
+			res = 100;}}
+		else {res = 0.0;}
+>>>>>>> branch 'main' of https://github.com/NathanSlbg/NathanSlbg
 		if (f.getGamme()==Gamme.MQ) {if(cours<=this.getCoursmaxMG().getValeur()) {
+<<<<<<< HEAD
 			res = (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1));}}
 		else {res = 100.0;}
+=======
+			res = (100);}}
+		else {res = 0.0;}
+>>>>>>> branch 'main' of https://github.com/NathanSlbg/NathanSlbg
 		if (f.getGamme()==Gamme.BQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
+<<<<<<< HEAD
 			res = (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1));}}
 		else {res =100.0;}
+=======
+			res = (100);}}
+		else {res =0.0;}
+>>>>>>> branch 'main' of https://github.com/NathanSlbg/NathanSlbg
 		super.journalAchatB.ajouter("on dit qu'on en veut :"+res);
 		return res;}
 	
