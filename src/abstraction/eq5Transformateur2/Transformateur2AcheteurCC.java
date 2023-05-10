@@ -46,7 +46,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	@Override
 	public boolean achete(IProduit produit) {
 		// TODO Auto-generated method stub
-		if (((produit.getType().equals("Feve")))&&((((Feve)produit).getGamme()== Gamme.MQ) ||((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable())))){
+		if (((produit.getType().equals("Feve")))&&(((((Feve)produit).getGamme()== Gamme.MQ)&&!(((Feve)produit).isBioEquitable())))||((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable()))){
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme vouloir acheter le produit "+produit);
 			return true;} //on achète seulement les fèves haute gamme bio équitable et les fèves moyenne gamme
 		else {
