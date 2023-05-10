@@ -235,9 +235,8 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		enleve_contrats_obsolete();
 
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-//			for (Integer d : durees_CC) {
-			int d =24;
-
+			for (Integer d : durees_CC) {
+				
 			if(besoin_de_CC ( d,marque)) {	//On va regarder si on a besoin d'un nouveau contrat cadre pour chaque marque
 							
 //				Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, d, quantite_besoin_cc(d, marque)/d);
@@ -252,7 +251,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 
 				}
 				}
-			};  		
+			}}  		
 		}
 		
 	
@@ -370,7 +369,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		if (nombre_achats.get((ChocolatDeMarque)(contrat.getProduit()))!=0) {
 			prix+=" ce qui equivaut à "+ Math.floor( contrat.getPrix()*100 /cout_marque.get(contrat.getProduit()))+ "% du prix de cout moyen ";
 		}
-		String message="Les negociations avec "+ contrat.getVendeur().getNom()+" ont abouti à un contrat cadre de "+contrat.getProduit().toString()+" à un prix de "+contrat.getPrix()+ prix;
+		String message="contrat signé avec "+ contrat.getVendeur().getNom()+" pour "+contrat.getProduit().toString()+" à un prix de "+contrat.getPrix()+ prix+ " de durée "+contrat.getEcheancier();
 		journal.ajouter(Color.GREEN, Color.BLACK,message);
 		journal_achat.ajouter(Color.GREEN, Color.BLACK,message);
 		journal_achat.ajouter(Color.white,Color.black,"--------------------------------------------------------------------------------");

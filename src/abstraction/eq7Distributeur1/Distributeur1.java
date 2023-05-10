@@ -30,6 +30,8 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		journal.ajouter("============================== étape "+etape+" ==============================");
 		journal_achat.ajouter("============================== étape "+etape+" ==============================");
 		journal_stock.ajouter("============================== étape "+etape+" ==============================");
+		journal_vente.ajouter("============================== étape "+etape+" ==============================");
+
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			Var_Stock_choco.get(marque).setValeur(this, stockChocoMarque.get(marque));
 			Var_Cout_Choco.get(marque).setValeur(this, getCoutTotal(marque));
@@ -174,7 +176,8 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 		stockChocoMarque.put(choco, stockChocoMarque.get(choco)-quantite);
 		totalStocks.setValeur(this, totalStocks.getValeur(cryptogramme)-quantite, cryptogramme);
-		this.journal_vente.ajouter("Eq7 a vendu "+ (int)Math.floor(quantite)+" T de "+choco+ " aux clients finaux pour un total de " + (int)Math.floor(montant)+"e");
+		this.journal_vente.ajouter(COLOR_GREEN, COLOR_BROWN, "ca nous coute "+cout_marque.get(choco));
+		this.journal_vente.ajouter("Eq7 a vendu "+ (int)Math.floor(quantite)+" T de "+choco+ " aux clients finaux pour un prix à la tonne de "+ (int)Math.floor(montant/quantite));
 		//Actualisation des previsions persos
 		actualiser_prevision_perso( choco,   quantite);
 		ventes.ajouter(this, montant);

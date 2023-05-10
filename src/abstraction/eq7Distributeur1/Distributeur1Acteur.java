@@ -103,7 +103,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	    this.journal_stock = new Journal("Journal des Stocks de l'" + this.getNom(),this);
 	    this.journal_vente = new Journal("Journal des ventes de l'" + this.getNom(),this);
 		this.cmSelectionnee = new Variable(getNom()+" chocolat de marque selectionné", "indiquez l'index du chocolat de marque", this, 0.0);
-
+		
 	}
 	
 
