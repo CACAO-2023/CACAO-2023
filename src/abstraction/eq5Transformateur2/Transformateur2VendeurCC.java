@@ -57,13 +57,13 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	public boolean vend(IProduit produit) {
 		if ((stockChocoMarque.containsKey(produit))&&(produit.getType().equals("ChocolatDeMarque"))&&((((ChocolatDeMarque)produit).getGamme()== Gamme.MQ) ||((((ChocolatDeMarque)produit).getGamme()== Gamme.HQ)&&(((ChocolatDeMarque)produit).isBioEquitable())))){
 			if (this.stockChocoMarque.get(produit)>100) { 
-				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous déclarons pouvoir vendre du " + produit.getType() + " " + produit);
+				//this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous déclarons pouvoir vendre du " + produit.getType() + " " + produit);
 				return true;}
 			else {
 				return false;}}
 		else if ((((stockChoco.containsKey(produit))&& (produit.getType().equals("Chocolat"))&&((((Chocolat)produit).getGamme()== Gamme.MQ) ||((((Chocolat)produit).getGamme()== Gamme.HQ)&&(((Chocolat)produit).isBioEquitable())))))){
 			if (this.stockChoco.get(produit)>100) { 
-				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous déclarons pouvoir vendre du " + produit.getType() + " " + produit);
+				//this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous déclarons pouvoir vendre du " + produit.getType() + " " + produit);
 				return true;
 			}
 			else {
