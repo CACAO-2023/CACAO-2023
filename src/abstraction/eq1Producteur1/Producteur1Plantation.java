@@ -222,7 +222,7 @@ public class Producteur1Plantation extends Producteur1Acteur {
 //===== fin elouan et gab =====	
 
 
-//====== gab : calcul du coût de revient pour une qtté donnée d'un produit 
+//====== gab : calcul du coût de revient pour une qtté donnée d'un produit + calcul de la production sur un an
 
 	//méthode qui renvoie le coût de revient d'un stock de fève avant de le vendre
 	//feve chgt qualité?
@@ -301,6 +301,59 @@ public class Producteur1Plantation extends Producteur1Acteur {
 	public double prixMinAvecMarge(IProduit produit, double quantite) {
 		return coutRevientQuantite(produit, quantite)*1.10 ;
 	}
+	
+	HashMap<Integer,Double> produit_bas_annee = new HashMap<Integer,Double>() ;
+	HashMap<Integer,Double> produit_moy_annee = new HashMap<Integer,Double>() ;
+	
+	//méthode qui ajoute la quantité produit au step dans le hashmap de la production annuelle
+	public void ajoutStockProduit(IProduit produit, double quantite) {
+		if (produit==Feve.F_BQ) {
+			//ajout de la quantité ramassée au step présent
+			produit_bas_annee.put(step, quantite); 
+
+			
+		} else {
+			//ajout de la quantité ramassée au step présent
+			produit_moy_annee.put(step, quantite); 		
+		}
+		
+	}
+	
+	//méthode qui enlève la vieille production de la production annuelle
+	public void enleveVieilleProduction() {
+		//on enlève le stock ramassé il y a plus d'un an 
+		produit_bas_annee.remove(step-21) ;
+		produit_moy_annee.remove(step-21) ;
+	}
+	
+	//méthode qui renvoit la quantite produite sur l'année écoulée pour comparer à la demande globale
+	public double quantiteAnneeEcoulee(IProduit produit) {
+		double quantite = 0 ;
+		if (produit==Feve.F_BQ) {
+			for (Integer i : produit_bas_annee.keySet()) {
+				quantite = quantite + produit_bas_annee.get(i) ;
+			}
+		} else {
+			for (Integer i : produit_moy_annee.keySet()) {
+				quantite = quantite + produit_moy_annee.get(i) ;
+			}
+		}
+			
+		return quantite ;
+	}
+	
+	//méthode qui renvoit le production moyenne d'un certain produit par step sur l'année écoulée, pour les prévisions en CC
+	public double productionMoyenneParStep(IProduit produit) {
+		double production = quantiteAnneeEcoulee(produit) ;
+		return production/21 ;
+	}
+	
+	//méthode qui supprime des champs si notre production est très supérieure à la demande globale
+	public void suppressionChamp() {
+		
+	}
+		
+	
 
 
 
