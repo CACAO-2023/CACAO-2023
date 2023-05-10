@@ -52,8 +52,8 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 		journal_OA.ajouter("determination_qte_cible");
 		for(int i =0; i <  this.chocolats.size();i++) {
 
-			if(stock.getStock(this.chocolats.get(i)) < 10000) {
-				double cible = 10000 - stock.getStock(this.chocolats.get(i));
+			if(stock.getStock(this.chocolats.get(i)) < 20000) {
+				double cible = 20000 - stock.getStock(this.chocolats.get(i));
 				qte_cible.put(this.chocolats.get(i), cible);
 				journal_OA.ajouter(this.chocolats.get(i) + " needs an OA of qte : "+ cible);
 			}
@@ -145,7 +145,8 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 						}
 						this.stock.QteStock.put(pRetenue.getChocolatDeMarque(), nouveauStock);
 						this.journal_OA.ajouter("   Achat par offre d'achat de "+pRetenue+" --> quantite en stock = "+nouveauStock);
-						
+						this.journal_achats.ajouter("   Achat par offre d'achat de "+pRetenue+" --> quantite en stock = "+nouveauStock);
+
 						this.journal_OA.ajouter("On adapte le prix de vente en fonction du prix d'achat de cette offre d'achat");
 						this.adapter_prix_vente(pRetenue);
 						
@@ -193,6 +194,8 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 		if(((ChocolatDeMarque)proposition.getChocolatDeMarque()).getGamme() == Gamme.MQ  && !((ChocolatDeMarque)proposition.getChocolatDeMarque()).isBioEquitable()) {
 			prix_tonne_de_vente_contrat = prix*2;
 		}
+		
+		
 
 		double prix_tonne_de_vente_apres_achat = 0.0;
 
