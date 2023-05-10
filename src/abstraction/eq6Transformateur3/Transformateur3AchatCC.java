@@ -359,7 +359,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		if (vendeurs.size()!=0) {
 			for (IVendeurContratCadre vendeur : vendeurs) {
 			super.journalAchatCC.ajouter("on essaie de demander un contrat à l'equipe :"+vendeur.getNom());
-			ExemplaireContratCadre contrat = superviseur.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1,Filiere.LA_FILIERE.getEtape()+5,100.0), super.cryptogramme, false);
+			ExemplaireContratCadre contrat = superviseur.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1,Filiere.LA_FILIERE.getEtape()+9,100.0), super.cryptogramme, false);
 			if (contrat != null) {super.journalAchatCC.ajouter("CC cherché et trouvé :"+contrat.toString());
 									this.ListeContratEnCoursAchat.add(contrat);
 									this.quantiteEnAttente=this.quantiteEnAttente+contrat.getQuantiteTotale();
@@ -398,16 +398,16 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		}  
 		
 		this.getListeContratEnCoursA().removeAll(contratsObsoletes);
-		if (super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente<this.quantBQMax 
+		if (super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantBQMax 
 				&& this.prioriteCC) {
 		this.chercheContrat(Feve.F_BQ);}
-		if (super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente<this.quantMQMax
+		if (super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantMQMax
 				&& this.prioriteCC) {
 		this.chercheContrat(Feve.F_MQ);}
-		if (super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente<this.quantMQLMax
+		if (super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantMQLMax
 				&& this.prioriteCC) {
 		this.chercheContrat(Feve.F_MQ_BE);}
-		if (super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente<this.quantHQMax
+		if (super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantHQMax
 				&& this.prioriteCC) {
 		this.chercheContrat(Feve.F_HQ_BE);}
 	}  
