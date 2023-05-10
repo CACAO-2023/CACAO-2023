@@ -128,8 +128,10 @@ public class Champs {
 			return l;
 
 	}
-	
-	
+	
+
+	
+
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
