@@ -95,7 +95,11 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 		double prix_palier =40000;
 		if(c != null) { 
 		//	prix_palier = prixMax.get(propositions.get(iBest).getChocolatDeMarque());
-			prix_palier = 20000;
+			System.out.print(prixMax);
+			if(prixMax != null) {
+				prix_palier = prixMax.get(c.getChocolat());
+
+			}
 			
 		}
 		journal_OA.ajouter("prix_palier de " +prix_palier );
