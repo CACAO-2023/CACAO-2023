@@ -48,9 +48,9 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 			double prixGamme =0;
 			Gamme g;
 			switch (c.getGamme()) {
-			case HQ : prixGamme=40000;break;
-			case MQ : prixGamme=20000;break;
-			case BQ : prixGamme=10000;break;
+			case HQ : prixGamme=50000;break;
+			case MQ : prixGamme=30000;break;
+			case BQ : prixGamme=15000;break;
 
 			}
 			this.prixMax.put(c, prixGamme+(c.isBioEquitable()? 5000 : 0));
@@ -89,7 +89,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 					if (contratAvecChocolat.size()==0) {
 						for (int j=0; j< vendeursChocolat.size()&&pasAchete;j++) {
 
-							cpt=3;
+							
 							//Echeancier echeancier = new Echeancier (contratEnCours.get(i).getEcheancier().getStepFin(),24, 25000.0);
 							ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier , this.cryptogramme, initialise);
 							if (cc!= null) {
@@ -113,7 +113,8 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 									qteVoulue.add(f, 35000.0);
 								}
 							}
-							cpt=3;
+							
+							
 							Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(), qteVoulue);
 							ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier2 , this.cryptogramme, initialise);
 							if (cc!=null) 
@@ -122,7 +123,22 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 								adapter_prix_vente(cc);
 							}
 							}
-					}}
+						
+					}
+					if (prixEnCours.keySet().size()!=0) {
+						double pm = 0.0;
+						IVendeurContratCadre vmin=null;
+						
+						for (IVendeurContratCadre v : prixEnCours.keySet()) {
+							if (prixEnCours.get(v)<pm){
+								pm = prixEnCours.get(v);
+								vmin = v ; 
+							}
+							//Comment garder l'echeancier ???? -> tjrs le même à la fin 
+							ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vmin, chocolats.get(i), echeancier , this.cryptogramme, initialise);
+						}
+					}
+					}
 			}}}}}
 
 
@@ -215,7 +231,6 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		prix = contrat.getPrix();
 		prixEnCours.put(contrat.getVendeur(), contrat.getPrix());
-		cpt--;
 		if (pasAchete) {
 			return 0.0;
 		}
@@ -248,7 +263,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 				prix=prix*0.8;
 				prec=prix;
 				journal_ventes.ajouter("7nouveau prix tonne de " + contrat.getProduit()+" est de " + prix + "€");
-				return prix;
+				return prix ;
 			}
 			else {
 				return 0.0;
