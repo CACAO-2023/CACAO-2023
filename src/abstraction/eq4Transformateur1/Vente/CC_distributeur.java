@@ -58,7 +58,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 //				Chocolat cb = Chocolat.C_BQ;	
 //				produits.add(cb);
 				for (ChocolatDeMarque c: Filiere.LA_FILIERE.getChocolatsProduits()) {
-					if (c.getMarque().equals("Vccotioi") || c.getMarque().equals("choco")) {
+					if (c.getMarque().equals("Vccotioi") || c.getMarque().equals("Yocttotoa")) {
 						produits.add(c);
 					}
 				}
@@ -129,7 +129,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		Object produit = contrat.getProduit();
 		double qtok=0;
 		if (produit instanceof ChocolatDeMarque) {
-			if ((((ChocolatDeMarque) produit).getMarque().equals("Vccotioi") || ((ChocolatDeMarque) produit).getMarque().equals("choco")) && this.stockChocoMarque.keySet().contains(produit)) {
+			if ((((ChocolatDeMarque) produit).getMarque().equals("Vccotioi") || ((ChocolatDeMarque) produit).getMarque().equals("Yocttotoa")) && this.stockChocoMarque.keySet().contains(produit)) {
 				qtok= this.stockChocoMarque.get(produit);
 				if (qtok>200) {
 					

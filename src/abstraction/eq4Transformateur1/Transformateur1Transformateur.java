@@ -58,7 +58,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		if (transfo>0) {
 			this.retirer(fb,transfo);
 			int pourcentageCacao =  42;
-			ChocolatDeMarque cm= new ChocolatDeMarque(cb, "choco", pourcentageCacao, 0);
+			ChocolatDeMarque cm= new ChocolatDeMarque(cb, "Yocttotoa", pourcentageCacao, 0);
 			this.ajouter(cm, transfo*conversionb);
 			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfo)+" T de "+fb+" en "+transfo*conversionb+" T de "+cb);
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fb+")->"+this.stockFeves.get(fb));
