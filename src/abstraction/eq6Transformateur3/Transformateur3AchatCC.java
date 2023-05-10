@@ -77,6 +77,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	public boolean achete(IProduit produit) {
 		double stock = 0.0;
 		boolean res =false;
+		if (produit.getType() == "Feve") {
 		switch(((Feve)produit).getGamme()) {
 		case BQ:
 			stock = super.stockChocolatBG.getQuantiteTotale();
@@ -91,7 +92,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		case HQ:
 			stock = super.stockChocolatHGL.getQuantiteTotale();
 			if (stock<quantHQMax-500) {res= true;}
-		}
+		}}
 		return res;
 	}
 	
