@@ -84,8 +84,8 @@ public class Producteur3 extends Bourse3  {
 		Stock Stock = this.getStock();
 		this.CoutTonne = CoutTotal / Math.max(Stock.getQuantite(), 1);
 		
-		if (this.CoutTonne > 6000) {
-			this.CoutTonne = 6000.;
+		if (this.CoutTonne > 10000) {
+			this.CoutTonne = 10000.;
 		}
 	}
 	
@@ -172,7 +172,6 @@ public class Producteur3 extends Bourse3  {
 
 				}
 
-		*/
 		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep + ", Hectares Achetés : " + this.HectaresAchetes.getValeur() + ", Coût de la tonne : " + this.CoutTonne);
 
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
