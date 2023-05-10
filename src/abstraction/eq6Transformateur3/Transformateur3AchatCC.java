@@ -421,6 +421,8 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	}  
 	public void actualisePrixMoyenCC() {
 	}
+	/** ecrit par Nathan Salbego
+	 */	
 	
 	public boolean privilegieCC(Feve f, double coursBourse) {
 		boolean res = false;
