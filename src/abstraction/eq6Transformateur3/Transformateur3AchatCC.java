@@ -452,6 +452,8 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		}
 		return res/n;
 	}
+	/** ecrit par Nathan Salbego
+	 */	
 	
 	public boolean privilegieCC(Feve f, double coursBourse) {
 		boolean res = false;
