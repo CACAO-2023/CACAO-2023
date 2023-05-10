@@ -12,7 +12,6 @@ public class ControlTimeGif extends TimerTask{
 	private Producteur3Acteur producteur3Acteur;
 	public ControlTimeGif(JFrame popup) {
         this.popup = popup;
-        popup.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.producteur3Acteur = ((Producteur3Acteur)Filiere.LA_FILIERE.getActeur("EQ3"));
     }
 	
