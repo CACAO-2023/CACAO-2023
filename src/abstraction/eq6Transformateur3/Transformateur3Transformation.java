@@ -307,21 +307,41 @@ public void initialiser() {
 
 	public void next() {
 		super.next();
-		if (stockFeveBG.getQuantiteTotale()>0) {
-			super.journalTransformation.ajouter("on veut transformer"+stockFeveBG.getQuantiteTotale()+"de Feves BG");
-		this.transformationChoco(Feve.F_BQ, stockFeveBG.getQuantiteTotale());
+		if (stockFeveBG.getQuantiteTotale()>0 && stockFeveBG.getQuantiteTotale()<super.partTransBQ*super.capTransMax) {
+			super.journalTransformation.ajouter("on veut obtenir"+stockFeveBG.getQuantiteTotale()/((double)this.getPourcentageCacaoBG())/100+"de Chocolat BG");
+		this.transformationChoco(Feve.F_BQ, stockFeveBG.getQuantiteTotale()/((double)this.getPourcentageCacaoBG())/100);
+		} else { 
+			if (stockFeveBG.getQuantiteTotale()>=super.partTransBQ*super.capTransMax) {
+				super.journalTransformation.ajouter("on veut obtenir"+super.partTransBQ*super.capTransMax/((double)this.getPourcentageCacaoBG())/100+"de Chocolat BG");
+				this.transformationChoco(Feve.F_BQ, super.partTransBQ*super.capTransMax/((double)this.getPourcentageCacaoBG())/100);
+			}
 		}
-		if (stockFeveMG.getQuantiteTotale()>0) {
-			super.journalTransformation.ajouter("on veut transformer"+stockFeveMG.getQuantiteTotale()+"de Feves MG");
-		this.transformationChoco(Feve.F_MQ, stockFeveMG.getQuantiteTotale());
+		if (stockFeveMG.getQuantiteTotale()>0 && stockFeveMG.getQuantiteTotale()<super.partTransMQ*super.capTransMax) {
+			super.journalTransformation.ajouter("on veut obtenir"+stockFeveMG.getQuantiteTotale()/((double)this.getPourcentageCacaoMG())/100+"de Chocolat MG");
+		this.transformationChoco(Feve.F_MQ, stockFeveMG.getQuantiteTotale()/((double)this.getPourcentageCacaoMG())/100);
+		} else { 
+			if (stockFeveMG.getQuantiteTotale()>=super.partTransMQ*super.capTransMax) {
+				super.journalTransformation.ajouter("on veut obtenir"+super.partTransMQ*super.capTransMax/((double)this.getPourcentageCacaoMG())/100+"de Chocolat MG");
+				this.transformationChoco(Feve.F_MQ, super.partTransMQ*super.capTransMax/((double)this.getPourcentageCacaoMG())/100);
+			}
 		}
-		if (stockFeveMGL.getQuantiteTotale()>0) {
-			super.journalTransformation.ajouter("on veut transformer"+stockFeveMGL.getQuantiteTotale()+"de Feves MGL");
-		this.transformationChoco(Feve.F_MQ_BE, stockFeveMGL.getQuantiteTotale());
+		if (stockFeveMGL.getQuantiteTotale()>0 && stockFeveMGL.getQuantiteTotale()<super.partTransMQL*super.capTransMax) {
+			super.journalTransformation.ajouter("on veut obtenir"+stockFeveMGL.getQuantiteTotale()/((double)this.getPourcentageCacaoMGL())/100+"de Chocolat MGL");
+		this.transformationChoco(Feve.F_MQ_BE, stockFeveMGL.getQuantiteTotale()/((double)this.getPourcentageCacaoMGL())/100);
+		} else { 
+			if (stockFeveMGL.getQuantiteTotale()>=super.partTransMQL*super.capTransMax) {
+				super.journalTransformation.ajouter("on veut obtenir"+super.partTransMQL*super.capTransMax/((double)this.getPourcentageCacaoMGL())/100+"de Chocolat MGL");
+				this.transformationChoco(Feve.F_MQ_BE, super.partTransMQL*super.capTransMax/((double)this.getPourcentageCacaoMGL())/100);
+			}
 		}
-		if (stockFeveHGL.getQuantiteTotale()>0) {
-			super.journalTransformation.ajouter("on veut transformer"+stockFeveHGL.getQuantiteTotale()+"de Feves HG");
-		this.transformationChoco(Feve.F_HQ_BE, stockFeveHGL.getQuantiteTotale());
+		if (stockFeveHGL.getQuantiteTotale()>0 && stockFeveHGL.getQuantiteTotale()<super.partTransHQ*super.capTransMax) {
+			super.journalTransformation.ajouter("on veut obtenir"+stockFeveHGL.getQuantiteTotale()/((double)this.getPourcentageCacaoHG())/100+"de Chocolat HGL");
+		this.transformationChoco(Feve.F_HQ_BE, stockFeveHGL.getQuantiteTotale()/((double)this.getPourcentageCacaoHG())/100);
+		} else { 
+			if (stockFeveHGL.getQuantiteTotale()>=super.partTransHQ*super.capTransMax) {
+				super.journalTransformation.ajouter("on veut obtenir"+super.partTransHQ*super.capTransMax/((double)this.getPourcentageCacaoHG())/100+"de Chocolat HGL");
+				this.transformationChoco(Feve.F_HQ_BE, super.partTransHQ*super.capTransMax/((double)this.getPourcentageCacaoHG())/100);
+			}
 		}
 	
 } 
