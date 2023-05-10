@@ -147,7 +147,10 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 					else if (vendeursChocolat.size()==1  ){
 						pasAchete=false;
 						ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(0), chocolats.get(i), echeancier , this.cryptogramme, initialise);
-						journal_achats.ajouter("1CC "+cc.getNumero()+" achat du chocolat" + chocolats.get(i)+"au prix à la tonne de" + prix);
+						if(cc != null) {
+							journal_achats.ajouter("1CC "+cc.getNumero()+" achat du chocolat" + chocolats.get(i)+"au prix à la tonne de" + prix);
+
+						}
 
 					}
 				}
