@@ -289,7 +289,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	//william 
 	public void adapter_prix_vente(ExemplaireContratCadre contrat) {
 		prix = contrat.getPrix() /*/contrat.getQuantiteTotale() deja à la tonne */;
-		journal_ventes.ajouter("achat du chocolat " + contrat.getProduit()+" au prix à la tonne de " + prix);
+		journal_prix_vente.ajouter("achat du chocolat " + contrat.getProduit()+" au prix à la tonne de " + prix);
 		ChocolatDeMarque choco = (ChocolatDeMarque)contrat.getProduit();
 
 		// on calcule le prix de vente du chocolat dus contract en fonction de la gamme

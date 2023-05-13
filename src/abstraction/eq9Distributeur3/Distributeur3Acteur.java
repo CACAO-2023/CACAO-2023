@@ -31,6 +31,10 @@ public class Distributeur3Acteur implements IActeur{
 	protected Journal journal_AO;
 	protected Journal journal_OA;
 	protected Journal journal_prix_vente;
+	
+	
+	public List<Double> CA;
+	public Double CA_step;
 
 
 	protected List<ChocolatDeMarque> chocolats;
@@ -42,6 +46,7 @@ public class Distributeur3Acteur implements IActeur{
 	protected HashMap<ChocolatDeMarque, Double> prix_tonne_vente;
 	protected Variable variable_stock;
 	protected Variable quanitite_cible_totale_OA;
+	protected Variable variable_CA;
 	protected Distributeur3AcheteurOA d;
 	
 	public Double qte_cible_OA_TOT;
@@ -76,13 +81,14 @@ public class Distributeur3Acteur implements IActeur{
 		variable_stock = new VariablePrivee("Eq9StockTablettes", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
 		qte_cible_OA_TOT = 0.0;
 		quanitite_cible_totale_OA  = new VariablePrivee("Eq9QteCibleOA", "<html>Quantite ciblée (à atteindre) via les OA</html>",this, 0.0, 1000000.0, 0.0);
-
+		variable_CA = new VariablePrivee("Eq9CA","<html>Chiffre d'Affaire</html>",this,0.0,1000000,0.0);
 	}
 	
 	public void initialiser() {
 		// william désormais on n'utilise plus une liste de String avec les chocolats qui nous intéressent, on sélectionne seulement à la gamme
 		
-		
+		CA_step = 0.0;
+		this.CA = new LinkedList<Double>();
 
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
@@ -123,6 +129,9 @@ public class Distributeur3Acteur implements IActeur{
 	////////////////////////////////////////////////////////
 
 	public void next() {
+		
+		CA.add(CA_step);
+		variable_CA.ajouter(Filiere.LA_FILIERE.getActeur(this.getNom()), CA_step);
 		
 		cout_stockage();
 		
@@ -203,7 +212,7 @@ public class Distributeur3Acteur implements IActeur{
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
 		
-		
+		res.add(variable_CA);
 		res.add(variable_stock);
 		res.add(quanitite_cible_totale_OA);
 		return res;
