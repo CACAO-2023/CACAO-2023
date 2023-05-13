@@ -280,7 +280,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 		this.journal_achats.ajouter("cc accepte Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "je viens de passer le contrat "+contrat + "et j'ai achete le chocolat " + contrat.getProduit());
 		this.contratEnCours.add(contrat);
 
-		notificationOperationBancaire(-1*contrat.getPrix()*contrat.getQuantiteTotale());
+	//e	notificationOperationBancaire(-1*contrat.getPrix()*contrat.getQuantiteTotale());
 
 		// william 
 		adapter_prix_vente(contrat);

@@ -126,7 +126,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 
 			journal_ventes.ajouter("Vente de " + quantite + "tonnes de " +  choco.getNom() + " pour " + montant + "€");
 			this.stock.ajoutQte(choco, -quantite);
-			notificationOperationBancaire(montant);
+			//e notificationOperationBancaire(montant);
 			CA_step += montant;
 
 			

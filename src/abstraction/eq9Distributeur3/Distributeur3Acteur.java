@@ -44,7 +44,11 @@ public class Distributeur3Acteur implements IActeur{
 	protected double prix;
 	private List<ChocolatDeMarque>chocosProduits;
 	protected HashMap<ChocolatDeMarque, Double> prix_tonne_vente;
-	protected Variable variable_stock;
+	protected Variable variable_stock_tot;
+	protected Variable variable_stock_HQ_BE;
+	protected Variable variable_stock_MQ_BE;
+	protected Variable variable_stock_MQ;
+
 	protected Variable quanitite_cible_totale_OA;
 	protected Variable variable_CA;
 	protected Distributeur3AcheteurOA d;
@@ -78,10 +82,18 @@ public class Distributeur3Acteur implements IActeur{
 		this.prix_tonne_vente = new HashMap<ChocolatDeMarque, Double> ();
 		
 		this.stock = new Stock(this);
-		variable_stock = new VariablePrivee("Eq9StockTablettes", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
+		
+		
 		qte_cible_OA_TOT = 0.0;
+		
 		quanitite_cible_totale_OA  = new VariablePrivee("Eq9QteCibleOA", "<html>Quantite ciblée (à atteindre) via les OA</html>",this, 0.0, 1000000.0, 0.0);
-		variable_CA = new VariablePrivee("Eq9CA","<html>Chiffre d'Affaire</html>",this,0.0,1000000,0.0);
+		variable_CA = new VariablePrivee("Eq9_Chiffre_Affaire_(Mrd€)","<html>Chiffre d'Affaire</html>",this,0.0,10000000,0.0);
+		variable_stock_tot = new VariablePrivee("Eq9_Stock_Total", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
+		variable_stock_HQ_BE = new VariablePrivee("Eq9_Stock_HQ_BE", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
+		variable_stock_MQ_BE = new VariablePrivee("Eq9_Stock_MQ_BE", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
+		variable_stock_MQ = new VariablePrivee("Eq9_Stock_MQ", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
+
+		
 	}
 	
 	public void initialiser() {
@@ -128,6 +140,7 @@ public class Distributeur3Acteur implements IActeur{
 		
 		
 		
+		
 	}
 	
 	public String toString() {
@@ -146,7 +159,6 @@ public class Distributeur3Acteur implements IActeur{
 	public void next() {
 		
 		CA.add(CA_step);
-		variable_CA.ajouter(Filiere.LA_FILIERE.getActeur(this.getNom()), CA_step);
 		
 		cout_stockage();
 		
@@ -156,11 +168,17 @@ public class Distributeur3Acteur implements IActeur{
 
 		etat_ventes();
 		
-		variable_stock = new VariablePrivee("Eq9StockTablettes", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 10000000.0, stock.qteStockTOT());
-
-		quanitite_cible_totale_OA  = new VariablePrivee("Eq9QteCibleOA", "<html>Quantite ciblée (à atteindre) via les OA</html>",this, 0.0, 1000000.0, qte_cible_OA_TOT);
+		
+		quanitite_cible_totale_OA.setValeur(this,qte_cible_OA_TOT, this.cryptogramme);
+		variable_CA.setValeur(this,CA_step/1000000000, this.cryptogramme);
+		
+		variable_stock_tot.setValeur(this, stock.qteStockTOT(), this.cryptogramme);
+		variable_stock_HQ_BE.setValeur(this, stock.qteStock_HQ_BE(), this.cryptogramme);
+		variable_stock_MQ_BE.setValeur(this, stock.qteStock_MQ_BE(), this.cryptogramme);
+		variable_stock_MQ.setValeur(this, stock.qteStock_MQ(), this.cryptogramme);
 
 		
+
 	}
 	
 	public void cout_stockage() {
@@ -171,7 +189,8 @@ public class Distributeur3Acteur implements IActeur{
 		prix = 16*30*q;
 		if(prix > 0.0) {
 			Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ9"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), prix);
-			notificationOperationBancaire(-1*prix);
+			journal_activitegenerale.ajouter("Paiement stockage : " + -1*prix);
+		//	notificationOperationBancaire(-1*prix);
 		}
 
 		
@@ -228,7 +247,10 @@ public class Distributeur3Acteur implements IActeur{
 		List<Variable> res=new ArrayList<Variable>();
 		
 		res.add(variable_CA);
-		res.add(variable_stock);
+		res.add(variable_stock_tot);
+		res.add(variable_stock_HQ_BE);
+		res.add(variable_stock_MQ_BE);
+		res.add(variable_stock_MQ);
 		res.add(quanitite_cible_totale_OA);
 		return res;
 		

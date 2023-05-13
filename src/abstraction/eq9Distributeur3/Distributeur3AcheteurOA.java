@@ -154,7 +154,7 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 						this.journal_OA.ajouter("On adapte le prix de vente en fonction du prix d'achat de cette offre d'achat");
 						this.adapter_prix_vente(pRetenue);
 						
-						notificationOperationBancaire(pRetenue.getPrixT()*pRetenue.getOffre().getQuantiteT());
+					//	notificationOperationBancaire(pRetenue.getPrixT()*pRetenue.getOffre().getQuantiteT());
 						
 						
 

@@ -61,7 +61,7 @@ public class Distributeur3AcheteurAO extends ExempleAbsAcheteurAO implements IAc
 		this.stock.put(propositionRetenue.getOffre().getChocolat(), stock+ propositionRetenue.getOffre().getQuantiteT());
 		this.prix.put(propositionRetenue.getOffre().getVendeur(), propositionRetenue.getPrixT()-1000.0);
 		a.journal_AO.ajouter("   mon prix a ete accepte. Mon prix pour "+propositionRetenue.getOffre().getVendeur()+" passe a "+(propositionRetenue.getPrixT()-1000.0));
-		notificationOperationBancaire(propositionRetenue.getPrixT()*propositionRetenue.getOffre().getQuantiteT());
+	//	notificationOperationBancaire(propositionRetenue.getPrixT()*propositionRetenue.getOffre().getQuantiteT());
 
 		adapter_prix_vente(propositionRetenue);
 	}
