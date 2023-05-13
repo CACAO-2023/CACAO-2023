@@ -33,9 +33,9 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		journal_vente.ajouter("============================== étape "+etape+" ==============================");
 
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			Var_Stock_choco.get(marque).setValeur(this, stockChocoMarque.get(marque));
-			Var_Cout_Choco.get(marque).setValeur(this, getCoutTotal(marque));
-			Var_Marge_Choco.get(marque).setValeur(this, prix(marque)-getCoutTotal(marque));
+			mettre_a_jour(Var_Cout_Choco, marque, getCoutTotal(marque));
+			mettre_a_jour(Var_Marge_Choco, marque, prix(marque)-get_valeur(Var_Cout_Choco,marque));
+
 		}
 		
 		//Prise en compte des couts de main doeuvre
@@ -49,10 +49,11 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 			journal_vente.ajouter("Cout de main d'oeuvre : "+cout_total_mise_en_rayon);
 				}
 		
+		solde_bancaire.setValeur(this, this.getSolde());
+
+		
 	}
 	
-	private void strategie() {
-	}
 	
 	/**
 	 * @author Theo
@@ -104,7 +105,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	 * @return le cout de revient d'1t de chocolat de marque, calcule grace au type de chocolat
 	 */
 	public double getCoutTotal(ChocolatDeMarque choco) {
-		Double cout_i = cout_marque.get(choco);
+		Double cout_i = get_valeur(Var_Cout_Choco, choco);
 		Double cout_s = cout_stockage_distributeur.getValeur();
 		Double cout_m = Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur(); //Cout de mise en rayon d'1T de chocolat
 		return (cout_i+cout_s+cout_m);
@@ -125,13 +126,14 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 //		} else {
 		int etape = Filiere.LA_FILIERE.getEtape()%24;
 		Double previsions = previsionsperso.get(etape).get(choco);
-		if (stockChocoMarque.get(choco) < previsions*1.5) {
-			return stockChocoMarque.get(choco);
+		double stock_choco = this.get_valeur(Var_Stock_choco, choco);
+		if (stock_choco < previsions*1.5) {
+			return stock_choco;
 		}
-		if (stockChocoMarque.get(choco) >= previsions*1.5) {
+		if (stock_choco >= previsions*1.5) {
 			return previsions*1.5;
 		}
-		return stockChocoMarque.get(choco);
+		return stock_choco;
 		
 //		}
 	}
@@ -155,7 +157,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 
 		ChocolatDeMarque topmarque = topvente();
 		double seuil = Filiere.SEUIL_EN_TETE_DE_GONDOLE_POUR_IMPACT;
-		if ((choco==topmarque)&&(stockChocoMarque.get(topmarque)>0)) {
+		if ((choco==topmarque)&&(this.get_valeur(Var_Stock_choco, topmarque)>0)) {
 			return quantiteEnVente(topmarque,cryptogramme)/10;
 		}
 		return 0.0;
@@ -174,13 +176,17 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	 * @author Theo
 	 */
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
-		stockChocoMarque.put(choco, stockChocoMarque.get(choco)-quantite);
+		mettre_a_jour(Var_Stock_choco, choco, get_valeur(Var_Stock_choco, choco)-quantite);
 		totalStocks.setValeur(this, totalStocks.getValeur(cryptogramme)-quantite, cryptogramme);
-		this.journal_vente.ajouter(COLOR_GREEN, COLOR_BROWN, "ca nous coute "+cout_marque.get(choco));
+		this.journal_vente.ajouter(COLOR_GREEN, COLOR_BROWN, "ca nous coute "+ get_valeur(Var_Cout_Choco, choco));
 		this.journal_vente.ajouter("Eq7 a vendu "+ (int)Math.floor(quantite)+" T de "+choco+ " aux clients finaux pour un prix à la tonne de "+ (int)Math.floor(montant/quantite));
 		//Actualisation des previsions persos
 		actualiser_prevision_perso( choco,   quantite);
-		ventes.ajouter(this, montant);
+		
+		mettre_a_jour(Var_Vente_Choco, choco, quantite);
+		
+		ventes.ajouter(this, montant); //?????
+		vente_step+=montant;
 	}
 
 	

@@ -45,7 +45,7 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 	private Boolean besoin() { //Besoin ou non d'un appel d'offre
 		int etapesuiv = (Filiere.LA_FILIERE.getEtape()+1)%24;
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (stockChocoMarque.get(marque) < getPrevisionsperso(marque,etapesuiv)) { //On achete seulement si on prevoit de vendre plus que ce qu'on a
+			if (get_valeur(Var_Stock_choco, marque) < getPrevisionsperso(marque,etapesuiv)) { //On achete seulement si on prevoit de vendre plus que ce qu'on a
 				return true;
 			}
 		}
@@ -57,8 +57,8 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 		int etapesuiv = (Filiere.LA_FILIERE.getEtape()+1)%24;
 		HashMap<ChocolatDeMarque,Double> qte = new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (stockChocoMarque.get(marque)+getLivraisonEtape(marque,Filiere.LA_FILIERE.getEtape()) < getPrevisionsperso(marque,etapesuiv)) {
-				qte.put(marque,2*(getPrevisionsperso(marque,etapesuiv)-(stockChocoMarque.get(marque))+getLivraisonEtape(marque,Filiere.LA_FILIERE.getEtape())));
+			if (get_valeur(Var_Stock_choco, marque)+getLivraisonEtape(marque,Filiere.LA_FILIERE.getEtape()) < getPrevisionsperso(marque,etapesuiv)) {
+				qte.put(marque,2*(getPrevisionsperso(marque,etapesuiv)-(get_valeur(Var_Stock_choco, marque))+getLivraisonEtape(marque,Filiere.LA_FILIERE.getEtape())));
 			}
 		}
 		return qte;
@@ -68,7 +68,7 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 		int etapesuiv = (Filiere.LA_FILIERE.getEtape()+1)%24;
 		List<ChocolatDeMarque> liste = new ArrayList<ChocolatDeMarque>();
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (stockChocoMarque.get(marque)+getLivraisonEtape(marque,Filiere.LA_FILIERE.getEtape()) < getPrevisionsperso(marque,etapesuiv)) {
+			if (get_valeur(Var_Stock_choco, marque)+getLivraisonEtape(marque,Filiere.LA_FILIERE.getEtape()) < getPrevisionsperso(marque,etapesuiv)) {
 				liste.add(marque);
 			}
 		}
@@ -88,10 +88,10 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 					PropositionVenteOA pRetenue = supOA.acheterParAO(this, cryptogramme,m.getChocolat(), m.getMarque(), qte.get(m), false); //acteur,crypto,choco,marque,qté,TG
 					if (pRetenue!=null) { //Update des paramètres etc
 						double nouveauStock = pRetenue.getOffre().getQuantiteT();
-						if (this.stockChocoMarque.keySet().contains(pRetenue.getChocolatDeMarque())) {
-							nouveauStock+=this.stockChocoMarque.get(pRetenue.getChocolatDeMarque());
+						if (Var_Stock_choco.keySet().contains(pRetenue.getChocolatDeMarque())) {
+							nouveauStock+=get_valeur(Var_Stock_choco, (pRetenue.getChocolatDeMarque()));
 						}
-						stockChocoMarque.replace(pRetenue.getChocolatDeMarque(), nouveauStock);
+						mettre_a_jour(Var_Stock_choco, pRetenue.getChocolatDeMarque(), nouveauStock);
 						journal_achat.ajouter("Achat par offre d'achat de "+pRetenue+" --> quantite en stock = "+nouveauStock);
 
 		////////////////////////////////////////////////				
