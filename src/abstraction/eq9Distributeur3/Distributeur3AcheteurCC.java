@@ -36,6 +36,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	//faire une méthode qui connait le prix d'achat moyen d'un chocolat
 
 	public Distributeur3AcheteurCC() {//ChocolatDeMarque[] chocos, double[] stocks) {
+		
 		contratEnCours = new LinkedList<ExemplaireContratCadre>();
 		prixEnCours = new HashMap<IVendeurContratCadre, Double>();
 		this.precedentPrix = new HashMap<Chocolat, Double>();

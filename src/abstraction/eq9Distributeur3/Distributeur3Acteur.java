@@ -92,8 +92,23 @@ public class Distributeur3Acteur implements IActeur{
 
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
+		
+		
+		for (ChocolatDeMarque c :  Filiere.LA_FILIERE.getChocolatsProduits()) {
+			double prixGamme =0;
+			Gamme g;
+			switch (c.getChocolat().getGamme()) {
+			case HQ : prixGamme=50000;break;
+			case MQ : prixGamme=30000;break;
+			case BQ : prixGamme=15000;break;
+
+			}
+			
+			this.prix_tonne_vente.put(c, prixGamme+(c.isBioEquitable()? 5000 : 0));
+		}
+		
+		
 		for (int i=0; i<chocolats_filiere.size(); i++) {
-			prix_tonne_vente.put(chocolats_filiere.get(i), 1.0);
 			
 			if(chocolats_filiere.get(i).getGamme() == Gamme.HQ) {
 				chocolats.add(chocolats_filiere.get(i));

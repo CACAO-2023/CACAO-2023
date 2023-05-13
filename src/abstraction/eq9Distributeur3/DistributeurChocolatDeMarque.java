@@ -30,7 +30,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 	@Override
 	public double prix(ChocolatDeMarque choco) {
 		if(prix_tonne_vente.get(choco) != null) {
-			return prix_tonne_vente.get(choco) +40000.0;
+			return prix_tonne_vente.get(choco);
 			
 		}
 		// TODO Auto-generated method stub
@@ -76,9 +76,10 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 			
 			
 			if (qtVente.containsKey(choco)) {
-				journal_ventes.ajouter("On vend " + qtVente.get(choco) +" "+ choco.getNom());
+				journal_ventes.ajouter("On met en vente " + qtVente.get(choco) +" "+ choco.getNom());
 				if (qtVente.get(choco) != 0) {
 				Filiere.LA_FILIERE.getBanque().virer(this, crypto, Filiere.LA_FILIERE.getActeur("Banque"), qtVente.get(choco)*prixRayon);
+
 				}
 				return qtVente.get(choco);
 			} else {
