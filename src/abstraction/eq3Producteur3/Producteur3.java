@@ -44,8 +44,8 @@ public class Producteur3 extends Bourse3  {
 		this.fields = new Champs();
 		this.SeuilHG = 0.;
 		this.SeuilMG = 0.;
-		this.quantiteVenduBourseB = 0.0;
-		this.quantiteVenduBourseM = 0.0;
+		this.quantiteVenduBourseB = new HashMap<Integer, Double>();
+		this.quantiteVenduBourseM = new HashMap<Integer, Double>();
 		this.CoutStep = 0.0;
 		this.CoutTonne = 0.;
 		this.HectaresLibres = 0;
@@ -139,15 +139,13 @@ public class Producteur3 extends Bourse3  {
 			}
 		}
 
-		// We only add the costs to CoutStep if we are not at step zero :
-		if (Filiere.LA_FILIERE.getEtape() > 0) {
-			this.CoutStep += Stock.getQuantite()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur();
-			this.addCoutHectaresUtilises();
-		}
-
-		this.updateListeCout();
-		this.updateCoutTonne();
 		
+		//Greve ?
+		double probaGreve = Math.random();
+		if(probaGreve < this.probaGreve.getValeur()){
+					this.GreveGeneral();
+
+		}
 		// Incendie ?	
 		double probaIncendie =  Math.random();
 				if(probaIncendie < this.probaIncendiH.getValeur()) {
@@ -164,14 +162,14 @@ public class Producteur3 extends Bourse3  {
 				if(probaCyclone <this.probaCyclone.getValeur()) {
 					this.Cyclone();
 			}
-				//Greve ?
-				double probaGreve = Math.random();
-				if(probaGreve < this.probaGreve.getValeur()){
-							this.GreveGeneral();
+			// We only add the costs to CoutStep if we are not at step zero :
+			if (Filiere.LA_FILIERE.getEtape() > 0) {
+				this.CoutStep += Stock.getQuantite()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur();
+				this.addCoutHectaresUtilises();
+			}
 
-				}
-
-
+			this.updateListeCout();
+			this.updateCoutTonne();
 		this.getJAchats().ajouter(Color.yellow, Color.BLACK, "Coût du step : " + this.CoutStep + ", Hectares Achetés : " + this.HectaresAchetes.getValeur() + ", Coût de la tonne : " + this.CoutTonne);
 
 		this.getJGeneral().ajouter(Color.cyan, Color.BLACK, 
@@ -375,7 +373,7 @@ public class Producteur3 extends Bourse3  {
 	/** 
 	 * @param s
 	 * @author BOCQUET Gabriel
-	 * @return argent gagne grace a la vente des feves de qualite s
+	 * @return argent gagne grace a la vente des feves de qualite s au précédent step
 	 */
 	protected double getRecetteCC(String s) {
 		if(Filiere.LA_FILIERE.getEtape() > 0) {
@@ -385,34 +383,21 @@ public class Producteur3 extends Bourse3  {
 		
 		LinkedList<ExemplaireContratCadre> contracts = this.contractprecedent;
 		LinkedList<ExemplaireContratCadre> contractsGoods = new LinkedList<ExemplaireContratCadre>();
+		//contractsGoods contient tous les contrats associes aux feves de qualite s
 		for(ExemplaireContratCadre c : contracts) {
 			if(f==((Feve)c.getProduit())){
 				contractsGoods.add(c);
 			}
 		}
 		double argentGagne = 0.0;
-		double stockActuel = this.getStock().getQuantite(f);
 		int i =0;
+		int step = Filiere.LA_FILIERE.getEtape() -1;
+		this.journal_activitegenerale.ajouter("Au step "+ step + "pour " + s  );
 		for(ExemplaireContratCadre c : contractsGoods) {
-			//Si je n'ai plus de feves je ne peux plus rien livrer
-			if(stockActuel <=0) {
-				break;
-			}
-			double qAEnvoyer=c.getQuantiteALivrerAuStep();
-			
-			if(qAEnvoyer <= stockActuel) {
-
-			i+=1;
-			argentGagne += c.getPrix()*qAEnvoyer;
-
-			stockActuel = stockActuel - qAEnvoyer;
-			}
-			else {
-				this.journal_activitegenerale.ajouter("On est rentre "+i+" dans la boucle if"+"pour "+contractsGoods.size()+"de contrat");
-				//Suppose que meme si on a pas assez de feve on renvoie ce que l'on a
-				argentGagne +=c.getPrix()*c.getQuantiteALivrerAuStep();//c.getQuantiteALivrerAuStep();
-				stockActuel=0.0;
-			}
+			i+=1;			
+			this.journal_activitegenerale.ajouter("Argent gagne = " + c.getPaiementsEffectues().getQuantite(Filiere.LA_FILIERE.getEtape() -1) + " pour i = " + i);
+			//Suppose que meme si on a pas assez de feve on renvoie ce que l'on a
+			argentGagne +=c.getPaiementsEffectues().getQuantite(Filiere.LA_FILIERE.getEtape() -1);		
 		}
 		return argentGagne;
 		}
@@ -427,21 +412,33 @@ public class Producteur3 extends Bourse3  {
 	protected double getBenefice(String s) {
 		double coutCurrentStep;
 		double recette;
+		int step = Filiere.LA_FILIERE.getEtape() - 1;
 		if(s.equals("H") || s.equals("M")) {
 			Feve f;
-			if(s=="H") {f=Feve.F_HQ_BE;}
-			else {f=Feve.F_MQ_BE;}
+			double tailleStock;
+			double tailleChamp;
+			if(s=="H") {
+				f=Feve.F_HQ_BE;
+				tailleStock = this.StockFeveH.getValeur(step);
+				tailleChamp = this.tailleH.getValeur(step);
+			}
+			else {
+				f=Feve.F_MQ_BE;
+				tailleStock = this.StockFeveM.getValeur(step);
+				tailleChamp = this.tailleM.getValeur(step);
+			}
 			//CoutStep = CoutStockageFeve + CoutEntretientChamp
-			coutCurrentStep = this.getStock().getQuantite(f)*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() + this.fields.getTaille(s)*this.coutEmployeStep.getValeur();
+			coutCurrentStep = tailleStock*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur(step) + tailleChamp*this.coutEmployeStep.getValeur(step);
 			 
 			//si on a des Hautes Gammes, this.getQuantiteVenduBourse =0. De plus, on a deja ajoute la quantite vendue en Bourse dans VentesHG ou VentesMG
-			recette = this.getQuantiteVenduBourse(s)*Filiere.LA_FILIERE.getIndicateur("BourseCacao cours M").getValeur() + this.getRecetteCC(s);
+			recette = this.getQuantiteVenduBourse(s,step)*Filiere.LA_FILIERE.getIndicateur("BourseCacao cours M").getValeur(step) + this.getRecetteCC(s);
 		}
 		else {
-			coutCurrentStep = this.getStock().getQuantite(Feve.F_BQ)*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur();
-			recette = this.getQuantiteVenduBourse(s)*Filiere.LA_FILIERE.getIndicateur("BourseCacao cours B").getValeur();
+			coutCurrentStep = this.StockFeveB.getValeur(step)*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur(step);
+			recette = this.getQuantiteVenduBourse(s,step)*Filiere.LA_FILIERE.getIndicateur("BourseCacao cours B").getValeur(step);
 		}
-		this.journal_activitegenerale.ajouter("Cout au step pour " + s + ":" + coutCurrentStep);
+		this.journal_activitegenerale.ajouter("Cout au step" + step +" pour " + s + ":" + coutCurrentStep);
+		this.journal_activitegenerale.ajouter("Recette pour " + s + "au step " + step + ":" + recette);
 		return recette - coutCurrentStep;
 	}
 	/**
