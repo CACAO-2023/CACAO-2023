@@ -3,16 +3,15 @@ package abstraction.eq2Producteur2;
 //Code écrit par Nathan Rabier
 
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 import abstraction.eqXRomu.contratsCadres.ContratCadre;
+import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
-
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Lot;
 
@@ -24,11 +23,16 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	private HashMap<Feve, Variable> stocksTot;// Est composé des indicateurs de stock,
 											  // que l'on tiens à jour à chaque modification
 											  // des stocks
-	
+	/**
+	 * Constructeur de Producteur2AStockeur
+	 */
 	public Producteur2AStockeur() {
 		super();
 	}
 	
+	/**
+	 * Initialise les stocks ainsi que les variables de suivi du stock total par type de fève
+	 */
 	public void initialiser() {
 		super.initialiser();
 		
@@ -92,24 +96,14 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		}
 	}
 	
+	/**
+	 * fonction next, mets à jour les stocks en périmant et déclassant les fèves qui le doivent
+	 */
 	public void next() {
 		this.journalStocks.ajouter("Stocks début step " + this.stocksString());
 		super.next();
 		this.majPerim();
 		this.majTot();
-		/*System.out.println(Filiere.LA_FILIERE.getEtape());
-		System.out.println(this.stocks);
-		System.out.println(this.getDescrStocksTheo(Filiere.LA_FILIERE.getEtape() + 1));*/
-		/*this.ajouterStock(Feve.F_BQ, Filiere.LA_FILIERE.getEtape(), 1000);
-		this.retirerStock(Feve.F_BQ, 500);
-		Lot lotHQ_BE = new Lot(Feve.F_HQ_BE);
-		lotHQ_BE.ajouter(0, 1000);
-		this.ajouterStock(lotHQ_BE);
-		//this.retirerStock(Feve.F_MQ, 500);
-		System.out.println(this.stocksString());
-		System.out.println(this.stocksTotString());
-		System.out.println(this.getStockTotTime(Feve.F_BQ, 2));
-		System.out.println(this.getStockTotStep(Feve.F_BQ, 2));*/
 	}
 	
 	/**
@@ -212,7 +206,15 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	 * @return le coût du stockage
 	 */
 	protected double coutStockage() {
-		return this.coutMoyenStock.getValeur() * this.getStockTotTot();
+		return Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() * this.getStockTotTot();
+	}
+	
+	/**
+	 * Calcule le coût de stockage du stock actuel de fève de type f
+	 * @return le coût du stockage
+	 */
+	protected double coutStockage(Feve f) {
+		return Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() * this.getStockTot(f).getValeur();
 	}
 	
 	/**
@@ -263,7 +265,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 				Feve f = (Feve) exCC.getProduit();
 				varQuantite2.put(f, varQuantite2.get(f) - exCC.getEcheancier().getQuantite(curEtape));
 			}
-			HashMap<Feve, Double> prod = thisP.Prevision_Production(curEtape);
+			HashMap<Feve, Double> prod = thisP.Prevision_Production_minimale(curEtape);
 			for (Feve f: varQuantite2.keySet()) {
 				varQuantite2.put(f, varQuantite2.get(f) + prod.get(f) - quantiteRetard.get(f) * (1 + ContratCadre.PENALITE_LIVRAISON));
 			}
@@ -289,8 +291,8 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	private void majPerimTheo(HashMap<Feve, Lot> stocksTheo, HashMap<Feve, HashMap<Integer, Double>> stocksDeclasse, HashMap<Feve, HashMap<Integer, Double>> stocksPerime, int etape) {
 		ArrayList<HashMap<Feve, Double>> descrPerim = this.majPerim(stocksTheo, etape);
 		for (Feve f: descrPerim.get(0).keySet()) {
-			stocksDeclasse.get(f).put(etape, descrPerim.get(0).get(f));
-			stocksPerime.get(f).put(etape, descrPerim.get(1).get(f));
+			stocksDeclasse.get(f).put(etape - 1, descrPerim.get(0).get(f));
+			stocksPerime.get(f).put(etape - 1, descrPerim.get(1).get(f));
 		}
 	}
 	
@@ -382,7 +384,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	}
 	
 	/**
-	 * Renvoie l'évolution du stock total entre l'étape courante et l'étape etape.
+	 * Renvoie l'état à chaque étape du stock total pour chaque type de fèves entre l'étape courante et l'étape etape.
 	 * @param etape la dernière etape de calcul du stock total prévisionnel.
 	 * @return Pour chaque type de fève, un dictionnaire liant une étape à la valeur du stock total de ce type de fève.
 	 */
@@ -391,7 +393,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	}
 	
 	/**
-	 * Renvoie l'évolution du stock total du type de fève f entre l'étape courante et l'étape etape.
+	 * Renvoie l'état à chaque étape du stock total du type de fève f entre l'étape courante et l'étape etape.
 	 * @param f le type de fève
 	 * @param etape la dernière etape de calcul du stock total prévisionnel.
 	 * @return Un dictionnaire liant une étape à la valeur du stock total de ce type de fève.
@@ -399,6 +401,71 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	protected HashMap<Integer, Double> getStocksTotTheo(Feve f, int etape) {
 		return getStocksTotTheo(etape).get(f);
 	}
+	
+	/**
+	 * Calcule la quantité maximale de chaque type de fèves que l'on peut vendre par contrat cadre.
+	 * Cette valeur est la quantité de fèves qui sera déclassé dans un temps tempsDegradationFeve.
+	 * etape doit être strictement supérieure à Filiere.LA_FILIERE.getEtape()
+	 * @param etape l'étape d'arrêt de l'échéancier
+	 * @return un échéancier par type de fève, correspoondant au max que l'on peut fournir en vente.
+	 */
+	protected HashMap<Feve, Echeancier> getEcheancierMax(int etape){
+		HashMap<Feve, Echeancier> echeanciersMax = new HashMap<Feve, Echeancier>();
+		ArrayList<HashMap<Feve,HashMap<Integer, Double>>> stockTheo = this.getDescrStocksTheo( Math.max(etape + (int)this.tempsDegradationFeve.getValeur(), Filiere.LA_FILIERE.getEtape() + (int)this.tempsPerimationFeve.getValeur() + 1));
+		HashMap<Feve, HashMap<Integer, Double>> declasse = stockTheo.get(stockTheo.size() - 2);
+		HashMap<Feve, HashMap<Integer, Double>> perime = stockTheo.get(stockTheo.size() - 1);
+		for (Feve f : this.lesFeves) {
+			Echeancier echeancier = new Echeancier();
+			double perim = 0.; //On ajoute les quantitées qui périment du stock à ce qu'on peut vendre
+			for (int i = Filiere.LA_FILIERE.getEtape() + 1; i < Filiere.LA_FILIERE.getEtape() + this.tempsPerimationFeve.getValeur() + 1; i ++) {
+				perim += perime.get(f).get(i);
+			}
+			double declas = 0.; //On ajoute aussi les quantitées qui seront déclassées
+			for (int i = Filiere.LA_FILIERE.getEtape() + 1; i < Filiere.LA_FILIERE.getEtape() + this.tempsDegradationFeve.getValeur() + 1; i ++) {
+				declas += declasse.get(f).get(i);
+			}
+			echeancier.ajouter(perim + declas);
+			
+			for (int i = Filiere.LA_FILIERE.getEtape() + 2; i < etape; i++) {
+				echeancier.ajouter(declasse.get(f).get(i + (int)this.tempsDegradationFeve.getValeur()));
+				//On n'ajoute pas ce qui périme, car avant de périmer, les fèves sont déclassées et sont donc déjà comptées pour un autre type de fève.
+			}
+			echeanciersMax.put(f, echeancier);
+		}
+		
+		return echeanciersMax;
+	}
+	
+	
+	/**
+	 * Calcule la quantité de fèves maximal que l'on peut mettre en vente en bourse à cette étape pour le type de fève f
+	 * @param f le type de fève
+	 * @return un tableau de taille deux, avec en premier la quantité à vendre étant agée de moins de this.stepsVecuesPourBourse.get(f), et en deuxième la quantité étant plus agée que cette valeur
+	 */
+	protected double[] getBourseMax(Feve f) {
+		int curEtape = Filiere.LA_FILIERE.getEtape();
+		ArrayList<HashMap<Feve,HashMap<Integer, Double>>> stockTheo = this.getDescrStocksTheo(curEtape + (int)Math.max(this.tempsDegradationFeve.getValeur(), this.tempsPerimationFeve.getValeur()));
+		double[] aVendre = {0., 0.};
+		HashMap<Feve, HashMap<Integer, Double>> declasse = stockTheo.get(stockTheo.size() - 2);
+		HashMap<Feve, HashMap<Integer, Double>> perime = stockTheo.get(stockTheo.size() - 1);
+		int tempsDegr = (int) this.tempsDegradationFeve.getValeur();
+		int tempsPerim = (int) this.tempsPerimationFeve.getValeur();
+		int stepsVB = (int) this.stepsVecuesPourBourse.get(f).getValeur();
+		for (int i = curEtape; i < curEtape + tempsPerim - Math.max(stepsVB - tempsDegr, 0); i ++) {
+			aVendre[1] += perime.get(f).get(i);
+		}
+		for (int i = curEtape + tempsPerim - Math.max(stepsVB - tempsDegr, 0); i < curEtape + tempsPerim; i ++) {
+			aVendre[0] += perime.get(f).get(i);
+		}
+		for (int i = curEtape; i < curEtape + tempsDegr - stepsVB; i ++) {
+			aVendre[1] += declasse.get(f).get(i);
+		}
+		for (int i = curEtape + Math.max(tempsDegr - stepsVB, 0); i < curEtape + tempsDegr; i ++) {
+			aVendre[0] += declasse.get(f).get(i);
+		}
+		return aVendre;
+	}
+	
 	
 	/**
 	 * Ajoute le lot au stock

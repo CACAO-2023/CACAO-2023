@@ -54,7 +54,7 @@ public class Filiere implements IAssermente {
 	//en vente en tete de gondole alors la marque est ajoutee a cette liste. Seuls les 100 derniers ajouts sont conserves.
 	private HashMap<String, Integer> nbPresencesEnTg; // nombre d'occurrence de la marque dans la liste presenceEnTG;
 	private HashMap<IActeur, Integer> cryptos;
-	public HashMap<IActeur, Long> tempsEquipes = new HashMap<IActeur, Long>();
+	public HashMap<String, Long> tempsEquipes = new HashMap<String, Long>();
 
 	/**
 	 * Initialise la filiere de sorte que le numero d'etape soit 0, 
@@ -102,7 +102,7 @@ public class Filiere implements IAssermente {
 					}
 				}
 			}
-			tempsEquipes.put(a, (long) 0);
+			tempsEquipes.put(a.getNom(), (long) 0);
 		}
 		this.journalFiliere.ajouter("Marques deposees : "+this.marquesDeposees);
 		this.journalFiliere.ajouter("Marques distributeurs : "+this.getMarquesDistributeur());
@@ -436,7 +436,7 @@ public class Filiere implements IAssermente {
 			}
 
 			long endTime = System.currentTimeMillis();
-			tempsEquipes.put(a, tempsEquipes.get(a) + endTime - startTime);
+			tempsEquipes.put(a.getNom(), tempsEquipes.get(a.getNom()) + endTime - startTime);
 		}
 		// Mise a jour de l'impact de la presence en TG sur les marques
 		HashMap<String, Double> quantiteEnTG=new HashMap<String,Double>(); // associe a chaque marque la quantite de produit en tete de gondole
