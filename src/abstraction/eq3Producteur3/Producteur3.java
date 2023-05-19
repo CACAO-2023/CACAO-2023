@@ -562,13 +562,14 @@ public class Producteur3 extends Bourse3  {
 		j.ajouter(Color.gray, Color.black, hectarDetruitM+"d'hectares de Moyenne Gamme qui ont été détruits par un cyclone");		
 		}
 			
-		
+		   
 	
 	/**
 	 * @author BOCQUET Gabriel
 	 *
 	 */
-	//Pour modéliser la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
+	//Pour modéliser    la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
+
 	protected void GreveGeneral() {
 		if (nbr_popup < 1) {
 			this.nbr_popup +=1;

@@ -290,7 +290,7 @@ public class Producteur3Acteur implements IActeur {
 		res.add(quantiteBruleM);
 		res.add(quantiteBruleL);
 		res.add(quantiteDetruiteCyclone);
-		res.add(pourcentageGrevise);
+		res.add(this.pourcentageGrevise);
 
 		res.add(EsperanceGaussienneProduction);
 		res.add(EcartTypeGaussienneProduction);
