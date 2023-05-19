@@ -141,7 +141,7 @@ public class Stock {
 	 * @author BOCQUET Gabriel
 	 */
 	public Lot retirerVielleFeve(Feve f, double quantite) {
-		if (quantite<=0 || quantite>this.getQuantite(f)+0.001) {
+		if (quantite<=0.0 || quantite>this.getQuantite(f)+0.001) {
 			throw new IllegalArgumentException("Essaie de retirer ("+quantite+") de " + f.toString() + " alors que les stocks sont de " + this.getQuantite(f));
 		} else {
 			Lot res=new Lot(f);
