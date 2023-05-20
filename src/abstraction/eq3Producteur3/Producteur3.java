@@ -543,7 +543,7 @@ public class Producteur3 extends Bourse3  {
 		HashMap<Integer,Integer> FieldH = fields.getChamps().get("H");
 		HashMap<Integer, Integer> FieldM = fields.getChamps().get("M");
 		double hectarDetruitH = 0;
-		double hectarDetruitM=0;
+		double hectarDetruitM=0.0;
 		Set<Integer> KeysH = FieldH.keySet();
 		Set<Integer> KeysM = FieldM.keySet();
 		Journal j = this.getJCatastrophe();

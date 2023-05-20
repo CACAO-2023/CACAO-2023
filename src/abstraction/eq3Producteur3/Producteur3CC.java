@@ -186,7 +186,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
             }
         }
 
-        if (currentQuantite > 0) {
+        if (currentQuantite > 0.0) {
             lot.ajouter(oldestStep, currentQuantite);
         }
         
