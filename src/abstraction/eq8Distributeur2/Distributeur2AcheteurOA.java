@@ -10,7 +10,7 @@ public class Distributeur2AcheteurOA extends ContratCadre implements IAcheteurOA
 
 	
 	
-	//Karim Ben Messaoud: retourne la prop avec le meilleur rapport qualité prixs
+	//Karim Ben Messaoud: retourne la prop avec le meilleur rapport qualité prix
 	public PropositionVenteOA choisirPV(List<PropositionVenteOA> propositions) {
         PropositionVenteOA meilleureProposition = null;
         double meilleurRapport = 0;
@@ -30,5 +30,11 @@ public class Distributeur2AcheteurOA extends ContratCadre implements IAcheteurOA
         
         
     }
+	
+	
+	
+	
+	
+	
 
 }
