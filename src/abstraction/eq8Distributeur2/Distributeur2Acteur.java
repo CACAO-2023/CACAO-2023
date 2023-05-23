@@ -333,7 +333,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			}}
 	}
 
-	//Auteur : Ben Messaoud Karim et Maxime Azzi
+	//Auteur : Ben Messaoud Karim 
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 		int pos = chocolats.indexOf(choco);
 		if (pos >= 0) {
