@@ -12,6 +12,7 @@ import abstraction.eqXRomu.produits.Gamme;
 public class Stock  {
 	HashMap<ChocolatDeMarque,Double> QteStock;
 	private Distributeur3Acteur a;
+	
 
 	
 	public Stock(Distributeur3Acteur a) {

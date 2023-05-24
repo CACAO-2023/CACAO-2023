@@ -11,14 +11,20 @@ import abstraction.eqXRomu.clients.ClientFinal;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Gamme;
 
 public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implements IDistributeurChocolatDeMarque {
 	
 	private double capaciteDeVente = Double.MAX_VALUE;
 	private double prixRayon = 1.0;
-	
+	public double qteVendue_HQ_BE;
+	public double qteVendue_MQ_BE;
+	public double qteVendue_MQ;
+	public double qteVendue_TOT;
 
-	
+
+
+
 	
 	
 
@@ -31,6 +37,40 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 	public void next() {
 		
 		super.next();
+		this.variable_qtte_vendue_TOT.setValeur(this, qteVendue_TOT, this.cryptogramme);
+		this.variable_qtte_vendue_HQ_BE.setValeur(this, qteVendue_HQ_BE, this.cryptogramme);
+		this.variable_qtte_vendue_MQ_BE.setValeur(this, qteVendue_MQ_BE, this.cryptogramme);
+		this.variable_qtte_vendue_MQ.setValeur(this, qteVendue_MQ, this.cryptogramme);
+		
+		this.journal_AO.ajouter("coef 1 = " + this.coef_prix_vente.get(0.0));
+		this.journal_AO.ajouter("coef 2 = " + this.coef_prix_vente.get(1.0));
+		this.journal_AO.ajouter("coef 3 = " + this.coef_prix_vente.get(2.0));
+
+		
+		if(100*qteVendue_HQ_BE/this.variable_stock_HQ_BE.getValeur() < 40 && this.coef_prix_vente.get(0.0)*0.8 > 1.0) {
+			this.journal_ventes.ajouter("On vend seulement " + qteVendue_HQ_BE/this.variable_stock_HQ_BE.getValeur() + "% de notre stock de HQ_BE");
+			this.coef_prix_vente.put(0.0,this.coef_prix_vente.get(0.0)*0.8);
+		}
+		if(100*qteVendue_MQ_BE/this.variable_stock_MQ_BE.getValeur() < 40 && this.coef_prix_vente.get(1.0)*0.8 > 1.0) {
+			this.journal_ventes.ajouter("On vend seulement " + qteVendue_MQ_BE/this.variable_stock_MQ_BE.getValeur() + "% de notre stock de MQ_BE");
+			this.coef_prix_vente.put(1.0,this.coef_prix_vente.get(1.0)*0.8);
+		}
+		if(100*qteVendue_MQ/this.variable_stock_MQ.getValeur() < 40 && this.coef_prix_vente.get(2.0)*0.8 > 1.0) {
+			this.journal_ventes.ajouter("On vend seulement " + qteVendue_MQ/this.variable_stock_MQ.getValeur() + "% de notre stock de MQ");
+			this.coef_prix_vente.put(2.0,this.coef_prix_vente.get(2.0)*0.8);
+		}
+		
+		
+		this.variable_perc_vendue.setValeur(this, 100*qteVendue_TOT/this.variable_stock_tot.getValeur(), this.cryptogramme);
+
+		
+
+		
+		qteVendue_HQ_BE = 0.0;
+		qteVendue_MQ_BE = 0.0;
+		qteVendue_MQ = 0.0;
+		qteVendue_TOT = 0.0;
+
 		
 	}
 	
@@ -140,6 +180,24 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 			this.stock.ajoutQte(choco, -quantite);
 			//e notificationOperationBancaire(montant);
 			CA_step += montant;
+			
+			
+			if(choco.getGamme() == Gamme.HQ) {
+				qteVendue_HQ_BE += quantite;
+			}
+			else if(choco.getGamme() == Gamme.MQ && choco.isBioEquitable()) {
+				qteVendue_MQ_BE += quantite;
+			}
+			else if(choco.getGamme() == Gamme.MQ && !choco.isBioEquitable()) {
+				qteVendue_MQ += quantite;
+			}
+			else {
+				this.journal_activitegenerale.ajouter("vente de chocolat basse qualité !!!");
+			}
+			
+			
+			qteVendue_TOT+= quantite;
+			
 
 			
 		}
