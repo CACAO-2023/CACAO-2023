@@ -119,7 +119,9 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 				vendeur = vendeurs.get((int)( Math.random()*vendeurs.size()));
 			}
 			vendeurs.remove(vendeur);
-			
+			if (e.getQuantiteTotale()< quantite_min_cc) {
+				return cc;
+			}
 			if (vendeur!=null) {
 				this.journal_achat.ajouter("Tentative de négociation de contrat cadre avec "+vendeur.getNom()+" pour "+produit);
 				cc = superviseurVentesCC.demandeAcheteur((IAcheteurContratCadre)this, (IVendeurContratCadre) vendeur, produit, e, cryptogramme,false);
@@ -206,13 +208,20 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	 * @param d : nbr_etape
 	 * @return echeancier sur d etapes, base sur les previsions de ventes
 	 */
-	//A COMPLETER POUR PRENDRE EN COMPTE VRAIES PREVISIONS PERSO
 	public Echeancier echeancier_strat(int stepDebut, int d, ChocolatDeMarque marque) {
 		Echeancier e = new Echeancier(stepDebut);
-		for (int etape = stepDebut+1; etape<stepDebut+d; etape++) {
-			int etapemod = etape%24;
-			//faut enlever le stock
-			Double q = previsionsperso.get(etapemod).get(marque) -getLivraisonEtape(marque, stepDebut+etape) -stockChocoMarque.get(marque)/d;
+		int delai_livraison = 1;
+		for (int etape = stepDebut+1; etape<stepDebut+d+1; etape++) {
+			double q = 0.;
+			if ((delai_livraison > 0) && (etape < stepDebut+1+delai_livraison)) { //On prevoit une plus grosse premiere livraison pour anticiper et respecter le decalage
+				for (int i=stepDebut+1; i<stepDebut+1+delai_livraison; i++) {
+					q += previsionsperso.get(i%24).get(marque) -getLivraisonEtape(marque, i) -stockChocoMarque.get(marque)/d;
+				}
+			}
+			else {
+				q = previsionsperso.get((etape+delai_livraison)%24).get(marque) -getLivraisonEtape(marque, etape+delai_livraison) -stockChocoMarque.get(marque)/d;
+			}
+			System.out.println(q);
 			if (q>0) {
 				e.ajouter(q);
 			}
@@ -220,7 +229,12 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 				e.ajouter(0.);
 			}
 		}
-	
+		if ((quantite_min_cc*0.9 < e.getQuantiteTotale()) && (e.getQuantiteTotale() < quantite_min_cc)) {
+			for (int i=0; i<d; i++) {
+				double qte = e.getQuantite(i);
+				e.set(i, qte*1.1);
+			}
+		}
 		return e;
 	}
 	

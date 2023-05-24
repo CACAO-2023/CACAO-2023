@@ -30,7 +30,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	 */
 	public void initialiser() {
 		this.dict_ratio = new TreeMap<Double,ChocolatDeMarque>();
-		
+		System.out.println("Hey");
 		super.initialiser();
 	}
 	
