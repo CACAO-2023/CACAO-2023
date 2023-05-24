@@ -467,7 +467,7 @@ public class Producteur3 extends Bourse3  {
 	 * 
 	 * @param Variable v
 	 * @return vClone.getMax()
-	 * @author BOCQUET Gabriel
+	 * @author BOCQUET Gabriel  
 	 * Retourne le max de v en ne prenant pas en compte le step actuelle*
 	 * 
 	 */

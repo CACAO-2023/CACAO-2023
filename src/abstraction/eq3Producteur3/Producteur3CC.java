@@ -163,7 +163,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     }
 
     /**
-     * @author Corentin Caugant
+     * @author Corentin Caugant  
      */
     @Override
     public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
