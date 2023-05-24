@@ -63,15 +63,33 @@ public class Lot {
 		this.quantites.put(step, total);
 	}
 
+	public void throwIllegalException(String message) {
+		throw new IllegalArgumentException(message);
+	}
 	/**
 	 * Ajoute lot2 a this 
 	 * @param lot2, lot2!=null et lot2 est du meme produit que this
 	 */
 	public void ajouter(Lot lot2) {
 		if (lot2==null) {
-			throw new IllegalArgumentException("Appel de add(Lot lot2) de Lot avec lot2==null");
+			//throw new IllegalArgumentException("Appel de add(Lot lot2) de Lot avec lot2==null");
+try {
+	throwIllegalException("Appel de add(Lot lot2) de Lot avec lot2==null");
+} catch (Exception e) {
+	e.printStackTrace();
+	System.out.println("Appel de add(Lot lot2) de Lot avec lot2==null -> bye bye");
+	System.exit(0);
+}
 		} else if (!lot2.getProduit().equals(this.produit)) {
-			throw new IllegalArgumentException("Appel de add(Lot lot2) de Lot avec des produits qui ne sont pas identiques");
+			//throw new IllegalArgumentException("Appel de add(Lot lot2) de Lot avec des produits qui ne sont pas identiques");
+			try {
+				throwIllegalException("Appel de add(Lot lot2) de Lot avec des produits qui ne sont pas identiques");
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Appel de add(Lot lot2) de Lot avec des produits qui ne sont pas identiques -> bye bye");
+				System.exit(0);
+			}
+
 		} else {
 			for (Integer i : lot2.quantites.keySet()) {
 				this.ajouter(i, lot2.quantites.get(i));
