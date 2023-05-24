@@ -40,7 +40,7 @@ public class Stock extends Transformateur1Acteur{
 			
 		this.stockChocoMarque=new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque c: Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (c.getMarque().equals("Vccotioi") || c.getMarque().equals("choco")) {
+			if (c.getMarque().equals("Vccotioi") || c.getMarque().equals("Yocttotoa")) {
 					this.stockChocoMarque.put(c, 1000.0);
 					this.totalStocksChocoMarque.ajouter(this, 1000.0, this.cryptogramme);
 					this.journal.ajouter("ajout de 1000 de "+c+" au stock de chocolat de marque "+c.getMarque() +" +--> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
