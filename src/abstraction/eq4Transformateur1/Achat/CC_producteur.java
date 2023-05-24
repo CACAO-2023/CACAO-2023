@@ -146,6 +146,8 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		return prix;
 	}
 
+// François Glavatkii
+	
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		String[] nomA = new String[3];
 		nomA[0] = "Eq1";
@@ -158,7 +160,8 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 			this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc_distributeur conclu "+contrat);
 			}
 		}
-	}
+		}
+		
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		IProduit produit= lot.getProduit();
 		double quantite = lot.getQuantiteTotale();
@@ -204,14 +207,18 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
 							ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancier, this.cryptogramme, false);
 							if (contrat1!=null) {
-								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : contrat signe = "+contrat1);
+								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_BQ: contrat signe = "+contrat1);
+								this.ContratEnCours_F_BQ.add(contrat1);
+
 						}
 						if (cm.getGamme().equals(Gamme.BQ)){
 							Echeancier echeancierB = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotB/2);
 							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
 							ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancierB, this.cryptogramme, false);
 							if (contrat2!=null) {
-								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : contrat signe = "+contrat2);
+								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_HQ : contrat signe = "+contrat2);
+								ContratEnCours_F_HQ.add(contrat2);
+								
 						}
 
 						}
