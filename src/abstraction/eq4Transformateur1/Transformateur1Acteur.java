@@ -50,7 +50,10 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	protected Variable totalStocksChocoMarque;  // La qualite totale de stock de chocolat de marque 
 	protected List<Feve> lesFeves;
 	protected Integer cryptogramme;
-	protected List<ExemplaireContratCadre> ContratEnCours;
+	protected ArrayList<ExemplaireContratCadre> ContratEnCours_F_BQ;
+	protected ArrayList<ExemplaireContratCadre> ContratEnCours_F_HQ;
+	protected ArrayList<ExemplaireContratCadre> ContratEnCours_C_BQ;
+	protected ArrayList<ExemplaireContratCadre> ContratEnCours_C_HQ;
 
 
 	
@@ -90,7 +93,13 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 			this.lesFeves.add(f);
 			this.journal.ajouter("   - "+f);
 		}
+		
 		this.step = 0;
+		this.ContratEnCours_C_BQ = new ArrayList<ExemplaireContratCadre> ();
+		this.ContratEnCours_C_HQ = new ArrayList<ExemplaireContratCadre> ();
+		this.ContratEnCours_F_BQ = new ArrayList<ExemplaireContratCadre> ();
+		this.ContratEnCours_F_HQ = new ArrayList<ExemplaireContratCadre> ();
+		
 	}
 	
 
@@ -107,8 +116,11 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	public void next() {
 		this.step += 1;
 		this.journal.ajouter("step:" + this.step);
-
-	}
+		for (ExemplaireContratCadre c : ContratEnCours_C_BQ ) {
+			if (c.getEcheancier().getStepFin() == Filiere.LA_FILIERE.getEtape());
+				//remove
+		}
+		}
 
 	public Color getColor() {// NE PAS MODIFIER
 		return new Color(229, 243, 157); 
