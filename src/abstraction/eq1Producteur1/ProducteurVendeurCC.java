@@ -154,7 +154,8 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		Lot lot = new Lot(produi);
 		this.journal_ventes.ajouter("Livraison de "+ livraisonBQ +"tonnes de bas de gamme pour "+ contrat.getAcheteur());
 		if (livraisonBQ>0) {
-		lot=super.getVraiStockB().retirer(livraisonBQ);		
+		lot=super.getVraiStockB().retirer(livraisonBQ);	
+		this.Stock.setValeur(this, this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale());
 		}
 		return lot;
 	 case F_MQ:
@@ -164,6 +165,7 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		 this.journal_ventes.ajouter("Livraison de "+ livraisonMQ +"tonnes de moyen de gamme pour "+ contrat.getAcheteur());
 		 if (livraisonMQ>0) {
 		 lot2=super.getVraiStockM().retirer(livraisonMQ);
+		 this.Stock.setValeur(this, this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale());
 		 }
 		 return lot2;
 	 case F_HQ_BE : return null;
