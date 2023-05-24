@@ -74,11 +74,11 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		
 		if (f.getGamme().equals(Gamme.HQ)) {
 			
-			 if (ventetotX/2 > 100){
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotX/2));
+			 if (ventetotX/2 > 500){
+				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat avec "+contrat.getVendeur()+"--> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotX/2));
 				return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotX/2);
 			}else {
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotX/2));
+				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat avec "+contrat.getVendeur()+"--> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, 1000));
 
 					return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotX/2);
 		}  
@@ -109,15 +109,30 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 			return 0.0;
 		}
 		prix = Math.min(prix, contrat.getPrix());
+<<<<<<< HEAD
 		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : on me propose le prix "+contrat.getPrix()+" -> ma proposition ="+prix);
 		return prix;*/
 		return contrat.getPrix();
+=======
+		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : "+contrat.getVendeur()+" propose le prix "+contrat.getPrix()+" -> ma proposition ="+prix);
+		return prix;
+>>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4/
 	}
 
 // François Glavatkii
 	
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
+		String[] nomA = new String[3];
+        nomA[0] = "Eq1";
+        nomA[1] = "Eq2";
+        nomA[2] = "Eq3";
+        for(int i =0; i<=2;i++) {
+        if ( contrat.getAcheteur().getNom().equals(nomA[i])) {
+        this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc_producteur conclu "+contrat);
+        }else {
+            this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nouveau cc_distributeur conclu "+contrat);
+            }
+        }
 	}
 
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
@@ -165,7 +180,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_BQ : tentative d'achat aupres de "+vendeurs);
 							ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancier, this.cryptogramme, false);
 							if (contrat1!=null) {
-								 ContratEnCours_F_BQ.add(contrat1);
+								 
 								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_BQ: contrat signe = "+contrat1);
 								this.ContratEnCours_F_BQ.add(contrat1);
 
