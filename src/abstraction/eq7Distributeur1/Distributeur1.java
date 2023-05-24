@@ -49,7 +49,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		}
 		
 		//Prise en compte des couts de main doeuvre
-		Double qte_totale_en_vente = 0.;
+		qte_totale_en_vente = 0.;
 		for (ChocolatDeMarque choco : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			qte_totale_en_vente += quantiteEnVente(choco,cryptogramme);
 		}
@@ -59,8 +59,6 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 			journal_vente.ajouter("Cout de main d'oeuvre : "+cout_total_mise_en_rayon);
 				}
 		
-		solde_bancaire.setValeur(this, this.getSolde());
-
 		
 	}
 	

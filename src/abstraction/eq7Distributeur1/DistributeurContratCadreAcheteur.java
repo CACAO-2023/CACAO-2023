@@ -144,9 +144,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		return cc;
 
 		}
-public void test() {
-	
-}
+
 	/**
 	 * @author Theo, Ghaly
 	 * @param step : étape
@@ -236,6 +234,8 @@ public void test() {
 
 		super.next();
 		enleve_contrats_obsolete();
+		Depense();
+
 
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			for (Integer d : durees_CC) {
@@ -254,7 +254,7 @@ public void test() {
 
 				}
 				}
-			}}  		
+			}} 
 		}
 		
 	
@@ -380,8 +380,25 @@ public void test() {
 		journal_achat.ajouter(Color.white,Color.black,"--------------------------------------------------------------------------------");
 
 		}
-		
+	/**
+	 * @author Ahmed
+	 * Actions pour avoir le montant des depenses du tour actuel
+	 */
+	public void Depense() {
+		Double cont = 0.0;
+		for (ExemplaireContratCadre contrat : this.mesContratEnTantQuAcheteur) {
+			
+			cont += contrat.getPaiementAEffectuerAuStep();
+			if(contrat.getPaiementAEffectuerAuStep()<0) {
+				System.out.print("contrat negatif  "+contrat.getPaiementAEffectuerAuStep());
+			}
+			}
+		depenses.setValeur(this, totalStocks.getValeur()*cout_stockage_distributeur.getValeur() + cout_main_doeuvre_distributeur.getValeur()*qte_totale_en_vente + cont);
+
 	}
+	
+	}
+	
 
 
 

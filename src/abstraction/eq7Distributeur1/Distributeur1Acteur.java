@@ -43,6 +43,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	protected Variable stock_MQ_BE = new Variable("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
 	protected Variable stock_HQ_BE = new Variable("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
 	protected Variable ventes = new Variable("Eq7ventes","ventes totales réalisées lors de ce tour",this,0);
+	protected Variable depenses = new Variable("Eq7Depenses à l'étape courante", "Depenses totales de ce tour ",this, 0);
 	protected Variable cmSelectionnee; // l'index du chocolat selectionne
 	protected HashMap<ChocolatDeMarque, Variable> Var_Stock_choco; // le stock de chaque chocolat de marque
 	protected HashMap<ChocolatDeMarque, Variable> Var_Cout_Choco; // le cout de chaque chocolat de marque
@@ -50,7 +51,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	protected HashMap<ChocolatDeMarque, Variable> Var_Vente_Choco; // la vente de chaque chocolat de marque
 	protected HashMap<ChocolatDeMarque, Variable> Var_nbr_Vente_Choco; // la quantité vendue de chaque chocolat de marque
 	
-
+	protected double qte_totale_en_vente;
 	protected double vente_step; //variable représentant la somme des vente au step courrant
 	protected Variable marge_Choco_marque_selectionnee = new Variable("Eq7_marge_Choco_marque_selectionnee", "marge Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
 	protected Variable cout_Choco_marque_selectionnee = new Variable("Eq7_cout_Choco_marque_selectionnee", "cout Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);	
@@ -93,7 +94,6 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	protected Variable cout_stockage_distributeur = new Variable("cout moyen stockage distributeur", this);
 	protected Variable cout_main_doeuvre_distributeur = new Variable("cout de la main d'oeuvre pour les distributeur", this); //cout total par tour
 
-	
 	protected LinkedList<VariablePrivee> liste = new LinkedList<VariablePrivee>();
 	protected int cryptogramme;
 	
@@ -274,6 +274,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		res.add(stock_BQ);
 		res.add(stock_MQ);
 		res.add(ventes);
+		res.add(depenses);
 		res.add(stock_Choco_marque_selectionnee);
 		res.add(cout_Choco_marque_selectionnee);
 		res.add(marge_Choco_marque_selectionnee);
