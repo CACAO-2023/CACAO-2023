@@ -238,7 +238,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 			case C_BQ      : prix= 15000;break;
 			}
 		}
-		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propose prix de "+prix+" pour "+produit);
+		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV :"+contrat.getAcheteur()+" propose prix de "+prix+" pour "+produit);
 		return prix;
 	}
 
@@ -251,7 +251,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		} else {
 			return prixInit*(1-0.049);
 		}
-	}
+		}
 
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
 		double stock=0.0;
@@ -287,7 +287,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 //				lot=new Lot((Chocolat)produit);
 //			}
 //		} 
-		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : doit livrer "+quantite+" de "+produit+" --> livre "+livre);
+		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : doit livrer "+quantite+" de "+produit+" à "+contrat.getAcheteur()+"--> livre "+livre);
 		if (livre>0) {
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);}
 		return lot;

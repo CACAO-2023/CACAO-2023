@@ -215,7 +215,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 			produits.add(fh);
 			for (Feve cm : produits ) {
 				List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(cm);
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLACK, " CCV : tentative d'achat de "+cm+" aupres de "+vendeurs);
+				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLACK, " CCA : tentative d'achat de "+cm+" aupres de "+vendeurs);
 				for (IVendeurContratCadre vendeur : vendeurs) {
 					if (!vendeur.equals(this)) {
 						if (cm.getGamme().equals(Gamme.BQ)){
@@ -227,7 +227,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 								quantite = 101;
 							}
 							Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, quantite);
-							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
+							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : tentative d'achat aupres de "+vendeurs);
 							ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancier, this.cryptogramme, false);
 							if (contrat1!=null) {
 								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_BQ: contrat signe = "+contrat1);
@@ -244,7 +244,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 								quantite2 = 101;
 							}
 							Echeancier echeancierH = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, quantite2);
-							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
+							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : tentative d'achat aupres de "+vendeurs);
 							ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancierH, this.cryptogramme, false);
 							if (contrat2!=null) {
 								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_HQ : contrat signe = "+contrat2);
