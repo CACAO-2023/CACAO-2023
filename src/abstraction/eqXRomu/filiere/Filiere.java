@@ -376,6 +376,7 @@ public class Filiere implements IAssermente {
 		if (res==null) {
 			System.out.println("  Aie... recherche d'un indicateur en utilisant un nom incorrect : \""+nomIndicateur+"\" n'est pas dans la liste :"+indicateurs.keySet());
 			System.out.println("  la variable que vous recherchez est peut etre un parametre plutot qu'un indicateur ?");
+			throw new IllegalArgumentException("recherche de >>"+nomIndicateur+"<<");
 		}
 		return res;
 	}

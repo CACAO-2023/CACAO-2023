@@ -27,7 +27,6 @@ public class Stock  {
 		for (Double qte : QteStock.values()) {
 	           tot += qte;
 			}
-		a.journal_stock.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "Etat du stock Total : "+tot); 
 		return tot;
 		}
 	
