@@ -109,14 +109,10 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 			return 0.0;
 		}
 		prix = Math.min(prix, contrat.getPrix());
-<<<<<<< HEAD
-		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : on me propose le prix "+contrat.getPrix()+" -> ma proposition ="+prix);
+		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : "+contrat.getVendeur()+" propose le prix "+contrat.getPrix()+" -> ma proposition ="+prix);
 		return prix;*/
 		return contrat.getPrix();
-=======
-		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : "+contrat.getVendeur()+" propose le prix "+contrat.getPrix()+" -> ma proposition ="+prix);
-		return prix;
->>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4/
+		
 	}
 
 // François Glavatkii
