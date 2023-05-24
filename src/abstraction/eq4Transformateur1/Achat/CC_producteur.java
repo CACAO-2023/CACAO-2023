@@ -156,9 +156,25 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		prix = Math.min(prix, contrat.getPrix());
 		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : "+contrat.getVendeur()+" propose le prix "+contrat.getPrix()+" -> ma proposition ="+prix);
 		return prix;*/
-		return contrat.getPrix();
 		
+		
+		// condition avec le prix du chocolat 
+		
+		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : "+contrat.getListePrix());
+		double prixInit = contrat.getPrix();
+		if (contrat.getListePrix().size()==7) {
+			return prixInit;
+		}else {
+		if (contrat.getListePrix().size()==1) {
+			return prixInit*0.9;
+		} else {
+			double prix=contrat.getListePrix().get(contrat.getListePrix().size()-2);
+			return prix*1.015165;
+		}
 	}
+}
+		
+
 
 // François Glavatkii
 	
@@ -215,7 +231,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 			produits.add(fh);
 			for (Feve cm : produits ) {
 				List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(cm);
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLACK, " CCV : tentative d'achat de "+cm+" aupres de "+vendeurs);
+				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLACK, " CCA : tentative d'achat de "+cm+" aupres de "+vendeurs);
 				for (IVendeurContratCadre vendeur : vendeurs) {
 					if (!vendeur.equals(this)) {
 						if (cm.getGamme().equals(Gamme.BQ)){
@@ -227,7 +243,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 								quantite = 101;
 							}
 							Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, quantite);
-							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
+							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : tentative d'achat aupres de "+vendeurs);
 							ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancier, this.cryptogramme, false);
 							if (contrat1!=null) {
 								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_BQ: contrat signe = "+contrat1);
@@ -244,7 +260,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 								quantite2 = 101;
 							}
 							Echeancier echeancierH = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, quantite2);
-							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
+							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : tentative d'achat aupres de "+vendeurs);
 							ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancierH, this.cryptogramme, false);
 							if (contrat2!=null) {
 								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_HQ : contrat signe = "+contrat2);

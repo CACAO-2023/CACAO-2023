@@ -1,14 +1,18 @@
                                                                                                                                                                                                                                                 package abstraction.eq6Transformateur3;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
+import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
@@ -16,6 +20,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 /**Nathan Salbego*/
 	
 	protected LinkedList<ExemplaireContratCadre> listeCC ;
+	private SuperviseurVentesContratCadre superviseur ;
 
 	
 	/**Nathan Salbego*/
@@ -38,7 +43,8 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		}
 		return tot;
 	}
-
+	
+	
 	@Override
 	/**Nathan Salbego*/
 	public boolean vend(IProduit produit) {
@@ -149,9 +155,25 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		super.journalVentes.ajouter("Nouveau contrat de vente passé :"+contrat.toString());}
 		
 	}
+	 
 	
 	public void initialiser() {
 		super.initialiser();
+		this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
+	}
+	public void rechercheContrat(IProduit produit) {
+		if (superviseur != null) {
+		List<IAcheteurContratCadre> acheteurs = superviseur.getAcheteurs(produit);
+		if (acheteurs.size()!=0) {
+			Collections.shuffle(acheteurs);
+			for (IAcheteurContratCadre acheteur : acheteurs) {
+				if (acheteur!=Filiere.LA_FILIERE.getActeur("ecochoco")) {
+			super.journalVentes.ajouter("on essaie de demander un contrat à l'equipe :"+acheteur.getNom());
+			ExemplaireContratCadre contrat = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1,Filiere.LA_FILIERE.getEtape()+9,100.0), super.cryptogramme, false);
+			if (contrat != null) {super.journalVentes.ajouter("CC cherché et trouvé :"+contrat.toString());
+									this.listeCC.add(contrat);
+									}}}}}
+		
 	}
 	/**Nathan Salbego*/
 	public void next() {
@@ -163,6 +185,14 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 			}
 		}
 		this.listeCC.removeAll(contratsObsoletes);
+		if ((this.stockChocolatBG.getQuantiteTotale()>5000 ))
+		{this.rechercheContrat(super.chocosProduits.get(0));}
+		if ((this.stockChocolatMG.getQuantiteTotale()>5000))
+		{this.rechercheContrat(super.chocosProduits.get(1));}
+		if ((this.stockChocolatMGL.getQuantiteTotale()>5000))
+		{this.rechercheContrat(super.chocosProduits.get(2));}
+		if ((this.stockChocolatHGL.getQuantiteTotale()>5000)) {
+		{this.rechercheContrat(super.chocosProduits.get(3));}}
 	}
 
 	@Override
@@ -172,21 +202,20 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		super.journalVentes.ajouter("Stock MGL="+this.stockChocolatMGL.getQuantiteTotale());
 		super.journalVentes.ajouter("Stock MG="+this.stockChocolatMG.getQuantiteTotale());
 		super.journalVentes.ajouter("Stock BG="+this.stockChocolatBG.getQuantiteTotale());
+		Lot lot = new Lot(produit);
 		if (super.getLotChocolat(produit)!=null) {
 		double livre = Math.min(super.getLotChocolat(produit).getQuantiteTotale(), quantite);
-		super.journalVentes.ajouter("On livre : "+livre+"de : "+produit.getType());
+		super.journalVentes.ajouter("On livre : "+livre+"de : "+((ChocolatDeMarque)produit).getMarque());
 		if (livre>0.0) {
 			super.retirerChocolat((ChocolatDeMarque)produit, livre);//Attention il faut que cela soit possible; verifier la quantité
-		}
-		Lot lot = new Lot(produit);
+		
+		
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); 
 		return lot;}
 		else {
 			super.journalVentes.ajouter("On ne livre pas");
-			Lot l=new Lot(produit);
-			return l; 
-		}
-
+		}}
+		return lot;
 	}
 	/**ecrit par Nathan Claeys
 	   * pour pouvoir rendre les variables qui peuvent aider à la prise de decision

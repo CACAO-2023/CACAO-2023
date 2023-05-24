@@ -51,10 +51,24 @@ public class Lot {
 	 */
 	public void ajouter(int step, double quantite) {
 		if (quantite<=0.0) {
-			throw new IllegalArgumentException("Appel de ajouter de Lot avec une quantite de "+quantite);
-		}
+//			throw new IllegalArgumentException("Appel de ajouter de Lot avec une quantite de "+quantite);
+			try {
+				throwIllegalException("Appel de ajouter de Lot avec une quantite de "+quantite);
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Appel de ajouter de Lot avec une quantite de "+quantite+" -> bye bye");
+				System.exit(0);
+			}		}
 		if (step<0) {
-			throw new IllegalArgumentException("Appel de ajouter de Lot avec un step de "+step);
+//			throw new IllegalArgumentException("Appel de ajouter de Lot avec un step de "+step);
+			try {
+				throwIllegalException("Appel de ajouter de Lot avec un step de "+step);
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Appel de ajouter de Lot avec un step de "+step+" -> bye bye");
+				System.exit(0);
+			}		
+			//}
 		}
 		double total=quantite;
 		if (this.quantites.keySet().contains(step)) {
@@ -116,7 +130,15 @@ try {
 	 */
 	public Lot retirer(double quantite) {
 		if (quantite<=0 || quantite>this.getQuantiteTotale()+0.001) {
-			throw new IllegalArgumentException("Appel de retirer("+quantite+") sur un Lot de feves dont la quantite totale est "+this.getQuantiteTotale());
+		//	throw new IllegalArgumentException("Appel de retirer("+quantite+") sur un Lot de feves dont la quantite totale est "+this.getQuantiteTotale());
+			try {
+				throwIllegalException("Appel de retirer("+quantite+") sur un Lot de feves dont la quantite totale est "+this.getQuantiteTotale());
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Appel de retirer("+quantite+") sur un Lot de feves dont la quantite totale est "+this.getQuantiteTotale()+" -> bye bye");
+				System.exit(0);
+			}		
+			return null;
 		} else {
 			Lot res=new Lot(produit);
 			List<Integer> vides = new LinkedList<Integer>();

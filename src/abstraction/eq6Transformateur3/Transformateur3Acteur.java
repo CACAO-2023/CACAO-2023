@@ -37,7 +37,7 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	protected Variable totalStocksChoco; 
 	protected List<ChocolatDeMarque>chocosProduits;
 	//les var ci dessous décrivent les capacité de transformationj à chaque step
-	protected double capTransMax = 1000.0;
+	protected double capTransMax = 8000.0;
 	protected double partTransBQ = 0.25;
 	protected double partTransMQ = 0.25;
 	protected double partTransMQL = 0.25;
@@ -106,6 +106,7 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	}
 
 	public void initialiser() {
+		
 			}
 
 	public String getNom() {// NE PAS MODIFIER
