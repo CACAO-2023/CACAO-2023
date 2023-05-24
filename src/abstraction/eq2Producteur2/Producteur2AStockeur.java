@@ -23,6 +23,8 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	private HashMap<Feve, Variable> stocksTot;// Est composé des indicateurs de stock,
 											  // que l'on tiens à jour à chaque modification
 											  // des stocks
+	
+	private boolean afficher;
 	/**
 	 * Constructeur de Producteur2AStockeur
 	 */
@@ -35,6 +37,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	 */
 	public void initialiser() {
 		super.initialiser();
+		this.afficher = false;
 		
 		this.stocks = this.createStocks();
 		
@@ -129,6 +132,8 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		ArrayList<HashMap<Feve, Double>> descrPerim = new ArrayList<HashMap<Feve, Double>>();
 		descrPerim.add(stocksDeclasse);
 		descrPerim.add(stocksPerim);
+		if (this.afficher)
+			System.out.println(stocks);
 		for (Feve f : this.lesFeves) {
 			HashMap<Integer, Double> stock = stocks.get(f).getQuantites();
 			if (stock.containsKey(etapeDegrad)) {
@@ -143,13 +148,16 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 			}
 			Set<Integer> key = new HashSet<>(stock.keySet());
 			for (int i: key) {
-				double stockPerim = 0.;
 				if (i <= etapePerim) {
-					stockPerim += stock.get(i);
+					stocksPerim.put(f, stock.get(i) + stocksPerim.get(f));
 					stock.remove(i);
 				}
-				stocksPerim.put(f, stockPerim);
 			}
+		}
+		if (this.afficher) {
+			System.out.println("stocks qui périment à " + etape + " : "+ stocksPerim);
+			System.out.println("stocks qui déclassent : " + stocksDeclasse);
+			System.out.println(stocks);
 		}
 		return descrPerim;
 	}
@@ -229,9 +237,11 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	protected ArrayList<HashMap<Feve,HashMap<Integer, Double>>> getDescrStocksTheo(int etape) {
 		if (etape < Filiere.LA_FILIERE.getEtape())
 			return null;
+		if (this.afficher)
+			System.out.println(this.stocks);
+		//Initialisation Variables
 		HashMap<Feve, Lot> stocksTheo = this.createStocks();
-		
-		for (Feve f: this.stocks.keySet())
+		for (Feve f: this.stocks.keySet()) //Initialisation valeurs stocks
 			stocksTheo.get(f).ajouter(this.stocks.get(f));
 		
 		HashMap<Feve, HashMap<Integer, Double>> stocksTheoTot = new HashMap<Feve, HashMap<Integer, Double>>();
@@ -243,37 +253,48 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 			stocksDeclasse.put(f, new HashMap<Integer, Double>());
 		}
 		ArrayList<HashMap<Feve, HashMap<Integer, Double>>> descrStocksTheo = new ArrayList<HashMap<Feve, HashMap<Integer, Double>>>();
-		descrStocksTheo.add(stocksTheoTot);
+		
 		
 		HashMap<Feve, Double> varQuantite = createStock();
 		HashMap<Feve, Double> quantiteRetard = createStock();
 		
+		//Prise en compte des quantités à livrer ce tour-ci
 		for (ExemplaireContratCadre exCC : this.contrats)
 			varQuantite.put((Feve)exCC.getProduit(), varQuantite.get((Feve) exCC.getProduit()) - exCC.getQuantiteALivrerAuStep());
 		
 		variaQuant(varQuantite, stocksTheo, quantiteRetard, Filiere.LA_FILIERE.getEtape());
 		
+		//maj de stocksTheoTot
 		for (Feve f: stocksTheo.keySet())
 			stocksTheoTot.get(f).put(Filiere.LA_FILIERE.getEtape(), stocksTheo.get(f).getQuantiteTotale() - quantiteRetard.get(f));
 		
+		//ajout de la variable représentant les quantitées totales en stock à chaque étape
+		descrStocksTheo.add(stocksTheoTot);
+		
+		//ajout du premier stock dans la liste
 		descrStocksTheo.add(this.copieStocksLotHash(stocksTheo));
 		
 		for (int curEtape = Filiere.LA_FILIERE.getEtape() + 1; curEtape <= etape; curEtape ++) {
 			this.majPerimTheo(stocksTheo, stocksDeclasse, stocksPerime, curEtape);
+			if (this.afficher)
+				System.out.println("quantiteRetard : " + quantiteRetard);
 			HashMap<Feve, Double> varQuantite2 = createStock();
+			//prise en compte des contrats cadre en cours
 			for (ExemplaireContratCadre exCC : this.contrats) {
 				Feve f = (Feve) exCC.getProduit();
 				varQuantite2.put(f, varQuantite2.get(f) - exCC.getEcheancier().getQuantite(curEtape));
 			}
+			//prise en compte de la production minimale et des penalitées de livraison
 			HashMap<Feve, Double> prod = thisP.Prevision_Production_minimale(curEtape);
 			for (Feve f: varQuantite2.keySet()) {
 				varQuantite2.put(f, varQuantite2.get(f) + prod.get(f) - quantiteRetard.get(f) * (1 + ContratCadre.PENALITE_LIVRAISON));
 			}
-			
-			variaQuant(varQuantite2, stocksTheo, quantiteRetard, etape);
+			//maj des stocks
+			variaQuant(varQuantite2, stocksTheo, quantiteRetard, curEtape);
+			//maj stocksTheoTot
 			for (Feve f: stocksTheo.keySet())
 				stocksTheoTot.get(f).put(curEtape, stocksTheo.get(f).getQuantiteTotale() - quantiteRetard.get(f));
-
+			//ajout du stock dans la liste
 			descrStocksTheo.add(this.copieStocksLotHash(stocksTheo));
 		}
 		descrStocksTheo.add(stocksDeclasse);
@@ -414,9 +435,6 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		ArrayList<HashMap<Feve,HashMap<Integer, Double>>> stockTheo = this.getDescrStocksTheo( Math.max(etape + (int)this.tempsDegradationFeve.getValeur(), Filiere.LA_FILIERE.getEtape() + (int)this.tempsPerimationFeve.getValeur() + 1));
 		HashMap<Feve, HashMap<Integer, Double>> declasse = stockTheo.get(stockTheo.size() - 2);
 		HashMap<Feve, HashMap<Integer, Double>> perime = stockTheo.get(stockTheo.size() - 1);
-		//System.out.println(stockTheo);
-		//System.out.println(declasse);
-		//System.out.println(perime);
 		for (Feve f : this.lesFeves) {
 			Echeancier echeancier = new Echeancier();
 			double perim = 0.; //On ajoute les quantitées qui périment du stock à ce qu'on peut vendre
@@ -435,7 +453,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 			}
 			echeanciersMax.put(f, echeancier);
 		}
-		//System.out.println(echeanciersMax);
+		
 		return echeanciersMax;
 	}
 	
@@ -447,9 +465,15 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	 */
 	protected double[] getBourseMax(Feve f) {
 		int curEtape = Filiere.LA_FILIERE.getEtape();
+		if (curEtape > 890) 
+			this.afficher = true;
 		ArrayList<HashMap<Feve,HashMap<Integer, Double>>> stockTheo = this.getDescrStocksTheo(curEtape + (int)Math.max(this.tempsDegradationFeve.getValeur(), this.tempsPerimationFeve.getValeur()));
-		//System.out.println(f);
-		//System.out.println(stockTheo);
+		if (curEtape > 890) {
+			this.afficher = false;
+			System.out.println(f);
+			System.out.println(this.stocks.get(f));
+			System.out.println(stockTheo);
+		}
 		double[] aVendre = {0., 0.};
 		HashMap<Feve, HashMap<Integer, Double>> declasse = stockTheo.get(stockTheo.size() - 2);
 		HashMap<Feve, HashMap<Integer, Double>> perime = stockTheo.get(stockTheo.size() - 1);
@@ -468,7 +492,8 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 		for (int i = curEtape + Math.max(tempsDegr - stepsVB, 0); i < curEtape + tempsDegr; i ++) {
 			aVendre[0] += declasse.get(f).get(i);
 		}
-		//System.out.println(aVendre[0] + " " + aVendre[1]);
+		if (curEtape > 890)
+			System.out.println(aVendre[0] + " " + aVendre[1]);
 		return aVendre;
 	}
 	
