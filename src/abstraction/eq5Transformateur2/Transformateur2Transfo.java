@@ -182,7 +182,7 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 					if(c.getGamme()==Gamme.HQ) {
 						this.setHQStep(this.getHQStep()+1);
 				}}
-				
+				//ok
 							
 			}
 		}
