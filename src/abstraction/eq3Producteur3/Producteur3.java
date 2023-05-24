@@ -16,6 +16,7 @@ import java.util.TimerTask;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.general.Historique;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Feve;
@@ -32,7 +33,7 @@ public class Producteur3 extends Bourse3  {
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
 	private LinkedList<Double> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
 	private HashMap<Integer,Integer> achatHectarCout;
-
+	
 	private Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
 
 
@@ -50,7 +51,8 @@ public class Producteur3 extends Bourse3  {
 		this.CoutStep = 0.0;
 		this.CoutTonne = 0.;
 		this.HectaresLibres = 0;
-		this.HectaresUtilises = 950000;
+		//this.HectaresUtilises = 950000; premiers essais
+		this.HectaresUtilises = 728000; //optimises
 		this.ListeCout = new LinkedList<Double>();
 		this.achatHectarCout = new HashMap<Integer, Integer>();
 	}
@@ -437,13 +439,15 @@ public class Producteur3 extends Bourse3  {
 			if(s=="H") {
 				f=Feve.F_HQ_BE;
 				tailleStock = this.StockFeveH.getValeur(step);
-				tailleChamp = this.tailleH.getValeur(step);
+				tailleChamp = this.getMaxPrec(tailleH);//this.getMaxPrec(this.tailleH);
+				this.journal_plantation.ajouter("Nombre employé H: " + tailleChamp);
 				proportionChamps = this.tailleH.getValeur(step)/(this.tailleH.getValeur(step) + this.tailleM.getValeur(step));
 			}
 			else {
 				f=Feve.F_MQ_BE;
 				tailleStock = this.StockFeveM.getValeur(step);
-				tailleChamp = this.tailleM.getValeur(step);
+				tailleChamp =this.getMaxPrec(tailleM);//this.getMaxPrec(this.tailleM);
+				this.journal_plantation.ajouter("Nombre employé M: " + tailleChamp);
 				proportionChamps = tailleChamp/ (this.tailleH.getValeur(step) + this.tailleM.getValeur(step));
 			}
 			//CoutStep = CoutStockageFeve + CoutEntretientChamp + CoutAchatDesChamps
@@ -459,6 +463,29 @@ public class Producteur3 extends Bourse3  {
 		this.journal_activitegenerale.ajouter("Cout au step" + step +" pour " + s + ":" + coutCurrentStep);
 		this.journal_activitegenerale.ajouter("Recette pour " + s + "au step " + step + ":" + recette);
 		return recette - coutCurrentStep;
+	}
+	/**
+	 * 
+	 * @param Variable v
+	 * @return vClone.getMax()
+	 * @author BOCQUET Gabriel  
+	 * Retourne le max de v en ne prenant pas en compte le step actuelle*
+	 * 
+	 */
+	public int getMaxPrec(Variable v) {
+		if(Filiere.LA_FILIERE.getEtape() - 1 > -1) {
+		Historique h = v.getHistorique();
+		int max = 999999999;
+		for(int i= 0 ;i < Filiere.LA_FILIERE.getEtape();i++) {
+			int Valuei = (int)h.getValeur(i);
+			System.out.println("Valuei = " + Valuei);
+			if(Valuei < max) {
+				max = Valuei;
+			}
+		}
+		return max;
+		}
+		return 0;
 	}
 	/**
 	 * @author Dubus-Chanson Victor
@@ -513,16 +540,16 @@ public class Producteur3 extends Bourse3  {
 			}
 			if (this.nbr_popup < 1) {
 			this.nbr_popup +=1;
-			JFrame popup = new JFrame(nom_incendie);		
-			popup.setLocation(300, 100);
-			ImageIcon icon = new ImageIcon(url);
-			JLabel label = new JLabel(icon);
-	        popup.getContentPane().add(label);
-	        popup.pack();
-	        popup.setVisible(true);
-	        Timer timer = new Timer();
-			ControlTimeGif monTimerTask = new ControlTimeGif(popup);
-			timer.schedule(monTimerTask, 3000);
+		//	JFrame popup = new JFrame(nom_incendie);		
+			//popup.setLocation(300, 100);
+			//ImageIcon icon = new ImageIcon(url);
+			//JLabel label = new JLabel(icon);
+	        //popup.getContentPane().add(label);
+	        //popup.pack();
+	        //popup.setVisible(true);
+	      //  Timer timer = new Timer();
+		//	ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+			//timer.schedule(monTimerTask, 3000);
 			}
 			for(Integer key : KeyM) {
 				hectarMburnt += FieldsM.get(key)*Degat;
@@ -546,16 +573,16 @@ public class Producteur3 extends Bourse3  {
 	public void Cyclone() {
 		if(this.nbr_popup < 1) {
 		this.nbr_popup +=1;
-		JFrame popup = new JFrame("Cyclone !");		
-		popup.setLocation(300, 100);
-		ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Cyclone.gif");
-		JLabel label = new JLabel(icon);
-        popup.getContentPane().add(label);
-        popup.pack();
-        popup.setVisible(true);
-        Timer timer = new Timer();
-		ControlTimeGif monTimerTask = new ControlTimeGif(popup);
-		timer.schedule(monTimerTask, 3000);	
+//		JFrame popup = new JFrame("Cyclone !");		
+//		popup.setLocation(300, 100);
+//		ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Cyclone.gif");
+//		JLabel label = new JLabel(icon);
+//        popup.getContentPane().add(label);
+//        popup.pack();
+//        popup.setVisible(true);
+//        Timer timer = new Timer();
+//		ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+//		timer.schedule(monTimerTask, 3000);	
 		}
 		Champs fields = this.getFields();
 		HashMap<Integer,Integer> FieldH = fields.getChamps().get("H");
@@ -589,11 +616,11 @@ public class Producteur3 extends Bourse3  {
 	//Pour modéliser    la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
 
 	protected void GreveGeneral() {
-		if (nbr_popup < 1) {
+		if (nbr_popup < 0) {
 			this.nbr_popup +=1;
 			JFrame popup = new JFrame("Grêve des Ouvriers !");		
 			popup.setLocation(300, 100);
-			ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Greve.gif");
+			ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Greve.gif"); //
 			JLabel label = new JLabel(icon);
 			popup.getContentPane().add(label);
 	        popup.pack();

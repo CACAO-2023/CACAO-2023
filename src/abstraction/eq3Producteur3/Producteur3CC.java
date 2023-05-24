@@ -42,8 +42,8 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
 
         // Initialisation des HashMaps. Au début tous nos acheteurs ont la même fiabilité.
-        Double PRIX_DEPART_MQ = 10000.0;
-        Double PRIX_DEPART_HQ = 30000.0;
+        Double PRIX_DEPART_MQ = 6000.0; //10000 avant, mais des équipes ne négocient pas
+        Double PRIX_DEPART_HQ = 10000.0; //30000 avant, mais des équipes ne négocient pas
 
         List<IAcheteurContratCadre> acheteurs = new LinkedList<IAcheteurContratCadre>();
 		List<IActeur> acteurs = Filiere.LA_FILIERE.getActeursSolvables();
@@ -163,7 +163,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     }
 
     /**
-     * @author Corentin Caugant
+     * @author Corentin Caugant  
      */
     @Override
     public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
