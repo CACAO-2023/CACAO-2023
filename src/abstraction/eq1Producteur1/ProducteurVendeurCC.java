@@ -7,10 +7,12 @@ import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
@@ -18,26 +20,35 @@ import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 public class ProducteurVendeurCC extends Producteur1Plantation implements IVendeurContratCadre{
     private List<ExemplaireContratCadre> mescontrats;
     protected SuperviseurVentesContratCadre supCCadre;
-	
+	private HashMap<Feve, Integer> nego; 
+	private HashMap<IActeur, Integer> systemefidelite;
 	
 	
 	public ProducteurVendeurCC() {
 		super();
 		this.mescontrats= new LinkedList<ExemplaireContratCadre>();
+		this.nego= new HashMap<Feve, Integer>();
+		this.systemefidelite=new HashMap<IActeur, Integer>();
+		
 	}
 	public void initialiser() {
 		super.initialiser();
 		this.supCCadre = (SuperviseurVentesContratCadre) (Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
+		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
+			systemefidelite.put(acteur, 0);
+		}
 	}
 	
+	
 	public boolean peutVendre(IProduit produit) {
-		return (produit instanceof Feve) ;
+		return produit instanceof Feve && (produit == Feve.F_BQ || produit == Feve.F_MQ);
 	}
 	
 
 	//On doit revoir la stratégie de contreproposition(criteres, quantité max, quantité min ...)
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		if (this.peutVendre((IProduit) contrat.getProduit())) {
+		  
 		  switch ((Feve)contrat.getProduit()) {
 		  case F_BQ:
 			if (contrat.getEcheancier().getQuantiteTotale()<super.getVraiStockB().getQuantiteTotale()) {
@@ -72,37 +83,45 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		}
 		return null;
 	}
+	
+	public double DeterminerFacteurPrix(int i, IActeur acteur) { //On tient compte du systeme de fidélité et de la difficulté des négociations
+		double f=1;
+		if (i>=3) {
+			f=f-i/10;
+		}
+		int NbreDachat=this.systemefidelite.get(acteur);
+		return f - NbreDachat/20;
+	}
 
 	@Override
 	public double propositionPrix(ExemplaireContratCadre c) {
-		double p=0;
-		if((Feve)c.getProduit()==Feve.F_BQ) {		
-			p= 1.5;
-		}
-		if((Feve)c.getProduit()==Feve.F_MQ) {
-			p= 1.9;
+		double p= prixMinAvecMarge((Feve)c.getProduit(), 1)*1.3;
+		if (this.systemefidelite.get(c.getAcheteur())>=10) {
+			p=p*0.9;
 		}
 		return p;
-		
-		
 	}
+	
 
 	
 	@Override
-	public double contrePropositionPrixVendeur(ExemplaireContratCadre c) {
-		
-		
+	public double contrePropositionPrixVendeur(ExemplaireContratCadre c) {		
+		if (!(this.nego.keySet().contains(c.getProduit()))) {
+			this.nego.put((Feve)c.getProduit(), 0);}
+		this.nego.put((Feve)c.getProduit(), this.nego.get(c.getProduit())+1);
+        double fp=DeterminerFacteurPrix(this.nego.get(c.getProduit()), c.getAcheteur()); //Facteur prix
 		double p= (c.getPrix()+ propositionPrix(c))/2;		
-		if (c.getPrix()>=propositionPrix(c)) {
+		if (fp*p<c.getPrix()){ 
 			return c.getPrix();
 		}
-		else {
 		
-		if (p>0.75*propositionPrix(c)) {
-		return p;
-		}else {
-			return propositionPrix(c)*Math.random()+ propositionPrix(c);
-		}}
+		else if (fp*p>super.prixMinAvecMarge((Feve)c.getProduit(), c.getQuantiteTotale())/c.getQuantiteTotale()) {
+			return fp*p; 
+		}
+		else {
+			return super.prixMinAvecMarge((Feve)c.getProduit(), c.getQuantiteTotale())/c.getQuantiteTotale();
+		}
+		
 		
 	}
 	
@@ -112,22 +131,28 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		
 	}
 	
-
+	
 	@Override
 	public Lot livrer(IProduit produi, double quantite, ExemplaireContratCadre contrat) {
 	 switch ((Feve)produi) {
 	 
 	 case F_BQ:
-		double livraisonBQ = Math.min(super.getVraiStockB().getQuantiteTotale(), quantite);		
+		int oldeststepBQ = this.OldestStep(produi);
+		int livraisonBQ = (int)Math.min(super.getVraiStockB().getQuantiteTotale(), quantite);		
 		Lot lot = new Lot(produi);
-		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livraisonBQ); 
 		this.journal_ventes.ajouter("Livraison de "+ livraisonBQ +"tonnes de bas de gamme pour "+ contrat.getAcheteur());
+		if (livraisonBQ>0) {
+		super.getVraiStockB().retirer(livraisonBQ);
+		lot.ajouter(livraisonBQ, oldeststepBQ);}
 		return lot;
 	 case F_MQ:
-		 double livraisonMQ = Math.min(super.getVraiStockM().getQuantiteTotale(), quantite);
+		 int oldeststepMQ = this.OldestStep(produi);
+		 int livraisonMQ = (int)Math.min(super.getVraiStockM().getQuantiteTotale(), quantite);
 		 Lot lot2 = new Lot(produi);
-		 lot2.ajouter(Filiere.LA_FILIERE.getEtape(), livraisonMQ); 
 		 this.journal_ventes.ajouter("Livraison de "+ livraisonMQ +"tonnes de moyen de gamme pour "+ contrat.getAcheteur());
+		 if (livraisonMQ>0) {
+		 super.getVraiStockM().retirer(livraisonMQ);
+		 lot2.ajouter(oldeststepMQ, livraisonMQ);}
 		 return lot2;
 	 case F_HQ_BE : return null;
 	 case F_MQ_BE : return null;	
@@ -146,7 +171,11 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		this.PropositionVendeur(Feve.F_BQ);
 		this.PropositionVendeur(Feve.F_MQ);
 		this.journal_ventes.ajouter("Nos contrats à l'étape "+ Filiere.LA_FILIERE.getEtape()+"sont "+ this.mescontrats);
-	    
+		this.nego.clear();
+		for (IActeur acteur : this.systemefidelite.keySet()){
+			this.journal_fidelite.ajouter("L'acteur "+acteur.getNom()+ "a "+this.systemefidelite.get(acteur));
+			
+		}
 	}
 
 	@Override
@@ -164,10 +193,38 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		if (c != null) {
 			this.journal_ventes.ajouter("Début contrat cadre avec "+client.getNom() +"pour" + produit +c);
 			this.mescontrats.add(c);
+			this.nego.put((Feve)c.getProduit(), 1);
+			UpdateFidelite(c);
 		}
 		return c;
 		
 	}
 	
+	
+	
+	public void UpdateFidelite(ExemplaireContratCadre contrat) {
+		IActeur acteur= contrat.getAcheteur();
+		this.systemefidelite.put(acteur, this.systemefidelite.get(acteur)+1);
+		
+	}
+	
+	public int OldestStep(IProduit produit) {
+	    double os = this.getVraiStockB().getQuantites().get(Filiere.LA_FILIERE.getEtape());
+		if (produit==Feve.F_BQ) {
+	    	for (int i : this.getVraiStockB().getQuantites().keySet()) {
+	    		if (this.getVraiStockB().getQuantites().get(i)<os) {
+	    			os=this.getVraiStockB().getQuantites().get(i);
+	    		}
+	    	}
+	    }
+		else if (produit==Feve.F_MQ) {
+			for (int i: this.getVraiStockM().getQuantites().keySet()) {
+				if (this.getVraiStockM().getQuantites().get(i)<os) {
+					os=this.getVraiStockM().getQuantites().get(i);
+				}
+			}
+		}
+		return (int)os;
+	}
 
 }
