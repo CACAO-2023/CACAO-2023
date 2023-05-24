@@ -406,19 +406,27 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		}  
 		
 		this.getListeContratEnCoursA().removeAll(contratsObsoletes);
-		if ((super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente+200000<this.quantBQMax 
+		//if ((super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente+200000<this.quantBQMax 
+				//&& this.prioriteCCBG)
+		if ((super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente+10000<250000 
 				&& this.prioriteCCBG)
 				|| super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente<this.quantBQMin+10000) {
 		this.chercheContrat(Feve.F_BQ);}
-		if ((super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente+200000<this.quantMQMax
+		//if ((super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente+200000<this.quantMQMax
+				//&& this.prioriteCCMG)
+		if ((super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente+10000<250000
 				&& this.prioriteCCMG)
 				|| super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente<this.quantMQMin +10000) {
 		this.chercheContrat(Feve.F_MQ);}
-		if ((super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente+200000<this.quantMQLMax
+		//if ((super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente+200000<this.quantMQLMax
+				//&& this.prioriteCCMGL)
+		if ((super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente+10000<250000
 				&& this.prioriteCCMGL)
 				||super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente<this.quantMQLMin + 10000) {
 		this.chercheContrat(Feve.F_MQ_BE);}
-		if ((super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente+200000<this.quantHQMax
+		//if ((super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente+200000<this.quantHQMax
+				//&& this.prioriteCCHG)
+		if ((super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente+10000<250000
 				&& this.prioriteCCHG)
 				||super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente<this.quantHQMin + 10000) {
 		this.chercheContrat(Feve.F_HQ_BE);}
