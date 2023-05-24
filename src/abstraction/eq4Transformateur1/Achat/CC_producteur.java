@@ -203,7 +203,14 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 				for (IVendeurContratCadre vendeur : vendeurs) {
 					if (!vendeur.equals(this)) {
 						if (cm.getGamme().equals(Gamme.BQ)){
-							Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotB/2);
+							double quantite = 0;
+							if (ventetotB/2>100) {
+								quantite = ventetotB/2;
+							}
+							else {
+								quantite = 101;
+							}
+							Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, quantite);
 							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
 							ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancier, this.cryptogramme, false);
 							if (contrat1!=null) {
@@ -211,10 +218,17 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 								this.ContratEnCours_F_BQ.add(contrat1);
 
 						}
-						if (cm.getGamme().equals(Gamme.BQ)){
-							Echeancier echeancierB = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotB/2);
+						if (cm.getGamme().equals(Gamme.HQ)){
+							double quantite2 = 0;
+							if (ventetotH/2>100) {
+								quantite2 = ventetotH/2;
+							}
+							else {
+								quantite2 = 101;
+							}
+							Echeancier echeancierH = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, quantite2);
 							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
-							ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancierB, this.cryptogramme, false);
+							ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancierH, this.cryptogramme, false);
 							if (contrat2!=null) {
 								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_HQ : contrat signe = "+contrat2);
 								ContratEnCours_F_HQ.add(contrat2);
