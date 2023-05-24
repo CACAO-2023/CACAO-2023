@@ -307,6 +307,7 @@ public void initialiser() {
 
 	public void next() {
 		super.next();
+		if (super.totalStocksChoco.getValeur()<500000) {
 		if (stockFeveBG.getQuantiteTotale()>0 && stockFeveBG.getQuantiteTotale()<super.partTransBQ*super.capTransMax) {
 			super.journalTransformation.ajouter("on veut obtenir"+stockFeveBG.getQuantiteTotale()/((double)this.getPourcentageCacaoBG())*100+"de Chocolat BG");
 		this.transformationChoco(Feve.F_BQ, stockFeveBG.getQuantiteTotale()/((double)this.getPourcentageCacaoBG())*100);
@@ -341,6 +342,7 @@ public void initialiser() {
 			if (stockFeveHGL.getQuantiteTotale()>=super.partTransHQ*super.capTransMax) {
 				super.journalTransformation.ajouter("on veut obtenir"+super.partTransHQ*super.capTransMax/((double)this.getPourcentageCacaoHG())/100+"de Chocolat HGL");
 				this.transformationChoco(Feve.F_HQ_BE, super.partTransHQ*super.capTransMax/((double)this.getPourcentageCacaoHG())/100);
+			}
 			}
 		}
 	
