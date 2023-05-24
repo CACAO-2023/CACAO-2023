@@ -69,71 +69,80 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 	// François Glavatkii et Alexian 
 	
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		
+		/*
 		Echeancier echeancier = contrat.getEcheancier();
 		int duree = echeancier.getNbEcheances();
 		double quantitetot = echeancier.getQuantiteTotale();
 		
-		int ventetotH = 0;
-		int ventetotB = 0;
+		int ventetotX = 0;
 		for (abstraction.eqXRomu.produits.ChocolatDeMarque c : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (c.getGamme().equals(Gamme.HQ)){
-				ventetotH += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
+			if(c.getGamme().equals(((Feve)contrat.getProduit()).getGamme())) {
+				ventetotX += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
 			}
-			if (c.getGamme().equals(Gamme.BQ)){
-				ventetotB += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
-			} 
 		}
-		if (( duree >= 15) && ( quantitetot <= ventetotH) && ( quantitetot >= 10000)) {
+//		if (( duree >= 15) && ( quantitetot <= ventetotX) && ( quantitetot >= 10000)) {
 			
-			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
-			return contrat.getEcheancier();
-		}
-		if (( duree >= 15) && ( quantitetot <= ventetotB) && ( quantitetot >= 10000)) {
-			
-			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
-			return contrat.getEcheancier();
-		}
+//			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
+//			return contrat.getEcheancier();
+//		}
+
 		Feve f = (Feve) contrat.getProduit();
 		if (f.getGamme().equals(Gamme.MQ)) {
 			return null;
 		}
 		
+		int aLivrer =0;
 		if (f.getGamme().equals(Gamme.HQ)) {
-			
-			 if (ventetotH/30 > 100){
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotH/2));
-				return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotH/30);
-			}else {
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, 101));
-
-					return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, 101);
-		}}
-		
-		if (f.getGamme().equals(Gamme.BQ)) {
-			if (ventetotB/30 > 100){
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotB/2));
-				return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotB/30);
-			}else {
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, 101));
-
-					return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, 101);
-				}
+			for (ExemplaireContratCadre c : ContratEnCours_F_HQ) {
+				aLivrer += c.getQuantiteALivrerAuStep();
+			}
 		}
-		return null;
+		else if (f.getGamme().equals(Gamme.BQ)) {
+			for (ExemplaireContratCadre c : ContratEnCours_F_BQ) {
+				aLivrer += c.getQuantiteALivrerAuStep();
+			}
+		}
+		if (aLivrer>this.qteTransfo*2) {
+			return null;
+		}
+			
+<<<<<<< HEAD
+//		if (f.getGamme().equals(Gamme.HQ)) {
+			
+//			 if (ventetotX/2 > 100){
+//				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotX/2));
+//				return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotX/2);
+//			}else {
+//				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotX/2));
+=======
+			 if (ventetotX/2 > 500){
+				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat avec "+contrat.getVendeur()+"--> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotX/2));
+				return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotX/2);
+			}else {
+				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat avec "+contrat.getVendeur()+"--> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, 1000));
+>>>>>>> branch 'main' of https://github.com/AlexianBtrl/CACAO-2023-Eq4
+
+//					return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotX/2);
+//		}  
+//			 }
+		return echeancier;
+		}
 		
+		return null;*/
+		return contrat.getEcheancier();
 	}
+
 	
 	
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		double prix=1500.0;
+		/*double prix=3000.0;
 //		System.out.println(" type produit "+contrat.getProduit());
 		double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
 		Object produit = contrat.getProduit();
 		if (produit instanceof Feve) {
 			switch ((Feve)produit) {
-			case F_HQ_BE : prix= 3125;break;
-			case F_BQ : prix= 1106;break;
+			case F_HQ_BE : prix= 3500;break;
+			case F_BQ : prix= 1506;break;
 			}
 		}
 		int nbPas=0;
@@ -145,23 +154,30 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 			return 0.0;
 		}
 		prix = Math.min(prix, contrat.getPrix());
-		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : on me propose le prix "+contrat.getPrix()+" -> ma proposition ="+prix);
-		return prix;
+		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : "+contrat.getVendeur()+" propose le prix "+contrat.getPrix()+" -> ma proposition ="+prix);
+		return prix;*/
+		return contrat.getPrix();
+		
 	}
 
+// François Glavatkii
+	
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		String[] nomA = new String[3];
-		nomA[0] = "Eq1";
-		nomA[1] = "Eq2";
-		nomA[2] = "Eq3";
-		for(int i =0; i<=2;i++) {
-		if ( contrat.getAcheteur().getNom().equals(nomA[i])) {
-		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc_producteur conclu "+contrat);
-		}else {
-			this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc_distributeur conclu "+contrat);
-			}
-		}
+
+        nomA[0] = "Eq1";
+        nomA[1] = "Eq2";
+        nomA[2] = "Eq3";
+        for(int i =0; i<=2;i++) {
+        if ( contrat.getAcheteur().getNom().equals(nomA[i])) {
+        this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc_producteur conclu "+contrat);
+        }else {
+            this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nouveau cc_distributeur conclu "+contrat);
+            }
+        }
 	}
+
+
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		IProduit produit= lot.getProduit();
 		double quantite = lot.getQuantiteTotale();
@@ -178,8 +194,8 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		return 10; // --> j'afficherai un taux de RSE de 10% sur mes chocolats de marque produits
 	}
 
-// Par Fouad:
-	
+	// François et Fouad
+
 	 public void next() {
 			super.next();
 			int ventetotH = 0;
@@ -203,24 +219,41 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 				for (IVendeurContratCadre vendeur : vendeurs) {
 					if (!vendeur.equals(this)) {
 						if (cm.getGamme().equals(Gamme.BQ)){
-							Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotB/2);
+							double quantite = 0;
+							if (ventetotB/2>100) {
+								quantite = ventetotB/2;
+							}
+							else {
+								quantite = 101;
+							}
+							Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, quantite);
 							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
 							ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancier, this.cryptogramme, false);
 							if (contrat1!=null) {
-								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : contrat signe = "+contrat1);
-						}
-						if (cm.getGamme().equals(Gamme.BQ)){
-							Echeancier echeancierB = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotB/2);
-							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
-							ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancierB, this.cryptogramme, false);
-							if (contrat2!=null) {
-								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : contrat signe = "+contrat2);
-						}
+								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_BQ: contrat signe = "+contrat1);
+								this.ContratEnCours_F_BQ.add(contrat1);
 
 						}
+						}
+						if (cm.getGamme().equals(Gamme.HQ)){
+							double quantite2 = 0;
+							if (ventetotH/2>100) {
+								quantite2 = ventetotH/2;
+							}
+							else {
+								quantite2 = 101;
+							}
+							Echeancier echeancierH = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, quantite2);
+							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
+							ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancierH, this.cryptogramme, false);
+							if (contrat2!=null) {
+								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_HQ : contrat signe = "+contrat2);
+								ContratEnCours_F_HQ.add(contrat2);
+								
+						}
 					}
+				}
 			}
 		}
-		}
-	 }
+	}
 }
