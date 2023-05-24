@@ -189,7 +189,6 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	 * au moins cette quantite en stock)
 	 */
 	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
-
 		int etape = Filiere.LA_FILIERE.getEtape()%24;
 		Double previsions = previsionsperso.get(etape).get(choco);
 		double stock_choco = this.get_valeur(Var_Stock_choco, choco);
