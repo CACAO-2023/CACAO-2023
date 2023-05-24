@@ -25,7 +25,7 @@ import abstraction.eqXRomu.produits.Feve;
  * @author FERHOUT Adam
  */
 
-public class Transformateur2 extends Transformateur2AcheteurBourseCacao implements IFabricantChocolatDeMarque{
+public class Transformateur2 extends Transformateur2VendeurBourseCacao implements IFabricantChocolatDeMarque{
 	
 	private List<ChocolatDeMarque>chocosProduits; // Liste des chocolats de marque produits 
 	protected HashMap<Feve, Double> stockFeves; // Feves disponible (en stock)

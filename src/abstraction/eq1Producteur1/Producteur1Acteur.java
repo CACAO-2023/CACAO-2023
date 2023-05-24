@@ -16,9 +16,7 @@ import abstraction.eqXRomu.produits.Gamme;
 public class Producteur1Acteur implements IActeur {
 	
 	protected int cryptogramme;
-	protected Variable coutreplantation = new Variable("Cout de replantation", "Cout de replantation pour un hectare, peu importe sa gamme", this, 1000); //choisi arbitrairement
-	protected Variable coutmaindoeuvre = new Variable("Cout de la main d'oeuvre", "Cout de la main d'oeuvre par hectare par step", this, 30);
-	protected Journal journal_evenements;
+	protected Journal journal;
 	protected Journal journal_stocks;
 	protected Journal journal_ventes;
 	protected Journal journal_champs;
@@ -31,7 +29,7 @@ public class Producteur1Acteur implements IActeur {
 	protected Variable Stock = new Variable("Stock totale de fèves en tonne", "La quantité en tonne de fèves séchées de moyenne et basse qualité présentes dans nos stocks", this, 2000);
 
 	public Producteur1Acteur() {
-		this.journal_evenements = new Journal("Journal : évenements"+this.getNom(), this);
+		this.journal = new Journal("Journal "+this.getNom(), this);
 		this.journal_stocks = new Journal("Journal : stocks"+this.getNom(), this);
 		this.journal_ventes = new Journal("Journal : ventes"+this.getNom(), this);
 		this.journal_champs = new Journal("Journal : champs"+this.getNom(), this);
@@ -40,18 +38,19 @@ public class Producteur1Acteur implements IActeur {
 	public void initialiser() { //elouan et charles
 		this.step = 0;
 		this.champBas = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
-		for (int i=0; i<40; i++) {
-			this.champBas.ajouter(-i*51, 5000.);
+		for (int i=0; i<30; i++) {
+			this.champBas.ajouter(-i, 6666.67);
 		}
 		this.champMoy = new champ();//initialisation de nos champs avec un hectare pour compiler sans bug : à modifier
-		for (int i=0; i<40; i++) {
-			this.champMoy.ajouter(-i*51, 1250.);
+		for (int i=0; i<30; i++) {
+			this.champMoy.ajouter(-i, 1666.67);
 		}
 		this.stockFeveBas = new Lot(Feve.F_BQ);
 		this.stockFeveBas.ajouter(0,1200);
 		this.stockFeveMoy = new Lot(Feve.F_MQ);
 		this.stockFeveMoy.ajouter(0,300);
 	}
+
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ1";
 	}
@@ -63,9 +62,17 @@ public class Producteur1Acteur implements IActeur {
 	public void next() { //elouan
 		this.step = this.step + 1;
 		// maj des journaux
+		this.journal.ajouter("step : "+step);
 		this.journal_stocks.ajouter("===== step : "+step+" =====");
 		this.journal_stocks.ajouter("Stock bas de gamme : "+this.stockFeveBas.getQuantiteTotale());
 		this.journal_stocks.ajouter("Stock moyenne gamme : "+this.stockFeveMoy.getQuantiteTotale());
+		this.journal_champs.ajouter("===== step : "+step+" =====");
+		this.journal_champs.ajouter("---> Qualite : Bas");
+		this.journal_champs.ajouter(this.champBas.toString());
+		this.journal_champs.ajouter("Cela fait en tout "+this.champBas.getNbHectare()+" hectares");
+		this.journal_champs.ajouter("---> Qualite : Moy");
+		this.journal_champs.ajouter(this.champMoy.toString());
+		this.journal_champs.ajouter("Cela fait en tout "+this.champMoy.getNbHectare()+" hectares");
 		this.journal_ventes.ajouter("===== step : "+step+" =====");
 		// maj des indicateurs
 		this.Stock.setValeur(this, this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale());
@@ -91,15 +98,13 @@ public class Producteur1Acteur implements IActeur {
 	// Renvoie les parametres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
-		res.add(this.coutmaindoeuvre);
-		res.add(this.coutreplantation);
 		return res;
 	}
 
 	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
-		res.add(this.journal_evenements);
+		res.add(this.journal);
 		res.add(this.journal_ventes);
 		res.add(this.journal_stocks);
 		res.add(this.journal_champs);

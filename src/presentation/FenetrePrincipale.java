@@ -67,7 +67,7 @@ public class FenetrePrincipale extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private HashMap<IActeur, JButton> boutonsFaillite;
+	private HashMap<IActeur, JButton>boutonsFaillite;
 	private HashMap<IActeur, Integer> cryptos; // Pour acceder aux variables a acces restreint
 	
 	public FenetrePrincipale(String[] args) {

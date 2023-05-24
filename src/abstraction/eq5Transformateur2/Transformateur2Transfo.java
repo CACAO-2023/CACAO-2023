@@ -81,17 +81,16 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 				double proportion_marque = 0;
 				String Marque = "";
 				int cacao = 0;
-				double cout = 0;
 				
 				if (f.getGamme()==Gamme.MQ) {
-					qtefeve = this.stockFeves.get(f)*0.9 ; //15% des feves moyenne gamme sont transformées en ChocoPop, 25% sans marque
-					proportion_marque = 0.8;
+					qtefeve = this.stockFeves.get(f)*0.15 ; //15% des feves moyenne gamme sont transformées en ChocoPop, 25% sans marque
+					proportion_marque = 0.75;
 					Marque = "ChocoPop";
 					cacao = 70;
 				}
 				
 				if((c.getGamme()==Gamme.HQ) && (c.isBioEquitable())) {
-					qtefeve = this.stockFeves.get(f)*0.9 ; //10% des feves haute gamme sont transformées en ChocoPop
+					qtefeve = this.stockFeves.get(f)*0.10 ; //10% des feves haute gamme sont transformées en ChocoPop
 					proportion_marque = 1;
 					Marque = "Maison Doutre";
 					cacao = 90;
@@ -103,11 +102,6 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 				this.stockChoco.put(c, this.stockChoco.get(c)+((qtefeve*(1-proportion_marque))*this.pourcentageTransfo.get(f).get(c)));
 				this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Transformation de "+qtefeve*(1-proportion_marque)+" feves "+Journal.texteSurUneLargeurDe(f.getGamme()+"", 15)+" en "+this.stockChoco.get(c)+((qtefeve*(1-proportion_marque))*this.pourcentageTransfo.get(f).get(c))+" chocolat "+Journal.texteSurUneLargeurDe(c.getGamme()+"", 15));
 		
-				// On paie les coûts de transformation
-				cout = qtefeve*1500; // le coût de transformation est fixé a 1500€ par tonne de feve.
-				Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), cout);
-				this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE,"Paiement de "+cout+" pour la transformation de "+qtefeve+" tonnes de feve en chocolat ");
-				
 				ChocolatDeMarque cm = new ChocolatDeMarque(c, Marque, cacao, 0); // le chocolat ChocoPop est a 70% fait de cacao
 				double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;	
 				this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Transformation de "+qtefeve*proportion_marque+" feves "+Journal.texteSurUneLargeurDe(f.getGamme()+"", 15)+" en "+((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c))+Journal.texteSurUneLargeurDe(cm.getMarque(), 15));

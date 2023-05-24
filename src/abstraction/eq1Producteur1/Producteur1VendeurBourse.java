@@ -14,41 +14,25 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 	
 	// On repère les fêves qui vont périmées pour pouvoir les vendre.
 	
-	public Double feveBQPeri() { //Elouan
-		if (this.stockFeveBas.getQuantites().get(step-11)==null)
-			{
-			return 0.;
-			}
-		else {
-			return this.stockFeveBas.getQuantites().get(step-11);
-		}
-	}
-
-	/*public Double feveBQPeri() {
+	public int feveBQPeri() {
+		
 		int FeveBasPeri = 0;
 		for (int i=0 ; i <= step ; i++) {
 			FeveBasPeri += this.stockFeveBas.getQuantites().get(step);
 		}
 		return FeveBasPeri;
-		}*/
-	
-	public Double feveMQPeri() { //Elouan
-		if (this.stockFeveMoy.getQuantites().get(step-11)==null)
-			{
-			return 0.;
-			}
-		else {
-			return this.stockFeveMoy.getQuantites().get(step-11);
-		}
+		
 	}
 	
-	/*public int feveMQPeri () {
+	public int feveMQPeri () {
+		
 		int FeveMoyPeri = 0;
 		for (int i=0 ; i <= step ; i++) {
 			FeveMoyPeri += this.stockFeveMoy.getQuantites().get(step);
 		}
 		return FeveMoyPeri;
-	}*/
+		
+	}
 	
 	
 	
@@ -59,7 +43,7 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 		BourseCacao bourse = (BourseCacao)(Filiere.LA_FILIERE.getActeur("BourseCacao"));
 			
 		if (f==Feve.F_BQ) {
-			Double FeveBQPeri = this.feveBQPeri();
+			int FeveBQPeri = this.feveBQPeri();
 			if (this.getStockBas().getQuantiteTotale()!=0.0 && 
 			   ((this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale())*50) >= (this.stockFeveBas.getQuantiteTotale()*bourse.getCours(Feve.F_BQ).getValeur()+this.stockFeveMoy.getQuantiteTotale()*bourse.getCours(Feve.F_MQ).getValeur())/10 ) {
 				return this.getStockBas().getQuantiteTotale()/10+FeveBQPeri;
@@ -68,7 +52,7 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 		}
 		
 		if (f==Feve.F_MQ) {
-			Double FeveMQPeri = this.feveMQPeri();
+			int FeveMQPeri = this.feveMQPeri();
 			if (this.getStockMoy().getQuantiteTotale()!=0.0 && 
 			   ((this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale())*50) >= (this.stockFeveBas.getQuantiteTotale()*bourse.getCours(Feve.F_BQ).getValeur()+this.stockFeveMoy.getQuantiteTotale()*bourse.getCours(Feve.F_MQ).getValeur())/10  ) {
 			return this.getStockMoy().getQuantiteTotale()/10+ FeveMQPeri;
@@ -97,7 +81,7 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 
 	
 	public void notificationBlackList(int dureeEnStep) {
-		this.journal_evenements.ajouter("Aie... blackliste pendant 6 steps");
+		this.journal.ajouter("Aie... blackliste pendant 6 steps");
 	}
 	
 }

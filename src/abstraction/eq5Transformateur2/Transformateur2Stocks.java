@@ -23,24 +23,19 @@ public class Transformateur2Stocks extends Transformateur2Acteur {
 	
 	public void initialiser() {
 		super.initialiser();
-		
 		this.stockFeves=new HashMap<Feve,Double>();
-		 // on ajoute par défaut un certain stock de feves (10000 de chaque type)
-		this.stockFeves.put(Feve.F_MQ, 10000.0);
-		this.totalStocksFeves.ajouter(this, 10000.0, this.cryptogramme);
-		this.journal.ajouter("ajout de 10000 de "+Feve.F_MQ+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
+		for (Feve f : Feve.values()) { // on ajoute par défaut un certain stock de feves (10000 de chaque type)
+			this.stockFeves.put(f, 10000.0);
+			this.totalStocksFeves.ajouter(this, 10000.0, this.cryptogramme);
+			this.journal.ajouter("ajout de 10000 de "+f+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
+		}
 		
-		this.stockFeves.put(Feve.F_HQ_BE, 10000.0);
-		this.totalStocksFeves.ajouter(this, 10000.0, this.cryptogramme);
-		this.journal.ajouter("ajout de 10000 de "+Feve.F_HQ_BE+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
-			
 		this.stockChoco=new HashMap<Chocolat,Double>(); // de meme avec les differents chocolats
-		
-		this.stockChoco.put(Chocolat.C_MQ, 0.0);
-		this.totalStocksChoco.ajouter(this, 0.0, this.cryptogramme);
-		this.stockChoco.put(Chocolat.C_HQ_BE, 0.0);
-		this.totalStocksChoco.ajouter(this, 0.0, this.cryptogramme);
-
+		for (Chocolat c : Chocolat.values()) {
+			this.stockChoco.put(c, 1000.0);
+			this.totalStocksChoco.ajouter(this, 1000.0, this.cryptogramme);
+			this.journal.ajouter("ajout de 1000 de "+c+" au stock de chocolat --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
+		}
 		
 		this.stockChocoMarque=new HashMap<ChocolatDeMarque,Double>();
 		ChocolatDeMarque Chocopop = new ChocolatDeMarque(Chocolat.C_MQ, "ChocoPop", 75, 0);
@@ -52,28 +47,28 @@ public class Transformateur2Stocks extends Transformateur2Acteur {
 	public void next() {
 		super.next();
 		
+		System.out.println("ok");
+		
 		/**
 		 * @author adam
 		 * coûts de stockage
 		 */
 		
 		for(Feve f : Feve.values()) {
-			if((stockFeves.containsKey(f))&&(stockFeves.get(f)!=0)) {
-				double stockfeve = this.stockFeves.get(f);
-				// dans le CdCf il a été convenu que le cout de stockage pour une feve était 4x celui des producteurs
-				double cout = stockfeve*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*4;
-				Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), cout);
-				this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "Couts de stockage de la feve "+f+" ! On perd "+cout+" euros");
-		}}
+			double stockfeve = this.stockFeves.get(f);
+			// dans le CdCf il a été convenu que le cout de stockage pour une feve était 4x celui des producteurs
+			double cout = stockfeve*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*4;
+			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), cout);
+			this.journal.ajouter("Couts de stockage de la feve "+f+" ! On perd "+cout+" euros");
+		}
 		
 		for(Chocolat c : Chocolat.values()) {
-			if((stockChoco.containsKey(c))&&(stockChoco.get(c)!=0)) {
-				double stockchoc = this.stockChoco.get(c);
-				// dans le CdCf il a été convenu que le cout de stockage pour le chocolat feve était 4x celui des producteurs
-				double cout = stockchoc*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*4;
-				Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), cout);
-				this.journal.ajouter("Couts de stockage du chocolat "+c+" ! On perd "+cout+" euros");
-		}}
+			double stockchoc = this.stockChoco.get(c);
+			// dans le CdCf il a été convenu que le cout de stockage pour le chocolat feve était 4x celui des producteurs
+			double cout = stockchoc*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*4;
+			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), cout);
+			this.journal.ajouter("Couts de stockage du chocolat "+c+" ! On perd "+cout+" euros");
+		}
 		
 	}
 	

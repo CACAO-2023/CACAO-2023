@@ -46,7 +46,7 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
 
 	protected Variable totalStocksFeves;
-//	protected Variable totalStocksChoco;
+	protected Variable totalStocksChoco;
 	protected Variable totalStocksChocoMarque;  // La qualite totale de stock de chocolat de marque 
 	protected List<Feve> lesFeves;
 	protected Integer cryptogramme;
@@ -77,7 +77,7 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 		this.journal_CC_DISTRI = new Journal("Journal "+this.getNom() + " vente CC distributeur", this);
 		this.journal_appel = new Journal("Journal "+this.getNom() + " vente appel d'offre", this);
 		this.totalStocksFeves = new VariablePrivee("Eq4StockFeves", "<html>Quantite totale de feves en stock</html>",this, 0.0, 1000000.0, 0.0);this.totalStocksFeves= new VariablePrivee("Eq4StockFeves", "<html>Quantite totale de feves en stock</html>",this, 0.0, 1000000.0, 0.0);
-//		this.totalStocksChoco = new VariablePrivee("Eq4StockChoco", "<html>Quantite totale de chocolat en stock</html>",this, 0.0, 1000000.0, 0.0); 
+		this.totalStocksChoco = new VariablePrivee("Eq4StockChoco", "<html>Quantite totale de chocolat en stock</html>",this, 0.0, 1000000.0, 0.0); 
 		this.totalStocksChocoMarque = new VariablePrivee("Eq4StockChocoMarque", "<html>Quantite totale de chocolat de marque en stock</html>",this, 0.0, 1000000.0, 0.0);
 	}
 	
@@ -113,9 +113,6 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	public Color getColor() {// NE PAS MODIFIER
 		return new Color(229, 243, 157); 
 	}
-	public String toString() {
-		return this.getNom();
-	}
 
 	public String getDescription() {
 		return "Pour les produits bas de gamme vendus sous marque distributeur, notre objectif est de maximiser les ventes en proposant des prix comp�titifs. Nous comparons les prix propos�s par tous les producteurs et la bourse afin d'acheter le cacao au meilleur prix. Les producteurs sont s�lectionnes par contrat cadre ainsi que les distributeurs. Nous envisageons �galement des principes de solde et de promotion pour �couler les stocks plus rapidement, � choisir entre la p�riode des f�tes ou non.\r\n"
@@ -126,7 +123,7 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
 		res.add(this.totalStocksFeves);
-//		res.add(this.totalStocksChoco);
+		res.add(this.totalStocksChoco);
 		res.add(this.totalStocksChocoMarque);
 		return res;
 	}
@@ -192,7 +189,6 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	public List<String> getMarquesChocolat() {
 		LinkedList<String> marques = new LinkedList<String>();
 		marques.add("Vccotioi");
-		marques.add("choco");
 		return marques;
 	}
 }

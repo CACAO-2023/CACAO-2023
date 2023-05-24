@@ -9,7 +9,7 @@ import abstraction.eqXRomu.offresAchat.PropositionVenteOA;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 /**
- * @author Fouad, Alexian
+ * @author Fouad 
  *
  */
 
@@ -18,7 +18,7 @@ public class VendeurOA extends DistributeurChocolatDeMarque implements IVendeurO
 	public PropositionVenteOA proposerVente(OffreAchat offre) {
 		this.journal_appel.ajouter("proposerVente(offre = "+offre+")");
 		for (ChocolatDeMarque c: Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (c.getMarque().equals("Vccotioi") || c.getMarque().equals("choco")) {
+			if (c.getMarque().equals("Vccotioi")) {
 				this.journal_appel.ajouter("      "+c+" "+(offre.getChocolat().equals(c.getChocolat())?"convient":"ne convient pas")+" "+(offre.getMarque()==null || offre.getMarque().equals(c.getMarque())?" marque ok":" marque pas ok"));
 				if (offre.getChocolat().equals(c.getChocolat()) && (offre.getMarque()==null || offre.getMarque().equals(c.getMarque()))) { // type recherche
 					if (this.stockChocoMarque.get(c)>=offre.getQuantiteT()) {
