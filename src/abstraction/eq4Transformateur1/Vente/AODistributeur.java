@@ -13,7 +13,7 @@ import abstraction.eqXRomu.offresAchat.PropositionVenteOA;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 /**
- * @author alexian, verification François
+ * @author alexian, verife François
  *
  */
 
@@ -22,7 +22,7 @@ public class AODistributeur extends CC_distributeur implements IVendeurAO {
 	
 	@Override
 	public PropositionAchatAO choisir(List<PropositionAchatAO> propositions) {
-		double prix=1000;
+		double prix=0;
 		PropositionAchatAO propRetenue=null;
 		for (PropositionAchatAO p : propositions) {
 			if (p.getPrixT()>prix) {
@@ -43,7 +43,8 @@ public class AODistributeur extends CC_distributeur implements IVendeurAO {
 			if (this.stockChocoMarque.get(c)>2000) {
 				PropositionAchatAO retenue = superviseur.vendreParAO(this, cryptogramme, c, 2000.0, false);
 				if (retenue!=null) {
-					this.retirer(c, retenue.getOffre().getQuantiteT());
+					this.totalStocksChocoMarque.ajouter(this,-retenue.getOffre().getQuantiteT() ,this.cryptogramme);
+					this.stockChocoMarque.put(c, this.stockChocoMarque.get(c)-retenue.getOffre().getQuantiteT());
 					journal.ajouter("vente de "+retenue.getOffre().getQuantiteT()+" T a "+retenue.getAcheteur().getNom());
 				} else {
 					journal.ajouter("pas d'offre retenue");

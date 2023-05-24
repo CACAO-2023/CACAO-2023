@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Journal;
 /**
  * Modelise une quantite d'un meme produit qui n'a pas forcement ete
@@ -110,11 +109,8 @@ public class Lot {
 						this.quantites.put(i,this.quantites.get(i)-reste);
 						reste=0;
 					} else {
-						if (this.quantites.get(i)>0.0) {
-						
 						res.ajouter(i,this.quantites.get(i));
 						reste = reste - this.quantites.get(i);
-						}
 						vides.add(i);
 					}
 				}

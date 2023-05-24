@@ -171,11 +171,10 @@ public class Journal {
 	}
 
 	public static String doubleSur(double nombre, int caracteresApresLaVirgule) {
-		String debut = "";
 		String avantLaVirgule = "";
 		String apresLaVirgule = "";
 		if (nombre<0.0) {
-			debut="-";
+			avantLaVirgule="-";
 			nombre=-nombre;
 		}
 		long partieEntiere = (long)nombre;
@@ -198,7 +197,7 @@ public class Journal {
 			nombre=nombre*10.0;
 			nombre=nombre-(int)(nombre);
 		}
-		return debut+avantLaVirgule+","+apresLaVirgule;
+		return avantLaVirgule+","+apresLaVirgule;
 
 	}
 

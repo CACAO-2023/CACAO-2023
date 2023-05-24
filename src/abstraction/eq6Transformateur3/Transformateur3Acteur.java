@@ -17,7 +17,7 @@ import abstraction.eqXRomu.produits.Feve;
 
 public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	
-	protected List<ChocolatDeMarque> ListeProduits;
+	private List<ChocolatDeMarque> ListeProduits;
 	protected HashMap<Feve, Double> stockFeves;
 	protected HashMap<Chocolat, Double> stockChoco;
 	protected int cryptogramme;
@@ -28,6 +28,7 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	protected Journal journalTransformation;
 	protected Journal journalAchatCC;
 	protected Journal journalAchatB;
+	protected List<Journal> ListJournal;
 	protected int pourcentageCacaoBG ;
 	protected int pourcentageCacaoMG ;
 	protected int pourcentageCacaoMGL ;
@@ -36,18 +37,12 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	protected Variable totalStocksFeves;   
 	protected Variable totalStocksChoco; 
 	protected List<ChocolatDeMarque>chocosProduits;
-	//les var ci dessous décrivent les capacité de transformationj à chaque step
-	protected double capTransMax = 1000.0;
-	protected double partTransBQ = 0.25;
-	protected double partTransMQ = 0.25;
-	protected double partTransMQL = 0.25;
-	protected double partTransHQ = 0.25;
 	
 	/**Nathan Claeys*/
 	protected Transformateur3Acteur() {
 		this.journal = new Journal("Journal"+this.getNom(),this);
 		this.journalStock = new Journal("Journal des stocks"+this.getNom(),this);
-		this.journalVentes = new Journal("Journal des ventes"+this.getNom(),this);
+		this.journalVentes = new Journal("Journal des ventess"+this.getNom(),this);
 		this.journalTransformation = new Journal("Journal des oppérations de transformation"+this.getNom(),this);
 		this.journalAchatCC = new Journal("Journal des achats par contrats cadres"+this.getNom(),this);
 		this.journalAchatB = new Journal("Journal des achats en bourse"+this.getNom(),this);
@@ -56,20 +51,17 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 		this.pourcentageCacaoMGL = 75;
 		this.pourcentageCacaoHG = 85;
 		this.pourcentageRSE = 10;
-		this.totalStocksFeves = new Variable ("totalStocksFeves","defini l'etat total du stock de feves",this,0.0,2000000.0,0.0);
-		this.totalStocksChoco = new Variable ("totalStocksChoco","defini l'etat total du stock de produit fini",this,0.0,2000000.0,0.0);
+		this.totalStocksFeves = new Variable ("totalStocksFeves","defini l'etat total du stock de feves",this,0.0,1000000.0,0.0);
+		this.totalStocksChoco = new Variable ("totalStocksChoco","defini l'etat total du stock de produit fini",this,0.0,1000000.0,0.0);
+		this.ListJournal = new LinkedList<Journal>();
+		ListJournal.add(this.journal);
 		this.chocosProduits = new LinkedList<ChocolatDeMarque>();
 		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_BQ,"eco+ choco",this.pourcentageCacaoBG,this.pourcentageRSE));
 		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_MQ,"chokchoco",this.pourcentageCacaoMG,this.pourcentageRSE));
 		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_MQ_BE,"chokchoco bio",this.pourcentageCacaoMGL,this.pourcentageRSE));
 		this.chocosProduits.add(new ChocolatDeMarque (Chocolat.C_HQ_BE,"Choc",this.pourcentageCacaoHG,this.pourcentageRSE));
 	}
-	public void setcapTransMax(double m) {
-		this.capTransMax = m;
-	}
-	public double getcapTransMax() {
-		return this.capTransMax;
-	}
+	
 	/**
 	 * @return the pourcentageCacaoBG
 	 */
@@ -119,6 +111,8 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
  */
 	public void next() {
 		this.journal.ajouter(Filiere.LA_FILIERE.getEtape()+"");
+		this.ListJournal.add(this.journal);
+		this.ListJournal.add(journalStock);
 	}
 
 	public Color getColor() {// NE PAS MODIFIER

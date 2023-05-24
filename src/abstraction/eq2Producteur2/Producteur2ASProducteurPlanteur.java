@@ -21,16 +21,6 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	private HashMap<Feve, Double> prix;
 	private HashMap<Feve,HashMap<Integer, Integer>> age_hectares;
 	private HashMap<Feve, Double> cout_parcelle;
-	private double borne_min_BQ;
-	private double borne_max_BQ;
-	private double borne_min_MQ;
-	private double borne_max_MQ;
-	private double borne_min_MQ_BE;
-	private double borne_max_MQ_BE;
-	private double borne_min_HQ_BE;
-	private double borne_max_HQ_BE;
-	
-	
 	// Pour age_hectares nous avons un Hashmap dans un autre, ici la première clef fait reference à la Feve car 
 	//Les employes auront differents salaires selon la gamme sur laquelle ils travaillent
 	//La deuxiemes clef est un entirer qui correspond à l'age (en step) des hectares
@@ -62,15 +52,6 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		for (int i = -24 * 39; i <= 0; i += 24)
 			setAge(Feve.F_HQ_BE, i, 625);
 		setCout_Parcelle(1000, 2000, 3000, 5000);
-		this.borne_min_BQ = 0.9;
-		this.borne_max_BQ = 1.15;
-		this.borne_min_MQ = 0.9;
-		this.borne_max_MQ = 1.1;
-		this.borne_min_MQ_BE = 0.8;
-		this.borne_max_MQ_BE = 1.1;
-		this.borne_min_HQ_BE = 0.75;
-		this.borne_max_HQ_BE = 1.05;
-		
 	}
 	
 	
@@ -181,12 +162,6 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		this.majSurfaceTot();
 	}
 	
-	//Entre 3 ans et 40 ans la productivité de nos hectare suivra cette gaussienne
-	protected double Productivite_1_hectare(int step) {
-		double P = 110/(720*Math.sqrt(2*Math.PI))*Math.exp(-1/2*((step-480)/720)^2);
-		return P;
-	}
-	
 	//La fonction ci_dessous prevois les quantities de cacao que l'on sera apte a produire à une step donnée
 	//Avec nos terres actuelles. En effet dans notre cas un hectare met 3 ans pour que les cacaoyers dessus
 	//puissent produire des feves, ils produisent des feves de maniere constante jusqu'a 40 ans
@@ -200,7 +175,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 					qte =+ 0;
 				}
 				if (step-i>=3*24 && step-i<40*24) {
-					qte =+ Productivite_1_hectare(i)*this.age_hectares.get(f).get(i);
+					qte =+ prodHec.getValeur()*this.age_hectares.get(f).get(i);
 				}
 				
 			}
@@ -243,7 +218,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	//une rentabilite superieure a 10%
 	
 	protected boolean Rentabilites(Feve f, Double prix){
-		double rentabilite = prix * Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f)/this.salaires.get(f);
+		double rentabilite = prix * prodHec.getValeur()/this.salaires.get(f);
 		if (rentabilite>=1.1) {
 			return true;
 		}
@@ -257,43 +232,15 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		return 1.1*CoutProd().get(f)/Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f);
 	}
 	
-	protected boolean mauvais_resultat(Feve f, int debut, int fin) {
-		double CA = 0;
-		double cout = 0;		
-		for (int i=debut; i<=fin; i++ ) {
-			CA = CA + argentVente.get(f).getValeur(i);
-			cout = cout + coutProdFeve.get(f).getValeur(i);
-		}
-		if (cout > CA) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
 	//
 	private void ajustement_plantation() {
 		for (Feve f : this.salaires.keySet()) {
 			int nb_a_planter = 0;
-			if (Filiere.LA_FILIERE.getEtape()>=24*3 && Filiere.LA_FILIERE.getEtape()%24==0) {
-				if (mauvais_resultat(f, Filiere.LA_FILIERE.getEtape()-3*24, Filiere.LA_FILIERE.getEtape())) {
-					for (int age : this.age_hectares.get(f).keySet()) {
-						int nb_plantation = this.age_hectares.get(f).get(age);
-						this.age_hectares.get(f).put(age,(int) Math.round(0.8*nb_plantation));
-					}}
-				else {
-					if (f == Feve.F_MQ_BE) {
-							nb_a_planter =(int) Math.round(this.surface_plantation.get(f).getValeur()*0.08);
-							}}
-			}
-			
 			if (this.age_hectares.get(f).containsKey(Filiere.LA_FILIERE.getEtape() - 37*24)) {
 				nb_a_planter = this.age_hectares.get(f).get(Filiere.LA_FILIERE.getEtape() - 37*24);
 			}
-			if (f == Feve.F_MQ_BE) {
-				if (Filiere.LA_FILIERE.getEtape()%24==0) {
-					nb_a_planter +=(int) Math.round(this.surface_plantation.get(f).getValeur()*0.08);
-				}
+			if (Filiere.LA_FILIERE.getEtape()%24==0) {
+				nb_a_planter +=(int) Math.round(this.surface_plantation.get(f).getValeur()*0.03);
 			}
 			if (nb_a_planter>0) {
 				Planter(f, nb_a_planter);
@@ -301,7 +248,6 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 			}
 		}
 	}
-	
 	// Une fois les plantation ajustees, sachant qu'un employe s'occupe d'un hectare on adapte le nombre
 	//d'employes aux nombres d'hectares
 	private void ajustement_employes () {
@@ -316,58 +262,14 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		}
 	}
 	
-	// On renvoie un nombre aléatoire entre une valeur min (incluse)
-	// et une valeur max (exclue)
-	protected double getRandomArbitrary(double min , double max) {
-	  return Math.random() * (max - min) + min;
-	}
-
-	private HashMap<Feve, Double> Production_avec_intemperies() {
-		HashMap<Feve, Double> prevision = Prevision_Production(Filiere.LA_FILIERE.getEtape());
-		for (Feve f : Prevision_Production(Filiere.LA_FILIERE.getEtape()).keySet()) {
-			if (f == Feve.F_BQ) {
-				prevision.put(f, prevision.get(f)*getRandomArbitrary(this.borne_min_BQ, this.borne_max_BQ));
-			}
-			if (f == Feve.F_MQ) {
-				prevision.put(f, prevision.get(f)*getRandomArbitrary(this.borne_min_MQ, this.borne_max_MQ));
-			}
-			if (f == Feve.F_MQ_BE) {
-				prevision.put(f, prevision.get(f)*getRandomArbitrary(this.borne_min_MQ_BE, this.borne_max_MQ_BE));
-			}
-			if (f == Feve.F_HQ_BE) {
-				prevision.put(f, prevision.get(f)*getRandomArbitrary(this.borne_min_HQ_BE, this.borne_max_HQ_BE));
-			}
-	}
-		return prevision;
-	}
-	
-	protected HashMap<Feve, Double> Prevision_Production_minimale(int step) {
-		HashMap<Feve, Double> prevision = Prevision_Production(step);
-		for (Feve f : Prevision_Production(Filiere.LA_FILIERE.getEtape()).keySet()) {
-			if (f == Feve.F_BQ) {
-				prevision.put(f, prevision.get(f)*this.borne_min_MQ);
-			}
-			if (f == Feve.F_MQ) {
-				prevision.put(f, prevision.get(f)*this.borne_min_MQ);
-			}
-			if (f == Feve.F_MQ_BE) {
-				prevision.put(f, prevision.get(f)*this.borne_min_MQ_BE);
-			}
-			if (f == Feve.F_HQ_BE) {
-				prevision.put(f, prevision.get(f)*this.borne_min_HQ_BE);
-			}
-	}
-		return prevision;
-	}
-	
 	public void next() {
 		this.journalProd.ajouter("Etat plantation : " + this.age_hectares);
 		this.journalProd.ajouter("Etat Masse Salariale : " + this.employes);
 		super.next();
 		this.majPlantation();
 		for (Feve f : this.age_hectares.keySet()) {
-			if (Production_avec_intemperies().get(f)>0){
-				this.ajouterStock(f, Filiere.LA_FILIERE.getEtape(), Production_avec_intemperies().get(f));
+			if (Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f)>0){
+				this.ajouterStock(f, Filiere.LA_FILIERE.getEtape(), Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f));
 			}
 		}
 		this.ajustement_plantation();
