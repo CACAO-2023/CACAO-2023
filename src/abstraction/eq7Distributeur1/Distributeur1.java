@@ -48,11 +48,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		}
 		
 		//Prise en compte des couts de main doeuvre
-		qte_totale_en_vente = 0.;
-		for (ChocolatDeMarque choco : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			qte_totale_en_vente += quantiteEnVente(choco,cryptogramme);
-		}
-		Double cout_total_mise_en_rayon = qte_totale_en_vente * Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur();
+		Double cout_total_mise_en_rayon = getTotalVentes() * Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur();
 		if (cout_total_mise_en_rayon > 0) {
 			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme,Filiere.LA_FILIERE.getBanque(),cout_total_mise_en_rayon );	
 			journal_vente.ajouter("Cout de main d'oeuvre : "+cout_total_mise_en_rayon);
@@ -61,7 +57,9 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		
 	}
 	
-
+	/**
+	 * @author Theo
+	 */
 	private double getTotalVentes() {
 		double total = 0.;
 		for (ChocolatDeMarque choco : Filiere.LA_FILIERE.getChocolatsProduits()) {
@@ -146,6 +144,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		double prix_moyen = 0.;
 		if (Filiere.LA_FILIERE.getEtape() >= 24) {
 			prix_moyen = Filiere.LA_FILIERE.prixMoyen(choco,Filiere.LA_FILIERE.getEtape()-24);
+			System.out.println("cout moyen "+choco+" "+prix_moyen);
 		}
 		if (((prix < prix_moyen*0.9) || (prix > prix_moyen*1.1)) && (prix_moyen != 0.)) {
 			prix = prix - (prix-prix_moyen)*0.5;	
@@ -190,11 +189,8 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	 */
 	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
 		int etape = Filiere.LA_FILIERE.getEtape()%24;
-		Double previsions = previsionsperso.get(etape).get(choco);
+		double previsions = previsionsperso.get(etape).get(choco);
 		double stock_choco = this.get_valeur(Var_Stock_choco, choco);
-		if (stock_choco < previsions*1.5) {
-			return stock_choco;
-		}
 		if (stock_choco >= previsions*1.5) {
 			return previsions*1.5;
 		}

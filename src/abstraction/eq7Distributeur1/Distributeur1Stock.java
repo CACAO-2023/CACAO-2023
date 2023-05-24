@@ -1,12 +1,9 @@
 package abstraction.eq7Distributeur1;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
-import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
@@ -95,17 +92,29 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 	public void initialiser() {
 		super.initialiser();
 
-		//Initialisation des stocks
-		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			Double valeur_stock_initial = 1000.;
-			mettre_a_jour(Var_Stock_choco, marque, valeur_stock_initial);
-			totalStocks.setValeur(this, totalStocks.getValeur()+valeur_stock_initial, this.cryptogramme);
-			nombre_achats.put(marque, 0);
-			journal_stock.ajouter("Stock de "+marque+" : "+ valeur_stock_initial +" T");
-		}
-
+		//Initialisation des stocks dans Acteur (on est oblige a cause des variables)
+		
 		//initialisation des indicateurs de stock
-		actualise_indic_stock();
+		stock_BQ.setValeur(this, 0);
+		stock_HQ_BE.setValeur(this, 0);
+		stock_MQ.setValeur(this, 0);
+		stock_MQ_BE.setValeur(this, 0);
+		
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			Chocolat gamme = marque.getChocolat();
+    		if (gamme == Chocolat.C_BQ) {
+    			stock_BQ.ajouter(this, valeur_stock_initial);
+    		}
+    		if (gamme == Chocolat.C_MQ) {
+    			stock_MQ.ajouter(this, valeur_stock_initial);
+    		}
+    		if (gamme == Chocolat.C_MQ_BE) {
+    			stock_MQ_BE.ajouter(this, valeur_stock_initial);
+    		}
+    		if (gamme == Chocolat.C_HQ_BE) {
+    			stock_HQ_BE.ajouter(this, valeur_stock_initial);    		
+    		}
+		}
 	}
 	
 	

@@ -14,6 +14,7 @@ import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
@@ -177,11 +178,10 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	}
 
 	/**
+	 * @author Ghaly & Theo
+	 * @param d : nombre d'étapes 
 	 * est appelée pour savoir si on a besoin d'un contrat cadre sur la durée d
 	 * On lance un CC seulement si notre stock n'est pas suffisant sur la durée qui suit
-	 * il faut faire attention à ce que un CC > 100T
-	 * @param d : nombre d'étapes 
-	 * @author Ghaly & Theo
 	 */
 	public boolean besoin_de_CC (int d,ChocolatDeMarque marque) {  
 			double previsionannee = 0;
@@ -353,7 +353,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	@Override
 	/**
 	 * @author Theo
-	 * Actions necessaires pour actualiser/annoncer
+	 * Actions necessaires pour actualiser/annoncer chaque reception de cc
 	 */
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		IProduit produit= lot.getProduit();
@@ -362,9 +362,9 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 			ChocolatDeMarque marque = (ChocolatDeMarque)produit;
 			if (Var_Stock_choco.keySet().contains(produit)) {
 				mettre_a_jour(Var_Stock_choco, marque, get_valeur(Var_Stock_choco, marque)+quantite);
-			} else {
-//				mettre_a_jour(Var_Stock_choco, marque, quantite);
-				//???????????????????????????????????????????????
+			}
+			else {
+				Var_Stock_choco.put(marque, new Variable("le stock de la marque "+marque.getNom(), "le stock de la marque "+marque.getNom(), this, quantite));
 			}
 			this.totalStocks.ajouter(this, quantite, this.cryptogramme);
 			this.journal_stock.ajouter("Reception de "+quantite+" T de "+produit+". Stock->  "+ get_valeur(Var_Stock_choco, (ChocolatDeMarque)(produit)));

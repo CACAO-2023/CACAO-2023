@@ -70,6 +70,8 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	 */
 	double quantite_min_cc = SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER;
 	
+	protected double valeur_stock_initial = 10000.;
+	
 
 	
 	/**
@@ -138,7 +140,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	public void mettre_a_jour(HashMap<ChocolatDeMarque, Variable> h_var, ChocolatDeMarque marque, double montant) {
 		Variable var = h_var.get(marque);
 		var.setValeur(this, montant);
-		h_var.put(marque, var);
+		h_var.replace(marque, var);
 	}
 	
 	/**
@@ -167,10 +169,10 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	public void initialiser() {
 		cout_stockage_distributeur.setValeur(this, Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*16);
 		
-		cout_chocolat.put(Chocolat.C_HQ_BE, 10000.);
-		cout_chocolat.put(Chocolat.C_MQ_BE, 7500.);
-		cout_chocolat.put(Chocolat.C_MQ, 5000.);
-		cout_chocolat.put(Chocolat.C_BQ, 3000.);
+		cout_chocolat.put(Chocolat.C_HQ_BE, 25000.);
+		cout_chocolat.put(Chocolat.C_MQ_BE, 20000.);
+		cout_chocolat.put(Chocolat.C_MQ, 15000.);
+		cout_chocolat.put(Chocolat.C_BQ, 10000.);
 
 		vente_step=0;
 		this.chocolatsDeMarquesProduits = Filiere.LA_FILIERE.getChocolatsProduits();
@@ -183,7 +185,10 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		
 		
 		for (ChocolatDeMarque cm : chocolatsDeMarquesProduits) {
-			this.Var_Stock_choco.put(cm, new Variable("le stock de la marque "+cm.getNom(), "le stock de la marque "+cm.getNom(), this, 0.0));
+			totalStocks.setValeur(this, totalStocks.getValeur()+valeur_stock_initial, this.cryptogramme);
+			nombre_achats.put(cm, 0);
+			journal_stock.ajouter("Stock de "+cm+" : "+ valeur_stock_initial +" T");
+			this.Var_Stock_choco.put(cm, new Variable("le stock de la marque "+cm.getNom(), "le stock de la marque "+cm.getNom(), this, valeur_stock_initial));
 			this.Var_Marge_Choco.put(cm, new Variable("la marge de la marque "+cm.getNom(), "la marge de la marque "+cm.getNom(), this, 0.0));
 			this.Var_Cout_Choco.put(cm, new Variable("le cout de la marque "+cm.getNom(), "le cout de la marque "+cm.getNom(), this, 0.0));
 			this.Var_Vente_Choco.put(cm, new Variable("le nombre de vente de la marque "+cm.getNom(), "le nombre de vente de la marque "+cm.getNom(), this, 0.0));
