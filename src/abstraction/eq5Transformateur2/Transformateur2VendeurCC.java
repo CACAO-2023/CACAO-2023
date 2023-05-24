@@ -25,8 +25,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
 	//protected LinkedList<ExemplaireContratCadre> contrats;
-	protected HashMap<ExemplaireContratCadre, String> ContratsVendeur;
-	private IProduit produit;
+	//protected HashMap<ExemplaireContratCadre, String> ContratsVendeur;
 
 	//fait par yassine
 	public void initialiser() {
@@ -36,10 +35,10 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	}
 
 
-	public Transformateur2VendeurCC() {
+	/*public Transformateur2VendeurCC() {
 		super();  
 		this.ContratsVendeur =new HashMap<>();
-	}
+	}*/
 
 	//fait par wiem : nous vendons du chocolat sans et avec marque
 	public boolean peutVendre(IProduit produit) {
@@ -167,7 +166,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
         ExemplaireContratCadre cc = superviseurVentesCC.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
         if (cc != null) {   
         		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "CC : " + cc);
-        	this.ContratsVendeur.put(cc,  acheteur.getNom());
+        	//this.ContratsVendeur.put(cc,  acheteur.getNom());
         } else {
         		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
         	}

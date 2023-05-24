@@ -25,12 +25,17 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
 	//protected LinkedList<ExemplaireContratCadre> contrats;
-	protected HashMap<ExemplaireContratCadre, String> ContratsAcheteur;
+	//protected HashMap<ExemplaireContratCadre, String> ContratsAcheteur;
 
 	public void initialiser() {
 		super.initialiser();
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 	}
+	
+	/*public Transformateur2AcheteurCC() {
+		super();  
+		this.ContratsAcheteur =new HashMap<>();
+	}*/
 
 	@Override
 	public boolean achete(IProduit produit) {
@@ -176,7 +181,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		if (cc != null) {   
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + vendeur.getNom() + " pour " + produit + "CC : " + cc);
 
-			this.ContratsAcheteur.put(cc,vendeur.getNom());
+			//this.ContratsAcheteur.put(cc,vendeur.getNom());
 		} 
 		else {
 
