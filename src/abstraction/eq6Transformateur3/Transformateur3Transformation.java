@@ -90,7 +90,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 				}
 			}
 			double pourcentageTransfo =((double) this.getPourcentageCacaoBG())/100;
-			stockFeveBG.retirer(pourcentageTransfo*qte);
+			super.retirerFeve(Feve.F_BQ,pourcentageTransfo*qte);
 			super.journalTransformation.ajouter("on retire du stock de fève BG :"+pourcentageTransfo*qte);
 			super.ajouterChocolat(super.chocosProduits.get(0), qte, Filiere.LA_FILIERE.getEtape());
 			super.journalTransformation.ajouter("on ajoute au stock de chocolat BG :"+qte);
@@ -108,7 +108,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 					double pourcentageTransfo = ((double)this.getPourcentageCacaoMG())/100;
 					double c=getMQStep1();
 					setMQStep1(qte);
-					stockFeveMG.retirer(pourcentageTransfo*qte);
+					super.retirerFeve(Feve.F_MQ,pourcentageTransfo*qte);
 					super.journalTransformation.ajouter("on retire du stock de fève MG :"+pourcentageTransfo*qte);
 					if (c!=0) {
 						super.ajouterChocolat(super.chocosProduits.get(1), c, Filiere.LA_FILIERE.getEtape());
@@ -129,7 +129,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 							double pourcentageTransfo = ((double)this.getPourcentageCacaoMGL())/100;
 							double c=getMQBEStep1();
 							setMQBEStep1(qte);
-							stockFeveMGL.retirer(pourcentageTransfo*qte);
+							super.retirerFeve(Feve.F_MQ_BE,pourcentageTransfo*qte);
 							super.journalTransformation.ajouter("on retire du stock de fève MGL :"+pourcentageTransfo*qte);
 							if (c!=0) {
 								super.ajouterChocolat(super.chocosProduits.get(2), c, Filiere.LA_FILIERE.getEtape());
@@ -152,7 +152,7 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 									setHQBEStep1(qte);
 									double d = getHQBEStep2();
 									setHQBEStep2(c);
-									stockFeveHGL.retirer(pourcentageTransfo*qte);
+									super.retirerFeve(Feve.F_HQ_BE,pourcentageTransfo*qte);
 									super.journalTransformation.ajouter("on retire du stock de fève HG :"+pourcentageTransfo*qte);
 									if (d!=0) {
 										super.ajouterChocolat(super.chocosProduits.get(3), d, Filiere.LA_FILIERE.getEtape());
