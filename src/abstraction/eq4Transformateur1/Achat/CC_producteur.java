@@ -113,6 +113,8 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		return prix;
 	}
 
+// François Glavatkii
+	
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
 	}
@@ -164,6 +166,9 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 							if (contrat1!=null) {
 								 ContratEnCours_F_BQ.add(contrat1);
 								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_BQ: contrat signe = "+contrat1);
+								this.ContratEnCours_F_BQ.add(contrat1);
+
+						}
 						}
 						if (cm.getGamme().equals(Gamme.HQ)){
 							Echeancier echeancierB = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotH/2);
@@ -172,10 +177,10 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 							if (contrat2!=null) {
 								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_HQ : contrat signe = "+contrat2);
 								ContratEnCours_F_HQ.add(contrat2);
+								
 						}
 
 						}
-					}
 			}
 		}
 		}
