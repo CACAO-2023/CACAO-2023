@@ -92,7 +92,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 		double quantiteLivre = 0.;
 		double[] feveEnBourse = this.getBourseMax(f); //initialisation de feveEnBourse
 		if (f == Feve.F_BQ) {
-			quantiteLivre = Math.min(quantiteEnT+1,feveEnBourse[0]+feveEnBourse[1] );//on renvoie le min entre ce qu'on a mis en bourse et ce qu'on a promis
+			quantiteLivre = Math.min(Math.min(quantiteEnT+1,feveEnBourse[0]+feveEnBourse[1] ), this.stockTotBasse.getValeur());//on renvoie le min entre ce qu'on a mis en bourse et ce qu'on a promis
 			this.BQquantiteVendueBourse.setValeur(this, quantiteLivre, this.cryptogramme);
 		}
 		if (f == Feve.F_MQ) {
@@ -101,7 +101,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 				double quantiteBEDeclassee = Math.min(quantiteEnT, feveDeclassee); // on déclasse les feves MQ BE proche de la péremption en MQ proches de la péremption, pour les vendre en priorité
 				this.convertStockMQ_BE(quantiteBEDeclassee);
 			}
-			quantiteLivre = Math.min(quantiteEnT+1, feveDeclassee + feveEnBourse[0]+feveEnBourse[1]);//on renvoie le min entre ce qu'on a et ce qu'on a promis
+			quantiteLivre = Math.min(Math.min(quantiteEnT+1, feveDeclassee + feveEnBourse[0]+feveEnBourse[1]), this.stockTotMoy.getValeur());//on renvoie le min entre ce qu'on a et ce qu'on a promis
 			this.MQquantiteVendueBourse.setValeur(this, quantiteLivre, this.cryptogramme);
 		}
 		if (f == Feve.F_BQ)

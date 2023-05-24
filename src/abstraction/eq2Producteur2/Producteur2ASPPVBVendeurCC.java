@@ -174,8 +174,8 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 			return contrat.getPrix();
 		}
 		if(contrat.getPrix() >= this.prix_rentable((Feve) contrat.getProduit())) {
-			if(contrat.getPrix() <= prixPrec*facteurTolerance) {
-				return contrat.getPrix(); //Si le prix proposé est roche du prix souhaité précédement, on accepte afin d'assurer que la vente est lieu
+			if(contrat.getPrix() >= prixPrec*facteurTolerance) {
+				return contrat.getPrix(); //Si le prix proposé est roche du prix souhaité précédement, on accepte afin d'assurer que la vente ai lieu
 			} else {
 				return getPrixSouhaitéCC(contrat)*3/4 + contrat.getPrix()/4; /*Négociation 1/4||3/4 pour tenter de tirer un prix convenable*/
 			}

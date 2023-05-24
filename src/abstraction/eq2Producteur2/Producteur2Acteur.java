@@ -51,9 +51,14 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable coutProdMQ = new VariablePrivee("EQ2 coût de production et stockage de MQ", "coût total de production et de stockage de MQ à chaque step", this, 0);
 	protected Variable coutProMQ_BE = new VariablePrivee("EQ2 coût de production et stockage de MQ_BE", "coût total de production et de stockage de MQ_BE à chaque step", this, 0);
 	protected Variable coutProdHQ_BE = new VariablePrivee("EQ2 coût de production et stockage de HQ_BE", "coût total de production et de stockage de HQ_BE à chaque step", this, 0);
+	protected Variable prodBQ = new VariablePrivee("EQ2 quantite de BQ produite", "quantite de fève de BQ produite à chaque tour", this, 0);
+	protected Variable prodMQ = new VariablePrivee("EQ2 quantite de MQ produite", "quantite de fève de MQ produite à chaque tour", this, 0);
+	protected Variable prodMQ_BE = new VariablePrivee("EQ2 quantite de MQ_BE produite", "quantite de fève de MQ_BE produite à chaque tour", this, 0);
+	protected Variable prodHQ_BE = new VariablePrivee("EQ2 quantite de HQ_BE produite", "quantite de fève de HQ_BE produite à chaque tour", this, 0);
 	protected HashMap<Feve, Variable> stepsVecuesPourBourse = new HashMap<Feve, Variable>();
 	protected HashMap<Feve, Variable> argentVente = new HashMap<Feve, Variable>();
 	protected HashMap<Feve, Variable> coutProdFeve = new HashMap<Feve, Variable>();
+	protected HashMap<Feve, Variable> prodFeve = new HashMap<Feve, Variable>();
 	protected Producteur2 thisP;
 
 	//Prix pour les contrats cadres
@@ -86,6 +91,11 @@ public class Producteur2Acteur implements IActeur {
 		this.coutProdFeve.put(Feve.F_MQ, this.coutProdMQ);
 		this.coutProdFeve.put(Feve.F_MQ_BE, this.coutProMQ_BE);
 		this.coutProdFeve.put(Feve.F_HQ_BE, this.coutProdHQ_BE);
+		
+		this.prodFeve.put(Feve.F_BQ, this.prodBQ);
+		this.prodFeve.put(Feve.F_MQ, this.prodMQ);
+		this.prodFeve.put(Feve.F_MQ_BE, this.prodMQ_BE);
+		this.prodFeve.put(Feve.F_HQ_BE, this.prodHQ_BE);
 	}
 	
 	public void initialiser() {
@@ -150,6 +160,10 @@ public class Producteur2Acteur implements IActeur {
 		res.add(this.nbHecMoy);
 		res.add(this.nbHecMoyBE);
 		res.add(this.nbHecHauteBE);
+		res.add(this.prodBQ);
+		res.add(this.prodMQ);
+		res.add(this.prodMQ_BE);
+		res.add(this.prodHQ_BE);
 		res.add(this.stockTotBasse);
 		res.add(this.stockTotMoy);
 		res.add(this.stockTotMoyBE);
