@@ -25,33 +25,15 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 		}
 	}
 
-	/*public Double feveBQPeri() {
-		int FeveBasPeri = 0;
-		for (int i=0 ; i <= step ; i++) {
-			FeveBasPeri += this.stockFeveBas.getQuantites().get(step);
-		}
-		return FeveBasPeri;
-		}*/
-	
-	public Double feveMQPeri() { //Elouan
+	public Double feveMQPeri() {
 		if (this.stockFeveMoy.getQuantites().get(step-11)==null)
-			{
-			return 0.0;
-			}
-		else {
-			return this.stockFeveMoy.getQuantites().get(step-11);
+		{
+		return 0.0;
 		}
+	else {
+		return this.stockFeveMoy.getQuantites().get(step-11);
 	}
-	
-	/*public int feveMQPeri () {
-		int FeveMoyPeri = 0;
-		for (int i=0 ; i <= step ; i++) {
-			FeveMoyPeri += this.stockFeveMoy.getQuantites().get(step);
-		}
-		return FeveMoyPeri;
-	}*/
-	
-	
+	}
 	
 	// On vend nos fêves qui vont périmées ainsi que les fêves en surplus (si les coûts de stockage deviennent trop importants --> coûts de stockage >= bénéfices / 2).
 	
