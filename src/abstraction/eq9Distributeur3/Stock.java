@@ -10,12 +10,18 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
 public class Stock  {
 	HashMap<ChocolatDeMarque,Double> QteStock;
+	HashMap<Integer,Double> qteStockHQ;
+	HashMap<Integer,Double> qteStockMQ;
+	HashMap<Integer,Double> qteStockMQBE;
 	private Distributeur3Acteur a;
 
 	
 	public Stock(Distributeur3Acteur a) {
 		QteStock = new HashMap<ChocolatDeMarque, Double> ();
 		this.a = a;
+		qteStockHQ = new HashMap<Integer, Double>();
+		qteStockMQ = new HashMap<Integer, Double>();
+		qteStockMQBE = new HashMap<Integer, Double>();
 		
 	}
 	
