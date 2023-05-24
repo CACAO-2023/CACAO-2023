@@ -137,7 +137,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 
 
 								//Echeancier echeancier = new Echeancier (contratEnCours.get(i).getEcheancier().getStepFin(),24, 25000.0);
-								ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier , this.cryptogramme, initialise);
+								ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier , this.cryptogramme, false);
 								if (cc!= null) {
 									pasAchete = false;
 
@@ -181,7 +181,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 
 
 									Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(), qteVoulue);
-									ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier2 , this.cryptogramme, initialise);
+									ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier2 , this.cryptogramme, false);
 									if (cc!=null) 
 									{ 
 
@@ -210,7 +210,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 										//Comment garder l'echeancier ???? -> tjrs le même à la fin 
 										//System.out.println("on lance avec " + vmin);
 										pasAchete = false;
-										ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vmin, chocolats.get(i), echeancier , this.cryptogramme, initialise);
+										ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vmin, chocolats.get(i), echeancier , this.cryptogramme, false);
 										prixEnCours.clear();
 										
 
@@ -230,7 +230,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 									}
 									if(vmin !=null) {
 										//Comment garder l'echeancier ???? -> tjrs le même à la fin 
-										ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vmin, chocolats.get(i), echeancier , this.cryptogramme, initialise);
+										ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vmin, chocolats.get(i), echeancier , this.cryptogramme, false);
 
 									}
 
@@ -240,7 +240,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 					}
 					else if (vendeursChocolat.size()==1  ){
 						pasAchete=false;
-						ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(0), chocolats.get(i), echeancier , this.cryptogramme, initialise);
+						ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(0), chocolats.get(i), echeancier , this.cryptogramme, false);
 						if(cc != null) {
 							journal_achats.ajouter("1CC "+cc.getNumero()+" achat du chocolat " + chocolats.get(i)+" au prix à la tonne de " + prix);
 
