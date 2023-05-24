@@ -1,14 +1,18 @@
                                                                                                                                                                                                                                                 package abstraction.eq6Transformateur3;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
+import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
+import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
@@ -16,6 +20,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 /**Nathan Salbego*/
 	
 	protected LinkedList<ExemplaireContratCadre> listeCC ;
+	private SuperviseurVentesContratCadre superviseur ;
 
 	
 	/**Nathan Salbego*/
@@ -38,7 +43,8 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		}
 		return tot;
 	}
-
+	
+	
 	@Override
 	/**Nathan Salbego*/
 	public boolean vend(IProduit produit) {
@@ -152,6 +158,20 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	
 	public void initialiser() {
 		super.initialiser();
+		this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
+	}
+	public void chercheContrat(IProduit produit) {
+		if (superviseur != null) {
+		List<IAcheteurContratCadre> acheteurs = superviseur.getAcheteurs(produit);
+		if (acheteurs.size()!=0) {
+			Collections.shuffle(acheteurs);
+			for (IAcheteurContratCadre acheteur : acheteurs) {
+			super.journalVentes.ajouter("on essaie de demander un contrat à l'equipe :"+acheteur.getNom());
+			ExemplaireContratCadre contrat = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1,Filiere.LA_FILIERE.getEtape()+9,100.0), super.cryptogramme, false);
+			if (contrat != null) {super.journalVentes.ajouter("CC cherché et trouvé :"+contrat.toString());
+									this.listeCC.add(contrat);
+									}}}}
+		
 	}
 	/**Nathan Salbego*/
 	public void next() {
@@ -163,6 +183,14 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 			}
 		}
 		this.listeCC.removeAll(contratsObsoletes);
+		if ((this.stockChocolatBG.getQuantiteTotale()>5000 ))
+		{this.chercheContrat(Feve.F_BQ);}
+		if ((this.stockChocolatMG.getQuantiteTotale()>5000))
+		{this.chercheContrat(Feve.F_MQ);}
+		if ((this.stockChocolatMGL.getQuantiteTotale()>5000))
+		{this.chercheContrat(Feve.F_MQ_BE);}
+		if ((this.stockChocolatHGL.getQuantiteTotale()>5000)) {
+		{this.chercheContrat(Feve.F_HQ_BE);}}
 	}
 
 	@Override
