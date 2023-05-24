@@ -185,7 +185,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 									if (cc!=null) 
 									{ 
 
-										pasAchete = false; journal_ventes.ajouter("2achat du chocolat" + chocolats.get(i)+"au prix à la tonne de" + prix);
+										pasAchete = false; journal_ventes.ajouter("achat du chocolat" + chocolats.get(i)+"au prix à la tonne de" + prix);
 
 										pasAchete = false; journal_ventes.ajouter("achat du chocolat " + chocolats.get(i)+" au prix à la tonne de " + prix);
 
@@ -242,7 +242,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 						pasAchete=false;
 						ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(0), chocolats.get(i), echeancier , this.cryptogramme, initialise);
 						if(cc != null) {
-							journal_achats.ajouter("1CC "+cc.getNumero()+" achat du chocolat " + chocolats.get(i)+" au prix à la tonne de " + prix);
+							journal_achats.ajouter("CC "+cc.getNumero()+" achat du chocolat " + chocolats.get(i)+" au prix à la tonne de " + prix);
 
 						}
 
@@ -450,14 +450,14 @@ public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 	double prix_max = prixMax.get(c);
 	double prix_min=1000;
 	double prec = precedentPrix.get(choco.getChocolat());
-	journal_ventes.ajouter("5ancien prix tonne de " + contrat.getProduit()+" est de " + prec + "€");
+	journal_ventes.ajouter("ancien prix tonne de " + contrat.getProduit()+" est de " + prec + "€");
 
 	/*On regarde d'abord la taille de la liste des prix proposés. Si la liste est de longueur 6 ou plus,
 		on accepte le contrat s'il est dans la fourchette prixMin, prixMax car on risque de perdre le contrat*/
 	if(contrat.getListePrix().size()>=6) {
 		if(prix<prix_max && prix>prix_min) {
 			prec=prix;
-			journal_ventes.ajouter("6nouveau prix tonne de " + contrat.getProduit()+" est de " + prix + "€");
+			journal_ventes.ajouter("nouveau prix tonne de " + contrat.getProduit()+" est de " + prix + "€");
 			return prix;
 		}
 		else {
@@ -495,7 +495,7 @@ public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 			//On pourra peut etre rajouter un comportement selon le comportement de l'autre partie (s'il fait pas d'ffort on s'adapte par exemple)
 			prix=prix*0.8;
 			prec=prix;
-			journal_ventes.ajouter("7nouveau prix tonne de " + contrat.getProduit()+" est de " + prix + "€");
+			journal_ventes.ajouter("nouveau prix tonne de " + contrat.getProduit()+" est de " + prix + "€");
 			return prix ;
 
 			

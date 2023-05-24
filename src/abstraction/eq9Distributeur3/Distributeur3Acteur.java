@@ -167,6 +167,11 @@ public class Distributeur3Acteur implements IActeur{
 			stock.ajoutQte(chocolats.get(j), 8000);
 		}
 		
+		variable_stock_tot.setValeur(this, stock.qteStockTOT(), this.cryptogramme);
+		variable_stock_HQ_BE.setValeur(this, stock.qteStock_HQ_BE(), this.cryptogramme);
+		variable_stock_MQ_BE.setValeur(this, stock.qteStock_MQ_BE(), this.cryptogramme);
+		variable_stock_MQ.setValeur(this, stock.qteStock_MQ(), this.cryptogramme);
+		
 		
 		
 		
@@ -200,12 +205,7 @@ public class Distributeur3Acteur implements IActeur{
 		
 		quanitite_cible_totale_OA.setValeur(this,qte_cible_OA_TOT, this.cryptogramme);
 		variable_CA.setValeur(this,CA_step/1000000000, this.cryptogramme);
-		
-		variable_stock_tot.setValeur(this, stock.qteStockTOT(), this.cryptogramme);
-		variable_stock_HQ_BE.setValeur(this, stock.qteStock_HQ_BE(), this.cryptogramme);
-		variable_stock_MQ_BE.setValeur(this, stock.qteStock_MQ_BE(), this.cryptogramme);
-		variable_stock_MQ.setValeur(this, stock.qteStock_MQ(), this.cryptogramme);
-
+	
 		
 
 	}

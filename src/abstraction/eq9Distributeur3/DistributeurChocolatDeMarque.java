@@ -33,6 +33,12 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 	public void next() {
 		
 		super.next();
+		
+		
+	
+
+		
+		
 		this.variable_qtte_vendue_TOT.setValeur(this, qteVendue_TOT, this.cryptogramme);
 		this.variable_qtte_vendue_HQ_BE.setValeur(this, qteVendue_HQ_BE, this.cryptogramme);
 		this.variable_qtte_vendue_MQ_BE.setValeur(this, qteVendue_MQ_BE, this.cryptogramme);
@@ -110,7 +116,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 			this.variable_perc_vendue.setValeur(this, 100*qteVendue_TOT/this.variable_stock_tot.getValeur(), this.cryptogramme);
 		}
 		else {
-			this.variable_perc_vendue.setValeur(this, 100, this.cryptogramme);
+			this.variable_perc_vendue.setValeur(this, 0, this.cryptogramme);
 		}
 
 		
@@ -120,6 +126,12 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 		qteVendue_MQ_BE = 0.0;
 		qteVendue_MQ = 0.0;
 		qteVendue_TOT = 0.0;
+		
+		
+		variable_stock_tot.setValeur(this, stock.qteStockTOT(), this.cryptogramme);
+		variable_stock_HQ_BE.setValeur(this, stock.qteStock_HQ_BE(), this.cryptogramme);
+		variable_stock_MQ_BE.setValeur(this, stock.qteStock_MQ_BE(), this.cryptogramme);
+		variable_stock_MQ.setValeur(this, stock.qteStock_MQ(), this.cryptogramme);
 
 		
 	}
