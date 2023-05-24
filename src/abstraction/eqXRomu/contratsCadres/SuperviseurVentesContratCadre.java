@@ -293,6 +293,7 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 		HashMap<IVendeurContratCadre, HashMap<IProduit,Double>> engageALivrer = new HashMap<IVendeurContratCadre, HashMap<IProduit,Double>>();
 		HashMap<IAcheteurContratCadre, Double> engageAPayer = new HashMap<IAcheteurContratCadre, Double>();
 		HashMap<IAcheteurContratCadre, Double> totalPaye = new HashMap<IAcheteurContratCadre, Double>();
+		HashMap<IVendeurContratCadre, Double> totalRecu = new HashMap<IVendeurContratCadre, Double>();
 		double chocoALivrer=0;// au cours de cette etape
 		double chocoLivre=0;  // au cours de cette etape
 		double fevesALivrer=0;// au cours de cette etape
@@ -358,6 +359,11 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 				} else {
 					totalPaye.put(acheteur, totalPaye.get(acheteur)+aPayer);
 				}
+				if (!totalRecu.keySet().contains(cc.getVendeur())) {
+					totalRecu.put(cc.getVendeur(),aPayer);
+				} else {
+					totalRecu.put(cc.getVendeur(), totalRecu.get(cc.getVendeur())+aPayer);
+				}
 				this.journal.ajouter("  a payer="+String.format("%.3f",aPayer)+"  paye="+String.format("%.3f",effectivementPaye));
 				if (effectivementPaye>0.0) {
 					cc.payer(effectivementPaye);
@@ -387,6 +393,10 @@ public class SuperviseurVentesContratCadre implements IActeur, IAssermente {
 		this.journal.ajouter("===== SOMMES PAYEES AU STEP =====");
 		for (IAcheteurContratCadre a : totalPaye.keySet()) {
 			this.journal.ajouter("..== "+a.getNom()+" : "+totalPaye.get(a));
+		}
+		this.journal.ajouter("===== SOMMES RECUES AU STEP =====");
+		for (IVendeurContratCadre a : totalRecu.keySet()) {
+			this.journal.ajouter("..== "+a.getNom()+" : "+totalRecu.get(a));
 		}
 	}
 
