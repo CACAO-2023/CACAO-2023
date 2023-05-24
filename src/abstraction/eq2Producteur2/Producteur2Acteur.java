@@ -57,10 +57,10 @@ public class Producteur2Acteur implements IActeur {
 	protected Producteur2 thisP;
 
 	//Prix pour les contrats cadres
-	public double prixBQ = 500.0;
-	public double prixMQ = 1000.0;
-	public double prixMQBE = 1500.0;
-	public double prixHQ = 2000.0;
+	public double prixBQ = 2200.0*1.01;
+	public double prixMQ = 3500.0*1.05;
+	public double prixMQBE = 5000.0*0.99;
+	public double prixHQ = 10000.0*1.1;
 	public HashMap<Feve, Double> prixCC;
 	protected LinkedList<ExemplaireContratCadre> contrats;
 	
