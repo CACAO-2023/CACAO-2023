@@ -80,30 +80,37 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 				ventetotX += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
 			}
 		}
-		if (( duree >= 15) && ( quantitetot <= ventetotX) && ( quantitetot >= 10000)) {
+//		if (( duree >= 15) && ( quantitetot <= ventetotX) && ( quantitetot >= 10000)) {
 			
-			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
-			return contrat.getEcheancier();
-		}
+//			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
+//			return contrat.getEcheancier();
+//		}
 
 		Feve f = (Feve) contrat.getProduit();
 		if (f.getGamme().equals(Gamme.MQ)) {
 			return null;
 		}
 		
-		if (f.getGamme().equals(Gamme.HQ)) {
+//		if (f.getGamme().equals(Gamme.HQ)) {
 			
-			 if (ventetotX/2 > 100){
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotX/2));
-				return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotX/2);
-			}else {
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotX/2));
+//			 if (ventetotX/2 > 100){
+//				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotX/2));
+//				return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotX/2);
+//			}else {
+//				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotX/2));
 
-					return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotX/2);
-		}  
-			 }
-		
-		return null;
+//					return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotX/2);
+//		}  
+//			 }
+		else {
+			int aLivrer = 0;
+			if(echeancier.getQuantiteTotale()/echeancier.getNbEcheances()>ventetotX) {
+				return null;
+			}
+			else {
+				return echeancier;
+			}
+		}
 		
 	}
 	
