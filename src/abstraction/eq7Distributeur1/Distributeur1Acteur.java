@@ -166,6 +166,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	 */
 	public void initialiser() {
 		cout_stockage_distributeur.setValeur(this, Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*16);
+		
 		cout_chocolat.put(Chocolat.C_HQ_BE, 10000.);
 		cout_chocolat.put(Chocolat.C_MQ_BE, 7500.);
 		cout_chocolat.put(Chocolat.C_MQ, 5000.);

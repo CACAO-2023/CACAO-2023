@@ -36,10 +36,10 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	
 	public void initiate_durees(){
 		this.durees_CC= new LinkedList<>();
-		durees_CC.add(24); //12 mois = 1an
-		durees_CC.add(18); //9 mois
-		durees_CC.add(12); //6 mois
-		durees_CC.add(6); //3 mois
+//		durees_CC.add(24); //12 mois = 1an
+//		durees_CC.add(18); //9 mois
+		durees_CC.add(13); //6 mois
+//		durees_CC.add(6); //3 mois
 	}
 	
 	public DistributeurContratCadreAcheteur() {
@@ -67,6 +67,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		ChocolatDeMarque marque = (ChocolatDeMarque) contrat.getProduit();
 		if (nombre_achats.get(marque)==0) {
+			
 			return contrat.getPrix();		
 		} 
 //		else if ((cout_marque.get(marque)*1.5	< contrat.getPrix()) || (contrat.getPrix()<0.5*getCout_gamme(marque))) {
@@ -143,7 +144,9 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		return cc;
 
 		}
-
+public void test() {
+	
+}
 	/**
 	 * @author Theo, Ghaly
 	 * @param step : étape
