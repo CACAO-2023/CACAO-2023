@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Set;
 
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.produits.Feve;
 
 public class Champs {
 	private HashMap<String, HashMap<Integer, Integer>> Champs; /* String H ou M (key) et Hashmap des champs. Champs contient tous les champs */
@@ -29,7 +30,7 @@ public class Champs {
 		Champs.put("H", ChampH);
 		
 	}
-
+	
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
