@@ -242,9 +242,9 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		actualiser_prevision_perso( choco,   quantite);
 		
 		mettre_a_jour(Var_Vente_Choco, choco, montant);
-		if(choco.getNom().equals("C_MQ_chokchoco")) {
-			System.out.println("-----------------------------");
-		}
+		mettre_a_jour(Var_nbr_Vente_Choco, choco, quantite);
+		
+
 		vente_step+=montant;
 	}
 

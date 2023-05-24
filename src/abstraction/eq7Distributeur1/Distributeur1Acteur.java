@@ -48,6 +48,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	protected HashMap<ChocolatDeMarque, Variable> Var_Cout_Choco; // le cout de chaque chocolat de marque
 	protected HashMap<ChocolatDeMarque, Variable> Var_Marge_Choco; // la marge de chaque chocolat de marque
 	protected HashMap<ChocolatDeMarque, Variable> Var_Vente_Choco; // la vente de chaque chocolat de marque
+	protected HashMap<ChocolatDeMarque, Variable> Var_nbr_Vente_Choco; // la quantité vendue de chaque chocolat de marque
 	
 
 	protected double vente_step; //variable représentant la somme des vente au step courrant
@@ -55,6 +56,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	protected Variable cout_Choco_marque_selectionnee = new Variable("Eq7_cout_Choco_marque_selectionnee", "cout Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);	
 	protected Variable stock_Choco_marque_selectionnee = new Variable("Eq7_stock_Choco_marque_selectionnee", "stock Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
 	protected Variable Vente_Choco_marque_selectionnee = new Variable("Eq7_vente_Choco_marque_selectionnee", "vente Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
+	protected Variable Vente_nbr_Choco_marque_selectionnee = new Variable("Eq7_quantite_vendue_Choco_marque_selectionnee", "nombre d'articles vente Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
 
 	protected Variable solde_bancaire = new Variable("Eq7_solde_bancaire","solde_bancaire",this,0);
 	
@@ -176,17 +178,22 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		this.Var_Cout_Choco = new HashMap<ChocolatDeMarque, Variable> ();
 		this.Var_Marge_Choco = new HashMap<ChocolatDeMarque, Variable> ();
 		this.Var_Vente_Choco = new HashMap<ChocolatDeMarque, Variable> ();
+		this.Var_nbr_Vente_Choco = new HashMap<ChocolatDeMarque, Variable> ();
+		
 		
 		for (ChocolatDeMarque cm : chocolatsDeMarquesProduits) {
 			this.Var_Stock_choco.put(cm, new Variable("le stock de la marque "+cm.getNom(), "le stock de la marque "+cm.getNom(), this, 0.0));
 			this.Var_Marge_Choco.put(cm, new Variable("la marge de la marque "+cm.getNom(), "la marge de la marque "+cm.getNom(), this, 0.0));
 			this.Var_Cout_Choco.put(cm, new Variable("le cout de la marque "+cm.getNom(), "le cout de la marque "+cm.getNom(), this, 0.0));
 			this.Var_Vente_Choco.put(cm, new Variable("le nombre de vente de la marque "+cm.getNom(), "le nombre de vente de la marque "+cm.getNom(), this, 0.0));
+			this.Var_nbr_Vente_Choco.put(cm, new Variable("la quantite vendue de la marque "+cm.getNom(), "la quantite vendue de la marque "+cm.getNom(), this, 0.0));
+			
 		}
 		this.marge_Choco_marque_selectionnee.cloner(Var_Marge_Choco.get(chocolatsDeMarquesProduits.get(0)));
 		this.cout_Choco_marque_selectionnee.cloner(Var_Cout_Choco.get(chocolatsDeMarquesProduits.get(0)));
 		this.stock_Choco_marque_selectionnee.cloner(this.Var_Stock_choco.get(chocolatsDeMarquesProduits.get(0))); // initialement c'est le premier chocolat de marque qui dont le stock est affiche
 		this.Vente_Choco_marque_selectionnee.cloner(this.Var_Vente_Choco.get(chocolatsDeMarquesProduits.get(0))); // initialement c'est le premier chocolat de marque qui dont le stock est affiche
+		this.Vente_nbr_Choco_marque_selectionnee.cloner(this.Var_nbr_Vente_Choco.get(chocolatsDeMarquesProduits.get(0))); // initialement c'est le premier chocolat de marque qui dont le stock est affiche
 		
 		this.cmSelectionnee.addObserver(this);
 		
@@ -270,7 +277,8 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		res.add(cout_Choco_marque_selectionnee);
 		res.add(marge_Choco_marque_selectionnee);
 		res.add(Vente_Choco_marque_selectionnee);
-		res.add(solde_bancaire);
+		res.add(Vente_nbr_Choco_marque_selectionnee);
+		
 		return res;
 
 	}
@@ -360,6 +368,8 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		this.marge_Choco_marque_selectionnee.cloner(this.Var_Marge_Choco.get(this.chocolatsDeMarquesProduits.get(index)));
 		this.cout_Choco_marque_selectionnee.cloner(this.Var_Cout_Choco.get(this.chocolatsDeMarquesProduits.get(index)));
 		this.Vente_Choco_marque_selectionnee.cloner(this.Var_Vente_Choco.get(this.chocolatsDeMarquesProduits.get(index)));
+		this.Vente_nbr_Choco_marque_selectionnee.cloner(this.Var_nbr_Vente_Choco.get(this.chocolatsDeMarquesProduits.get(index)));
+		
 		System.out.println("Chocolat de marque selectionne :"+this.chocolatsDeMarquesProduits.get(index));
 	}
 	
@@ -374,6 +384,8 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		cout_Choco_marque_selectionnee.setValeur(this, get_valeur(Var_Cout_Choco, choco));
 		marge_Choco_marque_selectionnee.setValeur(this, get_valeur(Var_Marge_Choco, choco));
 		Vente_Choco_marque_selectionnee.setValeur(this, get_valeur(Var_Vente_Choco, choco));
+		Vente_nbr_Choco_marque_selectionnee.setValeur(this, get_valeur(Var_nbr_Vente_Choco, choco));
+		
 		
 	}
 }
