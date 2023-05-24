@@ -168,7 +168,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     @Override
     public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
 
-        Lot lot = new Lot(produit);
+        Lot lot =  new Lot(produit);
 
         int oldestStep = Stock.getAge((Feve)produit);
         double currentQuantite;
