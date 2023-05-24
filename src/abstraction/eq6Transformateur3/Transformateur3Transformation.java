@@ -308,30 +308,30 @@ public void initialiser() {
 	public void next() {
 		super.next();
 		if (stockFeveBG.getQuantiteTotale()>0 && stockFeveBG.getQuantiteTotale()<super.partTransBQ*super.capTransMax) {
-			super.journalTransformation.ajouter("on veut obtenir"+stockFeveBG.getQuantiteTotale()/((double)this.getPourcentageCacaoBG())/100+"de Chocolat BG");
-		this.transformationChoco(Feve.F_BQ, stockFeveBG.getQuantiteTotale()/((double)this.getPourcentageCacaoBG())/100);
+			super.journalTransformation.ajouter("on veut obtenir"+stockFeveBG.getQuantiteTotale()/((double)this.getPourcentageCacaoBG())*100+"de Chocolat BG");
+		this.transformationChoco(Feve.F_BQ, stockFeveBG.getQuantiteTotale()/((double)this.getPourcentageCacaoBG())*100);
 		} else { 
 			if (stockFeveBG.getQuantiteTotale()>=super.partTransBQ*super.capTransMax) {
-				super.journalTransformation.ajouter("on veut obtenir"+super.partTransBQ*super.capTransMax/((double)this.getPourcentageCacaoBG())/100+"de Chocolat BG");
-				this.transformationChoco(Feve.F_BQ, super.partTransBQ*super.capTransMax/((double)this.getPourcentageCacaoBG())/100);
+				super.journalTransformation.ajouter("on veut obtenir"+super.partTransBQ*super.capTransMax/((double)this.getPourcentageCacaoBG())*100+"de Chocolat BG");
+				this.transformationChoco(Feve.F_BQ, super.partTransBQ*super.capTransMax/((double)this.getPourcentageCacaoBG())*100);
 			}
 		}
 		if (stockFeveMG.getQuantiteTotale()>0 && stockFeveMG.getQuantiteTotale()<super.partTransMQ*super.capTransMax) {
-			super.journalTransformation.ajouter("on veut obtenir"+stockFeveMG.getQuantiteTotale()/((double)this.getPourcentageCacaoMG())/100+"de Chocolat MG");
-		this.transformationChoco(Feve.F_MQ, stockFeveMG.getQuantiteTotale()/((double)this.getPourcentageCacaoMG())/100);
+			super.journalTransformation.ajouter("on veut obtenir"+stockFeveMG.getQuantiteTotale()/((double)this.getPourcentageCacaoMG())*100+"de Chocolat MG");
+		this.transformationChoco(Feve.F_MQ, stockFeveMG.getQuantiteTotale()/((double)this.getPourcentageCacaoMG())*100);
 		} else { 
 			if (stockFeveMG.getQuantiteTotale()>=super.partTransMQ*super.capTransMax) {
-				super.journalTransformation.ajouter("on veut obtenir"+super.partTransMQ*super.capTransMax/((double)this.getPourcentageCacaoMG())/100+"de Chocolat MG");
-				this.transformationChoco(Feve.F_MQ, super.partTransMQ*super.capTransMax/((double)this.getPourcentageCacaoMG())/100);
+				super.journalTransformation.ajouter("on veut obtenir"+super.partTransMQ*super.capTransMax/((double)this.getPourcentageCacaoMG())*100+"de Chocolat MG");
+				this.transformationChoco(Feve.F_MQ, super.partTransMQ*super.capTransMax/((double)this.getPourcentageCacaoMG())*100);
 			}
 		}
 		if (stockFeveMGL.getQuantiteTotale()>0 && stockFeveMGL.getQuantiteTotale()<super.partTransMQL*super.capTransMax) {
-			super.journalTransformation.ajouter("on veut obtenir"+stockFeveMGL.getQuantiteTotale()/((double)this.getPourcentageCacaoMGL())/100+"de Chocolat MGL");
-		this.transformationChoco(Feve.F_MQ_BE, stockFeveMGL.getQuantiteTotale()/((double)this.getPourcentageCacaoMGL())/100);
+			super.journalTransformation.ajouter("on veut obtenir"+stockFeveMGL.getQuantiteTotale()/((double)this.getPourcentageCacaoMGL())*100+"de Chocolat MGL");
+		this.transformationChoco(Feve.F_MQ_BE, stockFeveMGL.getQuantiteTotale()/((double)this.getPourcentageCacaoMGL())*100);
 		} else { 
 			if (stockFeveMGL.getQuantiteTotale()>=super.partTransMQL*super.capTransMax) {
-				super.journalTransformation.ajouter("on veut obtenir"+super.partTransMQL*super.capTransMax/((double)this.getPourcentageCacaoMGL())/100+"de Chocolat MGL");
-				this.transformationChoco(Feve.F_MQ_BE, super.partTransMQL*super.capTransMax/((double)this.getPourcentageCacaoMGL())/100);
+				super.journalTransformation.ajouter("on veut obtenir"+super.partTransMQL*super.capTransMax/((double)this.getPourcentageCacaoMGL())*100+"de Chocolat MGL");
+				this.transformationChoco(Feve.F_MQ_BE, super.partTransMQL*super.capTransMax/((double)this.getPourcentageCacaoMGL())*100);
 			}
 		}
 		if (stockFeveHGL.getQuantiteTotale()>0 && stockFeveHGL.getQuantiteTotale()<super.partTransHQ*super.capTransMax) {
