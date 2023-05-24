@@ -11,6 +11,8 @@ import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
+
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -361,6 +363,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		if (superviseur != null) {
 		List<IVendeurContratCadre> vendeurs = superviseur.getVendeurs(produit);
 		if (vendeurs.size()!=0) {
+			Collections.shuffle(vendeurs);
 			for (IVendeurContratCadre vendeur : vendeurs) {
 			super.journalAchatCC.ajouter("on essaie de demander un contrat à l'equipe :"+vendeur.getNom());
 			ExemplaireContratCadre contrat = superviseur.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1,Filiere.LA_FILIERE.getEtape()+9,100.0), super.cryptogramme, false);
