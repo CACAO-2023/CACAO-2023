@@ -19,6 +19,7 @@ import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 // AYOUB
 public class ProducteurVendeurCC extends Producteur1Plantation implements IVendeurContratCadre{
     private List<ExemplaireContratCadre> mescontrats;
+    private List<ExemplaireContratCadre> mescontratspaslivrés;
     protected SuperviseurVentesContratCadre supCCadre;
 	private HashMap<Feve, Integer> nego; 
 	private HashMap<IActeur, Integer> systemefidelite;
@@ -33,6 +34,7 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	public ProducteurVendeurCC() {
 		super();
 		this.mescontrats= new LinkedList<ExemplaireContratCadre>();
+		this.mescontratspaslivrés= new LinkedList<ExemplaireContratCadre>();
 		this.nego= new HashMap<Feve, Integer>();
 		this.systemefidelite=new HashMap<IActeur, Integer>();
 		
@@ -140,6 +142,7 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.mescontrats.add(contrat);
+		this.mescontratspaslivrés.add(contrat);
 		
 	}
 	
@@ -180,6 +183,9 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
 				contratstermine.add(contrat);
 			}
+			if (contrat.getQuantiteRestantALivrer()==0.0) {
+				mescontratspaslivrés.remove(contrat);
+			}
 		}
 		this.mescontrats.removeAll(contratstermine);
 		if (super.getVraiStockB().getQuantiteTotale()>1000 && nbcontratBQ < maxcontratBQ) {
@@ -201,10 +207,16 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		for (ExemplaireContratCadre contrat : this.mescontrats) {
 			if (contrat.getProduit()==Feve.F_BQ) {
 				quantiteventeBQ+=contrat.getQuantiteRestantALivrer();
-				nbcontratBQ+=1;
 			}
 			else {
 				quantiteventeMQ+=contrat.getQuantiteRestantALivrer();
+			}
+		}
+		for (ExemplaireContratCadre c : this.mescontratspaslivrés) {
+			if (c.getProduit()==Feve.F_BQ) {
+				nbcontratBQ+=1;
+			}
+			else {
 				nbcontratMQ+=1;
 			}
 		}

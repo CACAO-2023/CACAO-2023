@@ -126,7 +126,7 @@ public class Producteur1Plantation extends Producteur1Acteur {
 					this.journal_champs.ajouter("Un champ de "+q+" hectares a été planté");
 				}
 				else if ((step-i)%12==0 && step-i>0 && !greve || (greve&&(a<=max))) {
-					if (this.Stock.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()<2000000) {
+					if (this.Stock.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()<10000000) {
 						double nb_tonnes = q*0.56 ; //ajouter facteur random
 						double random = ThreadLocalRandom.current().nextDouble(0.9, 1.1);
 						nb_tonnes = nb_tonnes * random ;
@@ -180,7 +180,7 @@ public class Producteur1Plantation extends Producteur1Acteur {
 					this.journal_champs.ajouter("Un champ de "+q+" hectares a été planté");
 				}
 				else if ((step-i)%10==0 && step-i>0 && !greve || (greve&&(a<=max))) 
-				{if (this.Stock.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()<2000000) {
+				{if (this.Stock.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()<10000000) {
 					double nb_tonnes = q*0.56 ; //ajouter facteur random
 					double random = ThreadLocalRandom.current().nextDouble(0.9, 1.15);
 					nb_tonnes = nb_tonnes * random ;
