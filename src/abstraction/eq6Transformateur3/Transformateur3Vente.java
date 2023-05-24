@@ -155,6 +155,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		super.journalVentes.ajouter("Nouveau contrat de vente passé :"+contrat.toString());}
 		
 	}
+	 
 	
 	public void initialiser() {
 		super.initialiser();
