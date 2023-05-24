@@ -106,6 +106,7 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	}
 
 	public void initialiser() {
+		
 			}
 
 	public String getNom() {// NE PAS MODIFIER
