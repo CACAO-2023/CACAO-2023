@@ -33,6 +33,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 
 
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
+
 	
 	public void initialiser() {
 		super.initialiser();
@@ -230,6 +231,8 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		if (produit instanceof ChocolatDeMarque) {
 			if (this.stockChocoMarque.keySet().contains(produit)) {
 				stock= this.stockChocoMarque.get(produit);
+				
+				}				
 				livre = Math.min(stock, quantite);
 				if (quantite>stock) {
 					this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  Stock insuffisant pour satisfaire toute la demande");
@@ -239,7 +242,8 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 				}
 				lot=new Lot((ChocolatDeMarque)produit);
 			}
-		} 
+		
+
 //		else if (produit instanceof Chocolat) {
 //			if (this.stockChoco.keySet().contains(produit)) {
 //				stock= this.stockChoco.get(produit);
