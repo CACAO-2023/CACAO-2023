@@ -619,7 +619,7 @@ public class Producteur3 extends Bourse3  {
 			this.nbr_popup +=1;
 			JFrame popup = new JFrame("Grêve des Ouvriers !");		
 			popup.setLocation(300, 100);
-			ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Greve.gif");
+			ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Greve.gif"); //
 			JLabel label = new JLabel(icon);
 			popup.getContentPane().add(label);
 	        popup.pack();
