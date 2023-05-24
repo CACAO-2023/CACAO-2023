@@ -73,7 +73,7 @@ public class Stock  {
 	// fonction coût du stock 
 	// Mathilde Soun 
 	public double coutDeStock () {
-		double cout = Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*this.qteStockTOT();
+		double cout = Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*this.qteStockTOT()*16;
 		return cout;
 	}
 	// met à jour le journal pour le stock de chaque chocolat 

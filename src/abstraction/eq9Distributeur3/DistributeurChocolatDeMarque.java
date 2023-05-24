@@ -22,9 +22,18 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 	
 	
 
+	
+
 	public DistributeurChocolatDeMarque() {
 		
 	}
+	
+	public void next() {
+		
+		super.next();
+		
+	}
+	
 	
 	//william
 	@Override
@@ -71,7 +80,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 			journal_activitegenerale.ajouter("On essaie de me pirater (RayonVide)");
 			return 0;
 		} else {
-			HashMap<ChocolatDeMarque, Double> qtVente = this.quantiteTotale();
+			HashMap<ChocolatDeMarque, Double> qtVente = quantiteTotale();
 			
 			
 			
@@ -79,6 +88,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 				journal_ventes.ajouter("On vend " + qtVente.get(choco) +" "+ choco.getNom());
 				if (qtVente.get(choco) != 0) {
 				Filiere.LA_FILIERE.getBanque().virer(this, crypto, Filiere.LA_FILIERE.getActeur("Banque"), qtVente.get(choco)*prixRayon);
+				journal_operationsbancaires.ajouter("On paie "+ qtVente.get(choco)*prixRayon + " pour la mise en rayon de " + choco.getNom() );
 				}
 				return qtVente.get(choco);
 			} else {
@@ -97,7 +107,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 			journal_activitegenerale.ajouter("Quelqu'un essaye de me pirater !");
 			return 0.0;
 		} else {
-			HashMap<ChocolatDeMarque, Double> qtVente = this.quantiteTotale();
+			HashMap<ChocolatDeMarque, Double> qtVente = quantiteTotale();
 			
 			double sum = 0.0;
 			for (double d : qtVente.values()) {
@@ -106,9 +116,10 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 			
 			if (choco.equals(chocolats.get(5))) {
 				double qtTg = Math.min(qtVente.get(choco), sum*0.1);
-				journal_ventes.ajouter("On met "+ qtTg + "de" + choco.getNom() + "en tête de gondole.");
+				journal_ventes.ajouter("On met "+ qtTg + " de " + choco.getNom() + " en tête de gondole.");
 				return qtTg;
 			} else {
+				journal_ventes.ajouter("On ne met pas de " + choco.getNom() + " en tête de gondole.");
 				return 0.0;
 			}
 
