@@ -61,16 +61,20 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		return res;}
 		else {
 			if (f.getGamme()==Gamme.BQ) {
-				res= Math.max(0,super.quantBQMax-super.stockFeveBG.getQuantiteTotale()-super.quantiteEnAttente-1000);
+				double quant = Math.min(super.quantBQMax-super.stockFeveBG.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-800000);
+				res= Math.max(0,quant);
 			}
 			if (f.getGamme()==Gamme.MQ) {
-				res= Math.max(0,super.quantMQMax-super.stockFeveMG.getQuantiteTotale()-super.quantiteEnAttente-1000);
+				double quant = Math.min(super.quantMQMax-super.stockFeveMG.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-800000);
+				res= Math.max(0,quant);
 			}
 			if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {
-				res= Math.max(0,super.quantMQLMax-super.stockFeveMGL.getQuantiteTotale()-super.quantiteEnAttente-1000);
+				double quant = Math.min(super.quantMQLMax-super.stockFeveMGL.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-800000);
+				res= Math.max(0,quant);
 			}
 			if (f.getGamme()==Gamme.HQ) {
-				res= Math.max(0,super.quantHQMax-super.stockFeveHGL.getQuantiteTotale()-super.quantiteEnAttente-1000);
+				double quant = Math.min(super.quantHQMax-super.stockFeveHGL.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-800000);
+				res= Math.max(0,quant);
 			}
 		return res;
 		}
