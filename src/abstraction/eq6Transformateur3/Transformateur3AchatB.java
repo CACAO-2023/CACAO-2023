@@ -41,11 +41,12 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 
 	public double demande(Feve f, double cours) {
 		super.journalAchatB.ajouter("on nous demande si on veut des"+f.getType()+"avec le cours : "+cours);
-		double res = 6.0;
+		double res = 0;
+		if (privilegieCC(f,cours)) {
 		if (f.getGamme()==Gamme.BQ) {if(cours<=this.getCoursmaxBG().getValeur()) {
 													res =(100);}
 		}
-		else {res = 0.0;}
+		else {res = 100.0;}
 		if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxMGL().getValeur()) {
 			res = 100;}}
 		else {res = 0.0;}
@@ -55,8 +56,27 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		if (f.getGamme()==Gamme.BQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
 			res = (100);}}
 		else {res =0.0;}
+
 		super.journalAchatB.ajouter("on dit qu'on en veut :"+res);
 		return res;}
+		else {
+			if (f.getGamme()==Gamme.BQ) {
+				res= Math.max(0,super.quantBQMax-super.stockFeveBG.getQuantiteTotale()-super.quantiteEnAttente-1000);
+			}
+			if (f.getGamme()==Gamme.MQ) {
+				res= Math.max(0,super.quantMQMax-super.stockFeveMG.getQuantiteTotale()-super.quantiteEnAttente-1000);
+			}
+			if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {
+				res= Math.max(0,super.quantMQLMax-super.stockFeveMGL.getQuantiteTotale()-super.quantiteEnAttente-1000);
+			}
+			if (f.getGamme()==Gamme.HQ) {
+				res= Math.max(0,super.quantHQMax-super.stockFeveHGL.getQuantiteTotale()-super.quantiteEnAttente-1000);
+			}
+		return res;
+		}
+		}
+	
+	
 
 
 	private double max(double d, double e) {
@@ -99,7 +119,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 */
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
 		super.ajouterFeve(l);
-		super.journalAchatB.ajouter("Stock de "+l.getQuantiteTotale()+""+"tonnes de feves"+((Feve)l.getProduit()).toString()+" acheté en bourse");
+		super.journalAchatB.ajouter("Stock de "+l.getQuantiteTotale()+""+"tonnes de feves"+((Feve)l.getProduit()).toString()+" acheté en bourse de qualité:"+l.getProduit().toString());
 		
 	}
 
