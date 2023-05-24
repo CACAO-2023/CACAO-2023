@@ -478,7 +478,7 @@ public class Producteur3 extends Bourse3  {
 		int max = 999999999;
 		for(int i= 0 ;i < Filiere.LA_FILIERE.getEtape();i++) {
 			int Valuei = (int)h.getValeur(i);
-			System.out.println("Valuei = " + Valuei);
+			// System.out.println("Valuei = " + Valuei);
 			if(Valuei < max) {
 				max = Valuei;
 			}
