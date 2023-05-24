@@ -1,4 +1,6 @@
 package abstraction.eq4Transformateur1;
+import abstraction.eq4Transformateur1.Transformateur1Acteur;
+
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -6,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eq4Transformateur1.Achat.AchatBourse;
+import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
 import abstraction.eqXRomu.general.Journal;
@@ -54,9 +57,15 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		super.next();
 		Feve fb = Feve.F_BQ;
 		Chocolat cb = Chocolat.C_BQ;
-		int transfo = (int) (Math.min(this.stockFeves.get(fb), Math.random()*1000));
+		double aVendreBQ=0;
+		for (ExemplaireContratCadre c : ContratEnCours_C_BQ ) {
+			aVendreBQ+=c.getQuantiteALivrerAuStep();
+		}
+
+		double transfo = (int) (Math.min(this.stockFeves.get(fb), Math.random()*1000)) + (aVendreBQ)/1.58;
+		
 		double conversionb = 1.58;
-		if (transfo>0) {
+		if (transfo>0.0) {
 			this.retirer(fb,transfo);
 			int pourcentageCacao =  42;
 			ChocolatDeMarque cm= new ChocolatDeMarque(cb, "Yocttotoa", pourcentageCacao, 0);
@@ -68,7 +77,13 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		}
 		Feve fh = Feve.F_HQ_BE;
 		Chocolat ch = Chocolat.C_HQ_BE;
-		int transfoh = (int) (Math.min(this.stockFeves.get(fh), Math.random()*1000));
+		double aVendreHQ=0;
+		for (ExemplaireContratCadre c : ContratEnCours_C_HQ ) {
+			aVendreHQ+=c.getQuantiteALivrerAuStep();
+		}
+		
+		double transfoh = (int) (Math.min(this.stockFeves.get(fh), Math.random()*1000)) + (aVendreHQ)/1.06;
+		
 		double conversion = 1.06;
 		if (transfoh>0) {
 			this.retirer(fh,transfoh);
@@ -82,5 +97,6 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			this.qteTransfo+=transfoh;
 		}
 	}
+	
 }
 	
