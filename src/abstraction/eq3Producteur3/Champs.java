@@ -15,8 +15,10 @@ public class Champs {
 	 * @author Dubus-Chanson Victor, Corentin Caugant
 	 */
 	public Champs() {
-		Integer NombreHectaresM = 22500;
-		Integer NombreHectaresH =1250;
+		//Integer NombreHectaresM = 22500; premiers essais
+		//Integer NombreHectaresH =1250;
+		Integer NombreHectaresM = 16000; // optimises
+		Integer NombreHectaresH = 2200; // pas trop haut, afin de simuler la réalité
 		HashMap<Integer, Integer> ChampH = new HashMap<Integer, Integer>();
 		HashMap<Integer, Integer> ChampM = new HashMap<Integer, Integer>();
 
