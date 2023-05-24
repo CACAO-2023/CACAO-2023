@@ -21,14 +21,10 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 	public double qteVendue_MQ_BE;
 	public double qteVendue_MQ;
 	public double qteVendue_TOT;
-
-
-
-
 	
-	
+	private double nbr_steps_sans_vente;
 
-	
+
 
 	public DistributeurChocolatDeMarque() {
 		
@@ -42,26 +38,80 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 		this.variable_qtte_vendue_MQ_BE.setValeur(this, qteVendue_MQ_BE, this.cryptogramme);
 		this.variable_qtte_vendue_MQ.setValeur(this, qteVendue_MQ, this.cryptogramme);
 		
-		this.journal_AO.ajouter("coef 1 = " + this.coef_prix_vente.get(0.0));
-		this.journal_AO.ajouter("coef 2 = " + this.coef_prix_vente.get(1.0));
-		this.journal_AO.ajouter("coef 3 = " + this.coef_prix_vente.get(2.0));
+		this.journal_coefs.ajouter(" ... ");
+
+		this.journal_coefs.ajouter("coef 1 = " + this.coef_prix_vente.get(0.0));
+		this.journal_coefs.ajouter("coef 2 = " + this.coef_prix_vente.get(1.0));
+		this.journal_coefs.ajouter("coef 3 = " + this.coef_prix_vente.get(2.0));
 
 		
 		if(100*qteVendue_HQ_BE/this.variable_stock_HQ_BE.getValeur() < 40 && this.coef_prix_vente.get(0.0)*0.8 > 1.0) {
-			this.journal_ventes.ajouter("On vend seulement " + qteVendue_HQ_BE/this.variable_stock_HQ_BE.getValeur() + "% de notre stock de HQ_BE");
 			this.coef_prix_vente.put(0.0,this.coef_prix_vente.get(0.0)*0.8);
+			changement_strategique_prix_vente(Gamme.HQ,true,0.8);
 		}
+		if(100*qteVendue_HQ_BE/this.variable_stock_HQ_BE.getValeur() > 80) {
+			this.coef_prix_vente.put(0.0,this.coef_prix_vente.get(0.0)*1.2);
+			changement_strategique_prix_vente(Gamme.HQ,true,1.2);
+
+		}
+		
+		
 		if(100*qteVendue_MQ_BE/this.variable_stock_MQ_BE.getValeur() < 40 && this.coef_prix_vente.get(1.0)*0.8 > 1.0) {
-			this.journal_ventes.ajouter("On vend seulement " + qteVendue_MQ_BE/this.variable_stock_MQ_BE.getValeur() + "% de notre stock de MQ_BE");
 			this.coef_prix_vente.put(1.0,this.coef_prix_vente.get(1.0)*0.8);
+			changement_strategique_prix_vente(Gamme.MQ,true,0.8);
+
 		}
+		if(100*qteVendue_MQ_BE/this.variable_stock_MQ_BE.getValeur() > 80) {
+			this.coef_prix_vente.put(1.0,this.coef_prix_vente.get(0.0)*1.2);
+			changement_strategique_prix_vente(Gamme.MQ,true,1.2);
+
+		}
+		
+		
 		if(100*qteVendue_MQ/this.variable_stock_MQ.getValeur() < 40 && this.coef_prix_vente.get(2.0)*0.8 > 1.0) {
-			this.journal_ventes.ajouter("On vend seulement " + qteVendue_MQ/this.variable_stock_MQ.getValeur() + "% de notre stock de MQ");
 			this.coef_prix_vente.put(2.0,this.coef_prix_vente.get(2.0)*0.8);
+			changement_strategique_prix_vente(Gamme.MQ,false,0.8);
+
+		}
+		if(100*qteVendue_MQ/this.variable_stock_MQ.getValeur() > 80) {
+			this.coef_prix_vente.put(2.0,this.coef_prix_vente.get(0.0)*1.2);
+			changement_strategique_prix_vente(Gamme.MQ,false,1.2);
+
+		}
+		if(this.variable_stock_tot.getValeur() != 0) {
+			
+			if(100*qteVendue_TOT/this.variable_stock_tot.getValeur() < 5.0) {
+				nbr_steps_sans_vente += 1;
+				if(nbr_steps_sans_vente == 4) {
+					// si on ne fait aucune vente et qu'il reste du stock, on casse les prix
+					changement_strategique_prix_vente(Gamme.HQ,true,0.5);
+					changement_strategique_prix_vente(Gamme.MQ,true,0.5);
+					changement_strategique_prix_vente(Gamme.MQ,false,0.5);
+					this.journal_coefs.ajouter("On met en promot le stock (PROMO 50%)");
+					
+				}
+				if(nbr_steps_sans_vente == 8) {
+					// si on ne fait aucune vente et qu'il reste du stock, on casse les prix
+					this.stock.liquider();
+					this.journal_coefs.ajouter("On liquide le stock");
+					
+				}
+				
+			}
+			else {
+				nbr_steps_sans_vente = 0;
+			}
+			
 		}
 		
 		
-		this.variable_perc_vendue.setValeur(this, 100*qteVendue_TOT/this.variable_stock_tot.getValeur(), this.cryptogramme);
+		
+		if(this.variable_stock_tot.getValeur() != 0) {
+			this.variable_perc_vendue.setValeur(this, 100*qteVendue_TOT/this.variable_stock_tot.getValeur(), this.cryptogramme);
+		}
+		else {
+			this.variable_perc_vendue.setValeur(this, 100, this.cryptogramme);
+		}
 
 		
 
@@ -71,6 +121,15 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 		qteVendue_MQ = 0.0;
 		qteVendue_TOT = 0.0;
 
+		
+	}
+	
+	public void changement_strategique_prix_vente(Gamme gam,boolean b,Double coefi) {
+		for(int i =0; i<chocolats.size();i++) {
+			if(chocolats.get(i).getGamme() == gam && chocolats.get(i).isBioEquitable() == b ) {
+				this.prix_tonne_vente.put(chocolats.get(i),this.prix_tonne_vente.get(chocolats.get(i))*coefi);
+			}
+		}
 		
 	}
 	

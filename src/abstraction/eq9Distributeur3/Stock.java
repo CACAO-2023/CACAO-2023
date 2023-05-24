@@ -81,6 +81,13 @@ public class Stock  {
 	// ajout d'une qte de chocolat (ou soustraction de chocolat)
 	// Mathilde Soun 
 	
+	public void liquider() {
+		for (ChocolatDeMarque c : a.chocolats) {
+			QteStock.put(c,0.0);
+			}
+
+	}
+	
 	public void ajoutQte(ChocolatDeMarque c, double ajout){
 		a.journal_stock.ajouter("On ajoute au stock de "+ c.getNom() + " une quantite de  " + ajout); 
 
