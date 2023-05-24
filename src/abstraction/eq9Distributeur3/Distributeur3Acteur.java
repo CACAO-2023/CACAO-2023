@@ -28,8 +28,10 @@ public class Distributeur3Acteur implements IActeur{
 	protected Journal journal_operationsbancaires;
 	protected Journal journal_stock;
 	protected Journal journal_activitegenerale;
-	protected Journal journal_AO;
+	protected Journal journal_coefs;
 	protected Journal journal_OA;
+	protected Journal journal_AO;
+
 	protected Journal journal_prix_vente;
 	
 	
@@ -82,8 +84,10 @@ public class Distributeur3Acteur implements IActeur{
 		this.journal_achats = new Journal(this.getNom()+" achats", this);
 		this.journal_operationsbancaires = new Journal(this.getNom()+" operations", this);
 		this.journal_activitegenerale = new Journal(this.getNom()+" activites", this);
-		this.journal_AO = new Journal(this.getNom()+" AO", this);
+		this.journal_coefs = new Journal(this.getNom()+" coefs ", this);
 		this.journal_OA = new Journal(this.getNom()+" OA", this);
+		this.journal_AO = new Journal(this.getNom()+" AO", this);
+
 		this.journal_prix_vente = new Journal(this.getNom() + " prix vente ",this);
 
 
@@ -163,6 +167,11 @@ public class Distributeur3Acteur implements IActeur{
 			stock.ajoutQte(chocolats.get(j), 8000);
 		}
 		
+		variable_stock_tot.setValeur(this, stock.qteStockTOT(), this.cryptogramme);
+		variable_stock_HQ_BE.setValeur(this, stock.qteStock_HQ_BE(), this.cryptogramme);
+		variable_stock_MQ_BE.setValeur(this, stock.qteStock_MQ_BE(), this.cryptogramme);
+		variable_stock_MQ.setValeur(this, stock.qteStock_MQ(), this.cryptogramme);
+		
 		
 		
 		
@@ -196,12 +205,7 @@ public class Distributeur3Acteur implements IActeur{
 		
 		quanitite_cible_totale_OA.setValeur(this,qte_cible_OA_TOT, this.cryptogramme);
 		variable_CA.setValeur(this,CA_step/1000000000, this.cryptogramme);
-		
-		variable_stock_tot.setValeur(this, stock.qteStockTOT(), this.cryptogramme);
-		variable_stock_HQ_BE.setValeur(this, stock.qteStock_HQ_BE(), this.cryptogramme);
-		variable_stock_MQ_BE.setValeur(this, stock.qteStock_MQ_BE(), this.cryptogramme);
-		variable_stock_MQ.setValeur(this, stock.qteStock_MQ(), this.cryptogramme);
-
+	
 		
 
 	}
@@ -307,7 +311,9 @@ public class Distributeur3Acteur implements IActeur{
 		res.add(journal_operationsbancaires);
 		res.add(journal_activitegenerale);
 		res.add(journal_stock);
+		res.add(journal_coefs);
 		res.add(journal_AO);
+
 		res.add(journal_OA);
 		res.add(journal_prix_vente);
 
