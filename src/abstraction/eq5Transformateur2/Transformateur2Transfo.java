@@ -143,7 +143,7 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 							
 					// On paie les coûts de transformation
 				System.out.println("Stock qui sera transfo"+this.getHQStep()+"  "+this.getHQteFeve()+"  "+this.getMQStep()+"   "+this.getMQteFeve());
-				System.out.println("Gamme "+f.getGamme());
+				System.out.println();
 				if((this.getMQStep()==1)&&(f.getGamme()==Gamme.MQ)) {
 					this.ajoutStock(this.getMQteFeve(), 0.8, f, c, "ChocoPop", 70);
 					this.setMQStep(0);
