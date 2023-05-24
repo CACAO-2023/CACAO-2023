@@ -81,6 +81,8 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 								ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeVendeur(acheteur, this, cm, echeancier, this.cryptogramme, false);
 								if (contrat1!=null) {
 									this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV_BQ : contrat signe = "+contrat1);
+									this.ContratEnCours_C_BQ.add(contrat1);
+
 							}
 							if (cm.getGamme().equals(Gamme.HQ)){
 								Echeancier echeancierB = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotH/2);
@@ -88,6 +90,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 								ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeVendeur(acheteur, this, cm, echeancierB, this.cryptogramme, false);
 								if (contrat2!=null) {
 									this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV_HQ : contrat signe = "+contrat2);
+									this.ContratEnCours_C_HQ.add(contrat1);
 							}
 							}
 							}
@@ -190,11 +193,22 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 
 
 	
+
+	// François Glavatkii
+	public void notificationNouveauContratCadre_DISTRIBUTEUR(ExemplaireContratCadre contrat) {
+		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nouveau cc conclu "+contrat);
+		if (((Chocolat) contrat.getProduit()).getGamme().equals(Gamme.HQ)){
+			this.ContratEnCours_F_HQ.add(contrat);
+		}
+		if (((Chocolat) contrat.getProduit()).getGamme().equals(Gamme.BQ)){
+			this.ContratEnCours_F_BQ.add(contrat);
+		} 
+	}
+	
 	/**
 	 * @author fouad
 	 *
-	 */
-	
+	 */	
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		double prix=0.0;
 		Object produit = contrat.getProduit();
