@@ -141,7 +141,7 @@ public class Stock {
 	 * @author BOCQUET Gabriel
 	 */
 	public Lot retirerVielleFeve(Feve f, double quantite) {
-		if (quantite<=0 || quantite>this.getQuantite(f)+0.001) {
+		if (quantite<=0.0 || quantite>this.getQuantite(f)+0.001) {
 			throw new IllegalArgumentException("Essaie de retirer ("+quantite+") de " + f.toString() + " alors que les stocks sont de " + this.getQuantite(f));
 		} else {
 			Lot res=new Lot(f);
@@ -152,7 +152,7 @@ public class Stock {
 			Collections.reverse(keyList);
 			double reste = quantite;
 			for (Integer i : keyList) {
-				if (reste>0) {
+				if (reste > 0.0) {
 					if (this.getStock().get(f).getQuantites().get(i)>=reste) {
 						res.ajouter(i,reste);
 						this.getStock().get(f).getQuantites().put(i,this.getStock().get(f).getQuantites().get(i)-reste);

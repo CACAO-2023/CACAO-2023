@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
@@ -43,7 +44,6 @@ public class Producteur3Acteur implements IActeur {
 	public Variable StockFeveB;
 	public Variable tailleH;
 	public Variable tailleM;
-
 	public Variable coutMoyen;
 	public Variable coutEmployeStep;
 	public Variable coutSalaireTot;
@@ -77,8 +77,9 @@ public class Producteur3Acteur implements IActeur {
     protected HashMap<IAcheteurContratCadre, Double> acheteursMQprix;
     protected HashMap<IAcheteurContratCadre, Double> acheteursHQprix;
 	
-
+    protected int nbr_popup;
 	protected Champs fields;
+	protected LinkedList<ExemplaireContratCadre> contractprecedent; /*Cette variable corresponds aux contrats que l'on avait au step précedent
 
 	/**
 	 * @author BOCQUET Gabriel, Corentin Caugant
@@ -125,6 +126,7 @@ public class Producteur3Acteur implements IActeur {
 	this.pourcentageGrevise = new Variable("Equipe3 Pourcentage Greviste", "Fixe la proportion d'ouvrier en Greve ",this,0.2);
 	this.quantiteBruleH = new Variable("Equipe3 Proportion Champs Brules Incendie H", "Fixe le pourcentage d'arbre brules suite a un incendie H ",this,0.5);
 	this.quantiteBruleM = new Variable("Equipe3 Proportion Champs Brules Incendie M", "Fixe le pourcentage d'arbre brules suite a un incendie M ",this,0.2);
+
 
 	this.quantiteBruleL = new Variable("Equipe3 Proportion Champs Brules Incendie L", "Fixe le pourcentage d'arbre brules suite a un incendie L ",this,0.1);
 	this.quantiteDetruiteCyclone = new Variable("Equipe3 Proportion Champs Detruits Cyclone Max", "Fixe le pourcentage maximum d'arbre detruits suite a un Cyclone",this,0.3);
@@ -218,6 +220,12 @@ public class Producteur3Acteur implements IActeur {
 		return this.journal_achats;
 	}
 	
+	public void setNbrpopup(int i) {
+		this.nbr_popup = i;
+	}
+	public int getNbrpopup() {
+		return this.nbr_popup;
+	}
 	protected Journal getJPlantation() {
 		return this.journal_plantation;
 	}
@@ -282,7 +290,7 @@ public class Producteur3Acteur implements IActeur {
 		res.add(quantiteBruleM);
 		res.add(quantiteBruleL);
 		res.add(quantiteDetruiteCyclone);
-		res.add(pourcentageGrevise);
+		res.add(this.pourcentageGrevise);
 
 		res.add(EsperanceGaussienneProduction);
 		res.add(EcartTypeGaussienneProduction);
@@ -318,6 +326,7 @@ public class Producteur3Acteur implements IActeur {
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
 		if (this == acteur) {
+			this.nbr_popup +=1;
 			JFrame popup = new JFrame("L'equipe 3 a fait faillite...Triste");
 			popup.setLocation(300, 100);
 			double proba = Math.random();
