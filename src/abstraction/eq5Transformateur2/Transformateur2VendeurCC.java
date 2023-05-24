@@ -143,6 +143,11 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	public ExemplaireContratCadre getContrat(Chocolat produit) {
     	this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche acheteur pour " + produit);
     	List<IAcheteurContratCadre> acheteurs = superviseurVentesCC.getAcheteurs(produit);
+    	// CODE AJOUTE PAR ROMU POUR EVITER ERREURS
+    	if (acheteurs.size()<1) {
+    		return null;
+    	}
+    	// FIN DE CODE AJOUTE PAR ROMU
     	IAcheteurContratCadre acheteur = acheteurs.get((int)(Math.random() * acheteurs.size())); 
     	
     	this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
