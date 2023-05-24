@@ -49,13 +49,13 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 		// l'on a en stock pour savoir ce qu'il faut ajouter en plus pour ne pas avoit de repture de stock
 		// et cela pour chaque chocolat que l'on vend
 		// on fait l'hypothèse que on peut vendre 3000 de chaque chocolat (très peu réaliste)
-		System.out.print("determination_qte_cible");
+		journal_OA.ajouter("determination_qte_cible");
 		for(int i =0; i <  this.chocolats.size();i++) {
 
-			if(stock.getStock(this.chocolats.get(i)) < 3000) {
-				double cible = 3000 - stock.getStock(this.chocolats.get(i));
+			if(stock.getStock(this.chocolats.get(i)) < 20000) {
+				double cible = 20000 - stock.getStock(this.chocolats.get(i));
 				qte_cible.put(this.chocolats.get(i), cible);
-				System.out.print(this.chocolats.get(i) + " needs an OA of qte : "+ cible);
+				journal_OA.ajouter(this.chocolats.get(i) + " needs an OA of qte : "+ cible);
 			}
 			else {
 				qte_cible.put(this.chocolats.get(i), 0.0);
@@ -76,7 +76,7 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 		}
 		
 		*/
-		double best=Double.MAX_VALUE;
+		double best=Double.MIN_VALUE;
 		int iBest=0;
 		for (int i=0; i<propositions.size(); i++) {
 			
@@ -95,8 +95,14 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 		double prix_palier =40000;
 		if(c != null) { 
 		//	prix_palier = prixMax.get(propositions.get(iBest).getChocolatDeMarque());
-			prix_palier = 20000;
+			System.out.print(prixMax);
+			if(prixMax != null) {
+				prix_palier = prixMax.get(c.getChocolat());
+
+			}
+			
 		}
+		journal_OA.ajouter("prix_palier de " +prix_palier );
 		
 		if(propositions.get(iBest).getVendeur()==this || propositions.get(iBest).getPrixT()> prix_palier) {
 			journal_OA.ajouter("OA de " + propositions.get(iBest).getVendeur().getNom() + " refusée du fait du prix trop élevé ou nous sommes le vendeur & l'acheteur");
@@ -114,6 +120,8 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 	public void next() {
 		super.next();
 		
+		journal_OA.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " \n");
+		
 		determination_qte_cible();
 		
 		
@@ -121,7 +129,7 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 			this.journal_OA.ajouter("Superviseur Offre d'Achat trouvé");
 			supOA =(SuperviseurVentesOA)(Filiere.LA_FILIERE.getActeur("Sup.OA"));
 		}
-		if (supOA!=null && Math.random()<0.1) { // 1 fois sur 10 en moyenne
+		if (supOA!=null) { 
 			
 			
 			this.journal_OA.ajouter("Offre d'Achat initiée");
@@ -141,9 +149,12 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 						}
 						this.stock.QteStock.put(pRetenue.getChocolatDeMarque(), nouveauStock);
 						this.journal_OA.ajouter("   Achat par offre d'achat de "+pRetenue+" --> quantite en stock = "+nouveauStock);
-						
+						this.journal_achats.ajouter("   Achat par offre d'achat de "+pRetenue+" --> quantite en stock = "+nouveauStock);
+
 						this.journal_OA.ajouter("On adapte le prix de vente en fonction du prix d'achat de cette offre d'achat");
 						this.adapter_prix_vente(pRetenue);
+						
+					//	notificationOperationBancaire(pRetenue.getPrixT()*pRetenue.getOffre().getQuantiteT());
 						
 						
 
@@ -151,7 +162,7 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 				}
 			}
 		}
-		System.out.print("on actualise qte cible tot");
+		journal_OA.ajouter("on actualise qte cible tot");
 		qte_cible_tot();
 		
 	}
@@ -163,7 +174,7 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 			qte_cible_TOT += this.qte_cible.get(this.chocolats.get(i));
 		}
 		this.qte_cible_OA_TOT = qte_cible_TOT;
-		System.out.print("qte cible tot : " + qte_cible_TOT);
+		journal_OA.ajouter("qte cible tot : " + qte_cible_TOT);
 	}
 	
 	
@@ -171,7 +182,7 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 		
 		
 		double prix_proposition = proposition.getPrixT() /*/contrat.getQuantiteTotale() deja à la tonne */;
-		journal_ventes.ajouter("achat du chocolat" + proposition.getChocolatDeMarque()+"au prix à la tonne de" + prix + "par offre d'achat");
+		journal_OA.ajouter("achat du chocolat" + proposition.getChocolatDeMarque()+"au prix à la tonne de" + prix + "par offre d'achat");
 		ChocolatDeMarque choco = (ChocolatDeMarque)proposition.getChocolatDeMarque();
 
 		// on calcule le prix de vente du chocolat dus contract en fonction de la gamme
@@ -189,6 +200,8 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 		if(((ChocolatDeMarque)proposition.getChocolatDeMarque()).getGamme() == Gamme.MQ  && !((ChocolatDeMarque)proposition.getChocolatDeMarque()).isBioEquitable()) {
 			prix_tonne_de_vente_contrat = prix*2;
 		}
+		
+		
 
 		double prix_tonne_de_vente_apres_achat = 0.0;
 

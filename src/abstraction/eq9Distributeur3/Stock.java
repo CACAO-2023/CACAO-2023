@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Gamme;
 
 
 public class Stock  {
@@ -14,6 +15,7 @@ public class Stock  {
 	HashMap<Integer,Double> qteStockMQ;
 	HashMap<Integer,Double> qteStockMQBE;
 	private Distributeur3Acteur a;
+	
 
 	
 	public Stock(Distributeur3Acteur a) {
@@ -36,6 +38,37 @@ public class Stock  {
 		return tot;
 		}
 	
+	public double qteStock_HQ_BE () {
+		double tot = 0.0;
+		for (ChocolatDeMarque c : a.chocolats) {
+			if(c.getChocolat().getGamme() == Gamme.HQ) {
+				 tot += getStock(c);
+			}
+		}
+		return tot;
+		}
+	
+	public double qteStock_MQ_BE () {
+		double tot = 0.0;
+		for (ChocolatDeMarque c : a.chocolats) {
+			if(c.getChocolat().getGamme() == Gamme.MQ &&c.getChocolat().isBioEquitable() ) {
+				 tot += getStock(c);
+			}  
+		}
+		return tot;
+		}
+	
+	public double qteStock_MQ () {
+		double tot = 0.0;
+		for (ChocolatDeMarque c : a.chocolats) {
+			if(c.getChocolat().getGamme() == Gamme.MQ && !c.getChocolat().isBioEquitable()) {
+				 tot += getStock(c);
+			}
+	          
+		}
+		return tot;
+		}
+	
 	public HashMap<ChocolatDeMarque, Double> getQteStock() {
 		return QteStock;
 	}
@@ -54,6 +87,13 @@ public class Stock  {
 	// ajout d'une qte de chocolat (ou soustraction de chocolat)
 	// Mathilde Soun 
 	
+	public void liquider() {
+		for (ChocolatDeMarque c : a.chocolats) {
+			QteStock.put(c,0.0);
+			}
+
+	}
+	
 	public void ajoutQte(ChocolatDeMarque c, double ajout){
 		a.journal_stock.ajouter("On ajoute au stock de "+ c.getNom() + " une quantite de  " + ajout); 
 
@@ -70,18 +110,19 @@ public class Stock  {
 			this.QteStock.put(c, null);
 		}
 		this.QteStock.put(c, qte);
-		a.variable_stock.ajouter(a, qte, a.cryptogramme);
 	}
 	
 	
 	
 	
+
 	// fonction coût du stock 
 	// Mathilde Soun 
 	public double coutDeStock () {
-		double cout = Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*this.qteStockTOT();
+		double cout = Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*this.qteStockTOT()*16;
 		return cout;
 	}
+
 	// met à jour le journal pour le stock de chaque chocolat 
 	// Mathilde 
 	public void maJ () {
