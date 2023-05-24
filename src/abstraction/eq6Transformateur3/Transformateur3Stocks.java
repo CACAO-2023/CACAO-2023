@@ -279,15 +279,19 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   		int perim = date - dureePeremption ;
   		Object quantiteRetiree = this.stockFeveBG.getQuantites().get(perim) ;
   		if(quantiteRetiree!=null && quantiteRetiree instanceof Double && ((Double)quantiteRetiree) >0) {
+  			super.journalStock.ajouter("on retire les fèves périmées"+quantiteRetiree);
   		this.stockFeveBG.retirer(((Double)quantiteRetiree)) ;} // retire la feve perime
   		Object quantiteRetiree2 = this.stockFeveMG.getQuantites().get(perim) ;
   		if(quantiteRetiree2!=null && quantiteRetiree2 instanceof Double &&((Double)quantiteRetiree2)>0) {
+  			super.journalStock.ajouter("on retire les fèves périmées"+quantiteRetiree2);
   		this.stockFeveMG.retirer(((Double)quantiteRetiree2)) ;}
   		Object quantiteRetiree3 = this.stockFeveMGL.getQuantites().get(perim) ;
   		if(quantiteRetiree3!=null && quantiteRetiree3 instanceof Double &&((Double)quantiteRetiree3)>0) {  		
+  			super.journalStock.ajouter("on retire les fèves périmées"+quantiteRetiree3);
   		this.stockFeveMGL.retirer(((Double)quantiteRetiree3)) ;}
   		Object quantiteRetiree4 = this.stockFeveHGL.getQuantites().get(perim) ;
   		if(quantiteRetiree4!=null && quantiteRetiree4 instanceof Double && ((Double)quantiteRetiree4)>0) { 
+  			super.journalStock.ajouter("on retire les fèves périmées"+quantiteRetiree4);
   		this.stockFeveHGL.retirer(((Double)quantiteRetiree4)) ;}
   		super.journalStock.ajouter(date+" ");
   		super.journalStock.ajouter(" La quantité de feve BG est :"+ this.stockFeveBG.getQuantiteTotale() );
@@ -299,10 +303,10 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   		super.journalStock.ajouter(" La quantité de Chocolat MGL est :"+ this.stockChocolatMGL.getQuantiteTotale() );
   		super.journalStock.ajouter(" La quantité de Chocolat HGL est :"+ this.stockChocolatHGL.getQuantiteTotale() );
   		double coutFeve=super.totalStocksFeves.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() ;
-  		double coutChoco=super.totalStocksChoco.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() ;
+  		double coutChoco=super.totalStocksFeves.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() ;
   		if(coutFeve>0) {
   		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), coutFeve) ;
-  		super.journalStock.ajouter(" on a payé :"+ coutFeve+" pour le cout de stockage des feves" );
+  		super.journalStock.ajouter(" on a payé :"+ coutChoco+" pour le cout de stockage des feves" );
   		}
   		if(coutChoco>0) {
   		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), coutChoco) ;

@@ -31,12 +31,13 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 
 	public List<ChocolatDeMarque> getChocolatsProduits() {
 		if (this.chocosProduits.size()==0) {
-			for (Chocolat c : Chocolat.values()) {
-				int pourcentageCacao =  (int) (Filiere.LA_FILIERE.getParametre("pourcentage min cacao "+c.getGamme()).getValeur());
-				this.chocosProduits.add(new ChocolatDeMarque(c, "Vccotioi", pourcentageCacao, 0));
+			for (ChocolatDeMarque c : Filiere.LA_FILIERE.getChocolatsProduits()) {
+				if(c.getMarque().equals("Vccotioi") || c.getMarque().equals("Yocttotoa") ) {
+					chocosProduits.add(c);
+				}
 			}
 		}
-		return this.chocosProduits;
+		return this.chocosProduits ;
 	}
 
 	public void initialiser() {
@@ -58,7 +59,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		if (transfo>0) {
 			this.retirer(fb,transfo);
 			int pourcentageCacao =  42;
-			ChocolatDeMarque cm= new ChocolatDeMarque(cb, "choco", pourcentageCacao, 0);
+			ChocolatDeMarque cm= new ChocolatDeMarque(cb, "Yocttotoa", pourcentageCacao, 0);
 			this.ajouter(cm, transfo*conversionb);
 			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfo)+" T de "+fb+" en "+transfo*conversionb+" T de "+cb);
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fb+")->"+this.stockFeves.get(fb));
