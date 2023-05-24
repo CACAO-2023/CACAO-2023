@@ -184,13 +184,13 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		}
 		this.listeCC.removeAll(contratsObsoletes);
 		if ((this.stockChocolatBG.getQuantiteTotale()>5000 ))
-		{this.chercheContrat(Feve.F_BQ);}
+		{this.chercheContrat(super.ListeProduits.get(0));}
 		if ((this.stockChocolatMG.getQuantiteTotale()>5000))
-		{this.chercheContrat(Feve.F_MQ);}
+		{this.chercheContrat(super.ListeProduits.get(1));}
 		if ((this.stockChocolatMGL.getQuantiteTotale()>5000))
-		{this.chercheContrat(Feve.F_MQ_BE);}
+		{this.chercheContrat(super.ListeProduits.get(2));}
 		if ((this.stockChocolatHGL.getQuantiteTotale()>5000)) {
-		{this.chercheContrat(Feve.F_HQ_BE);}}
+		{this.chercheContrat(super.ListeProduits.get(3));}}
 	}
 
 	@Override
