@@ -33,7 +33,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
 	//protected LinkedList<ExemplaireContratCadre> ContratsAchat;
 	protected HashMap<ExemplaireContratCadre,String> ContratsAchat;
-	
+
 	public void initialiser() {
 		super.initialiser();
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
@@ -48,12 +48,12 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		// TODO Auto-generated method stub
 		System.out.println(produit+" "+produit.getType());
 		if ((produit.getType().equals("Feve")
-			&& ((((Feve)produit).getGamme()== Gamme.MQ)&&(!((Feve)produit).isBioEquitable())
-			|| ((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable()))))) {
+				&& ((((Feve)produit).getGamme()== Gamme.MQ)&&(!((Feve)produit).isBioEquitable())
+						|| ((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable()))))) {
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme vouloir acheter le produit "+produit);
 			return true;} //on achète seulement les fèves haute gamme bio équitable et les fèves moyenne gamme
 		else {
-			
+
 			return false;}
 
 
@@ -104,7 +104,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 			}
 		}
 
-		return nouvelEcheancier;
+		return nouvelEcheancier; 
 	}   
 	/*
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
