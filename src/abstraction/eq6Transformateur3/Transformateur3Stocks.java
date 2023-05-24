@@ -302,7 +302,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   		double coutChoco=super.totalStocksChoco.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() ;
   		if(coutFeve>0) {
   		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), coutFeve) ;
-  		super.journalStock.ajouter(" on a payé :"+ coutChoco+" pour le cout de stockage des feves" );
+  		super.journalStock.ajouter(" on a payé :"+ coutFeve+" pour le cout de stockage des feves" );
   		}
   		if(coutChoco>0) {
   		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), coutChoco) ;
