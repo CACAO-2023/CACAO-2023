@@ -6,6 +6,7 @@ import java.util.List;
 
 import abstraction.eq4Transformateur1.Vente.AODistributeur;
 import abstraction.eq4Transformateur1.Vente.VendeurOA;
+import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
 import abstraction.eqXRomu.produits.Chocolat;
@@ -49,6 +50,27 @@ public class Transformateur1 extends VendeurOA implements IFabricantChocolatDeMa
 		double coutMainDOeuvre = 5*this.qteTransfo;
 		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), coutStock+coutMainDOeuvre);
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LGREEN,"Le coût de stockage à ce step s'élève à : "+coutStock+" et le coût de la main d'oeuvre  à : "+coutMainDOeuvre);
+		
+		for (ExemplaireContratCadre c : ContratEnCours_C_BQ ) {
+			if (c.getEcheancier().getStepFin() == Filiere.LA_FILIERE.getEtape()) {
+				ContratEnCours_C_BQ.remove(c);
+			}
+		}
+		for (ExemplaireContratCadre c : ContratEnCours_C_HQ ) {
+			if (c.getEcheancier().getStepFin() == Filiere.LA_FILIERE.getEtape()) {
+				ContratEnCours_C_HQ.remove(c);
+			}	
+		}
+		for (ExemplaireContratCadre c : ContratEnCours_F_BQ ) {
+			if (c.getEcheancier().getStepFin() == Filiere.LA_FILIERE.getEtape()) {
+				ContratEnCours_F_BQ.remove(c);
+			}
+		}
+		for (ExemplaireContratCadre c : ContratEnCours_F_HQ ) {
+			if (c.getEcheancier().getStepFin() == Filiere.LA_FILIERE.getEtape()) {
+				ContratEnCours_F_HQ.remove(c);
+			}
+		}	
 	}
 
 }

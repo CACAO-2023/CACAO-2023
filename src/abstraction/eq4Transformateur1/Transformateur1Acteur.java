@@ -116,26 +116,7 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	public void next() {
 		this.step += 1;
 		this.journal.ajouter("step:" + this.step);
-		for (ExemplaireContratCadre c : ContratEnCours_C_BQ ) {
-			if (c.getEcheancier().getStepFin() == Filiere.LA_FILIERE.getEtape()) {
-				ContratEnCours_C_BQ.remove(c);
-			}
-		}
-		for (ExemplaireContratCadre c : ContratEnCours_C_HQ ) {
-			if (c.getEcheancier().getStepFin() == Filiere.LA_FILIERE.getEtape()) {
-				ContratEnCours_C_HQ.remove(c);
-			}	
-		}
-		for (ExemplaireContratCadre c : ContratEnCours_F_BQ ) {
-			if (c.getEcheancier().getStepFin() == Filiere.LA_FILIERE.getEtape()) {
-				ContratEnCours_F_BQ.remove(c);
-			}
-		}
-		for (ExemplaireContratCadre c : ContratEnCours_F_HQ ) {
-			if (c.getEcheancier().getStepFin() == Filiere.LA_FILIERE.getEtape()) {
-				ContratEnCours_F_HQ.remove(c);
-			}
-		}		
+	
 	}
 		
 
