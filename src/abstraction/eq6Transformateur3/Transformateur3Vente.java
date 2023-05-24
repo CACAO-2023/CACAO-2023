@@ -174,7 +174,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		super.journalVentes.ajouter("Stock BG="+this.stockChocolatBG.getQuantiteTotale());
 		if (super.getLotChocolat(produit)!=null) {
 		double livre = Math.min(super.getLotChocolat(produit).getQuantiteTotale(), quantite);
-		super.journalVentes.ajouter("On livre : "+livre+"de : "+produit.getType());
+		super.journalVentes.ajouter("On livre : "+livre+"de : "+((ChocolatDeMarque)produit).getMarque());
 		if (livre>0.0) {
 			super.retirerChocolat((ChocolatDeMarque)produit, livre);//Attention il faut que cela soit possible; verifier la quantité
 		}
