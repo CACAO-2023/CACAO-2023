@@ -78,7 +78,7 @@ public class Distributeur2AcheteurOA extends ContratCadre implements IAcheteurOA
 	//karim
 	public void next() {
 		this.journal_OA.ajouter("next");
-		System.out.print("jaj");
+		
 	    super.next();
 	    if (supOA == null) {
 	        supOA = (SuperviseurVentesOA) (Filiere.LA_FILIERE.getActeur("Sup.OA"));
@@ -92,11 +92,11 @@ public class Distributeur2AcheteurOA extends ContratCadre implements IAcheteurOA
 			
 
 	        if (pRetenue != null) {
-	            double nouveauStock = pRetenue.getOffre().getQuantiteT();
-	            if (this.stocks.getStock(pRetenue.getChocolatDeMarque()) != 0.0) {
-	                nouveauStock += this.stocks.getStock(pRetenue.getChocolatDeMarque());
-	            }
+	            
+	        	double nouveauStock = pRetenue.getOffre().getQuantiteT();
+	        	stock_total += nouveauStock;
 	            this.stocks.ajouterAuStock(pRetenue.getChocolatDeMarque(), nouveauStock);
+	    		s.setValeur(this, stock_total, this.cryptogramme);
 	            this.journal_OA.ajouter("Achat par offre d'achat de " + pRetenue + " --> quantite en stock = " + nouveauStock);
 	        }}
 	    }

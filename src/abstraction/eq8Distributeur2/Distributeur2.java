@@ -12,7 +12,6 @@ public class Distributeur2 extends Distributeur2AcheteurOA  {
 	
 	
 public void next() {
-	System.out.print("jaj D2");
 
 	super.next();
 	

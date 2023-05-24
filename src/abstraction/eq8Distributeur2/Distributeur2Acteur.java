@@ -30,7 +30,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	protected int cryptogramme;
 	protected String nom;
-	protected ArrayList<ChocolatDeMarque> chocolats;
+	protected List<ChocolatDeMarque> chocolats;
 	//protected LinkedList<String> nos_chocolats;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
 	protected StockGeneral stocks;
@@ -50,7 +50,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	public Distributeur2Acteur() {
 		cryptogramme = 0; // valeur par défaut à modifier
 		nom = "équipe 8";
-		chocolats =  new ArrayList<ChocolatDeMarque>();
 		prixDeVente = new HashMap<>();
 		stocks = new StockGeneral();
 		stock_total = 0.0;
@@ -103,24 +102,18 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	}
 	
 	public void initialiser() {
+		chocolats =  Filiere.LA_FILIERE.getChocolatsProduits();
+		for (ChocolatDeMarque marque : chocolats) {
+			
+			stocks.initStock(marque, 30000);
+			journal_stocks.ajouter("Stock de "+marque+" : "+stocks.getStock(marque)+" T");
+		}	
+		for (ChocolatDeMarque marque : chocolats) {
+			stock_total += stocks.getStock(marque);
+		}
+		s.setValeur(this, stock_total, this.cryptogramme);
 		
-
-		if (Filiere.LA_FILIERE.getEtape()==0) {
 			for (ChocolatDeMarque marque : chocolats) {
-				System.out.println("stock initialisé");
-				stocks.initStock(marque, 30000);
-				journal_stocks.ajouter("Stock de "+marque+" : "+stocks.getStock(marque)+" T");
-			}	
-			for (ChocolatDeMarque marque : chocolats) {
-				stock_total += stocks.getStock(marque);
-			}
-			s.setValeur(this, stock_total, this.cryptogramme);
-			}
-		
-		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
-		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
-			for (ChocolatDeMarque marque : chocolats_filiere) {
-				chocolats.add(marque);
 				
 				if (marque.getGamme()==Gamme.HQ) {
 					prixDeVente.put(marque,4500.);
@@ -176,6 +169,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			
 			if (stocks.getStockGlobal() > 0) {
 				double cout_TOT = 16*30*stock_total-getTotalCoutMainDoeuvre();
+				System.out.println("Stock total : "+ stock_total);
 				Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme,Filiere.LA_FILIERE.getBanque(),cout_TOT );	
 				
 				
@@ -329,10 +323,12 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	//Auteur : Ben Messaoud Karim 
 	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
+		System.out.println("stock choco "+choco+ this.stocks.getStock(choco));
 		if (choco == null || this.stocks.getStock(choco) == 0.0) {
 			return 0.0;
 		} else {
 			double stockChoco = this.stocks.getStock(choco);
+			
 			return  stockChoco ;
 		}
 	}
@@ -344,7 +340,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			return 0.0;
 		} else {
 			if (choco.getGamme() == Gamme.BQ) {
-				double n = this.getStock(choco);
+				double n = quantiteEnVente(choco, crypto);
 				return n / 10.0;
 			} else {
 				return 0.0;
@@ -353,17 +349,20 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	//Auteur : Ben Messaoud Karim 
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
-		int pos = chocolats.indexOf(choco);
-		if (pos >= 0) {
+//		int pos = chocolats.indexOf(choco);
+//		if (pos >= 0) {
 			
 			this.stocks.retirerDuStock(choco, quantite);
+			
+			
+			
 			stock_total-=quantite;
 			
 			s.setValeur(this, stock_total, this.cryptogramme);
 			journal_stocks.ajouter("retrait d'une quantité de"+ quantite+"T");
 			journal_ventes.ajouter("La quantité " + quantite + " a été vendue à" + montant);
 		}
-	}
+//	}
 
 	//Auteur : Ben Messaoud Karim
 	public void notificationRayonVide(ChocolatDeMarque choco, int crypto) {
