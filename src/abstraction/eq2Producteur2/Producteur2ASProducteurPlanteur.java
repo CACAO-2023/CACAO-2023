@@ -257,6 +257,9 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		return 1.1*CoutProd().get(f)/Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f);
 	}
 	
+	//La fonction ci-dessous nous renvoit un boolean si les resultats d'une certaine fève est bon ou mauvais
+	//entre une date de début et une date de fin
+	
 	protected boolean mauvais_resultat(Feve f, int debut, int fin) {
 		double CA = 0;
 		double cout = 0;		
@@ -271,7 +274,11 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 			return false;
 		}
 	}
-	//
+	
+	//Cette fonction permet d'ajuster nos plantation : si le resultat et mauvais on la reduit
+	//Pour la feve de moyenne qualitité on augmente petit à petit sa taille tous les ans
+	//Pour la feve de basse qualité on fait de même jusqu'à 20 ans de fillière
+	//Enfin on compense les arbres qui seront prochainement trop vieux
 	private void ajustement_plantation() {
 		for (Feve f : this.salaires.keySet()) {
 			int nb_a_planter = 0;
@@ -281,25 +288,23 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 						int nb_plantation = this.age_hectares.get(f).get(age);
 						this.age_hectares.get(f).put(age,(int) Math.round(0.8*nb_plantation));
 					}}
-				else {
-					if (f == Feve.F_MQ_BE) {
-							nb_a_planter =(int) Math.round(this.surface_plantation.get(f).getValeur()*0.08);
-							}}
 			}
 			
 			if (this.age_hectares.get(f).containsKey(Filiere.LA_FILIERE.getEtape() - 37*24)) {
 				nb_a_planter = this.age_hectares.get(f).get(Filiere.LA_FILIERE.getEtape() - 37*24);
 			}
-			if (f == Feve.F_MQ_BE) {
+			if (f == Feve.F_MQ_BE && mauvais_resultat(f, Filiere.LA_FILIERE.getEtape()-24, Filiere.LA_FILIERE.getEtape()) == false && Filiere.LA_FILIERE.getEtape()%24==0) {
 				if (Filiere.LA_FILIERE.getEtape()%24==0) {
 					nb_a_planter +=(int) Math.round(this.surface_plantation.get(f).getValeur()*0.08);
 				}
+			if (f == Feve.F_BQ && mauvais_resultat(f, Filiere.LA_FILIERE.getEtape()-24, Filiere.LA_FILIERE.getEtape()) == false && Filiere.LA_FILIERE.getEtape()%24==0 && Filiere.LA_FILIERE.getEtape()<20*24) {
+				nb_a_planter += (int) Math.round(this.surface_plantation.get(f).getValeur()*0.08);
 			}
 			if (nb_a_planter>0) {
 				Planter(f, nb_a_planter);
 				Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), this.cout_parcelle.get(f)*nb_a_planter);
 			}
-		}
+			}}
 	}
 	
 	// Une fois les plantation ajustees, sachant qu'un employe s'occupe d'un hectare on adapte le nombre
@@ -340,6 +345,8 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	}
 		return prevision;
 	}
+	
+	//Cette fonction nous renvoit les prévisions les plus pessimistes de production
 	
 	protected HashMap<Feve, Double> Prevision_Production_minimale(int step) {
 		HashMap<Feve, Double> prevision = Prevision_Production(step);
