@@ -208,8 +208,11 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		
 	}
 	
-	public int OldestStep(IProduit produit) {
-	    double os = this.getVraiStockB().getQuantites().get(Filiere.LA_FILIERE.getEtape());
+	public int OldestStep(IProduit produit) {	    
+		double os = 100000;
+		if (this.getVraiStockB().getQuantites().get(Filiere.LA_FILIERE.getEtape())!=null) {
+		os = this.getVraiStockB().getQuantites().get(Filiere.LA_FILIERE.getEtape());}
+		
 		if (produit==Feve.F_BQ) {
 	    	for (int i : this.getVraiStockB().getQuantites().keySet()) {
 	    		if (this.getVraiStockB().getQuantites().get(i)<os) {
@@ -224,7 +227,9 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 				}
 			}
 		}
-		return (int)os;
+		return (int)os;}
+	    
+	    
 	}
 
-}
+

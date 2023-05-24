@@ -86,13 +86,21 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 	
 	public Lot notificationVente(Feve f, double quantite, double cours) {
 		Lot l = new Lot(f);
-		l.ajouter(Filiere.LA_FILIERE.getEtape(), quantite); // cet exemple ne gere pas la production : tout le stock est considere comme venant d'etre produit;
+		
 		if (f==Feve.F_BQ) {
+			int q = (int)Math.min(quantite, super.getVraiStockB().getQuantiteTotale());
+			if (q!=0) {
+			l.ajouter(Filiere.LA_FILIERE.getEtape(), q);} // cet exemple ne gere pas la production : tout le stock est considere comme venant d'etre produit;}
+			else {return null;}
 			this.stockFeveBas.retirer(quantite);
 			this.journal_stocks.ajouter("BOURSEV: vente de "+quantite+" T de "+f+" en bourse. Stock -> "+this.getStockBas().getQuantiteTotale());
 			this.journal_ventes.ajouter("BOURSEV: vente de "+quantite+" T de "+f+" en bourse. Stock -> "+ quantite*cours);
 		}
 		if (f==Feve.F_MQ) {
+			int q = (int)Math.min(quantite, super.getVraiStockM().getQuantiteTotale());
+			if (q!=0) {
+			l.ajouter(Filiere.LA_FILIERE.getEtape(), q); }// cet exemple ne gere pas la production : tout le stock est considere comme venant d'etre produit;
+			else {return null;}
 			this.stockFeveMoy.retirer(quantite);
 			this.journal_stocks.ajouter("BOURSEV: vente de "+quantite+" T de "+f+" en bourse. Stock -> "+this.getStockMoy().getQuantiteTotale());
 			this.journal_ventes.ajouter("BOURSEV: vente de "+quantite+" T de "+f+" en bourse. Stock -> "+ quantite*cours);
