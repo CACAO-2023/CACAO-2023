@@ -31,6 +31,10 @@ public class Distributeur3Acteur implements IActeur{
 	protected Journal journal_AO;
 	protected Journal journal_OA;
 	protected Journal journal_prix_vente;
+	
+	
+	public List<Double> CA;
+	public Double CA_step;
 
 
 	protected List<ChocolatDeMarque> chocolats;
@@ -40,8 +44,13 @@ public class Distributeur3Acteur implements IActeur{
 	protected double prix;
 	private List<ChocolatDeMarque>chocosProduits;
 	protected HashMap<ChocolatDeMarque, Double> prix_tonne_vente;
-	protected Variable variable_stock;
+	protected Variable variable_stock_tot;
+	protected Variable variable_stock_HQ_BE;
+	protected Variable variable_stock_MQ_BE;
+	protected Variable variable_stock_MQ;
+
 	protected Variable quanitite_cible_totale_OA;
+	protected Variable variable_CA;
 	protected Distributeur3AcheteurOA d;
 	
 	public Double qte_cible_OA_TOT;
@@ -73,21 +82,45 @@ public class Distributeur3Acteur implements IActeur{
 		this.prix_tonne_vente = new HashMap<ChocolatDeMarque, Double> ();
 		
 		this.stock = new Stock(this);
-		variable_stock = new VariablePrivee("Eq9StockTablettes", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
+		
+		
 		qte_cible_OA_TOT = 0.0;
+		
 		quanitite_cible_totale_OA  = new VariablePrivee("Eq9QteCibleOA", "<html>Quantite ciblée (à atteindre) via les OA</html>",this, 0.0, 1000000.0, 0.0);
+		variable_CA = new VariablePrivee("Eq9_Chiffre_Affaire_(Mrd€)","<html>Chiffre d'Affaire</html>",this,0.0,10000000,0.0);
+		variable_stock_tot = new VariablePrivee("Eq9_Stock_Total", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
+		variable_stock_HQ_BE = new VariablePrivee("Eq9_Stock_HQ_BE", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
+		variable_stock_MQ_BE = new VariablePrivee("Eq9_Stock_MQ_BE", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
+		variable_stock_MQ = new VariablePrivee("Eq9_Stock_MQ", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
 
+		
 	}
 	
 	public void initialiser() {
 		// william désormais on n'utilise plus une liste de String avec les chocolats qui nous intéressent, on sélectionne seulement à la gamme
 		
-		
+		CA_step = 0.0;
+		this.CA = new LinkedList<Double>();
 
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
+		
+		
+		for (ChocolatDeMarque c :  Filiere.LA_FILIERE.getChocolatsProduits()) {
+			double prixGamme =0;
+			Gamme g;
+			switch (c.getChocolat().getGamme()) {
+			case HQ : prixGamme=50000;break;
+			case MQ : prixGamme=30000;break;
+			case BQ : prixGamme=15000;break;
+
+			}
+			
+			this.prix_tonne_vente.put(c, prixGamme+(c.isBioEquitable()? 5000 : 0));
+		}
+		
+		
 		for (int i=0; i<chocolats_filiere.size(); i++) {
-			prix_tonne_vente.put(chocolats_filiere.get(i), 1.0);
 			
 			if(chocolats_filiere.get(i).getGamme() == Gamme.HQ) {
 				chocolats.add(chocolats_filiere.get(i));
@@ -104,6 +137,7 @@ public class Distributeur3Acteur implements IActeur{
 		for (int j=0; j <chocolats.size(); j++) {
 			stock.ajoutQte(chocolats.get(j), 8000);
 		}
+		
 		
 		
 		
@@ -124,30 +158,43 @@ public class Distributeur3Acteur implements IActeur{
 
 	public void next() {
 		
+		CA.add(CA_step);
+		
 		cout_stockage();
 		
 		journal_activitegenerale.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		journal_activitegenerale.ajouter("Solde="+getSolde()+"€");
 		journal_stock.ajouter("Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "Etat du stock Total : "+stock.qteStockTOT()); 
-
+		
 		etat_ventes();
 		
-		variable_stock = new VariablePrivee("Eq9StockTablettes", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 10000000.0, stock.qteStockTOT());
-
-		quanitite_cible_totale_OA  = new VariablePrivee("Eq9QteCibleOA", "<html>Quantite ciblée (à atteindre) via les OA</html>",this, 0.0, 1000000.0, qte_cible_OA_TOT);
+		
+		quanitite_cible_totale_OA.setValeur(this,qte_cible_OA_TOT, this.cryptogramme);
+		variable_CA.setValeur(this,CA_step/1000000000, this.cryptogramme);
+		
+		variable_stock_tot.setValeur(this, stock.qteStockTOT(), this.cryptogramme);
+		variable_stock_HQ_BE.setValeur(this, stock.qteStock_HQ_BE(), this.cryptogramme);
+		variable_stock_MQ_BE.setValeur(this, stock.qteStock_MQ_BE(), this.cryptogramme);
+		variable_stock_MQ.setValeur(this, stock.qteStock_MQ(), this.cryptogramme);
 
 		
+
 	}
 	
 	public void cout_stockage() {
 
-		//william
+		//baptiste
 		//cout du stockage
-		double q = stock.qteStockTOT();
-		prix = 16*30*q;
+		prix = this.stock.coutDeStock();
 		if(prix > 0.0) {
 			Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ9"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), prix);
+
 			notificationOperationBancaire(-1*prix);
+			
+
+			journal_activitegenerale.ajouter("Paiement stockage : " + -1*prix);
+		//	notificationOperationBancaire(-1*prix);
+
 		}
 
 		
@@ -203,8 +250,11 @@ public class Distributeur3Acteur implements IActeur{
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
 		
-		
-		res.add(variable_stock);
+		res.add(variable_CA);
+		res.add(variable_stock_tot);
+		res.add(variable_stock_HQ_BE);
+		res.add(variable_stock_MQ_BE);
+		res.add(variable_stock_MQ);
 		res.add(quanitite_cible_totale_OA);
 		return res;
 		
@@ -257,7 +307,7 @@ public class Distributeur3Acteur implements IActeur{
 		//- vous pouvez exploiter la methode notificationOperationBancaire de votre acteur pour afficher dans un journal 
 		//vos entree/sorties d'argent : ça levera le doute sur les prix que vous estimez minimalistes.
 		
-		journal_operationsbancaires.ajouter("Operation de " + montant + " €");
+		journal_operationsbancaires.ajouter("Operation de " + montant + " €" );
 
 	}
 	
@@ -285,4 +335,5 @@ public class Distributeur3Acteur implements IActeur{
 		return this.stock.getStock(c);
 	}
 
+	
 }
