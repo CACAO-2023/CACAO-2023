@@ -107,8 +107,7 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 		this.stockChocoMarque.put(cm, scm+((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c)));					
 		this.totalStocksChocoMarque.ajouter(this, ((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c)), this.cryptogramme);
 		this.totalStocksChoco.ajouter(this, ((qtefeve*(1-proportion_marque))*this.pourcentageTransfo.get(f).get(c)), this.cryptogramme);
-		System.out.println("Nous venons de transformer "+qtefeve+" Tonnes de chcocolat "+Marque);
-	}
+		}
 	
 	public void next() {
 		super.next();
@@ -148,7 +147,6 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 					cacao = 70;
 					this.stockFeves.put(f, (double) 0); // on les retire a nos stocks
 					this.totalStocksFeves.retirer(this, qtefeve, this.cryptogramme); // et aux stocks totaux
-					System.out.println("DEBUT TRANSFO CHOCOPOP");
 				}
 				
 				if(((c.getGamme()==Gamme.HQ) && (c.isBioEquitable()))&&(this.getHQStep()==0)) {
@@ -159,12 +157,10 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 					cacao = 90;
 					this.stockFeves.put(f, (double) 0); // on les retire a nos stocks
 					this.totalStocksFeves.retirer(this, qtefeve, this.cryptogramme); // et aux stocks totaux
-					System.out.println("DEBUT TRANSFO DE MAISON DOUTRE");
 				}
 				
 							
 					// On paie les coûts de transformation
-				System.out.println("Stock qui sera transfo"+this.getHQStep()+"  "+this.getHQteFeve()+"  "+this.getMQStep()+"   "+this.getMQteFeve());
 				if((this.getMQStep()==1)&&(f.getGamme()==Gamme.MQ)) {
 					this.ajoutStock(this.getMQteFeve(), 0.8, f, c, "ChocoPop", 70);
 					this.setMQStep(0);

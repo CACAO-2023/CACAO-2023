@@ -80,7 +80,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		return contrat.getEcheancier(); } 
 
 
-	//fait par wiem : prix sans reel sens, juste indicatifs
+	//fait par wiem
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		double prix = 0;
 		Chocolat cp=null ;
@@ -92,20 +92,20 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		if (cp == Chocolat.C_MQ ) {
 			Double stock = stockChoco.get(cp);
 			if (stock!=null) {
-
-				prix = 2800*1.1*stock ;
-
+				//stock*(cout de stockage 1300 + prix de transfo 1500 + prix moyen d'une tonne de feves MQ) + marge de 10%
+				prix = (2800*1500)*1.1*stock ;
 				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);
 			}}
-		if ( cp == Chocolat.C_HQ_BE ) {
+		if ( cp == Chocolat.C_HQ_BE) {
 			Double stock = stockChocoMarque.get(cp);
 			if (stock!=null) {
-
-				prix = 2800*1.1*stock;
+				//stock*(cout de stockage 1300 + prix de transfo 1500 + prix moyen d'une tonne de feves HQ_BE) + marge de 10%
+				prix = (2800+11800)*1.1*stock;
 				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);}}
-		return prix; }
+		return prix; 
+		}
 
-	//stock*(cout de stockage 1300 + prix de transfo 1500) + marge de 10%
+	
 
 
 	//fait par yassine : pas de négociations

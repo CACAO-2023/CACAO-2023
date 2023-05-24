@@ -25,14 +25,14 @@ public class Transformateur2Stocks extends Transformateur2Acteur {
 		super.initialiser();
 		
 		this.stockFeves=new HashMap<Feve,Double>();
-		 // on ajoute par défaut un certain stock de feves (10000 de chaque type)
-		this.stockFeves.put(Feve.F_MQ, 10000.0);
-		this.totalStocksFeves.ajouter(this, 10000.0, this.cryptogramme);
-		this.journal.ajouter("ajout de 10000 de "+Feve.F_MQ+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
+		 // on ajoute par défaut un certain stock de feves (200 de chaque type)
+		this.stockFeves.put(Feve.F_MQ, 200.0);
+		this.totalStocksFeves.ajouter(this, 200.0, this.cryptogramme);
+		this.journal.ajouter("ajout de 200 de "+Feve.F_MQ+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
 		
-		this.stockFeves.put(Feve.F_HQ_BE, 10000.0);
-		this.totalStocksFeves.ajouter(this, 10000.0, this.cryptogramme);
-		this.journal.ajouter("ajout de 10000 de "+Feve.F_HQ_BE+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
+		this.stockFeves.put(Feve.F_HQ_BE, 200.0);
+		this.totalStocksFeves.ajouter(this, 200.0, this.cryptogramme);
+		this.journal.ajouter("ajout de 200 de "+Feve.F_HQ_BE+" au stock de feves --> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
 			
 		this.stockChoco=new HashMap<Chocolat,Double>(); // de meme avec les differents chocolats
 		

@@ -32,7 +32,6 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2VendeurCC
 	public double demande(Feve f, double cours) {
 		// on achete en quantités aléatoires si notre solde le permet
 		if((f.getGamme()==Feve.F_MQ.getGamme())
-				||(f.getGamme()==Feve.F_HQ_BE.getGamme())
 				&&(this.totalStocksFeves.getValeur() < 20000)) // on achète plus de fèves a partir de 20000 tonnes
 		{
 			double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
@@ -40,9 +39,11 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2VendeurCC
 			this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   BOURSEA: demande en bourse de "+demande+" de "+f);
 			return demande;
 		}
-		else {
-			return 0.0;
+		if(this.totalStocksFeves.getValeur()>20000) {
+			this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   Stock trop elevé ! Pas d'achat. ");
+			return 0.0;	
 		}
+		return 0.0;
 	}
 
 
