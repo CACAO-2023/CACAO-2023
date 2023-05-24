@@ -428,6 +428,7 @@ public class Producteur3 extends Bourse3  {
 	 * @return Benefice gagne suite a la vente des feves de qualite s
 	 */
 	protected double getBenefice(String s) {
+		if(Filiere.LA_FILIERE.getEtape()>0) {
 		double coutCurrentStep;
 		double recette;
 		int step = Filiere.LA_FILIERE.getEtape() - 1;
@@ -463,6 +464,8 @@ public class Producteur3 extends Bourse3  {
 		this.journal_activitegenerale.ajouter("Cout au step" + step +" pour " + s + ":" + coutCurrentStep);
 		this.journal_activitegenerale.ajouter("Recette pour " + s + "au step " + step + ":" + recette);
 		return recette - coutCurrentStep;
+		}
+		return 0.0;
 	}
 	/**
 	 * 
