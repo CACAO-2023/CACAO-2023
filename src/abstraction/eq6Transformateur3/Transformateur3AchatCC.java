@@ -86,18 +86,23 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		if (produit.getType() == "Feve") {
 		switch(((Feve)produit).getGamme()) {
 		case BQ:
-			stock = super.stockChocolatBG.getQuantiteTotale();
-			if (stock<quantBQMax-500) {res= true;}
+			//stock = super.stockChocolatBG.getQuantiteTotale();
+			stock = super.totalStocksFeves.getValeur();
+			//if (stock<quantBQMax-500) {res= true;}
+			if (stock + this.quantiteEnAttente<quantBQMax-500) {res= true;}
 		case MQ:
 			if (((Feve)produit).isBioEquitable()) {
 				stock = super.stockChocolatMGL.getQuantiteTotale();
-				if (stock<quantMQLMax-500) {res= true;}
+				//if (stock<quantMQLMax-500) {res= true;}
+				if (stock + this.quantiteEnAttente<quantMQLMax-500) {res= true;}
 			}
 			else {stock = super.stockChocolatMG.getQuantiteTotale();
-			if (stock<quantMQMax-500) {res= true;}}
+			//if (stock<quantMQMax-500) {res= true;}}
+			if (stock + this.quantiteEnAttente<quantMQMax-500) {res= true;}}
 		case HQ:
 			stock = super.stockChocolatHGL.getQuantiteTotale();
-			if (stock<quantHQMax-500) {res= true;}
+			//if (stock<quantHQMax-500) {res= true;}
+			if (stock + this.quantiteEnAttente<quantHQMax-500) {res= true;}
 		}}
 		return res;
 	}
