@@ -32,7 +32,7 @@ public class Transformateur1 extends VendeurOA implements IFabricantChocolatDeMa
 				Chocolat c = Chocolat.C_HQ_BE;
 				this.chocosProduits.add(new ChocolatDeMarque(c, "Vccotioi", 90, 10));
 				Chocolat b = Chocolat.C_BQ;
-				this.chocosProduits.add(new ChocolatDeMarque(b, "choco", 42, 0));
+				this.chocosProduits.add(new ChocolatDeMarque(b, "Yocttotoa", 42, 0));
 		}
 	//System.out.println(	Filiere.LA_FILIERE.getParametre("pourcentage min cacao BQ").getValeur());
 		
