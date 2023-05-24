@@ -31,6 +31,7 @@ public class Producteur3 extends Bourse3  {
 	private Integer HectaresLibres; /*Repertorie le nombre d'hectares libres que l'on possede*/
 	private Integer HectaresUtilises; /*Repertorie le nombre d'hectares que l'on utilise*/
 	private LinkedList<Double> ListeCout; /*Les couts des 18 steps precedents, y compris celui-la*/
+	private HashMap<Integer,Integer> achatHectarCout;
 
 	private Double CoutTonne; /*Le cout par tonne de cacao, calcule sur 18 step (destruction de la feve apres 9 mois), le meme pour toute gamme*/
 
@@ -51,6 +52,7 @@ public class Producteur3 extends Bourse3  {
 		this.HectaresLibres = 0;
 		this.HectaresUtilises = 950000;
 		this.ListeCout = new LinkedList<Double>();
+		this.achatHectarCout = new HashMap<Integer, Integer>();
 	}
 	
 	/**
@@ -356,9 +358,23 @@ public class Producteur3 extends Bourse3  {
 	public void achatHectares(Integer HectaresAAcheter) {
 		Integer coutAchatHectares = HectaresAAcheter * 3250;
 		this.HectaresAchetes.setValeur(this, HectaresAAcheter);
+		this.achatHectarCout.put(Filiere.LA_FILIERE.getEtape(), coutAchatHectares);
 		this.CoutStep = this.CoutStep + coutAchatHectares;
 	}
-	
+	/**
+	 * @author BOCQUET Gabriel
+	 * @param  s
+	 * Return the cost of the buying of a field at step s
+	 */
+	public Integer getCoutAchatChamp(Integer s) {
+		if (s > -1) {
+			if(this.achatHectarCout.get(s) != null) {
+				return this.achatHectarCout.get(s);
+			}
+			
+		}
+		return 0;
+	}
 	/**
 	 * @author Dubus-Chanson Victor
 	 */
@@ -417,24 +433,27 @@ public class Producteur3 extends Bourse3  {
 			Feve f;
 			double tailleStock;
 			double tailleChamp;
+			double proportionChamps;
 			if(s=="H") {
 				f=Feve.F_HQ_BE;
 				tailleStock = this.StockFeveH.getValeur(step);
 				tailleChamp = this.tailleH.getValeur(step);
+				proportionChamps = this.tailleH.getValeur(step)/(this.tailleH.getValeur(step) + this.tailleM.getValeur(step));
 			}
 			else {
 				f=Feve.F_MQ_BE;
 				tailleStock = this.StockFeveM.getValeur(step);
 				tailleChamp = this.tailleM.getValeur(step);
+				proportionChamps = tailleChamp/ (this.tailleH.getValeur(step) + this.tailleM.getValeur(step));
 			}
-			//CoutStep = CoutStockageFeve + CoutEntretientChamp
-			coutCurrentStep = tailleStock*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur(step) + tailleChamp*this.coutEmployeStep.getValeur(step);
+			//CoutStep = CoutStockageFeve + CoutEntretientChamp + CoutAchatDesChamps
+			coutCurrentStep = tailleStock*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur(step) + tailleChamp*this.coutEmployeStep.getValeur(step) + this.getCoutAchatChamp(step)*proportionChamps;
 			 
 			//si on a des Hautes Gammes, this.getQuantiteVenduBourse =0. De plus, on a deja ajoute la quantite vendue en Bourse dans VentesHG ou VentesMG
 			recette = this.getQuantiteVenduBourse(s,step)*Filiere.LA_FILIERE.getIndicateur("BourseCacao cours M").getValeur(step) + this.getRecetteCC(s);
 		}
 		else {
-			coutCurrentStep = this.StockFeveB.getValeur(step)*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur(step);
+			coutCurrentStep = this.StockFeveB.getValeur(step)*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur(step) ;
 			recette = this.getQuantiteVenduBourse(s,step)*Filiere.LA_FILIERE.getIndicateur("BourseCacao cours B").getValeur(step);
 		}
 		this.journal_activitegenerale.ajouter("Cout au step" + step +" pour " + s + ":" + coutCurrentStep);
@@ -467,7 +486,6 @@ public class Producteur3 extends Bourse3  {
 			Champs fields = this.getFields();
 			HashMap<Integer,Integer> FieldsH = fields.getChamps().get("H");
 			HashMap<Integer,Integer> FieldsM = fields.getChamps().get("M");
-			HashMap<Integer, Integer> Fields =fields.getChamps().get("C");
 			double hectarMburnt = 0;
 			double hectarHburnt = 0;
 			double Degat =0;
@@ -543,7 +561,7 @@ public class Producteur3 extends Bourse3  {
 		HashMap<Integer,Integer> FieldH = fields.getChamps().get("H");
 		HashMap<Integer, Integer> FieldM = fields.getChamps().get("M");
 		double hectarDetruitH = 0;
-		double hectarDetruitM=0;
+		double hectarDetruitM=0.0;
 		Set<Integer> KeysH = FieldH.keySet();
 		Set<Integer> KeysM = FieldM.keySet();
 		Journal j = this.getJCatastrophe();
@@ -569,6 +587,7 @@ public class Producteur3 extends Bourse3  {
 	 *
 	 */
 	//Pour modéliser    la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
+
 	protected void GreveGeneral() {
 		if (nbr_popup < 1) {
 			this.nbr_popup +=1;

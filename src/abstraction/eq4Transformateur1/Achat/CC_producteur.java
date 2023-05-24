@@ -251,10 +251,9 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 								ContratEnCours_F_HQ.add(contrat2);
 								
 						}
-
-						}
+					}
+				}
 			}
 		}
-		}
-	 }
+	}
 }
