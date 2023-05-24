@@ -59,7 +59,7 @@ public class Stock extends Transformateur1Acteur{
 			}
 			this.totalStocksFeves.ajouter(this,quantite,this.cryptogramme);
 			}
-		else if(produit.getType().equals("ChocoDeMarque")) {
+		else if(produit.getType().equals("ChocolatDeMarque")) {
 			if (this.stockChocoMarque.keySet().contains(produit)) {
 				this.stockChocoMarque.put((ChocolatDeMarque)produit,this.stockChocoMarque.get((ChocolatDeMarque)produit)+quantite);
 				}
