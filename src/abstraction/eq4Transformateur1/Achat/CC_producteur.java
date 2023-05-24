@@ -156,9 +156,25 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		prix = Math.min(prix, contrat.getPrix());
 		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : "+contrat.getVendeur()+" propose le prix "+contrat.getPrix()+" -> ma proposition ="+prix);
 		return prix;*/
-		return contrat.getPrix();
 		
+		
+		// condition avec le prix du chocolat 
+		
+		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : "+contrat.getListePrix());
+		double prixInit = contrat.getPrix();
+		if (contrat.getListePrix().size()==7) {
+			return prixInit;
+		}else {
+		if (contrat.getListePrix().size()==1) {
+			return prixInit*0.9;
+		} else {
+			double prix=contrat.getListePrix().get(contrat.getListePrix().size()-2);
+			return prix*1.015165;
+		}
 	}
+}
+		
+
 
 // François Glavatkii
 	
