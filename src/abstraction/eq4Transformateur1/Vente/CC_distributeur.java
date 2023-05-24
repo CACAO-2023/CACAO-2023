@@ -91,7 +91,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 								ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeVendeur(acheteur, this, cm, echeancierB, this.cryptogramme, false);
 								if (contrat2!=null) {
 									this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV_HQ : contrat signe = "+contrat2);
-									this.ContratEnCours_C_HQ.add(contrat1);
+									this.ContratEnCours_C_HQ.add(contrat2);
 							}
 							}
 						}
