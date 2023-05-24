@@ -27,7 +27,7 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 	}
 
 	private void setMQteFeve(double mQteFeve) {
-		MQteFeve = mQteFeve;
+		this.MQteFeve = mQteFeve;
 	}
 
 
@@ -44,15 +44,15 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 	}
 
 	private void setMQStep(double mQStep) {
-		MQStep = mQStep;
+		this.MQStep = mQStep;
 	}
 
 	private void setHQStep(double HQStep) {
-		HQStep = HQStep;
+		this.HQStep = HQStep;
 	}
 
 	private void setHQteFeve(double HQteFeve) {
-		HQteFeve = HQteFeve;
+		this.HQteFeve = HQteFeve;
 	}
 
 	/**
@@ -101,13 +101,13 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 		cout = qtefeve*1500; // le coût de transformation est fixé a 1500€ par tonne de feve.
 		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), cout);
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE,"Paiement de "+cout+" pour la transformation de "+qtefeve+" tonnes de feve en chocolat ");
-			
 		ChocolatDeMarque cm = new ChocolatDeMarque(c, Marque, cacao, 0); // le chocolat ChocoPop est a 70% fait de cacao
 		double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;	
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Transformation de "+qtefeve*proportion_marque+" feves "+Journal.texteSurUneLargeurDe(f.getGamme()+"", 15)+" en "+((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c))+Journal.texteSurUneLargeurDe(cm.getMarque(), 15));
 		this.stockChocoMarque.put(cm, scm+((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c)));					
 		this.totalStocksChocoMarque.ajouter(this, ((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c)), this.cryptogramme);
 		this.totalStocksChoco.ajouter(this, ((qtefeve*(1-proportion_marque))*this.pourcentageTransfo.get(f).get(c)), this.cryptogramme);
+		System.out.println("Nous venons de transformer "+qtefeve+" Tonnes de chcocolat "+Marque);
 	}
 	
 	public void next() {
@@ -140,34 +140,13 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 				int cacao = 0;
 				double cout = 0;
 				
-							
-					// On paie les coûts de transformation
-				System.out.println("Stock qui sera transfo"+this.getHQStep()+"  "+this.getHQteFeve()+"  "+this.getMQStep()+"   "+this.getMQteFeve());
-				System.out.println();
-				if((this.getMQStep()==1)&&(f.getGamme()==Gamme.MQ)) {
-					this.ajoutStock(this.getMQteFeve(), 0.8, f, c, "ChocoPop", 70);
-					this.setMQStep(0);
-					System.out.println("okkk");
-				}
-				else {
-					this.setMQStep(this.getMQStep()+1);
-				}
-				
-				if((this.getHQStep()==2)&&(c.getGamme()==Gamme.HQ)) {
-					this.ajoutStock(this.getHQteFeve(), 1, f, c, "Maison Doutre", 90);
-					this.setHQStep(0);
-				}
-				else {
-					this.setHQStep(this.getHQStep()+1);
-				}
-				
 				if ((f.getGamme()==Gamme.MQ)&&(this.getMQStep()==0)){
 					qtefeve = this.stockFeves.get(f);
-					this.setMQteFeve(qtefeve); //15% des feves moyenne gamme sont transformées en ChocoPop, 25% sans marque
+					this.setMQteFeve(qtefeve); 
 					proportion_marque = 0.8;
 					Marque = "ChocoPop";
 					cacao = 70;
-					this.stockFeves.put(f, this.stockFeves.get(f)-qtefeve); // on les retire a nos stocks
+					this.stockFeves.put(f, (double) 0); // on les retire a nos stocks
 					this.totalStocksFeves.retirer(this, qtefeve, this.cryptogramme); // et aux stocks totaux
 					System.out.println("DEBUT TRANSFO CHOCOPOP");
 				}
@@ -178,10 +157,32 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 					proportion_marque = 1;
 					Marque = "Maison Doutre";
 					cacao = 90;
-					this.stockFeves.put(f, this.stockFeves.get(f)-qtefeve); // on les retire a nos stocks
+					this.stockFeves.put(f, (double) 0); // on les retire a nos stocks
 					this.totalStocksFeves.retirer(this, qtefeve, this.cryptogramme); // et aux stocks totaux
-					System.out.println("DEBUT TRANSFO DE CHOCOLAT");
+					System.out.println("DEBUT TRANSFO DE MAISON DOUTRE");
 				}
+				
+							
+					// On paie les coûts de transformation
+				System.out.println("Stock qui sera transfo"+this.getHQStep()+"  "+this.getHQteFeve()+"  "+this.getMQStep()+"   "+this.getMQteFeve());
+				if((this.getMQStep()==1)&&(f.getGamme()==Gamme.MQ)) {
+					this.ajoutStock(this.getMQteFeve(), 0.8, f, c, "ChocoPop", 70);
+					this.setMQStep(0);
+				}
+				else {
+					if(f.getGamme()==Gamme.MQ) {
+						this.setMQStep(this.getMQStep()+1);
+				}}
+				
+				if((this.getHQStep()==2)&&(c.getGamme()==Gamme.HQ)) {
+					this.ajoutStock(this.getHQteFeve(), 1, f, c, "Maison Doutre", 90);
+					this.setHQStep(0);
+				}
+				else {
+					if(c.getGamme()==Gamme.HQ) {
+						this.setHQStep(this.getHQStep()+1);
+				}}
+				
 							
 			}
 		}
