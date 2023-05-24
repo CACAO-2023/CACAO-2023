@@ -97,7 +97,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	public double coutDeMainDoeuvre() {
 		//double coutMD = Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur();
-		System.out.println(Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur());
+		//System.out.println(Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur());
 		return 0.;
 	}
 	
@@ -169,7 +169,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			
 			if (stocks.getStockGlobal() > 0) {
 				double cout_TOT = 16*30*stock_total-getTotalCoutMainDoeuvre();
-				System.out.println("Stock total : "+ stock_total);
+				//System.out.println("Stock total : "+ stock_total);
 				Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme,Filiere.LA_FILIERE.getBanque(),cout_TOT );	
 				
 				
@@ -247,13 +247,14 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	// Appelee lorsqu'un acteur fait faillite (potentiellement vous)
 	// afin de vous en informer.
+	
 	//Auteur : Ben Messaoud Karim
 	public void notificationFaillite(IActeur acteur) {
 		if (this==acteur) {
-			System.out.println("oups on est mort");
+			journal_activitegenerale.ajouter("oups on est mort");
 		}
 		else {
-			System.out.println("try again");
+			journal_activitegenerale.ajouter("try again");
 		}
 
 	}
@@ -323,7 +324,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	//Auteur : Ben Messaoud Karim 
 	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
-		System.out.println("stock choco "+choco+ this.stocks.getStock(choco));
+		//System.out.println("stock choco "+choco+ this.stocks.getStock(choco));
 		if (choco == null || this.stocks.getStock(choco) == 0.0) {
 			return 0.0;
 		} else {
