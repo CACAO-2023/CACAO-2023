@@ -1,10 +1,13 @@
 package abstraction.eq2Producteur2;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 
 //Code ecrit par Nino
 
 import java.util.List;
+import java.util.Set;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
@@ -78,6 +81,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 				}
 			}
 		}
+		this.majListeCC();
 		this.journalCC.ajouter("Contrats Cadre en cours : " + this.contrats);
 	}
 	
@@ -124,7 +128,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		Echeancier echMax = this.getEcheancierMax(echeancierAch.getStepFin()).get(contrat.getProduit()); //Echeancier correspondant à la vente de tout notre stock
 		Echeancier ech = new Echeancier(echeancierAch.getStepDebut()); //Echeancier renvoyé
 		if(echeancierAch.getStepDebut() > Filiere.LA_FILIERE.getEtape()) {
-			for(int i = contrat.getEcheancier().getStepDebut(); i<contrat.getEcheancier().getStepFin()+1; i++){
+			for(int i = contrat.getEcheancier().getStepDebut(); i<echeancierAch.getStepFin()+1; i++){
 				ech.ajouter(Math.min(echMax.getQuantite(i) + echMax.getQuantiteJusquA(i-1) - ech.getQuantiteJusquA(i-1), echeancierAch.getQuantite(i))); //On accepte la proposition de l'acheteur en vérifiant que l'on pourra y répondre
 			}
 			if(ech.getQuantiteTotale()>venteMin) {
@@ -251,6 +255,18 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 */
 	private double getPrixSouhaitéCC(ExemplaireContratCadre contrat) {
 		return this.getPrixCC((Feve) contrat.getProduit())*this.facteurFidelite(contrat.getAcheteur())*this.facteurPrix();
+	}
+	
+	private void majListeCC() {
+		LinkedList<ExemplaireContratCadre> supp = new LinkedList<ExemplaireContratCadre>();
+		for(ExemplaireContratCadre cc : this.contrats) {
+			if(cc.getEcheancier().getStepFin() < Filiere.LA_FILIERE.getEtape()) {
+				supp.add(cc);
+			}
+		}
+		for(ExemplaireContratCadre cc : supp) {
+			this.contrats.remove(cc);
+		}
 	}
 	
 	//Méthode pour les tests

@@ -56,15 +56,13 @@ public class Producteur2Acteur implements IActeur {
 	protected HashMap<Feve, Variable> coutProdFeve = new HashMap<Feve, Variable>();
 	protected Producteur2 thisP;
 
-	//Prix provisoires pour les contrats cadres
+	//Prix pour les contrats cadres
 	public double prixBQ = 500.0;
 	public double prixMQ = 1000.0;
 	public double prixMQBE = 1500.0;
 	public double prixHQ = 2000.0;
 	public HashMap<Feve, Double> prixCC;
-
 	protected LinkedList<ExemplaireContratCadre> contrats;
-	
 	
 	protected Feve[] lesFeves = {Feve.F_BQ, Feve.F_MQ, Feve.F_MQ_BE, Feve.F_HQ_BE};
 
