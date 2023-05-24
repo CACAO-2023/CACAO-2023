@@ -31,7 +31,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	protected int cryptogramme;
 	protected String nom;
 	protected List<ChocolatDeMarque> chocolats;
-	//protected LinkedList<String> nos_chocolats;
 	protected HashMap<ChocolatDeMarque, Double> prixDeVente;
 	protected StockGeneral stocks;
 	protected HashMap<Gamme, Double> pourcentagesGamme;
@@ -66,26 +65,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		journal_stocks = new Journal("Journal des stocks " + nom, this);
 		initialiserGamme();
 
-		//this.nos_chocolats = new LinkedList<String>();
-		
-		//nos marques de chocolats
-		//this.nos_chocolats.add("C_HQ_BE_Vccotioi");
-		//this.nos_chocolats.add("C_MQ_ChocoPop");
-		//this.nos_chocolats.add("C_MQ_chokchoco");
-		//this.nos_chocolats.add("C_MQ_BE_Villors");
-
-		
-	//C_HQ_BE_Vccotioi
-	//C_MQ_ChocoPop
-	//C_HQ_BE_Maison Doutre
-	//C_BQ_eco+ choco
-	//C_MQ_chokchoco
-	//C_MQ_BE_chokchoco bio
-	//C_HQ_BE_Choc
-	//C_HQ_BE_Villors
-	//C_MQ_BE_Villors
-	//C_MQ_Villors
-	//C_BQ_Villors	
+	
 		
 	}
 
@@ -169,12 +149,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			
 			if (stocks.getStockGlobal() > 0) {
 				double cout_TOT = 16*30*stock_total-getTotalCoutMainDoeuvre();
-				//System.out.println("Stock total : "+ stock_total);
 				Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme,Filiere.LA_FILIERE.getBanque(),cout_TOT );	
-				
-				
-				
-				//journal_stock.ajouter("Cout de stockage : "+cout_STOCK);
 				}	
 			
 			
@@ -324,7 +299,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	//Auteur : Ben Messaoud Karim 
 	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
-		//System.out.println("stock choco "+choco+ this.stocks.getStock(choco));
 		if (choco == null || this.stocks.getStock(choco) == 0.0) {
 			return 0.0;
 		} else {
@@ -350,15 +324,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	//Auteur : Ben Messaoud Karim 
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
-//		int pos = chocolats.indexOf(choco);
-//		if (pos >= 0) {
-			
-			this.stocks.retirerDuStock(choco, quantite);
-			
-			
-			
+			this.stocks.retirerDuStock(choco, quantite);			
 			stock_total-=quantite;
-			
 			s.setValeur(this, stock_total, this.cryptogramme);
 			journal_stocks.ajouter("retrait d'une quantité de"+ quantite+"T");
 			journal_ventes.ajouter("La quantité " + quantite + " a été vendue à" + montant);

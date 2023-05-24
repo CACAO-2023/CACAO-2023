@@ -125,7 +125,6 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	}
 
 		
-
 	//Auteur : Marzougui Mariem
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		stocks.ajouterAuStock((ChocolatDeMarque)(contrat.getProduit()),lot.getQuantiteTotale() );

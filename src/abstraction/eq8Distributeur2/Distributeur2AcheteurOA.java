@@ -29,7 +29,7 @@ public class Distributeur2AcheteurOA extends ContratCadre implements IAcheteurOA
             if (rapport > meilleurRapport) {
                 meilleureProposition = proposition;
                 meilleurRapport = rapport;
-                
+     
             }
         }
         return meilleureProposition;
@@ -83,13 +83,12 @@ public class Distributeur2AcheteurOA extends ContratCadre implements IAcheteurOA
 	    if (supOA == null) {
 	        supOA = (SuperviseurVentesOA) (Filiere.LA_FILIERE.getActeur("Sup.OA"));
 	    }
+	    
 	    if (supOA != null) {
             this.journal_OA.ajouter("SUPERVISEUR TROUVE");
 
 	    	for (int i =0;this.chocolats.size()> i; i++) {
 		        PropositionVenteOA pRetenue = supOA.acheterParAO(this, this.cryptogramme, this.chocolats.get(i).getChocolat(), this.chocolats.get(i).getMarque(), 3, true);
-
-			
 
 	        if (pRetenue != null) {
 	            
