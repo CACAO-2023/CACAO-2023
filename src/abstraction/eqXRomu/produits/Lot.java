@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Journal;
 /**
  * Modelise une quantite d'un meme produit qui n'a pas forcement ete
@@ -50,10 +51,24 @@ public class Lot {
 	 */
 	public void ajouter(int step, double quantite) {
 		if (quantite<=0.0) {
-			throw new IllegalArgumentException("Appel de ajouter de Lot avec une quantite de "+quantite);
-		}
+//			throw new IllegalArgumentException("Appel de ajouter de Lot avec une quantite de "+quantite);
+			try {
+				throwIllegalException("Appel de ajouter de Lot avec une quantite de "+quantite);
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Appel de ajouter de Lot avec une quantite de "+quantite+" -> bye bye");
+				System.exit(0);
+			}		}
 		if (step<0) {
-			throw new IllegalArgumentException("Appel de ajouter de Lot avec un step de "+step);
+//			throw new IllegalArgumentException("Appel de ajouter de Lot avec un step de "+step);
+			try {
+				throwIllegalException("Appel de ajouter de Lot avec un step de "+step);
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Appel de ajouter de Lot avec un step de "+step+" -> bye bye");
+				System.exit(0);
+			}		
+			//}
 		}
 		double total=quantite;
 		if (this.quantites.keySet().contains(step)) {
@@ -62,15 +77,33 @@ public class Lot {
 		this.quantites.put(step, total);
 	}
 
+	public void throwIllegalException(String message) {
+		throw new IllegalArgumentException(message);
+	}
 	/**
 	 * Ajoute lot2 a this 
 	 * @param lot2, lot2!=null et lot2 est du meme produit que this
 	 */
 	public void ajouter(Lot lot2) {
 		if (lot2==null) {
-			throw new IllegalArgumentException("Appel de add(Lot lot2) de Lot avec lot2==null");
+			//throw new IllegalArgumentException("Appel de add(Lot lot2) de Lot avec lot2==null");
+try {
+	throwIllegalException("Appel de add(Lot lot2) de Lot avec lot2==null");
+} catch (Exception e) {
+	e.printStackTrace();
+	System.out.println("Appel de add(Lot lot2) de Lot avec lot2==null -> bye bye");
+	System.exit(0);
+}
 		} else if (!lot2.getProduit().equals(this.produit)) {
-			throw new IllegalArgumentException("Appel de add(Lot lot2) de Lot avec des produits qui ne sont pas identiques");
+			//throw new IllegalArgumentException("Appel de add(Lot lot2) de Lot avec des produits qui ne sont pas identiques");
+			try {
+				throwIllegalException("Appel de add(Lot lot2) de Lot avec des produits qui ne sont pas identiques");
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Appel de add(Lot lot2) de Lot avec des produits qui ne sont pas identiques -> bye bye");
+				System.exit(0);
+			}
+
 		} else {
 			for (Integer i : lot2.quantites.keySet()) {
 				this.ajouter(i, lot2.quantites.get(i));
@@ -97,7 +130,15 @@ public class Lot {
 	 */
 	public Lot retirer(double quantite) {
 		if (quantite<=0 || quantite>this.getQuantiteTotale()+0.001) {
-			throw new IllegalArgumentException("Appel de retirer("+quantite+") sur un Lot de feves dont la quantite totale est "+this.getQuantiteTotale());
+		//	throw new IllegalArgumentException("Appel de retirer("+quantite+") sur un Lot de feves dont la quantite totale est "+this.getQuantiteTotale());
+			try {
+				throwIllegalException("Appel de retirer("+quantite+") sur un Lot de feves dont la quantite totale est "+this.getQuantiteTotale());
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Appel de retirer("+quantite+") sur un Lot de feves dont la quantite totale est "+this.getQuantiteTotale()+" -> bye bye");
+				System.exit(0);
+			}		
+			return null;
 		} else {
 			Lot res=new Lot(produit);
 			List<Integer> vides = new LinkedList<Integer>();
@@ -109,8 +150,11 @@ public class Lot {
 						this.quantites.put(i,this.quantites.get(i)-reste);
 						reste=0;
 					} else {
+						if (this.quantites.get(i)>0.0) {
+						
 						res.ajouter(i,this.quantites.get(i));
 						reste = reste - this.quantites.get(i);
+						}
 						vides.add(i);
 					}
 				}

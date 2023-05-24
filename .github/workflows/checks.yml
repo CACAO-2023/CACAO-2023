@@ -75,6 +75,7 @@ jobs:
           ant -noinput -buildfile build.xml
           ant -noinput -buildfile build.xml
           ant -noinput -buildfile build.xml
+          ant -noinput -buildfile build.xml
     - name: Pass performance file
       id: perf
       if: success()
@@ -91,6 +92,9 @@ jobs:
     - name: Performance results
       run: |
         echo ${{ needs.java_tests.outputs.times }}
+    - name: Performance check
+      if: fromJSON(needs.java_tests.outputs.times)[fromJSON(steps.actorTeams.outputs.teams)[0]] >= 20000
+      run: exit 1
     - name: Auto-merge
       if: fromJSON(needs.java_tests.outputs.times)[fromJSON(steps.actorTeams.outputs.teams)[0]] < 20000
       run: | 

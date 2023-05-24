@@ -42,8 +42,8 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
 
         // Initialisation des HashMaps. Au début tous nos acheteurs ont la même fiabilité.
-        Double PRIX_DEPART_MQ = 10000.0;
-        Double PRIX_DEPART_HQ = 30000.0;
+        Double PRIX_DEPART_MQ = 6000.0; //10000 avant, mais des équipes ne négocient pas
+        Double PRIX_DEPART_HQ = 10000.0; //30000 avant, mais des équipes ne négocient pas
 
         List<IAcheteurContratCadre> acheteurs = new LinkedList<IAcheteurContratCadre>();
 		List<IActeur> acteurs = Filiere.LA_FILIERE.getActeursSolvables();
@@ -163,12 +163,12 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     }
 
     /**
-     * @author Corentin Caugant
+     * @author Corentin Caugant  
      */
     @Override
     public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
 
-        Lot lot = new Lot(produit);
+        Lot lot =  new Lot(produit);
 
         int oldestStep = Stock.getAge((Feve)produit);
         double currentQuantite;
@@ -186,7 +186,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
             }
         }
 
-        if (currentQuantite > 0) {
+        if (currentQuantite > 0.0) {
             lot.ajouter(oldestStep, currentQuantite);
         }
         
@@ -309,7 +309,10 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      */
     public void next() {
         super.next();
-
+        //Pour la suite, on abesoin de savoir les contrats qui ont ete effectue au step precedent
+        LinkedList<ExemplaireContratCadre> contraprecedent = new LinkedList<ExemplaireContratCadre>();
+        contraprecedent.addAll(this.contracts);
+        this.contractprecedent = contraprecedent;
         List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.contracts) {
 			if (contrat.getQuantiteRestantALivrer()<=0.0 && contrat.getMontantRestantARegler()<=0.0) {
