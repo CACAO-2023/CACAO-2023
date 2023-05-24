@@ -50,7 +50,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 	// François Glavatkii et Alexian 
 	
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		
+		/*
 		Echeancier echeancier = contrat.getEcheancier();
 		int duree = echeancier.getNbEcheances();
 		double quantitetot = echeancier.getQuantiteTotale();
@@ -84,13 +84,13 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		}  
 			 }
 		
-		return null;
-		
+		return null;*/
+		return contrat.getEcheancier();
 	}
 	
 	
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		double prix=3000.0;
+		/*double prix=3000.0;
 //		System.out.println(" type produit "+contrat.getProduit());
 		double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
 		Object produit = contrat.getProduit();
@@ -110,7 +110,8 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		}
 		prix = Math.min(prix, contrat.getPrix());
 		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : on me propose le prix "+contrat.getPrix()+" -> ma proposition ="+prix);
-		return prix;
+		return prix;*/
+		return contrat.getPrix();
 	}
 
 // François Glavatkii
