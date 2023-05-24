@@ -46,7 +46,6 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	@Override
 	public boolean achete(IProduit produit) {
 		// TODO Auto-generated method stub
-		System.out.println(produit+" "+produit.getType());
 		if ((produit.getType().equals("Feve")
 				&& ((((Feve)produit).getGamme()== Gamme.MQ)&&(!((Feve)produit).isBioEquitable())
 						|| ((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable()))))) {
@@ -78,7 +77,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		double soldeDisponible = super.getSolde(); 
 		Echeancier echeancierPropose = contrat.getEcheancier();
 		Echeancier nouvelEcheancier = new Echeancier(echeancierPropose);
-
+		
 		if (contrat.getPrix() > prixMax) {
 			// Si le prix proposé est supérieur au prix maximum, annuler les négociations
 			nouvelEcheancier.vider();
@@ -104,27 +103,8 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 			}
 		}
 
-		return nouvelEcheancier; 
+		return nouvelEcheancier.getQuantiteTotale()>100.0 ? nouvelEcheancier : null; 
 	}   
-	/*
-	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
-		return contrat.getEcheancier(); //pas de négociations 
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
-	}
-<<<<<<< HEAD
-
-
-
-		@Override
-		public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
-			return contrat.getEcheancier(); //pas de négociations 
-		}
-=======
-<<<<<<< HEAD
-	 */
-
 
 
 	//Par Mathis DOUTRE
@@ -205,7 +185,6 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		if (cc != null) {   
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + vendeur.getNom() + " pour " + produit + "CC : " + cc);
 			this.ContratsAchat.put(cc,vendeur.getNom());
-			System.out.println(ContratsAchat);
 		} 
 		else {
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);

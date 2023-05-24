@@ -93,12 +93,17 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		if (cp == Chocolat.C_MQ ) {
 			Set<Chocolat> choco = stockChoco.keySet();
 			Double stock = stockChoco.get(choco);
-			prix = 2800.1*stock ; }
+			if (stock!=null) {
+			prix = 2800.1*stock ;
+			this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);
+			}}
 		if ( cp 
 				== Chocolat.C_HQ_BE ) {
 			Set<ChocolatDeMarque> choco = stockChocoMarque.keySet();
 			Double stock = stockChocoMarque.get(choco);
-			prix = 2800.1*stock; }
+			if (stock!=null) {
+			prix = 2800.1*stock;
+			this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);}}
 		return prix; }
 
 	//stock*(cout de stockage 1300 + prix de transfo 1500) + marge de 10%
