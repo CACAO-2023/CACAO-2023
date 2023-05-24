@@ -102,8 +102,8 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   /**Mouhamed SOW*/
   /**methode pour savoir ou il faut ajouter le chocolat*/
   public Lot getLotChocolat(IProduit produit) {
-	  if(produit instanceof Chocolat) {
-		  Chocolat chocolat=(Chocolat) produit ;
+	  if(produit instanceof ChocolatDeMarque) {
+		  ChocolatDeMarque chocolat=(ChocolatDeMarque) produit ;
 		  switch(chocolat.getGamme()) {
 		  case MQ :
 			  return this.stockChocolatBG ;
