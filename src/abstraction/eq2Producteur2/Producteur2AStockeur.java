@@ -327,6 +327,7 @@ public class Producteur2AStockeur extends Producteur2Acteur {
 	 * @param varQuantite les variations de quantite par type de fève.
 	 * @param stocks le stock de chaque type de fève.
 	 * @param quantiteRetard la quantite restante à retirer par type de fève.
+	 * @param etape l'etape courante de calcul (pour ajouter les fèves à stocks avec une bonne date de production)
 	 */
 	private void variaQuant(HashMap<Feve, Double> varQuantite, HashMap<Feve, Lot> stocks, HashMap<Feve, Double> quantiteRetard, int etape) {
 		for (Feve f: varQuantite.keySet()) {
