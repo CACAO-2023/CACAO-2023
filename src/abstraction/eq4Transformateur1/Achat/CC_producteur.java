@@ -179,6 +179,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 								this.ContratEnCours_F_BQ.add(contrat1);
 
 						}
+						}
 						if (cm.getGamme().equals(Gamme.HQ)){
 							Echeancier echeancierB = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotH/2);
 							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_HQ : tentative d'achat aupres de "+vendeurs);
@@ -190,7 +191,6 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 						}
 
 						}
-					}
 			}
 		}
 		}

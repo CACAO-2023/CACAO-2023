@@ -84,14 +84,14 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 									this.ContratEnCours_C_BQ.add(contrat1);
 
 							}
+							}
 							if (cm.getGamme().equals(Gamme.HQ)){
 								Echeancier echeancierB = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotH/2);
 								this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV_HQ : tentative d'achat aupres de "+acheteurs);
 								ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeVendeur(acheteur, this, cm, echeancierB, this.cryptogramme, false);
 								if (contrat2!=null) {
 									this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV_HQ : contrat signe = "+contrat2);
-									this.ContratEnCours_C_HQ.add(contrat1);
-							}
+									this.ContratEnCours_C_HQ.add(contrat2);
 							}
 							}
 						}
@@ -217,7 +217,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		}
 		if (produit instanceof Chocolat) {
 			switch ((Chocolat)produit) {
-			case C_HQ_BE   : prix= 49999;break;
+			case C_HQ_BE   : prix= 50000;break;
 			case C_BQ      : prix= 15000;break;
 			}
 		}
@@ -226,14 +226,13 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 	}
 
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		System.out.println(" type produit "+contrat.getProduit());
-
-		double prixInit=contrat.getListePrix().get(0);
+		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : "+contrat.getListePrix());
+		double prixInit=contrat.getListePrix().get(contrat.getListePrix().size()-2);
 		double prix = contrat.getPrix();
 		if (prix>0.0 && (prixInit-prix)/prixInit<=0.049) {
 			return prix;
 		} else {
-			return prixInit;
+			return prixInit*(1-0.049);
 		}
 	}
 
