@@ -74,11 +74,11 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		
 		if (f.getGamme().equals(Gamme.HQ)) {
 			
-			 if (ventetotX/2 > 100){
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotX/2));
+			 if (ventetotX/2 > 500){
+				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat avec "+contrat.getVendeur()+"--> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotX/2));
 				return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotX/2);
 			}else {
-				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, ventetotX/2));
+				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCA : propAchat avec "+contrat.getVendeur()+"--> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, 1000));
 
 					return new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 15, ventetotX/2);
 		}  
@@ -109,7 +109,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 			return 0.0;
 		}
 		prix = Math.min(prix, contrat.getPrix());
-		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : on me propose le prix "+contrat.getPrix()+" -> ma proposition ="+prix);
+		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : "+contrat.getVendeur()+" propose le prix "+contrat.getPrix()+" -> ma proposition ="+prix);
 		return prix;
 	}
 
