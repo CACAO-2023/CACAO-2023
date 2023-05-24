@@ -173,7 +173,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 					if (!vendeur.equals(this)) {
 						if (cm.getGamme().equals(Gamme.BQ)){
 							Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotB/2);
-							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_BQ : tentative d'achat aupres de "+vendeurs);
+							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_BQ : tentative d'achat aupres de "+vendeur);
 							ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancier, this.cryptogramme, false);
 							if (contrat1!=null) {
 								 
@@ -184,7 +184,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 						}
 						if (cm.getGamme().equals(Gamme.HQ)){
 							Echeancier echeancierB = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotH/2);
-							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_HQ : tentative d'achat aupres de "+vendeurs);
+							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_HQ : tentative d'achat aupres de "+vendeur);
 							ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancierB, this.cryptogramme, false);
 							if (contrat2!=null) {
 								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_HQ : contrat signe = "+contrat2);
