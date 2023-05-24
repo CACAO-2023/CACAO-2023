@@ -36,6 +36,7 @@ public class Distributeur1AcheteurOA extends DistributeurContratCadreAcheteur im
 		double critere = propositions.get(0).getPrixT()*propositions.get(0).getPrixT()/propositions.get(0).getChocolatDeMarque().qualitePercue();
 		for (PropositionVenteOA p : propositions) {
 			if (p.getPrixT()*p.getPrixT()/p.getChocolatDeMarque().qualitePercue() < critere) { //Critere ameliorable
+				critere = p.getPrixT()*p.getPrixT()/p.getChocolatDeMarque().qualitePercue();
 				best = p;
 			}
 		}

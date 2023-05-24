@@ -24,7 +24,25 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	private Variable prixmaxMG;
 	private Variable prixmaxMGL;
 	private Variable prixmaxHG;
-	private double quantiteEnAttente ;
+	protected double quantiteEnAttente ;
+	//Les var ci dessous indiquent la tranche dans laquelle on veut que les stocks restent
+	protected double quantBQMin = 10000.0;
+	protected double quantMQMin = 10000.0;
+	protected double quantMQLMin = 10000.0;
+	protected double quantHQMin = 10000.0;
+	protected double quantBQMax = 250000.0;
+	protected double quantMQMax = 250000.0;
+	protected double quantMQLMax = 250000.0;
+	protected double quantHQMax = 250000.0;
+	protected double prixMoyBQ = 0.0;
+	protected double prixMoyMQ = 0.0;
+	protected double prixMoyMQL = 0.0;
+	protected double prixMoyHQ = 0.0;
+	protected boolean prioriteCCBG = true;
+	protected boolean prioriteCCMG = true;
+	protected boolean prioriteCCMGL =true;
+	protected boolean prioriteCCHG =true;
+	
 	
 	public Transformateur3AchatCC () {
 		super();
@@ -36,6 +54,18 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		this.quantiteEnAttente = 0.0;
 		
 	}
+	public void setprixMoyBQ(double p) {
+		this.prixMoyBQ = p;
+	}
+	public void setprixMoyMQ(double p) {
+		this.prixMoyMQ = p;
+	}	
+	public void setprixMoyMQL(double p) {
+		this.prixMoyMQL = p;
+	}
+	public void setprixMoyHQ(double p) {
+		this.prixMoyHQ = p;
+	}
 	/**
 	 * ecrit par Nathan Claeys
 	 * Methode appelee par le superviseur afin de savoir si l'acheteur est pret a
@@ -45,9 +75,32 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 * @return Retourne false si l'acheteur ne souhaite pas etablir de contrat a
 	 *         cette etape pour ce type de produit (retourne true si il est pret a
 	 *         negocier un contrat cadre pour ce type de produit).
-	 * La r�ponse va d�pendre de la valeur de la valeur du stock du produit et de si il y a un contrat sur ce produit
+	 * Dans cette fonction on va regarder pour chaque type de feves si leur stock est bien dans l'encadrement souhaité.
+	 * Si il n'est pas à sa valeur max on va essayer de le compéter sinon on ne prend pas.
 	 */
 	public boolean achete(IProduit produit) {
+		double stock = 0.0;
+		boolean res =false;
+		if (produit.getType() == "Feve") {
+		switch(((Feve)produit).getGamme()) {
+		case BQ:
+			stock = super.stockChocolatBG.getQuantiteTotale();
+			if (stock<quantBQMax-500) {res= true;}
+		case MQ:
+			if (((Feve)produit).isBioEquitable()) {
+				stock = super.stockChocolatMGL.getQuantiteTotale();
+				if (stock<quantMQLMax-500) {res= true;}
+			}
+			else {stock = super.stockChocolatMG.getQuantiteTotale();
+			if (stock<quantMQMax-500) {res= true;}}
+		case HQ:
+			stock = super.stockChocolatHGL.getQuantiteTotale();
+			if (stock<quantHQMax-500) {res= true;}
+		}}
+		return res;
+	}
+	
+	public boolean acheteV1(IProduit produit) {
 		int step = Filiere.LA_FILIERE.getEtape();
 		if (produit instanceof Feve) {/**List<Double> besoin_prochain = new LinkedList<Double>();
 									  for (int i=1;i<5;i++) {
@@ -104,6 +157,51 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 * Il faut verifier que la duree nous convient et que chaque livraison proposée est sup à ce que l'on souhaite avoir
 	 */
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
+		Echeancier vendeurecheancier = contrat.getEcheancier();
+		Echeancier res = null;
+		int stepdebut = vendeurecheancier.getStepDebut();
+		int duree = vendeurecheancier.getNbEcheances();
+		boolean cbon = true;
+		double stock = 0.0;
+		double stockMax = 0.0;
+		int dureeMax = duree;
+		switch (((Feve)contrat.getProduit()).getGamme()) {
+		case BQ:
+			stock = super.stockChocolatBG.getQuantiteTotale();
+			stockMax = this.quantBQMax;
+		case MQ:
+			if (((Feve)contrat.getProduit()).isBioEquitable()) {
+				stock = super.stockChocolatMGL.getQuantiteTotale();
+				stockMax = this.quantMQLMax;
+			}
+			else {stock = super.stockChocolatMG.getQuantiteTotale();
+				  stockMax = this.quantMQMax;}
+		case HQ:
+			stock = super.stockChocolatHGL.getQuantiteTotale();
+			stockMax = this.quantHQMax;
+		}
+		for (int i = stepdebut;i<stepdebut+duree;i++) {
+			stock = stock+this.getArrivageCCStep(i, ((Feve)contrat.getProduit()));
+			if (stock>stockMax) {cbon=false;dureeMax = i-1-stepdebut;}
+		}
+		if (dureeMax<duree) {
+			if (dureeMax>0) {
+				LinkedList<Double> l = new LinkedList<Double>();
+				for (int i=0;i<dureeMax;i++) {
+					l.add(vendeurecheancier.getQuantite(stepdebut+i));
+				}
+				Echeancier ech = new Echeancier(stepdebut,l);
+			}
+			else {res = null;}}
+		else {res = vendeurecheancier;}
+		
+		
+		return res;
+	}
+	
+	
+	
+	public Echeancier contrePropositionDeLAcheteurV1(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
 		Echeancier vendeurecheancier = contrat.getEcheancier();
 		int stepdebut = vendeurecheancier.getStepDebut();
@@ -111,7 +209,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		int compt = 0; /**si il y a 3 step à la suite sans besoin on reduit le contrat**/
 		int notreduree = 0;
 		for (int i=stepdebut;i<stepdebut+duree && compt<3;i++) {
-			if (super.BesoinStep(i,((Feve)contrat.getProduit()))>0) {compt = 0;notreduree=i;}
+			if (1>0) {compt = 0;notreduree=i;}//a refaire
 			else {compt = compt+1;}			
 		}
 		if (notreduree == 0) {return null;}
@@ -138,7 +236,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	private double BesoinMaxEntre(int d, int f,Feve feve) {
 		double max =0;
 		for (int i= d;i<f;i++) {
-			double besoin = super.BesoinStep(i, feve);
+			double besoin = 100;// a faire
 			if (besoin>max) {max = besoin;}
 		}
 		return max;
@@ -180,6 +278,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 			  		if (super.getSolde()<proposition) {res = super.getSolde();}
 			  		else {res = proposition;}}}}}
 		return res;
+		
 	}
 
 	/**
@@ -264,8 +363,9 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		if (vendeurs.size()!=0) {
 			for (IVendeurContratCadre vendeur : vendeurs) {
 			super.journalAchatCC.ajouter("on essaie de demander un contrat à l'equipe :"+vendeur.getNom());
-			ExemplaireContratCadre contrat = superviseur.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1,Filiere.LA_FILIERE.getEtape()+5,100.0), super.cryptogramme, false);
+			ExemplaireContratCadre contrat = superviseur.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1,Filiere.LA_FILIERE.getEtape()+9,100.0), super.cryptogramme, false);
 			if (contrat != null) {super.journalAchatCC.ajouter("CC cherché et trouvé :"+contrat.toString());
+									this.ListeContratEnCoursAchat.add(contrat);
 									this.quantiteEnAttente=this.quantiteEnAttente+contrat.getQuantiteTotale();
 									super.journalAchatCC.ajouter("nouvelle valeur en attente : "+quantiteEnAttente+" et tot stock : "+super.totalStocksFeves.getValeur());}}}}
 		
@@ -291,6 +391,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	
 	public void next() {
 		super.next(); 
+		this.actualisePrixMoyenCC();
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.getListeContratEnCoursA()) {
 			super.journalAchatCC.ajouter(contrat.toString());
@@ -302,13 +403,81 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		}  
 		
 		this.getListeContratEnCoursA().removeAll(contratsObsoletes);
-		if (super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente<1000) {
+		if ((super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantBQMax 
+				&& this.prioriteCCBG)
+				|| super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente<this.quantBQMin+10000) {
 		this.chercheContrat(Feve.F_BQ);}
-		if (super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente<1000) {
+		if ((super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantMQMax
+				&& this.prioriteCCMG)
+				|| super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente<this.quantMQMin +10000) {
 		this.chercheContrat(Feve.F_MQ);}
-		if (super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente<1000) {
+		if ((super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantMQLMax
+				&& this.prioriteCCMGL)
+				||super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente<this.quantMQLMin + 10000) {
 		this.chercheContrat(Feve.F_MQ_BE);}
-		if (super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente<1000) {
+		if ((super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantHQMax
+				&& this.prioriteCCHG)
+				||super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente<this.quantHQMin + 10000) {
 		this.chercheContrat(Feve.F_HQ_BE);}
+		
+		
+		
 	}  
+	public void actualisePrixMoyenCC() {
+		LinkedList<Double> listBQ = new LinkedList<Double>();
+		LinkedList<Double> listMQ = new LinkedList<Double>();
+		LinkedList<Double> listMQL = new LinkedList<Double>();
+		LinkedList<Double> listHQ = new LinkedList<Double>();
+		for (ExemplaireContratCadre contrat : this.ListeContratEnCoursAchat) {
+			switch (((Feve)contrat.getProduit()).getGamme()) {
+			case BQ:
+				listBQ.add(contrat.getPrix());
+			case MQ:
+				if(((Feve)contrat.getProduit()).isBioEquitable()) {
+					listMQL.add(contrat.getPrix());
+				}else {
+					listMQ.add(contrat.getPrix());
+				}
+			case HQ:
+				listHQ.add(contrat.getPrix());
+			}
+		}
+		this.prixMoyBQ = this.moyList(listBQ);
+		this.prixMoyMQ = this.moyList(listMQ);
+		this.prixMoyMQL = this.moyList(listMQL);
+		this.prixMoyHQ = this.moyList(listHQ);
+	}
+	
+	public double moyList(List<Double> l) {
+		int n =  l.size();
+		if (n == 0) {return 0.0;}
+		else{
+		double res = 0.0;
+		for (int i =0;i<n;i++) {
+			res = res + l.get(i);
+		}
+		return res/n;}
+	}
+	/** ecrit par Nathan Salbego
+	 */	
+	
+	public boolean privilegieCC(Feve f, double coursBourse) {
+		boolean res = false;
+		switch (f.getGamme()) {
+			case BQ:
+		res = this.prixMoyBQ<coursBourse;
+		this.prioriteCCBG = res;
+			case MQ:
+				if (f.isBioEquitable()) {
+	  	res = this.prixMoyMQL<coursBourse;
+	  	this.prioriteCCMGL = res;}
+				else {
+	  	res = this.prixMoyMQ<coursBourse;
+	  	this.prioriteCCMG = res;}
+			case HQ:
+	  	res = this.prixMoyHQ <coursBourse;
+	  	this.prioriteCCHG = res;
+	  	
+	}return res;}
+	
 }  
