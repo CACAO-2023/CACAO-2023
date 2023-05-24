@@ -54,30 +54,38 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		// === Lancement si possible d'un contrat cadre
 		if (this.superviseurVentesCC!=null) {
 			// Tentative de lancer un contrat avec tous les acheteurs
-				List<IProduit> produits = new LinkedList<IProduit>();
-//				Chocolat cb = Chocolat.C_BQ;	
-//				produits.add(cb);
+			int ventetotH = 0;
+			int ventetotB = 0;
+			for (abstraction.eqXRomu.produits.ChocolatDeMarque c : Filiere.LA_FILIERE.getChocolatsProduits()) {
+				if (c.getGamme().equals(Gamme.HQ)){
+					ventetotH += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
+				}
+				if (c.getGamme().equals(Gamme.BQ)){
+					ventetotB += Filiere.LA_FILIERE.getVentes(c, Filiere.LA_FILIERE.getEtape() );
+				} 
+			}
+				List<ChocolatDeMarque> produits = new LinkedList<ChocolatDeMarque>();
 				for (ChocolatDeMarque c: Filiere.LA_FILIERE.getChocolatsProduits()) {
 					if (c.getMarque().equals("Vccotioi") || c.getMarque().equals("choco")) {
 						produits.add(c);
 					}
 				}
-				for (IProduit cm : produits) {
+				for (ChocolatDeMarque cm : produits) {
 					List<IAcheteurContratCadre> acheteurs = superviseurVentesCC.getAcheteurs(cm);
 					this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLACK, " CCV : tentative de vente de "+cm+" aupres de "+acheteurs);
 					for (IAcheteurContratCadre acheteur : acheteurs) {
 						if (!acheteur.equals(this)) {
 							if (cm.getGamme().equals(Gamme.BQ)){
 								Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotB/2);
-								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : tentative d'achat aupres de "+acheteurs);
-								ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeAcheteur(this, acheteur, cm, echeancier, this.cryptogramme, false);
+								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : tentative de vente aupres de "+acheteurs);
+								ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeVendeur(acheteur, this, cm, echeancier, this.cryptogramme, false);
 								if (contrat1!=null) {
 									this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : contrat signe = "+contrat1);
 							}
 							if (cm.getGamme().equals(Gamme.HQ)){
 								Echeancier echeancierB = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, ventetotH/2);
 								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : tentative d'achat aupres de "+acheteurs);
-								ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeAcheteur(this, acheteur, cm, echeancierB, this.cryptogramme, false);
+								ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeVendeur(acheteur, this, cm, echeancierB, this.cryptogramme, false);
 								if (contrat2!=null) {
 									this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : contrat signe = "+contrat2);
 							}
