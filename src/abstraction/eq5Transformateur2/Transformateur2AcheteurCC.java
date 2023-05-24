@@ -46,7 +46,6 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	@Override
 	public boolean achete(IProduit produit) {
 		// TODO Auto-generated method stub
-		System.out.println(produit+" "+produit.getType());
 		if ((produit.getType().equals("Feve")
 			&& ((((Feve)produit).getGamme()== Gamme.MQ)&&(!((Feve)produit).isBioEquitable())
 			|| ((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable()))))) {
@@ -205,7 +204,6 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		if (cc != null) {   
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + vendeur.getNom() + " pour " + produit + "CC : " + cc);
 			this.ContratsAchat.put(cc,vendeur.getNom());
-			System.out.println(ContratsAchat);
 		} 
 		else {
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
