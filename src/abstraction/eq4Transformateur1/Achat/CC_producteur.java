@@ -116,7 +116,17 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 // François Glavatkii
 	
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
+		String[] nomA = new String[3];
+        nomA[0] = "Eq1";
+        nomA[1] = "Eq2";
+        nomA[2] = "Eq3";
+        for(int i =0; i<=2;i++) {
+        if ( contrat.getAcheteur().getNom().equals(nomA[i])) {
+        this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc_producteur conclu "+contrat);
+        }else {
+            this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nouveau cc_distributeur conclu "+contrat);
+            }
+        }
 	}
 
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
@@ -164,7 +174,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_BQ : tentative d'achat aupres de "+vendeurs);
 							ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancier, this.cryptogramme, false);
 							if (contrat1!=null) {
-								 ContratEnCours_F_BQ.add(contrat1);
+								 
 								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_BQ: contrat signe = "+contrat1);
 								this.ContratEnCours_F_BQ.add(contrat1);
 
