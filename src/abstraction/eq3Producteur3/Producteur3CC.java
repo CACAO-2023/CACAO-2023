@@ -133,14 +133,13 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      * @author Corentin Caugant, Victor Dubus-Chanson
      */
     public double propositionPrixIntial(IAcheteurContratCadre acheteur, Feve feve) {
+        // ! Nous ferons toujours monter un peu le prix au début des négociations pour s'assurer que notre prix ne baisse pas inéxorablement.
         if (feve == Feve.F_MQ_BE) {
-            double price = Math.max(this.getPrixTonne() /* * 1.2 */, this.acheteursMQprix.get(acheteur) /* * 1.1*/);
-            System.out.println("Equipe 3 : acheteursMQprixget : " + this.acheteursMQprix.get(acheteur));
+            double price = Math.max(this.getPrixTonne() * 1.2 , this.acheteursMQprix.get(acheteur) * 1.1);
             this.acheteursMQprix.put(acheteur, price);
             return price;
         } else {
-            double price = Math.max(this.getPrixTonne() /* * 1.4*/, this.acheteursHQprix.get(acheteur) /* * 1.3*/);
-            System.out.println("Equipe 3 : acheteursHQprixget : " + this.acheteursHQprix.get(acheteur));
+            double price = Math.max(this.getPrixTonne() * 1.4, this.acheteursHQprix.get(acheteur) * 1.3);
             this.acheteursHQprix.put(acheteur, price);
             return price;
         }
@@ -227,13 +226,13 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     @Override
     public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
         Echeancier echeancier = contrat.getEcheancier();
-        if (this.getAvailableQuantity((Feve)contrat.getProduit()) <= 0) {
+        if (this.getAvailableQuantity((Feve)contrat.getProduit()) <= 100) {
             return null;
         }
 
         // We rework the echeancier to fit the stock
         if (echeancier.getQuantiteTotale() > this.getAvailableQuantity((Feve)contrat.getProduit())) {
-            echeancier.ajouter(this.getAvailableQuantity((Feve)contrat.getProduit())/(echeancier.getStepFin() - echeancier.getStepDebut()));
+            echeancier = new Echeancier(echeancier.getStepDebut(), echeancier.getStepFin() - echeancier.getStepDebut(), this.getAvailableQuantity((Feve)contrat.getProduit())/(echeancier.getStepFin() - echeancier.getStepDebut()));
         }
 
         return echeancier;
@@ -355,6 +354,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         }
         
         double SAFE_MARGIN = this.margeStockage.getValeur(); // Percentage of the stock we want to keep
-        return Math.min(Math.max(available * (1 - SAFE_MARGIN), 0.0), 100000);
+        available = Math.min(Math.max(available * (1 - SAFE_MARGIN), 0.0), 100000);
+        return available;
     }
 }
