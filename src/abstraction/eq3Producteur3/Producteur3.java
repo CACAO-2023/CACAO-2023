@@ -539,16 +539,16 @@ public class Producteur3 extends Bourse3  {
 			}
 			if (this.nbr_popup < 1) {
 			this.nbr_popup +=1;
-		//	JFrame popup = new JFrame(nom_incendie);		
-			//popup.setLocation(300, 100);
-			//ImageIcon icon = new ImageIcon(url);
-			//JLabel label = new JLabel(icon);
-	        //popup.getContentPane().add(label);
-	        //popup.pack();
-	        //popup.setVisible(true);
-	      //  Timer timer = new Timer();
-		//	ControlTimeGif monTimerTask = new ControlTimeGif(popup);
-			//timer.schedule(monTimerTask, 3000);
+			JFrame popup = new JFrame(nom_incendie);		
+			popup.setLocation(950, 50);
+			ImageIcon icon = new ImageIcon(url);
+			JLabel label = new JLabel(icon);
+	        popup.getContentPane().add(label);
+	        popup.pack();
+	        popup.setVisible(true);
+	        Timer timer = new Timer();
+			ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+			timer.schedule(monTimerTask, 3000);
 			}
 			for(Integer key : KeyM) {
 				hectarMburnt += FieldsM.get(key)*Degat;
@@ -572,16 +572,17 @@ public class Producteur3 extends Bourse3  {
 	public void Cyclone() {
 		if(this.nbr_popup < 1) {
 		this.nbr_popup +=1;
-//		JFrame popup = new JFrame("Cyclone !");		
-//		popup.setLocation(300, 100);
-//		ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Cyclone.gif");
-//		JLabel label = new JLabel(icon);
-//        popup.getContentPane().add(label);
-//        popup.pack();
-//        popup.setVisible(true);
-//        Timer timer = new Timer();
-//		ControlTimeGif monTimerTask = new ControlTimeGif(popup);
-//		timer.schedule(monTimerTask, 3000);	
+		JFrame popup = new JFrame("Cyclone !");		
+		popup.setLocation(300, 100);
+		ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Cyclone.gif");
+		JLabel label = new JLabel(icon);
+        popup.getContentPane().add(label);
+        popup.setLocation(950, 50);
+        popup.pack();
+        popup.setVisible(true);
+        Timer timer = new Timer();
+		ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+		timer.schedule(monTimerTask, 3000);	
 		}
 		Champs fields = this.getFields();
 		HashMap<Integer,Integer> FieldH = fields.getChamps().get("H");
@@ -615,13 +616,14 @@ public class Producteur3 extends Bourse3  {
 	//Pour modéliser    la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
 
 	protected void GreveGeneral() {
-		if (nbr_popup < 0) {
+		if (nbr_popup < 1) {
 			this.nbr_popup +=1;
 			JFrame popup = new JFrame("Grêve des Ouvriers !");		
 			popup.setLocation(300, 100);
 			ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Greve.gif"); //
 			JLabel label = new JLabel(icon);
 			popup.getContentPane().add(label);
+			popup.setLocation(950, 50);
 	        popup.pack();
 			popup.setVisible(true);
 			Timer timer = new Timer();
