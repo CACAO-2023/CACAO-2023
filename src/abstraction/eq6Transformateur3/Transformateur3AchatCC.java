@@ -11,6 +11,8 @@ import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
+
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -84,18 +86,23 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		if (produit.getType() == "Feve") {
 		switch(((Feve)produit).getGamme()) {
 		case BQ:
-			stock = super.stockChocolatBG.getQuantiteTotale();
-			if (stock<quantBQMax-500) {res= true;}
+			//stock = super.stockChocolatBG.getQuantiteTotale();
+			stock = super.totalStocksFeves.getValeur();
+			//if (stock<quantBQMax-500) {res= true;}
+			if (stock + this.quantiteEnAttente<quantBQMax-500) {res= true;}
 		case MQ:
 			if (((Feve)produit).isBioEquitable()) {
 				stock = super.stockChocolatMGL.getQuantiteTotale();
-				if (stock<quantMQLMax-500) {res= true;}
+				//if (stock<quantMQLMax-500) {res= true;}
+				if (stock + this.quantiteEnAttente<quantMQLMax-500) {res= true;}
 			}
 			else {stock = super.stockChocolatMG.getQuantiteTotale();
-			if (stock<quantMQMax-500) {res= true;}}
+			//if (stock<quantMQMax-500) {res= true;}}
+			if (stock + this.quantiteEnAttente<quantMQMax-500) {res= true;}}
 		case HQ:
 			stock = super.stockChocolatHGL.getQuantiteTotale();
-			if (stock<quantHQMax-500) {res= true;}
+			//if (stock<quantHQMax-500) {res= true;}
+			if (stock + this.quantiteEnAttente<quantHQMax-500) {res= true;}
 		}}
 		return res;
 	}
@@ -195,9 +202,9 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 			else {res = null;}}
 		else {res = vendeurecheancier;}
 		
-		
-		return res;
-	}
+		if (res.getQuantiteTotale()+super.totalStocksFeves.getValeur()+this.quantiteEnAttente>80000) {return null;}
+		else {return res;}
+		}
 	
 	
 	
@@ -224,7 +231,8 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		}
 		Echeancier ech = new Echeancier(stepdebut,res);
 		super.journalAchatCC.ajouter("valeur tot du stock après ce contrat : "+ech.getQuantiteTotale()+super.totalStocksFeves.getValeur()+this.quantiteEnAttente);
-		if (ech.getQuantiteTotale()+super.totalStocksFeves.getValeur()+this.quantiteEnAttente>super.totalStocksFeves.getMax()) {return null;}
+		//if (ech.getQuantiteTotale()+super.totalStocksFeves.getValeur()+this.quantiteEnAttente>super.totalStocksFeves.getMax()) {return null;}
+		if (ech.getQuantiteTotale()+super.totalStocksFeves.getValeur()+this.quantiteEnAttente>1000000) {return null;}
 		else {return ech;}}
 	}
 
@@ -361,6 +369,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		if (superviseur != null) {
 		List<IVendeurContratCadre> vendeurs = superviseur.getVendeurs(produit);
 		if (vendeurs.size()!=0) {
+			Collections.shuffle(vendeurs);
 			for (IVendeurContratCadre vendeur : vendeurs) {
 			super.journalAchatCC.ajouter("on essaie de demander un contrat à l'equipe :"+vendeur.getNom());
 			ExemplaireContratCadre contrat = superviseur.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1,Filiere.LA_FILIERE.getEtape()+9,100.0), super.cryptogramme, false);
@@ -403,22 +412,30 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		}  
 		
 		this.getListeContratEnCoursA().removeAll(contratsObsoletes);
-		if ((super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantBQMax 
-				&& this.prioriteCCBG)
-				|| super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente<this.quantBQMin+10000) {
-		this.chercheContrat(Feve.F_BQ);}
-		if ((super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantMQMax
-				&& this.prioriteCCMG)
-				|| super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente<this.quantMQMin +10000) {
-		this.chercheContrat(Feve.F_MQ);}
-		if ((super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantMQLMax
-				&& this.prioriteCCMGL)
-				||super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente<this.quantMQLMin + 10000) {
-		this.chercheContrat(Feve.F_MQ_BE);}
-		if ((super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente+1000<this.quantHQMax
-				&& this.prioriteCCHG)
-				||super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente<this.quantHQMin + 10000) {
-		this.chercheContrat(Feve.F_HQ_BE);}
+		//if ((super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente+200000<this.quantBQMax 
+				//&& this.prioriteCCBG)
+		if ((super.totalStocksFeves.getValeur()+this.quantiteEnAttente+10000<250000 
+				&& this.prioriteCCBG))
+				//|| super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente<this.quantBQMin+10000) {
+		{this.chercheContrat(Feve.F_BQ);}
+		//if ((super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente+200000<this.quantMQMax
+				//&& this.prioriteCCMG)
+		if ((super.totalStocksFeves.getValeur()+this.quantiteEnAttente+10000<250000
+				&& this.prioriteCCMG))
+				//|| super.stockFeveMG.getQuantiteTotale()+this.quantiteEnAttente<this.quantMQMin +10000) {
+		{this.chercheContrat(Feve.F_MQ);}
+		//if ((super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente+200000<this.quantMQLMax
+				//&& this.prioriteCCMGL)
+		if ((super.totalStocksFeves.getValeur()+this.quantiteEnAttente+10000<250000
+				&& this.prioriteCCMGL))
+				//||super.stockFeveMGL.getQuantiteTotale()+this.quantiteEnAttente<this.quantMQLMin + 10000) {
+		{this.chercheContrat(Feve.F_MQ_BE);}
+		//if ((super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente+200000<this.quantHQMax
+				//&& this.prioriteCCHG)
+		if ((super.totalStocksFeves.getValeur()+this.quantiteEnAttente+10000<250000
+				&& this.prioriteCCHG))
+				//||super.stockFeveHGL.getQuantiteTotale()+this.quantiteEnAttente<this.quantHQMin + 10000) {
+		{this.chercheContrat(Feve.F_HQ_BE);}
 		
 		
 		

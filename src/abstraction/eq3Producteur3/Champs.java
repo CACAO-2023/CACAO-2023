@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Set;
 
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.produits.Feve;
 
 public class Champs {
 	private HashMap<String, HashMap<Integer, Integer>> Champs; /* String H ou M (key) et Hashmap des champs. Champs contient tous les champs */
@@ -14,8 +15,10 @@ public class Champs {
 	 * @author Dubus-Chanson Victor, Corentin Caugant
 	 */
 	public Champs() {
-		Integer NombreHectaresM = 22500;
-		Integer NombreHectaresH =1250;
+		//Integer NombreHectaresM = 22500; premiers essais
+		//Integer NombreHectaresH =1250;
+		Integer NombreHectaresM = 16000; // optimises
+		Integer NombreHectaresH = 2200; // pas trop haut, afin de simuler la réalité
 		HashMap<Integer, Integer> ChampH = new HashMap<Integer, Integer>();
 		HashMap<Integer, Integer> ChampM = new HashMap<Integer, Integer>();
 
@@ -29,7 +32,7 @@ public class Champs {
 		Champs.put("H", ChampH);
 		
 	}
-
+	
 	/**
 	 * @author BOCQUET Gabriel
 	 */	

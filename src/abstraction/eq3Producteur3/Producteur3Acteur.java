@@ -114,9 +114,9 @@ public class Producteur3Acteur implements IActeur {
 	this.coutMoyen = new Variable("Equipe3 Cout Moyen par tonne", "Correspond au cout depense par step par tonne de cacao ",this,this.CoutTonne);
 	this.coutEmployeStep = new Variable("Equipe3 Cout par Employe", "Correspond au salaire d'un employe par step ",this,220);
 	this.coutSalaireTot = new Variable("Equipe3 Cout Salaire", "Correspond au total des salaires que nous devons payer ",this,(this.fields.getTaille("M")+this.fields.getTaille("H"))*this.coutEmployeStep.getValeur());
-	this.BeneficeH =  new Variable("Equipe3 Benefice Feves Hautes Gamme", "Correspond au benefice fait sur les feves Hautes Gamme ",this,0);
-	this.BeneficeM = new Variable("Equipe3 Benefice Feves Moyennes  Gamme", "Correspond au benefice fait sur les feves Moyennes Gamme ",this,0);
-	this.BeneficeB = new Variable("Equipe3 Benefice Feves Bas de Gamme", "Correspond au benefice fait sur les feves Bas de Gamme ",this,0);
+	this.BeneficeH =  new Variable("Equipe3 Benefice Feves Hautes Gamme", "Correspond au benefice fait sur les feves Hautes Gamme au step precedent",this,0);
+	this.BeneficeM = new Variable("Equipe3 Benefice Feves Moyennes  Gamme", "Correspond au benefice fait sur les feves Moyennes Gamme au step precedent",this,0);
+	this.BeneficeB = new Variable("Equipe3 Benefice Feves Bas de Gamme", "Correspond au benefice fait sur les feves Bas de Gamme au step precedent",this,0);
 	this.dateLimiteVenteM = new Variable("Equipe3 Date limite vente Bouse Feve M", "Fixe la date limite de vente des feves M avant de les vendre en bouse ",this,10);
 	this.probaIncendiL = new Variable("Equipe3 Proba Incendi L", "Fixe la probabilite qu'un incendie de taille L arrive ",this,0.1);
 	this.probaIncendiM = new Variable("Equipe3 Proba Incendi M", "Fixe la probabilite qu'un incendie de taille M arrive ",this,0.05);
