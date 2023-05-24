@@ -33,6 +33,8 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 	private double MQBEStep1;
 	private double HQBEStep1;
 	private double HQBEStep2;
+	private double CoutAdditifs = 400;
+	private double CoutTransfo=10;       //Cout de main d'oeuvre, électricité, maintien des machines...
 	
 	/** écrit par Maxime Bedu*/
 	
@@ -80,11 +82,11 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 	
 		public void transformationChoco(Feve f, double qte) {
 		if (f == Feve.F_BQ) {
-			double a=CoutMatPremiere(Feve.F_BQ,qte);
+			double a=CoutTotaux(Feve.F_BQ,qte);
 			if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
 				while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) && qte>1) {
-					qte=qte-1;
-					a=CoutMatPremiere(Feve.F_BQ,qte);
+					qte=qte/2;
+					a=CoutTotaux(Feve.F_BQ,qte);
 				}
 			}
 			double pourcentageTransfo =((double) this.getPourcentageCacaoBG())/100;
@@ -97,10 +99,10 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 			//stockChocolatBG.ajouter(Filiere.LA_FILIERE.getEtape(),qte);
 			} else {
 				if (f == Feve.F_MQ) {
-					double a=CoutMatPremiere(Feve.F_MQ,qte);
+					double a=CoutTotaux(Feve.F_MQ,qte);
 					if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) ) {
 						while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)&& qte>1) {
-							qte=qte-1;
+							qte=qte/2;
 						}
 					}
 					double pourcentageTransfo = ((double)this.getPourcentageCacaoMG())/100;
@@ -117,11 +119,11 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 						super.journalTransformation.ajouter("On a payé :"+a+"les matières premières et ouvriers pour la transfo MG");
 					} else {
 						if (f ==Feve.F_MQ_BE) {
-							double a=CoutMatPremiere(Feve.F_MQ_BE,qte);
+							double a=CoutTotaux(Feve.F_MQ_BE,qte);
 							if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)) {
 								while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) && qte>1) {
-									qte=qte-1;
-									a=CoutMatPremiere(Feve.F_MQ_BE,qte);
+									qte=qte/2;
+									a=CoutTotaux(Feve.F_MQ_BE,qte);
 								}
 							}
 							double pourcentageTransfo = ((double)this.getPourcentageCacaoMGL())/100;
@@ -138,11 +140,11 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 								super.journalTransformation.ajouter("On a payé :"+a+"les matières premières et ouvriers pour la transfo MGL");
 							} else {
 								if (f == Feve.F_HQ_BE) {
-									double a=CoutMatPremiere(Feve.F_HQ_BE,qte);
+									double a=CoutTotaux(Feve.F_HQ_BE,qte);
 									if (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme) ) {
 										while (a>Filiere.LA_FILIERE.getBanque().getSolde(this, super.cryptogramme)&& qte>1) {
-											qte=qte-1;
-											a=CoutMatPremiere(Feve.F_HQ_BE,qte);
+											qte=qte/2;
+											a=CoutTotaux(Feve.F_HQ_BE,qte);
 										}
 									}
 									double pourcentageTransfo = ((double)this.getPourcentageCacaoHG())/100;
@@ -167,7 +169,10 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 	}
 
 
-		/** écrit par Maxime Bedu*/
+		/** écrit par Maxime Bedu
+		
+		On met de côté la fonction BesoinStep qu'on utilisera plus. On aurait pu faire par itération mais 
+		cela rendrait le code plus lourd encore
 		
 protected double BesoinStep(int Step, Feve f) {
 	int Stepi=Filiere.LA_FILIERE.getEtape();
@@ -264,29 +269,27 @@ protected double BesoinStep(int Step, Feve f) {
 	return 100;
 }
 
+*/
+
 /** écrit par Maxime Bedu*/
 
-protected double CoutMatPremiere(Feve f, double qte) {
-	if (f == Feve.F_BQ) { 
-		double pourcentageTransfo = ((double)this.getPourcentageCacaoBG())/100;
-		return qte*(1-pourcentageTransfo)*400+5*qte;
-	} else {
-		if (f == Feve.F_MQ) { 
-			double pourcentageTransfo = ((double)this.getPourcentageCacaoMG())/100;
-			return qte*(1-pourcentageTransfo)*400+5*qte;
-	} else {
-		if (f == Feve.F_MQ_BE) { 
-			double pourcentageTransfo = ((double)this.getPourcentageCacaoMGL())/100;
-			return qte*(1-pourcentageTransfo)*400+5*qte;
-	} else {
-		if (f == Feve.F_HQ_BE) { 
-			double pourcentageTransfo = ((double)this.getPourcentageCacaoHG())/100;
-			return qte*(1-pourcentageTransfo)*400+5*qte;
+protected double CoutTotaux(Feve f, double qte) {
+	double pourcentageTransfo=0.0;
+	switch(f.getGamme()) {
+	case BQ:
+		pourcentageTransfo=((double)this.getPourcentageCacaoBG())/100;
+	case MQ:
+		if (f.isBioEquitable()) {
+			pourcentageTransfo=((double)this.getPourcentageCacaoMGL())/100;
+		} else {
+			pourcentageTransfo=((double)this.getPourcentageCacaoMG())/100;
+		}
+	case HQ:
+		pourcentageTransfo=((double)this.getPourcentageCacaoHG())/100;
 	}
-	}
-	}}
-	return 0;
+	return qte*(1-pourcentageTransfo)*CoutAdditifs+qte*CoutTransfo;
 }
+
 
 
 /**ecrit par Nathan Claeys
@@ -304,21 +307,41 @@ public void initialiser() {
 
 	public void next() {
 		super.next();
-		if (stockFeveBG.getQuantiteTotale()>0) {
-			super.journalTransformation.ajouter("on veut transformer"+stockFeveBG.getQuantiteTotale()+"de Feves BG");
-		this.transformationChoco(Feve.F_BQ, stockFeveBG.getQuantiteTotale());
+		if (stockFeveBG.getQuantiteTotale()>0 && stockFeveBG.getQuantiteTotale()<super.partTransBQ*super.capTransMax) {
+			super.journalTransformation.ajouter("on veut obtenir"+stockFeveBG.getQuantiteTotale()/((double)this.getPourcentageCacaoBG())*100+"de Chocolat BG");
+		this.transformationChoco(Feve.F_BQ, stockFeveBG.getQuantiteTotale()/((double)this.getPourcentageCacaoBG())*100);
+		} else { 
+			if (stockFeveBG.getQuantiteTotale()>=super.partTransBQ*super.capTransMax) {
+				super.journalTransformation.ajouter("on veut obtenir"+super.partTransBQ*super.capTransMax/((double)this.getPourcentageCacaoBG())*100+"de Chocolat BG");
+				this.transformationChoco(Feve.F_BQ, super.partTransBQ*super.capTransMax/((double)this.getPourcentageCacaoBG())*100);
+			}
 		}
-		if (stockFeveMG.getQuantiteTotale()>0) {
-			super.journalTransformation.ajouter("on veut transformer"+stockFeveMG.getQuantiteTotale()+"de Feves MG");
-		this.transformationChoco(Feve.F_MQ, stockFeveMG.getQuantiteTotale());
+		if (stockFeveMG.getQuantiteTotale()>0 && stockFeveMG.getQuantiteTotale()<super.partTransMQ*super.capTransMax) {
+			super.journalTransformation.ajouter("on veut obtenir"+stockFeveMG.getQuantiteTotale()/((double)this.getPourcentageCacaoMG())*100+"de Chocolat MG");
+		this.transformationChoco(Feve.F_MQ, stockFeveMG.getQuantiteTotale()/((double)this.getPourcentageCacaoMG())*100);
+		} else { 
+			if (stockFeveMG.getQuantiteTotale()>=super.partTransMQ*super.capTransMax) {
+				super.journalTransformation.ajouter("on veut obtenir"+super.partTransMQ*super.capTransMax/((double)this.getPourcentageCacaoMG())*100+"de Chocolat MG");
+				this.transformationChoco(Feve.F_MQ, super.partTransMQ*super.capTransMax/((double)this.getPourcentageCacaoMG())*100);
+			}
 		}
-		if (stockFeveMGL.getQuantiteTotale()>0) {
-			super.journalTransformation.ajouter("on veut transformer"+stockFeveMGL.getQuantiteTotale()+"de Feves MGL");
-		this.transformationChoco(Feve.F_MQ_BE, stockFeveMGL.getQuantiteTotale());
+		if (stockFeveMGL.getQuantiteTotale()>0 && stockFeveMGL.getQuantiteTotale()<super.partTransMQL*super.capTransMax) {
+			super.journalTransformation.ajouter("on veut obtenir"+stockFeveMGL.getQuantiteTotale()/((double)this.getPourcentageCacaoMGL())*100+"de Chocolat MGL");
+		this.transformationChoco(Feve.F_MQ_BE, stockFeveMGL.getQuantiteTotale()/((double)this.getPourcentageCacaoMGL())*100);
+		} else { 
+			if (stockFeveMGL.getQuantiteTotale()>=super.partTransMQL*super.capTransMax) {
+				super.journalTransformation.ajouter("on veut obtenir"+super.partTransMQL*super.capTransMax/((double)this.getPourcentageCacaoMGL())*100+"de Chocolat MGL");
+				this.transformationChoco(Feve.F_MQ_BE, super.partTransMQL*super.capTransMax/((double)this.getPourcentageCacaoMGL())*100);
+			}
 		}
-		if (stockFeveHGL.getQuantiteTotale()>0) {
-			super.journalTransformation.ajouter("on veut transformer"+stockFeveHGL.getQuantiteTotale()+"de Feves HG");
-		this.transformationChoco(Feve.F_HQ_BE, stockFeveHGL.getQuantiteTotale());
+		if (stockFeveHGL.getQuantiteTotale()>0 && stockFeveHGL.getQuantiteTotale()<super.partTransHQ*super.capTransMax) {
+			super.journalTransformation.ajouter("on veut obtenir"+stockFeveHGL.getQuantiteTotale()/((double)this.getPourcentageCacaoHG())/100+"de Chocolat HGL");
+		this.transformationChoco(Feve.F_HQ_BE, stockFeveHGL.getQuantiteTotale()/((double)this.getPourcentageCacaoHG())/100);
+		} else { 
+			if (stockFeveHGL.getQuantiteTotale()>=super.partTransHQ*super.capTransMax) {
+				super.journalTransformation.ajouter("on veut obtenir"+super.partTransHQ*super.capTransMax/((double)this.getPourcentageCacaoHG())/100+"de Chocolat HGL");
+				this.transformationChoco(Feve.F_HQ_BE, super.partTransHQ*super.capTransMax/((double)this.getPourcentageCacaoHG())/100);
+			}
 		}
 	
 } 

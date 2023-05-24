@@ -20,10 +20,12 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	
 	public Transformateur3AchatB () {
 		super();
-		this.coursmaxBG = new Variable ("cours maximal BG","cours maximal que l'acteur va accepter pour les feves bas de gamme",this,0.0,4000,2000);
-		this.coursmaxMG = new Variable ("cours maximal MG","cours maximal que l'acteur va accepter pour les feves moyenne gamme",this,0.0,5000,2400);
-		this.coursmaxMGL = new Variable ("cours maximal MGL","cours maximal que l'acteur va accepter pour les feves moyenne gamme labelisees",this,0.0,5500,2600);
-		this.coursmaxHGL = new Variable ("cours maximal HGL","cours maximal que l'acteur va accepter pour les feves haut de gamme",this,0.0,6000,2800);
+		this.coursmaxBG = new Variable ("cours maximal BG","cours maximal que l'acteur va accepter pour les feves bas de gamme",this,0.0,4000,4000);
+		this.coursmaxMG = new Variable ("cours maximal MG","cours maximal que l'acteur va accepter pour les feves moyenne gamme",this,0.0,5000,5000);
+		this.coursmaxMGL = new Variable ("cours maximal MGL","cours maximal que l'acteur va accepter pour les feves moyenne gamme labelisees",this,0.0,5500,5500);
+		this.coursmaxHGL = new Variable ("cours maximal HGL","cours maximal que l'acteur va accepter pour les feves haut de gamme",this,0.0,6000,6000);
+		//Filiere.LA_FILIERE.getActeur("BourseCacao").getCoursFeve().getValeur();
+		//peut être remplacer par une constante à modifier qui sera init par le cours actuel.
 	}
 	/**
 	 * ecrit par Nathan Claeys
@@ -38,23 +40,47 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 
 
 	public double demande(Feve f, double cours) {
-		super.journalAchatB.ajouter("on nous demande si on veut des"+f.getType());
-		double res = 6.0;
+		super.journalAchatB.ajouter("on nous demande si on veut des"+f.getType()+"avec le cours : "+cours);
+		double res = 0;
+		if (privilegieCC(f,cours)) {
 		if (f.getGamme()==Gamme.BQ) {if(cours<=this.getCoursmaxBG().getValeur()) {
-													res =(max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1.0));}
+													res =(100);}
 		}
-		else {res = 0.0;}
+		else {res = 100.0;}
 		if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxMGL().getValeur()) {
-			res = (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1));}}
+			res = 100;}}
 		else {res = 0.0;}
 		if (f.getGamme()==Gamme.MQ) {if(cours<=this.getCoursmaxMG().getValeur()) {
-			res = (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1));}}
+			res = (100);}}
 		else {res = 0.0;}
 		if (f.getGamme()==Gamme.BQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
-			res = (max(super.BesoinStep(Filiere.LA_FILIERE.getEtape()+1,f)-super.getArrivageCCStep(Filiere.LA_FILIERE.getEtape()+1,f),1));}}
+			res = (100);}}
 		else {res =0.0;}
+
 		super.journalAchatB.ajouter("on dit qu'on en veut :"+res);
 		return res;}
+		else {
+			if (f.getGamme()==Gamme.BQ) {
+				double quant = Math.min(super.quantBQMax-super.stockFeveBG.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-300000);
+				res= Math.max(0,quant);
+			}
+			if (f.getGamme()==Gamme.MQ) {
+				double quant = Math.min(super.quantMQMax-super.stockFeveMG.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-300000);
+				res= Math.max(0,quant);
+			}
+			if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {
+				double quant = Math.min(super.quantMQLMax-super.stockFeveMGL.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-300000);
+				res= Math.max(0,quant);
+			}
+			if (f.getGamme()==Gamme.HQ) {
+				double quant = Math.min(super.quantHQMax-super.stockFeveHGL.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-300000);
+				res= Math.max(0,quant);
+			}
+		return res;
+		}
+		}
+	
+	
 
 
 	private double max(double d, double e) {
@@ -96,8 +122,8 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 	 * n'a pas a s'occuper du paiement qui a deja ete effectue)
 	 */
 	public void notificationAchat(Lot l, double coursEnEuroParT) {
-		super.ajouterFeve((Feve)l.getProduit(), l.getQuantiteTotale(),Filiere.LA_FILIERE.getEtape());
-		super.journalAchatB.ajouter("Stock de "+l.getQuantiteTotale()+""+"tonnes de feves"+((Feve)l.getProduit()).toString()+" acheté en bourse");
+		super.ajouterFeve(l);
+		super.journalAchatB.ajouter("Stock de "+l.getQuantiteTotale()+""+"tonnes de feves"+((Feve)l.getProduit()).toString()+" acheté en bourse de qualité:"+l.getProduit().toString());
 		
 	}
 

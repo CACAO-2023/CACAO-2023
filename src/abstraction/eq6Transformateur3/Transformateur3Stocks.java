@@ -30,20 +30,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
     private int dureePeremption = 6; 
 
     /**Mouhamed SOW*/  
-  public Transformateur3Stocks(Lot stockFeveBG, Lot stockFeveMG, Lot stockFeveMGL, Lot stockFeveHGL,
-			Lot stockChocolatBG, Lot stockChocolatMG, Lot stockChocolatMGL, Lot stockChocolatHGL,
-			List<ChocolatDeMarque> stockProduit) {
-	  	super();
-		this.stockFeveBG = stockFeveBG;
-		this.stockFeveMG = stockFeveMG;
-		this.stockFeveMGL = stockFeveMGL;
-		this.stockFeveHGL = stockFeveHGL;
-		this.stockChocolatBG = stockChocolatBG;
-		this.stockChocolatMG = stockChocolatMG;
-		this.stockChocolatMGL = stockChocolatMGL;
-		this.stockChocolatHGL = stockChocolatHGL;
-		this.stockProduit = stockProduit;
-	}
+
  /**Il faut ecrire la fonction constructeur sans param c'est celle là que Romu appelle *
   * dans le code de la filière il faut donc construire les feves et les lots et ensuite 
   * utiliser les constructeur avec le constructeur déjà ecrit
@@ -61,27 +48,27 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
       this.stockProduit = new ArrayList<ChocolatDeMarque>();
   }
   /**Mouhamed SOW*/
-  public void ajouterFeve(Feve feve, Double quantite, int dateDeRecolte) {
-	    if (quantite ==0) {;}
+  public void ajouterFeve(Lot l) {
+	    if (l.getQuantiteTotale() ==0) {;}
 	    else {
-	    switch(feve.getGamme()) {
+	    switch(((Feve)l.getProduit()).getGamme()) {
 	        case BQ:
-	            stockFeveBG.ajouter(dateDeRecolte, quantite);
-	            super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+quantite);
+	            stockFeveBG.ajouter(l);
+	            super.totalStocksFeves.setValeur(this, super.totalStocksFeves.getValeur()+l.getQuantiteTotale());
 	            break;
 	        case MQ:
-	        	if(feve.isBioEquitable()) {
-	        		stockFeveMGL.ajouter(dateDeRecolte, quantite);
-	        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+quantite);
+	        	if(((Feve) l.getProduit()).isBioEquitable()) {
+	        		stockFeveMGL.ajouter(l);
+	        		super.totalStocksFeves.setValeur(this, super.totalStocksFeves.getValeur()+l.getQuantiteTotale());
 	        		break ;
 	        	}else {
-	        		stockFeveMG.ajouter(dateDeRecolte, quantite);
-	        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+quantite);
+	        		stockFeveMG.ajouter(l);
+	        		super.totalStocksFeves.setValeur(this, super.totalStocksFeves.getValeur()+l.getQuantiteTotale());
 	                break;
 	        	}
 	        case HQ:
-	        	stockFeveHGL.ajouter(dateDeRecolte, quantite);
-	        	super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()+quantite);
+	        	stockFeveHGL.ajouter(l);
+	        	super.totalStocksFeves.setValeur(this, super.totalStocksFeves.getValeur()+l.getQuantiteTotale());
         		break ;
 	        default:
 	            throw new IllegalArgumentException("Type de fève invalide");
@@ -144,11 +131,11 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
         case BQ:
             if(stockFeveBG.getQuantiteTotale()>=quantite) {
         	stockFeveBG.retirer(quantite); 
-        	super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-quantite);
+        	super.totalStocksFeves.setValeur(this, super.totalStocksFeves.getValeur()-quantite);
         	break ;
         	}
             else {stockFeveBG.retirer(stockFeveBG.getQuantiteTotale());
-            super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-stockFeveBG.getQuantiteTotale());
+            super.totalStocksFeves.setValeur(this, super.totalStocksFeves.getValeur()-stockFeveBG.getQuantiteTotale());
             super.journalStock.ajouter(" La quantité de feve BG est nulle" );
             break;
             }
@@ -156,22 +143,22 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
         	if(feve.isBioEquitable()) {
         		if(stockFeveMGL.getQuantiteTotale()>=quantite) {
         		stockFeveMGL.retirer(quantite);
-        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-quantite);
+        		super.totalStocksFeves.setValeur(this, super.totalStocksFeves.getValeur()-quantite);
         		break;
         		}
         		else {stockFeveMGL.retirer(stockFeveMGL.getQuantiteTotale());
-        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-stockFeveMGL.getQuantiteTotale());
+        		super.totalStocksFeves.setValeur(this, super.totalStocksFeves.getValeur()-stockFeveMGL.getQuantiteTotale());
         		super.journalStock.ajouter(" La quantité de feve MGL est nulle" );
         		break ;
         		}
         	}else {
         		if(stockFeveMG.getQuantiteTotale()>=quantite) {
             		stockFeveMG.retirer(quantite);
-            		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-quantite);
+            		super.totalStocksFeves.setValeur(this, super.totalStocksFeves.getValeur()-quantite);
             		break;
             		}
             		else {stockFeveMG.retirer(stockFeveMG.getQuantiteTotale());
-            		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-stockFeveMG.getQuantiteTotale());
+            		super.totalStocksFeves.setValeur(this, super.totalStocksFeves.getValeur()-stockFeveMG.getQuantiteTotale());
             		super.journalStock.ajouter(" La quantité de feve MG est nulle" );
             		break ;
             		}
@@ -179,11 +166,11 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
         case HQ:
         	if(stockFeveHGL.getQuantiteTotale()>=quantite) {
         		stockFeveHGL.retirer(quantite);
-        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-quantite);
+        		super.totalStocksFeves.setValeur(this, super.totalStocksFeves.getValeur()-quantite);
         		break;
         		}
         		else {stockFeveHGL.retirer(stockFeveHGL.getQuantiteTotale());
-        		super.totalStocksFeves.ajouter(this, super.totalStocksFeves.getValeur()-stockFeveHGL.getQuantiteTotale());
+        		super.totalStocksFeves.setValeur(this, super.totalStocksFeves.getValeur()-stockFeveHGL.getQuantiteTotale());
         		super.journalStock.ajouter(" La quantité de feve HGL est nulle" );
         		break ;
         		}
@@ -202,21 +189,21 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  switch(choco.getGamme()) {
 	  	case BQ :
 	  		this.stockChocolatBG.ajouter(dateProduction, quantite); 
-	  		super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()+quantite);
+	  		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()+quantite);
 	  		break ;
 	  	case MQ :
 	  		if(choco.isBioEquitable()) {
 	  			this.stockChocolatMGL.ajouter(dateProduction, quantite);
-	  			super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()+quantite);
+	  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()+quantite);
 	  			break ;
 	  		}else {
 	  			this.stockChocolatMG.ajouter(dateProduction, quantite); 
-	  			super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()+quantite);
+	  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()+quantite);
 	  			break ;
 	  		}
 	  	case HQ :
 	  		this.stockChocolatHGL.ajouter(dateProduction, quantite); 
-	  		super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()+quantite);
+	  		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()+quantite);
 	  		break ;
 	  	default :
 	  		throw new IllegalArgumentException("Type de Chocolat invalide");
@@ -231,43 +218,43 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  	case BQ :
 	  		if(stockChocolatBG.getQuantiteTotale()>=quantite) {
 	  			stockChocolatBG.retirer(quantite);
-	  			super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-quantite);
+	  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 	  			break;
 	  			}
         		else {stockChocolatBG.retirer(stockChocolatBG.getQuantiteTotale());
-        		super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-stockChocolatBG.getQuantiteTotale());
+        		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatBG.getQuantiteTotale());
         		break ;
         		}
 	  	case MQ :
 	  		if(chocolat.isBioEquitable()) {
 	  			if(stockChocolatMGL.getQuantiteTotale()>=quantite) {
 		  			stockChocolatMGL.retirer(quantite);
-		  			super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-quantite);
+		  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 		  			break;
 		  			}
 	        		else {stockChocolatMGL.retirer(stockChocolatMGL.getQuantiteTotale());
-	        		super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-stockChocolatMGL.getQuantiteTotale());
+	        		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatMGL.getQuantiteTotale());
 	        		break ;
 	        		}
 	  		}else {
 	  			if(stockChocolatMG.getQuantiteTotale()>=quantite) {
 		  			stockChocolatMG.retirer(quantite);
-		  			super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-quantite);
+		  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 		  			break;
 		  			}
 	        		else {stockChocolatMG.retirer(stockChocolatMG.getQuantiteTotale());
-	        		super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-stockChocolatMG.getQuantiteTotale());
+	        		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatMG.getQuantiteTotale());
 	        		break ;
 	        		}
 	  		}
 	  	case HQ :
 	  		if(stockChocolatHGL.getQuantiteTotale()>=quantite) {
 	  			stockChocolatHGL.retirer(quantite);
-	  			super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-quantite);
+	  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 	  			break;
 	  			}
         		else {stockChocolatHGL.retirer(stockChocolatHGL.getQuantiteTotale());
-        		super.totalStocksChoco.ajouter(this, super.totalStocksChoco.getValeur()-stockChocolatHGL.getQuantiteTotale());
+        		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatHGL.getQuantiteTotale());
         		break ;
         		}
 	  	default :
@@ -312,10 +299,10 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   		super.journalStock.ajouter(" La quantité de Chocolat MGL est :"+ this.stockChocolatMGL.getQuantiteTotale() );
   		super.journalStock.ajouter(" La quantité de Chocolat HGL est :"+ this.stockChocolatHGL.getQuantiteTotale() );
   		double coutFeve=super.totalStocksFeves.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() ;
-  		double coutChoco=super.totalStocksFeves.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() ;
+  		double coutChoco=super.totalStocksChoco.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() ;
   		if(coutFeve>0) {
   		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), coutFeve) ;
-  		super.journalStock.ajouter(" on a payé :"+ coutChoco+" pour le cout de stockage des feves" );
+  		super.journalStock.ajouter(" on a payé :"+ coutFeve+" pour le cout de stockage des feves" );
   		}
   		if(coutChoco>0) {
   		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), coutChoco) ;

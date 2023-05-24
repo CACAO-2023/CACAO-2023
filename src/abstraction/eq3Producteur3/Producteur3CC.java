@@ -20,6 +20,8 @@ import abstraction.eqXRomu.produits.Lot;
 public class Producteur3CC extends Producteur3Acteur implements IVendeurContratCadre {
     protected LinkedList<ExemplaireContratCadre> contracts;
     protected SuperviseurVentesContratCadre superviseur;
+    protected LinkedList<IAcheteurContratCadre> acheteursMQ;
+    protected LinkedList<IAcheteurContratCadre> acheteursHQ;
     
     /**
      * @author Corentin Caugant
@@ -27,6 +29,9 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     public Producteur3CC() {
         super();
         this.contracts = new LinkedList<ExemplaireContratCadre>();
+
+        this.acheteursHQ = new LinkedList<IAcheteurContratCadre>();
+        this.acheteursMQ = new LinkedList<IAcheteurContratCadre>();
     }
 
     /**
@@ -163,7 +168,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     @Override
     public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
 
-        Lot lot = new Lot(produit);
+        Lot lot =  new Lot(produit);
 
         int oldestStep = Stock.getAge((Feve)produit);
         double currentQuantite;
@@ -181,7 +186,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
             }
         }
 
-        if (currentQuantite > 0) {
+        if (currentQuantite > 0.0) {
             lot.ajouter(oldestStep, currentQuantite);
         }
         
@@ -243,9 +248,11 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         if ((Feve)contrat.getProduit() == Feve.F_MQ_BE) {
             this.acheteursMQfiabilité.put((IAcheteurContratCadre)contrat.getAcheteur(), this.acheteursMQfiabilité.get((IAcheteurContratCadre)contrat.getAcheteur()) + 1);
             this.acheteursMQprix.put((IAcheteurContratCadre)contrat.getAcheteur(), contrat.getPrix());
+            this.acheteursMQ.add((IAcheteurContratCadre)contrat.getAcheteur());
         } else if ((Feve)contrat.getProduit() == Feve.F_HQ_BE) {
             this.acheteursHQfiabilité.put((IAcheteurContratCadre)contrat.getAcheteur(), this.acheteursHQfiabilité.get((IAcheteurContratCadre)contrat.getAcheteur()) + 1);
             this.acheteursHQprix.put((IAcheteurContratCadre)contrat.getAcheteur(), contrat.getPrix());
+            this.acheteursHQ.add((IAcheteurContratCadre)contrat.getAcheteur());
         }
         this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + contrat.getAcheteur().getNom() + " pour " + contrat.getProduit() + "\nDétails : " + contrat + "!");
     }
@@ -263,7 +270,10 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     public ExemplaireContratCadre getContractForProduct(Feve produit) {
         // First we need to select a buyer for the product
         this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Recherche acheteur pour " + produit + "...");
-        IAcheteurContratCadre acheteur = this.choisirClient(produit);
+        IAcheteurContratCadre acheteur;
+        do {
+            acheteur = this.choisirClient(produit);
+        } while ((produit == Feve.F_HQ_BE && (this.acheteursHQ.contains(acheteur) && this.acheteursHQ.size() < this.acheteursHQfiabilité.size())) || (produit == Feve.F_MQ_BE && this.acheteursMQ.contains(acheteur) && this.acheteursMQ.size() < this.acheteursMQfiabilité.size()));
 
         // Now making the contract
         this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit + "...");
@@ -275,13 +285,20 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
             if ((Feve)cc.getProduit() == Feve.F_MQ_BE) {
                 this.acheteursMQfiabilité.put((IAcheteurContratCadre)cc.getAcheteur(), this.acheteursMQfiabilité.get((IAcheteurContratCadre)cc.getAcheteur()) + 1);
                 this.acheteursMQprix.put((IAcheteurContratCadre)cc.getAcheteur(), cc.getPrix());
+                this.acheteursMQ.add((IAcheteurContratCadre)cc.getAcheteur());
             } else if ((Feve)cc.getProduit() == Feve.F_HQ_BE) {
                 this.acheteursHQfiabilité.put((IAcheteurContratCadre)cc.getAcheteur(), this.acheteursHQfiabilité.get((IAcheteurContratCadre)cc.getAcheteur()) + 1);
                 this.acheteursHQprix.put((IAcheteurContratCadre)cc.getAcheteur(), cc.getPrix());
+                this.acheteursHQ.add((IAcheteurContratCadre)cc.getAcheteur());
             }
 
             this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "\nDétails : " + cc + "!");
         } else {
+            if (produit == Feve.F_MQ_BE) {
+                this.acheteursMQ.add(acheteur);
+            } else if (produit == Feve.F_HQ_BE) {
+                this.acheteursHQ.add(acheteur);
+            }
             this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit + "...");
         }
         return cc;
@@ -292,7 +309,10 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      */
     public void next() {
         super.next();
-
+        //Pour la suite, on abesoin de savoir les contrats qui ont ete effectue au step precedent
+        LinkedList<ExemplaireContratCadre> contraprecedent = new LinkedList<ExemplaireContratCadre>();
+        contraprecedent.addAll(this.contracts);
+        this.contractprecedent = contraprecedent;
         List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.contracts) {
 			if (contrat.getQuantiteRestantALivrer()<=0.0 && contrat.getMontantRestantARegler()<=0.0) {
@@ -311,6 +331,9 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
                 this.getContractForProduct(Feve.F_MQ_BE);
             }
         }
+
+        this.acheteursHQ = new LinkedList<IAcheteurContratCadre>();
+        this.acheteursMQ = new LinkedList<IAcheteurContratCadre>();
     }
 
     /**
