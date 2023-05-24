@@ -61,7 +61,7 @@ public class Producteur1Plantation extends Producteur1Acteur {
 			b = false;
 			g = true;
 			this.journal_evenements.ajouter(Filiere.LA_FILIERE.getParametre("Equipe3 Pourcentage Greviste").getValeur()*100+"% de notre main d'oeuvre fait grève.");
-			this.journal_champs.ajouter(Color.WHITE, Color.RED,"ATTENTION : une grève a lieu");
+			this.journal_champs.ajouter(Color.WHITE, Color.RED,"ATTENTION : une grève a lieu"); //Equipe3 Pourcentage Perte Greviste au dessus 
 			this.journal_stocks.ajouter(Color.WHITE, Color.RED,"ATTENTION : une grève a lieu");
 		}
 		double incendieL = Math.random();
