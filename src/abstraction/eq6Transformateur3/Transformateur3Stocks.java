@@ -221,9 +221,9 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 	  			break;
 	  			}
-        		else {stockChocolatBG.retirer(stockChocolatBG.getQuantiteTotale());
+        		else {if(stockChocolatBG.getQuantiteTotale()>0.0){stockChocolatBG.retirer(stockChocolatBG.getQuantiteTotale());
         		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatBG.getQuantiteTotale());
-        		break ;
+        		break ;}
         		}
 	  	case MQ :
 	  		if(chocolat.isBioEquitable()) {
@@ -232,9 +232,11 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 		  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 		  			break;
 		  			}
-	        		else {stockChocolatMGL.retirer(stockChocolatMGL.getQuantiteTotale());
+	        		else {if(stockChocolatBG.getQuantiteTotale()>0.0){
+	        			stockChocolatMGL.retirer(stockChocolatMGL.getQuantiteTotale());
+	        
 	        		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatMGL.getQuantiteTotale());
-	        		break ;
+	        		break ;}
 	        		}
 	  		}else {
 	  			if(stockChocolatMG.getQuantiteTotale()>=quantite) {
@@ -242,10 +244,11 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 		  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 		  			break;
 		  			}
-	        		else {stockChocolatMG.retirer(stockChocolatMG.getQuantiteTotale());
+	        		else {if(stockChocolatBG.getQuantiteTotale()>0.0){
+	        			stockChocolatMG.retirer(stockChocolatMG.getQuantiteTotale());
 	        		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatMG.getQuantiteTotale());
 	        		break ;
-	        		}
+	        		}}
 	  		}
 	  	case HQ :
 	  		if(stockChocolatHGL.getQuantiteTotale()>=quantite) {
@@ -253,10 +256,11 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 	  			break;
 	  			}
-        		else {stockChocolatHGL.retirer(stockChocolatHGL.getQuantiteTotale());
+        		else {if(stockChocolatBG.getQuantiteTotale()>0.0){
+        			stockChocolatHGL.retirer(stockChocolatHGL.getQuantiteTotale());
         		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatHGL.getQuantiteTotale());
         		break ;
-        		}
+        		}}
 	  	default :
 	  		throw new IllegalArgumentException("Type de Chocolat invalide");
 	  }
