@@ -285,7 +285,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		if (this==acteur) {
 			System.out.println("They killed Chocorama... ");
 		} else {
-			System.out.println("try again "+acteur.getNom()+"... We ("+this.getNom()+") will not miss you.");
+			System.out.println("Try again "+acteur.getNom()+"... We ("+this.getNom()+") will not miss you.");
 		}
 	}
 
