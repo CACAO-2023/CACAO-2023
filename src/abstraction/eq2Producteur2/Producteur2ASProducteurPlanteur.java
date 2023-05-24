@@ -278,7 +278,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	//Cette fonction permet d'ajuster nos plantation : si le resultat et mauvais on la reduit
 	//Pour la feve de moyenne qualitité on augmente petit à petit sa taille tous les ans
 	//Pour la feve de basse qualité on fait de même jusqu'à 20 ans de fillière
-	//Enfin on compense les arbres qui vont devenir trop vieux
+	//Enfin on compense les arbres qui seront prochainement trop vieux
 	private void ajustement_plantation() {
 		for (Feve f : this.salaires.keySet()) {
 			int nb_a_planter = 0;
