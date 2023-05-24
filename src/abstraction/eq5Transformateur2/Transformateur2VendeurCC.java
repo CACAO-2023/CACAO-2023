@@ -1,9 +1,11 @@
 package abstraction.eq5Transformateur2;//Fait par Yassine et Wiem
 
 import java.awt.Color;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
@@ -89,13 +91,17 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			cp = ((ChocolatDeMarque)contrat.getProduit()).getChocolat();
 		}
 		if (cp == Chocolat.C_MQ ) {
-			prix = 30000; }
+			Set<Chocolat> choco = stockChoco.keySet();
+			Double stock = stockChoco.get(choco);
+			prix = 2800.1*stock ; }
 		if ( cp 
 				== Chocolat.C_HQ_BE ) {
-			prix = 40000; }
+			Set<ChocolatDeMarque> choco = stockChocoMarque.keySet();
+			Double stock = stockChocoMarque.get(choco);
+			prix = 2800.1*stock; }
 		return prix; }
 
-	//stock*cout de stockage 1300 + prix de transfo 1500/T + marge de 10%
+	//stock*(cout de stockage 1300 + prix de transfo 1500) + marge de 10%
 
 
 	//fait par yassine : pas de négociations
