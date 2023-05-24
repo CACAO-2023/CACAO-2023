@@ -53,15 +53,25 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		Echeancier e=contrat.getEcheancier();
 		for (int i=contrat.getEcheancier().getStepDebut();i<contrat.getEcheancier().getStepFin()+1;i++) {
-			if(demandeTotStep(i,contrat.getProduit())<super.capTransMax/4) {
+			if(demandeTotStep(i,contrat.getProduit())>super.capTransMax/4) {
+				super.journalVentes.ajouter("Proposition rejetée pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
 				return null;
 			}
 			else {
 			if (demandeTotStep(i,contrat.getProduit())+contrat.getEcheancier().getQuantite(i)>super.capTransMax/4) {
 				e.set(i,super.capTransMax/4-demandeTotStep(i,contrat.getProduit()));
-				}}
+				super.journalVentes.ajouter("Proposition négociée pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+				}
+			else{
+				super.journalVentes.ajouter("Proposition acceptée pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());}
+			}
 	}
-		return e;
+		if (e.getQuantiteTotale()<100) {
+			super.journalVentes.ajouter("Proposition rejetée pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+			return null;
+		}
+		else {
+		return e;}
 		}
 
 	@Override
@@ -162,21 +172,20 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		super.journalVentes.ajouter("Stock MGL="+this.stockChocolatMGL.getQuantiteTotale());
 		super.journalVentes.ajouter("Stock MG="+this.stockChocolatMG.getQuantiteTotale());
 		super.journalVentes.ajouter("Stock BG="+this.stockChocolatBG.getQuantiteTotale());
+		Lot lot = new Lot(produit);
 		if (super.getLotChocolat(produit)!=null) {
 		double livre = Math.min(super.getLotChocolat(produit).getQuantiteTotale(), quantite);
-		super.journalVentes.ajouter("On livre : "+livre+"de : "+produit.getType());
+		super.journalVentes.ajouter("On livre : "+livre+"de : "+((ChocolatDeMarque)produit).getMarque());
 		if (livre>0.0) {
 			super.retirerChocolat((ChocolatDeMarque)produit, livre);//Attention il faut que cela soit possible; verifier la quantité
-		}
-		Lot lot = new Lot(produit);
+		
+		
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); 
 		return lot;}
 		else {
 			super.journalVentes.ajouter("On ne livre pas");
-			Lot l=new Lot(produit);
-			return l; 
-		}
-
+		}}
+		return lot;
 	}
 	/**ecrit par Nathan Claeys
 	   * pour pouvoir rendre les variables qui peuvent aider à la prise de decision
