@@ -202,7 +202,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 			else {res = null;}}
 		else {res = vendeurecheancier;}
 		
-		if (res.getQuantiteTotale()+super.totalStocksFeves.getValeur()+this.quantiteEnAttente>200000) {return null;}
+		if (res.getQuantiteTotale()+super.totalStocksFeves.getValeur()+this.quantiteEnAttente>80000) {return null;}
 		else {return res;}
 		}
 	
