@@ -54,6 +54,7 @@ public class Filiere implements IAssermente {
 	//en vente en tete de gondole alors la marque est ajoutee a cette liste. Seuls les 100 derniers ajouts sont conserves.
 	private HashMap<String, Integer> nbPresencesEnTg; // nombre d'occurrence de la marque dans la liste presenceEnTG;
 	private HashMap<IActeur, Integer> cryptos;
+	public HashMap<String, Long> tempsEquipes = new HashMap<String, Long>();
 
 	/**
 	 * Initialise la filiere de sorte que le numero d'etape soit 0, 
@@ -101,6 +102,7 @@ public class Filiere implements IAssermente {
 					}
 				}
 			}
+			tempsEquipes.put(a.getNom(), (long) 0);
 		}
 		this.journalFiliere.ajouter("Marques deposees : "+this.marquesDeposees);
 		this.journalFiliere.ajouter("Marques distributeurs : "+this.getMarquesDistributeur());
@@ -374,6 +376,7 @@ public class Filiere implements IAssermente {
 		if (res==null) {
 			System.out.println("  Aie... recherche d'un indicateur en utilisant un nom incorrect : \""+nomIndicateur+"\" n'est pas dans la liste :"+indicateurs.keySet());
 			System.out.println("  la variable que vous recherchez est peut etre un parametre plutot qu'un indicateur ?");
+			throw new IllegalArgumentException("recherche de >>"+nomIndicateur+"<<");
 		}
 		return res;
 	}
@@ -420,14 +423,21 @@ public class Filiere implements IAssermente {
 	public void next() {
 		this.journalFiliere.ajouter("Next() : Passage a l'etape suivante====================== ");
 		for (IActeur a : this.acteurs) {
+			long startTime = System.currentTimeMillis();
+
 			if (!this.laBanque.aFaitFaillite(a)) {
+
 				this.journalFiliere.ajouter(Journal.texteColore(a, "- "+a.getNom()+".next()"));
 				this.journalFiliere.notifyObservers();
 				a.next();
 				for (Journal j : journauxParActeur.get(a)) {
 					j.notifyObservers();
 				}
+				
 			}
+
+			long endTime = System.currentTimeMillis();
+			tempsEquipes.put(a.getNom(), tempsEquipes.get(a.getNom()) + endTime - startTime);
 		}
 		// Mise a jour de l'impact de la presence en TG sur les marques
 		HashMap<String, Double> quantiteEnTG=new HashMap<String,Double>(); // associe a chaque marque la quantite de produit en tete de gondole

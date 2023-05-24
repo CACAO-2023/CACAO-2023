@@ -143,9 +143,32 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 	//fait par wiem  : on cherche un acheteur potentiel et on établit un contrat avec 
 	public ExemplaireContratCadre getContrat(Chocolat produit) {
-		//this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche acheteur pour " + produit);
-		List<IAcheteurContratCadre> acheteurs = superviseurVentesCC.getAcheteurs(produit);
-		IAcheteurContratCadre acheteur = acheteurs.get((int)(Math.random() * acheteurs.size())); 
+    	this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche acheteur pour " + produit);
+    	List<IAcheteurContratCadre> acheteurs = superviseurVentesCC.getAcheteurs(produit);
+    	// CODE AJOUTE PAR ROMU POUR EVITER ERREURS
+    	if (acheteurs.size()<1) {
+    		return null;
+    	}
+    	// FIN DE CODE AJOUTE PAR ROMU
+    	IAcheteurContratCadre acheteur = acheteurs.get((int)(Math.random() * acheteurs.size())); 
+    	
+    	this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
+        ExemplaireContratCadre cc = superviseurVentesCC.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
+        if (cc != null) {   
+        		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "CC : " + cc);
+        	this.ContratsVendeur.put(cc,  acheteur.getNom());
+        } else {
+        		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
+        	}
+        	return cc; 
+    	}
+    
+   //fait par wiem 
+	public void next() {
+	super.next();
+	this.getContrat(Chocolat.C_MQ);
+	this.getContrat(Chocolat.C_HQ_BE);
+>>>>>>> refs/remotes/origin/main
 
 		//this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
 		ExemplaireContratCadre cc = superviseurVentesCC.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
