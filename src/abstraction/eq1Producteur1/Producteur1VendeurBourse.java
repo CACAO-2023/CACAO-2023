@@ -8,6 +8,7 @@ import abstraction.eqXRomu.bourseCacao.BourseCacao;
 import abstraction.eqXRomu.bourseCacao.IVendeurBourse;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVendeurBourse {
@@ -24,56 +25,42 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 		}
 	}
 
-	/*public Double feveBQPeri() {
-		int FeveBasPeri = 0;
-		for (int i=0 ; i <= step ; i++) {
-			FeveBasPeri += this.stockFeveBas.getQuantites().get(step);
-		}
-		return FeveBasPeri;
-		}*/
-	
-	public Double feveMQPeri() { //Elouan
+	public Double feveMQPeri() {
 		if (this.stockFeveMoy.getQuantites().get(step-11)==null)
-			{
-			return 0.;
-			}
-		else {
-			return this.stockFeveMoy.getQuantites().get(step-11);
+		{
+		return 0.0;
 		}
+	else {
+		return this.stockFeveMoy.getQuantites().get(step-11);
 	}
-	
-	/*public int feveMQPeri () {
-		int FeveMoyPeri = 0;
-		for (int i=0 ; i <= step ; i++) {
-			FeveMoyPeri += this.stockFeveMoy.getQuantites().get(step);
-		}
-		return FeveMoyPeri;
-	}*/
-	
-	
+	}
 	
 	// On vend nos fêves qui vont périmées ainsi que les fêves en surplus (si les coûts de stockage deviennent trop importants --> coûts de stockage >= bénéfices / 2).
 	
 	public double offre(Feve f, double cours) {
-		
 		BourseCacao bourse = (BourseCacao)(Filiere.LA_FILIERE.getActeur("BourseCacao"));
-			
+		int quantite = 1;
 		if (f==Feve.F_BQ) {
 			Double FeveBQPeri = this.feveBQPeri();
-			if (this.getStockBas().getQuantiteTotale()!=0.0 && 
-			   ((this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale())*50) >= (this.stockFeveBas.getQuantiteTotale()*bourse.getCours(Feve.F_BQ).getValeur()+this.stockFeveMoy.getQuantiteTotale()*bourse.getCours(Feve.F_MQ).getValeur())/10 ) {
-				return this.getStockBas().getQuantiteTotale()/10+FeveBQPeri;
+			if ((this.getStockBas().getQuantiteTotale()!=0.0) && 
+			   (bourse.getCours(f).getValeur() >= prixMinAvecMarge( f, quantite))) {
+				double pourcentage = ((bourse.getCours(f).getValeur()/(prixMinAvecMarge( f, quantite)))/100.0);
+					return (this.getStockBas().getQuantiteTotale()*(pourcentage*10))+FeveBQPeri;
+				
 			}
 			return FeveBQPeri;
 		}
 		
 		if (f==Feve.F_MQ) {
 			Double FeveMQPeri = this.feveMQPeri();
-			if (this.getStockMoy().getQuantiteTotale()!=0.0 && 
-			   ((this.stockFeveBas.getQuantiteTotale()+this.stockFeveMoy.getQuantiteTotale())*50) >= (this.stockFeveBas.getQuantiteTotale()*bourse.getCours(Feve.F_BQ).getValeur()+this.stockFeveMoy.getQuantiteTotale()*bourse.getCours(Feve.F_MQ).getValeur())/10  ) {
-			return this.getStockMoy().getQuantiteTotale()/10+ FeveMQPeri;
+			if ((this.getStockMoy().getQuantiteTotale()!=0.0 && 
+			   (bourse.getCours(f).getValeur() >= prixMinAvecMarge( f, quantite)))) {
+				int pourcentage = (int) (10*(bourse.getCours(f).getValeur()/(prixMinAvecMarge( f, quantite))));
+				
+					return (this.getStockMoy().getQuantiteTotale()*(pourcentage*10))+FeveMQPeri;
 			}
-
+			
+	
 			return FeveMQPeri;
 		}
 		return 0;
@@ -81,13 +68,21 @@ public class Producteur1VendeurBourse extends ProducteurVendeurCC implements IVe
 	
 	public Lot notificationVente(Feve f, double quantite, double cours) {
 		Lot l = new Lot(f);
-		l.ajouter(Filiere.LA_FILIERE.getEtape(), quantite); // cet exemple ne gere pas la production : tout le stock est considere comme venant d'etre produit;
+		
 		if (f==Feve.F_BQ) {
+			int q = (int)Math.min(quantite, super.getVraiStockB().getQuantiteTotale());
+			if (q!=0) {
+			l.ajouter(Filiere.LA_FILIERE.getEtape(), q);} // cet exemple ne gere pas la production : tout le stock est considere comme venant d'etre produit;}
+			else {return null;}
 			this.stockFeveBas.retirer(quantite);
 			this.journal_stocks.ajouter("BOURSEV: vente de "+quantite+" T de "+f+" en bourse. Stock -> "+this.getStockBas().getQuantiteTotale());
 			this.journal_ventes.ajouter("BOURSEV: vente de "+quantite+" T de "+f+" en bourse. Stock -> "+ quantite*cours);
 		}
 		if (f==Feve.F_MQ) {
+			int q = (int)Math.min(quantite, super.getVraiStockM().getQuantiteTotale());
+			if (q!=0) {
+			l.ajouter(Filiere.LA_FILIERE.getEtape(), q); }// cet exemple ne gere pas la production : tout le stock est considere comme venant d'etre produit;
+			else {return null;}
 			this.stockFeveMoy.retirer(quantite);
 			this.journal_stocks.ajouter("BOURSEV: vente de "+quantite+" T de "+f+" en bourse. Stock -> "+this.getStockMoy().getQuantiteTotale());
 			this.journal_ventes.ajouter("BOURSEV: vente de "+quantite+" T de "+f+" en bourse. Stock -> "+ quantite*cours);
