@@ -52,7 +52,7 @@ public class Producteur3 extends Bourse3  {
 		this.CoutTonne = 0.;
 		this.HectaresLibres = 0;
 		//this.HectaresUtilises = 950000; premiers essais
-		this.HectaresUtilises = 728000; //optimises
+		this.HectaresUtilises = 680000; //optimises
 		this.ListeCout = new LinkedList<Double>();
 		this.achatHectarCout = new HashMap<Integer, Integer>();
 	}
@@ -87,8 +87,8 @@ public class Producteur3 extends Bourse3  {
 		Stock Stock = this.getStock();
 		this.CoutTonne = CoutTotal / Math.max(Stock.getQuantite(), 1);
 		
-		if (this.CoutTonne > 10000) {
-			this.CoutTonne = 10000.;
+		if (this.CoutTonne > 20000) {
+			this.CoutTonne = 20000.;
 		}
 	}
 	

@@ -35,14 +35,14 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     }
 
     /**
-     * @author Corentin Caugant
+     * @author Corentin Caugant, Victor Dubus-Chanson
      */
     public void initialiser() {
         super.initialiser();
         this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
 
         // Initialisation des HashMaps. Au début tous nos acheteurs ont la même fiabilité.
-        Double PRIX_DEPART_MQ = 6000.0; //10000 avant, mais des équipes ne négocient pas
+        Double PRIX_DEPART_MQ = 5000.0; //10000 avant, mais des équipes ne négocient pas
         Double PRIX_DEPART_HQ = 10000.0; //30000 avant, mais des équipes ne négocient pas
 
         List<IAcheteurContratCadre> acheteurs = new LinkedList<IAcheteurContratCadre>();
@@ -126,18 +126,21 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
 
     /**
      * Returns the initial price we will propose to the buyer.
+     * Does not increase the price because some teams just straight out do not negotiate and will keep buying at the increased price
      * @param acheteur The buyer we want to sell to
      * @param feve The type of beans we want to sell
      * @return The price we propose to the buyer, based on the type of beans and the buyer's last agreed price
-     * @author Corentin Caugant
+     * @author Corentin Caugant, Victor Dubus-Chanson
      */
     public double propositionPrixIntial(IAcheteurContratCadre acheteur, Feve feve) {
         if (feve == Feve.F_MQ_BE) {
-            double price = Math.max(this.getPrixTonne() * 1.2, this.acheteursMQprix.get(acheteur) * 1.1);
+            double price = Math.max(this.getPrixTonne() /* * 1.2 */, this.acheteursMQprix.get(acheteur) /* * 1.1*/);
+            System.out.println("Equipe 3 : acheteursMQprixget : " + this.acheteursMQprix.get(acheteur));
             this.acheteursMQprix.put(acheteur, price);
             return price;
         } else {
-            double price = Math.max(this.getPrixTonne() * 1.4, this.acheteursHQprix.get(acheteur) * 1.3);
+            double price = Math.max(this.getPrixTonne() /* * 1.4*/, this.acheteursHQprix.get(acheteur) /* * 1.3*/);
+            System.out.println("Equipe 3 : acheteursHQprixget : " + this.acheteursHQprix.get(acheteur));
             this.acheteursHQprix.put(acheteur, price);
             return price;
         }
@@ -339,7 +342,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     /**
      * Returns the quantity of beans available for a given quality.
      * This method takes into account ongoing CCs and the stock to compute the quantity available for sale accurately.
-     * Corentin Caugant
+     * @author Corentin Caugant
      */
     public double getAvailableQuantity(Feve qualite) {
         double available = this.getStock().getQuantite(qualite);
