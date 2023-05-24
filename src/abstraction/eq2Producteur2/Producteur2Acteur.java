@@ -42,7 +42,7 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable coutSalaire = new VariablePrivee("EQ2 cout salaire", "coût des salaires à chaque étape", this, 0);
 	protected Variable stepsVecuesPourBourseMQ_BE = new VariablePrivee("EQ2 seuil age vente en bourse MQ_BE", "seuil d'ancienneté de vente de MQ_BE en bourse", this, 10);
 	protected Variable stepsVecuesPourBourseMQ = new VariablePrivee("EQ2 seuil age vente en bourse MQ", "seuil d'ancienneté de vente obligatoire de MQ en bourse", this, 10);
-	protected Variable stepsVecuesPourBourseBQ = new VariablePrivee("EQ2 seuil age vente en bourse BQ", "seuil d'ancienneté de vente obligatoire de MQ_BE en bourse", this, 10);
+	protected Variable stepsVecuesPourBourseBQ = new VariablePrivee("EQ2 seuil age vente en bourse BQ", "seuil d'ancienneté de vente obligatoire de BQ en bourse", this, 10);
 	protected Variable argentVenteBQ = new VariablePrivee("EQ2 argent gagné par la vente de BQ", "montre l'argent gagné par la vente de BQ à chaque tour", this, 0);
 	protected Variable argentVenteMQ = new VariablePrivee("EQ2 argent gagné par la vente de MQ", "montre l'argent gagné par la vente de MQ à chaque tour", this, 0);
 	protected Variable argentVenteMQ_BE = new VariablePrivee("EQ2 argent gagné par la vente de MQ_BE", "montre l'argent gagné par la vente de MQ_BE à chaque tour", this, 0);
@@ -51,20 +51,23 @@ public class Producteur2Acteur implements IActeur {
 	protected Variable coutProdMQ = new VariablePrivee("EQ2 coût de production et stockage de MQ", "coût total de production et de stockage de MQ à chaque step", this, 0);
 	protected Variable coutProMQ_BE = new VariablePrivee("EQ2 coût de production et stockage de MQ_BE", "coût total de production et de stockage de MQ_BE à chaque step", this, 0);
 	protected Variable coutProdHQ_BE = new VariablePrivee("EQ2 coût de production et stockage de HQ_BE", "coût total de production et de stockage de HQ_BE à chaque step", this, 0);
+	protected Variable prodBQ = new VariablePrivee("EQ2 quantite de BQ produite", "quantite de fève de BQ produite à chaque tour", this, 0);
+	protected Variable prodMQ = new VariablePrivee("EQ2 quantite de MQ produite", "quantite de fève de MQ produite à chaque tour", this, 0);
+	protected Variable prodMQ_BE = new VariablePrivee("EQ2 quantite de MQ_BE produite", "quantite de fève de MQ_BE produite à chaque tour", this, 0);
+	protected Variable prodHQ_BE = new VariablePrivee("EQ2 quantite de HQ_BE produite", "quantite de fève de HQ_BE produite à chaque tour", this, 0);
 	protected HashMap<Feve, Variable> stepsVecuesPourBourse = new HashMap<Feve, Variable>();
 	protected HashMap<Feve, Variable> argentVente = new HashMap<Feve, Variable>();
 	protected HashMap<Feve, Variable> coutProdFeve = new HashMap<Feve, Variable>();
+	protected HashMap<Feve, Variable> prodFeve = new HashMap<Feve, Variable>();
 	protected Producteur2 thisP;
 
-	//Prix provisoires pour les contrats cadres
-	public double prixBQ = 500.0;
-	public double prixMQ = 1000.0;
-	public double prixMQBE = 1500.0;
-	public double prixHQ = 2000.0;
+	//Prix pour les contrats cadres
+	public double prixBQ = 2200.0*1.01;
+	public double prixMQ = 3500.0*1.05;
+	public double prixMQBE = 5000.0*0.99;
+	public double prixHQ = 10000.0*1.1;
 	public HashMap<Feve, Double> prixCC;
-
 	protected LinkedList<ExemplaireContratCadre> contrats;
-	
 	
 	protected Feve[] lesFeves = {Feve.F_BQ, Feve.F_MQ, Feve.F_MQ_BE, Feve.F_HQ_BE};
 
@@ -88,6 +91,11 @@ public class Producteur2Acteur implements IActeur {
 		this.coutProdFeve.put(Feve.F_MQ, this.coutProdMQ);
 		this.coutProdFeve.put(Feve.F_MQ_BE, this.coutProMQ_BE);
 		this.coutProdFeve.put(Feve.F_HQ_BE, this.coutProdHQ_BE);
+		
+		this.prodFeve.put(Feve.F_BQ, this.prodBQ);
+		this.prodFeve.put(Feve.F_MQ, this.prodMQ);
+		this.prodFeve.put(Feve.F_MQ_BE, this.prodMQ_BE);
+		this.prodFeve.put(Feve.F_HQ_BE, this.prodHQ_BE);
 	}
 	
 	public void initialiser() {
@@ -152,6 +160,10 @@ public class Producteur2Acteur implements IActeur {
 		res.add(this.nbHecMoy);
 		res.add(this.nbHecMoyBE);
 		res.add(this.nbHecHauteBE);
+		res.add(this.prodBQ);
+		res.add(this.prodMQ);
+		res.add(this.prodMQ_BE);
+		res.add(this.prodHQ_BE);
 		res.add(this.stockTotBasse);
 		res.add(this.stockTotMoy);
 		res.add(this.stockTotMoyBE);
