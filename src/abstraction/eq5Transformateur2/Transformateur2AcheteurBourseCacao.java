@@ -31,7 +31,6 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2VendeurCC
 	
 	public double demande(Feve f, double cours) {
 		// on achete en quantités aléatoires si notre solde le permet
-		System.out.println(this.totalStocksFeves.getValeur());
 		if((f.getGamme()==Feve.F_MQ.getGamme())
 				&&(this.totalStocksFeves.getValeur() < 20000)) // on achète plus de fèves a partir de 20000 tonnes
 		{
