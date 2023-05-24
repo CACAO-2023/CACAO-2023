@@ -105,7 +105,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 					prixDeVente.put(marque,2500.);
 				}
 			}
-		
 	}
 
 	public String getNom() {// NE PAS MODIFIER
@@ -151,12 +150,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 				double cout_TOT = 16*30*stock_total-getTotalCoutMainDoeuvre();
 				Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme,Filiere.LA_FILIERE.getBanque(),cout_TOT );	
 				}	
-			
-			
-			
-			
-		
-		
 		journal_stocks.ajouter("Stock total "+ stock_total+"T");
 		
 		//Répertoire de l'activité générale
@@ -183,7 +176,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
 		res.add(s);
-		
 		return res;
 	}
 
