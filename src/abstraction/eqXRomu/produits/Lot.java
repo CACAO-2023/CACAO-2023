@@ -97,7 +97,7 @@ public class Lot {
 	 * @param quantite, quantite>0 et quantite<=this.getQuantiteTotale()
 	 */
 	public Lot retirer(double quantite) {
-		if (quantite<=0.0 || quantite>this.getQuantiteTotale()+0.001) {
+		if (quantite<=0 || quantite>this.getQuantiteTotale()+0.001) {
 			throw new IllegalArgumentException("Appel de retirer("+quantite+") sur un Lot de feves dont la quantite totale est "+this.getQuantiteTotale());
 		} else {
 			Lot res=new Lot(produit);
