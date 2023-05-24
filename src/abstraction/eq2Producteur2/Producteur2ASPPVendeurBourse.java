@@ -20,7 +20,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 	
 	public double stock_mis_en_bourse(Feve f) {
 		if (f==Feve.F_BQ) {
-			return this.getStocksTotTheo(Feve.F_BQ, Filiere.LA_FILIERE.getEtape()).get(Filiere.LA_FILIERE.getEtape());//renvoie le stock dispo pour la bourse à l'étape actuelle
+			return this.getStocksTotTheo(Feve.F_BQ, Filiere.LA_FILIERE.getEtape()).get(Filiere.LA_FILIERE.getEtape());//renvoie le stock dispo pour la bourse à l'étape actuelle	
 		} 
 		if (f==Feve.F_MQ) {
 			return this.getStocksTotTheo(Feve.F_MQ, Filiere.LA_FILIERE.getEtape()).get(Filiere.LA_FILIERE.getEtape());
@@ -42,7 +42,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 			// avec une continuité linéaire de la relation prix/proportion_vendue entre ces 2 points
 			float prix_seuil_1=2000;
 			float prix_seuil_2=2500;
-			if (cours_de_f < prix_seuil_1 && this.Rentabilites(f, cours_de_f)==false) {
+			if ( this.Rentabilites(f, cours_de_f)==false) {
 				return 0;
 			}
 			if (this.Rentabilites(f, cours_de_f)==true && cours_de_f < prix_seuil_1) { //si le cours permet de faire au moins 10% de profit, on ne met en vente que les fèves 
@@ -58,7 +58,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 		if (f==Feve.F_MQ) {
 			float prix_seuil_1=2400;
 			float prix_seuil_2=3000;
-			if (cours_de_f < prix_seuil_1 && this.Rentabilites(f, cours_de_f)==false) { //si le cours de f est trop bas, où que le cours n'assure pas les 10% minimum de rentabilités on n'en met pas en bourse
+			if (this.Rentabilites(f, cours_de_f)==false) { //si le cours de f est trop bas, où que le cours n'assure pas les 10% minimum de rentabilités on n'en met pas en bourse
 				return 0;
 			}
 			if (this.Rentabilites(f, cours_de_f)==true && cours_de_f < prix_seuil_1) { //si le cours permet de faire au moins 10% de profit, on ne met en vente que les fèves 
@@ -98,7 +98,7 @@ public class Producteur2ASPPVendeurBourse extends Producteur2ASProducteurPlanteu
 	public Lot notificationVente(Feve f, double quantiteEnT, double coursEnEuroParT) {
 		double quantiteLivre = 0.;
 		if (f == Feve.F_BQ) {
-			quantiteLivre = Math.min(quantiteEnT, this.getStockTot(f).getValeur());//on renvoie le min entre ce qu'on a et ce qu'on a promis
+			quantiteLivre = Math.min(quantiteEnT, this.getStockTot(f).getValeur());//on renvoie le min entre ce qu'on a et ce qu'on a promis, on rajoute un +1 pour avoir un epsilon de marge et assurer la vente même si l'algo fait une erreur d'arrondi
 			this.BQquantiteVendueBourse.setValeur(null, quantiteLivre, this.cryptogramme);
 		}
 		if (f == Feve.F_MQ) { //
