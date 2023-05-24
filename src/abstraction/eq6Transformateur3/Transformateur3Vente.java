@@ -18,7 +18,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	protected LinkedList<ExemplaireContratCadre> listeCC ;
 
 	
-	
+	/**Nathan Salbego*/
 	public Transformateur3Vente() {
 		super();
 		listeCC=new LinkedList<ExemplaireContratCadre>();
@@ -29,17 +29,18 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	 * @param choco
 	 * @return
 	 */
+	/**Nathan Salbego*/
 	protected double demandeTotStep (int step,Object choco) {
 		double tot=0;
 		for (int i=0;i<listeCC.size();i++) {
 			if (listeCC.get(i).getProduit().equals(choco)) 
 			tot+=listeCC.get(i).getQuantiteALivrerAuStep();
 		}
-		if (tot == 0){return 100;}
-		else{return tot;}
+		return tot;
 	}
 
 	@Override
+	/**Nathan Salbego*/
 	public boolean vend(IProduit produit) {
 		if (produit instanceof ChocolatDeMarque) {
 			return (((ChocolatDeMarque)produit).getMarque().equals("eco+ choco"))||((ChocolatDeMarque)produit).getMarque().equals("chokchoco")||((ChocolatDeMarque)produit).getMarque().equals("chokchoco bio")||((ChocolatDeMarque)produit).getMarque().equals("Choc");
@@ -48,6 +49,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	}
 
 	@Override
+	/**Nathan Salbego*/
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		Echeancier e= contrat.getEcheancier();;
 		double quantite=e.getQuantiteTotale()/e.getNbEcheances();
@@ -61,66 +63,85 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	}
 
 	@Override
+	/**Nathan Salbego*/
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
-				return 2000;
+				super.journalVentes.ajouter("Proposition de prix: "+20000+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+				return 20000;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco")) {
-				return 2100;
+				super.journalVentes.ajouter("Proposition de prix: "+21000+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+				return 21000;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco bio")) {
-				return 2300;
+				super.journalVentes.ajouter("Proposition de prix: "+23000+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+				return 23000;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("Choc")) {
-				return 2500;
+				super.journalVentes.ajouter("Proposition de prix: "+25000+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+				return 25000;
 			}
 		}
+		super.journalVentes.ajouter("Proposition de prix: "+0+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
 		return 0;
 	}
 
 	@Override
+	/**Nathan Salbego*/
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
-			double i=(10+Math.random()/10);
+			double i=(Math.random()/10);
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
-				if(contrat.getPrix()<1800) {
-					return 2000*(1-i);
+				if(contrat.getPrix()<18000) {
+					super.journalVentes.ajouter("Contre proposition de prix: "+2000*(1-i)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return 20000*(1-i);
 				}
-				else {return Math.min(contrat.getPrix()*(1+i), 2000);
+				else {super.journalVentes.ajouter("Contre proposition de prix: "+Math.min(contrat.getPrix()*(1+i), 20000)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return Math.min(contrat.getPrix()*(1+i), 20000);
 			}}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco")) {
-				if(contrat.getPrix()<1890) {
-					return 2100*(1-i);
+				if(contrat.getPrix()<18900) {
+					super.journalVentes.ajouter("Contre proposition de prix: "+21000*(1-i)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return 21000*(1-i);
 				}
-				else {return Math.min(contrat.getPrix()*(1+i), 2100);
+				else {super.journalVentes.ajouter("Contre proposition de prix: "+Math.min(contrat.getPrix()*(1+i), 21000)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return Math.min(contrat.getPrix()*(1+i), 21000);
 			}}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco bio")) {
-				if(contrat.getPrix()<2070) {
-					return 2300*(1-i);
+				if(contrat.getPrix()<20700) {
+					super.journalVentes.ajouter("Contre proposition de prix: "+23000*(1-i)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return 23000*(1-i);
 				}
-				else {return Math.min(contrat.getPrix()*(1+i), 2300);
+				else {super.journalVentes.ajouter("Contre proposition de prix: "+Math.min(contrat.getPrix()*(1+i), 20300)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return Math.min(contrat.getPrix()*(1+i), 23000);
 			}}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("Choc")) {
-				if(contrat.getPrix()<2250) {
-					return 2500*(1-i);
+				if(contrat.getPrix()<22500) {
+					super.journalVentes.ajouter("Contre proposition de prix: "+25000*(1-i)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return 25000*(1-i);
 				}
-				else {return Math.min(contrat.getPrix()*(1+i), 2500);
+				else {super.journalVentes.ajouter("Contre proposition de prix: "+Math.min(contrat.getPrix()*(1+i), 25000)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return Math.min(contrat.getPrix()*(1+i), 25000);
 			}}
 		}
-		return 2000;
+		super.journalVentes.ajouter("Contre proposition de prix: "+20000+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+		return 20000;
 	}
 
 	@Override
+	/**Nathan Salbego*/
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
+		if (contrat.getVendeur()==this) {
 		this.listeCC.add(contrat);
-		super.journalVentes.ajouter("Nouveau contrat de vente passé :"+contrat.toString());
+		super.journalVentes.ajouter("Nouveau contrat de vente passé :"+contrat.toString());}
 		
 	}
 	
 	public void initialiser() {
 		super.initialiser();
 	}
+	/**Nathan Salbego*/
 	public void next() {
 		super.next();
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
@@ -133,9 +154,11 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	}
 
 	@Override
+	/**Nathan Salbego*/
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
 		if (super.getLotChocolat(produit)!=null) {
 		double livre = Math.min(super.getLotChocolat(produit).getQuantiteTotale(), quantite);
+		super.journalVentes.ajouter("On livre : "+livre+"de : "+produit.getType());
 		if (livre>0.0) {
 			super.retirerChocolat((ChocolatDeMarque)produit, livre);//Attention il faut que cela soit possible; verifier la quantité
 		}
@@ -146,6 +169,7 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 			Lot l=new Lot(produit);
 			return l; 
 		}
+
 	}
 	/**ecrit par Nathan Claeys
 	   * pour pouvoir rendre les variables qui peuvent aider à la prise de decision

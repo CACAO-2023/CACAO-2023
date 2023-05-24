@@ -291,15 +291,17 @@ public class BourseCacao implements IActeur, IAssermente {
 					for (IAcheteurBourse a : demandes.keySet()){
 						// S'il demeure plus d'offres que de demande la demande est honoree, sinon c'est au prorata
 						double quantite = totalOffres>=totalDemandes ? demandes.get(a) : (totalOffres*demandes.get(a))/totalDemandes;
-						obtenusA.get(f).get(a).ajouter(etape, quantite);
-						boolean virementOk = banque.virer((IActeur)a, cryptos.get((IActeur)a), this,cours*quantite);
-						if (virementOk) {
-							Lot lot = lotGlobal.retirer(quantite);
-							a.notificationAchat(lot, cours);
-							journal.get(f).ajouter(Journal.texteColore((IActeur)a, ((IActeur)a).getNom()+" obtient "+Journal.doubleSur(lot.getQuantiteTotale(),2)+" et paye "+Journal.doubleSur(cours*lot.getQuantiteTotale(), 2)));
-						} else { // Normalement la transaction peut avoir lieu vu qu'on a verifie au prealable la capacite du vendeur a payer
-							a.notificationBlackList(6);
-							blackListA.put(a,6);
+						if (quantite>=0.01) {
+							obtenusA.get(f).get(a).ajouter(etape, quantite);
+							boolean virementOk = banque.virer((IActeur)a, cryptos.get((IActeur)a), this,cours*quantite);
+							if (virementOk) {
+								Lot lot = lotGlobal.retirer(quantite);
+								a.notificationAchat(lot, cours);
+								journal.get(f).ajouter(Journal.texteColore((IActeur)a, ((IActeur)a).getNom()+" obtient "+Journal.doubleSur(lot.getQuantiteTotale(),2)+" et paye "+Journal.doubleSur(cours*lot.getQuantiteTotale(), 2)));
+							} else { // Normalement la transaction peut avoir lieu vu qu'on a verifie au prealable la capacite du vendeur a payer
+								a.notificationBlackList(6);
+								blackListA.put(a,6);
+							}
 						}
 					}
 				} else if (totalOffres<=totalDemandes && totalOffres>0.0){ // offre<demande : Les vendeurs vont vendre tout ce qu'ils ont mis en vente et les acheteurs auront des feves au prorata de leur proposition d'achat
@@ -323,16 +325,18 @@ public class BourseCacao implements IActeur, IAssermente {
 					for (IAcheteurBourse a : demandes.keySet()){
 						// La quantite achetee est au prorata de la quantite demandee
 						double quantite = (totalOffres*demandes.get(a))/totalDemandes; 
-						obtenusA.get(f).get(a).ajouter(etape, quantite);
-						if (cours*quantite>0) {
-							boolean virementOk = banque.virer((IActeur)a, cryptos.get((IActeur)a), this,cours*quantite);
-							if (virementOk) { // normalement c'est le cas vu qu'on a verifie auparavant
-								Lot lot = lotGlobal.retirer(quantite);
-								a.notificationAchat(lot, cours);
-								journal.get(f).ajouter(Journal.texteColore((IActeur)a, ((IActeur)a).getNom()+" obtient "+Journal.doubleSur(quantite,2)+" et paye "+Journal.doubleSur(cours*quantite, 2)));
-							} else {
-								a.notificationBlackList(6);
-								blackListA.put(a,6);
+						if (quantite>=0.01)  {
+							obtenusA.get(f).get(a).ajouter(etape, quantite);
+							if (cours*quantite>0) {
+								boolean virementOk = banque.virer((IActeur)a, cryptos.get((IActeur)a), this,cours*quantite);
+								if (virementOk) { // normalement c'est le cas vu qu'on a verifie auparavant
+									Lot lot = lotGlobal.retirer(quantite);
+									a.notificationAchat(lot, cours);
+									journal.get(f).ajouter(Journal.texteColore((IActeur)a, ((IActeur)a).getNom()+" obtient "+Journal.doubleSur(quantite,2)+" et paye "+Journal.doubleSur(cours*quantite, 2)));
+								} else {
+									a.notificationBlackList(6);
+									blackListA.put(a,6);
+								}
 							}
 						}
 					}
@@ -419,4 +423,4 @@ public class BourseCacao implements IActeur, IAssermente {
 			}
 		}
 	}
-	}
+}

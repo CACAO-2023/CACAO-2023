@@ -27,8 +27,5 @@ public class Producteur2 extends Producteur2ASPPVBVendeurCC  {
 		for (Feve f : this.lesFeves) {
 			this.coutProdFeve.get(f).setValeur(this, coutProdSalaire.get(f) + this.coutStockage(f), this.cryptogramme);
 		}
-		
-		//System.out.println(this.coutStockage());
-		//System.out.println(this.CoutSalaire());
 	}
 }

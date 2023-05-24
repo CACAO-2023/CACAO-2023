@@ -140,17 +140,19 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 */
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		Echeancier echeancierAch = contrat.getEcheancier();
+		Echeancier echMax = this.getEcheancierMax(echeancierAch.getStepFin()).get(contrat.getProduit());
+		Echeancier ech = new Echeancier(echeancierAch.getStepDebut());
 		if(echeancierAch.getStepDebut() > Filiere.LA_FILIERE.getEtape()) {
-			boolean testQuantite = true;
-			HashMap<Integer, Double> hs = getStocksTotTheo((Feve) contrat.getProduit(), Filiere.LA_FILIERE.getEtape() + contrat.getEcheancier().getNbEcheances() + 1);
 			for(int i = Filiere.LA_FILIERE.getEtape() +1; i<Filiere.LA_FILIERE.getEtape()+contrat.getEcheancier().getNbEcheances()+1; i++){
-				if(hs.get(i)-contrat.getEcheancier().getQuantiteJusquA(i) < 0.0) {
-					testQuantite = false;
+				if(echMax.getQuantite(i) >= echeancierAch.getQuantite(i)) {
+					ech.ajouter((echMax.getQuantite(i) + 9*echeancierAch.getQuantite(i))/10); //On essaye de vendre plus de fèves
+				} else {
+					ech.ajouter(echMax.getQuantite(i));
 				}
 			}
-			if(testQuantite) {
-				return new Echeancier(echeancierAch.getStepDebut(), echeancierAch.getStepFin(), (3*echeancierAch.getQuantiteTotale()+hs.get(contrat.getEcheancier().getStepFin()+1))/(echeancierAch.getNbEcheances()*4)); //On essaye de refiler plus de notre stock aux acheteurs
-			} 
+			if(ech.getQuantiteTotale() < venteMin) {
+				return null;
+			}
 			return echeancierAch;
 		}
 		return null;

@@ -30,6 +30,23 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		journal.ajouter("============================== étape "+etape+" ==============================");
 		journal_achat.ajouter("============================== étape "+etape+" ==============================");
 		journal_stock.ajouter("============================== étape "+etape+" ==============================");
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			Var_Stock_choco.get(marque).setValeur(this, stockChocoMarque.get(marque));
+			Var_Cout_Choco.get(marque).setValeur(this, getCoutTotal(marque));
+			Var_Marge_Choco.get(marque).setValeur(this, prix(marque)-getCoutTotal(marque));
+		}
+		
+		//Prise en compte des couts de main doeuvre
+		Double qte_totale_en_vente = 0.;
+		for (ChocolatDeMarque choco : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			qte_totale_en_vente += quantiteEnVente(choco,cryptogramme);
+		}
+		Double cout_total_mise_en_rayon = qte_totale_en_vente * Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur();
+		if (cout_total_mise_en_rayon > 0) {
+			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme,Filiere.LA_FILIERE.getBanque(),cout_total_mise_en_rayon );	
+			journal_vente.ajouter("Cout de main d'oeuvre : "+cout_total_mise_en_rayon);
+				}
+		
 	}
 	
 	private void strategie() {
@@ -55,15 +72,16 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	/**
 	 * @author Theo
 	 * @param choco, choco!=null
-	 * @return Le prix de vente actuel d'un Kg de chocolat choco
+	 * @return Le prix de vente actuel d'une tonne de chocolat choco
 	 * IMPORTANT : durant une meme etape, la fonction doit toujours retourner la meme valeur pour un chocolat donne.
 	 */
 	public double prix(ChocolatDeMarque choco) {
 		double qualite = choco.qualitePercue();
-		double coef = 1-(((10/3)*qualite)/100)+0.1;
+//		double coef = 1-(((10/3)*qualite)/100)+0.1;
 		double promo = prixPromotion(choco);
-		double cout = getCout(choco);
-		return (cout/1000)*promo/coef;
+		double cout = getCoutTotal(choco);
+		double prix = cout*promo/(1-0.1*qualite);
+		return prix;
 	}
 	
 	/**
@@ -72,11 +90,23 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	 */
 	public double prixPromotion(ChocolatDeMarque choco) { 
 		if (((Filiere.LA_FILIERE.getEtape()%3)==0)&&(choco.getChocolat()!=Chocolat.C_BQ)) {
-			return 0.9;
+			return 0.95;
 		}
 		else {
 			return 1;
 		}
+	}
+	
+	/**
+	 * @author Theo
+	 * @param choco
+	 * @return le cout de revient d'1t de chocolat de marque, calcule grace au type de chocolat
+	 */
+	public double getCoutTotal(ChocolatDeMarque choco) {
+		Double cout_i = getCout_gamme(choco);
+		Double cout_s = cout_stockage_distributeur.getValeur();
+		Double cout_m = Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur(); //Cout de mise en rayon d'1T de chocolat
+		return (cout_i+cout_s+cout_m);
 	}
 	
 	/**
@@ -92,7 +122,16 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 //			double qStock = stockChocoMarque7.get(choco);
 //			return qStock/2.0;
 //		} else {
+		int etape = Filiere.LA_FILIERE.getEtape()%24;
+		Double previsions = previsionsperso.get(etape).get(choco);
+		if (stockChocoMarque.get(choco) < previsions*1.5) {
+			return stockChocoMarque.get(choco);
+		}
+		if (stockChocoMarque.get(choco) >= previsions*1.5) {
+			return previsions*1.5;
+		}
 		return stockChocoMarque.get(choco);
+		
 //		}
 	}
 	
@@ -116,7 +155,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		ChocolatDeMarque topmarque = topvente();
 		double seuil = Filiere.SEUIL_EN_TETE_DE_GONDOLE_POUR_IMPACT;
 		if ((choco==topmarque)&&(stockChocoMarque.get(topmarque)>0)) {
-			return stockChocoMarque.get(topmarque)/10;
+			return quantiteEnVente(topmarque,cryptogramme)/10;
 		}
 		return 0.0;
 	}
@@ -136,12 +175,12 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant, int crypto) {
 		stockChocoMarque.put(choco, stockChocoMarque.get(choco)-quantite);
 		totalStocks.setValeur(this, totalStocks.getValeur(cryptogramme)-quantite, cryptogramme);
-		this.journal.ajouter("Eq7 a vendu "+quantite+" T de "+choco+ " aux clients finaux ");
-		
+		this.journal_vente.ajouter("Eq7 a vendu "+ (int)Math.floor(quantite)+" T de "+choco+ " aux clients finaux pour un total de " + (int)Math.floor(montant)+"e");
 		//Actualisation des previsions persos
 		actualiser_prevision_perso( choco,   quantite);
-
+		ventes.ajouter(this, montant);
 	}
+
 	
 	/**
 	 * Methode appelee par le client final lorsque la quantite en rayon de chocolat choco 
