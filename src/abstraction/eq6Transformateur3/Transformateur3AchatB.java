@@ -46,7 +46,7 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		if (f.getGamme()==Gamme.BQ) {if(cours<=this.getCoursmaxBG().getValeur()) {
 													res =(100);}
 		}
-		else {res = 100.0;}
+		else {res = 0.0;}
 		if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxMGL().getValeur()) {
 			res = 100;}}
 		else {res = 0.0;}
@@ -61,19 +61,19 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		return res;}
 		else {
 			if (f.getGamme()==Gamme.BQ) {
-				double quant = Math.min(super.quantBQMax-super.stockFeveBG.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-300000);
+				double quant = Math.min(super.quantBQMax-super.stockFeveBG.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-200000);
 				res= Math.max(0,quant);
 			}
 			if (f.getGamme()==Gamme.MQ) {
-				double quant = Math.min(super.quantMQMax-super.stockFeveMG.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-300000);
+				double quant = Math.min(super.quantMQMax-super.stockFeveMG.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-200000);
 				res= Math.max(0,quant);
 			}
 			if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {
-				double quant = Math.min(super.quantMQLMax-super.stockFeveMGL.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-300000);
+				double quant = Math.min(super.quantMQLMax-super.stockFeveMGL.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-200000);
 				res= Math.max(0,quant);
 			}
 			if (f.getGamme()==Gamme.HQ) {
-				double quant = Math.min(super.quantHQMax-super.stockFeveHGL.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-300000);
+				double quant = Math.min(super.quantHQMax-super.stockFeveHGL.getQuantiteTotale()-super.quantiteEnAttente-1000,super.totalStocksChoco.getValeur()-200000);
 				res= Math.max(0,quant);
 			}
 		return res;
