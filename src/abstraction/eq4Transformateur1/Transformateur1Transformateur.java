@@ -84,7 +84,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		
 		double transfoh = (int) (Math.min(this.stockFeves.get(fh), Math.random()*1000)) + (aVendreHQ)/1.06;
 		
-		double conversion = 1.06 ;
+		double conversion = 1.06;
 		if (transfoh>0) {
 			this.retirer(fh,transfoh);
 			// Tous les chocolats sont directement étiquetés "Vccotioi"
