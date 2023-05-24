@@ -105,7 +105,7 @@ public class Producteur1Plantation extends Producteur1Acteur {
 	}
 
 	public void recolte(boolean greve) {
-		//===== début Elouan =====
+		//===== Elouan =====
 		//cette methode est notre next V1, mais n'est pas toujours appele (en cas de greve par exemple)
 		this.journal_champs.ajouter("---> Qualite : Moy");
 		Lot lot_moy = this.getStockMoy();
@@ -125,9 +125,8 @@ public class Producteur1Plantation extends Producteur1Acteur {
 					Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), this.coutreplantation.getValeur()*q);
 					this.journal_champs.ajouter("Un champ de "+q+" hectares a été planté");
 				}
-				else if ((step-i)%12==0 && step-i>0) {
-					// ===== elouan et début gab =====
-					if (!greve || (greve&&(a<=max))) {
+				else if ((step-i)%12==0 && step-i>0 && !greve || (greve&&(a<=max))) {
+					if (this.Stock.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()<2000000) {
 						double nb_tonnes = q*0.56 ; //ajouter facteur random
 						double random = ThreadLocalRandom.current().nextDouble(0.9, 1.1);
 						nb_tonnes = nb_tonnes * random ;
@@ -138,6 +137,8 @@ public class Producteur1Plantation extends Producteur1Acteur {
 							quantiteFeveM.put(step, nb_tonnes);
 						}
 						//ajouter lot moyen et cout replantation 
+					} else {
+						this.journal_stocks.ajouter("On ne récolte pas pour ne pas faire exploser notre cout de stockage");
 					}
 				}
 			}
@@ -178,9 +179,8 @@ public class Producteur1Plantation extends Producteur1Acteur {
 					Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), q*this.coutreplantation.getValeur());
 					this.journal_champs.ajouter("Un champ de "+q+" hectares a été planté");
 				}
-				else if ((step-i)%10==0 && step-i>0) 
-					// ===== elouan et début gab =====
-				{if (!greve || (greve&&(a<=max))) {
+				else if ((step-i)%10==0 && step-i>0 && !greve || (greve&&(a<=max))) 
+				{if (this.Stock.getValeur()*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()<2000000) {
 					double nb_tonnes = q*0.56 ; //ajouter facteur random
 					double random = ThreadLocalRandom.current().nextDouble(0.9, 1.15);
 					nb_tonnes = nb_tonnes * random ;
@@ -191,6 +191,8 @@ public class Producteur1Plantation extends Producteur1Acteur {
 					} else {
 						quantiteFeveB.put(step, nb_tonnes);
 					}
+				}else {
+					this.journal_stocks.ajouter("On ne récolte pas pour ne pas faire exploser notre cout de stockage");
 				}
 				}
 			}
@@ -220,7 +222,7 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur("EQ1"), cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), (q1+q2)*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());
 		this.journal_stocks.ajouter("Cout de stockage bas de gamme : "+q2*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());
 		this.journal_stocks.ajouter("Cout de stockage moyenne gamme : "+q1*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur());
-		//on replante les champs détruits pour toujours rester au dessus de 250kHa pour notre production de masse
+		//on replante les champs détruits pour toujours rester autour de 250kHa pour notre production de masse
 		if (cm.getNbHectare()<50000) {
 			cm.ajouter(step, 50000-cm.getNbHectare());
 		}
@@ -228,9 +230,8 @@ public class Producteur1Plantation extends Producteur1Acteur {
 			cb.ajouter(step, 200000-cb.getNbHectare());
 		}
 	}
-//===== fin elouan et gab =====	
 
-//====== gab : calcul du coût de revient pour une qtté donnée d'un produit 
+	//====== gab : calcul du coût de revient pour une qtté donnée d'un produit 
 
 	//méthode qui renvoie le coût de revient d'un stock de fève avant de le vendre
 	//feve chgt qualité?
