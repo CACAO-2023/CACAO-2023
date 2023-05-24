@@ -102,8 +102,8 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   /**Mouhamed SOW*/
   /**methode pour savoir ou il faut ajouter le chocolat*/
   public Lot getLotChocolat(IProduit produit) {
-	  if(produit instanceof Chocolat) {
-		  Chocolat chocolat=(Chocolat) produit ;
+	  if(produit instanceof ChocolatDeMarque) {
+		  ChocolatDeMarque chocolat=(ChocolatDeMarque) produit ;
 		  switch(chocolat.getGamme()) {
 		  case MQ :
 			  return this.stockChocolatBG ;
@@ -221,9 +221,9 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 	  			break;
 	  			}
-        		else {stockChocolatBG.retirer(stockChocolatBG.getQuantiteTotale());
+        		else {if(stockChocolatBG.getQuantiteTotale()>0.0){stockChocolatBG.retirer(stockChocolatBG.getQuantiteTotale());
         		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatBG.getQuantiteTotale());
-        		break ;
+        		break ;}
         		}
 	  	case MQ :
 	  		if(chocolat.isBioEquitable()) {
@@ -232,9 +232,11 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 		  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 		  			break;
 		  			}
-	        		else {stockChocolatMGL.retirer(stockChocolatMGL.getQuantiteTotale());
+	        		else {if(stockChocolatBG.getQuantiteTotale()>0.0){
+	        			stockChocolatMGL.retirer(stockChocolatMGL.getQuantiteTotale());
+	        
 	        		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatMGL.getQuantiteTotale());
-	        		break ;
+	        		break ;}
 	        		}
 	  		}else {
 	  			if(stockChocolatMG.getQuantiteTotale()>=quantite) {
@@ -242,10 +244,11 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 		  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 		  			break;
 		  			}
-	        		else {stockChocolatMG.retirer(stockChocolatMG.getQuantiteTotale());
+	        		else {if(stockChocolatBG.getQuantiteTotale()>0.0){
+	        			stockChocolatMG.retirer(stockChocolatMG.getQuantiteTotale());
 	        		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatMG.getQuantiteTotale());
 	        		break ;
-	        		}
+	        		}}
 	  		}
 	  	case HQ :
 	  		if(stockChocolatHGL.getQuantiteTotale()>=quantite) {
@@ -253,10 +256,11 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 	  			break;
 	  			}
-        		else {stockChocolatHGL.retirer(stockChocolatHGL.getQuantiteTotale());
+        		else {if(stockChocolatBG.getQuantiteTotale()>0.0){
+        			stockChocolatHGL.retirer(stockChocolatHGL.getQuantiteTotale());
         		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatHGL.getQuantiteTotale());
         		break ;
-        		}
+        		}}
 	  	default :
 	  		throw new IllegalArgumentException("Type de Chocolat invalide");
 	  }
@@ -279,15 +283,19 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   		int perim = date - dureePeremption ;
   		Object quantiteRetiree = this.stockFeveBG.getQuantites().get(perim) ;
   		if(quantiteRetiree!=null && quantiteRetiree instanceof Double && ((Double)quantiteRetiree) >0) {
+  			super.journalStock.ajouter("on retire les fèves périmées BG"+quantiteRetiree);
   		this.stockFeveBG.retirer(((Double)quantiteRetiree)) ;} // retire la feve perime
   		Object quantiteRetiree2 = this.stockFeveMG.getQuantites().get(perim) ;
   		if(quantiteRetiree2!=null && quantiteRetiree2 instanceof Double &&((Double)quantiteRetiree2)>0) {
+  			super.journalStock.ajouter("on retire les fèves périmées MG"+quantiteRetiree2);
   		this.stockFeveMG.retirer(((Double)quantiteRetiree2)) ;}
   		Object quantiteRetiree3 = this.stockFeveMGL.getQuantites().get(perim) ;
   		if(quantiteRetiree3!=null && quantiteRetiree3 instanceof Double &&((Double)quantiteRetiree3)>0) {  		
+  			super.journalStock.ajouter("on retire les fèves périmées MGL"+quantiteRetiree3);
   		this.stockFeveMGL.retirer(((Double)quantiteRetiree3)) ;}
   		Object quantiteRetiree4 = this.stockFeveHGL.getQuantites().get(perim) ;
   		if(quantiteRetiree4!=null && quantiteRetiree4 instanceof Double && ((Double)quantiteRetiree4)>0) { 
+  			super.journalStock.ajouter("on retire les fèves périmées HGL"+quantiteRetiree4);
   		this.stockFeveHGL.retirer(((Double)quantiteRetiree4)) ;}
   		super.journalStock.ajouter(date+" ");
   		super.journalStock.ajouter(" La quantité de feve BG est :"+ this.stockFeveBG.getQuantiteTotale() );
