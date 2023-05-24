@@ -43,6 +43,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	protected Journal journal_stocks;
 	protected Journal journal_ContratCadre;
 	protected Journal journal_activitegenerale;
+	protected Journal journal_OA ;
 	protected double coutDeMainDoeuvre;
 
 
@@ -59,7 +60,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		coutDeMainDoeuvre = 10;
 		journal_operationsbancaires = new Journal("Journal des Opérations bancaires de l'" + nom, this);
 		journal_ventes = new Journal("Journal des Ventes de l'" + nom, this);
-		journal_achats = new Journal("Journal des Achats de l'" + nom, this);
+		journal_OA = new Journal("Journal des offres d'achats'" + nom, this);
+		journal_achats = new Journal("Journal des Achats de l' " + nom, this);
 		journal_ContratCadre= new Journal("Journal des Contrats Cadre de l'" + nom, this);
 		journal_activitegenerale = new Journal("Journal général de l'" + nom, this);
 		journal_stocks = new Journal("Journal des stocks " + nom, this);
@@ -95,12 +97,25 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	}
 
 	public double coutDeMainDoeuvre() {
-		double coutMD = Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur();
-		
-		return coutMD;
+		//double coutMD = Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur();
+		System.out.println(Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur());
+		return 0.;
 	}
 	
 	public void initialiser() {
+		
+
+		if (Filiere.LA_FILIERE.getEtape()==0) {
+			for (ChocolatDeMarque marque : chocolats) {
+				System.out.println("stock initialisé");
+				stocks.initStock(marque, 30000);
+				journal_stocks.ajouter("Stock de "+marque+" : "+stocks.getStock(marque)+" T");
+			}	
+			for (ChocolatDeMarque marque : chocolats) {
+				stock_total += stocks.getStock(marque);
+			}
+			s.setValeur(this, stock_total, this.cryptogramme);
+			}
 		
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
@@ -159,17 +174,19 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 				}
 			}
 			
+			if (stocks.getStockGlobal() > 0) {
+				double cout_TOT = 16*30*stock_total-getTotalCoutMainDoeuvre();
+				Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme,Filiere.LA_FILIERE.getBanque(),cout_TOT );	
+				
+				
+				
+				//journal_stock.ajouter("Cout de stockage : "+cout_STOCK);
+				}	
+			
+			
+			
+			
 		
-		if (Filiere.LA_FILIERE.getEtape()==0) {
-			for (ChocolatDeMarque marque : chocolats) {
-				stocks.ajouterAuStock(marque, 30000.0);
-				journal_stocks.ajouter("Stock de "+marque+" : "+stocks.getStock(marque)+" T");
-			}	
-			for (ChocolatDeMarque marque : chocolats) {
-				stock_total += stocks.getStock(marque);
-			}
-			s.setValeur(this, stock_total, this.cryptogramme);
-			}
 		
 		journal_stocks.ajouter("Stock total "+ stock_total+"T");
 		
@@ -216,6 +233,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		res.add(journal_achats);
 		res.add(journal_ventes);
 		res.add(journal_ContratCadre);
+		res.add(journal_OA);
 		res.add(journal_activitegenerale);
 		res.add(journal_stocks);
 		return res;

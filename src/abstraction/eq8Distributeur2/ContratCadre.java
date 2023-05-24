@@ -28,6 +28,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 		this.contratsEnCours=new LinkedList<ExemplaireContratCadre>();
 	}
 	public void initialiser() {	
+		super.initialiser();
 	}
 
 	//Auteur : Marzougui Mariem
@@ -93,32 +94,36 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 
 	//Auteur : Marzougui Mariem
 	public void next() {
-		super.next();
-		SuperviseurVentesContratCadre sup = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
-			for (ChocolatDeMarque choco:chocolats) {
-				List<IVendeurContratCadre> vendeurs = sup.getVendeurs(choco);
-				Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape()+1,24, 30000.0);
-				List<ExemplaireContratCadre> nouveaux_contrats = new ArrayList<ExemplaireContratCadre> ();
-				if (contratsEnCours != null) {
-				for (ExemplaireContratCadre c : nouveaux_contrats) {
-					if (choco.equals((ChocolatDeMarque)(c.getProduit()))) {
-						nouveaux_contrats.add(c);
-					}
-				}
-				}
-				if (vendeurs.size()>0  ) {
-					if (nouveaux_contrats.size()==0) {
-					for (IVendeurContratCadre vendeur : vendeurs) {
-						ExemplaireContratCadre cc =sup.demandeAcheteur(this , vendeur, choco, echeancier , this.cryptogramme, true);
-					}
-					for (ExemplaireContratCadre c : nouveaux_contrats) {
-						for (IVendeurContratCadre vendeur : vendeurs) {
-							Echeancier nouveau_echeancier = new Echeancier (c.getEcheancier().getStepFin(),24, 30000.0);
-							ExemplaireContratCadre cc =sup.demandeAcheteur(this , vendeur, choco, nouveau_echeancier , this.cryptogramme, true);
-					}
-					}
-				
-				}}}}
+	    super.next();
+	    SuperviseurVentesContratCadre sup = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
+	    for (ChocolatDeMarque choco:chocolats) {
+	        List<IVendeurContratCadre> vendeurs = sup.getVendeurs(choco);
+	        Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape()+1,24, 30000.0);
+	        List<ExemplaireContratCadre> nouveaux_contrats = new ArrayList<ExemplaireContratCadre> ();
+	        if (contratsEnCours != null) {
+	            for (ExemplaireContratCadre c : nouveaux_contrats) {
+	                if (choco.equals((ChocolatDeMarque)(c.getProduit()))) {
+	                    nouveaux_contrats.add(c);
+	                }
+	            }
+	        }
+	        if (vendeurs.size()>0  ) {
+	            if (nouveaux_contrats.size()==0) {
+	                for (IVendeurContratCadre vendeur : vendeurs) {
+	                    ExemplaireContratCadre cc =sup.demandeAcheteur(this , vendeur, choco, echeancier , this.cryptogramme, true);
+	                    this.journal_ContratCadre.ajouter("Proposition de contrat cadre avec " + vendeur.toString() + " pour " + choco.toString());
+	                }
+	                for (ExemplaireContratCadre c : nouveaux_contrats) {
+	                    for (IVendeurContratCadre vendeur : vendeurs) {
+	                        Echeancier nouveau_echeancier = new Echeancier (c.getEcheancier().getStepFin(),24, 30000.0);
+	                        ExemplaireContratCadre cc =sup.demandeAcheteur(this , vendeur, choco, nouveau_echeancier , this.cryptogramme, true);
+	                    }
+	                }
+	            }
+	        }
+	    }
+	}
+
 		
 
 	//Auteur : Marzougui Mariem
