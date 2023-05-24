@@ -138,6 +138,16 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		double promo = prixPromotion(choco);
 		double cout = getCoutTotal(choco);
 		double prix = cout*promo/(1-0.1*qualite);
+		double prix_moyen = 0.;
+		if (Filiere.LA_FILIERE.getEtape() >= 24) {
+			prix_moyen = Filiere.LA_FILIERE.prixMoyen(choco,Filiere.LA_FILIERE.getEtape()-24);
+		}
+		if (((prix < prix_moyen*0.9) || (prix > prix_moyen*1.1)) && (prix_moyen != 0.)) {
+			prix = prix - (prix-prix_moyen)*0.5;	
+			}
+		if (prix < cout/0.9) {
+			return cout/0.9;
+		}
 		return prix;
 	}
 	
