@@ -52,6 +52,7 @@ public class Producteur3 extends Bourse3  {
 		this.HectaresLibres = 0;
 		this.HectaresUtilises = 950000;
 		this.ListeCout = new LinkedList<Double>();
+		this.achatHectarCout = new HashMap<Integer, Integer>();
 	}
 	
 	/**
