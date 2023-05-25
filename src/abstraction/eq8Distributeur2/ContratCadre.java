@@ -1,21 +1,15 @@
 package abstraction.eq8Distributeur2;
 
-import java.awt.Color;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
-import abstraction.eqXRomu.filiere.IActeur;
-import abstraction.eqXRomu.general.Journal;
-import abstraction.eqXRomu.general.Variable;
-import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
@@ -27,6 +21,8 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 		super();
 		this.contratsEnCours=new LinkedList<ExemplaireContratCadre>();
 	}
+	
+	//Auteur : Marzougui Mariem
 	public void initialiser() {	
 		super.initialiser();
 	}
@@ -81,7 +77,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	}
 
 	//Auteur : Marzougui Mariem
-	//On retourne le prix sans négociation
+	//On retourne le prix avec négociation
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		return contrat.getPrix()*0.95;
 	}
@@ -131,4 +127,5 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 		stock_total+=lot.getQuantiteTotale();
 		s.setValeur(this, stock_total, this.cryptogramme);
 		this.journal_stocks.ajouter("ajout d'une quantité de"+lot.getQuantiteTotale()+"T livraison de CC "+contrat.getNumero());
-	}}
+	}
+}

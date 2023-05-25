@@ -38,8 +38,8 @@ public class StockGeneral {
 		return s;
 	}
 	
+	// auteur : AZZI Maxime
 	public void initStock(ChocolatDeMarque produit, double quantiteAjoutee) {
-		
 		stockMarque.put(produit, new Stock(quantiteAjoutee));
 		
 		

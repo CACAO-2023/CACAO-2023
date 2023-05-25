@@ -3,17 +3,10 @@ package abstraction.eq8Distributeur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import abstraction.eqXRomu.clients.ClientFinal;
-import abstraction.eqXRomu.clients.ExempleDistributeurChocolatMarque;
-import abstraction.eqXRomu.contratsCadres.Echeancier;
-import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
-import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
-import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
@@ -23,8 +16,7 @@ import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
-import abstraction.eqXRomu.produits.IProduit;
-import abstraction.eqXRomu.produits.Lot;
+
 
 public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarque, IMarqueChocolat {
 
@@ -45,7 +37,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	protected Journal journal_OA ;
 	protected double coutDeMainDoeuvre;
 
-
+	//Auteur : Mariem Marzougui et Karim Ben Messaoud
 	public Distributeur2Acteur() {
 		cryptogramme = 0; // valeur par défaut à modifier
 		nom = "équipe 8";
@@ -54,7 +46,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		stock_total = 0.0;
 		s= new VariablePrivee("Eq8 TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
 		pourcentagesGamme = new HashMap<>();
-		
 		coutDeMainDoeuvre = 10;
 		journal_operationsbancaires = new Journal("Journal des Opérations bancaires de l'" + nom, this);
 		journal_ventes = new Journal("Journal des Ventes de l'" + nom, this);
@@ -64,23 +55,24 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		journal_activitegenerale = new Journal("Journal général de l'" + nom, this);
 		journal_stocks = new Journal("Journal des stocks " + nom, this);
 		initialiserGamme();
-
 	
-		
 	}
-
+	
+	//Auteur : Karim Ben Messaoud
 	private void initialiserGamme() {
 		pourcentagesGamme.put(Gamme.BQ, 0.55);
 		pourcentagesGamme.put(Gamme.MQ, 0.40);
 		pourcentagesGamme.put(Gamme.HQ, 0.05);
 	}
-
+	
+	//Auteur : Karim Ben Messaoud
 	public double coutDeMainDoeuvre() {
 		//double coutMD = Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur();
 		//System.out.println(Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur());
 		return 0.;
 	}
 	
+	//Auteur : Marzougui Mariem et Karim Ben Messaoud
 	public void initialiser() {
 		chocolats =  Filiere.LA_FILIERE.getChocolatsProduits();
 		for (ChocolatDeMarque marque : chocolats) {
@@ -110,12 +102,11 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ8";
 	}
-	//karim
+	//Karim Ben Messaoud
 	public double getTotalCoutMainDoeuvre() {
 	    double totalCout = 0;
 	    for (ChocolatDeMarque marque : chocolats) {
 	        double stock = stocks.getStock(marque);
-	        
 	        totalCout += stock * coutDeMainDoeuvre();
 	    }
 	    return totalCout;
@@ -127,14 +118,12 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	//         En lien avec l'interface graphique         //
 	////////////////////////////////////////////////////////
 
+	//Auteur : Marzougui Mariem
 	public void next() {
-		
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
-		
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
 			for (ChocolatDeMarque marque : chocolats_filiere) {
-				chocolats.add(marque);
-				
+				chocolats.add(marque);	
 				if (marque.getGamme()==Gamme.HQ) {
 					prixDeVente.put(marque,4500.);
 				}
@@ -207,6 +196,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	// Appelee en debut de simulation pour vous communiquer 
 	// votre cryptogramme personnel, indispensable pour les
 	// transactions.
+	
 	//Auteur : Ben Messaoud Karim
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
@@ -243,7 +233,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	// Renvoie le solde actuel de l'acteur
 	//Auteur : Ben Messaoud Karim
 	public double getSolde() {
-		
 		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme)-16*30*stock_total-getTotalCoutMainDoeuvre();
 		
 	}
@@ -252,12 +241,14 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	//        Pour la creation de filieres de test        //
 	////////////////////////////////////////////////////////
 
+	//Auteur : Marzougui Mariem
 	// Renvoie la liste des filieres proposees par l'acteur
 	public List<String> getNomsFilieresProposees() {
 		ArrayList<String> filieres = new ArrayList<String>();
 		return(filieres);
 	}
 
+	//Auteur : Marzougui Mariem
 	// Renvoie une instance d'une filiere d'apres son nom
 	public Filiere getFiliere(String nom) {
 		return Filiere.LA_FILIERE;
@@ -268,6 +259,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			return this.stocks.getStock(choco);
 	}
 
+	//Auteur : Ben Messaoud Karim
 	public List<String> getMarquesChocolat() {
 		return new ArrayList<String>();
 	}
@@ -295,7 +287,6 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			return 0.0;
 		} else {
 			double stockChoco = this.stocks.getStock(choco);
-			
 			return  stockChoco ;
 		}
 	}
@@ -329,6 +320,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		// Ajouter un message dans le journal pour indiquer que le rayon est vide
 		journal_activitegenerale.ajouter("Le rayon du chocolat " + choco.getNom() + " est vide.");
 	}
+	
+	//Auteur : Marzougui Mariem
 	public String toString() {
         return this.getNom();
     }

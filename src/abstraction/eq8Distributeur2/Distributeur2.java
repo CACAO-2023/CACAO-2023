@@ -12,7 +12,6 @@ public class Distributeur2 extends Distributeur2AcheteurOA  {
 	
 	
 public void next() {
-
 	super.next();
 	
 	
