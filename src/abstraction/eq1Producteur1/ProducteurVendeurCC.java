@@ -47,8 +47,8 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		}
 		this.quantiteventeBQ=0;
 		this.quantiteventeMQ=0;
-		this.maxcontratBQ=10;
-		this.maxcontratMQ=3;
+		this.maxcontratBQ=15;
+		this.maxcontratMQ=5;
 		this.nbcontratBQ=0;
 		this.nbcontratMQ=0;
 	}
