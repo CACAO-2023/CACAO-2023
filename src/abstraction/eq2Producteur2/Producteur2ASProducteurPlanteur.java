@@ -19,7 +19,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	private HashMap<Feve, Double> salaires;
 	private HashMap<Feve, Variable> surface_plantation;
 	private HashMap<Feve, Double> prix;
-	private HashMap<Feve,HashMap<Integer, Integer>> age_hectares;
+	protected HashMap<Feve,HashMap<Integer, Integer>> age_hectares;
 	private HashMap<Feve, Double> cout_parcelle;
 	private double borne_min_BQ;
 	private double borne_max_BQ;
@@ -183,7 +183,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	
 	//Entre 3 ans et 40 ans la productivité de nos hectare suivra cette gaussienne
 	protected double Productivite_1_hectare(int step) {
-		double P = 110/(720*Math.sqrt(2*Math.PI))*Math.exp(-1/2*((step-480)/720)^2);
+		double P = 110/(720*Math.sqrt(2*Math.PI))*Math.exp(-1./2*Math.pow((step-480.0)/720,2));
 		return P;
 	}
 	
@@ -197,10 +197,10 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 			double qte = 0;
 			for (int i : this.age_hectares.get(f).keySet()){
 				if (step-i<3*24) {
-					qte =+ 0;
+					qte += 0;
 				}
 				if (step-i>=3*24 && step-i<40*24) {
-					qte =+ Productivite_1_hectare(i)*this.age_hectares.get(f).get(i);
+					qte += Productivite_1_hectare(step - i)*this.age_hectares.get(f).get(i);
 				}
 				
 			}
@@ -243,7 +243,7 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	//une rentabilite superieure a 10%
 	
 	protected boolean Rentabilites(Feve f, Double prix){
-		double rentabilite = prix * Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f)/this.salaires.get(f);
+		double rentabilite = prix * this.Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f)/this.salaires.get(f);
 		if (rentabilite>=1.1) {
 			return true;
 		}
@@ -254,8 +254,11 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 	//nous renvoit le prix minimum de rentabilite de celle-ci
 	
 	protected double prix_rentable(Feve f) {
-		return 1.1*CoutProd().get(f)/Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f);
+		return 1.1*CoutProd().get(f)/this.Prevision_Production(Filiere.LA_FILIERE.getEtape()).get(f);
 	}
+	
+	//La fonction ci-dessous nous renvoit un boolean si les resultats d'une certaine fève est bon ou mauvais
+	//entre une date de début et une date de fin
 	
 	protected boolean mauvais_resultat(Feve f, int debut, int fin) {
 		double CA = 0;
@@ -271,7 +274,11 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 			return false;
 		}
 	}
-	//
+	
+	//Cette fonction permet d'ajuster nos plantation : si le resultat et mauvais on la reduit
+	//Pour la feve de moyenne qualitité bio-équitable on augmente petit à petit sa taille tous les ans
+	//Pour la feve de basse qualité on fait de même jusqu'à 20 ans de fillière
+	//Enfin on compense les arbres qui seront prochainement trop vieux
 	private void ajustement_plantation() {
 		for (Feve f : this.salaires.keySet()) {
 			int nb_a_planter = 0;
@@ -279,27 +286,25 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 				if (mauvais_resultat(f, Filiere.LA_FILIERE.getEtape()-3*24, Filiere.LA_FILIERE.getEtape())) {
 					for (int age : this.age_hectares.get(f).keySet()) {
 						int nb_plantation = this.age_hectares.get(f).get(age);
-						this.age_hectares.get(f).put(age,(int) Math.round(0.8*nb_plantation));
+						this.age_hectares.get(f).put(age,(int) Math.ceil(0.8*nb_plantation));
 					}}
-				else {
-					if (f == Feve.F_MQ_BE) {
-							nb_a_planter =(int) Math.round(this.surface_plantation.get(f).getValeur()*0.08);
-							}}
 			}
 			
 			if (this.age_hectares.get(f).containsKey(Filiere.LA_FILIERE.getEtape() - 37*24)) {
 				nb_a_planter = this.age_hectares.get(f).get(Filiere.LA_FILIERE.getEtape() - 37*24);
 			}
-			if (f == Feve.F_MQ_BE) {
+			if (f == Feve.F_MQ_BE && mauvais_resultat(f, Filiere.LA_FILIERE.getEtape()-24, Filiere.LA_FILIERE.getEtape()) == false && Filiere.LA_FILIERE.getEtape()%24==0) {
 				if (Filiere.LA_FILIERE.getEtape()%24==0) {
 					nb_a_planter +=(int) Math.round(this.surface_plantation.get(f).getValeur()*0.08);
 				}
+			if (f == Feve.F_BQ && mauvais_resultat(f, Filiere.LA_FILIERE.getEtape()-24, Filiere.LA_FILIERE.getEtape()) == false && Filiere.LA_FILIERE.getEtape()%24==0 && Filiere.LA_FILIERE.getEtape()<20*24) {
+				nb_a_planter += (int) Math.round(this.surface_plantation.get(f).getValeur()*0.08);
 			}
 			if (nb_a_planter>0) {
 				Planter(f, nb_a_planter);
 				Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), this.cout_parcelle.get(f)*nb_a_planter);
 			}
-		}
+			}}
 	}
 	
 	// Une fois les plantation ajustees, sachant qu'un employe s'occupe d'un hectare on adapte le nombre
@@ -341,6 +346,8 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		return prevision;
 	}
 	
+	//Cette fonction nous renvoit les prévisions les plus pessimistes de production
+	
 	protected HashMap<Feve, Double> Prevision_Production_minimale(int step) {
 		HashMap<Feve, Double> prevision = Prevision_Production(step);
 		for (Feve f : Prevision_Production(Filiere.LA_FILIERE.getEtape()).keySet()) {
@@ -365,9 +372,11 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 		this.journalProd.ajouter("Etat Masse Salariale : " + this.employes);
 		super.next();
 		this.majPlantation();
+		HashMap<Feve, Double> prod = Production_avec_intemperies();
 		for (Feve f : this.age_hectares.keySet()) {
 			if (Production_avec_intemperies().get(f)>0){
-				this.ajouterStock(f, Filiere.LA_FILIERE.getEtape(), Production_avec_intemperies().get(f));
+				this.prodFeve.get(f).setValeur(this, prod.get(f), this.cryptogramme);
+				this.ajouterStock(f, Filiere.LA_FILIERE.getEtape(), prod.get(f));
 			}
 		}
 		this.ajustement_plantation();

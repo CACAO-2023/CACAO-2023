@@ -22,6 +22,7 @@ public class Producteur1Acteur implements IActeur {
 	protected Journal journal_stocks;
 	protected Journal journal_ventes;
 	protected Journal journal_champs;
+	protected Journal journal_fidelite;
 	protected int step;
 	protected champ champBas;
 	protected champ champMoy;
@@ -35,6 +36,7 @@ public class Producteur1Acteur implements IActeur {
 		this.journal_stocks = new Journal("Journal : stocks"+this.getNom(), this);
 		this.journal_ventes = new Journal("Journal : ventes"+this.getNom(), this);
 		this.journal_champs = new Journal("Journal : champs"+this.getNom(), this);
+		this.journal_fidelite=new Journal("Journal: Fidélité"+this.getNom(), this);
 	}
 	
 	public void initialiser() { //elouan et charles
@@ -103,6 +105,7 @@ public class Producteur1Acteur implements IActeur {
 		res.add(this.journal_ventes);
 		res.add(this.journal_stocks);
 		res.add(this.journal_champs);
+		res.add(this.journal_fidelite);
 		return res;
 	}
 
