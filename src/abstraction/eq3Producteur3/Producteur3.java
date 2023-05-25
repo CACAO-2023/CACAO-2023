@@ -128,7 +128,7 @@ public class Producteur3 extends Bourse3  {
 		HarvestToStock(Filiere.LA_FILIERE.getEtape());
 		this.Stock = Stock.miseAJourStock();
 
-		// Now adding to the step cost the storage costs
+		// Now adding   to the step cost the storage costs
 		//Greve ?
 		double probaGreve = Math.random();
 		if(probaGreve < this.probaGreve.getValeur()){
