@@ -129,7 +129,12 @@ public class Producteur3 extends Bourse3  {
 		this.Stock = Stock.miseAJourStock();
 
 		// Now adding to the step cost the storage costs
-		
+		//Greve ?
+		double probaGreve = Math.random();
+		if(probaGreve < this.probaGreve.getValeur()){
+					this.GreveGeneral();
+
+		}
 		updateHectaresLibres(Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape() % 12 == 0) {
 			if (Filiere.LA_FILIERE.getEtape() != 0) {
@@ -143,12 +148,7 @@ public class Producteur3 extends Bourse3  {
 		}
 
 		
-		//Greve ?
-		double probaGreve = Math.random();
-		if(probaGreve < this.probaGreve.getValeur()){
-					this.GreveGeneral();
 
-		}
 		// Incendie ?	
 		double probaIncendie =  Math.random();
 				if(probaIncendie < this.probaIncendiH.getValeur()) {
@@ -480,7 +480,6 @@ public class Producteur3 extends Bourse3  {
 		int max = 999999999;
 		for(int i= 0 ;i < Filiere.LA_FILIERE.getEtape();i++) {
 			int Valuei = (int)h.getValeur(i);
-			System.out.println("Valuei = " + Valuei);
 			if(Valuei < max) {
 				max = Valuei;
 			}
@@ -641,10 +640,10 @@ public class Producteur3 extends Bourse3  {
 		Champs fields = this.getFields();
 		HashMap<String, LinkedList<Integer>> Keys = fields.HarvestKeys(Filiere.LA_FILIERE.getEtape());
 		LinkedList<Integer> quantitePerdues = fields.HarvestQuantityG(Filiere.LA_FILIERE.getEtape(),Keys, nbrgreviste);
-		if(quantitePerdues.get(0) > 0) {
+		if(quantitePerdues.get(0) > 0.1) {
 		super.getStock().retirerVielleFeve(Feve.F_HQ_BE,quantitePerdues.get(0));
 		}
-		if(quantitePerdues.get(1) > 0) {
+		if(quantitePerdues.get(1) > 0.1) {
 		super.getStock().retirerVielleFeve(Feve.F_MQ_BE,quantitePerdues.get(1));
 		}
 		Journal j = super.getJCatastrophe();
