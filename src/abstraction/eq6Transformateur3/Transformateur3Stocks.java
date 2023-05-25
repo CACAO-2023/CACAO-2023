@@ -221,8 +221,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 	  			break;
 	  			}
-        		else {if(stockChocolatBG.getQuantiteTotale()>0.0){
-        			stockChocolatBG.retirer(stockChocolatBG.getQuantiteTotale());
+        		else {if(stockChocolatBG.getQuantiteTotale()>0.0){stockChocolatBG.retirer(stockChocolatBG.getQuantiteTotale());
         		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatBG.getQuantiteTotale());
         		break ;}
         		}
@@ -233,7 +232,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 		  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 		  			break;
 		  			}
-	        		else {if(stockChocolatMGL.getQuantiteTotale()>0.0){
+	        		else {if(stockChocolatBG.getQuantiteTotale()>0.0){
 	        			stockChocolatMGL.retirer(stockChocolatMGL.getQuantiteTotale());
 	        
 	        		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatMGL.getQuantiteTotale());
@@ -245,7 +244,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 		  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 		  			break;
 		  			}
-	        		else {if(stockChocolatMG.getQuantiteTotale()>0.0){
+	        		else {if(stockChocolatBG.getQuantiteTotale()>0.0){
 	        			stockChocolatMG.retirer(stockChocolatMG.getQuantiteTotale());
 	        		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatMG.getQuantiteTotale());
 	        		break ;
@@ -257,7 +256,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 	  			break;
 	  			}
-        		else {if(stockChocolatHGL.getQuantiteTotale()>0.0){
+        		else {if(stockChocolatBG.getQuantiteTotale()>0.0){
         			stockChocolatHGL.retirer(stockChocolatHGL.getQuantiteTotale());
         		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatHGL.getQuantiteTotale());
         		break ;

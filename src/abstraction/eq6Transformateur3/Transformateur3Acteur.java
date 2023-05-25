@@ -106,7 +106,7 @@ public class Transformateur3Acteur implements IActeur, IMarqueChocolat  {
 	}
 
 	public void initialiser() {
-		
+		System.out.println("initialiser equ 6 chocoproduits et sa taille est :"+this.chocosProduits.size());
 			}
 
 	public String getNom() {// NE PAS MODIFIER
