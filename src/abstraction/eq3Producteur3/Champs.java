@@ -17,8 +17,8 @@ public class Champs {
 	public Champs() {
 		//Integer NombreHectaresM = 22500; premiers essais
 		//Integer NombreHectaresH =1250;
-		Integer NombreHectaresM = 14000; // optimises
-		Integer NombreHectaresH = 3000; // pas trop haut, afin de simuler la réalité
+		Integer NombreHectaresM = 9000; // optimises
+		Integer NombreHectaresH = 1500; // pas trop haut, afin de simuler la réalité
 		HashMap<Integer, Integer> ChampH = new HashMap<Integer, Integer>();
 		HashMap<Integer, Integer> ChampM = new HashMap<Integer, Integer>();
 
