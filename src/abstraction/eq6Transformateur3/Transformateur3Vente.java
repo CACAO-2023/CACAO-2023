@@ -155,22 +155,24 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		super.journalVentes.ajouter("Nouveau contrat de vente passé :"+contrat.toString());}
 		
 	}
+	 
 	
 	public void initialiser() {
 		super.initialiser();
 		this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
 	}
-	public void chercheContrat(IProduit produit) {
+	public void rechercheContrat(IProduit produit) {
 		if (superviseur != null) {
 		List<IAcheteurContratCadre> acheteurs = superviseur.getAcheteurs(produit);
 		if (acheteurs.size()!=0) {
 			Collections.shuffle(acheteurs);
 			for (IAcheteurContratCadre acheteur : acheteurs) {
+				if (acheteur!=Filiere.LA_FILIERE.getActeur("ecochoco")) {
 			super.journalVentes.ajouter("on essaie de demander un contrat à l'equipe :"+acheteur.getNom());
 			ExemplaireContratCadre contrat = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1,Filiere.LA_FILIERE.getEtape()+9,100.0), super.cryptogramme, false);
 			if (contrat != null) {super.journalVentes.ajouter("CC cherché et trouvé :"+contrat.toString());
 									this.listeCC.add(contrat);
-									}}}}
+									}}}}}
 		
 	}
 	/**Nathan Salbego*/
@@ -184,13 +186,13 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		}
 		this.listeCC.removeAll(contratsObsoletes);
 		if ((this.stockChocolatBG.getQuantiteTotale()>5000 ))
-		{this.chercheContrat(super.chocosProduits.get(0));}
+		{this.rechercheContrat(super.chocosProduits.get(0));}
 		if ((this.stockChocolatMG.getQuantiteTotale()>5000))
-		{this.chercheContrat(super.chocosProduits.get(1));}
+		{this.rechercheContrat(super.chocosProduits.get(1));}
 		if ((this.stockChocolatMGL.getQuantiteTotale()>5000))
-		{this.chercheContrat(super.chocosProduits.get(2));}
+		{this.rechercheContrat(super.chocosProduits.get(2));}
 		if ((this.stockChocolatHGL.getQuantiteTotale()>5000)) {
-		{this.chercheContrat(super.chocosProduits.get(3));}}
+		{this.rechercheContrat(super.chocosProduits.get(3));}}
 	}
 
 	@Override
