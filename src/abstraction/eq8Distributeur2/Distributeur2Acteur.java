@@ -37,7 +37,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	protected Journal journal_OA ;
 	protected double coutDeMainDoeuvre;
 
-	//Auteur : Mariem Marzougui et Karim Ben Messaoud
+	//Auteurs : Mariem Marzougui et Karim Ben Messaoud
 	public Distributeur2Acteur() {
 		cryptogramme = 0; // valeur par défaut à modifier
 		nom = "équipe 8";

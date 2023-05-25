@@ -32,7 +32,7 @@ public class Distributeur2AcheteurOA extends ContratCadre implements IAcheteurOA
    
     }
   
-	//Karim Ben Messaoud
+	//Auteur: Karim Ben Messaoud
 	public void next() {
 		this.journal_OA.ajouter("next");
 		

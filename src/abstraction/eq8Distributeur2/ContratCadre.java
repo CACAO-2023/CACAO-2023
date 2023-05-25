@@ -77,6 +77,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	}
 
 	//Auteur : Marzougui Mariem
+	
 	//On retourne le prix avec négociation
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		return contrat.getPrix()*0.95;

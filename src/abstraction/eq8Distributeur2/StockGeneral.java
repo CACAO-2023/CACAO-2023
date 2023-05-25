@@ -15,7 +15,6 @@ public class StockGeneral {
 	// auteur : AZZI Maxime
 	public StockGeneral() {
 		stockMarque = new HashMap<ChocolatDeMarque, Stock>();
-		
 	}
 
 	// auteur : AZZI Maxime
@@ -41,8 +40,6 @@ public class StockGeneral {
 	// auteur : AZZI Maxime
 	public void initStock(ChocolatDeMarque produit, double quantiteAjoutee) {
 		stockMarque.put(produit, new Stock(quantiteAjoutee));
-		
-		
 	}
 
 	// Autres méthodes pour gérer le stock général (ajouter, retirer, etc.)

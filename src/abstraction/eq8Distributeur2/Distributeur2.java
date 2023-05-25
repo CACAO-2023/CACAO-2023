@@ -4,8 +4,8 @@ public class Distributeur2 extends Distributeur2AcheteurOA  {
 	
 	public Distributeur2() {
 		super();
-		
 	}
+	
 	public void initialiser() {	
 		super.initialiser();
 	}
