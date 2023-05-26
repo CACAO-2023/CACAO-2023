@@ -147,13 +147,13 @@ public class Stock {
 			Lot res=new Lot(f);
 			List<Integer> vides = new LinkedList<Integer>();
 			Set<Integer> s = this.getStock().get(f).getQuantites().keySet();
-			List<Integer> keyList = new ArrayList(s);
+			List<Integer> keyList = new ArrayList<Integer>(s);
 			Collections.sort(keyList);
 			Collections.reverse(keyList);
 			double reste = quantite;
 			for (Integer i : keyList) {
 				if (reste > 0.0) {
-					if (this.getStock().get(f).getQuantites().get(i)>=reste) {
+					if (this.getStock().get(f).getQuantites().get(i)>reste) {
 						res.ajouter(i,reste);
 						this.getStock().get(f).getQuantites().put(i,this.getStock().get(f).getQuantites().get(i)-reste);
 						reste=0;
