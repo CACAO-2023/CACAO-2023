@@ -3,7 +3,6 @@ package abstraction.eq3Producteur3;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
@@ -11,11 +10,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
-import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Historique;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
@@ -52,7 +49,7 @@ public class Producteur3 extends Bourse3  {
 		this.CoutTonne = 0.;
 		this.HectaresLibres = 0;
 		//this.HectaresUtilises = 950000; premiers essais
-		this.HectaresUtilises = 728000; //optimises
+		this.HectaresUtilises = 420000; //optimises
 		this.ListeCout = new LinkedList<Double>();
 		this.achatHectarCout = new HashMap<Integer, Integer>();
 	}
@@ -87,8 +84,8 @@ public class Producteur3 extends Bourse3  {
 		Stock Stock = this.getStock();
 		this.CoutTonne = CoutTotal / Math.max(Stock.getQuantite(), 1);
 		
-		if (this.CoutTonne > 10000) {
-			this.CoutTonne = 10000.;
+		if (this.CoutTonne > 20000) {
+			this.CoutTonne = 20000.;
 		}
 	}
 	
@@ -129,8 +126,13 @@ public class Producteur3 extends Bourse3  {
 		HarvestToStock(Filiere.LA_FILIERE.getEtape());
 		this.Stock = Stock.miseAJourStock();
 
-		// Now adding to the step cost the storage costs
-		
+		// Now adding   to the step cost the storage costs
+		//Greve ?
+		double probaGreve = Math.random();
+		if(probaGreve < this.probaGreve.getValeur()){
+					this.GreveGeneral();
+
+		}
 		updateHectaresLibres(Filiere.LA_FILIERE.getEtape());
 		if (Filiere.LA_FILIERE.getEtape() % 12 == 0) {
 			if (Filiere.LA_FILIERE.getEtape() != 0) {
@@ -144,12 +146,7 @@ public class Producteur3 extends Bourse3  {
 		}
 
 		
-		//Greve ?
-		double probaGreve = Math.random();
-		if(probaGreve < this.probaGreve.getValeur()){
-					this.GreveGeneral();
 
-		}
 		// Incendie ?	
 		double probaIncendie =  Math.random();
 				if(probaIncendie < this.probaIncendiH.getValeur()) {
@@ -428,6 +425,7 @@ public class Producteur3 extends Bourse3  {
 	 * @return Benefice gagne suite a la vente des feves de qualite s
 	 */
 	protected double getBenefice(String s) {
+		if(Filiere.LA_FILIERE.getEtape()>0) {
 		double coutCurrentStep;
 		double recette;
 		int step = Filiere.LA_FILIERE.getEtape() - 1;
@@ -463,6 +461,8 @@ public class Producteur3 extends Bourse3  {
 		this.journal_activitegenerale.ajouter("Cout au step" + step +" pour " + s + ":" + coutCurrentStep);
 		this.journal_activitegenerale.ajouter("Recette pour " + s + "au step " + step + ":" + recette);
 		return recette - coutCurrentStep;
+		}
+		return 0.0;
 	}
 	/**
 	 * 
@@ -540,16 +540,16 @@ public class Producteur3 extends Bourse3  {
 			}
 			if (this.nbr_popup < 1) {
 			this.nbr_popup +=1;
-		//	JFrame popup = new JFrame(nom_incendie);		
-			//popup.setLocation(300, 100);
-			//ImageIcon icon = new ImageIcon(url);
-			//JLabel label = new JLabel(icon);
-	        //popup.getContentPane().add(label);
-	        //popup.pack();
-	        //popup.setVisible(true);
-	      //  Timer timer = new Timer();
-		//	ControlTimeGif monTimerTask = new ControlTimeGif(popup);
-			//timer.schedule(monTimerTask, 3000);
+			JFrame popup = new JFrame(nom_incendie);		
+			popup.setLocation(950, 50);
+			ImageIcon icon = new ImageIcon(url);
+			JLabel label = new JLabel(icon);
+	        popup.getContentPane().add(label);
+	        popup.pack();
+	        popup.setVisible(true);
+	        Timer timer = new Timer();
+			ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+			timer.schedule(monTimerTask, 3000);
 			}
 			for(Integer key : KeyM) {
 				hectarMburnt += FieldsM.get(key)*Degat;
@@ -573,16 +573,17 @@ public class Producteur3 extends Bourse3  {
 	public void Cyclone() {
 		if(this.nbr_popup < 1) {
 		this.nbr_popup +=1;
-//		JFrame popup = new JFrame("Cyclone !");		
-//		popup.setLocation(300, 100);
-//		ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Cyclone.gif");
-//		JLabel label = new JLabel(icon);
-//        popup.getContentPane().add(label);
-//        popup.pack();
-//        popup.setVisible(true);
-//        Timer timer = new Timer();
-//		ControlTimeGif monTimerTask = new ControlTimeGif(popup);
-//		timer.schedule(monTimerTask, 3000);	
+		JFrame popup = new JFrame("Cyclone !");		
+		popup.setLocation(300, 100);
+		ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Cyclone.gif");
+		JLabel label = new JLabel(icon);
+        popup.getContentPane().add(label);
+        popup.setLocation(950, 50);
+        popup.pack();
+        popup.setVisible(true);
+        Timer timer = new Timer();
+		ControlTimeGif monTimerTask = new ControlTimeGif(popup);
+		timer.schedule(monTimerTask, 3000);	
 		}
 		Champs fields = this.getFields();
 		HashMap<Integer,Integer> FieldH = fields.getChamps().get("H");
@@ -613,16 +614,17 @@ public class Producteur3 extends Bourse3  {
 	 * @author BOCQUET Gabriel
 	 *
 	 */
-	//Pour modéliser    la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
+	//Pour modéliser la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
 
 	protected void GreveGeneral() {
-		if (nbr_popup < 0) {
+		if (nbr_popup < 1) {
 			this.nbr_popup +=1;
 			JFrame popup = new JFrame("Grêve des Ouvriers !");		
 			popup.setLocation(300, 100);
 			ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Greve.gif"); //
 			JLabel label = new JLabel(icon);
 			popup.getContentPane().add(label);
+			popup.setLocation(950, 50);
 	        popup.pack();
 			popup.setVisible(true);
 			Timer timer = new Timer();
@@ -637,10 +639,10 @@ public class Producteur3 extends Bourse3  {
 		Champs fields = this.getFields();
 		HashMap<String, LinkedList<Integer>> Keys = fields.HarvestKeys(Filiere.LA_FILIERE.getEtape());
 		LinkedList<Integer> quantitePerdues = fields.HarvestQuantityG(Filiere.LA_FILIERE.getEtape(),Keys, nbrgreviste);
-		if(quantitePerdues.get(0) > 0) {
+		if(quantitePerdues.get(0) > 0.1) {
 		super.getStock().retirerVielleFeve(Feve.F_HQ_BE,quantitePerdues.get(0));
 		}
-		if(quantitePerdues.get(1) > 0) {
+		if(quantitePerdues.get(1) > 0.1) {
 		super.getStock().retirerVielleFeve(Feve.F_MQ_BE,quantitePerdues.get(1));
 		}
 		Journal j = super.getJCatastrophe();
