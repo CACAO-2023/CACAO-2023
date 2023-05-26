@@ -3,7 +3,6 @@ package abstraction.eq3Producteur3;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
@@ -11,11 +10,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
-import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Historique;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;

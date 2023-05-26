@@ -2,11 +2,9 @@ package abstraction.eq3Producteur3;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.Set;
 
 import abstraction.eqXRomu.filiere.Filiere;
-import abstraction.eqXRomu.produits.Feve;
 
 public class Champs {
 	private HashMap<String, HashMap<Integer, Integer>> Champs; /* String H ou M (key) et Hashmap des champs. Champs contient tous les champs */
@@ -53,7 +51,6 @@ public class Champs {
 	 * Cette fonction nous donne le taux de recolte en fonction de l'age des arbres. Les valeurs ont été trouvé par Florian de l'equipe 2
 	 */
 	public double gaussienne(double x) {
-		Random r = new Random();
 		double sigma = Filiere.LA_FILIERE.getParametre("Ecart-type gaussienne pour production").getValeur();
 		double esperance = Filiere.LA_FILIERE.getParametre("Esperance gaussienne pour production").getValeur();
 		return (600/(Math.sqrt(2*Math.PI)*sigma))*Math.exp(-(x-esperance)*(x-esperance)/(2*sigma*sigma));
@@ -112,7 +109,7 @@ public class Champs {
 	public LinkedList<Integer> HarvestQuantity(int CurrentStep, HashMap<String, LinkedList<Integer>> Keys){
 		String[] Gamme = {"H","M"};
 		HashMap<String, HashMap<Integer, Integer>> FieldList =this.getChamps();
-		LinkedList<Integer> l = new LinkedList();
+		LinkedList<Integer> l = new LinkedList<Integer>();
 		//On recupere la liste des champs de moyenne gamme
 		for(String s : Gamme) {
 		HashMap<Integer,Integer> Field = FieldList.get(s);
@@ -235,7 +232,7 @@ public class Champs {
 
 		}
 		}
-			LinkedList<Integer> l = new LinkedList();
+			LinkedList<Integer> l = new LinkedList<Integer>();
 			l.add(quantiteH);
 			l.add(quantiteM);
 			return l;
