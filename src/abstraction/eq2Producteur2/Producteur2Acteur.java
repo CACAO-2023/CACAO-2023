@@ -60,7 +60,7 @@ public class Producteur2Acteur implements IActeur {
 	protected HashMap<Feve, Variable> coutProdFeve = new HashMap<Feve, Variable>();
 	protected HashMap<Feve, Variable> prodFeve = new HashMap<Feve, Variable>();
 	protected Producteur2 thisP;
-
+	
 	//Prix pour les contrats cadres
 	protected Variable prixBQ = new Variable("EQ2 prix de référence BQ CC", "prix de référence de BQ pour les CC", this, 2200.0*1.01);
 	protected Variable prixMQ = new Variable("EQ2 prix de référence MQ CC", "prix de référence de MQ pour les CC", this,3500.0*1.05);
@@ -70,7 +70,7 @@ public class Producteur2Acteur implements IActeur {
 	protected LinkedList<ExemplaireContratCadre> contrats;
 	
 	protected Feve[] lesFeves = {Feve.F_BQ, Feve.F_MQ, Feve.F_MQ_BE, Feve.F_HQ_BE};
-
+	
 	public Producteur2Acteur() {
 		this.journal = new Journal("Journal " + this.getNom(), this);
 		this.journalCC = new Journal("Journal Contrat Cadre " + this.getNom(), this);
