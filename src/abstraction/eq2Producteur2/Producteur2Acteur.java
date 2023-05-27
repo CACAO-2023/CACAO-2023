@@ -60,17 +60,17 @@ public class Producteur2Acteur implements IActeur {
 	protected HashMap<Feve, Variable> coutProdFeve = new HashMap<Feve, Variable>();
 	protected HashMap<Feve, Variable> prodFeve = new HashMap<Feve, Variable>();
 	protected Producteur2 thisP;
-
+	
 	//Prix pour les contrats cadres
-	public double prixBQ = 2200.0*1.01;
-	public double prixMQ = 3500.0*1.05;
-	public double prixMQBE = 5000.0*0.99;
-	public double prixHQ = 10000.0*1.1;
-	public HashMap<Feve, Double> prixCC;
+	protected Variable prixBQ = new Variable("EQ2 prix de référence BQ CC", "prix de référence de BQ pour les CC", this, 2200.0*1.01);
+	protected Variable prixMQ = new Variable("EQ2 prix de référence MQ CC", "prix de référence de MQ pour les CC", this,3500.0*1.05);
+	protected Variable prixMQBE = new Variable("EQ2 prix de référence MQ_BE CC", "prix de référence de MQ_BE pour les CC", this,5000.0*0.99);
+	protected Variable prixHQ = new Variable("EQ2 prix de référence HQ_BE CC", "prix de référence de HQ_BE pour les CC", this,10000.0*1.1);
+	protected HashMap<Feve, Variable> prixCC;
 	protected LinkedList<ExemplaireContratCadre> contrats;
 	
 	protected Feve[] lesFeves = {Feve.F_BQ, Feve.F_MQ, Feve.F_MQ_BE, Feve.F_HQ_BE};
-
+	
 	public Producteur2Acteur() {
 		this.journal = new Journal("Journal " + this.getNom(), this);
 		this.journalCC = new Journal("Journal Contrat Cadre " + this.getNom(), this);
@@ -100,7 +100,7 @@ public class Producteur2Acteur implements IActeur {
 	
 	public void initialiser() {
 		
-		this.prixCC = new HashMap<Feve, Double>();
+		this.prixCC = new HashMap<Feve, Variable>();
 		this.getPrixCC().put(Feve.F_BQ, prixBQ);
 		this.getPrixCC().put(Feve.F_MQ, prixMQ);
 		this.getPrixCC().put(Feve.F_MQ_BE, prixMQBE);
@@ -119,12 +119,12 @@ public class Producteur2Acteur implements IActeur {
 	////////////////////////////////////////////////////////
 
 	
-	public HashMap<Feve, Double> getPrixCC(){
+	public HashMap<Feve, Variable> getPrixCC(){
 		return this.prixCC;
 	}
 
 	public double getPrixCC(Feve f){
-		return this.prixCC.get(f);
+		return this.prixCC.get(f).getValeur();
 
 	}
 	public LinkedList<ExemplaireContratCadre> getContrats(){
@@ -176,6 +176,10 @@ public class Producteur2Acteur implements IActeur {
 		res.add(this.argentVenteMQ);
 		res.add(this.argentVenteMQ_BE);
 		res.add(this.argentVenteHQ_BE);
+		res.add(this.prixBQ);
+		res.add(this.prixMQ);
+		res.add(this.prixMQBE);
+		res.add(this.prixHQ);
 		res.add(this.coutProdBQ);
 		res.add(this.coutProdMQ);
 		res.add(this.coutProMQ_BE);

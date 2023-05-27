@@ -2,8 +2,11 @@
 
 package abstraction.eq2Producteur2;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import abstraction.eqXRomu.filiere.Filiere;
@@ -284,27 +287,38 @@ public class Producteur2ASProducteurPlanteur extends Producteur2AStockeur{
 			int nb_a_planter = 0;
 			if (Filiere.LA_FILIERE.getEtape()>=24*3 && Filiere.LA_FILIERE.getEtape()%24==0) {
 				if (mauvais_resultat(f, Filiere.LA_FILIERE.getEtape()-3*24, Filiere.LA_FILIERE.getEtape())) {
-					for (int age : this.age_hectares.get(f).keySet()) {
-						int nb_plantation = this.age_hectares.get(f).get(age);
-						this.age_hectares.get(f).put(age,(int) Math.ceil(0.8*nb_plantation));
-					}}
+					int nb_a_deplanter = (int) Math.floor(this.surface_plantation.get(f).getValeur() * 0.2);
+					Set<Integer> key = this.age_hectares.get(f).keySet();
+					List<Integer> keyList = new ArrayList<Integer>(key);
+					Collections.sort(keyList);
+					for (int age : keyList) {
+						if (nb_a_deplanter > 0) {
+							if (this.age_hectares.get(f).get(age) <= nb_a_deplanter) {
+								nb_a_deplanter -= this.age_hectares.get(f).get(age);
+								this.age_hectares.get(f).remove(age);
+							} else {
+								this.age_hectares.get(f).put(age, this.age_hectares.get(f).get(age) - nb_a_deplanter);
+								nb_a_deplanter = 0;
+							}
+						}
+					}
+				}
 			}
 			
-			if (this.age_hectares.get(f).containsKey(Filiere.LA_FILIERE.getEtape() - 37*24)) {
-				nb_a_planter = this.age_hectares.get(f).get(Filiere.LA_FILIERE.getEtape() - 37*24);
-			}
-			if (f == Feve.F_MQ_BE && mauvais_resultat(f, Filiere.LA_FILIERE.getEtape()-24, Filiere.LA_FILIERE.getEtape()) == false && Filiere.LA_FILIERE.getEtape()%24==0) {
-				if (Filiere.LA_FILIERE.getEtape()%24==0) {
+			if (f == Feve.F_MQ_BE && Filiere.LA_FILIERE.getEtape()%24==0 && !mauvais_resultat(f, Filiere.LA_FILIERE.getEtape()-24, Filiere.LA_FILIERE.getEtape())) {
 					nb_a_planter +=(int) Math.round(this.surface_plantation.get(f).getValeur()*0.08);
 				}
-			if (f == Feve.F_BQ && mauvais_resultat(f, Filiere.LA_FILIERE.getEtape()-24, Filiere.LA_FILIERE.getEtape()) == false && Filiere.LA_FILIERE.getEtape()%24==0 && Filiere.LA_FILIERE.getEtape()<20*24) {
+			if (f == Feve.F_BQ && Filiere.LA_FILIERE.getEtape()%24==0 && Filiere.LA_FILIERE.getEtape()<20*24 && !mauvais_resultat(f, Filiere.LA_FILIERE.getEtape()-24, Filiere.LA_FILIERE.getEtape())) {
 				nb_a_planter += (int) Math.round(this.surface_plantation.get(f).getValeur()*0.08);
+			}
+			if (this.age_hectares.get(f).containsKey(Filiere.LA_FILIERE.getEtape() - 37*24)) {
+				nb_a_planter = this.age_hectares.get(f).get(Filiere.LA_FILIERE.getEtape() - 37*24);
 			}
 			if (nb_a_planter>0) {
 				Planter(f, nb_a_planter);
 				Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), this.cout_parcelle.get(f)*nb_a_planter);
 			}
-			}}
+		}
 	}
 	
 	// Une fois les plantation ajustees, sachant qu'un employe s'occupe d'un hectare on adapte le nombre
