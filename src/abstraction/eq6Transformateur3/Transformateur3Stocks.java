@@ -221,8 +221,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
 	  			break;
 	  			}
-        		else {if(stockChocolatBG.getQuantiteTotale()>0.0){
-        			stockChocolatBG.retirer(stockChocolatBG.getQuantiteTotale());
+        		else {if(stockChocolatBG.getQuantiteTotale()>0.0){stockChocolatBG.retirer(stockChocolatBG.getQuantiteTotale());
         		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatBG.getQuantiteTotale());
         		break ;}
         		}
