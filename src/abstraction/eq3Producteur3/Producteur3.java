@@ -369,8 +369,12 @@ public class Producteur3 extends Bourse3  {
 	 */
 	public Integer getCoutAchatChamp(Integer s) {
 		if (s > -1) {
+			
 			if(this.achatHectarCout.get(s) != null) {
 				return this.achatHectarCout.get(s);
+			}
+			else {
+				return 0;
 			}
 			
 		}
@@ -407,12 +411,9 @@ public class Producteur3 extends Bourse3  {
 			}
 		}
 		double argentGagne = 0.0;
-		int i =0;
 		int step = Filiere.LA_FILIERE.getEtape() -1;
 		this.journal_activitegenerale.ajouter("Au step "+ step + "pour " + s  );
 		for(ExemplaireContratCadre c : contractsGoods) {
-			i+=1;			
-			this.journal_activitegenerale.ajouter("Argent gagne = " + c.getPaiementsEffectues().getQuantite(Filiere.LA_FILIERE.getEtape() -1) + " pour i = " + i);
 			//Suppose que meme si on a pas assez de feve on renvoie ce que l'on a
 			argentGagne +=c.getPaiementsEffectues().getQuantite(Filiere.LA_FILIERE.getEtape() -1);		
 		}
@@ -441,18 +442,27 @@ public class Producteur3 extends Bourse3  {
 				tailleStock = this.StockFeveH.getValeur(step);
 				tailleChamp = this.getMaxPrec(tailleH);//this.getMaxPrec(this.tailleH);
 				this.journal_plantation.ajouter("Nombre employé H: " + tailleChamp);
+				if(this.tailleH.getValeur(step) !=0 && this.tailleM.getValeur(step) != 0){
 				proportionChamps = this.tailleH.getValeur(step)/(this.tailleH.getValeur(step) + this.tailleM.getValeur(step));
-			}
+				}
+				else {
+					proportionChamps =0;
+				}
+				}
 			else {
 				f=Feve.F_MQ_BE;
 				tailleStock = this.StockFeveM.getValeur(step);
 				tailleChamp =this.getMaxPrec(tailleM);//this.getMaxPrec(this.tailleM);
 				this.journal_plantation.ajouter("Nombre employé M: " + tailleChamp);
+				if(this.tailleH.getValeur(step) !=0 && this.tailleM.getValeur(step) != 0) {
 				proportionChamps = tailleChamp/ (this.tailleH.getValeur(step) + this.tailleM.getValeur(step));
+				}
+				else {
+					proportionChamps =0;
+				}
 			}
 			//CoutStep = CoutStockageFeve + CoutEntretientChamp + CoutAchatDesChamps
 			coutCurrentStep = tailleStock*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur(step) + tailleChamp*this.coutEmployeStep.getValeur(step) + this.getCoutAchatChamp(step)*proportionChamps;
-			 
 			//si on a des Hautes Gammes, this.getQuantiteVenduBourse =0. De plus, on a deja ajoute la quantite vendue en Bourse dans VentesHG ou VentesMG
 			recette = this.getQuantiteVenduBourse(s,step)*Filiere.LA_FILIERE.getIndicateur("BourseCacao cours M").getValeur(step) + this.getRecetteCC(s);
 		}
@@ -517,40 +527,19 @@ public class Producteur3 extends Bourse3  {
 			double hectarMburnt = 0;
 			double hectarHburnt = 0;
 			double Degat =0;
-			String nom_incendie ="";
-			String url ="";
 			Set<Integer> KeyM = FieldsM.keySet();
 			Set<Integer> KeyH = FieldsH.keySet();
 			Journal j = this.getJCatastrophe();
 			if(s.equals("Big")) {
-				url = "./src/abstraction/eq3Producteur3/Gif/Gros_incendie.gif";
-				nom_incendie = "Gros Incendie !";
 				Degat=quantiteBruleH.getValeur();		
 				
 			}
 			if(s.equals("Med")){
-				url = "./src/abstraction/eq3Producteur3/Gif/Incendie_Moyen.gif";
-				nom_incendie = "Incendie Moyen !";
 				Degat=quantiteBruleM.getValeur();
 			}
 			if(s.equals("Lit")) {
-				url = "./src/abstraction/eq3Producteur3/Gif/Petit_Incendie.gif";
 				Degat=quantiteBruleL.getValeur();
-				nom_incendie = "Petit Incendie !";
 				
-			}
-			if (this.nbr_popup < 1) {
-			this.nbr_popup +=1;
-			JFrame popup = new JFrame(nom_incendie);		
-			popup.setLocation(950, 50);
-			ImageIcon icon = new ImageIcon(url);
-			JLabel label = new JLabel(icon);
-	        popup.getContentPane().add(label);
-	        popup.pack();
-	        popup.setVisible(true);
-	        Timer timer = new Timer();
-			ControlTimeGif monTimerTask = new ControlTimeGif(popup);
-			timer.schedule(monTimerTask, 3000);
 			}
 			for(Integer key : KeyM) {
 				hectarMburnt += FieldsM.get(key)*Degat;
@@ -572,20 +561,6 @@ public class Producteur3 extends Bourse3  {
 	 * @author NAVEROS Marine
 	 */	
 	public void Cyclone() {
-		if(this.nbr_popup < 1) {
-		this.nbr_popup +=1;
-		JFrame popup = new JFrame("Cyclone !");		
-		popup.setLocation(300, 100);
-		ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Cyclone.gif");
-		JLabel label = new JLabel(icon);
-        popup.getContentPane().add(label);
-        popup.setLocation(950, 50);
-        popup.pack();
-        popup.setVisible(true);
-        Timer timer = new Timer();
-		ControlTimeGif monTimerTask = new ControlTimeGif(popup);
-		timer.schedule(monTimerTask, 3000);	
-		}
 		Champs fields = this.getFields();
 		HashMap<Integer,Integer> FieldH = fields.getChamps().get("H");
 		HashMap<Integer, Integer> FieldM = fields.getChamps().get("M");
@@ -618,22 +593,7 @@ public class Producteur3 extends Bourse3  {
 	//Pour modéliser    la grève générale, on va considérer les champs qui ne sont pas récoltés seront une perte de fève
 
 	protected void GreveGeneral() {
-		if (nbr_popup < 1) {
-			this.nbr_popup +=1;
-			JFrame popup = new JFrame("Grêve des Ouvriers !");		
-			popup.setLocation(300, 100);
-			ImageIcon icon = new ImageIcon("./src/abstraction/eq3Producteur3/Gif/Greve.gif"); //
-			JLabel label = new JLabel(icon);
-			popup.getContentPane().add(label);
-			popup.setLocation(950, 50);
-	        popup.pack();
-			popup.setVisible(true);
-			Timer timer = new Timer();
-			ControlTimeGif monTimerTask = new ControlTimeGif(popup);
-			timer.schedule(monTimerTask, 3000);
-		}
-		
-		
+	
 		//On a autant d'employé que d'hectare Utilise
 		Integer nbrgreviste = (int) Math.round(this.getHectaresUt()*this.pourcentageGrevise.getValeur());
 		//on calcule le ce qu'on aurait du produire avec ces employees
