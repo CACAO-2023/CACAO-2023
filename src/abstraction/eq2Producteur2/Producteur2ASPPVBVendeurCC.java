@@ -151,7 +151,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		if(this.nbEchecVentePrix.get(contrat.getProduit()) == 3) { //Si un produit voit trois ventes annulés de suite, on baisse son prix
 			this.nbIterationVentePrix = 0;
 			this.nbEchecVentePrix.put((Feve) contrat.getProduit(), 0);
-			this.getPrixCC().put((Feve) contrat.getProduit(), this.getPrixCC((Feve) contrat.getProduit())*0.9);
+			this.getPrixCC().get((Feve) contrat.getProduit()).setValeur(this, this.getPrixCC((Feve) contrat.getProduit())*0.9);
 		}
 		this.tentativeVente.put((Feve) contrat.getProduit(), true);
 		this.nbIterationVentePrix = 0;
@@ -195,7 +195,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.tentativeVente.put((Feve) contrat.getProduit(), false);
 		this.nbEchecVentePrix.put((Feve) contrat.getProduit(), 0);
-		this.getPrixCC().put((Feve) contrat.getProduit(), this.getPrixCC((Feve) contrat.getProduit())*0.9 + contrat.getPrix()*0.1); //On essaye d'adapter nos prix
+		this.getPrixCC().get((Feve) contrat.getProduit()).setValeur(this, this.getPrixCC((Feve) contrat.getProduit())*0.9 + contrat.getPrix()*0.1); //On essaye d'adapter nos prix
 		this.getContrats().add(contrat);
 	}
 	
