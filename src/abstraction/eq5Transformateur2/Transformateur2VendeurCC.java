@@ -77,7 +77,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 	//fait par yassine : on négocie en fonction d'un prix min et des stocks
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
-		double stock = stockChocoMarque.get(choco) != null ? stockChocoMarque.get(choco) : stockChoco.get(choco);
+		double stock = stockChocoMarque.get(contrat.getProduit()) != null ? stockChocoMarque.get(contrat.getProduit()) : stockChoco.get(contrat.getProduit());
 		double prixMin = 2800*stock;
 		double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
 		double prixDonne = contrat.getPrix();
@@ -102,8 +102,8 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 
 
-	this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : j'accepte l'echeancier "+contrat.getEcheancier());
-	return contrat.getEcheancier(); 
+	//this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : j'accepte l'echeancier "+contrat.getEcheancier());
+	//return contrat.getEcheancier(); 
 } 
 
 
