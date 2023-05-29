@@ -270,6 +270,15 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 		List<Variable> res = super.getIndicateurs();
 		return res;}
   
+  
+  public boolean estUnDeNosChoco (ChocolatDeMarque chocolat) {
+	  boolean res = false;
+	  for (ChocolatDeMarque choco : super.ListeProduits) {
+		  res = res || choco.equals(chocolat);
+	  }
+	  return res;
+  }
+  
   public void initialiser() {
 	  super.initialiser();
 	}
