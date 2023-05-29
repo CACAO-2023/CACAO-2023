@@ -273,7 +273,7 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   
   public boolean estUnDeNosChoco (ChocolatDeMarque chocolat) {
 	  boolean res = false;
-	  for (ChocolatDeMarque choco : super.ListeProduits) {
+	  for (ChocolatDeMarque choco : super.chocosProduits) {
 		  res = res || choco.equals(chocolat);
 	  }
 	  return res;
