@@ -103,27 +103,8 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 			}
 		}
 
-		return nouvelEcheancier;
-	}   
-	/*
-	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
-		return contrat.getEcheancier(); //pas de négociations 
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
-	}
-<<<<<<< HEAD
-
-
-
-		@Override
-		public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
-			return contrat.getEcheancier(); //pas de négociations 
-		}
-=======
-<<<<<<< HEAD
-	 */
-
+		return nouvelEcheancier.getQuantiteTotale()>100.0 ? nouvelEcheancier : null;}
+	
 
 
 	//Par Mathis DOUTRE

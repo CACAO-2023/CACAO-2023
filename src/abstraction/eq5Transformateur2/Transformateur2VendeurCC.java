@@ -77,7 +77,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	//fait par yassine : pas de négociations
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : j'accepte l'echeancier "+contrat.getEcheancier());
-		return contrat.getEcheancier(); } 
+		return contrat.getEcheancier().getQuantiteTotale()>100.0 ? contrat.getEcheancier() : null;}
 
 
 	//fait par wiem
@@ -103,9 +103,9 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 				prix = (2800+11800)*1.1*stock;
 				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);}}
 		return prix; 
-		}
+	}
 
-	
+
 
 
 	//fait par yassine : pas de négociations
@@ -164,31 +164,31 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
 
-		//if ((produit.getNom() == "MaisonDoutre") || (produit.getNom() == "ChocoPop")) {
-			Double stock = stockChocoMarque.get(produit);
-			ExemplaireContratCadre cc = superviseurVentesCC.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 0.1*stock), cryptogramme,false);
+		//if ((produit.getNom() == "MaisonDoutre") || (produit.getNom() == "ChocoPop")) 
+		Double stock = stockChocoMarque.get(produit);
+		ExemplaireContratCadre cc = superviseurVentesCC.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 0.1*stock), cryptogramme,false);
 
-		 if (cc != null) {   
-				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "CC : " + cc);
-				//this.ContratsVendeur.put(cc,  acheteur.getNom());
-			} else {
-				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
+		if (cc != null) {   
+			this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "CC : " + cc);
+			//this.ContratsVendeur.put(cc,  acheteur.getNom());
+		} else {
+			this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
+		}
+		return cc; }
+
+
+	//fait par wiem 
+	public void next() {
+		super.next();
+		for (ChocolatDeMarque c: Filiere.LA_FILIERE.getChocolatsProduits()) {
+			if (c.getMarque().equals("MaisonDoutre")) {
+				this.getContrat(c);
+
 			}
-			return cc; }
-		
+			if (c.getMarque().equals("ChocoPop")) {
+				this.getContrat(c);
 
-		//fait par wiem 
-		public void next() {
-			super.next();
-			for (ChocolatDeMarque c: Filiere.LA_FILIERE.getChocolatsProduits()) {
-				if (c.getMarque().equals("MaisonDoutre")) {
-					this.getContrat(c);
-					
-				}
-				if (c.getMarque().equals("ChocoPop")) {
-					this.getContrat(c);
-					
-				}
-			
+			}
+
 
 		}}}
