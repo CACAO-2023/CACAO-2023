@@ -39,9 +39,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	protected Journal journal_vente;
 	
 	
-	//On est oblige de mettre les variables ici sinon la creation de la filiere est dans un tel ordre que nous n'y avons pas acces assez tot
-	protected Variable totalStocks = new VariablePrivee("Eq7TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
-	//La quantité totale de stock de chocolat 
+	protected Variable totalStocks = new Variable("Eq7TotalStocks", "Quantite totale de chocolat (de marque) en stock",this, 0);
 	protected Variable stock_BQ = new Variable("Eq7stock_BQ", "Stock total de chocolat de basse qualité", this, 0);
 	protected Variable stock_MQ = new Variable("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
 	protected Variable stock_MQ_BE = new Variable("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
@@ -49,26 +47,29 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	protected Variable ventes = new Variable("Eq7ventes","ventes totales réalisées lors de ce tour",this,0);
 	protected Variable depenses = new Variable("Eq7Depenses à l'étape courante", "Depenses totales de ce tour ",this, 0);
 	protected Variable cmSelectionnee; // l'index du chocolat selectionne
+	
 	protected HashMap<ChocolatDeMarque, Variable> Var_Stock_choco; // le stock de chaque chocolat de marque
 	protected HashMap<ChocolatDeMarque, Variable> Var_Cout_Choco; // le cout de chaque chocolat de marque
 	protected HashMap<ChocolatDeMarque, Variable> Var_Marge_Choco; // la marge de chaque chocolat de marque
 	protected HashMap<ChocolatDeMarque, Variable> Var_Vente_Choco; // la vente de chaque chocolat de marque
 	protected HashMap<ChocolatDeMarque, Variable> Var_nbr_Vente_Choco; // la quantité vendue de chaque chocolat de marque
+	
 	protected FenetreGraphique graphique;
+	protected HashMap<ChocolatDeMarque, Courbe> courbes; 
+
 	protected Variable afficher_vente_depense_courrant; 
 	
 
 	protected double qte_totale_en_vente;
 	protected double vente_step; //variable représentant la somme des vente au step courrant
+	
 	protected Variable marge_Choco_marque_selectionnee = new Variable("Eq7_marge_Choco_marque_selectionnee", "marge Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
 	protected Variable cout_Choco_marque_selectionnee = new Variable("Eq7_cout_Choco_marque_selectionnee", "cout Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);	
 	protected Variable stock_Choco_marque_selectionnee = new Variable("Eq7_stock_Choco_marque_selectionnee", "stock Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
 	protected Variable Vente_Choco_marque_selectionnee = new Variable("Eq7_vente_Choco_marque_selectionnee", "vente Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
 	protected Variable Vente_nbr_Choco_marque_selectionnee = new Variable("Eq7_quantite_vendue_Choco_marque_selectionnee", "nombre d'articles vente Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
 
-	protected Variable solde_bancaire = new Variable("Eq7_solde_bancaire","solde_bancaire",this,0);
 	
-	protected HashMap<ChocolatDeMarque, Courbe> courbes; 
 
 	protected Courbe cventes = new Courbe("ventes ");
 	protected Courbe cdepense = new Courbe("depenses ");
@@ -84,7 +85,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	
 	protected double valeur_stock_initial = 10000.;
 	
-	protected HashMap<IActeur, Integer> cc_sans_vendeur ;
+	protected int cc_sans_vendeur=0 ;
 	protected HashMap<IActeur, Integer> cc_vendus ;
 	protected HashMap<IActeur, Integer> cc_non_aboutis ;
 
@@ -194,9 +195,9 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		cout_chocolat.put(Chocolat.C_BQ, 10000.);
 
 		
-		this.cc_sans_vendeur= new  HashMap<IActeur, Integer>()  ;
 		this.cc_non_aboutis= new  HashMap<IActeur, Integer> () ;
 		this.cc_vendus= new  HashMap<IActeur, Integer> () ;
+		
 		vente_step=0;
 		this.chocolatsDeMarquesProduits = Filiere.LA_FILIERE.getChocolatsProduits();
 

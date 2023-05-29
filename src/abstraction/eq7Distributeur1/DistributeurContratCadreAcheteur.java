@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import abstraction.eq4Transformateur1.Achat.CC_producteur;
 import abstraction.eq8Distributeur2.ContratCadre;
@@ -114,6 +115,11 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
 		ExemplaireContratCadre cc = null;
 		
+		if (vendeurs.isEmpty()) {
+			cc_sans_vendeur++;
+			journal_achat.ajouter(Color.orange,Color.black,"personne ne vend le produit "+produit);
+		}
+		
 		//On parcourt tous les vendeurs aleatoirement
 		while (!vendeurs.isEmpty() && cc == null) {
 			IVendeurContratCadre vendeur = null;
@@ -135,21 +141,23 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 			        mesContratEnTantQuAcheteur.add(cc);
 					notificationNouveauContratCadre(cc);
 					mesContratEnTantQuAcheteur.add(cc);
-					cc_signe++;
+					cc_vendus.put((IActeur)vendeur, (cc_vendus.containsKey(vendeur))? cc_vendus.get(vendeur)+1 : 1);
+					
 			    } 
 				else { //si le contrat est un echec
-					cc_refuse++;
+					cc_non_aboutis.put((IActeur)vendeur,(cc_non_aboutis.containsKey(vendeur))? cc_non_aboutis.get(vendeur)+1 : 1);
 			        this.journal_achat.ajouter(Color.RED, Color.BLACK,"Echec de la négociation de contrat cadre avec "+vendeur.getNom()+" pour "+produit+"...");
 				}
-			}}
+			}
+			}
 		if (cc ==null) {
 			cc_sans_vendeur++;
-			journal_achat.ajouter("On a cherché à établir un contrat cadre pour le produit "+produit+" de durée "+e.getNbEcheances()+ " mais on a pas trouvé de vendeur");
+			journal_achat.ajouter("On a cherché à établir un contrat cadre pour le produit "+produit+" de durée "+e.getNbEcheances()+ " mais aucune négociation n'a aboutie");
 		}
 	
 		return cc;
 
-		}
+	}
 
 	/**
 	 * @author Theo, Ghaly
@@ -251,8 +259,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 
 		enleve_contrats_obsolete();
 
-		cc_refuse=0;
-		cc_signe = 0;
 		cc_sans_vendeur=0;
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			for (Integer d : durees_CC) {
@@ -272,7 +278,23 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 				}
 				}
 			}} 
-		this.Bilan_achat.ajouter(COLOR_GREEN, Color.black,"le nombre de contrats_signés");
+		
+		for (Map.Entry<IActeur, Integer> entry : cc_vendus.entrySet()) {
+			IActeur key = entry.getKey();
+            Integer value = entry.getValue();
+            cc_vendus.put(key, 0); //on réinitialise la valeur pour le prochain tour
+    		this.Bilan_achat.ajouter(COLOR_GREEN, Color.black,"le nombre de contrats_signés par "+key+" est de "+value);
+        }
+		for (Map.Entry<IActeur, Integer> entry : cc_non_aboutis.entrySet()) {
+			IActeur key = entry.getKey();
+            Integer value = entry.getValue();
+            cc_non_aboutis.put(key, 0); //on réinitialise la valeur pour le prochain tour
+            if(value!=0) {
+    		this.Bilan_achat.ajouter(Color.RED, Color.black,"le nombre de contrats dont les négociations ont été rompues avec "+key+" est de "+value);
+        }}
+		this.Bilan_achat.ajouter(Color.PINK, Color.black,"le nombre de produits dont on a pas trouvé de vendeurs sur le marché est de "+cc_sans_vendeur);
+		cc_sans_vendeur=0;
+
 		super.next();
 
 		}
