@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eq4Transformateur1.Achat.CC_producteur;
 import abstraction.eq8Distributeur2.ContratCadre;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
@@ -39,7 +40,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		this.durees_CC= new LinkedList<>();
 //		durees_CC.add(24); //12 mois = 1an
 //		durees_CC.add(18); //9 mois
-		durees_CC.add(13); //6 mois
+		durees_CC.add(12); //6 mois
 //		durees_CC.add(6); //3 mois
 	}
 	
@@ -134,13 +135,15 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 			        mesContratEnTantQuAcheteur.add(cc);
 					notificationNouveauContratCadre(cc);
 					mesContratEnTantQuAcheteur.add(cc);
+					cc_signe++;
 			    } 
 				else { //si le contrat est un echec
-				
+					cc_refuse++;
 			        this.journal_achat.ajouter(Color.RED, Color.BLACK,"Echec de la négociation de contrat cadre avec "+vendeur.getNom()+" pour "+produit+"...");
 				}
 			}}
 		if (cc ==null) {
+			cc_sans_vendeur++;
 			journal_achat.ajouter("On a cherché à établir un contrat cadre pour le produit "+produit+" de durée "+e.getNbEcheances()+ " mais on a pas trouvé de vendeur");
 		}
 	
@@ -244,12 +247,13 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	 * @author Ghaly & Theo
 	 */
 	public void next() {
-
-		super.next();
-		enleve_contrats_obsolete();
 		Depense();
 
+		enleve_contrats_obsolete();
 
+		cc_refuse=0;
+		cc_signe = 0;
+		cc_sans_vendeur=0;
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			for (Integer d : durees_CC) {
 				
@@ -268,6 +272,9 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 				}
 				}
 			}} 
+		this.Bilan_achat.ajouter(COLOR_GREEN, Color.black,"le nombre de contrats_signés");
+		super.next();
+
 		}
 		
 	
@@ -400,17 +407,17 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	public void Depense() {
 		Double cont = 0.0;
 		for (ExemplaireContratCadre contrat : this.mesContratEnTantQuAcheteur) {
+			double val = contrat.getPaiementAEffectuerAuStep();
+			if(val>0) {
+				
+			cont += val ;
 			
-			cont += contrat.getPaiementAEffectuerAuStep();
-			if(contrat.getPaiementAEffectuerAuStep()<0) {
-				System.out.print("contrat negatif  "+contrat.getPaiementAEffectuerAuStep());
-			}
 			}
 		depenses.setValeur(this, totalStocks.getValeur()*cout_stockage_distributeur.getValeur() + cout_main_doeuvre_distributeur.getValeur()*qte_totale_en_vente + cont);
 
 	}
 	
-	}
+	}}
 	
 
 

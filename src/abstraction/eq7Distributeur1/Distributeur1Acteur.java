@@ -11,12 +11,15 @@ import java.util.Set;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.general.Courbe;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
+import presentation.secondaire.FenetreGraphique;
 
 public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	////////////////////////////////////////////////
@@ -31,6 +34,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	
 	protected Journal journal;
 	protected Journal journal_achat;
+	protected Journal Bilan_achat;
 	protected Journal journal_stock;
 	protected Journal journal_vente;
 	
@@ -50,7 +54,10 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	protected HashMap<ChocolatDeMarque, Variable> Var_Marge_Choco; // la marge de chaque chocolat de marque
 	protected HashMap<ChocolatDeMarque, Variable> Var_Vente_Choco; // la vente de chaque chocolat de marque
 	protected HashMap<ChocolatDeMarque, Variable> Var_nbr_Vente_Choco; // la quantité vendue de chaque chocolat de marque
+	protected FenetreGraphique graphique;
+	protected Variable afficher_vente_depense_courrant; 
 	
+
 	protected double qte_totale_en_vente;
 	protected double vente_step; //variable représentant la somme des vente au step courrant
 	protected Variable marge_Choco_marque_selectionnee = new Variable("Eq7_marge_Choco_marque_selectionnee", "marge Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
@@ -60,6 +67,11 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	protected Variable Vente_nbr_Choco_marque_selectionnee = new Variable("Eq7_quantite_vendue_Choco_marque_selectionnee", "nombre d'articles vente Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
 
 	protected Variable solde_bancaire = new Variable("Eq7_solde_bancaire","solde_bancaire",this,0);
+	
+	protected HashMap<ChocolatDeMarque, Courbe> courbes; 
+
+	protected Courbe cventes = new Courbe("ventes ");
+	protected Courbe cdepense = new Courbe("depenses ");
 	
 	
 	private List<ChocolatDeMarque>chocolatsDeMarquesProduits; // init dans initialiser
@@ -72,6 +84,10 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	
 	protected double valeur_stock_initial = 10000.;
 	
+	protected HashMap<IActeur, Integer> cc_sans_vendeur ;
+	protected HashMap<IActeur, Integer> cc_vendus ;
+	protected HashMap<IActeur, Integer> cc_non_aboutis ;
+
 
 	
 	/**
@@ -103,9 +119,11 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	public Distributeur1Acteur() {
 		this.journal = new Journal("Journal "+this.getNom(), this);
 	    this.journal_achat=new Journal("Journal des Achats de l'" + this.getNom(),this);
+	    this.Bilan_achat=new Journal("bilan des Achats de l'" + this.getNom(),this);
 	    this.journal_stock = new Journal("Journal des Stocks de l'" + this.getNom(),this);
 	    this.journal_vente = new Journal("Journal des ventes de l'" + this.getNom(),this);
 		this.cmSelectionnee = new Variable(getNom()+" chocolat de marque selectionné", "indiquez l'index du chocolat de marque", this, 0.0);
+		this.afficher_vente_depense_courrant = new Variable(getNom()+" évolution des dépenses et ventes de la marque selectionnée", "indiquez l'index du chocolat de marque", this, 0.0);
 		
 	}
 	
@@ -169,11 +187,16 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	public void initialiser() {
 		cout_stockage_distributeur.setValeur(this, Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*16);
 		
+		
 		cout_chocolat.put(Chocolat.C_HQ_BE, 25000.);
 		cout_chocolat.put(Chocolat.C_MQ_BE, 20000.);
 		cout_chocolat.put(Chocolat.C_MQ, 15000.);
 		cout_chocolat.put(Chocolat.C_BQ, 10000.);
 
+		
+		this.cc_sans_vendeur= new  HashMap<IActeur, Integer>()  ;
+		this.cc_non_aboutis= new  HashMap<IActeur, Integer> () ;
+		this.cc_vendus= new  HashMap<IActeur, Integer> () ;
 		vente_step=0;
 		this.chocolatsDeMarquesProduits = Filiere.LA_FILIERE.getChocolatsProduits();
 
@@ -182,7 +205,9 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		this.Var_Marge_Choco = new HashMap<ChocolatDeMarque, Variable> ();
 		this.Var_Vente_Choco = new HashMap<ChocolatDeMarque, Variable> ();
 		this.Var_nbr_Vente_Choco = new HashMap<ChocolatDeMarque, Variable> ();
-		
+	
+		cventes.setCouleur(Color.green);
+		cdepense.setCouleur(Color.red);
 		
 		for (ChocolatDeMarque cm : chocolatsDeMarquesProduits) {
 			totalStocks.setValeur(this, totalStocks.getValeur()+valeur_stock_initial, this.cryptogramme);
@@ -195,6 +220,8 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 			this.Var_nbr_Vente_Choco.put(cm, new Variable("la quantite vendue de la marque "+cm.getNom(), "la quantite vendue de la marque "+cm.getNom(), this, 0.0));
 			
 		}
+		this.cventes.ajouter(Filiere.LA_FILIERE.getEtape(), this.ventes.getValeur());
+		this.cdepense.ajouter(Filiere.LA_FILIERE.getEtape(), this.depenses.getValeur());
 		this.marge_Choco_marque_selectionnee.cloner(Var_Marge_Choco.get(chocolatsDeMarquesProduits.get(0)));
 		this.cout_Choco_marque_selectionnee.cloner(Var_Cout_Choco.get(chocolatsDeMarquesProduits.get(0)));
 		this.stock_Choco_marque_selectionnee.cloner(this.Var_Stock_choco.get(chocolatsDeMarquesProduits.get(0))); // initialement c'est le premier chocolat de marque qui dont le stock est affiche
@@ -202,6 +229,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		this.Vente_nbr_Choco_marque_selectionnee.cloner(this.Var_nbr_Vente_Choco.get(chocolatsDeMarquesProduits.get(0))); // initialement c'est le premier chocolat de marque qui dont le stock est affiche
 		
 		this.cmSelectionnee.addObserver(this);
+		this.afficher_vente_depense_courrant.addObserver(this);
 		
 		/////////////////////////////////////
 		//POTENTIELLEMENT à Changer
@@ -250,9 +278,12 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 
 		}
 		ventes.setValeur(this, vente_step);
+
+		this.cventes.ajouter(Filiere.LA_FILIERE.getEtape(), this.ventes.getValeur());
+		this.cdepense.ajouter(Filiere.LA_FILIERE.getEtape(), this.depenses.getValeur());
 		vente_step = 0 ; //réinitialiser la variable pour la prochaine étape
 		actualise_variable_selectionnee();
-
+		
 
 	}
 
@@ -273,6 +304,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		
 		List<Variable> res = new ArrayList<Variable>();
 		res.add(cmSelectionnee);
+		res.add(afficher_vente_depense_courrant);
 		res.add(totalStocks);
 		res.add(stock_HQ_BE);
 		res.add(stock_MQ_BE);
@@ -300,6 +332,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(this.journal);
 		res.add(this.journal_achat);
+		res.add(this.Bilan_achat);
 		res.add(this.journal_stock);
 		res.add(this.journal_vente);
 		return res;
@@ -378,8 +411,21 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		this.Vente_nbr_Choco_marque_selectionnee.cloner(this.Var_nbr_Vente_Choco.get(this.chocolatsDeMarquesProduits.get(index)));
 		
 		System.out.println("Chocolat de marque selectionne :"+this.chocolatsDeMarquesProduits.get(index));
+		int index_2 = (int)(this.afficher_vente_depense_courrant.getValeur());
+		if(index_2==1) {
+		afficher_graphique();
+		}
+
 	}
 	
+	
+	public void afficher_graphique() {
+		this.graphique= new FenetreGraphique("ventes et dépenses pendant le tour", 500,400);
+		
+		this.graphique.ajouter(cventes);
+		this.graphique.ajouter(cdepense);
+		this.graphique.setVisible(true);
+	}
 	/**
 	 * @author ghaly
 	 * actualise les valeurs des variables séléctionnées
