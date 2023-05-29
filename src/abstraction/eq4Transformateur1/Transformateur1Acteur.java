@@ -46,11 +46,14 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
 
 	protected Variable totalStocksFeves;
-	protected Variable totalStocksChoco;
+//	protected Variable totalStocksChoco;
 	protected Variable totalStocksChocoMarque;  // La qualite totale de stock de chocolat de marque 
 	protected List<Feve> lesFeves;
 	protected Integer cryptogramme;
-	protected List<ExemplaireContratCadre> ContratEnCours;
+	protected ArrayList<ExemplaireContratCadre> ContratEnCours_F_BQ;
+	protected ArrayList<ExemplaireContratCadre> ContratEnCours_F_HQ;
+	protected ArrayList<ExemplaireContratCadre> ContratEnCours_C_BQ;
+	protected ArrayList<ExemplaireContratCadre> ContratEnCours_C_HQ;
 
 
 	
@@ -77,7 +80,7 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 		this.journal_CC_DISTRI = new Journal("Journal "+this.getNom() + " vente CC distributeur", this);
 		this.journal_appel = new Journal("Journal "+this.getNom() + " vente appel d'offre", this);
 		this.totalStocksFeves = new VariablePrivee("Eq4StockFeves", "<html>Quantite totale de feves en stock</html>",this, 0.0, 1000000.0, 0.0);this.totalStocksFeves= new VariablePrivee("Eq4StockFeves", "<html>Quantite totale de feves en stock</html>",this, 0.0, 1000000.0, 0.0);
-		this.totalStocksChoco = new VariablePrivee("Eq4StockChoco", "<html>Quantite totale de chocolat en stock</html>",this, 0.0, 1000000.0, 0.0); 
+//		this.totalStocksChoco = new VariablePrivee("Eq4StockChoco", "<html>Quantite totale de chocolat en stock</html>",this, 0.0, 1000000.0, 0.0); 
 		this.totalStocksChocoMarque = new VariablePrivee("Eq4StockChocoMarque", "<html>Quantite totale de chocolat de marque en stock</html>",this, 0.0, 1000000.0, 0.0);
 	}
 	
@@ -90,7 +93,13 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 			this.lesFeves.add(f);
 			this.journal.ajouter("   - "+f);
 		}
+		
 		this.step = 0;
+		this.ContratEnCours_C_BQ = new ArrayList<ExemplaireContratCadre> ();
+		this.ContratEnCours_C_HQ = new ArrayList<ExemplaireContratCadre> ();
+		this.ContratEnCours_F_BQ = new ArrayList<ExemplaireContratCadre> ();
+		this.ContratEnCours_F_HQ = new ArrayList<ExemplaireContratCadre> ();
+		
 	}
 	
 
@@ -107,11 +116,15 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	public void next() {
 		this.step += 1;
 		this.journal.ajouter("step:" + this.step);
-
+	
 	}
+		
 
 	public Color getColor() {// NE PAS MODIFIER
 		return new Color(229, 243, 157); 
+	}
+	public String toString() {
+		return this.getNom();
 	}
 
 	public String getDescription() {
@@ -123,7 +136,7 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
 		res.add(this.totalStocksFeves);
-		res.add(this.totalStocksChoco);
+//		res.add(this.totalStocksChoco);
 		res.add(this.totalStocksChocoMarque);
 		return res;
 	}
@@ -189,6 +202,7 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	public List<String> getMarquesChocolat() {
 		LinkedList<String> marques = new LinkedList<String>();
 		marques.add("Vccotioi");
+		marques.add("Yocttotoa");
 		return marques;
 	}
 }

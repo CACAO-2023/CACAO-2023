@@ -1,10 +1,13 @@
 package abstraction.eq2Producteur2;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 
 //Code ecrit par Nino
 
 import java.util.List;
+import java.util.Set;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
@@ -12,88 +15,73 @@ import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
 public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse implements IVendeurContratCadre{
-	private HashMap<Feve, Integer> nbEchecVentePrix = new HashMap<Feve, Integer>(); //Permet de connaitre le nombre de vente ayant echoue à la suite 
-	private HashMap<Feve, Boolean> echecVentePrix = new HashMap<Feve, Boolean>();  //Permet de savoir si la derniere venet a reussi pour chaque produit
-	private int nbIterationVentePrix; //Compte le nombre d'appel à contrePropositionPrix pour faire évoluer le prix
-	double facteurPrixInit = 1.75;
-	double venteMin;
+	protected HashMap<Feve, Integer> nbEchecVentePrix = new HashMap<Feve, Integer>(); //Permet de connaitre le nombre de ventes ayant echoue à la suite 
+	protected HashMap<Feve, Boolean> tentativeVente = new HashMap<Feve, Boolean>();  //Permet de savoir si la derniere vente a reussi pour chaque produit
+	protected int nbIterationVentePrix; //Compte le nombre d'appel à contrePropositionPrix pour faire évoluer le prix
+	protected double facteurPrixInit = 1.75;
+	protected double venteMin = SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER;
+	protected int nbStepFidelité = 12;
+	protected int nbStepSuperFidelité = 60;
+	protected int nbStepProposition = 8;
+	protected double facteurTolerance = 0.95; //Facteur de tolérance pour l'acceptation des ventes
 	
 	
 	public Producteur2ASPPVBVendeurCC() {
 		super();
 	}
 	
+	
 	public void initialiser() {
 		super.initialiser();
 		
-		this.echecVentePrix.put(Feve.F_MQ_BE, false);
-		this.echecVentePrix.put(Feve.F_HQ_BE, false);
-		this.echecVentePrix.put(Feve.F_MQ, false);
+		this.tentativeVente.put(Feve.F_MQ_BE, false);
+		this.tentativeVente.put(Feve.F_HQ_BE, false);
+		this.tentativeVente.put(Feve.F_MQ, false);
 		this.nbEchecVentePrix.put(Feve.F_MQ_BE, 0);
 		this.nbEchecVentePrix.put(Feve.F_HQ_BE, 0);
 		this.nbEchecVentePrix.put(Feve.F_MQ, 0);
-		venteMin = SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER;
 	}
 	
 	/**
-	 * Methode appelee par le superviseur afin d'efefctuer les actions de l'acteur
+	 * Methode appelee par le superviseur afin d'effectuer les actions de l'acteur
 	 * a chaque etape. Ici on decide si on propose aux acheteurs un contrat cadre.
 	 */
 	public void next() {
 		super.next();
 		SuperviseurVentesContratCadre sup = ((SuperviseurVentesContratCadre) Filiere.LA_FILIERE.getActeur("Sup."+"CCadre"));
-		List<IAcheteurContratCadre> acheteurs = sup.getAcheteurs(Feve.F_MQ_BE);
-		HashMap<Integer, Double> hs = getStocksTotTheo(Feve.F_MQ_BE, Filiere.LA_FILIERE.getEtape() + 9);
-		HashMap<Integer, Double> hs2 = getStocksTotTheo(Feve.F_MQ_BE, Filiere.LA_FILIERE.getEtape() + 9);
-		for(IAcheteurContratCadre ach : acheteurs) {
-			boolean testQuantite = true;
-			for(int i = Filiere.LA_FILIERE.getEtape() + 1; i<=Filiere.LA_FILIERE.getEtape()+9; i++){
-				if(hs.get(i)-(i-Filiere.LA_FILIERE.getEtape() +1)*this.venteMin < this.venteMin) {
-					testQuantite = false;
-				}
-			}if(testQuantite) {
-				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 8, hs.get(Filiere.LA_FILIERE.getEtape()+9)/8);
-				ExemplaireContratCadre ex = sup.demandeVendeur(ach, this, Feve.F_MQ_BE, ech, this.cryptogramme, false);
+		List<IAcheteurContratCadre> acheteursMQ = sup.getAcheteurs(Feve.F_MQ_BE);
+		List<IAcheteurContratCadre> acheteursHQ = sup.getAcheteurs(Feve.F_HQ_BE);
+		Echeancier echMaxMQ = this.getEcheancierMax(Filiere.LA_FILIERE.getEtape() + nbStepProposition + 1).get(Feve.F_MQ_BE);
+		Echeancier echMaxHQ = this.getEcheancierMax(Filiere.LA_FILIERE.getEtape() + nbStepProposition + 1).get(Feve.F_HQ_BE);
+		if(echMaxMQ.getQuantiteTotale() > venteMin) {
+			int nbAcheteursMQ = acheteursMQ.size();
+			for(int i = 0; i<nbAcheteursMQ; i++) {
+				IAcheteurContratCadre ach = acheteursMQ.get((int) Math.random()*acheteursMQ.size());
+				acheteursMQ.remove(ach);
+				ExemplaireContratCadre ex = sup.demandeVendeur(ach, this, Feve.F_MQ_BE, echMaxMQ, this.cryptogramme, false);
 				if(ex != null) {
-					this.getContrats().add(ex);
-					this.echecVentePrix.put(Feve.F_MQ_BE, false);
-					this.nbEchecVentePrix.put(Feve.F_MQ_BE, 0);
-				}
-			}
-		List<IAcheteurContratCadre> acheteurs2 = sup.getAcheteurs(Feve.F_HQ_BE);
-		for(IAcheteurContratCadre ach2 : acheteurs2) {
-			boolean testQuantite2 = true;
-			for(int i = Filiere.LA_FILIERE.getEtape() +1; i<=Filiere.LA_FILIERE.getEtape()+9; i++){
-				if(hs.get(i)-(i-Filiere.LA_FILIERE.getEtape() +1)*this.venteMin/2 < this.venteMin/2) {
-					testQuantite2 = false;
-				}
-			}if(testQuantite2) {
-				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, 8, hs2.get(Filiere.LA_FILIERE.getEtape()+9)/8);
-				ExemplaireContratCadre ex = sup.demandeVendeur(ach2, this, Feve.F_MQ_BE, ech, this.cryptogramme, false);
-				if(ex != null) {
-					this.getContrats().add(ex);
-					this.echecVentePrix.put(Feve.F_MQ_BE, false);
-					this.nbEchecVentePrix.put(Feve.F_MQ_BE, 0);
+					this.notificationNouveauContratCadre(ex);
 				}
 			}
 		}
-			/* double prodMQ = this.aLivrer(Feve.F_MQ).getQuantiteJusquA(Filiere.LA_FILIERE.getEtape() + 12) - this.aLivrer(Feve.F_MQ).getQuantiteJusquA(Filiere.LA_FILIERE.getEtape()); //production previsionnelle moyenne des 12 steps à venir
-			if(this.getStockTot(Feve.F_MQ).getValeur()/12 + prodMQ >= 10) {
-				Echeancier ech = new Echeancier(Filiere.LA_FILIERE.getEtape(), 12, this.getStockTot(Feve.F_MQ).getValeur()/12 + prodMQ);
-				ExemplaireContratCadre ex = sup.demandeVendeur(ach, this, Feve.F_MQ, ech, this.cryptogramme, false);
+		if(echMaxHQ.getQuantiteTotale() > venteMin) {
+			int nbAcheteursHQ = acheteursHQ.size();
+			for(int i = 0; i<nbAcheteursHQ; i++) {
+				IAcheteurContratCadre ach = acheteursHQ.get((int) Math.random()*acheteursHQ.size());
+				acheteursHQ.remove(ach);
+				ExemplaireContratCadre ex = sup.demandeVendeur(ach, this, Feve.F_HQ_BE, echMaxHQ, this.cryptogramme, false);
 				if(ex != null) {
-					this.getContrats().add(ex);
-					this.echecVentePrix.put(Feve.F_MQ, false);
-					this.nbEchecVentePrix.put(Feve.F_MQ, 0);
+					this.notificationNouveauContratCadre(ex);
 				}
-			} */
-			
+			}
 		}
+		this.majListeCC();
 		this.journalCC.ajouter("Contrats Cadre en cours : " + this.contrats);
 	}
 	
@@ -104,7 +92,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * l'acteur ne vendra pas durant la simulation.
 	 */
 	public boolean peutVendre(IProduit produit) {
-		return produit instanceof Feve && produit == Feve.F_MQ && produit == Feve.F_MQ_BE && produit == Feve.F_HQ_BE; //Est-ce qu'on vend vraiment de tout ?
+		return produit instanceof Feve && (produit == Feve.F_MQ_BE || produit == Feve.F_HQ_BE);
 	}
 	
 	/**
@@ -118,18 +106,9 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	public boolean vend(IProduit produit) {
 		if (!peutVendre(produit)) {
 			return false;
+		} else {
+			return this.getEcheancierMax(Filiere.LA_FILIERE.getEtape() + this.nbStepProposition + 1).get(produit).getQuantiteTotale() >= venteMin;
 		}
-		boolean testQuantite = true;
-		HashMap<Integer, Double> hs = getStocksTotTheo((Feve) produit, Filiere.LA_FILIERE.getEtape() + 9);
-		for(int i = Filiere.LA_FILIERE.getEtape() +1; i<Filiere.LA_FILIERE.getEtape()+13; i++){
-			if(hs.get(i) < this.venteMin) {
-				testQuantite = false;
-			}
-		}
-		if(produit instanceof Feve && ((Feve) produit).isBioEquitable() && testQuantite) {
-			return true;			
-		}
-		return false;
 	}
 	
 	/**
@@ -145,19 +124,16 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * d'accord avec cet echeancier. Sinon, retourne un autre echeancier qui est une contreproposition.
 	 */
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
-		Echeancier echeancierAch = contrat.getEcheancier();
+		Echeancier echeancierAch = contrat.getEcheancier(); //Echeancier proposé par l'acheteur
+		Echeancier echMax = this.getEcheancierMax(echeancierAch.getStepFin()).get(contrat.getProduit()); //Echeancier correspondant à la vente de tout notre stock
+		Echeancier ech = new Echeancier(echeancierAch.getStepDebut()); //Echeancier renvoyé
 		if(echeancierAch.getStepDebut() > Filiere.LA_FILIERE.getEtape()) {
-			boolean testQuantite = true;
-			HashMap<Integer, Double> hs = getStocksTotTheo((Feve) contrat.getProduit(), Filiere.LA_FILIERE.getEtape() + contrat.getEcheancier().getNbEcheances() + 1);
-			for(int i = Filiere.LA_FILIERE.getEtape() +1; i<Filiere.LA_FILIERE.getEtape()+contrat.getEcheancier().getNbEcheances()+1; i++){
-				if(hs.get(i)-contrat.getEcheancier().getQuantiteJusquA(i) < 0.0) {
-					testQuantite = false;
-				}
+			for(int i = contrat.getEcheancier().getStepDebut(); i<echeancierAch.getStepFin()+1; i++){
+				ech.ajouter(Math.min(echMax.getQuantite(i) + echMax.getQuantiteJusquA(i-1) - ech.getQuantiteJusquA(i-1), echeancierAch.getQuantite(i))); //On accepte la proposition de l'acheteur en vérifiant que l'on pourra y répondre
 			}
-			if(testQuantite) {
-				return new Echeancier(echeancierAch.getStepDebut(), echeancierAch.getStepFin(), (3*echeancierAch.getQuantiteTotale()+hs.get(contrat.getEcheancier().getStepFin()+1))/(echeancierAch.getNbEcheances()*4)); //On essaye de refiler plus de notre stock aux acheteurs
-			} 
-			return echeancierAch;
+			if(ech.getQuantiteTotale()>venteMin) {
+				return ech;
+			}
 		}
 		return null;
 	}
@@ -169,19 +145,18 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * @return La proposition initale du prix a la tonne.
 	 */
 	public double propositionPrix(ExemplaireContratCadre contrat) {
-		if(this.echecVentePrix.get(contrat.getProduit())) {
+		if(this.tentativeVente.get(contrat.getProduit())) {
 			this.nbEchecVentePrix.put((Feve) contrat.getProduit(), this.nbEchecVentePrix.get(contrat.getProduit()) + 1);
 		}
 		if(this.nbEchecVentePrix.get(contrat.getProduit()) == 3) { //Si un produit voit trois ventes annulés de suite, on baisse son prix
 			this.nbIterationVentePrix = 0;
 			this.nbEchecVentePrix.put((Feve) contrat.getProduit(), 0);
-			this.getPrixCC().put((Feve) contrat.getProduit(), this.getPrixCC((Feve) contrat.getProduit())*0.9);
+			this.getPrixCC().get((Feve) contrat.getProduit()).setValeur(this, this.getPrixCC((Feve) contrat.getProduit())*0.9);
 		}
-		this.echecVentePrix.put((Feve) contrat.getProduit(), true);
-		this.nbIterationVentePrix = 0; 
-		return contrat.getEcheancier().getQuantiteTotale()*Math.min(this.prix_rentable((Feve) contrat.getProduit()), this.getPrixCC((Feve) contrat.getProduit())*this.facteurPrix(nbIterationVentePrix));
+		this.tentativeVente.put((Feve) contrat.getProduit(), true);
+		this.nbIterationVentePrix = 0;
+		return Math.max(this.prix_rentable((Feve) contrat.getProduit()), getPrixSouhaitéCC(contrat));
 	}
-	
 	/**
 	 * Methode appelee par le SuperviseurVentesContratCadre apres une contreproposition
 	 * de prix different de la part de l'acheteur, afin de connaitre la contreproposition
@@ -194,13 +169,18 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 */
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
 		this.nbIterationVentePrix++;
-		if(contrat.getPrix() >= this.getPrixCC((Feve) contrat.getProduit())) {
+		double prixPrec = contrat.getListePrix().get(contrat.getListePrix().size() - 2); //Le derneir prix que l'on a proposé
+		if(contrat.getPrix() >= prixPrec) { //Si le prix est supérieur au prix que l'on proposait précédement, on l'accepte dans notre grande gentillesse
 			return contrat.getPrix();
 		}
 		if(contrat.getPrix() >= this.prix_rentable((Feve) contrat.getProduit())) {
-			return contrat.getEcheancier().getQuantiteTotale()*this.getPrixCC((Feve) contrat.getProduit())*this.facteurPrix(nbIterationVentePrix); /*Négociation 1/4||3/4 pour tenter de tirer un prix convenable*/
+			if(contrat.getPrix() >= prixPrec*facteurTolerance) {
+				return contrat.getPrix(); //Si le prix proposé est roche du prix souhaité précédement, on accepte afin d'assurer que la vente ai lieu
+			} else {
+				return getPrixSouhaitéCC(contrat)*3/4 + contrat.getPrix()/4; /*Négociation 1/4||3/4 pour tenter de tirer un prix convenable*/
+			}
 		}
-		return -2;
+		return this.prix_rentable((Feve) contrat.getProduit());
 	}
 	
 	/**
@@ -213,9 +193,9 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * @param contrat
 	 */
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		this.echecVentePrix.put((Feve) contrat.getProduit(), false);
+		this.tentativeVente.put((Feve) contrat.getProduit(), false);
 		this.nbEchecVentePrix.put((Feve) contrat.getProduit(), 0);
-		this.getPrixCC().put((Feve) contrat.getProduit(), this.getPrixCC((Feve) contrat.getProduit())*0.9 + contrat.getPrix()*0.1);
+		this.getPrixCC().get((Feve) contrat.getProduit()).setValeur(this, this.getPrixCC((Feve) contrat.getProduit())*0.9 + contrat.getPrix()*0.1); //On essaye d'adapter nos prix
 		this.getContrats().add(contrat);
 	}
 	
@@ -229,7 +209,9 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * Une penalite est prevue si la quantite du lot retourne est inferieure a la quantite
 	 */
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
-		if(Math.min(this.getStockTot((Feve) produit).getValeur(), quantite) > 0.001) {
+		double quantiteLivre = Math.min(this.getStockTot((Feve) produit).getValeur(), quantite);
+		if(quantiteLivre > 0.001) {
+			this.argentVente.get((Feve) produit).ajouter(this, quantiteLivre*contrat.getPrix(), this.cryptogramme);
 			return retirerStock((Feve) produit, Math.min(this.getStockTot((Feve) produit).getValeur(), quantite));
 		} else {
 			return new Lot(produit);
@@ -241,7 +223,53 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * @param iteration
 	 * @return Retourne un double correspondant au facteur
 	 */
-	public double facteurPrix(int iteration) {
-		return (iteration-10)*0.8 + iteration*this.facteurPrixInit;
+	private double facteurPrix() {
+		return (this.nbIterationVentePrix-15)*(0.7-this.facteurPrixInit)/15 + 0.7;
+	}
+	
+	/**
+	 * Methode calculant les avantages du client liés à sa fidélité
+	 * @param act
+	 * @return Retourne un double correspondant au facteur diminuant le prix proposé à cet acteur
+	 */
+	private double facteurFidelite(IActeur act) {
+		int decompte = 0;
+		for(ExemplaireContratCadre cc : this.contrats) {
+			if(cc.getAcheteur().equals(act)) {
+				decompte = decompte + cc.getEcheancier().getNbEcheances();
+			}
+		}
+		if(decompte >= this.nbStepSuperFidelité) {
+			return 0.85;
+		} 
+		if(decompte >= this.nbStepFidelité) {
+			return 0.95;
+		}
+		return 1.0;
+	}
+	
+	/**
+	 * Méthode calculant le prix souhaité pour ce contrat i.e. en prenant en compte le produit et l'acheteur. Cette fonction ne tient pas compte de la rentabilité
+	 * @param contrat
+	 * @return Retourne un double correspondant au prix souhaité
+	 */
+	private double getPrixSouhaitéCC(ExemplaireContratCadre contrat) {
+		return this.getPrixCC((Feve) contrat.getProduit())*this.facteurFidelite(contrat.getAcheteur())*this.facteurPrix();
+	}
+	
+	private void majListeCC() {
+		LinkedList<ExemplaireContratCadre> supp = new LinkedList<ExemplaireContratCadre>();
+		for(ExemplaireContratCadre cc : this.contrats) {
+			if(cc.getEcheancier().getStepFin() < Filiere.LA_FILIERE.getEtape()) {
+				supp.add(cc);
+			}
+		}
+		for(ExemplaireContratCadre cc : supp) {
+			this.contrats.remove(cc);
+		}
+	}
+	
+	//Méthode pour les tests
+	public static void main(String[] args) {
 	}
 }

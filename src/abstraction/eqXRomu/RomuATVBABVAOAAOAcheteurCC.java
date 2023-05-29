@@ -29,8 +29,9 @@ public class RomuATVBABVAOAAOAcheteurCC extends RomuATVBABVAOAcheteurAppelOffre 
 	//                  IAcheteurContratCadre
 	//========================================================
 	public boolean achete(IProduit produit) {
-		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme acheter le produit "+produit);
-		return true;
+		String s =(produit instanceof Feve || produit instanceof ChocolatDeMarque)?" acheter " : "ne pas acheter";
+		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme "+s+" le produit "+produit);
+		return (produit instanceof Feve || produit instanceof ChocolatDeMarque);
 	}
 
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
@@ -41,7 +42,7 @@ public class RomuATVBABVAOAAOAcheteurCC extends RomuATVBABVAOAcheteurAppelOffre 
 		return contrat.getEcheancier();
 	}
 
-	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
+	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) { 
 		double prix=0.0;
 		double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
 		Object produit = contrat.getProduit();
@@ -50,17 +51,17 @@ public class RomuATVBABVAOAAOAcheteurCC extends RomuATVBABVAOAcheteurAppelOffre 
 		}
 		if (produit instanceof Chocolat) {
 			switch ((Chocolat)produit) {
-			case C_HQ_BE   : prix= 11.0;break;
-			case C_MQ_BE   : prix=  7.0;break;
-			case C_MQ      : prix=  6.0;break;
-			case C_BQ      : prix=  5.0;break;
+			case C_HQ_BE   : prix= 11000.0;break;
+			case C_MQ_BE   : prix=  7000.0;break;
+			case C_MQ      : prix=  6000.0;break;
+			case C_BQ      : prix=  5000.0;break;
 			}
 		} else if (produit instanceof Feve) {
 			switch ((Feve)produit) {
-			case F_HQ_BE : prix= 3.5;break;
-			case F_MQ_BE    : prix= 2.7;break;
-			case F_MQ      : prix= 2.5;break;
-			case F_BQ : prix= 1.5;break;
+			case F_HQ_BE : prix= 3500;break;
+			case F_MQ_BE    : prix= 2700;break;
+			case F_MQ      : prix= 2500;break;
+			case F_BQ : prix= 1500;break;
 			}
 		}
 		int nbPas=0;

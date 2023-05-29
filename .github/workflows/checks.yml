@@ -1,18 +1,15 @@
 name: Checks
 on: pull_request_target
-
 jobs:
   file_ownership:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
       - uses: tspascoal/get-user-teams-membership@v2
         id: actorTeams
         with:
           username: ${{ github.event.pull_request.user.login }}
           GITHUB_TOKEN: ${{ secrets.PAT }}
-          
       - uses: dorny/paths-filter@v2
         id: filter
         with:
@@ -46,7 +43,6 @@ jobs:
               - 'docs/**'
               - 'lib/**'
               - 'test/**'
-          
       - name: Test ownership
         if: fromJSON(steps.filter.outputs.changes)[1] != null || fromJSON(steps.filter.outputs.changes)[0] != fromJSON(steps.actorTeams.outputs.teams)[0]
         run: | 
@@ -56,13 +52,11 @@ jobs:
           echo ${{ steps.actorTeams.outputs.teams }}
           echo ${{ fromJSON(steps.actorTeams.outputs.teams)[0] }} 
           exit 1
-          
   java_tests:
-    if: ${{ always() }}
-    needs: file_ownership
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
+    outputs:
+      times: ${{ steps.perf.outputs.times }}
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -81,10 +75,29 @@ jobs:
           ant -noinput -buildfile build.xml
           ant -noinput -buildfile build.xml
           ant -noinput -buildfile build.xml
+          ant -noinput -buildfile build.xml
+    - name: Pass performance file
+      id: perf
+      if: success()
+      run: cat tempsEquipes.json >> "$GITHUB_OUTPUT"
+  performance_tests:
+    needs: [file_ownership, java_tests]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: tspascoal/get-user-teams-membership@v2
+      id: actorTeams
+      with:
+        username: ${{ github.event.pull_request.user.login }}
+        GITHUB_TOKEN: ${{ secrets.PAT }}
+    - name: Performance results
+      run: |
+        echo ${{ needs.java_tests.outputs.times }}
+    - name: Performance check
+      if: fromJSON(needs.java_tests.outputs.times)[fromJSON(steps.actorTeams.outputs.teams)[0]] >= 20000
+      run: exit 1
     - name: Auto-merge
-      if: success() && needs.file_ownership.result == 'success'
+      if: fromJSON(needs.java_tests.outputs.times)[fromJSON(steps.actorTeams.outputs.teams)[0]] < 20000
       run: | 
-        echo ${{ needs.file_ownership.result }}
         gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
