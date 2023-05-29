@@ -25,20 +25,16 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
 	//protected LinkedList<ExemplaireContratCadre> contrats;
-	//protected HashMap<ExemplaireContratCadre, String> ContratsVendeur;
+	protected LinkedList<ExemplaireContratCadre> ContratsVendeur;
 
 	//fait par yassine
 	public void initialiser() {
 		super.initialiser();
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
+		this.ContratsVendeur = new LinkedList<>();
 		//this.stockChoco.put(Chocolat.C_MQ,2000.);
 	}
 
-
-	/*public Transformateur2VendeurCC() {
-		super();  
-		this.ContratsVendeur =new HashMap<>();
-	}*/
 
 	//fait par wiem : nous vendons du chocolat sans et avec marque
 	public boolean peutVendre(IProduit produit) {
@@ -147,7 +143,9 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 	//fait par yassine  : ajout au journal des propositions de contrats cadres
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nouveau cc conclu "+contrat);
+		this.journalVentes.ajouter(COLOR_LLGRAY, Color.MAGENTA, "  CCV : nouveau cc conclu "+ contrat);
+		this.ContratsVendeur.add(contrat);
+		
 	}
 
 
@@ -163,16 +161,19 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		IAcheteurContratCadre acheteur = acheteurs.get((int)(Math.random() * acheteurs.size())); 
 
 		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
-
 		//if ((produit.getNom() == "MaisonDoutre") || (produit.getNom() == "ChocoPop")) 
 		Double stock = stockChocoMarque.get(produit);
-		ExemplaireContratCadre cc = superviseurVentesCC.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 0.1*stock), cryptogramme,false);
-
+		double A = 0;
+		if (produit.getNom() == "MaisonDoutre") {
+			A = 0.1; }
+		else if (produit.getNom() == "ChocoPop") {
+			A = 0.3; }
+		ExemplaireContratCadre cc = superviseurVentesCC.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, A*stock+SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER), cryptogramme,false);
+		
 		if (cc != null) {   
-			this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "CC : " + cc);
-			//this.ContratsVendeur.put(cc,  acheteur.getNom());
+			this.journalVentes.ajouter(COLOR_LLGRAY, Color.GREEN, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "CC : " + cc);
 		} else {
-			this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
+			this.journalVentes.ajouter(COLOR_LLGRAY, Color.RED, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
 		}
 		return cc; }
 
@@ -189,6 +190,5 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 				this.getContrat(c);
 
 			}
-
 
 		}}}

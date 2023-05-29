@@ -31,17 +31,14 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
-	//protected LinkedList<ExemplaireContratCadre> ContratsAchat;
-	protected HashMap<ExemplaireContratCadre,String> ContratsAchat;
+	protected LinkedList<ExemplaireContratCadre> ContratsAcheteur;
+
 	
 	public void initialiser() {
 		super.initialiser();
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
-		this.ContratsAchat = new HashMap<>();
-	}
-	public Transformateur2AcheteurCC() {
-		super();  
-		this.ContratsAchat = new HashMap<>();
+		this.ContratsAcheteur = new LinkedList<>();
+	
 	}
 	@Override
 	public boolean achete(IProduit produit) {
@@ -148,6 +145,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
 		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
+		this.ContratsAcheteur.add(contrat);
 	} //réussite des négociations sur le contrat précisé en paramètre dans tous les cas 
 
 	@Override
@@ -184,7 +182,6 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
 		if (cc != null) {   
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + vendeur.getNom() + " pour " + produit + "CC : " + cc);
-			this.ContratsAchat.put(cc,vendeur.getNom());
 		} 
 		else {
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
