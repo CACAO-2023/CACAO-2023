@@ -21,6 +21,11 @@ public class Transformateur2Stocks extends Transformateur2Acteur {
 		super();
 	}
 	
+	/**
+	 * @author adam
+	 * coûts de stockage
+	 */
+	
 	public void initialiser() {
 		super.initialiser();
 		
