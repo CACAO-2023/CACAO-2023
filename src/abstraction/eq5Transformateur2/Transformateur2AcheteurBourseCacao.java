@@ -4,6 +4,7 @@ import abstraction.eqXRomu.bourseCacao.BourseCacao;
 import abstraction.eqXRomu.bourseCacao.IAcheteurBourse;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Lot;
 
@@ -32,7 +33,7 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2VendeurCC
 	public double demande(Feve f, double cours) {
 		// on achete en quantités aléatoires si notre solde le permet
 		if((f.getGamme()==Feve.F_MQ.getGamme())
-				&&((this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE))< 20000.0)) // on achète plus de fèves a partir de 20000 tonnes
+				&&((this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE))< 2000.0)) // on achète plus de fèves a partir de 20000 tonnes
 		{
 			double solde = Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
 			double demande = Math.max(0, Math.min( Math.random()*500, solde));
