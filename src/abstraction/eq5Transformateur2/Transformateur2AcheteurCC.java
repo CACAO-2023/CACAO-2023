@@ -65,44 +65,49 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	}// 0% pour la marque "ChocoPop"
 
 
-
 	@Override
 	//Mathis DOUTRE
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		
+
 		if ((this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE))< 20000.0) {
-		double prixMax = 5000.0; // Prix maximum acceptable
-		double soldeDisponible = super.getSolde(); 
-		Echeancier echeancierPropose = contrat.getEcheancier();
-		Echeancier nouvelEcheancier = new Echeancier(echeancierPropose);
-    
-		if (contrat.getPrix() > prixMax) {
-			// Si le prix proposé est supérieur au prix maximum, annuler les négociations
-			nouvelEcheancier.vider();
-			return nouvelEcheancier;
-		}
-
-		double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
-
-		if (coutTotal > soldeDisponible) {
-			// Si le coût total est supérieur au solde disponible, ajuster les quantités de l'échéancier
-			double facteurAjustement = soldeDisponible / coutTotal;
-			for (int step = nouvelEcheancier.getStepDebut(); step <= nouvelEcheancier.getStepFin(); step++) {
-				double quantiteProposee = nouvelEcheancier.getQuantite(step);
-				double nouvelleQuantite = quantiteProposee * facteurAjustement;
-				nouvelEcheancier.set(step, nouvelleQuantite);
+			double prixMax = 0;// Prix maximum acceptable
+			if (contrat.getProduit() == Feve.F_MQ ) {
+				prixMax = 2000 ; 
 			}
-		} else {
-			// Si le coût total est inférieur ou égal au solde disponible, ajuster les quantités de l'échéancier en les multipliant par un facteur
-			for (int step = nouvelEcheancier.getStepDebut(); step <= nouvelEcheancier.getStepFin(); step++) {
-				double quantiteProposee = nouvelEcheancier.getQuantite(step);
-				double nouvelleQuantite = quantiteProposee * 0.9; // Multiplier par un facteur 0.9
-				nouvelEcheancier.set(step, nouvelleQuantite);
+			else if (contrat.getProduit() == Feve.F_HQ_BE) {
+				prixMax = 12300 ;
 			}
-		}
+			double soldeDisponible = super.getSolde(); 
+			Echeancier echeancierPropose = contrat.getEcheancier();
+			Echeancier nouvelEcheancier = new Echeancier(echeancierPropose);
 
-		return nouvelEcheancier.getQuantiteTotale()>100.0 ? nouvelEcheancier : null;}
-	else { return null; }}
+			if (contrat.getPrix() > prixMax) {
+				// Si le prix proposé est supérieur au prix maximum, annuler les négociations
+				nouvelEcheancier.vider();
+				return nouvelEcheancier;
+			}
+
+			double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
+
+			if (coutTotal > soldeDisponible) {
+				// Si le coût total est supérieur au solde disponible, ajuster les quantités de l'échéancier
+				double facteurAjustement = soldeDisponible / coutTotal;
+				for (int step = nouvelEcheancier.getStepDebut(); step <= nouvelEcheancier.getStepFin(); step++) {
+					double quantiteProposee = nouvelEcheancier.getQuantite(step);
+					double nouvelleQuantite = quantiteProposee * facteurAjustement;
+					nouvelEcheancier.set(step, nouvelleQuantite);
+				}
+			} else {
+				// Si le coût total est inférieur ou égal au solde disponible, ajuster les quantités de l'échéancier en les multipliant par un facteur
+				for (int step = nouvelEcheancier.getStepDebut(); step <= nouvelEcheancier.getStepFin(); step++) {
+					double quantiteProposee = nouvelEcheancier.getQuantite(step);
+					double nouvelleQuantite = quantiteProposee * 0.9; // Multiplier par un facteur 0.9
+					nouvelEcheancier.set(step, nouvelleQuantite);
+				}
+			}
+
+			return nouvelEcheancier.getQuantiteTotale()>100.0 ? nouvelEcheancier : null;}
+		else { return null; }}
 
 
 
@@ -156,7 +161,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		IProduit produit= lot.getProduit();
 		double quantite = lot.getQuantiteTotale();
 		if (contrat == null ) { this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "TROP DE FEVES")
-		;}
+			;}
 		else if (produit instanceof Feve) {
 			if (this.stockFeves.keySet().contains(produit)) {
 				this.stockFeves.put((Feve)produit, this.stockFeves.get(produit)+quantite);
@@ -182,8 +187,8 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 			}
 			// fin de code ajoute par romu
 			IVendeurContratCadre vendeur = vendeurs.get((int)(Math.random() * vendeurs.size())); //on cherche un vendeur
-			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
-			ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 10+(SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+100.0)), cryptogramme,false);
+			//this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
+			ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10,(SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+100.0)), cryptogramme,false);
 			if (cc != null) {   
 				this.journalAchats.ajouter(COLOR_LLGRAY, Color.GREEN, "Contrat cadre passé avec " + vendeur.getNom() + " pour " + produit + "CC : " + cc);
 			} 

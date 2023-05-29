@@ -162,24 +162,6 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	   } 
 		 
 		
-				
-        
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -260,7 +242,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		IAcheteurContratCadre acheteur = acheteurs.get((int)(Math.random() * acheteurs.size())); 
 
 
-		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
+		//this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
 
 
 		//if ((produit.getNom() == "MaisonDoutre") || (produit.getNom() == "ChocoPop")) {
