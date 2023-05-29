@@ -45,7 +45,8 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		// TODO Auto-generated method stub
 		if ((produit.getType().equals("Feve")
 				&& ((((Feve)produit).getGamme()== Gamme.MQ)&&(!((Feve)produit).isBioEquitable())
-						|| ((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable()))))) {
+						|| ((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable()))))
+				&& (this.totalStocksFeves.getValeur() < 20000.0)) {
 			//this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme vouloir acheter le produit "+produit);
 			return true;} //on achète seulement les fèves haute gamme bio équitable et les fèves moyenne gamme
 		else {
@@ -169,7 +170,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 
 
 	public ExemplaireContratCadre getContrat(Feve produit) {
-		if (this.totalStocksFeves.getValeur() < 20000.0) {
+		//if (this.totalStocksFeves.getValeur() < 20000.0) {
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit);
 			List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
 			// code ajoute par romu pour pallier a l'erreur juste apres d'acces a l'element 0 dans une liste vide
@@ -186,9 +187,9 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 			else {
 				this.journalAchats.ajouter(COLOR_LLGRAY, Color.RED, "Echec de la négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
 			}
-			return cc;}//on établit le contrat
+			return cc; /*}//on établit le contrat
 		else {this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Stock trop elevé ! Pas d'achat en CC.");
-		return null ;}
+		return null ;}*/
 	}
 
 	public void next() {
