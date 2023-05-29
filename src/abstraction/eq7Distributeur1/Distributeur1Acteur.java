@@ -98,6 +98,11 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	 */
 	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsionsperso; 
 	
+	/**
+	 * prix de vente de l'equipe 7
+	 * on suppose qu'on vend à chaque étape normalisée
+	 */
+	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> prevision_prix; 
 
 
 	/**
@@ -178,7 +183,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		int etape_annee = Filiere.LA_FILIERE.getEtape()/24+1;
 		int etapenormalisee = Filiere.LA_FILIERE.getEtape()%24;
 		HashMap<ChocolatDeMarque,Double> prevetapeperso = previsionsperso.get(etapenormalisee);
-		prevetapeperso.replace(choco, (prevetapeperso.get(choco)*etape_annee+quantite)/(etape_annee+1));
+		prevetapeperso.replace(choco, (prevetapeperso.get(choco)*etape_annee+quantite)/(etape_annee+1)); //recalcul de la moyenne
 		previsionsperso.replace(etapenormalisee, prevetapeperso);
 	}
 	
@@ -241,9 +246,10 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			mettre_a_jour(Var_Cout_Choco, marque,getCout_gamme(marque) );
 		}
-		//Initialisation des previsions
+		//Initialisation des previsions et prix 
 		this.previsionsperso = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 
-		
+		this.prevision_prix = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 
+
 		for (int i=0;i<24;i++) {
 			HashMap<ChocolatDeMarque,Double> prevtour = new HashMap<ChocolatDeMarque,Double>();
 			HashMap<ChocolatDeMarque,Double> prevtourperso = new HashMap<ChocolatDeMarque,Double>();

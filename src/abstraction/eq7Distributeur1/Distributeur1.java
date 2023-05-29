@@ -100,6 +100,8 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		this.dict_ratio = map;
 	}
 	
+	
+	
 	/**
 	 * @author Theo
 	 * @return la liste des chocolats de marque a mettre en tete de gondole, avec les quantites associees
@@ -137,23 +139,38 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 
 		if (qualite <1) {
 			qualite = 1.0; }
-//		double coef = 1-(((10/3)*qualite)/100)+0.1;
+
 		double promo = prixPromotion(choco);
 		double cout = getCoutTotal(choco);
 		double prix = cout*promo/(1-0.1*qualite);
 		double prix_moyen = 0.;
+		
+		int etape_normalisee= Filiere.LA_FILIERE.getEtape()%24;
+		
 		if (Filiere.LA_FILIERE.getEtape() >= 24) {
 			prix_moyen = Filiere.LA_FILIERE.prixMoyen(choco,Filiere.LA_FILIERE.getEtape()-24);
-			System.out.println("cout moyen "+choco+" "+prix_moyen);
+			double monPrixAncien = prevision_prix.get(etape_normalisee).get(choco);
+			
+
 		}
 		if (((prix < prix_moyen*0.9) || (prix > prix_moyen*1.1)) && (prix_moyen != 0.)) {
 			prix = prix - (prix-prix_moyen)*0.5;	
 			}
 		if (prix < cout/0.9) {
-			return cout/0.9;
+			prix= cout/0.9;
 		}
+		
+		if(Filiere.LA_FILIERE.getEtape()>=24) {
+			//sert à mémoriser notre prix à l'étape derniere
+			
+		HashMap<ChocolatDeMarque,Double> HPrix=this.prevision_prix.get(etape_normalisee);
+		HPrix.replace(choco, prix);
+		this.prevision_prix.replace(etape_normalisee, HPrix);
+		}
+		
 		return prix;
 	}
+	
 	
 	/**
 	 * @author Theo	 
