@@ -244,14 +244,9 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 		//this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
 
-
-		//if ((produit.getNom() == "MaisonDoutre") || (produit.getNom() == "ChocoPop")) {
-
-
-		//if ((produit.getNom() == "MaisonDoutre") || (produit.getNom() == "ChocoPop")) 
 		Double stock = stockChocoMarque.get(produit);
 		double A = 0;
-		if (produit.getNom() == "MaisonDoutre") {
+		if (produit.getNom() == "Maison Doutre") {
 			A = 0.1; }
 		else if (produit.getNom() == "ChocoPop") {
 			A = 0.3; }
@@ -272,7 +267,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	public void next() {
 		super.next();
 		for (ChocolatDeMarque c: Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (c.getMarque().equals("MaisonDoutre")) {
+			if (c.getMarque().equals("Maison Doutre")) {
 				this.getContrat(c);
 
 			}

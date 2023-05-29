@@ -69,7 +69,8 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	//Mathis DOUTRE
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 
-		if ((this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE))< 20000.0) {
+		double somme = (this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE));
+		if (somme < 20000.0) {
 			double prixMax = 0;// Prix maximum acceptable
 			if (contrat.getProduit() == Feve.F_MQ ) {
 				prixMax = 2000 ; 
@@ -178,7 +179,8 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 
 
 	public ExemplaireContratCadre getContrat(Feve produit) {
-		if ((this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE))< 20000.0) {
+		double somme = (this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE));
+		if (somme < 20000.0) {
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit);
 			List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
 			// code ajoute par romu pour pallier a l'erreur juste apres d'acces a l'element 0 dans une liste vide
