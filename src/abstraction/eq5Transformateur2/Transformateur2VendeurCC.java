@@ -74,7 +74,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 
 		double stock = stockChocoMarque.get(contrat.getProduit()) != null ? stockChocoMarque.get(contrat.getProduit()) : stockChoco.get(contrat.getProduit());
-		double prixMin = (2800+11800)*1.2*stock;
+
 		double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
 		double prixDonne = contrat.getPrix();
 
@@ -83,14 +83,14 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : j'accepte l'echeancier "+contrat.getEcheancier());
 		return nouvelEcheancier;}
 
-		/*if (echeancierPropose.getQuantiteAPartirDe(contrat.getEcheancier().getStepDebut()) > stock.getQuantite((Chocolat)contrat.getProduit())) {
+	/*if (echeancierPropose.getQuantiteAPartirDe(contrat.getEcheancier().getStepDebut()) > stock.getQuantite((Chocolat.C_MQ)contrat.getProduit())) {
 			echeancierPropose.ajouter(Math.max(SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER, stock.getQuantite((Chocolat)contrat.getProduit())));
 			return nouvelEcheancier;
 		}}*/
 
 
-		
-		
+
+
 
 
 
@@ -117,7 +117,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			Double stock = stockChoco.get(cp);
 			if (stock!=null) {
 				//stock*(cout de stockage 1300 + prix de transfo 1500 + prix moyen d'une tonne de feves MQ) + marge de 10%
-				prix = (2800*1500)*1.1*stock ;
+				prix = (2800+1500)*1.1*stock ;
 				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);
 			}}
 		if ( cp == Chocolat.C_HQ_BE) {
@@ -135,22 +135,49 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 
 
-	//fait par yassine : pas de négociations
+	//fait par yassine : négociations
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
 		double stock = stockChocoMarque.get(contrat.getProduit()) != null ? stockChocoMarque.get(contrat.getProduit()) : stockChoco.get(contrat.getProduit());
-		double prixMin = 2800*stock;
-		double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
+		double prixMinHq = (2800+11800)*1.2*stock;
+		double prixMinMq = (2800+1500)*1.2*stock;
+		//double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
 		double prixDonne = contrat.getPrix();
+		if (contrat.getProduit()==Chocolat.C_HQ_BE) {
+			if(prixDonne >= prixMinHq ) {
+				return prixDonne;
+			} 
+			else {
+				return prixMinHq;
+			}}
 
-		if(prixDonne < prixMin ) {
-			return prixMin * 1.1;
-		}
+		else{
+			if(prixDonne >= prixMinMq) {
+				return prixDonne;
+			} 
+			else {
+				return prixMinMq;
+			}}
+	   } 
+		 
+		
+				
+        
+	
 
 
-		return prixDonne*1.2 ;
 
 
-	}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -252,7 +279,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			this.journalVentes.ajouter(COLOR_LLGRAY, Color.RED, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
 		}
 		return cc;}
-	
+
 
 
 
