@@ -19,43 +19,53 @@ import abstraction.eqXRomu.produits.Lot;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+/*
+- dans acheteurCC vous declarez une liste de contrats protected LinkedList<ExemplaireContratCadre> contrats; mais qui n'est jamais créée/initialisée/remplie/utilisée
+- dans vendeurCC idem, vous declarez la meme liste de contrats, avec le meme nom --> elle masque la liste de sa fille. Mais bon, ce n'est pas visible comme problème vu qu'elle n'est pas plus créée/.../utilisée que celle de acheteurCC
+-     public boolean peutVendre(IProduit produit) {
+        return ((produit.getType().equals("Chocolat"))||(produit.getType().equals("ChocolatDeMarque")));} 
+---> Vous declarez pouvoir vendre n'importe quel chocolat / chocolatDeMarque, alors que c'est faux
+- dans vend vous ajoutez a votre journal this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous vendons du " + produit.getType() + " " + produit);   C'est un message qui induit en erreur car on croit que vous vendez alors qu'à ce stade vous ne faites que déclarer que vous etes en mesure de vendre.  --> plutot mentionner "nous declarons pouvoir vendre du ...*/
 
 public class Transformateur2AcheteurCC extends Transformateur2Transfo implements IAcheteurContratCadre {
 
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
-	//protected LinkedList<ExemplaireContratCadre> contrats;
-	protected HashMap<ExemplaireContratCadre, String> ContratsAcheteur;
-
+	//protected LinkedList<ExemplaireContratCadre> ContratsAchat;
+	protected HashMap<ExemplaireContratCadre,String> ContratsAchat;
+	
 	public void initialiser() {
 		super.initialiser();
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
+		this.ContratsAchat = new HashMap<>();
 	}
-
+	public Transformateur2AcheteurCC() {
+		super();  
+		this.ContratsAchat = new HashMap<>();
+	}
 	@Override
 	public boolean achete(IProduit produit) {
 		// TODO Auto-generated method stub
-
 		if ((produit.getType().equals("Feve")
-				&& ((((Feve)produit).getGamme()== Gamme.MQ)&&(!((Feve)produit).isBioEquitable())
-						|| ((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable()))))) {
-				this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme vouloir acheter le produit "+produit);
-				return true;} //on achète seulement les fèves haute gamme bio équitable et les fèves moyenne gamme
-			else {
-				this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme ne pas vouloir acheter le produit "+produit);
-				return false;}}
+			&& ((((Feve)produit).getGamme()== Gamme.MQ)&&(!((Feve)produit).isBioEquitable())
+			|| ((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable()))))) {
+			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme vouloir acheter le produit "+produit);
+			return true;} //on achète seulement les fèves haute gamme bio équitable et les fèves moyenne gamme
+		else {
+			
+			return false;}
 
 
-	
+	}
 
 	@Override
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
-		/*if ((( ((ChocolatDeMarque) produit).getMarque())) == "Maison Doutre") {
+		if ((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable())) {
 			return 10; } //1O% de RSE pour la marque "Maison Doutre"
-		else { */
-		return 0; } // 0% pour la marque "ChocoPop"
-	// }
+		else { 
+			return 0; }
+	}// 0% pour la marque "ChocoPop"
 
 
 
@@ -76,7 +86,6 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 
 		double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
 
-		
 		if (coutTotal > soldeDisponible) {
 			// Si le coût total est supérieur au solde disponible, ajuster les quantités de l'échéancier
 			double facteurAjustement = soldeDisponible / coutTotal;
@@ -94,16 +103,34 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 			}
 		}
 
-		return nouvelEcheancier.getQuantiteTotale()>100.0 ? nouvelEcheancier : null;}
+		return nouvelEcheancier;
+	}   
+	/*
+	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
+		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
+		return contrat.getEcheancier(); //pas de négociations 
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
+	}
+<<<<<<< HEAD
 
 
 
+		@Override
+		public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
+			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'accepte l'echeancier "+contrat.getEcheancier());
+			return contrat.getEcheancier(); //pas de négociations 
+		}
+=======
+<<<<<<< HEAD
+	 */
 
-		//Par Mathis DOUTRE
 
-		public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
+
+	//Par Mathis DOUTRE
+
+	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		double dernierPrix = contrat.getPrix();
-		double soldeDisponible = super.getSolde();
+		double soldeDisponible = super.getSolde(); 
 		double proposition = 0;
 
 
@@ -161,6 +188,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		}}//mise à jour du stock de fèves après reception d'une livraison
 
 
+
 	public ExemplaireContratCadre getContrat(Feve produit) {
 		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit);
 		List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
@@ -175,11 +203,9 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
 		if (cc != null) {   
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + vendeur.getNom() + " pour " + produit + "CC : " + cc);
-
-			this.ContratsAcheteur.put(cc,vendeur.getNom());
+			this.ContratsAchat.put(cc,vendeur.getNom());
 		} 
 		else {
-
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
 		}
 		return cc; //on établit le contrat
