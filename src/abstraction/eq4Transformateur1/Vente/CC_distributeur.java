@@ -229,14 +229,39 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		double prix=0.0;
 		Object produit = contrat.getProduit();
+		double prixMoy=0;
+		double quant=0;
 		if (produit instanceof ChocolatDeMarque) {
-			produit = ((ChocolatDeMarque)produit).getChocolat();
-		}
-		if (produit instanceof Chocolat) {
-			switch ((Chocolat)produit) {
-			case C_HQ_BE   : prix= 50000;break;
-			case C_BQ      : prix= 15000;break;
+			if (((ChocolatDeMarque) produit).getMarque()=="Vccotioi") {
+				for (ExemplaireContratCadre c : this.ContratEnCours_F_HQ) {
+					if (((Feve) c.getProduit())==Feve.F_HQ_BE) {
+						prixMoy += c.getPrix()*c.getQuantiteTotale();
+						quant += c.getQuantiteTotale();
+					}
+				}
+				prixMoy = prixMoy/quant;
+				
 			}
+			if (((ChocolatDeMarque) produit).getMarque()=="Yocttotoa") {
+				for (ExemplaireContratCadre c : this.ContratEnCours_F_HQ) {
+					if (((Feve) c.getProduit())==Feve.F_BQ) {
+						prixMoy += c.getPrix()*c.getQuantiteTotale();
+						quant += c.getQuantiteTotale();
+					}
+				}
+				prixMoy = (prixMoy/quant)*contrat.getQuantiteTotale();
+				
+			}
+			double coutStock = 4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*contrat.getQuantiteTotale();
+			double coutTransfo = 5*contrat.getQuantiteTotale();
+			prix = (prixMoy + coutStock + coutTransfo)*2;
+	//		produit = ((ChocolatDeMarque)produit).getChocolat();
+	//	}
+	//	if (produit instanceof Chocolat) {
+	//		switch ((Chocolat)produit) {
+	//		case C_HQ_BE   : prix= 50000;break;
+	//		case C_BQ      : prix= 15000;break;
+	//		}
 		}
 		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV :"+contrat.getAcheteur()+" propose prix de "+prix+" pour "+produit);
 		return prix;
