@@ -70,7 +70,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			return false;}}
 
 
-	//fait par yassine : on négocie en fonction d'un prix min et des stocks
+	//fait par yassine : on négocie en fonction des stocks
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 
 		double stock = stockChocoMarque.get(contrat.getProduit()) != null ? stockChocoMarque.get(contrat.getProduit()) : stockChoco.get(contrat.getProduit());
@@ -117,11 +117,9 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			Double stock = stockChoco.get(cp);
 			if (stock!=null) {
 				//stock*(cout de stockage 1300 + prix de transfo 1500 + prix moyen d'une tonne de feves MQ) + marge de 10%
-<<<<<<< HEAD
 				prix = (2800+1500)*1.1*stock ;
-=======
-				prix = (2800*1500)*1.2*stock ;
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
+
+
 				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);
 			}}
 		if ( cp == Chocolat.C_HQ_BE) {
@@ -141,9 +139,11 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 	//fait par yassine : négociations
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		double stock = stockChocoMarque.get(contrat.getProduit()) != null ? stockChocoMarque.get(contrat.getProduit()) : stockChoco.get(contrat.getProduit());
-		double prixMinHq = (2800+11800)*1.2*stock;
-		double prixMinMq = (2800+1500)*1.2*stock;
+		
+		Double stockHq = stockChocoMarque.get(Chocolat.C_HQ_BE);
+		Double stockMq = stockChoco.get(Chocolat.C_MQ);
+		double prixMinHq = (2800+11800)*stockHq;
+		double prixMinMq = (2800+1500)*stockMq;
 		//double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
 		double prixDonne = contrat.getPrix();
 		if (contrat.getProduit()==Chocolat.C_HQ_BE) {
@@ -152,7 +152,9 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			} 
 			else {
 				return prixMinHq;
-			}}
+
+			}
+		}
 
 		else{
 			if(prixDonne >= prixMinMq) {
@@ -160,13 +162,14 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			} 
 			else {
 				return prixMinMq;
-			}}
-	   } 
-		 
-		
-				
-        
-	
+			}
+		}
+	} 
+
+
+
+
+
 
 
 
