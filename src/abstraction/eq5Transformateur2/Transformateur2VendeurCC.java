@@ -117,11 +117,9 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			Double stock = stockChoco.get(cp);
 			if (stock!=null) {
 				//stock*(cout de stockage 1300 + prix de transfo 1500 + prix moyen d'une tonne de feves MQ) + marge de 10%
-<<<<<<< HEAD
-				prix = (2800+1500)*1.1*stock ;
-=======
-				prix = (2800*1500)*1.2*stock ;
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
+
+				prix = (2800+1500)*1.2*stock ;
+
 				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);
 			}}
 		if ( cp == Chocolat.C_HQ_BE) {
