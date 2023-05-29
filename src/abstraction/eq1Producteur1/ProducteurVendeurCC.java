@@ -25,8 +25,6 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	private HashMap<IActeur, Integer> systemefidelite;
 	private double quantiteventeBQ;
 	private double quantiteventeMQ;
-	private int maxcontratBQ;
-	private int maxcontratMQ;
 	private int nbcontratBQ;
 	private int nbcontratMQ;
 	
@@ -47,8 +45,6 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		}
 		this.quantiteventeBQ=0;
 		this.quantiteventeMQ=0;
-		this.maxcontratBQ=20;
-		this.maxcontratMQ=8;
 		this.nbcontratBQ=0;
 		this.nbcontratMQ=0;
 	}
@@ -65,7 +61,7 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 		  
 		  switch ((Feve)contrat.getProduit()) {
 		  case F_BQ:
-			if (contrat.getEcheancier().getQuantiteTotale()<super.getVraiStockB().getQuantiteTotale() && super.getVraiStockB().getQuantiteTotale()>1000 && nbcontratBQ<maxcontratBQ) {
+			if (contrat.getEcheancier().getQuantiteTotale()<super.getVraiStockB().getQuantiteTotale() && super.getVraiStockB().getQuantiteTotale()>1000 && nbcontratBQ<this.maxcontratBQ.getValeur()) {
 				Echeancier e = contrat.getEcheancier();
 				if (e.getQuantite(e.getStepDebut())>super.getVraiStockB().getQuantiteTotale()/5) { //Si la quantité demandé au premier step est inferieur au cinquieme de notre stock on negocie
 				    return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
@@ -77,7 +73,7 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 				return null; // On s'engage pas si on a pas la quantité demandé
 			}
 		  case F_MQ:
-			  if (contrat.getEcheancier().getQuantiteTotale()<super.getVraiStockM().getQuantiteTotale() && super.getVraiStockM().getQuantiteTotale()>100 && nbcontratMQ<maxcontratBQ) {
+			  if (contrat.getEcheancier().getQuantiteTotale()<super.getVraiStockM().getQuantiteTotale() && super.getVraiStockM().getQuantiteTotale()>100 && nbcontratMQ<this.maxcontratMQ.getValeur()) {
 				  Echeancier e = contrat.getEcheancier();
 					if (e.getQuantite(e.getStepDebut())>super.getVraiStockM().getQuantiteTotale()/10) { //Si la quantité demandé au premier step est inferieur au dixieme de notre stock on negocie
 					    return contrat.getEcheancier(); 
@@ -188,10 +184,10 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 			}
 		}
 		this.mescontrats.removeAll(contratstermine);
-		if (super.getVraiStockB().getQuantiteTotale()>1000 && nbcontratBQ < maxcontratBQ) {
+		if (super.getVraiStockB().getQuantiteTotale()>1000 && nbcontratBQ < this.maxcontratBQ.getValeur()) {
 		this.PropositionVendeur(Feve.F_BQ);
 		}
-		if (super.getVraiStockM().getQuantiteTotale()>100 && nbcontratMQ < maxcontratMQ) {
+		if (super.getVraiStockM().getQuantiteTotale()>100 && nbcontratMQ < this.maxcontratMQ.getValeur()) {
 		    this.PropositionVendeur(Feve.F_MQ);
 		    }
 		this.journal_ventes.ajouter("Nos contrats à l'étape "+ Filiere.LA_FILIERE.getEtape()+"sont "+ this.mescontrats);
