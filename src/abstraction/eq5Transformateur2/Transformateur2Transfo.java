@@ -94,25 +94,30 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 	 * @author FERHOUT Adam
 	 */
 	public void ajoutStock(double qtefeve, double proportion_marque, Feve f, Chocolat c, String Marque, int cacao) {
-		this.stockChoco.put(c, this.stockChoco.get(c)+((qtefeve*(1-proportion_marque))*this.pourcentageTransfo.get(f).get(c)));
-		this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Transformation de "+qtefeve*(1-proportion_marque)+" feves "+Journal.texteSurUneLargeurDe(f.getGamme()+"", 15)+" en "+this.stockChoco.get(c)+((qtefeve*(1-proportion_marque))*this.pourcentageTransfo.get(f).get(c))+" chocolat "+Journal.texteSurUneLargeurDe(c.getGamme()+"", 15));
+		
+		// On cree le chocolat sans marque
+		this.stockChoco.put(c, this.stockChoco.get(c)+((qtefeve*(1-proportion_marque))*this.pourcentageTransfo.get(f).get(c))); // on ajoute la quantité de chocolat obtenue
+		this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Transformation de "+qtefeve*(1-proportion_marque)+" feves "+Journal.texteSurUneLargeurDe(f.getGamme()+"", 15)+" en "+(qtefeve*(1-proportion_marque)*this.pourcentageTransfo.get(f).get(c)+" chocolat "+Journal.texteSurUneLargeurDe(c.getGamme()+"", 15)));
+
 		double cout = 0;
-			// On paie les coûts de transformation
+		// On paie les coûts de transformation
 		cout = qtefeve*1500; // le coût de transformation est fixé a 1500€ par tonne de feve.
 		if (cout>0) {
-		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), cout);
-		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE,"Paiement de "+cout+" pour la transformation de "+qtefeve+" tonnes de feve en chocolat ");
-		ChocolatDeMarque cm = new ChocolatDeMarque(c, Marque, cacao, 0); // le chocolat ChocoPop est a 70% fait de cacao
-		double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;	
-		this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Transformation de "+qtefeve*proportion_marque+" feves "+Journal.texteSurUneLargeurDe(f.getGamme()+"", 15)+" en "+((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c))+Journal.texteSurUneLargeurDe(cm.getMarque(), 15));
-		this.stockChocoMarque.put(cm, scm+((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c)));					
-		this.totalStocksChocoMarque.ajouter(this, ((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c)), this.cryptogramme);
-		this.totalStocksChoco.ajouter(this, ((qtefeve*(1-proportion_marque))*this.pourcentageTransfo.get(f).get(c)), this.cryptogramme);
+			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), cout);
+			this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE,"Paiement de "+cout+" pour la transformation de "+qtefeve+" tonnes de feve en chocolat ");
+			
+			ChocolatDeMarque cm = new ChocolatDeMarque(c, Marque, cacao, 0); // On cree le chocolat de marque
+			double scm = this.stockChocoMarque.keySet().contains(cm) ?this.stockChocoMarque.get(cm) : 0.0;	
+			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Transformation de "+qtefeve*proportion_marque+" feves "+Journal.texteSurUneLargeurDe(f.getGamme()+"", 15)+" en "+((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c))+Journal.texteSurUneLargeurDe(cm.getMarque(), 15));
+			this.stockChocoMarque.put(cm, scm+((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c)));					
+			this.totalStocksChocoMarque.ajouter(this, ((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c)), this.cryptogramme);
+			this.totalStocksChoco.ajouter(this, ((qtefeve*(1-proportion_marque))*this.pourcentageTransfo.get(f).get(c)), this.cryptogramme);
 		}}
 	
 	public void next() {
 		super.next();
 
+		System.out.println("STOCK TOTAL DE FEVES "+this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE));
 		this.journal.ajouter("=== Step numéro "+ Filiere.LA_FILIERE.getEtape()+" ===");
 		
 		this.journal.ajouter("=== STOCK === ");
@@ -134,7 +139,7 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 		for (Feve f : this.pourcentageTransfo.keySet()) {
 			for (Chocolat c : this.pourcentageTransfo.get(f).keySet()) {
 				
-				double qtefeve = 0; 
+				double qtefeve = 0.0; 
 				double proportion_marque = 0;
 				String Marque = "";
 				int cacao = 0;
@@ -157,7 +162,7 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 					Marque = "Maison Doutre";
 					cacao = 90;
 					this.stockFeves.put(f, (double) 0); // on les retire a nos stocks
-					this.totalStocksFeves.retirer(this, qtefeve, this.cryptogramme); // et aux stocks totaux
+					this.totalStocksFeves.retirer(this, qtefeve); // et aux stocks totaux
 				}
 				
 							

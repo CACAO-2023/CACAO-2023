@@ -119,6 +119,9 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 				//stock*(cout de stockage 1300 + prix de transfo 1500 + prix moyen d'une tonne de feves MQ) + marge de 10%
 				prix = (2800+1500)*1.1*stock ;
 
+				//stock*(cout de stockage 1300 + prix de transfo 1500 + prix moyen d'une tonne de feves MQ) + marge de 10%
+
+				
 
 				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);
 			}}
@@ -162,29 +165,14 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			} 
 			else {
 				return prixMinMq;
+
 			}
 		}
 	} 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
+		 
+		
 
 
 
@@ -265,16 +253,11 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		IAcheteurContratCadre acheteur = acheteurs.get((int)(Math.random() * acheteurs.size())); 
 
 
-		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
+		//this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
 
-
-		//if ((produit.getNom() == "MaisonDoutre") || (produit.getNom() == "ChocoPop")) {
-
-
-		//if ((produit.getNom() == "MaisonDoutre") || (produit.getNom() == "ChocoPop")) 
 		Double stock = stockChocoMarque.get(produit);
 		double A = 0;
-		if (produit.getNom() == "MaisonDoutre") {
+		if (produit.getNom() == "Maison Doutre") {
 			A = 0.1; }
 		else if (produit.getNom() == "ChocoPop") {
 			A = 0.3; }
@@ -295,7 +278,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	public void next() {
 		super.next();
 		for (ChocolatDeMarque c: Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (c.getMarque().equals("MaisonDoutre")) {
+			if (c.getMarque().equals("Maison Doutre")) {
 				this.getContrat(c);
 
 			}
