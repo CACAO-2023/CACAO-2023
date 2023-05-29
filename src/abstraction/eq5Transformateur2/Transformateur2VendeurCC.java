@@ -70,13 +70,39 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			return false;}}
 
 
-	//fait par yassine : pas de négociations
+	//fait par yassine : on négocie en fonction d'un prix min et des stocks
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
+
+		double stock = stockChocoMarque.get(contrat.getProduit()) != null ? stockChocoMarque.get(contrat.getProduit()) : stockChoco.get(contrat.getProduit());
+		double prixMin = (2800+11800)*1.2*stock;
+		double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
+		double prixDonne = contrat.getPrix();
+
+		Echeancier echeancierPropose = contrat.getEcheancier();
+		Echeancier nouvelEcheancier = new Echeancier(echeancierPropose);
 		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : j'accepte l'echeancier "+contrat.getEcheancier());
-		return contrat.getEcheancier().getQuantiteTotale()>100.0 ? contrat.getEcheancier() : null;}
+		return nouvelEcheancier;}
+
+		/*if (echeancierPropose.getQuantiteAPartirDe(contrat.getEcheancier().getStepDebut()) > stock.getQuantite((Chocolat)contrat.getProduit())) {
+			echeancierPropose.ajouter(Math.max(SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER, stock.getQuantite((Chocolat)contrat.getProduit())));
+			return nouvelEcheancier;
+		}}*/
 
 
-	//fait par wiem
+		
+		
+
+
+
+
+
+
+	//this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : j'accepte l'echeancier "+contrat.getEcheancier());
+	//return contrat.getEcheancier(); 
+
+
+
+	//fait par wiem : prix 
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		double prix = 0;
 		Chocolat cp=null ;
@@ -85,6 +111,8 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		} else {
 			cp = ((ChocolatDeMarque)contrat.getProduit()).getChocolat();
 		}
+
+
 		if (cp == Chocolat.C_MQ ) {
 			Double stock = stockChoco.get(cp);
 			if (stock!=null) {
@@ -98,15 +126,30 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 				//stock*(cout de stockage 1300 + prix de transfo 1500 + prix moyen d'une tonne de feves HQ_BE) + marge de 10%
 				prix = (2800+11800)*1.2*stock;
 				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);}}
-		return prix; 
-	}
+
+		return prix; }
+
+
+
 
 
 
 
 	//fait par yassine : pas de négociations
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		return contrat.getPrix(); 
+		double stock = stockChocoMarque.get(contrat.getProduit()) != null ? stockChocoMarque.get(contrat.getProduit()) : stockChoco.get(contrat.getProduit());
+		double prixMin = 2800*stock;
+		double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
+		double prixDonne = contrat.getPrix();
+
+		if(prixDonne < prixMin ) {
+			return prixMin * 1.1;
+		}
+
+
+		return prixDonne*1.2 ;
+
+
 	}
 
 
@@ -145,8 +188,35 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.journalVentes.ajouter(COLOR_LLGRAY, Color.MAGENTA, "  CCV : nouveau cc conclu "+ contrat);
 		this.ContratsVendeur.add(contrat);
-		
+
 	}
+
+
+	//fait par wiem  : on cherche un acheteur potentiel et on établit un contrat avec 
+	public ExemplaireContratCadre getContrat(Chocolat produit) {
+		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche acheteur pour " + produit);
+		List<IAcheteurContratCadre> acheteurs = superviseurVentesCC.getAcheteurs(produit);
+		// CODE AJOUTE PAR ROMU POUR EVITER ERREURS
+		if (acheteurs.size()<1) {
+			return null;
+		}
+		// FIN DE CODE AJOUTE PAR ROMU
+		IAcheteurContratCadre acheteur = acheteurs.get((int)(Math.random() * acheteurs.size())); 
+
+		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
+
+		ExemplaireContratCadre cc = superviseurVentesCC.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
+		if (cc != null) {   
+			this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "CC : " + cc);
+
+		} else {
+			this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
+		}
+		return cc; 
+	}
+
+
+
 
 
 	//fait par wiem  : on cherche un acheteur potentiel et on établit un contrat avec 
@@ -160,7 +230,13 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		// FIN DE CODE AJOUTE PAR ROMU
 		IAcheteurContratCadre acheteur = acheteurs.get((int)(Math.random() * acheteurs.size())); 
 
+
 		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
+
+
+		//if ((produit.getNom() == "MaisonDoutre") || (produit.getNom() == "ChocoPop")) {
+
+
 		//if ((produit.getNom() == "MaisonDoutre") || (produit.getNom() == "ChocoPop")) 
 		Double stock = stockChocoMarque.get(produit);
 		double A = 0;
@@ -169,13 +245,16 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		else if (produit.getNom() == "ChocoPop") {
 			A = 0.3; }
 		ExemplaireContratCadre cc = superviseurVentesCC.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, A*stock+SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER), cryptogramme,false);
-		
+
 		if (cc != null) {   
 			this.journalVentes.ajouter(COLOR_LLGRAY, Color.GREEN, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "CC : " + cc);
 		} else {
 			this.journalVentes.ajouter(COLOR_LLGRAY, Color.RED, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
 		}
-		return cc; }
+		return cc;}
+	
+
+
 
 
 	//fait par wiem 
@@ -190,5 +269,6 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 				this.getContrat(c);
 
 			}
+
 
 		}}}
