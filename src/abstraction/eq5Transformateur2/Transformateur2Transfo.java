@@ -99,6 +99,7 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 		double cout = 0;
 			// On paie les coûts de transformation
 		cout = qtefeve*1500; // le coût de transformation est fixé a 1500€ par tonne de feve.
+		if (cout>0) {
 		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), cout);
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE,"Paiement de "+cout+" pour la transformation de "+qtefeve+" tonnes de feve en chocolat ");
 		ChocolatDeMarque cm = new ChocolatDeMarque(c, Marque, cacao, 0); // le chocolat ChocoPop est a 70% fait de cacao
@@ -107,7 +108,7 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 		this.stockChocoMarque.put(cm, scm+((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c)));					
 		this.totalStocksChocoMarque.ajouter(this, ((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c)), this.cryptogramme);
 		this.totalStocksChoco.ajouter(this, ((qtefeve*(1-proportion_marque))*this.pourcentageTransfo.get(f).get(c)), this.cryptogramme);
-		}
+		}}
 	
 	public void next() {
 		super.next();

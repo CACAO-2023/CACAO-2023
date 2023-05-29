@@ -40,7 +40,7 @@ public class Transformateur2AcheteurBourseCacao extends Transformateur2VendeurCC
 			return demande;
 		}
 		if(this.totalStocksFeves.getValeur()>20000) {
-			this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   Stock trop elevé ! Pas d'achat. ");
+			this.journalAchats.ajouter(COLOR_LLGRAY, COLOR_PURPLE,"   Stock trop elevé ! Pas d'achat en bourse. ");
 			return 0.0;	
 		}
 		return 0.0;

@@ -33,23 +33,23 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
 	protected LinkedList<ExemplaireContratCadre> ContratsAcheteur;
 
-	
+
 	public void initialiser() {
 		super.initialiser();
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 		this.ContratsAcheteur = new LinkedList<>();
-	
+
 	}
 	@Override
 	public boolean achete(IProduit produit) {
 		// TODO Auto-generated method stub
 		if ((produit.getType().equals("Feve")
-			&& ((((Feve)produit).getGamme()== Gamme.MQ)&&(!((Feve)produit).isBioEquitable())
-			|| ((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable()))))) {
-			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme vouloir acheter le produit "+produit);
+				&& ((((Feve)produit).getGamme()== Gamme.MQ)&&(!((Feve)produit).isBioEquitable())
+						|| ((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable()))))) {
+			//this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme vouloir acheter le produit "+produit);
 			return true;} //on achète seulement les fèves haute gamme bio équitable et les fèves moyenne gamme
 		else {
-			
+
 			return false;}
 
 
@@ -101,7 +101,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		}
 
 		return nouvelEcheancier.getQuantiteTotale()>100.0 ? nouvelEcheancier : null;}
-	
+
 
 
 	//Par Mathis DOUTRE
@@ -144,7 +144,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
-		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : nouveau cc conclu "+contrat);
+		this.journalAchats.ajouter(COLOR_LLGRAY, Color.MAGENTA, "  CCA : nouveau cc conclu "+contrat);
 		this.ContratsAcheteur.add(contrat);
 	} //réussite des négociations sur le contrat précisé en paramètre dans tous les cas 
 
@@ -169,24 +169,26 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 
 
 	public ExemplaireContratCadre getContrat(Feve produit) {
-		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit);
-		List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
-		// code ajoute par romu pour pallier a l'erreur juste apres d'acces a l'element 0 dans une liste vide
-		if (vendeurs.size()==0) {
-			return null;
-		}
-		// fin de code ajoute par romu
-		IVendeurContratCadre vendeur = vendeurs.get((int)(Math.random() * vendeurs.size())); //on cherche un vendeur
-
-		this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
-		ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
-		if (cc != null) {   
-			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + vendeur.getNom() + " pour " + produit + "CC : " + cc);
-		} 
-		else {
-			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
-		}
-		return cc; //on établit le contrat
+		if (this.totalStocksFeves.getValeur() < 20000.0) {
+			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit);
+			List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
+			// code ajoute par romu pour pallier a l'erreur juste apres d'acces a l'element 0 dans une liste vide
+			if (vendeurs.size()==0) {
+				return null;
+			}
+			// fin de code ajoute par romu
+			IVendeurContratCadre vendeur = vendeurs.get((int)(Math.random() * vendeurs.size())); //on cherche un vendeur
+			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
+			ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
+			if (cc != null) {   
+				this.journalAchats.ajouter(COLOR_LLGRAY, Color.GREEN, "Contrat cadre passé avec " + vendeur.getNom() + " pour " + produit + "CC : " + cc);
+			} 
+			else {
+				this.journalAchats.ajouter(COLOR_LLGRAY, Color.RED, "Echec de la négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
+			}
+			return cc;}//on établit le contrat
+		else {this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Stock trop elevé ! Pas d'achat en CC.");
+		return null ;}
 	}
 
 	public void next() {
