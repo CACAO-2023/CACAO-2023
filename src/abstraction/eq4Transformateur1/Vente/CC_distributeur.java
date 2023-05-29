@@ -33,6 +33,8 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 
 
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
+	protected double prixMoyHQ;
+	protected double prixMoyBQ;
 
 	
 	public void initialiser() {
@@ -239,8 +241,8 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 						quant += c.getQuantiteTotale();
 					}
 				}
-				prixMoy = prixMoy/quant;
-				
+				prixMoy = (prixMoy/quant)/1.06;
+				prixMoyHQ = prixMoy;
 			}
 			if (((ChocolatDeMarque) produit).getMarque()=="Yocttotoa") {
 				for (ExemplaireContratCadre c : this.ContratEnCours_F_HQ) {
@@ -249,11 +251,11 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 						quant += c.getQuantiteTotale();
 					}
 				}
-				prixMoy = (prixMoy/quant)*contrat.getQuantiteTotale();
-				
+				prixMoy = (prixMoy/quant)/1.58;
+				prixMoyBQ = prixMoy;
 			}
-			double coutStock = 4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*contrat.getQuantiteTotale();
-			double coutTransfo = 5*contrat.getQuantiteTotale();
+			double coutStock = 4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur();
+			double coutTransfo = 5;
 			prix = (prixMoy + coutStock + coutTransfo)*2;
 	//		produit = ((ChocolatDeMarque)produit).getChocolat();
 	//	}
@@ -269,7 +271,16 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
 		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : "+contrat.getAcheteur()+"ListePrix :"+contrat.getListePrix());
-		double prixInit=contrat.getListePrix().get(contrat.getListePrix().size()-2);
+		double prixInit = 0;
+		if (contrat.getListePrix().size()==0) {
+			if (((ChocolatDeMarque)contrat.getProduit()).getChocolat().equals(Chocolat.C_HQ_BE)) {
+				return prixMoyHQ+4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()+5;
+			}
+			if (((ChocolatDeMarque)contrat.getProduit()).getChocolat().equals(Chocolat.C_BQ)) {
+				return prixMoyBQ+4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()+5;
+			}
+		}
+		prixInit=contrat.getListePrix().get(contrat.getListePrix().size()-2);
 		double prix = contrat.getPrix();
 		if ((prix > prixInit) || (prix>0.0 && (prixInit-prix)/prixInit<=0.049)) {
 			return prix;
