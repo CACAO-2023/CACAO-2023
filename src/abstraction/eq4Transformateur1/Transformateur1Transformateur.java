@@ -22,6 +22,8 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 	
 	protected List<ChocolatDeMarque>chocosProduits;
 	protected double qteTransfo;
+	protected double aVendreHQ;
+	protected double aVendreBQ;
 	
 	public Transformateur1Transformateur() {
 		super();
@@ -57,12 +59,11 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		super.next();
 		Feve fb = Feve.F_BQ;
 		Chocolat cb = Chocolat.C_BQ;
-		double aVendreBQ=0;
+		aVendreBQ=0;
 		for (ExemplaireContratCadre c : ContratEnCours_C_BQ ) {
 			aVendreBQ+=c.getQuantiteALivrerAuStep();
 		}
-
-		double transfo = (int) (Math.min(this.stockFeves.get(fb), Math.random()*1000)) + (aVendreBQ)/1.58;
+		double transfo = (int) (Math.min(this.stockFeves.get(fb), Math.random()*1000) + (aVendreBQ)/1.58);
 		
 		double conversionb = 1.58;
 		if (transfo>0.0) {
@@ -82,12 +83,12 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		}
 		Feve fh = Feve.F_HQ_BE;
 		Chocolat ch = Chocolat.C_HQ_BE;
-		double aVendreHQ=0;
+		aVendreHQ=0;
 		for (ExemplaireContratCadre c : ContratEnCours_C_HQ ) {
 			aVendreHQ+=c.getQuantiteALivrerAuStep();
 		}
 		
-		double transfoh = (int) (Math.min(this.stockFeves.get(fh), Math.random()*1000)) + (aVendreHQ)/1.06;
+		double transfoh = (int) (Math.min(this.stockFeves.get(fh), Math.random()*1000) + (aVendreHQ)/1.06);
 		
 		double conversion = 1.06;
 		if (transfoh>0) {
