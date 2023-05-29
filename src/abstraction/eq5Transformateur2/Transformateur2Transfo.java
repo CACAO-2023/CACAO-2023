@@ -113,6 +113,7 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 	public void next() {
 		super.next();
 
+		System.out.println("STOCK TOTAL DE FEVES "+this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE));
 		this.journal.ajouter("=== Step numéro "+ Filiere.LA_FILIERE.getEtape()+" ===");
 		
 		this.journal.ajouter("=== STOCK === ");
@@ -134,7 +135,7 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 		for (Feve f : this.pourcentageTransfo.keySet()) {
 			for (Chocolat c : this.pourcentageTransfo.get(f).keySet()) {
 				
-				double qtefeve = 0; 
+				double qtefeve = 0.0; 
 				double proportion_marque = 0;
 				String Marque = "";
 				int cacao = 0;
@@ -157,7 +158,7 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 					Marque = "Maison Doutre";
 					cacao = 90;
 					this.stockFeves.put(f, (double) 0); // on les retire a nos stocks
-					this.totalStocksFeves.retirer(this, qtefeve, this.cryptogramme); // et aux stocks totaux
+					this.totalStocksFeves.retirer(this, qtefeve); // et aux stocks totaux
 				}
 				
 							
