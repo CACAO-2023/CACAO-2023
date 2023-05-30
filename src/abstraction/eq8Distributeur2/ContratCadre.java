@@ -49,7 +49,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 			ChocolatDeMarque produit = (ChocolatDeMarque) contrat.getProduit();
 			if (produit != null && this.stocks.getStock(produit) != 0.0 ) {
 				double quantiteEnStock = this.stocks.getStock(produit);
-				if (contrat.getEcheancier().getQuantiteTotale() > quantiteEnStock) {
+				if (contrat.getEcheancier().getQuantiteTotale() < quantiteEnStock) {
 					if (Math.random() < 0.1) {
 						this.notificationNouveauContratCadre(contrat);
 						this.journal_ContratCadre.ajouter("effectuation du contrat:"+contrat.toString());
