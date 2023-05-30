@@ -180,7 +180,10 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 
 	public ExemplaireContratCadre getContrat(Feve produit) {
 		double somme = (this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE));
+		System.out.println("somme ="+
+		somme);
 		if (somme < 20000.0) {
+
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit);
 			List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
 			// code ajoute par romu pour pallier a l'erreur juste apres d'acces a l'element 0 dans une liste vide

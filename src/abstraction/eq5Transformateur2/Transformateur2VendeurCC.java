@@ -104,7 +104,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 	//fait par wiem : prix 
 	public double propositionPrix(ExemplaireContratCadre contrat) {
-		double prix = 0;
+		/*double prix = 0;
 		Chocolat cp=null ;
 		if ((contrat.getProduit() instanceof Chocolat)) {
 			cp=(Chocolat)contrat.getProduit();
@@ -114,14 +114,14 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 
 		if (cp == Chocolat.C_MQ ) {
-			Double stock = stockChoco.get(cp);
+			Double stock = stockChocoMarque.get(cp);
 			if (stock!=null) {
 				//stock*(cout de stockage 1300 + prix de transfo 1500 + prix moyen d'une tonne de feves MQ) + marge de 10%
 				prix = (2800+1500)*1.1*stock ;
 
 				//stock*(cout de stockage 1300 + prix de transfo 1500 + prix moyen d'une tonne de feves MQ) + marge de 10%
 
-				
+
 
 				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);
 			}}
@@ -132,7 +132,26 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 				prix = (2800+11800)*1.2*stock;
 				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);}}
 
-		return prix; }
+		return prix; }*/
+		double prix = 0.0;
+		if (stockChocoMarque.get(contrat.getProduit())!= null ) { 
+			double stock = stockChocoMarque.get(contrat.getProduit());
+			System.out.println(stock);
+			if (contrat.getProduit() == "ChocoPop") {
+				prix = (2800+1500)*1.2*stock; }
+			else if (contrat.getProduit() == "Maison Doutre") {
+				prix = (2800+11800)*1.2*stock;	
+			}this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);
+		}
+		return prix;
+		}
+		
+		//double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
+		//double prixDonne = contrat.getPrix();
+
+
+
+
 
 
 
@@ -142,37 +161,33 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 	//fait par yassine : négociations
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		
-		Double stockHq = stockChocoMarque.get(Chocolat.C_HQ_BE);
-		Double stockMq = stockChoco.get(Chocolat.C_MQ);
-		double prixMinHq = (2800+11800)*stockHq;
-		double prixMinMq = (2800+1500)*stockMq;
+		//Chocolat cp = ((ChocolatDeMarque)contrat.getProduit()).getChocolat();
+		//Double stock = stockChocoMarque.get(cp);
+
+		double stock = stockChocoMarque.get(contrat.getProduit());
+		double prixMin = 0.0;
+		if (contrat.getProduit() == "ChocoPop") {
+			prixMin = (2800+1500)*stock; }
+		else if (contrat.getProduit() == "Maison Doutre") {
+			prixMin = (2800+11800)*stock;	
+		}
 		//double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
 		double prixDonne = contrat.getPrix();
-		if (contrat.getProduit()==Chocolat.C_HQ_BE) {
-			if(prixDonne >= prixMinHq ) {
-				return prixDonne;
-			} 
-			else {
-				return prixMinHq;
 
-			}
+		if(prixDonne >= prixMin) {
+			return prixDonne;
+		} 
+		else {
+			return prixMin;
+
 		}
 
-		else{
-			if(prixDonne >= prixMinMq) {
-				return prixDonne;
-			} 
-			else {
-				return prixMinMq;
 
-			}
-		}
-	} 
+	}
 
- 
-		 
-		
+
+
+
 
 
 
