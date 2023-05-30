@@ -89,15 +89,15 @@ jobs:
       with:
         username: ${{ github.event.pull_request.user.login }}
         GITHUB_TOKEN: ${{ secrets.PAT }}
-    - name: Performance results
-      run: |
-        echo ${{ needs.java_tests.outputs.times }}
     - name: Performance check
       if: fromJSON(needs.java_tests.outputs.times)[fromJSON(steps.actorTeams.outputs.teams)[0]] >= 20000
-      run: exit 1
+      run: |
+        echo ${{ needs.java_tests.outputs.times }}
+        exit 1
     - name: Auto-merge
       if: fromJSON(needs.java_tests.outputs.times)[fromJSON(steps.actorTeams.outputs.teams)[0]] < 20000
       run: | 
+        echo ${{ needs.java_tests.outputs.times }}
         gh pr merge --auto --merge ${{ github.event.pull_request.html_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}

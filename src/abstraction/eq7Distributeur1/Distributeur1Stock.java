@@ -1,12 +1,9 @@
 package abstraction.eq7Distributeur1;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
-import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
@@ -41,16 +38,16 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			Chocolat gamme = marque.getChocolat();
     		if (gamme == Chocolat.C_BQ) {
-    			stock_BQ.ajouter(this, stockChocoMarque.get(marque));
+    			stock_BQ.ajouter(this, get_valeur(Var_Stock_choco, marque));
     		}
     		if (gamme == Chocolat.C_MQ) {
-    			stock_MQ.ajouter(this, stockChocoMarque.get(marque));
+    			stock_MQ.ajouter(this,get_valeur(Var_Stock_choco, marque));
     		}
     		if (gamme == Chocolat.C_MQ_BE) {
-    			stock_MQ_BE.ajouter(this, stockChocoMarque.get(marque));
+    			stock_MQ_BE.ajouter(this, get_valeur(Var_Stock_choco, marque));
     		}
     		if (gamme == Chocolat.C_HQ_BE) {
-    			stock_HQ_BE.ajouter(this, stockChocoMarque.get(marque));    		
+    			stock_HQ_BE.ajouter(this, get_valeur(Var_Stock_choco, marque));    		
     		}
 		}
 	}
@@ -68,7 +65,7 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 		for (ChocolatDeMarque choco : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			nb_total_achats += nombre_achats.get(choco);
 			if (choco.getChocolat()==gamme) {
-				stock_gamme += stockChocoMarque.get(choco);
+				stock_gamme += get_valeur(Var_Stock_choco, marque);
 			}
 
 		}
@@ -78,7 +75,7 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 
 	protected void actualise_cout_marque(ChocolatDeMarque choco, Double cout) {
 		int n = nombre_achats.get(choco);
-		cout_marque.replace(choco, (cout_marque.get(choco)*n+cout)/(n+1));
+		mettre_a_jour(Var_Cout_Choco, choco, (get_valeur(Var_Cout_Choco, choco)*n+cout)/(n+1) );
 	}
 	
 	/**
@@ -86,27 +83,38 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 	 * renvoit le cout total de stockage actuel de la marque à l'instant t
 	 */
 	protected double get_cout_stockage(ChocolatDeMarque marque) {
-		return cout_stockage_distributeur.getValeur() * stockChocoMarque.get(marque);
+		return cout_stockage_distributeur.getValeur() * get_valeur(Var_Stock_choco, marque);
 	}
 	
 	/**
 	 * @author Theo and Ghaly
 	 */
 	public void initialiser() {
-		
-		//Initialisation des stocks
-		this.stockChocoMarque = new HashMap<ChocolatDeMarque,Double>();
-		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			Double valeur_stock_initial = 1000.;
-			stockChocoMarque.put(marque,valeur_stock_initial);
-			totalStocks.setValeur(this, totalStocks.getValeur()+valeur_stock_initial, this.cryptogramme);
-			nombre_achats.put(marque, 0);
-			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
-		}
 		super.initialiser();
 
+		//Initialisation des stocks dans Acteur (on est oblige a cause des variables)
+		
 		//initialisation des indicateurs de stock
-		actualise_indic_stock();
+		stock_BQ.setValeur(this, 0);
+		stock_HQ_BE.setValeur(this, 0);
+		stock_MQ.setValeur(this, 0);
+		stock_MQ_BE.setValeur(this, 0);
+		
+		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			Chocolat gamme = marque.getChocolat();
+    		if (gamme == Chocolat.C_BQ) {
+    			stock_BQ.ajouter(this, valeur_stock_initial);
+    		}
+    		if (gamme == Chocolat.C_MQ) {
+    			stock_MQ.ajouter(this, valeur_stock_initial);
+    		}
+    		if (gamme == Chocolat.C_MQ_BE) {
+    			stock_MQ_BE.ajouter(this, valeur_stock_initial);
+    		}
+    		if (gamme == Chocolat.C_HQ_BE) {
+    			stock_HQ_BE.ajouter(this, valeur_stock_initial);    		
+    		}
+		}
 	}
 	
 	
@@ -123,14 +131,14 @@ public class Distributeur1Stock extends Distributeur1Acteur{
 		//Actualisation du stock total
 		double newstock = 0.;
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			newstock += stockChocoMarque.get(marque);
+			newstock += get_valeur(Var_Stock_choco, marque);
 		}
 		totalStocks.setValeur(this, newstock, this.cryptogramme);
 		
 		
 		//Affichage des stocks dans les Journaux
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			journal_stock.ajouter("Stock de "+marque+" : "+stockChocoMarque.get(marque)+" T");
+			journal_stock.ajouter("Stock de "+marque+" : "+get_valeur(Var_Stock_choco, marque)+" T");
 		}
 		
 		//System.out.print(totalStocks.getValeur()==(stock_BQ.getValeur()+stock_HQ_BE.getValeur()+stock_MQ.getValeur()+stock_MQ_BE.getValeur()));

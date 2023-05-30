@@ -11,12 +11,15 @@ import java.util.Set;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
+import abstraction.eqXRomu.general.Courbe;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.general.VariablePrivee;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
+import presentation.secondaire.FenetreGraphique;
 
 public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	////////////////////////////////////////////////
@@ -31,26 +34,56 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	
 	protected Journal journal;
 	protected Journal journal_achat;
+	protected Journal Bilan_achat;
 	protected Journal journal_stock;
 	protected Journal journal_vente;
 	
 	
-	//On est oblige de mettre les variables ici sinon la creation de la filiere est dans un tel ordre que nous n'y avons pas acces assez tot
-	protected Variable totalStocks = new VariablePrivee("Eq7TotalStocks", "<html>Quantite totale de chocolat (de marque) en stock</html>",this, 0.0, 1000000.0, 0.0);
-	//La quantité totale de stock de chocolat 
+	protected Variable totalStocks = new Variable("Eq7TotalStocks", "Quantite totale de chocolat (de marque) en stock",this, 0);
 	protected Variable stock_BQ = new Variable("Eq7stock_BQ", "Stock total de chocolat de basse qualité", this, 0);
 	protected Variable stock_MQ = new Variable("Eq7stock_MQ", "Stock total de chocolat de moyenne qualité", this, 0);
 	protected Variable stock_MQ_BE = new Variable("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
 	protected Variable stock_HQ_BE = new Variable("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
 	protected Variable ventes = new Variable("Eq7ventes","ventes totales réalisées lors de ce tour",this,0);
+	protected Variable depenses = new Variable("Eq7Depenses à l'étape courante", "Depenses totales de ce tour ",this, 0);
 	protected Variable cmSelectionnee; // l'index du chocolat selectionne
+	protected Variable afficher_prix = new Variable("Eq7 comparaison prix (inserer 1)", "Eq7 comparaison prix (inserer 1) ",this, 0);
+	
 	protected HashMap<ChocolatDeMarque, Variable> Var_Stock_choco; // le stock de chaque chocolat de marque
 	protected HashMap<ChocolatDeMarque, Variable> Var_Cout_Choco; // le cout de chaque chocolat de marque
 	protected HashMap<ChocolatDeMarque, Variable> Var_Marge_Choco; // la marge de chaque chocolat de marque
+	protected HashMap<ChocolatDeMarque, Variable> Var_Vente_Choco; // la vente de chaque chocolat de marque
+	protected HashMap<ChocolatDeMarque, Variable> Var_nbr_Vente_Choco; // la quantité vendue de chaque chocolat de marque
+	
+	protected FenetreGraphique graphique;
+	protected FenetreGraphique graphique_Prix;
+	
 
-	protected Variable marge_Choco_marque_selectionnee = new Variable("Equ7_marge_Choco_marque_selectionnee", "marge Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
-	protected Variable cout_Choco_marque_selectionnee = new Variable("Equ7_cout_Choco_marque_selectionnee", "stock Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);	
-	protected Variable stock_Choco_marque_selectionnee = new Variable("Equ7_stock_Choco_marque_selectionnee", "stock Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
+	
+	protected Variable afficher_vente_depense_courrant; 
+	
+
+	protected double qte_totale_en_vente;
+	protected double vente_step; //variable représentant la somme des vente au step courrant
+	
+	protected Variable marge_Choco_marque_selectionnee = new Variable("Eq7_marge_Choco_marque_selectionnee", "marge Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
+	protected Variable cout_Choco_marque_selectionnee = new Variable("Eq7_cout_Choco_marque_selectionnee", "cout Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);	
+	protected Variable stock_Choco_marque_selectionnee = new Variable("Eq7_stock_Choco_marque_selectionnee", "stock Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
+	protected Variable Vente_Choco_marque_selectionnee = new Variable("Eq7_vente_Choco_marque_selectionnee", "vente Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
+	protected Variable Vente_nbr_Choco_marque_selectionnee = new Variable("Eq7_quantite_vendue_Choco_marque_selectionnee", "nombre d'articles vente Total de la marque de chocolat sélectionnée grâce à cmselectionne", this, 0);
+
+	
+
+	protected Courbe cventes = new Courbe("ventes ");
+	protected Courbe cdepense = new Courbe("depenses ");
+	
+	protected HashMap<ChocolatDeMarque, Courbe> cPrixMoyen = new HashMap<ChocolatDeMarque,Courbe>();
+	protected HashMap<ChocolatDeMarque, Courbe> cNotrePrix = new HashMap<ChocolatDeMarque,Courbe>();
+
+	
+	
+	
+	
 	private List<ChocolatDeMarque>chocolatsDeMarquesProduits; // init dans initialiser
 
 	/**
@@ -59,10 +92,13 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	 */
 	double quantite_min_cc = SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER;
 	
-	/**
-	 * previsions de ventes de la filiere globale pour chaque etape_normalisee
-	 * prevision etape -> marque -> valeur
-	 */
+	protected double valeur_stock_initial = 10000.;
+	
+	protected int cc_sans_vendeur=0 ;
+	protected HashMap<IActeur, Integer> cc_vendus ;
+	protected HashMap<IActeur, Integer> cc_non_aboutis ;
+
+
 	
 	/**
 	 * previsions de vente de l'equipe 7
@@ -71,14 +107,13 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	 */
 	protected HashMap<Integer,HashMap<ChocolatDeMarque,Double>> previsionsperso; 
 	
-	protected HashMap<ChocolatDeMarque,Double> stockChocoMarque; //Stock de chaque chocolat de marque en tonne
-
 	/**
-	 * couts: couts d'achat à travers les contrats cadres
+	 * prix de vente de l'equipe 7
+	 * on suppose qu'on vend à chaque étape normalisée
 	 */
-	//protected HashMap<ChocolatDeMarque,Double> moyenne_couts = new HashMap<ChocolatDeMarque,Double>(); 
-	protected HashMap<ChocolatDeMarque,Double> cout_marque = new HashMap<ChocolatDeMarque,Double>(); 
-	
+	protected HashMap<Integer,HashMap<ChocolatDeMarque,Variable>> prevision_prix; 
+
+
 	/**
 	 * Cout en fonction du chocolat, pour 1t
 	 */
@@ -92,7 +127,6 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	protected Variable cout_stockage_distributeur = new Variable("cout moyen stockage distributeur", this);
 	protected Variable cout_main_doeuvre_distributeur = new Variable("cout de la main d'oeuvre pour les distributeur", this); //cout total par tour
 
-	
 	protected LinkedList<VariablePrivee> liste = new LinkedList<VariablePrivee>();
 	protected int cryptogramme;
 	
@@ -100,10 +134,12 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	public Distributeur1Acteur() {
 		this.journal = new Journal("Journal "+this.getNom(), this);
 	    this.journal_achat=new Journal("Journal des Achats de l'" + this.getNom(),this);
+	    this.Bilan_achat=new Journal("bilan des Achats de l'" + this.getNom(),this);
 	    this.journal_stock = new Journal("Journal des Stocks de l'" + this.getNom(),this);
 	    this.journal_vente = new Journal("Journal des ventes de l'" + this.getNom(),this);
 		this.cmSelectionnee = new Variable(getNom()+" chocolat de marque selectionné", "indiquez l'index du chocolat de marque", this, 0.0);
-
+		this.afficher_vente_depense_courrant = new Variable(getNom()+" évolution des dépenses et ventes (insérer 1)", "évolution des dépenses et ventes", this, 0.0);
+		
 	}
 	
 
@@ -129,8 +165,25 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		Chocolat gamme = marque.getChocolat();
 		return cout_chocolat.get(gamme);
 	}
+	/**
+	 * @author ghaly
+	 * met a jour la valeur de la variable associée à la marque de chocolat
+	 * 
+	 */
+	public void mettre_a_jour(HashMap<ChocolatDeMarque, Variable> h_var, ChocolatDeMarque marque, double montant) {
+		Variable var = h_var.get(marque);
+		var.setValeur(this, montant);
+		h_var.replace(marque, var);
+	}
 	
-
+	/**
+	 * retourne la valeur de la variable associée à la marque de chocolat
+	 */
+	public double get_valeur(HashMap<ChocolatDeMarque, Variable> h_var, ChocolatDeMarque marque) {
+		Variable var = h_var.get(marque);
+		return var.getValeur();
+	}
+	
 	/**
 	 * Actualisation des previsions persos
 	 * @author Theo, Ghaly
@@ -139,7 +192,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		int etape_annee = Filiere.LA_FILIERE.getEtape()/24+1;
 		int etapenormalisee = Filiere.LA_FILIERE.getEtape()%24;
 		HashMap<ChocolatDeMarque,Double> prevetapeperso = previsionsperso.get(etapenormalisee);
-		prevetapeperso.replace(choco, (prevetapeperso.get(choco)*etape_annee+quantite)/(etape_annee+1));
+		prevetapeperso.replace(choco, (prevetapeperso.get(choco)*etape_annee+quantite)/(etape_annee+1)); //recalcul de la moyenne
 		previsionsperso.replace(etapenormalisee, prevetapeperso);
 	}
 	
@@ -148,28 +201,53 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	 */
 	public void initialiser() {
 		cout_stockage_distributeur.setValeur(this, Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()*16);
-		cout_chocolat.put(Chocolat.C_HQ_BE, 10000.);
-		cout_chocolat.put(Chocolat.C_MQ_BE, 7500.);
-		cout_chocolat.put(Chocolat.C_MQ, 5000.);
-		cout_chocolat.put(Chocolat.C_BQ, 3000.);
+		
+		
+		cout_chocolat.put(Chocolat.C_HQ_BE, 25000.);
+		cout_chocolat.put(Chocolat.C_MQ_BE, 20000.);
+		cout_chocolat.put(Chocolat.C_MQ, 15000.);
+		cout_chocolat.put(Chocolat.C_BQ, 10000.);
 
+		
+		this.cc_non_aboutis= new  HashMap<IActeur, Integer> () ;
+		this.cc_vendus= new  HashMap<IActeur, Integer> () ;
+		
+		vente_step=0;
 		this.chocolatsDeMarquesProduits = Filiere.LA_FILIERE.getChocolatsProduits();
 
 		this.Var_Stock_choco = new HashMap<ChocolatDeMarque, Variable> ();
 		this.Var_Cout_Choco = new HashMap<ChocolatDeMarque, Variable> ();
 		this.Var_Marge_Choco = new HashMap<ChocolatDeMarque, Variable> ();
+		this.Var_Vente_Choco = new HashMap<ChocolatDeMarque, Variable> ();
+		this.Var_nbr_Vente_Choco = new HashMap<ChocolatDeMarque, Variable> ();
+	
+		cventes.setCouleur(Color.green);
+		cdepense.setCouleur(Color.red);
 		
 		for (ChocolatDeMarque cm : chocolatsDeMarquesProduits) {
-			this.Var_Stock_choco.put(cm, new Variable("le stock de la marque "+cm.getNom(), "le stock de la marque "+cm.getNom(), this, 0.0));
+			totalStocks.setValeur(this, totalStocks.getValeur()+valeur_stock_initial, this.cryptogramme);
+			nombre_achats.put(cm, 0);
+			journal_stock.ajouter("Stock de "+cm+" : "+ valeur_stock_initial +" T");
+			this.Var_Stock_choco.put(cm, new Variable("le stock de la marque "+cm.getNom(), "le stock de la marque "+cm.getNom(), this, valeur_stock_initial));
 			this.Var_Marge_Choco.put(cm, new Variable("la marge de la marque "+cm.getNom(), "la marge de la marque "+cm.getNom(), this, 0.0));
 			this.Var_Cout_Choco.put(cm, new Variable("le cout de la marque "+cm.getNom(), "le cout de la marque "+cm.getNom(), this, 0.0));
-			
+			this.Var_Vente_Choco.put(cm, new Variable("le nombre de vente de la marque "+cm.getNom(), "le nombre de vente de la marque "+cm.getNom(), this, 0.0));
+			this.Var_nbr_Vente_Choco.put(cm, new Variable("la quantite vendue de la marque "+cm.getNom(), "la quantite vendue de la marque "+cm.getNom(), this, 0.0));
+
+			this.cPrixMoyen.put(cm, new Courbe ("Prix Moyen"));
+			this.cNotrePrix.put(cm, new Courbe ("Prix qu'on propose"));
 		}
+		this.cventes.ajouter(Filiere.LA_FILIERE.getEtape(), this.ventes.getValeur());
+		this.cdepense.ajouter(Filiere.LA_FILIERE.getEtape(), this.depenses.getValeur());
 		this.marge_Choco_marque_selectionnee.cloner(Var_Marge_Choco.get(chocolatsDeMarquesProduits.get(0)));
 		this.cout_Choco_marque_selectionnee.cloner(Var_Cout_Choco.get(chocolatsDeMarquesProduits.get(0)));
 		this.stock_Choco_marque_selectionnee.cloner(this.Var_Stock_choco.get(chocolatsDeMarquesProduits.get(0))); // initialement c'est le premier chocolat de marque qui dont le stock est affiche
-		this.cmSelectionnee.addObserver(this);
+		this.Vente_Choco_marque_selectionnee.cloner(this.Var_Vente_Choco.get(chocolatsDeMarquesProduits.get(0))); // initialement c'est le premier chocolat de marque qui dont le stock est affiche
+		this.Vente_nbr_Choco_marque_selectionnee.cloner(this.Var_nbr_Vente_Choco.get(chocolatsDeMarquesProduits.get(0))); // initialement c'est le premier chocolat de marque qui dont le stock est affiche
 		
+		this.cmSelectionnee.addObserver(this);
+		this.afficher_vente_depense_courrant.addObserver(this);
+		this.afficher_prix.addObserver(this);
 		/////////////////////////////////////
 		//POTENTIELLEMENT à Changer
 		cout_main_doeuvre_distributeur.setValeur(this, Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur());
@@ -177,10 +255,15 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		
 		//Initialisation des couts
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			cout_marque.put(marque, getCout_gamme(marque));
+			mettre_a_jour(Var_Cout_Choco, marque,getCout_gamme(marque) );
 		}
-		//Initialisation des previsions
+		//Initialisation des previsions et prix 
 		this.previsionsperso = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 
+		this.prevision_prix = new HashMap<Integer,HashMap<ChocolatDeMarque,Variable>>(); 
+		
+		for (int i=0;i<24;i++) {
+			prevision_prix.put(i ,new HashMap<ChocolatDeMarque,Variable>());
+		}
 		
 		for (int i=0;i<24;i++) {
 			HashMap<ChocolatDeMarque,Double> prevtour = new HashMap<ChocolatDeMarque,Double>();
@@ -210,13 +293,21 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	 * @author Romain,Ghaly et Theo
 	 */
 	public void next() {
-		
 		int etape = Filiere.LA_FILIERE.getEtape();
 		
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			actualiser_prevision_perso( marque,  etape);
 			
-		}
+
+			}
+		ventes.setValeur(this, vente_step);
+
+		this.cventes.ajouter(Filiere.LA_FILIERE.getEtape(), this.ventes.getValeur());
+		this.cdepense.ajouter(Filiere.LA_FILIERE.getEtape(), this.depenses.getValeur());
+		vente_step = 0 ; //réinitialiser la variable pour la prochaine étape
+		actualise_variable_selectionnee();
+		
+
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -236,15 +327,21 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		
 		List<Variable> res = new ArrayList<Variable>();
 		res.add(cmSelectionnee);
+		res.add(afficher_vente_depense_courrant);
+		//res.add(afficher_prix); //pas encore réalisé
 		res.add(totalStocks);
 		res.add(stock_HQ_BE);
 		res.add(stock_MQ_BE);
 		res.add(stock_BQ);
 		res.add(stock_MQ);
 		res.add(ventes);
+		res.add(depenses);
 		res.add(stock_Choco_marque_selectionnee);
 		res.add(cout_Choco_marque_selectionnee);
 		res.add(marge_Choco_marque_selectionnee);
+		res.add(Vente_Choco_marque_selectionnee);
+		res.add(Vente_nbr_Choco_marque_selectionnee);
+		
 		return res;
 
 	}
@@ -259,6 +356,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(this.journal);
 		res.add(this.journal_achat);
+		res.add(this.Bilan_achat);
 		res.add(this.journal_stock);
 		res.add(this.journal_vente);
 		return res;
@@ -330,10 +428,51 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 			index=0;
 			this.cmSelectionnee.setValeur(this, index);
 		}
-		this.stock_Choco_marque_selectionnee.cloner(this.Var_Stock_choco.get(this.chocolatsDeMarquesProduits.get(index)));
-		this.marge_Choco_marque_selectionnee.cloner(this.Var_Marge_Choco.get(this.chocolatsDeMarquesProduits.get(index)));
-		this.cout_Choco_marque_selectionnee.cloner(this.Var_Cout_Choco.get(this.chocolatsDeMarquesProduits.get(index)));
+		ChocolatDeMarque chocolat_selectionne = this.chocolatsDeMarquesProduits.get(index);
+		this.stock_Choco_marque_selectionnee.cloner(this.Var_Stock_choco.get(chocolat_selectionne));
+		this.marge_Choco_marque_selectionnee.cloner(this.Var_Marge_Choco.get(chocolat_selectionne));
+		this.cout_Choco_marque_selectionnee.cloner(this.Var_Cout_Choco.get(chocolat_selectionne));
+		this.Vente_Choco_marque_selectionnee.cloner(this.Var_Vente_Choco.get(chocolat_selectionne));
+		this.Vente_nbr_Choco_marque_selectionnee.cloner(this.Var_nbr_Vente_Choco.get(chocolat_selectionne));
 		
 		System.out.println("Chocolat de marque selectionne :"+this.chocolatsDeMarquesProduits.get(index));
+		int index_2 = (int)(this.afficher_vente_depense_courrant.getValeur());
+		if(index_2==1) {
+		afficher_graphique();
+		}
+		int index_3 = (int)(this.afficher_prix.getValeur());
+		if(index_3==1) {
+			afficher_graphique_prix( chocolat_selectionne);
+		}
+
+	}
+	
+	public void afficher_graphique_prix(ChocolatDeMarque marque) {
+		this.graphique_Prix= new FenetreGraphique("comparaison des prix ", 500,400);
+		this.graphique.ajouter(cNotrePrix.get(marque));
+		this.graphique.ajouter(cPrixMoyen.get(marque));
+		this.graphique.setVisible(true);
+	}
+	public void afficher_graphique() {
+		this.graphique= new FenetreGraphique("ventes et dépenses pendant le tour", 500,400);
+		
+		this.graphique.ajouter(cventes);
+		this.graphique.ajouter(cdepense);
+		this.graphique.setVisible(true);
+	}
+	/**
+	 * @author ghaly
+	 * actualise les valeurs des variables séléctionnées
+	 */
+	public void actualise_variable_selectionnee() {
+		
+		ChocolatDeMarque choco= chocolatsDeMarquesProduits.get( (int)(cmSelectionnee.getValeur() ));
+		stock_Choco_marque_selectionnee.setValeur(this,get_valeur(Var_Stock_choco, choco)  );
+		cout_Choco_marque_selectionnee.setValeur(this, get_valeur(Var_Cout_Choco, choco));
+		marge_Choco_marque_selectionnee.setValeur(this, get_valeur(Var_Marge_Choco, choco));
+		Vente_Choco_marque_selectionnee.setValeur(this, get_valeur(Var_Vente_Choco, choco));
+		Vente_nbr_Choco_marque_selectionnee.setValeur(this, get_valeur(Var_nbr_Vente_Choco, choco));
+		
+		
 	}
 }
