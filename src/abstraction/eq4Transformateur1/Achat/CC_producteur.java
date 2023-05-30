@@ -262,7 +262,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLACK, " CCA : tentative d'achat de "+cm+" aupres de "+vendeurs);
 				for (IVendeurContratCadre vendeur : vendeurs) {
 					if (!vendeur.equals(this)) {
-						if (cm.getGamme().equals(Gamme.BQ)){
+						if (cm.getGamme().equals(Gamme.BQ) && this.stockFeves.get(Feve.F_BQ)<50000){
 							double quantite = 0;
 							if (ventetotB/2>100) {
 								quantite = ventetotB/2;
@@ -279,7 +279,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 
 						}
 						}
-						if (cm.getGamme().equals(Gamme.HQ)){
+						if (cm.getGamme().equals(Gamme.HQ) && this.stockFeves.get(Feve.F_HQ_BE)<50000){
 							double quantite2 = 0;
 							if (ventetotH/2>100) {
 								quantite2 = ventetotH/2;
