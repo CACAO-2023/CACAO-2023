@@ -2,6 +2,8 @@ package abstraction.eq8Distributeur2;
 
 
 import java.util.List;
+
+import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.offresAchat.IAcheteurOA;
 import abstraction.eqXRomu.offresAchat.PropositionVenteOA;
 import abstraction.eqXRomu.offresAchat.SuperviseurVentesOA;
@@ -37,7 +39,7 @@ public class Distributeur2AcheteurOA extends ContratCadre implements IAcheteurOA
 		this.journal_OA.ajouter("next");
 		
 	    super.next();
-	    /*
+	    
 	    if (supOA == null) {
 	        supOA = (SuperviseurVentesOA) (Filiere.LA_FILIERE.getActeur("Sup.OA"));
 	    }
@@ -54,9 +56,10 @@ public class Distributeur2AcheteurOA extends ContratCadre implements IAcheteurOA
 	            this.stocks.ajouterAuStock(pRetenue.getChocolatDeMarque(), nouveauStock);
 	    		s.setValeur(this, stock_total, this.cryptogramme);
 	            this.journal_OA.ajouter("Achat par offre d'achat de " + pRetenue + " --> quantite en stock = " + nouveauStock);
-	        }}
-	        */
-	        
+	        }
+	    	}
+	    }
+	       
 	    }
 	}
 
