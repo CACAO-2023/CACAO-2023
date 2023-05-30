@@ -208,10 +208,10 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		super.journalVentes.ajouter("On livre : "+livre+"de : "+((ChocolatDeMarque)produit).getMarque());
 		if (livre>0.0) {
 			//if (super.estUnDeNosChoco((ChocolatDeMarque)produit)){
-			super.retirerChocolat((ChocolatDeMarque)produit, livre);//Attention il faut que cela soit possible; verifier la quantité
+			double res = super.retirerChocolat((ChocolatDeMarque)produit, livre);//Attention il faut que cela soit possible; verifier la quantité
 		
-		
-		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); 
+		if (res>0) {
+		lot.ajouter(Filiere.LA_FILIERE.getEtape(), res); }
 		return lot;}
 		else {
 			super.journalVentes.ajouter("On ne livre pas");
