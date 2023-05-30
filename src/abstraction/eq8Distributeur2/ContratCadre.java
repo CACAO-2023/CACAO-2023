@@ -80,7 +80,13 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	
 	//On retourne le prix avec négociation
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		return contrat.getPrix()*0.95;
+		if (Math.random()<0.3) { // dans 30% des cas on achète sans négociations
+			return contrat.getPrix(); 
+			} 
+		else {
+			//dans 70% des cas on propose une négociation de 5% du prix initial
+			return contrat.getPrix()*0.95;
+			}	
 	}
 
 	//Auteur : Marzougui Mariem
@@ -92,6 +98,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	//Auteur : Marzougui Mariem
 	public void next() {
 	    super.next();
+	    /*
 	    SuperviseurVentesContratCadre sup = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 	    for (ChocolatDeMarque choco:chocolats) {
 	        List<IVendeurContratCadre> vendeurs = sup.getVendeurs(choco);
@@ -119,6 +126,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	            }
 	        }
 	    }
+	    */
 	}
 
 		
