@@ -15,7 +15,7 @@ public class Producteur1Plantation extends Producteur1Acteur {
 	private Lot stockBasPasSec;
 	private Lot stockMoyPasSec;
 
-	//===== 4 premières methodes : elouan =====
+	//===== 4 premières methodes : elouan ===== 
 
 	public champ getChampBas() {
 		return this.champBas;

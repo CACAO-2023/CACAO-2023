@@ -325,7 +325,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 	 */
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		Object produit = contrat.getProduit();
-		if (produit instanceof Feve && lot.getQuantiteTotale()>0) {
+		if (lot != null && produit != null && produit instanceof Feve && lot.getQuantiteTotale()>0) {
 			super.ajouterFeve(lot);}
 		this.quantiteEnAttente = this.quantiteEnAttente - lot.getQuantiteTotale();
 		super.journalAchatCC.ajouter("nouvel arrivage d'un lot de contrat cadre de "+lot.getQuantiteTotale()+"");

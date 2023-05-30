@@ -5,7 +5,6 @@ import java.util.TimerTask;
 import javax.swing.JFrame;
 
 import abstraction.eqXRomu.filiere.Filiere;
-import abstraction.eqXRomu.filiere.IActeur;
 
 public class ControlTimeGif extends TimerTask{
 	private JFrame popup;
