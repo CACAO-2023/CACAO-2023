@@ -121,7 +121,7 @@ public class Producteur3Acteur implements IActeur {
 	this.probaIncendiL = new Variable("Equipe3 Proba Incendi L", "Fixe la probabilite qu'un incendie de taille L arrive ",this,0.1);
 	this.probaIncendiM = new Variable("Equipe3 Proba Incendi M", "Fixe la probabilite qu'un incendie de taille M arrive ",this,0.05);
 	this.probaIncendiH = new Variable("Equipe3 Proba Incendi H", "Fixe la probabilite qu'un incendie de taille H arrive ",this,0.02);
-	this.probaCyclone = new Variable("Equipe3 Proba Cyclone", "Fixe la probabilite qu'un Cyclone arrive ",this,0);
+	this.probaCyclone = new Variable("Equipe3 Proba Cyclone", "Fixe la probabilite qu'un Cyclone arrive ",this,0.01);
 	this.probaGreve = new Variable("Equipe3 Proba Greve", "Fixe la probabilite qu'une Greve arrive ",this,0.02);
 	this.pourcentageGrevise = new Variable("Equipe3 Pourcentage Greviste", "Fixe la proportion d'ouvrier en Greve ",this,0.2);
 	this.quantiteBruleH = new Variable("Equipe3 Proportion Champs Brules Incendie H", "Fixe le pourcentage d'arbre brules suite a un incendie H ",this,0.5);
