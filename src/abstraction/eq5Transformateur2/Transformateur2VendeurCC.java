@@ -70,6 +70,52 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			return false;}}
 
 
+	//fait par wiem : prix 
+	public double propositionPrix(ExemplaireContratCadre contrat) {
+		double prix = 0.0;
+		Object produit = contrat.getProduit();
+		if ((stockChocoMarque.get(produit)!= null)&& (produit instanceof ChocolatDeMarque)){ 
+			double stock = stockChocoMarque.get(produit);
+			if (((ChocolatDeMarque)produit).getMarque().equals("ChocoPop")) {
+				prix = (2800+1500)*1.2*stock; }
+			else if (((ChocolatDeMarque)produit).getMarque().equals("Maison Doutre")) {
+				prix = (2800+11800)*1.2*stock;	
+			}
+		}
+		return prix;
+	}
+
+	//double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
+	//double prixDonne = contrat.getPrix();
+
+
+
+
+
+
+
+	//fait par yassine : négociations
+	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
+		double stock = stockChocoMarque.get(contrat.getProduit());
+		double prixMin = 0.0;
+		if (contrat.getProduit() == "ChocoPop") {
+			prixMin = (2800+1500)*1.1*stock; }
+		else if (contrat.getProduit() == "Maison Doutre") {
+			prixMin = (2800+11800)*1.1*stock;	
+		}
+		//double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
+		double prixDonne = contrat.getPrix();
+
+		if(prixDonne >= prixMin) {
+			return prixDonne;
+		} 
+		else {
+			return prixMin;
+
+		}
+
+
+	}
 	//fait par yassine : on négocie en fonction des stocks
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 
@@ -88,102 +134,6 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			return nouvelEcheancier;
 		}}*/
 
-
-
-
-
-
-
-
-
-
-	//this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : j'accepte l'echeancier "+contrat.getEcheancier());
-	//return contrat.getEcheancier(); 
-
-
-
-	//fait par wiem : prix 
-	public double propositionPrix(ExemplaireContratCadre contrat) {
-		/*double prix = 0;
-		Chocolat cp=null ;
-		if ((contrat.getProduit() instanceof Chocolat)) {
-			cp=(Chocolat)contrat.getProduit();
-		} else {
-			cp = ((ChocolatDeMarque)contrat.getProduit()).getChocolat();
-		}
-
-
-		if (cp == Chocolat.C_MQ ) {
-			Double stock = stockChocoMarque.get(cp);
-			if (stock!=null) {
-				//stock*(cout de stockage 1300 + prix de transfo 1500 + prix moyen d'une tonne de feves MQ) + marge de 10%
-				prix = (2800+1500)*1.1*stock ;
-
-				//stock*(cout de stockage 1300 + prix de transfo 1500 + prix moyen d'une tonne de feves MQ) + marge de 10%
-
-
-
-				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);
-			}}
-		if ( cp == Chocolat.C_HQ_BE) {
-			Double stock = stockChocoMarque.get(cp);
-			if (stock!=null) {
-				//stock*(cout de stockage 1300 + prix de transfo 1500 + prix moyen d'une tonne de feves HQ_BE) + marge de 10%
-				prix = (2800+11800)*1.2*stock;
-				this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);}}
-
-		return prix; }*/
-		double prix = 0.0;
-		if (stockChocoMarque.get(contrat.getProduit())!= null ) { 
-			double stock = stockChocoMarque.get(contrat.getProduit());
-			System.out.println(stock);
-			if (contrat.getProduit() == "ChocoPop") {
-				prix = (2800+1500)*1.2*stock; }
-			else if (contrat.getProduit() == "Maison Doutre") {
-				prix = (2800+11800)*1.2*stock;	
-			}this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "stock = "+stock+ "prix ="+prix);
-		}
-		return prix;
-		}
-		
-		//double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
-		//double prixDonne = contrat.getPrix();
-
-
-
-
-
-
-
-
-
-
-
-	//fait par yassine : négociations
-	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		//Chocolat cp = ((ChocolatDeMarque)contrat.getProduit()).getChocolat();
-		//Double stock = stockChocoMarque.get(cp);
-
-		double stock = stockChocoMarque.get(contrat.getProduit());
-		double prixMin = 0.0;
-		if (contrat.getProduit() == "ChocoPop") {
-			prixMin = (2800+1500)*stock; }
-		else if (contrat.getProduit() == "Maison Doutre") {
-			prixMin = (2800+11800)*stock;	
-		}
-		//double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
-		double prixDonne = contrat.getPrix();
-
-		if(prixDonne >= prixMin) {
-			return prixDonne;
-		} 
-		else {
-			return prixMin;
-
-		}
-
-
-	}
 
 
 
@@ -223,37 +173,10 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 	//fait par yassine  : ajout au journal des propositions de contrats cadres
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		this.journalVentes.ajouter(COLOR_LLGRAY, Color.MAGENTA, "  CCV : nouveau cc conclu "+ contrat);
+		this.journalVentes.ajouter(COLOR_LLGRAY, Color.MAGENTA, "  CCV : Nouveau CC conclu : on vend "+ contrat.getQuantiteALivrerAuStep()+" "+contrat.getProduit()+" à "+contrat.getPrix());
 		this.ContratsVendeur.add(contrat);
 
 	}
-
-
-	//fait par wiem  : on cherche un acheteur potentiel et on établit un contrat avec 
-	public ExemplaireContratCadre getContrat(Chocolat produit) {
-		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche acheteur pour " + produit);
-		List<IAcheteurContratCadre> acheteurs = superviseurVentesCC.getAcheteurs(produit);
-		// CODE AJOUTE PAR ROMU POUR EVITER ERREURS
-		if (acheteurs.size()<1) {
-			return null;
-		}
-		// FIN DE CODE AJOUTE PAR ROMU
-		IAcheteurContratCadre acheteur = acheteurs.get((int)(Math.random() * acheteurs.size())); 
-
-		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
-
-		ExemplaireContratCadre cc = superviseurVentesCC.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, (SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+10.0)/10), cryptogramme,false);
-		if (cc != null) {   
-			this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit + "CC : " + cc);
-
-		} else {
-			this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
-		}
-		return cc; 
-	}
-
-
-
 
 
 	//fait par wiem  : on cherche un acheteur potentiel et on établit un contrat avec 

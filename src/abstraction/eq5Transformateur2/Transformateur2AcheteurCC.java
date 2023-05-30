@@ -43,14 +43,13 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	@Override
 	public boolean achete(IProduit produit) {
 		// TODO Auto-generated method stub
+		boolean somme = false;
 		if ((produit.getType().equals("Feve")
 				&& ((((Feve)produit).getGamme()== Gamme.MQ)&&(!((Feve)produit).isBioEquitable())
 						|| ((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable()))))) {
 			//this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme vouloir acheter le produit "+produit);
-			return true;} //on achète seulement les fèves haute gamme bio équitable et les fèves moyenne gamme
-		else {
-
-			return false;}
+			somme = true;} //on achète seulement les fèves haute gamme bio équitable et les fèves moyenne gamme
+		return somme ; 
 
 
 	}
@@ -70,7 +69,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 
 		double somme = (this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE));
-		if (somme < 20000.0) {
+		if (somme < 2000.0) {
 			double prixMax = 0;// Prix maximum acceptable
 			if (contrat.getProduit() == Feve.F_MQ ) {
 				prixMax = 2000 ; 
@@ -180,9 +179,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 
 	public ExemplaireContratCadre getContrat(Feve produit) {
 		double somme = (this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE));
-		System.out.println("somme ="+
-		somme);
-		if (somme < 20000.0) {
+		if (somme < 2000.0) {
 
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit);
 			List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
