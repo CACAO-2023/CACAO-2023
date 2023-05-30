@@ -31,14 +31,15 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
-	protected LinkedList<ExemplaireContratCadre> ContratsAcheteur;
+	protected LinkedList<ExemplaireContratCadre> ContratsAcheteurMQ;
+	protected LinkedList<ExemplaireContratCadre> ContratsAcheteurHQBE;
 
 
 	public void initialiser() {
 		super.initialiser();
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
-		this.ContratsAcheteur = new LinkedList<>();
-
+		this.ContratsAcheteurMQ = new LinkedList<>();
+		this.ContratsAcheteurHQBE = new LinkedList<>();
 	}
 	@Override
 	public boolean achete(IProduit produit) {
@@ -152,8 +153,14 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method stub
 		this.journalAchats.ajouter(COLOR_LLGRAY, Color.MAGENTA, "  CCA : nouveau cc conclu "+contrat);
-		this.ContratsAcheteur.add(contrat);
-	} //réussite des négociations sur le contrat précisé en paramètre dans tous les cas 
+		if (contrat.getProduit() == Feve.F_MQ) {
+			ContratsAcheteurMQ.add(contrat);
+		}
+		else if (contrat.getProduit() == Feve.F_HQ_BE ) {
+			ContratsAcheteurHQBE.add(contrat);}
+
+	}
+	//réussite des négociations sur le contrat précisé en paramètre dans tous les cas 
 
 	@Override
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
@@ -187,10 +194,16 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 			if (vendeurs.size()==0) {
 				return null;
 			}
-			// fin de code ajoute par romu
+			// fin de code ajoute par romu 
+			//100 MQ 500 HQBE
 			IVendeurContratCadre vendeur = vendeurs.get((int)(Math.random() * vendeurs.size())); //on cherche un vendeur
 			//this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Tentative de négociation de contrat cadre avec " + vendeur.getNom() + " pour " + produit);
-			ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10,(SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+100.0)), cryptogramme,false);
+			double A = 0;
+			if (produit.getGamme() == Gamme.MQ) {
+				A = 500; }
+			else if ((produit.getGamme() == Gamme.HQ)&&(produit.isBioEquitable())){
+				A = 100; }
+			ExemplaireContratCadre cc = superviseurVentesCC.demandeAcheteur(this, vendeur, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10,(SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER+A)), cryptogramme,false);
 			if (cc != null) {   
 				this.journalAchats.ajouter(COLOR_LLGRAY, Color.GREEN, "Contrat cadre passé avec " + vendeur.getNom() + " pour " + produit + "CC : " + cc);
 			} 

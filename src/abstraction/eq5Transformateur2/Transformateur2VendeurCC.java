@@ -25,25 +25,27 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	public static Color COLOR_LLGRAY = new Color(238,238,238);
 	protected SuperviseurVentesContratCadre superviseurVentesCC;
 	//protected LinkedList<ExemplaireContratCadre> contrats;
-	protected LinkedList<ExemplaireContratCadre> ContratsVendeur;
+	protected LinkedList<ExemplaireContratCadre> ContratsVendeurHQBE;
+	protected LinkedList<ExemplaireContratCadre> ContratsVendeurMQ;
 
 	//fait par yassine
 	public void initialiser() {
 		super.initialiser();
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
-		this.ContratsVendeur = new LinkedList<>();
-		//this.stockChoco.put(Chocolat.C_MQ,2000.);
+		this.ContratsVendeurHQBE = new LinkedList<>();
+		this.ContratsVendeurMQ = new LinkedList<>();
+
 	}
 
 
 	//fait par wiem : nous vendons du chocolat sans et avec marque
 	public boolean peutVendre(IProduit produit) {
-		if (produit.getType().equals("Chocolat")) {
+		/*if (produit.getType().equals("Chocolat")) {
 			if (((((Chocolat)produit).getGamme()== Gamme.MQ)
 					||(((Chocolat)produit).getGamme()== Gamme.HQ)&&(((Chocolat)produit).isBioEquitable()))) {
 				return true;}
-			return false;}
-		else if ((produit.getType().equals("ChocolatDeMarque"))) {
+			return false;}*/
+		if ((produit.getType().equals("ChocolatDeMarque"))) {
 			if (((ChocolatDeMarque)produit).getNom()=="ChocoPop" ||(((ChocolatDeMarque)produit).getNom()== "MaisonDoutre")) {
 				return true;}
 			return false;}
@@ -59,13 +61,13 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 				return true;}
 			else {
 				return false;}}
-		else if ((((stockChoco.containsKey(produit))&& (produit.getType().equals("Chocolat"))&&((((Chocolat)produit).getGamme()== Gamme.MQ) ||((((Chocolat)produit).getGamme()== Gamme.HQ)&&(((Chocolat)produit).isBioEquitable())))))){
+		/*else if ((((stockChoco.containsKey(produit))&& (produit.getType().equals("Chocolat"))&&((((Chocolat)produit).getGamme()== Gamme.MQ) ||((((Chocolat)produit).getGamme()== Gamme.HQ)&&(((Chocolat)produit).isBioEquitable())))))){
 			if (this.stockChoco.get(produit)>100) { 
 				//this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous déclarons pouvoir vendre du " + produit.getType() + " " + produit);
 				return true;
 			}
 			else {
-				return false;}}
+				return false;}}*/
 		else {
 			return false;}}
 
@@ -74,7 +76,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		double prix = 0.0;
 		Object produit = contrat.getProduit();
-		if ((stockChocoMarque.get(produit)!= null)&& (produit instanceof ChocolatDeMarque)){ 
+		if ((produit instanceof ChocolatDeMarque)&&(stockChocoMarque.get(produit)!= null) ){ 
 			double stock = stockChocoMarque.get(produit);
 			if (((ChocolatDeMarque)produit).getMarque().equals("ChocoPop")) {
 				prix = (2800+1500)*1.2*stock; }
@@ -85,15 +87,6 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		return prix;
 	}
 
-	//double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
-	//double prixDonne = contrat.getPrix();
-
-
-
-
-
-
-
 	//fait par yassine : négociations
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
 		double stock = stockChocoMarque.get(contrat.getProduit());
@@ -103,7 +96,6 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		else if (contrat.getProduit() == "Maison Doutre") {
 			prixMin = (2800+11800)*1.1*stock;	
 		}
-		//double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
 		double prixDonne = contrat.getPrix();
 
 		if(prixDonne >= prixMin) {
@@ -111,28 +103,30 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		} 
 		else {
 			return prixMin;
-
 		}
-
-
 	}
+
 	//fait par yassine : on négocie en fonction des stocks
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 
-		double stock = stockChocoMarque.get(contrat.getProduit()) != null ? stockChocoMarque.get(contrat.getProduit()) : stockChoco.get(contrat.getProduit());
+		//double stock = stockChocoMarque.get(contrat.getProduit()) != null ? stockChocoMarque.get(contrat.getProduit()) : stockChoco.get(contrat.getProduit());
+		if (stockChocoMarque.get(contrat.getProduit()) != null) {
+			double stock = stockChocoMarque.get(contrat.getProduit());
+			double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
+			double prixDonne = contrat.getPrix();
 
-		double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
-		double prixDonne = contrat.getPrix();
-
-		Echeancier echeancierPropose = contrat.getEcheancier();
-		Echeancier nouvelEcheancier = new Echeancier(echeancierPropose);
-		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : j'accepte l'echeancier "+contrat.getEcheancier());
-		return nouvelEcheancier;}
+			Echeancier echeancierPropose = contrat.getEcheancier();
+			Echeancier nouvelEcheancier = new Echeancier(echeancierPropose);
+			this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : j'accepte l'echeancier "+contrat.getEcheancier());
+			return nouvelEcheancier;} return null;}
 
 	/*if (echeancierPropose.getQuantiteAPartirDe(contrat.getEcheancier().getStepDebut()) > stock.getQuantite((Chocolat.C_MQ)contrat.getProduit())) {
 			echeancierPropose.ajouter(Math.max(SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER, stock.getQuantite((Chocolat)contrat.getProduit())));
 			return nouvelEcheancier;
 		}}*/
+
+	//double coutTotal = contrat.getEcheancier().getQuantiteTotale() * contrat.getPrix();
+	//double prixDonne = contrat.getPrix();
 
 
 
@@ -155,7 +149,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 				}
 				lot=new Lot((ChocolatDeMarque)produit);
 			}
-		} else if (produit instanceof Chocolat) {
+		} /*else if (produit instanceof Chocolat) {
 			if (this.stockChoco.keySet().contains(produit)) {
 				stock= this.stockChoco.get(produit);
 				livre = Math.min(stock, quantite);
@@ -163,7 +157,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 					this.stockChoco.put((Chocolat)produit, this.stockChoco.get(produit)-livre);
 				}
 				lot=new Lot((Chocolat)produit);
-			}}
+			}}*/
 		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : doit livrer "+quantite+" de "+produit+" --> livre "+livre);
 		if (livre != 0) {
 			lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre);}
@@ -173,8 +167,13 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 	//fait par yassine  : ajout au journal des propositions de contrats cadres
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		this.journalVentes.ajouter(COLOR_LLGRAY, Color.MAGENTA, "  CCV : Nouveau CC conclu : on vend "+ contrat.getQuantiteALivrerAuStep()+" "+contrat.getProduit()+" à "+contrat.getPrix());
-		this.ContratsVendeur.add(contrat);
+		this.journalVentes.ajouter(COLOR_LLGRAY, Color.MAGENTA, "  CCV : Nouveau CC conclu : on vend "+ contrat.getQuantiteLivree()+" "+contrat.getProduit()+" à "+contrat.getPrix());
+		if (contrat.getProduit() == "ChocoPop") {
+			this.ContratsVendeurMQ.add(contrat); 
+		}
+		else if (contrat.getProduit() == "Maison Doutre") {
+			this.ContratsVendeurHQBE.add(contrat);
+		}
 
 	}
 
