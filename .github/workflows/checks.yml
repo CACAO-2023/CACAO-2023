@@ -72,7 +72,6 @@ jobs:
       with:
         run: |
           set -e
-          export ANT_OPTS="-Xmx2g"
           ant -noinput -buildfile build.xml
           ant -noinput -buildfile build.xml
           ant -noinput -buildfile build.xml
