@@ -156,11 +156,12 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		
 	}
 	 
-	
+	/**Nathan Salbego*/
 	public void initialiser() {
 		super.initialiser();
 		this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
 	}
+	/**Nathan Salbego*/
 	public void rechercheContrat(IProduit produit) {
 		if (superviseur != null) {
 		List<IAcheteurContratCadre> acheteurs = superviseur.getAcheteurs(produit);
