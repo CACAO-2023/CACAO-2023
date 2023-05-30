@@ -81,7 +81,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 						for (ExemplaireContratCadre c : ContratEnCours_F_HQ ) {
 							arriverHQ+=c.getQuantiteALivrerAuStep();
 						}
-						if (arriverHQ>aVendreHQ) {
+						if (arriverHQ>1.5*aVendreHQ && this.stockFeves.get(Feve.F_HQ_BE)>2000) {
 							List<IAcheteurContratCadre> acheteurs = superviseurVentesCC.getAcheteurs(cm);
 							this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLACK, " CCV : tentative de vente de "+cm+" aupres de "+acheteurs);
 							for (IAcheteurContratCadre acheteur : acheteurs) {
@@ -109,7 +109,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 						for (ExemplaireContratCadre c : ContratEnCours_F_BQ ) {
 							arriverBQ+=c.getQuantiteALivrerAuStep();
 						}
-						if (arriverBQ>aVendreBQ) {
+						if (arriverBQ>aVendreBQ && this.stockFeves.get(Feve.F_BQ)>2000) {
 							List<IAcheteurContratCadre> acheteurs = superviseurVentesCC.getAcheteurs(cm);
 							this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLACK, " CCV : tentative de vente de "+cm+" aupres de "+acheteurs);
 							for (IAcheteurContratCadre acheteur : acheteurs) {
@@ -246,11 +246,13 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nouveau cc conclu "+contrat);
 		if (((Chocolat) contrat.getProduit()).getGamme().equals(Gamme.HQ)){
 			this.ContratEnCours_F_HQ.add(contrat);
+			this.aVendreHQ+=contrat.getQuantiteALivrerAuStep();
 		}
 		if (((Chocolat) contrat.getProduit()).getGamme().equals(Gamme.BQ)){
 			this.ContratEnCours_F_BQ.add(contrat);
+			this.aVendreBQ+=contrat.getQuantiteALivrerAuStep();
+		}
 		} 
-	}
 	
 	/**
 	 * @author fouad
@@ -284,7 +286,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 			}
 			double coutStock = 4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur();
 			double coutTransfo = 5;
-			prix = (prixMoy + coutStock + coutTransfo)*2;
+			prix = (prixMoy + coutStock + coutTransfo)*5;
 	//		produit = ((ChocolatDeMarque)produit).getChocolat();
 	//	}
 	//	if (produit instanceof Chocolat) {
@@ -302,10 +304,10 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		double prixInit = 0;
 		if (contrat.getListePrix().size()==0) {
 			if (((ChocolatDeMarque)contrat.getProduit()).getChocolat().equals(Chocolat.C_HQ_BE)) {
-				return prixMoyHQ+4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()+5;
+				return (prixMoyHQ+4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()+5)*5;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getChocolat().equals(Chocolat.C_BQ)) {
-				return prixMoyBQ+4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()+5;
+				return (prixMoyBQ+4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur()+5)*5;
 			}
 		}
 		prixInit=contrat.getListePrix().get(contrat.getListePrix().size()-2);
