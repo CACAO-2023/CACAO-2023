@@ -45,7 +45,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	protected Variable stock_MQ_BE = new Variable("Eq7stock_MQ_BE", "stock Total de chocolat de moyenne qualité bio-équitable", this, 0);
 	protected Variable stock_HQ_BE = new Variable("Eq7stock_HQ_BE", "stock Total de chocolat de haute qualité bio-équitable", this, 0);
 	protected Variable ventes = new Variable("Eq7ventes","ventes totales réalisées lors de ce tour",this,0);
-	protected Variable depenses = new Variable("Eq7Depenses à l'étape courante", "Depenses totales de ce tour ",this, 0);
+	protected Variable depenses = new Variable("Eq7Depenses à l'étape courante (insérez 1 )", "Depenses totales de ce tour ",this, 0);
 	protected Variable cmSelectionnee; // l'index du chocolat selectionne
 	
 	protected HashMap<ChocolatDeMarque, Variable> Var_Stock_choco; // le stock de chaque chocolat de marque
@@ -249,7 +249,11 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		//Initialisation des previsions et prix 
 		this.previsionsperso = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 
 		this.prevision_prix = new HashMap<Integer,HashMap<ChocolatDeMarque,Double>>(); 
-
+		
+		for (int i=0;i<24;i++) {
+			prevision_prix.put(i ,new HashMap<ChocolatDeMarque,Double>());
+		}
+		
 		for (int i=0;i<24;i++) {
 			HashMap<ChocolatDeMarque,Double> prevtour = new HashMap<ChocolatDeMarque,Double>();
 			HashMap<ChocolatDeMarque,Double> prevtourperso = new HashMap<ChocolatDeMarque,Double>();

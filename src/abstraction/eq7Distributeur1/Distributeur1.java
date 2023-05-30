@@ -147,7 +147,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		
 		int etape_normalisee= Filiere.LA_FILIERE.getEtape()%24;
 		
-		if (Filiere.LA_FILIERE.getEtape() >= 24) {
+		if (Filiere.LA_FILIERE.getEtape() > 24) {
 			prix_moyen = Filiere.LA_FILIERE.prixMoyen(choco,Filiere.LA_FILIERE.getEtape()-24);
 			double monPrixAncien = prevision_prix.get(etape_normalisee).get(choco);
 			
@@ -160,13 +160,13 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 			prix= cout/0.9;
 		}
 		
-		if(Filiere.LA_FILIERE.getEtape()>=24) {
 			//sert à mémoriser notre prix à l'étape derniere
 			
 		HashMap<ChocolatDeMarque,Double> HPrix=this.prevision_prix.get(etape_normalisee);
-		HPrix.replace(choco, prix);
-		this.prevision_prix.replace(etape_normalisee, HPrix);
-		}
+		HPrix.put(choco, prix);
+		this.prevision_prix.put(etape_normalisee, HPrix);
+		
+		
 		
 		return prix;
 	}
