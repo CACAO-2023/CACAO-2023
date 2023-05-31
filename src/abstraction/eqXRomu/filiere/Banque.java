@@ -220,7 +220,7 @@ public class Banque implements IActeur, IAssermente {
 	}
 
 	public void faireFaillite(IActeur acteur) {
-		if (!(acteur instanceof IAssermente)) {
+		if (!(acteur instanceof IAssermente)) { 
 			this.journalBanque.ajouter(Journal.texteColore(acteur, "Faillite de "+acteur.getNom()));
 			this.faillites.put(acteur, true);
 			Filiere.LA_FILIERE.notificationFaillite(acteur);
