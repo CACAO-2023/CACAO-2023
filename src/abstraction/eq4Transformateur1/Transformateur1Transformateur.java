@@ -15,6 +15,7 @@ import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.Gamme;
 
 // Francois, Alexian, Amine, Fouad
 
@@ -24,6 +25,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 	protected double qteTransfo;
 	protected double aVendreHQ;
 	protected double aVendreBQ;
+	private int multiplicateur;
 	
 	public Transformateur1Transformateur() {
 		super();
@@ -47,6 +49,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 
 	public void initialiser() {
 		super.initialiser();
+		multiplicateur=0;
 	}
 
 	/**
@@ -63,7 +66,18 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		for (ExemplaireContratCadre c : ContratEnCours_C_BQ ) {
 			aVendreBQ+=c.getQuantiteALivrerAuStep();
 		}
-		double transfo = (int) (Math.min(this.stockFeves.get(fb), Math.random()*1000) + (aVendreBQ)/1.58);
+		double transfo = (int) (Math.min(this.stockFeves.get(fb), Math.random()*1000+(aVendreBQ)/1.58));
+		for (ChocolatDeMarque c : this.stockChocoMarque.keySet()) {
+			if (c.getGamme().equals(Gamme.BQ)) {
+				if (this.stockChocoMarque.get(c)<500) {
+					multiplicateur+=1;
+					transfo=500*multiplicateur;
+				}
+				if(this.stockChocoMarque.get(c)>20000) {
+					transfo=0;
+				}
+			}
+		}
 		
 		double conversionb = 1.58;
 		if (transfo>0.0) {
@@ -88,8 +102,15 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			aVendreHQ+=c.getQuantiteALivrerAuStep();
 		}
 		
-		double transfoh = (int) (Math.min(this.stockFeves.get(fh), Math.random()*1000) + (aVendreHQ)/1.06);
+		double transfoh = (int) (Math.min(this.stockFeves.get(fh), Math.random()*1000+(aVendreHQ)/1.06));
 		
+		for (ChocolatDeMarque c : this.stockChocoMarque.keySet()) {
+			if (c.getGamme().equals(Gamme.HQ)) {
+				if(this.stockChocoMarque.get(c)>20000) {
+					transfoh=0;
+				}
+			}
+		}
 		double conversion = 1.06;
 		if (transfoh>0) {
 			this.retirer(fh,transfoh);
