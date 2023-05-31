@@ -11,12 +11,19 @@ import abstraction.eqXRomu.produits.Gamme;
 
 public class Stock  {
 	HashMap<ChocolatDeMarque,Double> QteStock;
+	HashMap<Integer,Double> qteStockHQ;
+	HashMap<Integer,Double> qteStockMQ;
+	HashMap<Integer,Double> qteStockMQBE;
 	private Distributeur3Acteur a;
+	
 
 	
 	public Stock(Distributeur3Acteur a) {
 		QteStock = new HashMap<ChocolatDeMarque, Double> ();
 		this.a = a;
+		qteStockHQ = new HashMap<Integer, Double>();
+		qteStockMQ = new HashMap<Integer, Double>();
+		qteStockMQBE = new HashMap<Integer, Double>();
 		
 	}
 	
@@ -79,6 +86,13 @@ public class Stock  {
 	}
 	// ajout d'une qte de chocolat (ou soustraction de chocolat)
 	// Mathilde Soun 
+	
+	public void liquider() {
+		for (ChocolatDeMarque c : a.chocolats) {
+			QteStock.put(c,0.0);
+			}
+
+	}
 	
 	public void ajoutQte(ChocolatDeMarque c, double ajout){
 		a.journal_stock.ajouter("On ajoute au stock de "+ c.getNom() + " une quantite de  " + ajout); 

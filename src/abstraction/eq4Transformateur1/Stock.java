@@ -59,7 +59,8 @@ public class Stock extends Transformateur1Acteur{
 			}
 			this.totalStocksFeves.ajouter(this,quantite,this.cryptogramme);
 			}
-		else if(produit.getType().equals("ChocoDeMarque")) {
+		else if(produit.getType().equals("ChocolatDeMarque")) {
+
 			if (this.stockChocoMarque.keySet().contains(produit)) {
 				this.stockChocoMarque.put((ChocolatDeMarque)produit,this.stockChocoMarque.get((ChocolatDeMarque)produit)+quantite);
 				}
@@ -83,6 +84,8 @@ public class Stock extends Transformateur1Acteur{
 	
 	public void next() {
 		super.next();
+		System.out.println("stock de feves :" +this.stockFeves);
+		System.out.println("stock de choco :" +this.stockChocoMarque);
 		this.journal.ajouter("on a stockFeve : "+stockFeves);
 		this.journal.ajouter("=== STOCKS === ");
 		for (Feve f : this.stockFeves.keySet()) {
