@@ -107,10 +107,8 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	    
 	    SuperviseurVentesContratCadre sup = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
 	    for (int k=0; k<3;k++) {
-	   
 	    int i = (int) (Math.random()*(chocolats.size())) ;
 	    ChocolatDeMarque choco = chocolats.get(i);
-	 
 	        List<IVendeurContratCadre> vendeurs = sup.getVendeurs(choco);
 	        Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape()+1,12, 10000.0);
 	        List<ExemplaireContratCadre> nouveaux_contrats = new ArrayList<ExemplaireContratCadre> ();
