@@ -75,7 +75,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	//fait par wiem : prix 
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		double prix = 0.0;
-		Object produit = contrat.getProduit();
+		IProduit produit = (IProduit)contrat.getProduit();
 		if ((produit instanceof ChocolatDeMarque)&&(stockChocoMarque.get(produit)!= null) ){ 
 			double stock = stockChocoMarque.get(produit);
 			if (((ChocolatDeMarque)produit).getMarque().equals("ChocoPop")) {
@@ -90,10 +90,11 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	//fait par yassine : négociations
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
 		double stock = stockChocoMarque.get(contrat.getProduit());
+		IProduit produit = (IProduit)contrat.getProduit();
 		double prix = contrat.getPrix();
-		if ((contrat.getProduit() == "ChocoPop")&&(contrat.getEcheancier().getQuantiteTotale()>0.35*stock)) {
-			prix = (2800+1500)*1.1*stock; }
-		else if ((contrat.getProduit() == "Maison Doutre")&&(contrat.getEcheancier().getQuantiteTotale()>0.15)) {
+		if (((ChocolatDeMarque)produit).getMarque().equals("ChocoPop")&&(contrat.getEcheancier().getQuantiteTotale()>0.35*stock)) {
+			prix = (2800+1500)*1.1*stock;}
+		else if (((ChocolatDeMarque)produit).getMarque().equals("Maison Doutre")&&(contrat.getEcheancier().getQuantiteTotale()>0.15)) {
 			prix = (2800+11800)*1.1*stock;	
 		}
 		//double prix = contrat.getPrix();
@@ -111,11 +112,11 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		if (contrat.getQuantiteTotale()>stockChocoMarque.get(contrat.getProduit())) {
 			return null;}
-			else { return contrat.getEcheancier(); }
-		}
-		
-		
-		
+		else { return contrat.getEcheancier(); }
+	}
+
+
+
 
 	//double stock = stockChocoMarque.get(contrat.getProduit()) != null ? stockChocoMarque.get(contrat.getProduit()) : stockChoco.get(contrat.getProduit());
 	/*if (stockChocoMarque.get(contrat.getProduit()) != null) {
@@ -189,19 +190,16 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 	//fait par yassine  : ajout au journal des propositions de contrats cadres
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		this.journalVentes.ajouter(COLOR_LLGRAY, Color.MAGENTA, "  CCV : Nouveau CC conclu : PRODUIT ET QT TOTALE = "+ 
-
-				//contrat.getQuantiteLivree()
-				contrat.getQuantiteTotale()//.getEcheancier().getQuantiteTotale()
-			//	contrat.getQuantiteALivrerAuStep()
-		
-				+" "+contrat.getProduit()+", ACHETEUR = "+contrat.getAcheteur()+ ", PRIX = "+contrat.getPrix());
-		if (contrat.getProduit() == "ChocoPop") {
-			this.ContratsVendeurMQ.add(contrat); 
-		}
-		else if (contrat.getProduit() == "Maison Doutre") {
-			this.ContratsVendeurHQBE.add(contrat);
-		}
+		IProduit produit= (IProduit)contrat.getProduit();
+		if (produit instanceof ChocolatDeMarque) {
+			this.journalVentes.ajouter(COLOR_LLGRAY, Color.MAGENTA, "  CCV : Nouveau CC conclu : PRODUIT ET QT TOTALE = "+contrat.getQuantiteTotale() +" "+contrat.getProduit()+", ACHETEUR = "+contrat.getAcheteur()+ ", PRIX = "+contrat.getPrix());
+System.out.println(((ChocolatDeMarque)produit).getMarque());
+			if (((ChocolatDeMarque)produit).getMarque() == "ChocoPop") {
+				this.ContratsVendeurMQ.add(contrat); 
+			}
+			else if (((ChocolatDeMarque)produit).getMarque() ==  "Maison Doutre") {
+				this.ContratsVendeurHQBE.add(contrat);
+			}}
 
 	}
 
@@ -223,16 +221,15 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		Double stock = stockChocoMarque.get(produit);
 		if ((stock != null)&&(stock>100)) {
 			double A = 0;
-			if (produit.getNom() == "Maison Doutre") {
+			System.out.println(produit.getMarque());
+			if (produit.getMarque() == "Maison Doutre") {
 				A = 0.1; }
-			else if (produit.getNom() == "ChocoPop") {
+			else if (produit.getMarque() == "ChocoPop") {
 				A = 0.3; }
 			ExemplaireContratCadre cc = superviseurVentesCC.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, A*stock+SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER), cryptogramme,false);
 
 			if (cc != null) {   
-				this.journalVentes.ajouter(COLOR_LLGRAY, Color.GREEN, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit 
-						//"CC : " + cc
-						);
+				this.journalVentes.ajouter(COLOR_LLGRAY, Color.GREEN, "Contrat cadre passé avec " + acheteur.getNom() + " pour " + produit);
 			} else {
 				this.journalVentes.ajouter(COLOR_LLGRAY, Color.RED, "Echec de la négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit);
 			}
