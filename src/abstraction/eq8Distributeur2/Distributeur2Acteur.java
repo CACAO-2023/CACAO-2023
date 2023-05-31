@@ -36,6 +36,13 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	protected Journal journal_activitegenerale;
 	protected Journal journal_OA ;
 	protected double coutDeMainDoeuvre;
+	protected Variable ventes = new Variable("Eq8 ventes","ventes totales réalisées lors de ce tour",this,0);
+	protected double vente_step;
+	protected double qte_totale_en_vente;
+	protected Variable afficher_vente_depense_courrant; 
+	public List<Double> CA;
+	public Double CA_step;
+	protected Variable variable_CA;
 
 	//Auteurs : Mariem Marzougui et Karim Ben Messaoud
 	public Distributeur2Acteur() {
@@ -54,26 +61,32 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		journal_ContratCadre= new Journal("Journal des Contrats Cadre de l'" + nom, this);
 		journal_activitegenerale = new Journal("Journal général de l'" + nom, this);
 		journal_stocks = new Journal("Journal des stocks " + nom, this);
+		
+		variable_CA = new VariablePrivee("Eq8 Chiffre Affaire (en Mrd€)","<html>Chiffre d'Affaire</html>",this,0.0,10000000,0.0);
+
 		initialiserGamme();
 	
 	}
 	
 	//Auteur : Karim Ben Messaoud
 	private void initialiserGamme() {
-		pourcentagesGamme.put(Gamme.BQ, 0.55);
+		pourcentagesGamme.put(Gamme.BQ, 0.05);
 		pourcentagesGamme.put(Gamme.MQ, 0.40);
-		pourcentagesGamme.put(Gamme.HQ, 0.05);
+		pourcentagesGamme.put(Gamme.HQ, 0.55);
 	}
 	
 	//Auteur : Karim Ben Messaoud
 	public double coutDeMainDoeuvre() {
 		//double coutMD = Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur();
 		//System.out.println(Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur());
-		return 0.;
+		return Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur();
 	}
 	
 	//Auteur : Marzougui Mariem et Karim Ben Messaoud
 	public void initialiser() {
+		CA_step = 0.0;
+		vente_step=0;
+		this.CA = new LinkedList<Double>();
 		chocolats =  Filiere.LA_FILIERE.getChocolatsProduits();
 		for (ChocolatDeMarque marque : chocolats) {
 			
@@ -120,6 +133,12 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 
 	//Auteur : Marzougui Mariem
 	public void next() {
+		
+		CA.add(CA_step);
+		variable_CA.setValeur(this,CA_step/1000000000, this.cryptogramme);
+		ventes.setValeur(this, vente_step);
+		
+
 		List<ChocolatDeMarque> chocolats_filiere = new LinkedList<ChocolatDeMarque>();
 		chocolats_filiere = Filiere.LA_FILIERE.getChocolatsProduits();
 			for (ChocolatDeMarque marque : chocolats_filiere) {
@@ -136,7 +155,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			}
 			
 			if (stocks.getStockGlobal() > 0) {
-				double cout_TOT = 16*30*stock_total-getTotalCoutMainDoeuvre();
+				double cout_TOT = 16*30*stock_total+getTotalCoutMainDoeuvre();
+				
 				Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme,Filiere.LA_FILIERE.getBanque(),cout_TOT );	
 				}	
 		journal_stocks.ajouter("Stock total "+ stock_total+"T");
@@ -165,6 +185,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
 		res.add(s);
+		res.add(variable_CA);
+		res.add(ventes);
 		return res;
 	}
 
@@ -297,7 +319,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 		if (pos < 0) {
 			return 0.0;
 		} else {
-			if (choco.getGamme() == Gamme.BQ) {
+			if (choco.getGamme() == Gamme.HQ) {
 				double n = quantiteEnVente(choco, crypto);
 				return n / 10.0;
 			} else {
@@ -310,6 +332,8 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			this.stocks.retirerDuStock(choco, quantite);			
 			stock_total-=quantite;
 			s.setValeur(this, stock_total, this.cryptogramme);
+			CA_step += montant;
+
 			journal_stocks.ajouter("retrait d'une quantité de"+ quantite+"T");
 			journal_ventes.ajouter("La quantité " + quantite + " a été vendue à" + montant);
 		}
