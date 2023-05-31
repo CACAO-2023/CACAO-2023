@@ -51,37 +51,37 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 		this.journal_coefs.ajouter("coef 3 = " + this.coef_prix_vente.get(2.0));
 
 		
-		if(100*qteVendue_HQ_BE/this.variable_stock_HQ_BE.getValeur() < 40 && this.coef_prix_vente.get(0.0)*0.8 > 1.0) {
+		if(100*qteVendue_HQ_BE/this.variable_stock_HQ_BE.getValeur() < 8 && this.coef_prix_vente.get(0.0)*0.8 > 1.0) {
 			this.coef_prix_vente.put(0.0,this.coef_prix_vente.get(0.0)*0.8);
 			changement_strategique_prix_vente(Gamme.HQ,true,0.8);
 		}
-		if(100*qteVendue_HQ_BE/this.variable_stock_HQ_BE.getValeur() > 80) {
-			this.coef_prix_vente.put(0.0,this.coef_prix_vente.get(0.0)*1.2);
-			changement_strategique_prix_vente(Gamme.HQ,true,1.2);
+		if(100*qteVendue_HQ_BE/this.variable_stock_HQ_BE.getValeur() > 70) {
+			this.coef_prix_vente.put(0.0,this.coef_prix_vente.get(0.0)*1.5);
+			changement_strategique_prix_vente(Gamme.HQ,true,1.5);
 
 		}
 		
 		
-		if(100*qteVendue_MQ_BE/this.variable_stock_MQ_BE.getValeur() < 40 && this.coef_prix_vente.get(1.0)*0.8 > 1.0) {
+		if(100*qteVendue_MQ_BE/this.variable_stock_MQ_BE.getValeur() < 8 && this.coef_prix_vente.get(1.0)*0.8 > 1.0) {
 			this.coef_prix_vente.put(1.0,this.coef_prix_vente.get(1.0)*0.8);
 			changement_strategique_prix_vente(Gamme.MQ,true,0.8);
 
 		}
-		if(100*qteVendue_MQ_BE/this.variable_stock_MQ_BE.getValeur() > 80) {
-			this.coef_prix_vente.put(1.0,this.coef_prix_vente.get(0.0)*1.2);
-			changement_strategique_prix_vente(Gamme.MQ,true,1.2);
+		if(100*qteVendue_MQ_BE/this.variable_stock_MQ_BE.getValeur() > 70) {
+			this.coef_prix_vente.put(1.0,this.coef_prix_vente.get(0.0)*1.5);
+			changement_strategique_prix_vente(Gamme.MQ,true,1.5);
 
 		}
 		
 		
-		if(100*qteVendue_MQ/this.variable_stock_MQ.getValeur() < 40 && this.coef_prix_vente.get(2.0)*0.8 > 1.0) {
+		if(100*qteVendue_MQ/this.variable_stock_MQ.getValeur() < 8 && this.coef_prix_vente.get(2.0)*0.8 > 1.0) {
 			this.coef_prix_vente.put(2.0,this.coef_prix_vente.get(2.0)*0.8);
 			changement_strategique_prix_vente(Gamme.MQ,false,0.8);
 
 		}
-		if(100*qteVendue_MQ/this.variable_stock_MQ.getValeur() > 80) {
-			this.coef_prix_vente.put(2.0,this.coef_prix_vente.get(0.0)*1.2);
-			changement_strategique_prix_vente(Gamme.MQ,false,1.2);
+		if(100*qteVendue_MQ/this.variable_stock_MQ.getValeur() > 70) {
+			this.coef_prix_vente.put(2.0,this.coef_prix_vente.get(0.0)*1.5);
+			changement_strategique_prix_vente(Gamme.MQ,false,1.5);
 
 		}
 		if(this.variable_stock_tot.getValeur() != 0) {
