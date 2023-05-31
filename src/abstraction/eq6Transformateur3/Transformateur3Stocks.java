@@ -19,9 +19,13 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 
 /**Mouhamed SOW*/
 	protected Lot stockFeveBG; // feve bas gamme
+	protected Variable graphFeveBG;
     protected Lot stockFeveMG; // feve moyenne gamme
+    protected Variable graphFeveMG;
     protected Lot stockFeveMGL;// feve moyenne gamme labelisée
+    protected Variable graphFeveMGL;
     protected Lot stockFeveHGL;// feve haute gamme labelisée
+    protected Variable graphFeveHGL;
     protected Lot stockChocolatBG; // Chocolat bas gamme
     protected Variable graphChocoBG;
     protected Lot stockChocolatMG; // Chocolat moyenne gamme
@@ -54,6 +58,10 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
       this.graphChocoMG = new Variable ("quantite choco MG","quantite dans le stock de chocolat MG",this,0.0,1000000,this.stockChocolatMG.getQuantiteTotale());
       this.graphChocoMGL = new Variable ("quantite choco MGL","quantite dans le stock de chocolat MGL",this,0.0,1000000,this.stockChocolatMGL.getQuantiteTotale());
       this.graphChocoHGL = new Variable ("quantite choco HGL","quantite dans le stock de chocolat HGL",this,0.0,1000000,this.stockChocolatHGL.getQuantiteTotale());
+      this.graphFeveBG = new Variable ("quantite feve BG","quantite dans le stock de feve BG",this,0.0,1000000,this.stockFeveBG.getQuantiteTotale());
+      this.graphFeveMG = new Variable ("quantite feve MG","quantite dans le stock de feve MG",this,0.0,1000000,this.stockFeveMG.getQuantiteTotale());
+      this.graphFeveMGL = new Variable ("quantite feve MGL","quantite dans le stock de feve MGL",this,0.0,1000000,this.stockFeveMGL.getQuantiteTotale());
+      this.graphFeveHGL = new Variable ("quantite feve HGL","quantite dans le stock de feve HGL",this,0.0,1000000,this.stockFeveHGL.getQuantiteTotale());
   }
   /**Mouhamed SOW*/
   public void ajouterFeve(Lot l) {
@@ -299,6 +307,10 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 		res.add(this.graphChocoMG);
 		res.add(this.graphChocoMGL);
 		res.add(this.graphChocoHGL);
+		res.add(this.graphFeveBG);
+		res.add(this.graphFeveMG);
+		res.add(this.graphFeveMGL);
+		res.add(this.graphFeveHGL);
 		return res;}
   
   
@@ -343,9 +355,13 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   		this.stockFeveHGL.retirer(((Double)quantiteRetiree4)) ;}
   		super.journalStock.ajouter(date+" ");
   		super.journalStock.ajouter(" La quantité de feve BG est :"+ this.stockFeveBG.getQuantiteTotale() );
+  		this.graphFeveBG.setValeur(this, this.stockChocolatBG.getQuantiteTotale());
   		super.journalStock.ajouter(" La quantité de feve MG est :"+ this.stockFeveMG.getQuantiteTotale() );
+  		this.graphFeveMG.setValeur(this, this.stockChocolatMG.getQuantiteTotale());
   		super.journalStock.ajouter(" La quantité de feve MGL est :"+ this.stockFeveMGL.getQuantiteTotale() );
+  		this.graphFeveMGL.setValeur(this, this.stockChocolatMGL.getQuantiteTotale());
   		super.journalStock.ajouter(" La quantité de feve HGL est :"+ this.stockFeveHGL.getQuantiteTotale() );
+  		this.graphFeveHGL.setValeur(this, this.stockChocolatHGL.getQuantiteTotale());
   		super.journalStock.ajouter(" La quantité de Chocolat BG est :"+ this.stockChocolatBG.getQuantiteTotale() );
   		this.graphChocoBG.setValeur(this, this.stockChocolatBG.getQuantiteTotale());
   		super.journalStock.ajouter(" La quantité de Chocolat MG est :"+ this.stockChocolatMG.getQuantiteTotale() );
