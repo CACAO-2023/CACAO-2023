@@ -44,7 +44,7 @@ Not accepting because the code does not pass the tests. You can read the error m
 
 ## `Some checks were not successful`: `Checks / performance_tests`
 
-Not accepting because your update makes the simulation too slow. You can read the results of the performance tests by clicking on `Details` near to the failed check. You will see how much time (in milliseconds) each team takes when the button `Next` is clicked 300 times. The maximum time allowed per team is 20 seconds.
+Not accepting because your update makes the simulation too slow. You can read the results of the performance tests by clicking on `Details` near to the failed check. If you click on `Performance results` you will see how much time (in milliseconds) each team takes when the button `Next` is clicked 300 times. The maximum time allowed per team is 20 seconds.
 
 ## `This branch is out-of-date with the base branch`
 

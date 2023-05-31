@@ -77,7 +77,7 @@
         <junit fork="yes" haltonfailure="true" showoutput="yes">
             <formatter type="plain" usefile="false" />
             <test name="presentation.FenetrePrincipaleTest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea -Xmx4g"/>
+            <jvmarg line="-ea"/>
             <classpath refid="CACAO-2023.classpath"/>
         </junit>
     </target>
