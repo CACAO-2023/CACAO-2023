@@ -2,7 +2,6 @@ package abstraction.eq3Producteur3;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.Set;
 
 import abstraction.eqXRomu.filiere.Filiere;
@@ -14,8 +13,10 @@ public class Champs {
 	 * @author Dubus-Chanson Victor, Corentin Caugant
 	 */
 	public Champs() {
-		Integer NombreHectaresM = 22500;
-		Integer NombreHectaresH =1250;
+		//Integer NombreHectaresM = 22500; premiers essais
+		//Integer NombreHectaresH =1250;
+		Integer NombreHectaresM = 9000; // optimises
+		Integer NombreHectaresH = 1500; // pas trop haut, afin de simuler la réalité
 		HashMap<Integer, Integer> ChampH = new HashMap<Integer, Integer>();
 		HashMap<Integer, Integer> ChampM = new HashMap<Integer, Integer>();
 
@@ -29,7 +30,7 @@ public class Champs {
 		Champs.put("H", ChampH);
 		
 	}
-
+	
 	/**
 	 * @author BOCQUET Gabriel
 	 */	
@@ -50,7 +51,6 @@ public class Champs {
 	 * Cette fonction nous donne le taux de recolte en fonction de l'age des arbres. Les valeurs ont été trouvé par Florian de l'equipe 2
 	 */
 	public double gaussienne(double x) {
-		Random r = new Random();
 		double sigma = Filiere.LA_FILIERE.getParametre("Ecart-type gaussienne pour production").getValeur();
 		double esperance = Filiere.LA_FILIERE.getParametre("Esperance gaussienne pour production").getValeur();
 		return (600/(Math.sqrt(2*Math.PI)*sigma))*Math.exp(-(x-esperance)*(x-esperance)/(2*sigma*sigma));
@@ -109,7 +109,7 @@ public class Champs {
 	public LinkedList<Integer> HarvestQuantity(int CurrentStep, HashMap<String, LinkedList<Integer>> Keys){
 		String[] Gamme = {"H","M"};
 		HashMap<String, HashMap<Integer, Integer>> FieldList =this.getChamps();
-		LinkedList<Integer> l = new LinkedList();
+		LinkedList<Integer> l = new LinkedList<Integer>();
 		//On recupere la liste des champs de moyenne gamme
 		for(String s : Gamme) {
 		HashMap<Integer,Integer> Field = FieldList.get(s);
@@ -119,7 +119,6 @@ public class Champs {
 		//Ce taux permet de prendre en compte l'aspect aleatoire d'une recolte
 		for (Integer key : HarvestKeys) {
 			double HarvestRate = this.gaussienne(CurrentStep-key);
-			System.out.println(HarvestRate);
 			quantite +=Field.get(key)*HarvestRate;
 		}
 			
@@ -233,7 +232,7 @@ public class Champs {
 
 		}
 		}
-			LinkedList<Integer> l = new LinkedList();
+			LinkedList<Integer> l = new LinkedList<Integer>();
 			l.add(quantiteH);
 			l.add(quantiteM);
 			return l;

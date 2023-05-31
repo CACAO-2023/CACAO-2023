@@ -137,7 +137,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 
 
 								//Echeancier echeancier = new Echeancier (contratEnCours.get(i).getEcheancier().getStepFin(),24, 25000.0);
-								ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier , this.cryptogramme, initialise);
+								ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier , this.cryptogramme, false);
 								if (cc!= null) {
 									pasAchete = false;
 
@@ -181,7 +181,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 
 
 									Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(), qteVoulue);
-									ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier2 , this.cryptogramme, initialise);
+									ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier2 , this.cryptogramme, false);
 									if (cc!=null) 
 									{ 
 
@@ -210,7 +210,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 										//Comment garder l'echeancier ???? -> tjrs le même à la fin 
 										//System.out.println("on lance avec " + vmin);
 										pasAchete = false;
-										ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vmin, chocolats.get(i), echeancier , this.cryptogramme, initialise);
+										ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vmin, chocolats.get(i), echeancier , this.cryptogramme, false);
 										prixEnCours.clear();
 										
 
@@ -230,7 +230,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 									}
 									if(vmin !=null) {
 										//Comment garder l'echeancier ???? -> tjrs le même à la fin 
-										ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vmin, chocolats.get(i), echeancier , this.cryptogramme, initialise);
+										ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vmin, chocolats.get(i), echeancier , this.cryptogramme, false);
 
 									}
 
@@ -240,7 +240,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 					}
 					else if (vendeursChocolat.size()==1  ){
 						pasAchete=false;
-						ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(0), chocolats.get(i), echeancier , this.cryptogramme, initialise);
+						ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(0), chocolats.get(i), echeancier , this.cryptogramme, false);
 						if(cc != null) {
 							journal_achats.ajouter("CC "+cc.getNumero()+" achat du chocolat " + chocolats.get(i)+" au prix à la tonne de " + prix);
 
@@ -309,7 +309,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 				Echeancier e1 = new Echeancier(e.getStepDebut(), e.getNbEcheances(), 0); //Je cree un echeancier pour pouvoir le modifier 
 				for (int i = 0; i< e.getNbEcheances(); i++) {
 					if ((e.getStepDebut()+i)%24 ==3 || (e.getStepDebut()+i)%24 == 6 || (e.getStepDebut()+i)%24 == 23) { // Je regarde si je suis a paques noel ou saint valentin
-						if (e.getQuantite(i)+e.getStepDebut()+(this.stock.qteStockHQ.keySet().contains(i+e.getStepDebut())?this.stock.qteStockHQ.get(i+e.getStepDebut()):0)<35000) {
+						if (e.getQuantite(i+e.getStepDebut())+e.getStepDebut()+(this.stock.qteStockHQ.keySet().contains(i+e.getStepDebut())?this.stock.qteStockHQ.get(i+e.getStepDebut()):0)<35000) {
 							//System.out.println(e.getQuantite(i+e.getStepDebut())+" "+e.getQuantite(i)+" " +(this.stock.qteStockHQ.keySet().contains(i+e.getStepDebut())?this.stock.qteStockHQ.get(i+e.getStepDebut()):0)*1.1+" <<<<<<<<<<<<");
 							e1.set(i+e.getStepDebut(), (35000-e.getQuantite(i+e.getStepDebut())-(this.stock.qteStockHQ.keySet().contains(i+e.getStepDebut())?this.stock.qteStockHQ.get(i+e.getStepDebut()):0))*1.1); // en forte période on en commande 10% de plus
 						}

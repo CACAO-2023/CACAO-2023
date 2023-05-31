@@ -74,10 +74,10 @@
     </target>
     <target name="FenetrePrincipaleTest">
         <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" haltonfailure="true">
+        <junit fork="yes" haltonfailure="true" showoutput="yes">
             <formatter type="plain" usefile="false" />
             <test name="presentation.FenetrePrincipaleTest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
+            <jvmarg line="-ea -Xmx4g"/>
             <classpath refid="CACAO-2023.classpath"/>
         </junit>
     </target>

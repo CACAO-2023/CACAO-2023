@@ -1,7 +1,6 @@
 package abstraction.eq3Producteur3;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Set;
 
 import abstraction.eqXRomu.bourseCacao.IVendeurBourse;
@@ -59,7 +58,7 @@ public class Bourse3 extends Producteur3CC implements IVendeurBourse {
 		return quantite;
 	}
 
-	/** On va mettre en vente que des MQ et la bourse ne prend pas en compte le label
+	/** On va mettre en vente que   des MQ et la bourse ne prend pas en compte le label
 	 * @author BOCQUET Gabriel, Corentin Caugant
 	 */
 	public Lot notificationVente(Feve f, double quantiteEnT, double coursEnEuroParT) {
@@ -71,7 +70,7 @@ public class Bourse3 extends Producteur3CC implements IVendeurBourse {
 		s.retirerVielleFeve(Feve.F_MQ_BE, quantiteEnT);
 		}
 		else if ( f==Feve.F_BQ) {
-			this.quantiteVenduBourseB.put(Filiere.LA_FILIERE.getEtape(), quantiteEnT);
+			       this.quantiteVenduBourseB.put(Filiere.LA_FILIERE.getEtape(), quantiteEnT);
 			s.retirerVielleFeve(Feve.F_BQ, quantiteEnT);
 		}
 

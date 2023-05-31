@@ -44,33 +44,37 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		double res = 0;
 		if (privilegieCC(f,cours)) {
 		if (f.getGamme()==Gamme.BQ) {if(cours<=this.getCoursmaxBG().getValeur()) {
-													res =(100);}
+													res =(10);}
 		}
-		else {res = 100.0;}
+		else {res = 0.0;}
 		if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxMGL().getValeur()) {
-			res = 100;}}
+			res = 10;}}
 		else {res = 0.0;}
 		if (f.getGamme()==Gamme.MQ) {if(cours<=this.getCoursmaxMG().getValeur()) {
-			res = (100);}}
+			res = (10);}}
 		else {res = 0.0;}
 		if (f.getGamme()==Gamme.BQ && f.isBioEquitable()) {if(cours<=this.getCoursmaxHGL().getValeur()) {
-			res = (100);}}
+			res = (10);}}
 		else {res =0.0;}
 
 		super.journalAchatB.ajouter("on dit qu'on en veut :"+res);
 		return res;}
 		else {
 			if (f.getGamme()==Gamme.BQ) {
-				res= Math.max(0,super.quantBQMax-super.stockFeveBG.getQuantiteTotale()-super.quantiteEnAttente-1000);
+				double quant = Math.min(super.quantBQMax-super.stockFeveBG.getQuantiteTotale()-super.quantiteEnAttente-1000,8000 - super.totalStocksChoco.getValeur());
+				res= Math.max(0,quant);
 			}
 			if (f.getGamme()==Gamme.MQ) {
-				res= Math.max(0,super.quantMQMax-super.stockFeveMG.getQuantiteTotale()-super.quantiteEnAttente-1000);
+				double quant = Math.min(super.quantMQMax-super.stockFeveMG.getQuantiteTotale()-super.quantiteEnAttente-1000,80000 -super.totalStocksChoco.getValeur());
+				res= Math.max(0,quant);
 			}
 			if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {
-				res= Math.max(0,super.quantMQLMax-super.stockFeveMGL.getQuantiteTotale()-super.quantiteEnAttente-1000);
+				double quant = Math.min(super.quantMQLMax-super.stockFeveMGL.getQuantiteTotale()-super.quantiteEnAttente-1000,80000 - super.totalStocksChoco.getValeur());
+				res= Math.max(0,quant);
 			}
 			if (f.getGamme()==Gamme.HQ) {
-				res= Math.max(0,super.quantHQMax-super.stockFeveHGL.getQuantiteTotale()-super.quantiteEnAttente-1000);
+				double quant = Math.min(super.quantHQMax-super.stockFeveHGL.getQuantiteTotale()-super.quantiteEnAttente-1000,80000 -super.totalStocksChoco.getValeur());
+				res= Math.max(0,quant);
 			}
 		return res;
 		}
