@@ -41,24 +41,21 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 			Echeancier echeancier, long cryptogramme, boolean tg) {
 		return 10;
 	}
-	//public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-	//	return contrat.getEcheancier();
-	//}
+	
 		//Auteur : Marzougui Mariem
 		public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-			//+ contrat.getEcheancier().getQuantiteTotale()
 				this.journal_ContratCadre.ajouter("contre prop contrat:"+contrat.toString());
 				if (contrat.getProduit() instanceof ChocolatDeMarque) {
 					ChocolatDeMarque produit = (ChocolatDeMarque) contrat.getProduit();
 					if (produit != null && this.stocks.getStock(produit) != 0.0 ) {
 						double quantiteEnStock = this.stocks.getStock(produit);
 						
-						if (quantiteEnStock  +contrat.getEcheancier().getQuantiteTotale() < 30000.) {
+						if ( quantiteEnStock + contrat.getEcheancier().getQuantiteTotale() < 100000.) {
 							if (Math.random() < 0.9) {
 								this.notificationNouveauContratCadre(contrat);
 								this.journal_ContratCadre.ajouter("effectuation du contrat:"+contrat.toString());
 								
-								this.receptionner(new Lot((IProduit)contrat.getProduit()), contrat);
+								//this.receptionner(new Lot((IProduit)contrat.getProduit()), contrat);
 								return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
 								
 	
@@ -67,16 +64,16 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 								e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut()) / 2.0); // on souhaite livrer deux fois moins lors de la 1ere livraison
 								this.notificationNouveauContratCadre(contrat);
 								this.journal_ContratCadre.ajouter("effectuation du contrat:"+contrat.toString()+contrePropositionPrixAcheteur(contrat));
-								this.receptionner(new Lot((IProduit)contrat.getProduit()), contrat);
+								//this.receptionner(new Lot((IProduit)contrat.getProduit()), contrat);
 								
 								return e;
 							}
 						} else {
-							this.journal_ContratCadre.ajouter("rejet du contrat:"+contrat.toString()+"frileux"+contrat.getProduit()+"    "+quantiteEnStock);
+							this.journal_ContratCadre.ajouter("rejet1 du contrat:"+contrat.toString()+"frileux"+contrat.getProduit()+"    "+quantiteEnStock);
 							return null; // on est frileux : on ne s'engage dans un contrat cadre que si on a toute la quantite en stock (on pourrait accepter même si nous n'avons pas tout car nous pouvons produire/acheter pour tenir les engagements)
 						}
 					} else {
-						this.journal_ContratCadre.ajouter("rejet du contrat:"+contrat.toString()+"on ne vend pas de ce produit"+contrat.getProduit());
+						this.journal_ContratCadre.ajouter("rejet2 du contrat:"+contrat.toString()+"on ne vend pas de ce produit"+contrat.getProduit());
 						return null; // on ne vend pas de ce produit
 					}}else {
 						this.journal_ContratCadre.ajouter("le produit de ce contrat ne correspond pas à une marque de chocolat"+contrat.toString());
@@ -100,7 +97,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	//Auteur : Marzougui Mariem
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		contratsEnCours.add(contrat);
-		this.journal_ContratCadre.ajouter("contrat effectué:"+contrat.toString()+contrePropositionPrixAcheteur(contrat));	
+		this.journal_ContratCadre.ajouter("contrat effectué:"+contrat.toString());//+contrePropositionPrixAcheteur(contrat));	
 	}
 
 
@@ -108,13 +105,14 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	public void next() {
 	    super.next();
 	    
-	    //*
 	    SuperviseurVentesContratCadre sup = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
-	    
+	    for (int k=0; k<3;k++) {
+	   
 	    int i = (int) (Math.random()*(chocolats.size())) ;
 	    ChocolatDeMarque choco = chocolats.get(i);
+	 
 	        List<IVendeurContratCadre> vendeurs = sup.getVendeurs(choco);
-	        Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape()+1,24, 30000.0);
+	        Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape()+1,12, 10000.0);
 	        List<ExemplaireContratCadre> nouveaux_contrats = new ArrayList<ExemplaireContratCadre> ();
 	        if (contratsEnCours != null) {
 	            for (ExemplaireContratCadre c : nouveaux_contrats) {
@@ -131,15 +129,13 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	                }
 	                for (ExemplaireContratCadre c : nouveaux_contrats) {
 	                    for (IVendeurContratCadre vendeur : vendeurs) {
-	                        Echeancier nouveau_echeancier = new Echeancier (c.getEcheancier().getStepFin(),24, 30000.0);
+	                        Echeancier nouveau_echeancier = new Echeancier (c.getEcheancier().getStepFin(),12, 10000.0);
 	                        ExemplaireContratCadre cc =sup.demandeAcheteur(this , vendeur, choco, nouveau_echeancier , this.cryptogramme, true);
 	                    }
 	                }
 	            }
 	        }
-	    
-	    //*/
-	    
+	    }
 	}
 
 		

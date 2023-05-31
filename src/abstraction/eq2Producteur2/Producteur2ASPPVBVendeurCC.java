@@ -88,7 +88,6 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		}
 		this.majListeCC();
 		this.journalCC.ajouter("Contrats Cadre en cours : " + this.contrats);
-		System.out.println(this.getPrixCC(Feve.F_MQ_BE));
 	}
 	
 	/**
