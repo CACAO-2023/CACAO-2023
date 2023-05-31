@@ -105,7 +105,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		//else {
 		return prix;
 	}
-
+//s
 
 
 	//fait par yassine : on négocie en fonction des stocks
