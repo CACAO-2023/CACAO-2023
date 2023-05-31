@@ -110,11 +110,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * negocier un contrat cadre pour ce type de produit).
 	 */
 	public boolean vend(IProduit produit) {
-		if (!peutVendre(produit)) {
-			return false;
-		} else {
-			return this.getEcheancierMax(Filiere.LA_FILIERE.getEtape() + this.nbStepProposition + 1).get(produit).getQuantiteTotale() >= venteMin;
-		}
+		return peutVendre(produit) && this.getEcheancierMax(Filiere.LA_FILIERE.getEtape() + this.nbStepProposition + 1).get(produit).getQuantiteTotale() >= venteMin;
 	}
 	
 	/**
