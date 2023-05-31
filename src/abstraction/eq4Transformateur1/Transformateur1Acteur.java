@@ -58,6 +58,8 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	protected Variable PartDeMarcheBQ;
 	protected Variable PrixMoyF_HQ;
 	protected Variable PrixMoyF_BQ;
+	protected Variable qteHQVendu;
+	protected Variable qteBQVendu;
 
 
 	
@@ -91,6 +93,8 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 		this.PartDeMarcheHQ = new VariablePrivee("Eq4PartDeMarcheHQ","<html>Part de marché sur les ventes de chocolat haute qualité</html>",this,0.0,1.1,0.0);
 		this.PrixMoyF_BQ = new VariablePrivee("Eq4PrixMoyF_BQ","<html>Prix moyen de nos contrat cadre de fève basse qualité</html>",this,0.0,100000.0,0.0);
 		this.PrixMoyF_HQ = new VariablePrivee("Eq4PrixMoyF_HQ","<html>Prix moyen de nos contrat cadre de fève haute qualité</html>",this,0.0,100000.0,0.0);
+		this.qteBQVendu = new VariablePrivee("Eq4qteBQVendu","<html>Quantité de Vccotioi vendu aux clients</html>",this,0.0,100000.0,0.0);
+		this.qteHQVendu = new VariablePrivee("Eq4qteHQVendu","<html>Quantité de Yocttotoa vendu aux clients</html>",this,0.0,100000.0,0.0);
 	}
 	
 	//François Glavatkii
