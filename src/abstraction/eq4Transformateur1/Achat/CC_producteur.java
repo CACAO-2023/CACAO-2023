@@ -154,7 +154,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 	}
 
 	
-	
+	// François et Fouad  	
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		/*double prix=3000.0;
 //		System.out.println(" type produit "+contrat.getProduit());

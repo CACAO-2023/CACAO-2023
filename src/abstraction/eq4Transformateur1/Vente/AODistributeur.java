@@ -28,7 +28,7 @@ public class AODistributeur extends CC_distributeur implements IVendeurAO {
 			if (p.getPrixT()>prix) {
 				propRetenue=p;
 			}
-		}
+		}		
 		return propRetenue;
 	}
 	
