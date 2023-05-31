@@ -83,10 +83,10 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	@Override
 	/**Nathan Salbego*/
 	public double propositionPrix(ExemplaireContratCadre contrat) {
-		int a=5000;
-		int b=5500;
-		int c=6900;
-		int d=8300;
+		int a=2000;
+		int b=2500;
+		int c=2900;
+		int d=3300;
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
 				super.journalVentes.ajouter("Proposition de prix: "+a+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
@@ -112,10 +112,10 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	@Override
 	/**Nathan Salbego*/
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		int a=5000;
-		int b=5500;
-		int c=6900;
-		int d=8300;
+		int a=2000;
+		int b=2500;
+		int c=2900;
+		int d=3300;
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			double i=(Math.random()/10);
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
