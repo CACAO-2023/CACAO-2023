@@ -1,13 +1,11 @@
 package abstraction.eq2Producteur2;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 
 //Code ecrit par Nino
 
 import java.util.List;
-import java.util.Set;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
@@ -24,12 +22,13 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	protected HashMap<Feve, Integer> nbEchecVentePrix = new HashMap<Feve, Integer>(); //Permet de connaitre le nombre de ventes ayant echoue à la suite 
 	protected HashMap<Feve, Boolean> tentativeVente = new HashMap<Feve, Boolean>();  //Permet de savoir si la derniere vente a reussi pour chaque produit
 	protected int nbIterationVentePrix; //Compte le nombre d'appel à contrePropositionPrix pour faire évoluer le prix
-	protected double facteurPrixInit = 1.75;
+	protected double facteurPrixInit = 1.2;
 	protected double venteMin = SuperviseurVentesContratCadre.QUANTITE_MIN_ECHEANCIER;
 	protected int nbStepFidelité = 12;
-	protected int nbStepSuperFidelité = 60;
+	protected int nbStepSuperFidelité = 40;
 	protected int nbStepProposition = 8;
 	protected double facteurTolerance = 0.95; //Facteur de tolérance pour l'acceptation des ventes
+	protected HashMap<IActeur, HashMap<Integer, Boolean>> historiqueFidelite = new HashMap<IActeur, HashMap<Integer, Boolean>>();
 	
 	
 	public Producteur2ASPPVBVendeurCC() {
@@ -46,6 +45,9 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		this.nbEchecVentePrix.put(Feve.F_MQ_BE, 0);
 		this.nbEchecVentePrix.put(Feve.F_HQ_BE, 0);
 		this.nbEchecVentePrix.put(Feve.F_MQ, 0);
+		for(IAcheteurContratCadre ach : ((SuperviseurVentesContratCadre) Filiere.LA_FILIERE.getActeur("Sup."+"CCadre")).getAcheteurs(Feve.F_HQ_BE)) {
+			this.historiqueFidelite.put(ach, new HashMap<Integer, Boolean>());
+		}
 	}
 	
 	/**
@@ -169,7 +171,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 */
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
 		this.nbIterationVentePrix++;
-		double prixPrec = contrat.getListePrix().get(contrat.getListePrix().size() - 2); //Le derneir prix que l'on a proposé
+		double prixPrec = contrat.getListePrix().get(contrat.getListePrix().size() - 2); //Le dernier prix que l'on a proposé
 		if(contrat.getPrix() >= prixPrec) { //Si le prix est supérieur au prix que l'on proposait précédement, on l'accepte dans notre grande gentillesse
 			return contrat.getPrix();
 		}
@@ -197,6 +199,11 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		this.nbEchecVentePrix.put((Feve) contrat.getProduit(), 0);
 		this.getPrixCC().get((Feve) contrat.getProduit()).setValeur(this, this.getPrixCC((Feve) contrat.getProduit())*0.9 + contrat.getPrix()*0.1); //On essaye d'adapter nos prix
 		this.getContrats().add(contrat);
+		Echeancier ech = contrat.getEcheancier();
+		IActeur ach = contrat.getAcheteur();
+		for(int i = ech.getStepDebut(); i<=ech.getStepFin(); i++) {
+			this.historiqueFidelite.get(ach).put(i, true);
+		}
 	}
 	
 	/**
@@ -224,19 +231,22 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	 * @return Retourne un double correspondant au facteur
 	 */
 	private double facteurPrix() {
-		return (this.nbIterationVentePrix-15)*(0.7-this.facteurPrixInit)/15 + 0.7;
+		return (this.nbIterationVentePrix-15)*(0.8-this.facteurPrixInit)/15 + 0.8;
 	}
 	
 	/**
 	 * Methode calculant les avantages du client liés à sa fidélité
+	 * La fidélité se calcule par seuil
 	 * @param act
 	 * @return Retourne un double correspondant au facteur diminuant le prix proposé à cet acteur
 	 */
 	private double facteurFidelite(IActeur act) {
 		int decompte = 0;
-		for(ExemplaireContratCadre cc : this.contrats) {
-			if(cc.getAcheteur().equals(act)) {
-				decompte = decompte + cc.getEcheancier().getNbEcheances();
+		for(int i = Math.max(0, Filiere.LA_FILIERE.getEtape()-50); i<Filiere.LA_FILIERE.getEtape(); i++) {
+			if(this.historiqueFidelite.get(act).get(i) == null) {
+				this.historiqueFidelite.get(act).put(i, false);
+			} else if(this.historiqueFidelite.get(act).get(i)) {
+				decompte++;
 			}
 		}
 		if(decompte >= this.nbStepSuperFidelité) {
@@ -267,9 +277,5 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		for(ExemplaireContratCadre cc : supp) {
 			this.contrats.remove(cc);
 		}
-	}
-	
-	//Méthode pour les tests
-	public static void main(String[] args) {
 	}
 }
