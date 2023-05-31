@@ -23,9 +23,12 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 	
 	protected List<ChocolatDeMarque>chocosProduits;
 	protected double qteTransfo;
+	protected double qteTransfoH;
+	protected double qteTransfoB;
 	protected double aVendreHQ;
 	protected double aVendreBQ;
-	private int multiplicateur;
+	private int multiplicateurB;
+	private int multiplicateurH;
 	
 	public Transformateur1Transformateur() {
 		super();
@@ -49,7 +52,8 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 
 	public void initialiser() {
 		super.initialiser();
-		multiplicateur=0;
+		multiplicateurB=0;
+		multiplicateurH=0;
 	}
 
 	/**
@@ -70,8 +74,8 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		for (ChocolatDeMarque c : this.stockChocoMarque.keySet()) {
 			if (c.getGamme().equals(Gamme.BQ)) {
 				if (this.stockChocoMarque.get(c)<500) {
-					multiplicateur+=1;
-					transfo=500*multiplicateur;
+					multiplicateurB+=1;
+					transfo=500*multiplicateurB;
 				}
 				if(this.stockChocoMarque.get(c)>20000) {
 					transfo=0;
@@ -91,6 +95,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 					this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fb+")->"+this.stockFeves.get(fb));
 					this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cm+")->"+this.stockChocoMarque.get(cm));
 					this.qteTransfo=transfo;
+					this.qteTransfoB=transfo*conversionb;
 				}
 			}
 			
@@ -106,6 +111,10 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		
 		for (ChocolatDeMarque c : this.stockChocoMarque.keySet()) {
 			if (c.getGamme().equals(Gamme.HQ)) {
+				if (this.stockChocoMarque.get(c)<500) {
+					multiplicateurH+=1;
+					transfo=500*multiplicateurH;
+				}
 				if(this.stockChocoMarque.get(c)>20000) {
 					transfoh=0;
 				}
@@ -122,6 +131,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fh+")->"+this.stockFeves.get(fh));
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cm+")->"+this.stockChocoMarque.get(cm));
 			this.qteTransfo+=transfoh;
+			this.qteTransfoH=transfoh*conversion;
 		}
 	}
 	
