@@ -84,8 +84,6 @@ public class Stock extends Transformateur1Acteur{
 	
 	public void next() {
 		super.next();
-		System.out.println("stock de feves :" +this.stockFeves);
-		System.out.println("stock de choco :" +this.stockChocoMarque);
 		this.journal.ajouter("on a stockFeve : "+stockFeves);
 		this.journal.ajouter("=== STOCKS === ");
 		for (Feve f : this.stockFeves.keySet()) {
