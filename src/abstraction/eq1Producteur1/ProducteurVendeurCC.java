@@ -105,10 +105,8 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 
 	@Override
 	public double propositionPrix(ExemplaireContratCadre c) {
-		double p= prixMinAvecMarge((Feve)c.getProduit(), 1)*1.3;
-		if (this.systemefidelite.get(c.getAcheteur())>=10) {
-			p=p*0.9;
-		}
+		double p= prixMinAvecMarge((Feve)c.getProduit(), 1)*2;
+		
 		return p;
 	}
 	
@@ -254,8 +252,12 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	
 	public void UpdateFidelite(ExemplaireContratCadre contrat) {
 		IActeur acteur= contrat.getAcheteur();
+		if (this.systemefidelite.get(acteur)<10) {
 		this.systemefidelite.put(acteur, this.systemefidelite.get(acteur)+1);
-		
+		}
+		else {
+			this.systemefidelite.put(acteur, this.systemefidelite.get(acteur)-9);
+		}
 	}
 	
 	public int OldestStep(IProduit produit) {	    
