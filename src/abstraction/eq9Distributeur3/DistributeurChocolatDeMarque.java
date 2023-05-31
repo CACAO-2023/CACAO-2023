@@ -23,7 +23,8 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 	public double qteVendue_TOT;
 	
 	private double nbr_steps_sans_vente;
-
+	private double nbr_steps_avec_vente;
+	
 
 
 	public DistributeurChocolatDeMarque() {
@@ -87,6 +88,7 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 		if(this.variable_stock_tot.getValeur() != 0) {
 			
 			if(100*qteVendue_TOT/this.variable_stock_tot.getValeur() < 5.0) {
+				nbr_steps_avec_vente = 0;
 				nbr_steps_sans_vente += 1;
 				if(nbr_steps_sans_vente == 4) {
 					// si on ne fait aucune vente et qu'il reste du stock, on casse les prix
@@ -100,12 +102,23 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 					// si on ne fait aucune vente et qu'il reste du stock, on casse les prix
 					this.stock.liquider();
 					this.journal_coefs.ajouter("On liquide le stock");
+					this.acheter = false;
+					journal_STOP.ajouter("OFF");
+					
 					
 				}
 				
 			}
-			else {
+			else if(100*qteVendue_TOT/this.variable_stock_tot.getValeur() > 10.0){
 				nbr_steps_sans_vente = 0;
+				nbr_steps_avec_vente += 1;
+			    /*
+				if(nbr_steps_avec_vente > 3 && this.acheter == false) {
+					this.acheter = true;
+					journal_STOP.ajouter("ON suite à la vente de " + 100*qteVendue_TOT/this.variable_stock_tot.getValeur() + " du stock");
+
+				}
+				*/
 			}
 			
 		}

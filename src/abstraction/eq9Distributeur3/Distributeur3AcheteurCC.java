@@ -37,6 +37,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	private double stockMQ;
 	private double stockMQBE;
 	private double stockHQ;
+	boolean acheter;
 	//faire une méthode qui connait le prix d'achat moyen d'un chocolat
 
 	public Distributeur3AcheteurCC() {//ChocolatDeMarque[] chocos, double[] stocks) {
@@ -106,7 +107,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 			}}
 
 		SuperviseurVentesContratCadre supCCadre = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
-		if (chocolats.size()>0) {
+		if (chocolats.size()>0 && this.acheter == true) {
 
 			for (int i=0; i<chocolats.size();i++) {
 				List<IVendeurContratCadre> vendeursChocolat = supCCadre.getVendeurs(chocolats.get(i));
@@ -441,7 +442,7 @@ public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 	prix = contrat.getPrix();
 	//System.out.println(" ajout du prix dans laprixencours "+contrat.getPrix());
 	prixEnCours.put(contrat.getVendeur(), contrat.getPrix());
-	if (pasAchete) {
+	if (pasAchete  && this.acheter == false) {
 		return 0.0;
 	}
 	journal_ventes.ajouter("4proposition d'achat du chocolat" + contrat.getProduit()+"au prix à la tonne de" + prix);

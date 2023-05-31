@@ -31,6 +31,7 @@ public class Distributeur3Acteur implements IActeur{
 	protected Journal journal_coefs;
 	protected Journal journal_OA;
 	protected Journal journal_AO;
+	protected Journal journal_STOP;
 
 	protected Journal journal_prix_vente;
 	
@@ -55,12 +56,12 @@ public class Distributeur3Acteur implements IActeur{
 	protected Variable variable_qtte_vendue_MQ;
 	protected Variable variable_qtte_vendue_TOT;
 	protected Variable variable_perc_vendue;
+	
 
 
 	protected Variable quanitite_cible_totale_OA;
 	protected Variable variable_CA;
 	protected Distributeur3AcheteurOA d;
-	protected DistributeurChocolatDeMarque dcdm;
 	
 	public Double qte_cible_OA_TOT;
 	public HashMap<Double, Double> coef_prix_vente;
@@ -92,6 +93,8 @@ public class Distributeur3Acteur implements IActeur{
 
 
 		this.journal_stock = new Journal(this.getNom()+" stock", this);
+		this.journal_STOP = new Journal(this.getNom()+" STOP", this);
+
 		this.prixMoyen = new HashMap<ChocolatDeMarque, Double[]>();
 		
 		this.prix_tonne_vente = new HashMap<ChocolatDeMarque, Double> ();
@@ -124,7 +127,7 @@ public class Distributeur3Acteur implements IActeur{
 		coef_prix_vente.put(0.0, 5.0);
 		coef_prix_vente.put(1.0, 3.0);
 		coef_prix_vente.put(2.0, 2.0);
-
+		journal_STOP.ajouter("ON");
 		
 		// william désormais on n'utilise plus une liste de String avec les chocolats qui nous intéressent, on sélectionne seulement à la gamme
 		
@@ -144,7 +147,6 @@ public class Distributeur3Acteur implements IActeur{
 			case BQ : prixGamme=15000;break;
 
 			}
-			
 			this.prix_tonne_vente.put(c, prixGamme+(c.isBioEquitable()? 5000 : 0));
 		}
 		
@@ -313,6 +315,7 @@ public class Distributeur3Acteur implements IActeur{
 		res.add(journal_stock);
 		res.add(journal_coefs);
 		res.add(journal_AO);
+		res.add(journal_STOP);
 
 		res.add(journal_OA);
 		res.add(journal_prix_vente);
