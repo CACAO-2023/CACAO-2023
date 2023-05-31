@@ -28,8 +28,10 @@ public class Distributeur3Acteur implements IActeur{
 	protected Journal journal_operationsbancaires;
 	protected Journal journal_stock;
 	protected Journal journal_activitegenerale;
-	protected Journal journal_AO;
+	protected Journal journal_coefs;
 	protected Journal journal_OA;
+	protected Journal journal_AO;
+
 	protected Journal journal_prix_vente;
 	
 	
@@ -48,15 +50,26 @@ public class Distributeur3Acteur implements IActeur{
 	protected Variable variable_stock_HQ_BE;
 	protected Variable variable_stock_MQ_BE;
 	protected Variable variable_stock_MQ;
+	protected Variable variable_qtte_vendue_HQ_BE;
+	protected Variable variable_qtte_vendue_MQ_BE;
+	protected Variable variable_qtte_vendue_MQ;
+	protected Variable variable_qtte_vendue_TOT;
+	protected Variable variable_perc_vendue;
+
 
 	protected Variable quanitite_cible_totale_OA;
 	protected Variable variable_CA;
 	protected Distributeur3AcheteurOA d;
+	protected DistributeurChocolatDeMarque dcdm;
 	
 	public Double qte_cible_OA_TOT;
+	public HashMap<Double, Double> coef_prix_vente;
+	
 	
 	
 	public Distributeur3Acteur() {
+		
+		
 
 		this.chocosProduits = new LinkedList<ChocolatDeMarque>();
 		this.chocolats = new LinkedList<ChocolatDeMarque>();
@@ -71,8 +84,10 @@ public class Distributeur3Acteur implements IActeur{
 		this.journal_achats = new Journal(this.getNom()+" achats", this);
 		this.journal_operationsbancaires = new Journal(this.getNom()+" operations", this);
 		this.journal_activitegenerale = new Journal(this.getNom()+" activites", this);
-		this.journal_AO = new Journal(this.getNom()+" AO", this);
+		this.journal_coefs = new Journal(this.getNom()+" coefs ", this);
 		this.journal_OA = new Journal(this.getNom()+" OA", this);
+		this.journal_AO = new Journal(this.getNom()+" AO", this);
+
 		this.journal_prix_vente = new Journal(this.getNom() + " prix vente ",this);
 
 
@@ -85,6 +100,7 @@ public class Distributeur3Acteur implements IActeur{
 		
 		
 		qte_cible_OA_TOT = 0.0;
+		coef_prix_vente = new HashMap<Double, Double>();
 		
 		quanitite_cible_totale_OA  = new VariablePrivee("Eq9QteCibleOA", "<html>Quantite ciblée (à atteindre) via les OA</html>",this, 0.0, 1000000.0, 0.0);
 		variable_CA = new VariablePrivee("Eq9_Chiffre_Affaire_(Mrd€)","<html>Chiffre d'Affaire</html>",this,0.0,10000000,0.0);
@@ -92,11 +108,24 @@ public class Distributeur3Acteur implements IActeur{
 		variable_stock_HQ_BE = new VariablePrivee("Eq9_Stock_HQ_BE", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
 		variable_stock_MQ_BE = new VariablePrivee("Eq9_Stock_MQ_BE", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
 		variable_stock_MQ = new VariablePrivee("Eq9_Stock_MQ", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
-
 		
+		variable_qtte_vendue_HQ_BE = new VariablePrivee("Eq9_Qtte_Vendue_HQ_BE", "<html>Quantite vendue à ce step de HQ BE</html>",this, 0.0, 1000000.0, 0.0);
+		variable_qtte_vendue_MQ_BE = new VariablePrivee("Eq9_Qtte_Vendue_MQ_BE", "<html>Quantite vendue à ce step de MQ BE</html>",this, 0.0, 1000000.0, 0.0);
+		variable_qtte_vendue_MQ= new VariablePrivee("Eq9_Qtte_Vendue_MQ", "<html>Quantite vendue à ce step de MQ</html>",this, 0.0, 1000000.0, 0.0);
+
+		variable_qtte_vendue_TOT = new VariablePrivee("Eq9_Qtte_Vendue_TOT", "<html>Quantite vendue à ce step</html>",this, 0.0, 1000000.0, 0.0);
+	
+		variable_perc_vendue = new VariablePrivee("Eq9_%_Vendue_TOT", "<html>Pourcentage de stock vendu à ce step</html>",this, 0.0, 1000000.0, 0.0);
+
 	}
 	
 	public void initialiser() {
+		
+		coef_prix_vente.put(0.0, 5.0);
+		coef_prix_vente.put(1.0, 3.0);
+		coef_prix_vente.put(2.0, 2.0);
+
+		
 		// william désormais on n'utilise plus une liste de String avec les chocolats qui nous intéressent, on sélectionne seulement à la gamme
 		
 		CA_step = 0.0;
@@ -138,6 +167,11 @@ public class Distributeur3Acteur implements IActeur{
 			stock.ajoutQte(chocolats.get(j), 8000);
 		}
 		
+		variable_stock_tot.setValeur(this, stock.qteStockTOT(), this.cryptogramme);
+		variable_stock_HQ_BE.setValeur(this, stock.qteStock_HQ_BE(), this.cryptogramme);
+		variable_stock_MQ_BE.setValeur(this, stock.qteStock_MQ_BE(), this.cryptogramme);
+		variable_stock_MQ.setValeur(this, stock.qteStock_MQ(), this.cryptogramme);
+		
 		
 		
 		
@@ -171,12 +205,7 @@ public class Distributeur3Acteur implements IActeur{
 		
 		quanitite_cible_totale_OA.setValeur(this,qte_cible_OA_TOT, this.cryptogramme);
 		variable_CA.setValeur(this,CA_step/1000000000, this.cryptogramme);
-		
-		variable_stock_tot.setValeur(this, stock.qteStockTOT(), this.cryptogramme);
-		variable_stock_HQ_BE.setValeur(this, stock.qteStock_HQ_BE(), this.cryptogramme);
-		variable_stock_MQ_BE.setValeur(this, stock.qteStock_MQ_BE(), this.cryptogramme);
-		variable_stock_MQ.setValeur(this, stock.qteStock_MQ(), this.cryptogramme);
-
+	
 		
 
 	}
@@ -255,7 +284,14 @@ public class Distributeur3Acteur implements IActeur{
 		res.add(variable_stock_HQ_BE);
 		res.add(variable_stock_MQ_BE);
 		res.add(variable_stock_MQ);
+		
+		res.add(variable_qtte_vendue_HQ_BE);
+		res.add(variable_qtte_vendue_MQ_BE);
+		res.add(variable_qtte_vendue_MQ);
+		res.add(variable_qtte_vendue_TOT);
+
 		res.add(quanitite_cible_totale_OA);
+		res.add(variable_perc_vendue);
 		return res;
 		
 	}
@@ -275,7 +311,9 @@ public class Distributeur3Acteur implements IActeur{
 		res.add(journal_operationsbancaires);
 		res.add(journal_activitegenerale);
 		res.add(journal_stock);
+		res.add(journal_coefs);
 		res.add(journal_AO);
+
 		res.add(journal_OA);
 		res.add(journal_prix_vente);
 
