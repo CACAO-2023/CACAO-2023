@@ -254,8 +254,12 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 	
 	public void UpdateFidelite(ExemplaireContratCadre contrat) {
 		IActeur acteur= contrat.getAcheteur();
+		if (this.systemefidelite.get(acteur)<10) {
 		this.systemefidelite.put(acteur, this.systemefidelite.get(acteur)+1);
-		
+		}
+		else {
+			this.systemefidelite.put(acteur, this.systemefidelite.get(acteur)-9);
+		}
 	}
 	
 	public int OldestStep(IProduit produit) {	    
