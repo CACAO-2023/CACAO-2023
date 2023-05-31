@@ -134,10 +134,6 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 					}
 				}
 			}
-		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE,"aVendreHQ : "+aVendreHQ);
-		this.journal.ajouter(COLOR_LLGRAY, COLOR_GREEN,"arriverHQ : "+arriverHQ);
-		this.journal.ajouter(COLOR_LLGRAY, COLOR_LBLUE,"aVendreBQ : "+aVendreBQ);
-		this.journal.ajouter(COLOR_LLGRAY, COLOR_GREEN,"arriverBQ : "+arriverBQ);
 		}
 	
 	public boolean vend(IProduit produit) {
