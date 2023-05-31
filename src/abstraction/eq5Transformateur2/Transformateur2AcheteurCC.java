@@ -68,12 +68,13 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	@Override
 	//Mathis DOUTRE
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-				if (contrat.getQuantiteTotale()>stockFeves.get(contrat.getProduit())) {
-				return null;}
-				else { return contrat.getEcheancier(); }
-			}
-	
-		/*double somme = (this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE));
+		if (contrat.getQuantiteTotale()>stockFeves.get(contrat.getProduit())) {
+			
+			return null;}
+		else { return contrat.getEcheancier(); }
+	}
+
+	/*double somme = (this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE));
 		if (somme < 2000.0) {
 			double prixMax = 0;// Prix maximum acceptable
 			if (contrat.getProduit() == Feve.F_MQ ) {
@@ -116,28 +117,17 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 
 
 
-	//Par Mathis DOUTRE
-
+	//Par Wiem LABBAOUI
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		double somme = (this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE));
-		//double stock = stockFeves.get(contrat.getProduit());
 		double prix = contrat.getPrix();
-		if (somme < 2000.0) {
-		
-		if ((contrat.getProduit() == Gamme.MQ)&&(contrat.getEcheancier().getQuantiteTotale()>600)) {
+		IProduit produit= (IProduit)contrat.getProduit();
+		if ((((Feve)produit).getGamme() == Gamme.MQ) &&(contrat.getEcheancier().getQuantiteTotale()>600)) {
 			prix = (2800+1500)*1.1*this.stockFeves.get(contrat.getProduit()); }
-		else if ((contrat.getProduit() == "Maison Doutre")&&(contrat.getEcheancier().getQuantiteTotale()>200)) {
-			prix = (2800+11800)*1.1*this.stockFeves.get(contrat.getProduit());
-		}
-		//double prix = contrat.getPrix();
-
-		//if(prix >= nvprix) {
-			//return prix;
-		//} 
-		//else {
-			return prix;}
+		else if ((((((Feve)produit).getGamme() == Gamme.HQ)&& (((Feve)produit).isBioEquitable()) && (contrat.getEcheancier().getQuantiteTotale()>200)))) {
+			prix = (2800+11800)*1.1*this.stockFeves.get(contrat.getProduit());}
 		return prix;}
-		/*double dernierPrix = contrat.getPrix();
+
+	/*double dernierPrix = contrat.getPrix();
 		double soldeDisponible = super.getSolde(); 
 		double proposition = 0;
 
@@ -167,24 +157,27 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 
 		// Retourne la proposition de prix
 		return proposition;
-*/
-		
+	 */
+
 
 
 
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method
+		IProduit produit= (IProduit)contrat.getProduit();
 		this.journalAchats.ajouter(COLOR_LLGRAY, Color.MAGENTA, " CCA : Nouveau CC conclu : PRODUIT ET QT TOTALE = "+
 				+ contrat.getQuantiteTotale()+" " +contrat.getProduit()+
 				", VENDEUR = "+contrat.getVendeur()+ ", PRIX = "+contrat.getPrix());
-		if (contrat.getProduit() == Feve.F_MQ) {
+		if (((Feve)produit).getGamme() == Gamme.MQ){
 			ContratsAcheteurMQ.add(contrat);
 		}
-		else if (contrat.getProduit() == Feve.F_HQ_BE ) {
+		else if ((((Feve)produit).getGamme() == Gamme.HQ)&& (((Feve)produit).isBioEquitable())) {
 			ContratsAcheteurHQBE.add(contrat);}
 
 	}
+	
+	
 	//réussite des négociations sur le contrat précisé en paramètre dans tous les cas 
 
 	@Override
@@ -192,7 +185,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		// TODO Auto-generated method stub
 		IProduit produit= lot.getProduit();
 		double quantite = lot.getQuantiteTotale();
-		if (contrat == null ) { this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "TROP DE FEVES")
+		if (contrat == null ) { this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "TROP DE STOCK FEVES")
 			;}
 		else if (produit instanceof Feve) {
 			if (this.stockFeves.keySet().contains(produit)) {
@@ -208,7 +201,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 
 	public ExemplaireContratCadre getContrat(Feve produit) {
 		double somme = (this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE));
-		if (somme < 2000.0) {
+		if ((produit instanceof Feve) && (somme < 2000.0)) {
 
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche vendeur pour " + produit);
 			List<IVendeurContratCadre> vendeurs = superviseurVentesCC.getVendeurs(produit);
