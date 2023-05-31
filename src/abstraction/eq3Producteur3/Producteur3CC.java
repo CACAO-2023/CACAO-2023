@@ -40,8 +40,8 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
 
         // Initialisation des HashMaps. Au début tous nos acheteurs ont la même fiabilité.
-        Double PRIX_DEPART_MQ = 5000.0; //10000 avant, mais des équipes ne négocient pas, donc fixe
-        Double PRIX_DEPART_HQ = 10000.0; //30000 avant, mais des équipes ne négocient pas, donc fixe
+        Double PRIX_DEPART_MQ = 5000.0; //10000 avant, mais des équipes ne negocient pas, donc fixe a un prix défini entre les producteurs et les transformateurs
+        Double PRIX_DEPART_HQ = 10000.0; //30000 avant, idem
 
         List<IAcheteurContratCadre> acheteurs = new LinkedList<IAcheteurContratCadre>();
 		List<IActeur> acteurs = Filiere.LA_FILIERE.getActeursSolvables();
@@ -124,7 +124,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
 
     /**
      * Returns the initial price we will propose to the buyer.
-     * Does not increase the price because some teams just straight out do not negotiate and will keep buying at the increased price
+     * Does not increase the price because some teams do not negotiate and will keep buying at the increased price, with prices not having an upper limit
      * @param acheteur The buyer we want to sell to
      * @param feve The type of beans we want to sell
      * @return The price we propose to the buyer, based on the type of beans and the buyer's last agreed price
@@ -133,11 +133,13 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     public double propositionPrixIntial(IAcheteurContratCadre acheteur, Feve feve) {
         // ! Nous ferons toujours monter un peu le prix au début des négociations pour s'assurer que notre prix ne baisse pas inéxorablement.
         if (feve == Feve.F_MQ_BE) {
+        	// No negotiation
             // double price = Math.max(this.getPrixTonne() /** 1.2*/ , this.acheteursMQprix.get(acheteur) /** 1.1*/);
         	double price = 5000;
             this.acheteursMQprix.put(acheteur, price);
             return price;
         } else {
+        	// No negotiation
             // double price = Math.max(this.getPrixTonne() /* * 1.4*/, this.acheteursHQprix.get(acheteur) /** 1.3*/);
         	double price = 10000;
             this.acheteursHQprix.put(acheteur, price);

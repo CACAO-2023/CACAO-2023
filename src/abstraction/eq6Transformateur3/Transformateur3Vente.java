@@ -156,11 +156,12 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		
 	}
 	 
-	
+	/**Nathan Salbego*/
 	public void initialiser() {
 		super.initialiser();
 		this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
 	}
+	/**Nathan Salbego*/
 	public void rechercheContrat(IProduit produit) {
 		if (superviseur != null) {
 		List<IAcheteurContratCadre> acheteurs = superviseur.getAcheteurs(produit);
@@ -207,10 +208,11 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		double livre = Math.min(super.getLotChocolat(produit).getQuantiteTotale(), quantite);
 		super.journalVentes.ajouter("On livre : "+livre+"de : "+((ChocolatDeMarque)produit).getMarque());
 		if (livre>0.0) {
-			super.retirerChocolat((ChocolatDeMarque)produit, livre);//Attention il faut que cela soit possible; verifier la quantité
+			//if (super.estUnDeNosChoco((ChocolatDeMarque)produit)){
+			double res = super.retirerChocolat((ChocolatDeMarque)produit, livre);//Attention il faut que cela soit possible; verifier la quantité
 		
-		
-		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); 
+		if (res>0) {
+		lot.ajouter(Filiere.LA_FILIERE.getEtape(), res); }
 		return lot;}
 		else {
 			super.journalVentes.ajouter("On ne livre pas");
