@@ -61,19 +61,19 @@ public class Transformateur3AchatB extends Transformateur3AchatCC implements IAc
 		return res;}
 		else {
 			if (f.getGamme()==Gamme.BQ) {
-				double quant = Math.min(super.quantBQMax-super.stockFeveBG.getQuantiteTotale()-super.quantiteEnAttente-1000,8000 - super.totalStocksChoco.getValeur());
+				double quant = Math.min(super.quantBQMax-super.stockFeveBG.getQuantiteTotale()-super.quantiteEnAttente-1000,4000 - super.totalStocksChoco.getValeur());
 				res= Math.max(0,quant);
 			}
 			if (f.getGamme()==Gamme.MQ) {
-				double quant = Math.min(super.quantMQMax-super.stockFeveMG.getQuantiteTotale()-super.quantiteEnAttente-1000,80000 -super.totalStocksChoco.getValeur());
+				double quant = Math.min(super.quantMQMax-super.stockFeveMG.getQuantiteTotale()-super.quantiteEnAttente-1000,40000 -super.totalStocksChoco.getValeur());
 				res= Math.max(0,quant);
 			}
 			if (f.getGamme()==Gamme.MQ && f.isBioEquitable()) {
-				double quant = Math.min(super.quantMQLMax-super.stockFeveMGL.getQuantiteTotale()-super.quantiteEnAttente-1000,80000 - super.totalStocksChoco.getValeur());
+				double quant = Math.min(super.quantMQLMax-super.stockFeveMGL.getQuantiteTotale()-super.quantiteEnAttente-1000,40000 - super.totalStocksChoco.getValeur());
 				res= Math.max(0,quant);
 			}
 			if (f.getGamme()==Gamme.HQ) {
-				double quant = Math.min(super.quantHQMax-super.stockFeveHGL.getQuantiteTotale()-super.quantiteEnAttente-1000,80000 -super.totalStocksChoco.getValeur());
+				double quant = Math.min(super.quantHQMax-super.stockFeveHGL.getQuantiteTotale()-super.quantiteEnAttente-1000,40000 -super.totalStocksChoco.getValeur());
 				res= Math.max(0,quant);
 			}
 		return res;
