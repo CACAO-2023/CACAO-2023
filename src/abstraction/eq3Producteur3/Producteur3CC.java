@@ -235,7 +235,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     @Override
     public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
         Echeancier echeancier = contrat.getEcheancier();
-        if (this.getAvailableQuantity((Feve)contrat.getProduit()) <= 100) {
+        if (this.getAvailableQuantity((Feve)contrat.getProduit()) <= 200) {
             return null;
         }
 
@@ -343,10 +343,10 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
 
 
         for (int i = 0; i < 5; i++) {
-            if (this.getAvailableQuantity(Feve.F_HQ_BE) > 100) {
+            if (this.getAvailableQuantity(Feve.F_HQ_BE) > 200) {
                 this.getContractForProduct(Feve.F_HQ_BE);
             }
-            if (this.getAvailableQuantity(Feve.F_MQ_BE) > 100) {
+            if (this.getAvailableQuantity(Feve.F_MQ_BE) > 200) {
                 this.getContractForProduct(Feve.F_MQ_BE);
             }
         }
