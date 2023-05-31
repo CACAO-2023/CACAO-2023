@@ -73,7 +73,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		double transfo = (int) (Math.min(this.stockFeves.get(fb), Math.random()*1000+(aVendreBQ)/1.58));
 		for (ChocolatDeMarque c : this.stockChocoMarque.keySet()) {
 			if (c.getGamme().equals(Gamme.BQ)) {
-				if (this.stockChocoMarque.get(c)<500) {
+				if (this.stockChocoMarque.get(c)<500 && this.stockFeves.get(Feve.F_BQ)>500*(multiplicateurB+1)) {
 					multiplicateurB+=1;
 					transfo=500*multiplicateurB;
 				}
@@ -111,7 +111,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		
 		for (ChocolatDeMarque c : this.stockChocoMarque.keySet()) {
 			if (c.getGamme().equals(Gamme.HQ)) {
-				if (this.stockChocoMarque.get(c)<500) {
+				if (this.stockChocoMarque.get(c)<500 && this.stockFeves.get(Feve.F_HQ_BE)>500*(multiplicateurH+1)) {
 					multiplicateurH+=1;
 					transfo=500*multiplicateurH;
 				}

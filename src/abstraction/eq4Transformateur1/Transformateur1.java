@@ -92,9 +92,11 @@ public class Transformateur1 extends VendeurOA implements IFabricantChocolatDeMa
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(cm+"", 15)+" = "+this.stockChocoMarque.get(cm));
 			if (cm.getGamme().equals(Gamme.BQ)) {
 				this.PartDeMarcheBQ.setValeur(this, (Filiere.LA_FILIERE.getVentes(cm, etape))/venteTotB, this.cryptogramme);
+				this.qteBQVendu.setValeur(this,Filiere.LA_FILIERE.getVentes(cm, etape),this.cryptogramme);
 			}
 			if (cm.getGamme().equals(Gamme.HQ)) {
 				this.PartDeMarcheHQ.setValeur(this, (Filiere.LA_FILIERE.getVentes(cm, etape))/venteTotH, this.cryptogramme);
+				this.qteHQVendu.setValeur(this,Filiere.LA_FILIERE.getVentes(cm, etape),this.cryptogramme);
 			}
 		}
 	}
