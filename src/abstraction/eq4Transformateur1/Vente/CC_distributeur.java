@@ -269,6 +269,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 				}
 				prixMoy = (prixMoy/quant)/1.06;
 				prixMoyHQ = prixMoy;
+				this.PrixMoyF_HQ.setValeur(this, prixMoy, this.cryptogramme);
 			}
 			if (((ChocolatDeMarque) produit).getMarque()=="Yocttotoa") {
 				for (ExemplaireContratCadre c : this.ContratEnCours_F_BQ) {
@@ -279,6 +280,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 				}
 				prixMoy = (prixMoy/quant)/1.58;
 				prixMoyBQ = prixMoy;
+				this.PrixMoyF_BQ.setValeur(this, prixMoy, this.cryptogramme);
 			}
 			double coutStock = 4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur();
 			double coutTransfo = 5;
