@@ -23,9 +23,13 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
     protected Lot stockFeveMGL;// feve moyenne gamme labelisée
     protected Lot stockFeveHGL;// feve haute gamme labelisée
     protected Lot stockChocolatBG; // Chocolat bas gamme
+    protected Variable graphChocoBG;
     protected Lot stockChocolatMG; // Chocolat moyenne gamme
+    protected Variable graphChocoMG;
     protected Lot stockChocolatMGL; // Chocolat moyenne gamme labelisée
+    protected Variable graphChocoMGL;
     protected Lot stockChocolatHGL; // Chocolat haute gamme labélisée
+    protected Variable graphChocoHGL;
     protected List<ChocolatDeMarque> stockProduit;
     private int dureePeremption = 6; 
 
@@ -46,6 +50,10 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
       this.stockChocolatMGL = new Lot(new ChocolatDeMarque(Chocolat.C_MQ_BE,"chokchoco bio",super.pourcentageCacaoMGL,super.pourcentageRSE));
       this.stockChocolatHGL = new Lot(new ChocolatDeMarque(Chocolat.C_HQ_BE,"Choc",super.pourcentageCacaoHG,super.pourcentageRSE));
       this.stockProduit = new ArrayList<ChocolatDeMarque>();
+      this.graphChocoBG = new Variable ("quantite choco BG","quantite dans le stock de chocolat BG",this,0.0,1000000,this.stockChocolatBG.getQuantiteTotale());
+      this.graphChocoMG = new Variable ("quantite choco MG","quantite dans le stock de chocolat MG",this,0.0,1000000,this.stockChocolatMG.getQuantiteTotale());
+      this.graphChocoMGL = new Variable ("quantite choco MGL","quantite dans le stock de chocolat MGL",this,0.0,1000000,this.stockChocolatMGL.getQuantiteTotale());
+      this.graphChocoHGL = new Variable ("quantite choco HGL","quantite dans le stock de chocolat HGL",this,0.0,1000000,this.stockChocolatHGL.getQuantiteTotale());
   }
   /**Mouhamed SOW*/
   public void ajouterFeve(Lot l) {
@@ -287,6 +295,10 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
    */
   public List<Variable> getIndicateurs() {
 		List<Variable> res = super.getIndicateurs();
+		res.add(this.graphChocoBG);
+		res.add(this.graphChocoMG);
+		res.add(this.graphChocoMGL);
+		res.add(this.graphChocoHGL);
 		return res;}
   
   
@@ -327,9 +339,13 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   		super.journalStock.ajouter(" La quantité de feve MGL est :"+ this.stockFeveMGL.getQuantiteTotale() );
   		super.journalStock.ajouter(" La quantité de feve HGL est :"+ this.stockFeveHGL.getQuantiteTotale() );
   		super.journalStock.ajouter(" La quantité de Chocolat BG est :"+ this.stockChocolatBG.getQuantiteTotale() );
+  		this.graphChocoBG.setValeur(this, this.stockChocolatBG.getQuantiteTotale());
   		super.journalStock.ajouter(" La quantité de Chocolat MG est :"+ this.stockChocolatMG.getQuantiteTotale() );
+  		this.graphChocoMG.setValeur(this, this.stockChocolatMG.getQuantiteTotale());
   		super.journalStock.ajouter(" La quantité de Chocolat MGL est :"+ this.stockChocolatMGL.getQuantiteTotale() );
+  		this.graphChocoMGL.setValeur(this, this.stockChocolatMGL.getQuantiteTotale());
   		super.journalStock.ajouter(" La quantité de Chocolat HGL est :"+ this.stockChocolatHGL.getQuantiteTotale() );
+  		this.graphChocoHGL.setValeur(this, this.stockChocolatHGL.getQuantiteTotale());
   		double coutFeve=super.totalStocksFeves.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() ;
   		double coutChoco=super.totalStocksFeves.getValeur(date)*4*Filiere.LA_FILIERE.getParametre("cout moyen stockage producteur").getValeur() ;
   		if(coutFeve>0) {
