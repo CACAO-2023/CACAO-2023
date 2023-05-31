@@ -123,7 +123,6 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 		super.next();
 		double somme = this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE);
 		
-		System.out.println("STOCK TOTAL DE FEVES "+somme);
 		this.journal.ajouter("=== Step numéro "+ Filiere.LA_FILIERE.getEtape()+" ===");
 		
 		this.journal.ajouter("=== STOCK === ");
