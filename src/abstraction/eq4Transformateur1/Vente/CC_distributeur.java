@@ -76,7 +76,6 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 					}
 				}
 				for (ChocolatDeMarque cm : produits) {
-<<<<<<< HEAD
 					if (cm.getGamme().equals(Gamme.HQ)) {
 						arriverHQ=0;
 						for (ExemplaireContratCadre c : ContratEnCours_F_HQ ) {
@@ -102,47 +101,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 										this.ContratEnCours_C_BQ.add(contrat1);
 									}
 								}
-=======
-					List<IAcheteurContratCadre> acheteurs = superviseurVentesCC.getAcheteurs(cm);
-					this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLACK, " CCV : tentative de vente de "+cm+" aupres de "+acheteurs);
-					for (IAcheteurContratCadre acheteur : acheteurs) {
-						if (!acheteur.equals(this)) {
-							if (cm.getGamme().equals(Gamme.BQ)){
-								double quantite = 0;
-								if (ventetotB/2>100) {
-									quantite = ventetotB/2;
-								}
-								else {
-									quantite = 101;
-								}
-								Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, quantite);
-								this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV_BQ : tentative de vente aupres de "+acheteurs);
-								ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeVendeur(acheteur, this, cm, echeancier, this.cryptogramme, false);
-								if (contrat1!=null) {
-									this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV_BQ : contrat signe = "+contrat1);
-									this.ContratEnCours_C_BQ.add(contrat1);
-
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 							}
-							}
-							if (cm.getGamme().equals(Gamme.HQ)){
-								double quantiteH = 0;
-								if (ventetotH/2>100) {
-									quantiteH = ventetotH/2;
-								}
-								else {
-									quantiteH = 101;
-								}
-								Echeancier echeancierB = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, quantiteH);
-								this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV_HQ : tentative d'achat aupres de "+acheteurs);
-								ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeVendeur(acheteur, this, cm, echeancierB, this.cryptogramme, false);
-								if (contrat2!=null) {
-									this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV_HQ : contrat signe = "+contrat2);
-									this.ContratEnCours_C_HQ.add(contrat2);
-							}
-							}
-						}
-					}
 						}
 					}
 					else if (cm.getGamme().equals(Gamme.BQ)) {	
@@ -175,10 +134,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 					}
 				}
 			}
-<<<<<<< HEAD
 		}
-=======
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 	
 	public boolean vend(IProduit produit) {
 		boolean res=false;
@@ -286,7 +242,6 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		this.journal.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nouveau cc conclu "+contrat);
 		if (((Chocolat) contrat.getProduit()).getGamme().equals(Gamme.HQ)){
 			this.ContratEnCours_F_HQ.add(contrat);
-<<<<<<< HEAD
 			this.aVendreHQ+=contrat.getQuantiteALivrerAuStep();
 		}
 		if (((Chocolat) contrat.getProduit()).getGamme().equals(Gamme.BQ)){
@@ -294,13 +249,6 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 			this.aVendreBQ+=contrat.getQuantiteALivrerAuStep();
 		}
 		} 
-=======
-		}
-		if (((Chocolat) contrat.getProduit()).getGamme().equals(Gamme.BQ)){
-			this.ContratEnCours_F_BQ.add(contrat);
-		} 
-	}
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 	
 	/**
 	 * @author fouad
@@ -312,7 +260,6 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 		double prixMoy=0;
 		double quant=0;
 		if (produit instanceof ChocolatDeMarque) {
-<<<<<<< HEAD
 			if (((ChocolatDeMarque) produit).getMarque()=="Vccotioi") {
 				for (ExemplaireContratCadre c : this.ContratEnCours_F_HQ) {
 					if (((Feve) c.getProduit())==Feve.F_HQ_BE) {
@@ -322,14 +269,6 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 				}
 				prixMoy = (prixMoy/quant)/1.06;
 				prixMoyHQ = prixMoy;
-=======
-			produit = ((ChocolatDeMarque)produit).getChocolat();
-		}
-		if (produit instanceof Chocolat) {
-			switch ((Chocolat)produit) {
-			case C_HQ_BE   : prix= 50000;break;
-			case C_BQ      : prix= 15000;break;
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 			}
 			if (((ChocolatDeMarque) produit).getMarque()=="Yocttotoa") {
 				for (ExemplaireContratCadre c : this.ContratEnCours_F_BQ) {
@@ -357,7 +296,6 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 	}
 
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-<<<<<<< HEAD
 		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : "+contrat.getAcheteur()+"ListePrix :"+contrat.getListePrix());
 		double prixInit = 0;
 		if (contrat.getListePrix().size()==0) {
@@ -369,10 +307,6 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 			}
 		}
 		prixInit=contrat.getListePrix().get(contrat.getListePrix().size()-2);
-=======
-		this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : "+contrat.getListePrix());
-		double prixInit=contrat.getListePrix().get(contrat.getListePrix().size()-2);
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 		double prix = contrat.getPrix();
 		if ((prix > prixInit) || (prix>0.0 && (prixInit-prix)/prixInit<=0.049)) {
 			return prix;

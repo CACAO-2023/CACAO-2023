@@ -144,15 +144,12 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		}
 		
 		return null;*/
-<<<<<<< HEAD
 		if (contrat.getProduit().equals(Feve.F_BQ) && this.stockFeves.get(Feve.F_BQ)>50000) {
 			return null;
 		}
 		if (contrat.getProduit().equals(Feve.F_HQ_BE) && this.stockFeves.get(Feve.F_HQ_BE)>50000) {
 			return null;
 		}
-=======
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 		return contrat.getEcheancier();
 	}
 
@@ -180,7 +177,6 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		prix = Math.min(prix, contrat.getPrix());
 		this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : "+contrat.getVendeur()+" propose le prix "+contrat.getPrix()+" -> ma proposition ="+prix);
 		return prix;*/
-<<<<<<< HEAD
 		
 		
 		// condition avec le prix du chocolat 
@@ -203,18 +199,11 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 			return prix*1.1;
 		}
 		return prixInit;
-=======
-		return contrat.getPrix();
-		
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 	}
 
-<<<<<<< HEAD
 		
 
 
-=======
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 // François Glavatkii
 	
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
@@ -273,7 +262,6 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLACK, " CCA : tentative d'achat de "+cm+" aupres de "+vendeurs);
 				for (IVendeurContratCadre vendeur : vendeurs) {
 					if (!vendeur.equals(this)) {
-<<<<<<< HEAD
 						if (cm.getGamme().equals(Gamme.BQ) && this.stockFeves.get(Feve.F_BQ)<50000){
 							double quantite = 0;
 							if (ventetotB/2>100) {
@@ -284,18 +272,6 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 							}
 							Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, quantite);
 							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : tentative d'achat aupres de "+vendeurs);
-=======
-						if (cm.getGamme().equals(Gamme.BQ)){
-							double quantite = 0;
-							if (ventetotB/2>100) {
-								quantite = ventetotB/2;
-							}
-							else {
-								quantite = 101;
-							}
-							Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, quantite);
-							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 							ExemplaireContratCadre contrat1 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancier, this.cryptogramme, false);
 							if (contrat1!=null) {
 								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_BQ: contrat signe = "+contrat1);
@@ -303,7 +279,6 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 
 						}
 						}
-<<<<<<< HEAD
 						if (cm.getGamme().equals(Gamme.HQ) && this.stockFeves.get(Feve.F_HQ_BE)<50000){
 							double quantite2 = 0;
 							if (ventetotH/2>100) {
@@ -314,18 +289,6 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 							}
 							Echeancier echeancierH = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, quantite2);
 							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA : tentative d'achat aupres de "+vendeurs);
-=======
-						if (cm.getGamme().equals(Gamme.HQ)){
-							double quantite2 = 0;
-							if (ventetotH/2>100) {
-								quantite2 = ventetotH/2;
-							}
-							else {
-								quantite2 = 101;
-							}
-							Echeancier echeancierH = new Echeancier(Filiere.LA_FILIERE.getEtape()+1,15, quantite2);
-							this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCV : tentative d'achat aupres de "+vendeurs);
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 							ExemplaireContratCadre contrat2 = superviseurVentesCC.demandeAcheteur(this, vendeur, cm, echeancierH, this.cryptogramme, false);
 							if (contrat2!=null) {
 								this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, " CCA_HQ : contrat signe = "+contrat2);

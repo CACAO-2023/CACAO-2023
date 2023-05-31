@@ -26,8 +26,6 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 
 
 
-	
-
 	public DistributeurChocolatDeMarque() {
 		
 	}
@@ -36,7 +34,6 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 		
 		super.next();
 		
-<<<<<<< HEAD
 		
 	
 
@@ -146,8 +143,6 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 			}
 		}
 		
-=======
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 	}
 	
 	
@@ -256,7 +251,6 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 			this.stock.ajoutQte(choco, -quantite);
 			//e notificationOperationBancaire(montant);
 			CA_step += montant;
-<<<<<<< HEAD
 			
 			
 			if(choco.getGamme() == Gamme.HQ) {
@@ -275,8 +269,6 @@ public class DistributeurChocolatDeMarque extends Distributeur3AcheteurOA implem
 			
 			qteVendue_TOT+= quantite;
 			
-=======
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 
 			
 		}

@@ -50,15 +50,12 @@ public class Distributeur3Acteur implements IActeur{
 	protected Variable variable_stock_HQ_BE;
 	protected Variable variable_stock_MQ_BE;
 	protected Variable variable_stock_MQ;
-<<<<<<< HEAD
 	protected Variable variable_qtte_vendue_HQ_BE;
 	protected Variable variable_qtte_vendue_MQ_BE;
 	protected Variable variable_qtte_vendue_MQ;
 	protected Variable variable_qtte_vendue_TOT;
 	protected Variable variable_perc_vendue;
 
-=======
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 
 	protected Variable quanitite_cible_totale_OA;
 	protected Variable variable_CA;
@@ -103,10 +100,7 @@ public class Distributeur3Acteur implements IActeur{
 		
 		
 		qte_cible_OA_TOT = 0.0;
-<<<<<<< HEAD
 		coef_prix_vente = new HashMap<Double, Double>();
-=======
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 		
 		quanitite_cible_totale_OA  = new VariablePrivee("Eq9QteCibleOA", "<html>Quantite ciblée (à atteindre) via les OA</html>",this, 0.0, 1000000.0, 0.0);
 		variable_CA = new VariablePrivee("Eq9_Chiffre_Affaire_(Mrd€)","<html>Chiffre d'Affaire</html>",this,0.0,10000000,0.0);
@@ -114,7 +108,6 @@ public class Distributeur3Acteur implements IActeur{
 		variable_stock_HQ_BE = new VariablePrivee("Eq9_Stock_HQ_BE", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
 		variable_stock_MQ_BE = new VariablePrivee("Eq9_Stock_MQ_BE", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
 		variable_stock_MQ = new VariablePrivee("Eq9_Stock_MQ", "<html>Quantite totale de tablettes en stock</html>",this, 0.0, 1000000.0, 0.0);
-<<<<<<< HEAD
 		
 		variable_qtte_vendue_HQ_BE = new VariablePrivee("Eq9_Qtte_Vendue_HQ_BE", "<html>Quantite vendue à ce step de HQ BE</html>",this, 0.0, 1000000.0, 0.0);
 		variable_qtte_vendue_MQ_BE = new VariablePrivee("Eq9_Qtte_Vendue_MQ_BE", "<html>Quantite vendue à ce step de MQ BE</html>",this, 0.0, 1000000.0, 0.0);
@@ -123,10 +116,7 @@ public class Distributeur3Acteur implements IActeur{
 		variable_qtte_vendue_TOT = new VariablePrivee("Eq9_Qtte_Vendue_TOT", "<html>Quantite vendue à ce step</html>",this, 0.0, 1000000.0, 0.0);
 	
 		variable_perc_vendue = new VariablePrivee("Eq9_%_Vendue_TOT", "<html>Pourcentage de stock vendu à ce step</html>",this, 0.0, 1000000.0, 0.0);
-=======
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 
-		
 	}
 	
 	public void initialiser() {
@@ -185,7 +175,6 @@ public class Distributeur3Acteur implements IActeur{
 		
 		
 		
-		
 	}
 	
 	public String toString() {
@@ -216,16 +205,7 @@ public class Distributeur3Acteur implements IActeur{
 		
 		quanitite_cible_totale_OA.setValeur(this,qte_cible_OA_TOT, this.cryptogramme);
 		variable_CA.setValeur(this,CA_step/1000000000, this.cryptogramme);
-<<<<<<< HEAD
 	
-=======
-		
-		variable_stock_tot.setValeur(this, stock.qteStockTOT(), this.cryptogramme);
-		variable_stock_HQ_BE.setValeur(this, stock.qteStock_HQ_BE(), this.cryptogramme);
-		variable_stock_MQ_BE.setValeur(this, stock.qteStock_MQ_BE(), this.cryptogramme);
-		variable_stock_MQ.setValeur(this, stock.qteStock_MQ(), this.cryptogramme);
-
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 		
 
 	}
@@ -304,15 +284,12 @@ public class Distributeur3Acteur implements IActeur{
 		res.add(variable_stock_HQ_BE);
 		res.add(variable_stock_MQ_BE);
 		res.add(variable_stock_MQ);
-<<<<<<< HEAD
 		
 		res.add(variable_qtte_vendue_HQ_BE);
 		res.add(variable_qtte_vendue_MQ_BE);
 		res.add(variable_qtte_vendue_MQ);
 		res.add(variable_qtte_vendue_TOT);
 
-=======
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 		res.add(quanitite_cible_totale_OA);
 		res.add(variable_perc_vendue);
 		return res;

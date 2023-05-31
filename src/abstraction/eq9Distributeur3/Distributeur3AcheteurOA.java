@@ -129,11 +129,7 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 			this.journal_OA.ajouter("Superviseur Offre d'Achat trouvé");
 			supOA =(SuperviseurVentesOA)(Filiere.LA_FILIERE.getActeur("Sup.OA"));
 		}
-<<<<<<< HEAD
 		if (supOA!=null) { 
-=======
-		if (supOA!=null) { // 1 fois sur 10 en moyenne
->>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 			
 			
 			this.journal_OA.ajouter("Offre d'Achat initiée");
