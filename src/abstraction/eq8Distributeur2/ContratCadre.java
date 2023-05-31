@@ -106,7 +106,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	    super.next();
 	    
 	    SuperviseurVentesContratCadre sup = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
-	    for (int k=0; k<10;k++) {
+	    for (int k=0; k<3;k++) {
 	   
 	    int i = (int) (Math.random()*(chocolats.size())) ;
 	    ChocolatDeMarque choco = chocolats.get(i);
