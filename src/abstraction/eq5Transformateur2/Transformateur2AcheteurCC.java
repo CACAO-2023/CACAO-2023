@@ -201,10 +201,7 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 				this.stockFeves.put((Feve)produit, quantite);
 			}
 			this.totalStocksFeves.ajouter(this, quantite, this.cryptogramme);
-			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de feves "+produit+". Stock->  "+this.stockFeves.get(produit));
-		}
-		else {
-			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception d'un produit de type surprenant... "+produit);
+			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de feves "+produit+". Stock de " + produit + "->  "+this.stockFeves.get(produit));
 		}}//mise à jour du stock de fèves après reception d'une livraison
 
 
