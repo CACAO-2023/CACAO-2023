@@ -228,7 +228,7 @@ public class Banque implements IActeur, IAssermente {
 				this.journalBanque.ajouter(Journal.texteColore(acteur, "- notification de Faillite de "+acteur.getNom())+Journal.texteColore(a, " a "+a.getNom()));
 				a.notificationFaillite(acteur);
 			}
-			this.journalBanque.notifyObservers();
+			this.journalBanque.notifyObservers(); 
 		}
 	}
 
