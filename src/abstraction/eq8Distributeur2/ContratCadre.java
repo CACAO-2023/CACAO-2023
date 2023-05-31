@@ -50,7 +50,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 					if (produit != null && this.stocks.getStock(produit) != 0.0 ) {
 						double quantiteEnStock = this.stocks.getStock(produit);
 						
-						if ( quantiteEnStock + contrat.getEcheancier().getQuantiteTotale() < 100000.) {
+						if ( quantiteEnStock + contrat.getEcheancier().getQuantiteTotale() < 1000000. ) {
 							if (Math.random() < 0.9) {
 								this.notificationNouveauContratCadre(contrat);
 								this.journal_ContratCadre.ajouter("effectuation du contrat:"+contrat.toString());
@@ -85,11 +85,11 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	//Auteur : Marzougui Mariem
 	//On retourne le prix avec négociation dans la plupart des cas
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		if (Math.random()<0.3) { // dans 30% des cas on achète sans négociations
+		if (Math.random()<0.4) { // dans 40% des cas on achète sans négociations
 			return contrat.getPrix(); 
 			} 
 		else {
-			//dans 70% des cas on propose une négociation de 5% du prix initial
+			//dans 60% des cas on propose une négociation de 5% du prix initial
 			return contrat.getPrix()*0.95;
 			}	
 	}
@@ -106,7 +106,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	    super.next();
 	    
 	    SuperviseurVentesContratCadre sup = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
-	    for (int k=0; k<3;k++) {
+	    for (int k=0; k<5;k++) {
 	    int i = (int) (Math.random()*(chocolats.size())) ;
 	    ChocolatDeMarque choco = chocolats.get(i);
 	        List<IVendeurContratCadre> vendeurs = sup.getVendeurs(choco);
