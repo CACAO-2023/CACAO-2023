@@ -13,6 +13,8 @@ import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
+import abstraction.eqXRomu.general.Courbe;
+import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Gamme;
@@ -36,16 +38,20 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	public void next() {
 		super.next();
 		int etape = Filiere.LA_FILIERE.getEtape();
-		journal.ajouter("============================== étape "+etape+" ==============================");
-		journal_achat.ajouter("============================== étape "+etape+" ==============================");
-		journal_stock.ajouter("============================== étape "+etape+" ==============================");
-		journal_vente.ajouter("============================== étape "+etape+" ==============================");
 
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			mettre_a_jour(Var_Cout_Choco, marque, getCoutTotal(marque));
 			mettre_a_jour(Var_Marge_Choco, marque, prix(marque)-get_valeur(Var_Cout_Choco,marque));
 
-		}
+			if(etape>0) {
+			Courbe courbe = cNotrePrix.get(marque);
+			courbe.ajouter(etape, prix(marque));
+			cNotrePrix.put(marque, courbe);
+			
+			Courbe courbePrixMoyen = cPrixMoyen.get(marque);
+			courbePrixMoyen.ajouter(etape-1, Filiere.LA_FILIERE.prixMoyen(marque, etape-1));
+			cPrixMoyen.put(marque, courbePrixMoyen);
+		}}
 		
 		//Prise en compte des couts de main doeuvre
 		Double cout_total_mise_en_rayon = getTotalVentes() * Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur();
@@ -149,21 +155,31 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 		
 		if (Filiere.LA_FILIERE.getEtape() > 24) {
 			prix_moyen = Filiere.LA_FILIERE.prixMoyen(choco,Filiere.LA_FILIERE.getEtape()-24);
-			double monPrixAncien = prevision_prix.get(etape_normalisee).get(choco);
+			//double monPrixAncien = prevision_prix.get(etape_normalisee).get(choco).getValeur();
 			
 
 		}
+		for(IDistributeurChocolatDeMarque distributeur : Filiere.LA_FILIERE.getDistributeurs()) {
+			if(distributeur.quantiteEnVente(choco, Filiere.LA_FILIERE.getEtape())>0) {
+			}
+		}
+		
 		if (((prix < prix_moyen*0.9) || (prix > prix_moyen*1.1)) && (prix_moyen != 0.)) {
 			prix = prix - (prix-prix_moyen)*0.5;	
 			}
+		
 		if (prix < cout/0.9) {
 			prix= cout/0.9;
 		}
 		
 			//sert à mémoriser notre prix à l'étape derniere
 			
-		HashMap<ChocolatDeMarque,Double> HPrix=this.prevision_prix.get(etape_normalisee);
-		HPrix.put(choco, prix);
+		HashMap<ChocolatDeMarque,Variable> HPrix=this.prevision_prix.get(etape_normalisee);
+		if (HPrix.containsKey(choco)){
+			Variable v= this.prevision_prix.get(etape_normalisee).get(choco);
+			v.setValeur(this, prix);
+			HPrix.put(choco,v );
+		}
 		this.prevision_prix.put(etape_normalisee, HPrix);
 		
 		

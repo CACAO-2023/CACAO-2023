@@ -11,12 +11,15 @@ import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
+import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 
 public class Stock extends Transformateur1Acteur{
 	protected HashMap<Feve, Double> stockFeves;
 //	protected HashMap<Chocolat, Double> stockChoco;
 	protected HashMap<ChocolatDeMarque, Double> stockChocoMarque;
+	protected double stockHPrec;
+	protected double stockBPrec;
 	
 	public Stock() {
 		super();
@@ -46,6 +49,8 @@ public class Stock extends Transformateur1Acteur{
 					this.journal.ajouter("ajout de 1000 de "+c+" au stock de chocolat de marque "+c.getMarque() +" +--> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
 			}
 		}
+		this.stockHPrec=0;
+		this.stockBPrec=0;
 	}
 	
 	public void ajouter(IProduit produit, double quantite) {
@@ -59,7 +64,8 @@ public class Stock extends Transformateur1Acteur{
 			}
 			this.totalStocksFeves.ajouter(this,quantite,this.cryptogramme);
 			}
-		else if(produit.getType().equals("ChocoDeMarque")) {
+		else if(produit.getType().equals("ChocolatDeMarque")) {
+
 			if (this.stockChocoMarque.keySet().contains(produit)) {
 				this.stockChocoMarque.put((ChocolatDeMarque)produit,this.stockChocoMarque.get((ChocolatDeMarque)produit)+quantite);
 				}
@@ -75,7 +81,7 @@ public class Stock extends Transformateur1Acteur{
 			this.stockFeves.put((Feve)produit,this.stockFeves.get((Feve)produit)-quantite);
 			this.totalStocksFeves.setValeur(this,this.totalStocksFeves.getValeur()-quantite,this.cryptogramme);
 			}
-		else if(produit.getType().equals("ChocoDeMarque") && this.stockChocoMarque.keySet().contains(produit)) {
+		else if(produit.getType().equals("ChocolatDeMarque") && this.stockChocoMarque.keySet().contains(produit)) {
 			this.stockChocoMarque.put((ChocolatDeMarque)produit,this.stockChocoMarque.get((ChocolatDeMarque)produit)-quantite);
 			this.totalStocksChocoMarque.setValeur(this,this.totalStocksFeves.getValeur()-quantite,this.cryptogramme);
 		}
@@ -88,15 +94,16 @@ public class Stock extends Transformateur1Acteur{
 		for (Feve f : this.stockFeves.keySet()) {
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(f+"", 15)+" = "+this.stockFeves.get(f));
 		}
-//		for (Chocolat c : this.stockChoco.keySet()) {
-//			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(c+"", 15)+" = "+this.stockChoco.get(c));
-//		}
 		for (ChocolatDeMarque cm : this.stockChocoMarque.keySet()) {
 			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"Stock de "+Journal.texteSurUneLargeurDe(cm+"", 15)+" = "+this.stockChocoMarque.get(cm));
-			
+			if (cm.getGamme().equals(Gamme.BQ)) {
+				this.stockBPrec=this.stockChocoMarque.get(cm);
+			}
+			if (cm.getGamme().equals(Gamme.HQ)) {
+				this.stockHPrec=this.stockChocoMarque.get(cm);
+			}
 		}
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"StockFevesTotal="+this.totalStocksFeves.getValeur());
-//		this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"StockChocolatTotal="+this.totalStocksChoco.getValeur());
 		this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN,"StockChocoDeMarqueTotal="+this.totalStocksChocoMarque.getValeur());
 	}
 }

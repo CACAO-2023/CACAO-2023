@@ -46,14 +46,20 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	private Variable coutStockageProducteur;//Le cout moyen du stockage d'une Tonne a chaque step chez un producteur de feves
 
 	protected Variable totalStocksFeves;
-//	protected Variable totalStocksChoco;
-	protected Variable totalStocksChocoMarque;  // La qualite totale de stock de chocolat de marque 
+	protected Variable totalStocksChocoMarque;  // La quantite totale de stock de chocolat de marque 
 	protected List<Feve> lesFeves;
 	protected Integer cryptogramme;
 	protected ArrayList<ExemplaireContratCadre> ContratEnCours_F_BQ;
 	protected ArrayList<ExemplaireContratCadre> ContratEnCours_F_HQ;
 	protected ArrayList<ExemplaireContratCadre> ContratEnCours_C_BQ;
 	protected ArrayList<ExemplaireContratCadre> ContratEnCours_C_HQ;
+	protected Variable NbContratEnCours;
+	protected Variable PartDeMarcheHQ;
+	protected Variable PartDeMarcheBQ;
+	protected Variable PrixMoyF_HQ;
+	protected Variable PrixMoyF_BQ;
+	protected Variable qteHQVendu;
+	protected Variable qteBQVendu;
 
 
 	
@@ -82,6 +88,13 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 		this.totalStocksFeves = new VariablePrivee("Eq4StockFeves", "<html>Quantite totale de feves en stock</html>",this, 0.0, 1000000.0, 0.0);this.totalStocksFeves= new VariablePrivee("Eq4StockFeves", "<html>Quantite totale de feves en stock</html>",this, 0.0, 1000000.0, 0.0);
 //		this.totalStocksChoco = new VariablePrivee("Eq4StockChoco", "<html>Quantite totale de chocolat en stock</html>",this, 0.0, 1000000.0, 0.0); 
 		this.totalStocksChocoMarque = new VariablePrivee("Eq4StockChocoMarque", "<html>Quantite totale de chocolat de marque en stock</html>",this, 0.0, 1000000.0, 0.0);
+		this.NbContratEnCours = new VariablePrivee("Eq4NbContratEnCours","<html>Nombre de contrat cadre actuellement en cours</html>",this,0.0,200.0,0.0);
+		this.PartDeMarcheBQ = new VariablePrivee("Eq4PartDeMarcheBQ","<html>Part de marché sur les ventes de chocolat basse qualité</html>",this,0.0,1.1,0.0);
+		this.PartDeMarcheHQ = new VariablePrivee("Eq4PartDeMarcheHQ","<html>Part de marché sur les ventes de chocolat haute qualité</html>",this,0.0,1.1,0.0);
+		this.PrixMoyF_BQ = new VariablePrivee("Eq4PrixMoyF_BQ","<html>Prix moyen de nos contrat cadre de fève basse qualité</html>",this,0.0,100000.0,0.0);
+		this.PrixMoyF_HQ = new VariablePrivee("Eq4PrixMoyF_HQ","<html>Prix moyen de nos contrat cadre de fève haute qualité</html>",this,0.0,100000.0,0.0);
+		this.qteBQVendu = new VariablePrivee("Eq4qteBQVendu","<html>Quantité de Vccotioi vendu aux clients</html>",this,0.0,100000.0,0.0);
+		this.qteHQVendu = new VariablePrivee("Eq4qteHQVendu","<html>Quantité de Yocttotoa vendu aux clients</html>",this,0.0,100000.0,0.0);
 	}
 	
 	//François Glavatkii
@@ -98,8 +111,7 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 		this.ContratEnCours_C_BQ = new ArrayList<ExemplaireContratCadre> ();
 		this.ContratEnCours_C_HQ = new ArrayList<ExemplaireContratCadre> ();
 		this.ContratEnCours_F_BQ = new ArrayList<ExemplaireContratCadre> ();
-		this.ContratEnCours_F_HQ = new ArrayList<ExemplaireContratCadre> ();
-		
+		this.ContratEnCours_F_HQ = new ArrayList<ExemplaireContratCadre> ();	
 	}
 	
 
@@ -136,8 +148,14 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
 		res.add(this.totalStocksFeves);
-//		res.add(this.totalStocksChoco);
 		res.add(this.totalStocksChocoMarque);
+		res.add(this.NbContratEnCours);
+		res.add(this.PartDeMarcheBQ);
+		res.add(this.PartDeMarcheHQ);
+		res.add(this.PrixMoyF_BQ);
+		res.add(this.PrixMoyF_HQ);
+		res.add(this.qteBQVendu);
+		res.add(this.qteHQVendu);
 		return res;
 	}
 
