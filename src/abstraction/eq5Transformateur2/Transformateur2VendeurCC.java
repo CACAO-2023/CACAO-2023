@@ -189,13 +189,13 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 	//fait par yassine  : ajout au journal des propositions de contrats cadres
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-		this.journalVentes.ajouter(COLOR_LLGRAY, Color.MAGENTA, "  CCV : Nouveau CC conclu : PRODUIT ET QT TOTALE= "+ 
+		this.journalVentes.ajouter(COLOR_LLGRAY, Color.MAGENTA, "  CCV : Nouveau CC conclu : PRODUIT ET QT TOTALE = "+ 
 
 				//contrat.getQuantiteLivree()
 				contrat.getQuantiteTotale()//.getEcheancier().getQuantiteTotale()
 			//	contrat.getQuantiteALivrerAuStep()
-		+" "+contrat.getEcheancier()
-				+" "+contrat.getProduit()+" ACHETEUR = "+contrat.getAcheteur()+ " PRIX = "+contrat.getPrix());
+		
+				+" "+contrat.getProduit()+", ACHETEUR = "+contrat.getAcheteur()+ ", PRIX = "+contrat.getPrix());
 		if (contrat.getProduit() == "ChocoPop") {
 			this.ContratsVendeurMQ.add(contrat); 
 		}
