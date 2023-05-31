@@ -33,8 +33,8 @@ public class Transformateur3Transformation extends Transformateur3Vente {
 	private double MQBEStep1;
 	private double HQBEStep1;
 	private double HQBEStep2;
-	private double CoutAdditifs = 400;
-	private double CoutTransfo=10;       //Cout de main d'oeuvre, électricité, maintien des machines...
+	private double CoutAdditifs = 100;
+	private double CoutTransfo=8;       //Cout de main d'oeuvre, électricité, maintien des machines...
 	
 	/** écrit par Maxime Bedu*/
 	

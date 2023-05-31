@@ -18,8 +18,8 @@ public class Producteur1Acteur implements IActeur {
 	protected int cryptogramme;
 	protected Variable coutreplantation = new Variable("Cout de replantation", "Cout de replantation pour un hectare, peu importe sa gamme", this, 1000); //choisi arbitrairement
 	protected Variable coutmaindoeuvre = new Variable("Cout de la main d'oeuvre", "Cout de la main d'oeuvre par hectare par step", this, 30);
-	protected Variable maxcontratBQ = new Variable("Max de CC BQ", "", this, 25);
-	protected Variable maxcontratMQ = new Variable("Max de CC MQ", "", this, 5);
+	protected Variable maxcontratBQ = new Variable("Max de CC BQ", "", this, 13);
+	protected Variable maxcontratMQ = new Variable("Max de CC MQ", "", this, 3);
 	protected Journal journal_evenements;
 	protected Journal journal_stocks;
 	protected Journal journal_ventes;
