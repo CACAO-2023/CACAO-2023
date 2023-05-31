@@ -112,7 +112,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	    ChocolatDeMarque choco = chocolats.get(i);
 	 
 	        List<IVendeurContratCadre> vendeurs = sup.getVendeurs(choco);
-	        Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape()+1,24, 10000.0);
+	        Echeancier echeancier = new Echeancier (Filiere.LA_FILIERE.getEtape()+1,12, 10000.0);
 	        List<ExemplaireContratCadre> nouveaux_contrats = new ArrayList<ExemplaireContratCadre> ();
 	        if (contratsEnCours != null) {
 	            for (ExemplaireContratCadre c : nouveaux_contrats) {
@@ -129,7 +129,7 @@ public class ContratCadre extends Distributeur2Acteur implements IAcheteurContra
 	                }
 	                for (ExemplaireContratCadre c : nouveaux_contrats) {
 	                    for (IVendeurContratCadre vendeur : vendeurs) {
-	                        Echeancier nouveau_echeancier = new Echeancier (c.getEcheancier().getStepFin(),24, 10000.0);
+	                        Echeancier nouveau_echeancier = new Echeancier (c.getEcheancier().getStepFin(),12, 10000.0);
 	                        ExemplaireContratCadre cc =sup.demandeAcheteur(this , vendeur, choco, nouveau_echeancier , this.cryptogramme, true);
 	                    }
 	                }
