@@ -19,13 +19,6 @@ import abstraction.eqXRomu.produits.Lot;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-/*
-- dans acheteurCC vous declarez une liste de contrats protected LinkedList<ExemplaireContratCadre> contrats; mais qui n'est jamais créée/initialisée/remplie/utilisée
-- dans vendeurCC idem, vous declarez la meme liste de contrats, avec le meme nom --> elle masque la liste de sa fille. Mais bon, ce n'est pas visible comme problème vu qu'elle n'est pas plus créée/.../utilisée que celle de acheteurCC
--     public boolean peutVendre(IProduit produit) {
-        return ((produit.getType().equals("Chocolat"))||(produit.getType().equals("ChocolatDeMarque")));} 
----> Vous declarez pouvoir vendre n'importe quel chocolat / chocolatDeMarque, alors que c'est faux
-- dans vend vous ajoutez a votre journal this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous vendons du " + produit.getType() + " " + produit);   C'est un message qui induit en erreur car on croit que vous vendez alors qu'à ce stade vous ne faites que déclarer que vous etes en mesure de vendre.  --> plutot mentionner "nous declarons pouvoir vendre du ...*/
 
 public class Transformateur2AcheteurCC extends Transformateur2Transfo implements IAcheteurContratCadre {
 
@@ -41,52 +34,84 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 		this.ContratsAcheteurMQ = new LinkedList<>();
 		this.ContratsAcheteurHQBE = new LinkedList<>();
 	}
-	@Override
+
+	/**
+	 * @author LABBAOUI Wiem
+	 * On achète des fèves MQ et HQ_BE
+	 */
+
 	public boolean achete(IProduit produit) {
-		// TODO Auto-generated method stub
 		boolean somme = false;
 		if ((produit.getType().equals("Feve")
 				&& ((((Feve)produit).getGamme()== Gamme.MQ)&&(!((Feve)produit).isBioEquitable())
 						|| ((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable()))))) {
-			somme = true;} //on achète seulement les fèves haute gamme bio équitable et les fèves moyenne gamme
+			somme = true;} 
 		return somme ; 
 
 
 	}
 
-	@Override
+
+	/**
+	 * @author LABBAOUI Wiem
+	 * Pour la marque Maison Doutre : RSE de 10%
+	 * Pour la marque ChocoPop : pas de RSE
+	 */
+
 	public int fixerPourcentageRSE(IAcheteurContratCadre acheteur, IVendeurContratCadre vendeur, IProduit produit,
 			Echeancier echeancier, long cryptogramme, boolean tg) {
 		if ((((Feve)produit).getGamme()== Gamme.HQ)&&(((Feve)produit).isBioEquitable())) {
-			return 10; } //1O% de RSE pour la marque "Maison Doutre"
+			return 10; } 
 		else { 
 			return 0; }
-	}// 0% pour la marque "ChocoPop"
+	}
 
 
-	@Override
-	//Mathis DOUTRE
+	/**
+	 * @author MISBAH Yassine
+	 * On refuse l'échéancier si on ne peut pas livrer la quantité demandée
+	 */
+
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		if (contrat.getQuantiteTotale()>stockFeves.get(contrat.getProduit())) {
-			
+
 			return null;}
 		else { return contrat.getEcheancier(); }
 	}
 
 
-	//Par Wiem LABBAOUI
+
+	/**
+	 * @author LABBAOUI Wiem
+	 * Si l'acheteur propose d'acheter plus de 600T de ChocoPop,
+	 * on augmente le prix et on achète à 5% plus cher
+	 * Sinon, augmentation de 3%
+	 * Si l'acheteur propose d'acheter plus de 200T de Maison Doutre,
+	 * on augmente le prix et on achète avec 7% plus cher
+	 * Sinon, augmentation de 3%
+	 */
+
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		double prix = contrat.getPrix();
 		IProduit produit= (IProduit)contrat.getProduit();
-		if ((((Feve)produit).getGamme() == Gamme.MQ) && (contrat.getEcheancier().getQuantiteTotale()>600)) {
-			prix = (2800+1500)*1.1;}
-				
-		else if ((((((Feve)produit).getGamme() == Gamme.HQ)&& (((Feve)produit).isBioEquitable()) && (contrat.getEcheancier().getQuantiteTotale()>200)))) {
-			prix = (2800+11800)*1.1;}
-				
+		if ((((Feve)produit).getGamme() == Gamme.MQ)) {
+			if ((contrat.getEcheancier().getQuantiteTotale()>600)) {
+				prix = (2800+1500)*1.25;}
+			else { prix = (2800+1500)*1.23;} }
+
+		else if ((((Feve)produit).getGamme() == Gamme.HQ)&& (((Feve)produit).isBioEquitable())) {
+			if ((contrat.getEcheancier().getQuantiteTotale()>200)) {
+				prix = (2800+11800)*1.27;}
+			else {prix = (2800+11800)*1.23;}}
+
 		return prix;}
 
-	@Override
+
+	/**
+	 * @author MISBAH Yassine
+	 * On stock dans deux listes différentes les CCA pour nos deux marques
+	 */
+
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		// TODO Auto-generated method
 		IProduit produit= (IProduit)contrat.getProduit();
@@ -100,16 +125,18 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 			ContratsAcheteurHQBE.add(contrat);}
 
 	}
-	
-	
-	//réussite des négociations sur le contrat précisé en paramètre dans tous les cas 
 
-	@Override
+	/**
+	 * @author MISBAH Yassine
+	 * Reception des fèves, mise à jour des stocks
+	 */
+
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
 		IProduit produit= lot.getProduit();
 		double quantite = lot.getQuantiteTotale();
-		if (contrat == null ) { this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "TROP DE STOCK FEVES")
-			;}
+		if (contrat == null) {
+
+		}
 		else if (produit instanceof Feve) {
 			if (this.stockFeves.keySet().contains(produit)) {
 				this.stockFeves.put((Feve)produit, this.stockFeves.get(produit)+quantite);
@@ -118,9 +145,16 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 			}
 			this.totalStocksFeves.ajouter(this, quantite, this.cryptogramme);
 			this.journalAchats.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : reception "+quantite+" T de feves "+produit+". Stock de " + produit + "->  "+this.stockFeves.get(produit));
-		}}//mise à jour du stock de fèves après reception d'une livraison
+		}
+	}
 
 
+	/**
+	 * @author LABBAOUI Wiem
+	 * On cherche dans un premier temps un vendeur
+	 * Puis on établit le contrat
+	 * On la quantité 100+A selon la gamme de la feve
+	 */
 
 	public ExemplaireContratCadre getContrat(Feve produit) {
 		double somme = (this.stockFeves.get(Feve.F_MQ)+this.stockFeves.get(Feve.F_HQ_BE));

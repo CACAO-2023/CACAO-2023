@@ -27,7 +27,7 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	protected LinkedList<ExemplaireContratCadre> ContratsVendeurHQBE;
 	protected LinkedList<ExemplaireContratCadre> ContratsVendeurMQ;
 
-	//fait par yassine
+
 	public void initialiser() {
 		super.initialiser();
 		this.superviseurVentesCC = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
@@ -36,22 +36,28 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 	}
 
+	/**
+	 * @author LABBAOUI Wiem
+	 : On ne peut vend que du chocolat de marque MQ "ChocoPop" et HQ_BE "Maison Doutre"
+	 */
 
-	//fait par wiem : nous vendons du chocolat sans et avec marque
 	public boolean peutVendre(IProduit produit) {
 		if ((produit.getType().equals("ChocolatDeMarque"))) {
-			if (((ChocolatDeMarque)produit).getNom()=="ChocoPop" ||(((ChocolatDeMarque)produit).getNom()== "MaisonDoutre")) {
+			if (((ChocolatDeMarque)produit).getNom()=="ChocoPop" ||(((ChocolatDeMarque)produit).getNom()== "Maison Doutre")) {
 				return true;}
 			return false;}
 		return false; }
 
 
 
-	//fait par wiem : nous vendons du chocolat de moyenne gamme et haute gamme bioéquitable. La vente est possible ssi le stock est supérieur à 100T
+	/**
+	 * @author LABBAOUI Wiem
+	 : On vend ssi le stock est supérieur à 100 T
+	 */
+
 	public boolean vend(IProduit produit) {
 		if ((stockChocoMarque.containsKey(produit))&&(produit.getType().equals("ChocolatDeMarque"))&&((((ChocolatDeMarque)produit).getGamme()== Gamme.MQ) ||((((ChocolatDeMarque)produit).getGamme()== Gamme.HQ)&&(((ChocolatDeMarque)produit).isBioEquitable())))){
 			if (this.stockChocoMarque.get(produit)>100) { 
-				//this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCV : nous déclarons pouvoir vendre du " + produit.getType() + " " + produit);
 				return true;}
 			else {
 				return false;}}
@@ -59,7 +65,15 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			return false;}}
 
 
-	//fait par wiem : prix 
+
+	/**
+	 * @author LABBAOUI Wiem
+	 : On vend nos chocolats avec 20% de marge
+	   2800 = prix de transfo et coût de stockage
+	   1500 = prix d'achat d'une tonne de F_MQ
+	   11800 = prix d'achat d'une tonne de F_HQ_BE
+	 */ 
+
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		double prix = 0.0;
 		IProduit produit = (IProduit)contrat.getProduit();
@@ -67,13 +81,23 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			if (((ChocolatDeMarque)produit).getMarque().equals("ChocoPop")) {
 				prix = (2800+1500)*1.2; }
 			else if (((ChocolatDeMarque)produit).getMarque().equals("Maison Doutre")) {
-				prix = (2800+11800)*1.2;	
+				prix = (2800+11800)*1.3;	
 			}
 		}
 		return prix;
 	}
 
-	//fait par yassine : négociations
+
+	/**
+	 * @author LABBAOUI Wiem
+	 * Si l'acheteur propose d'acheter plus de 35% de notre stock pour ChocoPop,
+	 * on baisse le prix et on achète avec 10% de marge
+	 * Sinon, marge de 15%
+	 * Si l'acheteur propose d'acheter plus de 15% de notre stock pour Maison Doutre,
+	 * on baisse le prix et on achète avec 20% de marge
+	 * Sinon, marge de 25%
+	 */
+
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
 		double stock = stockChocoMarque.get(contrat.getProduit());
 		IProduit produit = (IProduit)contrat.getProduit();
@@ -84,22 +108,32 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 			else { prix  = (2800+1500)*1.15; }}
 		else if (((ChocolatDeMarque)produit).getMarque().equals("Maison Doutre")) { 
 			if (contrat.getEcheancier().getQuantiteTotale()>0.15*stock) {
-				prix = (2800+11800)*1.1; }
-			else { prix = (2800+1500)*1.15;}
+				prix = (2800+11800)*1.2; }
+			else { prix = (2800+1500)*1.25;}
 		}
 		return prix;}
 
 	//s
 
 
-	//fait par yassine : on négocie en fonction des stocks
+
+	/**
+	 * @author MISBAH Yassine
+	 * On refuse l'échéancier si on ne peut pas livrer la quantité demandée
+	 */
+
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		if (contrat.getQuantiteTotale()>stockChocoMarque.get(contrat.getProduit())) {
 			return null;}
 		else { return contrat.getEcheancier(); }
 	}
 
-	//fait par yassine : renvoie la quantité livrée, met à jour les stocks.
+
+	/**
+	 * @author MISBAH Yassine 
+	 * On livre tout notre stock si la quantité demandée est trop importante, mais 
+	 * ne devrait pas arriver à priori car l'échéancier vaudrait null
+	 */
 	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
 		double stock=0.0;
 		double livre=0.0;
@@ -121,7 +155,11 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	}
 
 
-	//fait par yassine  : ajout au journal des propositions de contrats cadres
+
+	/**
+	 * @author MISBAH Yassine
+	 * On stock dans deux listes différentes les CCV pour nos deux marques
+	 */
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		IProduit produit= (IProduit)contrat.getProduit();
 		if (produit instanceof ChocolatDeMarque) {
@@ -136,7 +174,15 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	}
 
 
-	//fait par wiem  : on cherche un acheteur potentiel et on établit un contrat avec 
+
+	/**
+	 * @author LABBAOUI Wiem
+	 * On cherche dans un premier temps un acheteur
+	 * Puis on établit le contrat
+	 * On vend 100 + 10% du stock pour la marque Maison Doutre
+	 * et 100 + 30% du stock pour la marque ChocoPop
+	 */
+
 	public ExemplaireContratCadre getContrat(ChocolatDeMarque produit) {
 		this.journalVentes.ajouter(COLOR_LLGRAY, Color.BLUE, "Recherche acheteur pour " + produit);
 		List<IAcheteurContratCadre> acheteurs = superviseurVentesCC.getAcheteurs(produit);
@@ -147,8 +193,6 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		// FIN DE CODE AJOUTE PAR ROMU
 		IAcheteurContratCadre acheteur = acheteurs.get((int)(Math.random() * acheteurs.size())); 
 		Double stock = stockChocoMarque.get(produit);
-		System.out.println("stocks : "+stockChocoMarque);
-		System.out.println("stock produit "+produit+ " -> "+stock);
 		if ((stock != null)&&(stock>100)) {
 			double A = 0;
 			if (produit.getMarque() == "Maison Doutre") {
@@ -168,8 +212,10 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 
 
 
+	/**
+	 * @author LABBAOUI Wiem
+	 */
 
-	//fait par wiem 
 	public void next() {
 		super.next();
 		for (ChocolatDeMarque c: Filiere.LA_FILIERE.getChocolatsProduits()) {
