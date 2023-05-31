@@ -20,12 +20,14 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     protected SuperviseurVentesContratCadre superviseur;
     protected LinkedList<IAcheteurContratCadre> acheteursMQ;
     protected LinkedList<IAcheteurContratCadre> acheteursHQ;
+    protected int stepsSansRuptures;
     
     /**
      * @author Corentin Caugant
      */
     public Producteur3CC() {
         super();
+        this.stepsSansRuptures = 0;
         this.contracts = new LinkedList<ExemplaireContratCadre>();
 
         this.acheteursHQ = new LinkedList<IAcheteurContratCadre>();
@@ -40,8 +42,8 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
 
         // Initialisation des HashMaps. Au début tous nos acheteurs ont la même fiabilité.
-        Double PRIX_DEPART_MQ = 5000.0; //10000 avant, mais des équipes ne negocient pas, donc fixe a un prix défini entre les producteurs et les transformateurs
-        Double PRIX_DEPART_HQ = 10000.0; //30000 avant, idem
+        Double PRIX_DEPART_MQ = 7500.0; //10000 avant, mais des équipes ne negocient pas, donc fixe a un prix défini entre les producteurs et les transformateurs
+        Double PRIX_DEPART_HQ = 15000.0; //30000 avant, idem
 
         List<IAcheteurContratCadre> acheteurs = new LinkedList<IAcheteurContratCadre>();
 		List<IActeur> acteurs = Filiere.LA_FILIERE.getActeursSolvables();
@@ -67,7 +69,13 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         }
     }
 
-
+    public double getPrixMax(Feve feve) {
+        if (feve == Feve.F_MQ_BE) {
+            return 7500.0;
+        } else {
+            return 15000.0;
+        }
+    }
     
     /**
      * Chooses a client to sell our beans. We are more likely to choose the client with the highest reliability.
@@ -132,19 +140,17 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      */
     public double propositionPrixIntial(IAcheteurContratCadre acheteur, Feve feve) {
         // ! Nous ferons toujours monter un peu le prix au début des négociations pour s'assurer que notre prix ne baisse pas inéxorablement.
+        double price;
         if (feve == Feve.F_MQ_BE) {
         	// No negotiation
-            // double price = Math.max(this.getPrixTonne() /** 1.2*/ , this.acheteursMQprix.get(acheteur) /** 1.1*/);
-        	double price = 5000;
+            price = Math.max(this.getPrixTonne() * 1.2 , this.acheteursMQprix.get(acheteur) * 1.1);
             this.acheteursMQprix.put(acheteur, price);
-            return price;
         } else {
         	// No negotiation
-            // double price = Math.max(this.getPrixTonne() /* * 1.4*/, this.acheteursHQprix.get(acheteur) /** 1.3*/);
-        	double price = 10000;
+            price = Math.max(this.getPrixTonne() /* * 1.4*/, this.acheteursHQprix.get(acheteur) /** 1.3*/);
             this.acheteursHQprix.put(acheteur, price);
-            return price;
         }
+        return Math.min(price, this.getPrixMax(feve));
     }
 
     /**
@@ -180,6 +186,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
             currentQuantite = quantite;
         } else {
             currentQuantite = Stock.getQuantite((Feve)produit); // ! Prepare for trouble, and make it double !
+            this.stepsSansRuptures = 0;
             journal_ventes.ajouter(Color.RED, Color.WHITE, "Attention, rupture de stock de " + contrat.getProduit() + ". Quantité livrée/quantité demandée : " + currentQuantite + "/" + quantite + ".");
             Stock.retirer((Feve)produit, currentQuantite);
 
@@ -228,7 +235,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     @Override
     public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
         Echeancier echeancier = contrat.getEcheancier();
-        if (this.getAvailableQuantity((Feve)contrat.getProduit()) <= 100) {
+        if (this.getAvailableQuantity((Feve)contrat.getProduit()) <= 200) {
             return null;
         }
 
@@ -282,7 +289,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         // Now making the contract
         this.getJVente().ajouter(Color.LIGHT_GRAY, Color.BLACK, "Tentative de négociation de contrat cadre avec " + acheteur.getNom() + " pour " + produit + "...");
         int length = ((int) Math.round(Math.random() * 10)) + 2;
-        ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, length,(((int) Math.round(this.getAvailableQuantity(produit)/length))) + 1), cryptogramme,false);
+        ExemplaireContratCadre cc = superviseur.demandeVendeur(acheteur, this, produit, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, length,(((int) Math.round(this.getAvailableQuantity(produit)/length)))), cryptogramme,false);
         if (cc != null) {
 
             this.contracts.add(cc);
@@ -313,6 +320,14 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      */
     public void next() {
         super.next();
+        this.stepsSansRuptures++;
+        if (this.stepsSansRuptures > 5) {
+            this.stepsSansRuptures = 0;
+            double marge = this.margeStockage.getValeur();
+            if (marge > 0.03) { // On ne veut pas que la marge soit inférieure à 3%
+                this.margeStockage.setValeur(this, marge - 0.01, this.cryptogramme);
+            }
+        }
         //Pour la suite, on abesoin de savoir les contrats qui ont ete effectue au step precedent
         LinkedList<ExemplaireContratCadre> contraprecedent = new LinkedList<ExemplaireContratCadre>();
         contraprecedent.addAll(this.contracts);
@@ -328,10 +343,10 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
 
 
         for (int i = 0; i < 5; i++) {
-            if (this.getAvailableQuantity(Feve.F_HQ_BE) > 100) {
+            if (this.getAvailableQuantity(Feve.F_HQ_BE) > 200) {
                 this.getContractForProduct(Feve.F_HQ_BE);
             }
-            if (this.getAvailableQuantity(Feve.F_MQ_BE) > 100) {
+            if (this.getAvailableQuantity(Feve.F_MQ_BE) > 200) {
                 this.getContractForProduct(Feve.F_MQ_BE);
             }
         }
