@@ -307,7 +307,11 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		vente_step = 0 ; //réinitialiser la variable pour la prochaine étape
 		actualise_variable_selectionnee();
 		
-
+		journal.ajouter("============================== étape "+(etape+1)+" ==============================");
+		journal_achat.ajouter("============================== étape "+(etape+1)+" ==============================");
+		journal_stock.ajouter("============================== étape "+(etape+1)+" ==============================");
+		journal_vente.ajouter("============================== étape "+(etape+1)+" ==============================");
+		Bilan_achat.ajouter("============================== étape "+(etape+1)+" ==============================");
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
