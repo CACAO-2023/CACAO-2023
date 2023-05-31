@@ -202,7 +202,7 @@ public class CC_distributeur extends AchatBourse implements IVendeurContratCadre
 						this.journal_CC_DISTRI.ajouter(COLOR_LLGRAY, COLOR_LBLUE, "  CCV : contrepropovend --> nouvel echeancier="+new Echeancier(contrat.getEcheancier().getStepDebut(), 15, 101));
 						return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, 101);
 					} else {
-						return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qtok*0.8/5);
+						return new Echeancier(contrat.getEcheancier().getStepDebut(), 15, qtok*0.8/3);
 					}
 			}
 			}

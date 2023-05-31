@@ -154,6 +154,8 @@ public class Transformateur1Acteur implements IActeur, IMarqueChocolat {
 		res.add(this.PartDeMarcheHQ);
 		res.add(this.PrixMoyF_BQ);
 		res.add(this.PrixMoyF_HQ);
+		res.add(this.qteBQVendu);
+		res.add(this.qteHQVendu);
 		return res;
 	}
 
