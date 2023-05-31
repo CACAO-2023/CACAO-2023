@@ -144,13 +144,13 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			for (ChocolatDeMarque marque : chocolats_filiere) {
 				chocolats.add(marque);	
 				if (marque.getGamme()==Gamme.HQ) {
-					prixDeVente.put(marque,4500.);
+					prixDeVente.put(marque,30000.);
 				}
 				if (marque.getGamme()==Gamme.MQ) {
-					prixDeVente.put(marque,3500.);
+					prixDeVente.put(marque,20000.);
 				}
 				if (marque.getGamme()==Gamme.BQ) {
-					prixDeVente.put(marque,2500.);
+					prixDeVente.put(marque,15000.);
 				}
 			}
 			
@@ -335,7 +335,7 @@ public class Distributeur2Acteur implements IActeur,IDistributeurChocolatDeMarqu
 			CA_step += montant;
 
 			journal_stocks.ajouter("retrait d'une quantité de"+ quantite+"T");
-			journal_ventes.ajouter("La quantité " + quantite + " a été vendue à" + montant);
+			journal_ventes.ajouter("La quantité " + quantite + "de "+ choco+ " a été vendue à" + montant +"stock restant"+stocks.getStock(choco));
 		}
 //	}
 
