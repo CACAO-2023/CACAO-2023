@@ -83,10 +83,10 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	@Override
 	/**Nathan Salbego*/
 	public double propositionPrix(ExemplaireContratCadre contrat) {
-		int a=3000;
-		int b=3300;
-		int c=3600;
-		int d=4000;
+		int a=2000;
+		int b=2500;
+		int c=2900;
+		int d=3300;
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
 				super.journalVentes.ajouter("Proposition de prix: "+a+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
@@ -112,10 +112,10 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	@Override
 	/**Nathan Salbego*/
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		int a=3000;
-		int b=3300;
-		int c=3600;
-		int d=4000;
+		int a=2000;
+		int b=2500;
+		int c=2900;
+		int d=3300;
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			double i=(Math.random()/10);
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
@@ -204,9 +204,9 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		{this.rechercheContrat(super.chocosProduits.get(3));}}
 	}
 
-	@Override
+
 	/**Nathan Salbego*/
-	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
+	public Lot livrer1(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
 		super.journalVentes.ajouter("Stock HGL="+this.stockChocolatHGL.getQuantiteTotale());
 		super.journalVentes.ajouter("Stock MGL="+this.stockChocolatMGL.getQuantiteTotale());
 		super.journalVentes.ajouter("Stock MG="+this.stockChocolatMG.getQuantiteTotale());
@@ -220,7 +220,6 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		else {super.journalVentes.ajouter("On livre : "+livre+"de : "+((ChocolatDeMarque)produit).getMarque());
 		}
 		if (livre>0.0) {
-			//if (super.estUnDeNosChoco((ChocolatDeMarque)produit)){
 			double res = super.retirerChocolat((ChocolatDeMarque)produit, livre);//Attention il faut que cela soit possible; verifier la quantité
 		
 		if (res>0) {
@@ -229,6 +228,27 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		else {
 			super.journalVentes.ajouter("On ne livre pas");
 		}}
+		return lot;
+	}
+	public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
+		super.journalVentes.ajouter("Stock HGL="+this.stockChocolatHGL.getQuantiteTotale());
+		super.journalVentes.ajouter("Stock MGL="+this.stockChocolatMGL.getQuantiteTotale());
+		super.journalVentes.ajouter("Stock MG="+this.stockChocolatMG.getQuantiteTotale());
+		super.journalVentes.ajouter("Stock BG="+this.stockChocolatBG.getQuantiteTotale());
+		Lot lot = new Lot(produit);
+		if (super.getLotChocolat(produit)!=null) {
+		double livre = super.retirerChocolat((ChocolatDeMarque)produit, quantite);
+		if (livre<quantite) {
+			super.journalVentes.ajouter("On livre seulement : "+livre+"de : "+((ChocolatDeMarque)produit).getMarque());
+		}
+		else {super.journalVentes.ajouter("On livre : "+livre+"de : "+((ChocolatDeMarque)produit).getMarque());
+		}
+		if (livre>0) {
+		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); }
+		return lot;}
+		else {
+			super.journalVentes.ajouter("On ne livre pas");
+		}
 		return lot;
 	}
 	/**ecrit par Nathan Claeys
