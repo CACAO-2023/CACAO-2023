@@ -123,10 +123,12 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 	 */
 
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
-		if (contrat.getQuantiteTotale()>stockChocoMarque.get(contrat.getProduit())) {
-			return null;}
-		else { return contrat.getEcheancier(); }
-	}
+		if (stockChocoMarque.get(contrat.getProduit())!=null) {
+			if (contrat.getQuantiteTotale()>stockChocoMarque.get(contrat.getProduit())) {
+				return null;}
+			return contrat.getEcheancier(); }
+		return null;}
+
 
 
 	/**
