@@ -156,12 +156,19 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		
 	}
 	 
+<<<<<<< HEAD
 	/**Nathan Salbego*/
+=======
+	
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 	public void initialiser() {
 		super.initialiser();
 		this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
 	}
+<<<<<<< HEAD
 	/**Nathan Salbego*/
+=======
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 	public void rechercheContrat(IProduit produit) {
 		if (superviseur != null) {
 		List<IAcheteurContratCadre> acheteurs = superviseur.getAcheteurs(produit);
@@ -208,11 +215,18 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		double livre = Math.min(super.getLotChocolat(produit).getQuantiteTotale(), quantite);
 		super.journalVentes.ajouter("On livre : "+livre+"de : "+((ChocolatDeMarque)produit).getMarque());
 		if (livre>0.0) {
+<<<<<<< HEAD
 			//if (super.estUnDeNosChoco((ChocolatDeMarque)produit)){
 			double res = super.retirerChocolat((ChocolatDeMarque)produit, livre);//Attention il faut que cela soit possible; verifier la quantité
 		
 		if (res>0) {
 		lot.ajouter(Filiere.LA_FILIERE.getEtape(), res); }
+=======
+			super.retirerChocolat((ChocolatDeMarque)produit, livre);//Attention il faut que cela soit possible; verifier la quantité
+		
+		
+		lot.ajouter(Filiere.LA_FILIERE.getEtape(), livre); 
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 		return lot;}
 		else {
 			super.journalVentes.ajouter("On ne livre pas");

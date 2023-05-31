@@ -125,18 +125,24 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 						}//ajoute les contrats avec le chocolat qui nous interesse 
 
 					}
+					if (vendeursChocolat.size()>1  ) {
+						pasAchete=true;
 
+<<<<<<< HEAD
 					if (vendeursChocolat.size()>0  ) {
 
 					if (vendeursChocolat.size()>1  ) {
 
 						pasAchete=true;
 
+=======
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 						if (contratAvecChocolat.size()==0) {
 							for (int j=0; j< vendeursChocolat.size()&&pasAchete;j++) {
 
 
 								//Echeancier echeancier = new Echeancier (contratEnCours.get(i).getEcheancier().getStepFin(),24, 25000.0);
+<<<<<<< HEAD
 								ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier , this.cryptogramme, false);
 								if (cc!= null) {
 									pasAchete = false;
@@ -160,6 +166,12 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 
 									journal_achats.ajouter("1CC "+cc.getNumero()+" achat du chocolat " + chocolats.get(i)+" au prix à la tonne de " + prix);
 
+=======
+								ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier , this.cryptogramme, initialise);
+								if (cc!= null) {
+									pasAchete = false;
+									journal_achats.ajouter("1CC "+cc.getNumero()+" achat du chocolat " + chocolats.get(i)+" au prix à la tonne de " + prix);
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 								}
 							}
 
@@ -181,6 +193,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 
 
 									Echeancier echeancier2 = new Echeancier (contratAvecChocolat.get(k).getEcheancier().getStepFin(), qteVoulue);
+<<<<<<< HEAD
 									ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier2 , this.cryptogramme, false);
 									if (cc!=null) 
 									{ 
@@ -189,12 +202,19 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 
 										pasAchete = false; journal_ventes.ajouter("achat du chocolat " + chocolats.get(i)+" au prix à la tonne de " + prix);
 
+=======
+									ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(j), chocolats.get(i), echeancier2 , this.cryptogramme, initialise);
+									if (cc!=null) 
+									{ 
+										pasAchete = false; journal_ventes.ajouter("achat du chocolat " + chocolats.get(i)+" au prix à la tonne de " + prix);
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 										adapter_prix_vente(cc);
 									}
 								}
 
 							}
 							if (prixEnCours.keySet().size()!=0) {
+<<<<<<< HEAD
 
 								//System.out.println(" key set ok");
 								double pm = 100000000000000000000.0;
@@ -244,15 +264,48 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 						if(cc != null) {
 							journal_achats.ajouter("CC "+cc.getNumero()+" achat du chocolat " + chocolats.get(i)+" au prix à la tonne de " + prix);
 
+=======
+								double pm = 100000000000000000000.0;
+								IVendeurContratCadre vmin=null;
+
+								for (IVendeurContratCadre v : prixEnCours.keySet()) {
+									if (prixEnCours.get(v)<pm){
+										pm = prixEnCours.get(v);
+										vmin = v ; 
+									}
+									if(vmin !=null) {
+										//Comment garder l'echeancier ???? -> tjrs le même à la fin 
+										ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vmin, chocolats.get(i), echeancier , this.cryptogramme, initialise);
+
+									}
+
+								}
+							}
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 						}
 
 					}
+<<<<<<< HEAD
+=======
+					else if (vendeursChocolat.size()==1  ){
+						pasAchete=false;
+						ExemplaireContratCadre cc =supCCadre.demandeAcheteur(this , vendeursChocolat.get(0), chocolats.get(i), echeancier , this.cryptogramme, initialise);
+						if(cc != null) {
+							journal_achats.ajouter("1CC "+cc.getNumero()+" achat du chocolat " + chocolats.get(i)+" au prix à la tonne de " + prix);
+
+						}
+
+					}
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 				}
 			}
 		}
 	}
+<<<<<<< HEAD
 	}
 
+=======
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 
 
 
@@ -397,6 +450,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 			//double qte = this.stock.getStock(chocolat);
 			//double qteProp = e.getQuantiteTotale();
 <<<<<<< HEAD
+<<<<<<< HEAD
 			for (int i=0; i<e.getNbEcheances();i++) {
 				stockPropose = stockPropose +e.getQuantite(i);
 			}
@@ -415,6 +469,11 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 			double qtechocstep = 0.0;
 			for(int j=0; j< e.getNbEcheances(); j++){
 >>>>>>> branch 'main' of https://github.com/BaptisteBAYLE/CACAO-2023
+=======
+
+			double qtechocstep = 0.0;
+			for(int j=0; j< e.getNbEcheances(); j++){
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 				for(int i =0; i<contratEnCours.size();i++) {
 
 					qtechocstep = qtechocstep +  contratEnCours.get(i).getEcheancier().getQuantite(j);}
@@ -428,9 +487,18 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		}
 			return e;
 			}*/
+=======
+			}
+			return e;
+		}
+
+		return null; 
+	}
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 
 return null; 
 }
@@ -464,10 +532,13 @@ public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 
 			return 0.0;
 		}
+<<<<<<< HEAD
 
 	} else {
 		/* 
 =======
+=======
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 		journal_ventes.ajouter("proposition d'achat du chocolat " + contrat.getProduit()+" au prix à la tonne de " + prix);
 		ChocolatDeMarque choco = (ChocolatDeMarque)contrat.getProduit();
 		Chocolat c = choco.getChocolat();
@@ -488,6 +559,7 @@ public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 
 				return 0.0;
 			}
+<<<<<<< HEAD
 		} 
 		else {
 			
@@ -499,6 +571,18 @@ public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 			return prix ;
 
 			
+=======
+		} else {
+			/* 
+			 On cherche à négocier le prix proposé entre le prix et prixMin 
+			 */
+			if(prix<prix_max && prix>prix_min) {
+				//On pourra peut etre rajouter un comportement selon le comportement de l'autre partie (s'il fait pas d'ffort on s'adapte par exemple)
+				prix=prix*0.8;
+				prec=prix;
+				journal_ventes.ajouter("nouveau prix tonne de " + contrat.getProduit()+" est de " + prix + "€");
+				return prix ;
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 			}
 			else {
 				return 0.0;
@@ -509,9 +593,41 @@ public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 
 	}
 
+<<<<<<< HEAD
 }
+=======
 
+	@Override
+	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
+		IProduit nt;
+		this.journal_achats = new Journal("On receptionne du chocolat : " + contrat.getProduit() + " en quantite : " + lot.getQuantiteTotale(), this);
+		stock.ajoutQte(((ChocolatDeMarque)(contrat.getProduit())), lot.getQuantiteTotale());
+	}
 
+	@Override
+	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
+		// TODO Auto-generated method stub
+		this.journal_achats.ajouter("cc accepte Etape "+ Filiere.LA_FILIERE.getEtape()+ " : " + "je viens de passer le contrat "+contrat + "et j'ai achete le chocolat " + contrat.getProduit());
+		this.contratEnCours.add(contrat);
+
+	//e	notificationOperationBancaire(-1*contrat.getPrix()*contrat.getQuantiteTotale());
+
+		// william 
+		adapter_prix_vente(contrat);
+
+	}
+
+	//william 
+	public void adapter_prix_vente(ExemplaireContratCadre contrat) {
+		prix = contrat.getPrix() /*/contrat.getQuantiteTotale() deja à la tonne */;
+		journal_prix_vente.ajouter("achat du chocolat " + contrat.getProduit()+" au prix à la tonne de " + prix);
+		ChocolatDeMarque choco = (ChocolatDeMarque)contrat.getProduit();
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
+
+		// on calcule le prix de vente du chocolat dus contract en fonction de la gamme
+		double prix_tonne_de_vente_contrat = 0.0;
+
+<<<<<<< HEAD
 
 	@Override
 	public void receptionner(Lot lot, ExemplaireContratCadre contrat) {
@@ -545,14 +661,27 @@ public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		// marge de 80% sur HQ_BE
 		if(choco.getGamme() == Gamme.HQ)  {
 			prix_tonne_de_vente_contrat = prix*this.coef_prix_vente.get(0.0);
+=======
+		// marge de 80% sur HQ_BE
+		if(choco.getGamme() == Gamme.HQ)  {
+			prix_tonne_de_vente_contrat = prix*5;
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 		}
 		// marge de 67% sur MQ_BE
 		if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.MQ && ((ChocolatDeMarque)contrat.getProduit()).isBioEquitable()){
+<<<<<<< HEAD
 			prix_tonne_de_vente_contrat = prix*this.coef_prix_vente.get(1.0);
 		}
 		// marge de 50% sur MQ
 		if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.MQ  && !((ChocolatDeMarque)contrat.getProduit()).isBioEquitable()) {
 			prix_tonne_de_vente_contrat = prix*this.coef_prix_vente.get(2.0);
+=======
+			prix_tonne_de_vente_contrat = prix*3;
+		}
+		// marge de 50% sur MQ
+		if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.MQ  && !((ChocolatDeMarque)contrat.getProduit()).isBioEquitable()) {
+			prix_tonne_de_vente_contrat = prix*2;
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 		}
 
 		double prix_tonne_de_vente_apres_achat = 0.0;

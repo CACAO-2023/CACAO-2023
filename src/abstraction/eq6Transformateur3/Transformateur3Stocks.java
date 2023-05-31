@@ -221,11 +221,20 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  		if(stockChocolatBG.getQuantiteTotale()>=quantite) {
 	  			stockChocolatBG.retirer(quantite);
 	  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
+<<<<<<< HEAD
 	  			res = quantite;
 	  		}
+=======
+	  			break;
+	  			}
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
         		else {if(stockChocolatBG.getQuantiteTotale()>0.0){stockChocolatBG.retirer(stockChocolatBG.getQuantiteTotale());
         		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatBG.getQuantiteTotale());
+<<<<<<< HEAD
         		res = stockChocolatBG.getQuantiteTotale();}
+=======
+        		break ;}
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
         		}
         		break ;
         		
@@ -234,38 +243,68 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
 	  			if(stockChocolatMGL.getQuantiteTotale()>=quantite) {
 		  			stockChocolatMGL.retirer(quantite);
 		  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
+<<<<<<< HEAD
 		  			res = quantite;
 	  			}
+=======
+		  			break;
+		  			}
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 	        		else {if(stockChocolatMGL.getQuantiteTotale()>0.0){
 	        			stockChocolatMGL.retirer(stockChocolatMGL.getQuantiteTotale());
 	        
 	        		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatMGL.getQuantiteTotale());
+<<<<<<< HEAD
 	        		res = stockChocolatMGL.getQuantiteTotale();}}
+=======
+	        		break ;}
+	        		}
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 	  		}else {
 	  			if(stockChocolatMG.getQuantiteTotale()>=quantite) {
 		  			stockChocolatMG.retirer(quantite);
 		  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
+<<<<<<< HEAD
 		  			res = quantite;
 	  			}
+=======
+		  			break;
+		  			}
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 	        		else {if(stockChocolatMG.getQuantiteTotale()>0.0){
 	        			stockChocolatMG.retirer(stockChocolatMG.getQuantiteTotale());
 	        		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatMG.getQuantiteTotale());
+<<<<<<< HEAD
 	        		
 	        		res = stockChocolatMG.getQuantiteTotale();}}
+=======
+	        		break ;
+	        		}}
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 	  		}
 	  		break;
 	  	case HQ :
 	  		if(stockChocolatHGL.getQuantiteTotale()>=quantite) {
 	  			stockChocolatHGL.retirer(quantite);
 	  			super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-quantite);
+<<<<<<< HEAD
 	  			res = quantite;
 	  		}
+=======
+	  			break;
+	  			}
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
         		else {if(stockChocolatHGL.getQuantiteTotale()>0.0){
         			stockChocolatHGL.retirer(stockChocolatHGL.getQuantiteTotale());
         		super.totalStocksChoco.setValeur(this, super.totalStocksChoco.getValeur()-stockChocolatHGL.getQuantiteTotale());
+<<<<<<< HEAD
            		res = stockChocolatHGL.getQuantiteTotale();
         		}}
 	  		break ;
+=======
+        		break ;
+        		}}
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 	  	default :
 	  		//throw new IllegalArgumentException("Type de Chocolat invalide");
 	  		res = 0.0;

@@ -83,6 +83,7 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 		if (transfo>0.0) {
 			this.retirer(fb,transfo);
 			int pourcentageCacao =  42;
+<<<<<<< HEAD
 			for (ChocolatDeMarque c : Filiere.LA_FILIERE.getChocolatsProduits()) {
 				if (c.getMarque().equals("Yocttotoa")) {
 					ChocolatDeMarque cm =c;
@@ -94,6 +95,14 @@ public class Transformateur1Transformateur extends Stock implements IFabricantCh
 				}
 			}
 			
+=======
+			ChocolatDeMarque cm= new ChocolatDeMarque(cb, "Yocttotoa", pourcentageCacao, 0);
+			this.ajouter(cm, transfo*conversionb);
+			this.journal.ajouter(COLOR_LLGRAY, Color.PINK, "Transfo de "+(transfo)+" T de "+fb+" en "+transfo*conversionb+" T de "+cb);
+			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+fb+")->"+this.stockFeves.get(fb));
+			this.journal.ajouter(COLOR_LLGRAY, COLOR_BROWN," stock("+cm+")->"+this.stockChocoMarque.get(cm));
+			this.qteTransfo=transfo;
+>>>>>>> branch 'main' of https://github.com/noikitu/CACAO-2023
 		}
 		Feve fh = Feve.F_HQ_BE;
 		Chocolat ch = Chocolat.C_HQ_BE;
