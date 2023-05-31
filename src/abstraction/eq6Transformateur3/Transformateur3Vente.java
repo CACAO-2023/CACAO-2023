@@ -56,14 +56,15 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	@Override
 	/**Nathan Salbego*/
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
+		int t=6;
 		Echeancier e=contrat.getEcheancier();
 		for (int i=contrat.getEcheancier().getStepDebut();i<contrat.getEcheancier().getStepFin()+1;i++) {
-			if(demandeTotStep(i,contrat.getProduit())>super.capTransMax/4) {
+			if(demandeTotStep(i,contrat.getProduit())>super.capTransMax/t) {
 				super.journalVentes.ajouter("Proposition rejetée pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
 				return null;
 			}
 			else {
-			if (demandeTotStep(i,contrat.getProduit())+contrat.getEcheancier().getQuantite(i)>super.capTransMax/4) {
+			if (demandeTotStep(i,contrat.getProduit())+contrat.getEcheancier().getQuantite(i)>super.capTransMax/t) {
 				e.set(i,super.capTransMax/4-demandeTotStep(i,contrat.getProduit()));
 				super.journalVentes.ajouter("Proposition négociée pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
 				}
