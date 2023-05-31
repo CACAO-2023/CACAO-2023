@@ -7,12 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import abstraction.eqXRomu.general.Courbe;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import controle.CtrlDecouvertAutorise;
 import presentation.FenetrePrincipale;
+import presentation.secondaire.FenetreGraphique;
 
 public class Banque implements IActeur, IAssermente {
+	public static final boolean AFFICHAGE_SOLDES = false;
 	public static final double SOLDE_MAX = 100000000000.0;
 	public static final double SOLDE_INITIAL = 10000000000.0;
 	private HashMap<IActeur, Variable> comptes; // Memorise le solde bancaire de chaque acteur
@@ -31,6 +34,8 @@ public class Banque implements IActeur, IAssermente {
 	private Variable agiosDecouvertAutorise; // Agios applicables pour une solde debiteur de [decouvertAutorise, 0]
 	private Variable agiosDecouvertAuDela; // Agios applicables pour un solde debiteur allant au dela du decouvert autorise
 	private Variable seuilOperationsRefusees; // Aucune operation amenant le solde a un niveau inferieur n'est autorisee mis a part l'ajout d'agios 
+	private FenetreGraphique graphiqueSoldes;
+	private HashMap<IActeur, Courbe> courbesSoldes;
 	
 	public Banque() {
 		this.comptes = new HashMap<IActeur, Variable>();
@@ -62,6 +67,15 @@ public class Banque implements IActeur, IAssermente {
 				((IAssermente)a).setCryptos(this.cryptogramme);
 			}
 		}
+		this.graphiqueSoldes=new FenetreGraphique("Soldes",600,400);
+		this.courbesSoldes=new HashMap<IActeur,Courbe>();
+		for (IActeur a : acteurs) {
+			if (!(a instanceof IAssermente)) {
+			this.courbesSoldes.put(a, new Courbe("Solde "+a.getNom())) ;
+			this.graphiqueSoldes.ajouter(this.courbesSoldes.get(a));
+			}
+		}
+		
 		Filiere.LA_FILIERE.setCryptos(this.cryptogramme);
 		if (FenetrePrincipale.LA_FENETRE_PRINCIPALE!=null) {
 			FenetrePrincipale.LA_FENETRE_PRINCIPALE.setCryptos(this.cryptogramme);
@@ -74,6 +88,7 @@ public class Banque implements IActeur, IAssermente {
 	public void next() {
 		Set<IActeur> acteurs = comptes.keySet();
 		for (IActeur a : acteurs) {
+			if (!(a instanceof IAssermente)) this.courbesSoldes.get(a).ajouter(Filiere.LA_FILIERE.getEtape(),this.comptes.get(a).getValeur());
 			if (!aFaitFaillite(a)) {
 				if (comptes.get(a).getValeur()<0) {
 					int nbDecouverts = decouvertsConsecutifs.get(a)+1;
@@ -88,6 +103,8 @@ public class Banque implements IActeur, IAssermente {
 				}
 			}
 		}
+			this.graphiqueSoldes.setVisible(AFFICHAGE_SOLDES);
+		
 	}
 
 	public void agios(IActeur a) {
