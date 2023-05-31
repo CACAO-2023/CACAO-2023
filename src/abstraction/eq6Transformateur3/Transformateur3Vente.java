@@ -84,20 +84,20 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
-				super.journalVentes.ajouter("Proposition de prix: "+20000+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-				return 20000;
+				super.journalVentes.ajouter("Proposition de prix: "+2500+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+				return 2500;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco")) {
-				super.journalVentes.ajouter("Proposition de prix: "+21000+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-				return 21000;
+				super.journalVentes.ajouter("Proposition de prix: "+2700+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+				return 2700;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco bio")) {
-				super.journalVentes.ajouter("Proposition de prix: "+23000+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-				return 23000;
+				super.journalVentes.ajouter("Proposition de prix: "+3000+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+				return 3000;
 			}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("Choc")) {
-				super.journalVentes.ajouter("Proposition de prix: "+25000+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-				return 25000;
+				super.journalVentes.ajouter("Proposition de prix: "+3300+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+				return 3300;
 			}
 		}
 		super.journalVentes.ajouter("Proposition de prix: "+0+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
@@ -110,40 +110,40 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		if (contrat.getProduit() instanceof ChocolatDeMarque) {
 			double i=(Math.random()/10);
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("eco+ choco")) {
-				if(contrat.getPrix()<18000) {
-					super.journalVentes.ajouter("Contre proposition de prix: "+2000*(1-i)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-					return 20000*(1-i);
+				if(contrat.getPrix()<2250) {
+					super.journalVentes.ajouter("Contre proposition de prix: "+2500*(1-i)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return 2500*(1-i);
 				}
-				else {super.journalVentes.ajouter("Contre proposition de prix: "+Math.min(contrat.getPrix()*(1+i), 20000)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-					return Math.min(contrat.getPrix()*(1+i), 20000);
+				else {super.journalVentes.ajouter("Contre proposition de prix: "+Math.min(contrat.getPrix()*(1+i), 2500)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return Math.min(contrat.getPrix()*(1+i), 2500);
 			}}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco")) {
-				if(contrat.getPrix()<18900) {
-					super.journalVentes.ajouter("Contre proposition de prix: "+21000*(1-i)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-					return 21000*(1-i);
+				if(contrat.getPrix()<2430) {
+					super.journalVentes.ajouter("Contre proposition de prix: "+2700*(1-i)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return 2700*(1-i);
 				}
-				else {super.journalVentes.ajouter("Contre proposition de prix: "+Math.min(contrat.getPrix()*(1+i), 21000)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-					return Math.min(contrat.getPrix()*(1+i), 21000);
+				else {super.journalVentes.ajouter("Contre proposition de prix: "+Math.min(contrat.getPrix()*(1+i), 2700)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return Math.min(contrat.getPrix()*(1+i), 2700);
 			}}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("chokchoco bio")) {
-				if(contrat.getPrix()<20700) {
-					super.journalVentes.ajouter("Contre proposition de prix: "+23000*(1-i)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-					return 23000*(1-i);
+				if(contrat.getPrix()<2700) {
+					super.journalVentes.ajouter("Contre proposition de prix: "+3000*(1-i)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return 3000*(1-i);
 				}
-				else {super.journalVentes.ajouter("Contre proposition de prix: "+Math.min(contrat.getPrix()*(1+i), 20300)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-					return Math.min(contrat.getPrix()*(1+i), 23000);
+				else {super.journalVentes.ajouter("Contre proposition de prix: "+Math.min(contrat.getPrix()*(1+i), 3000)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return Math.min(contrat.getPrix()*(1+i), 3000);
 			}}
 			if (((ChocolatDeMarque)contrat.getProduit()).getMarque().equals("Choc")) {
-				if(contrat.getPrix()<22500) {
-					super.journalVentes.ajouter("Contre proposition de prix: "+25000*(1-i)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-					return 25000*(1-i);
+				if(contrat.getPrix()<2980) {
+					super.journalVentes.ajouter("Contre proposition de prix: "+3300*(1-i)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return 3300*(1-i);
 				}
-				else {super.journalVentes.ajouter("Contre proposition de prix: "+Math.min(contrat.getPrix()*(1+i), 25000)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-					return Math.min(contrat.getPrix()*(1+i), 25000);
+				else {super.journalVentes.ajouter("Contre proposition de prix: "+Math.min(contrat.getPrix()*(1+i), 3300)+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+					return Math.min(contrat.getPrix()*(1+i), 3300);
 			}}
 		}
-		super.journalVentes.ajouter("Contre proposition de prix: "+20000+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
-		return 20000;
+		super.journalVentes.ajouter("Contre proposition de prix: "+2500+" pour :"+((ChocolatDeMarque)contrat.getProduit()).getMarque());
+		return 2500;
 	}
 
 	@Override
