@@ -9,17 +9,17 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 //auteur : AZZI Maxime
 
 public class StockGeneral {
-	protected HashMap<ChocolatDeMarque, Stock> stocks;
+	
+	protected HashMap<ChocolatDeMarque, Stock> stockMarque;
 
 	// auteur : AZZI Maxime
 	public StockGeneral() {
-		stocks = new HashMap<ChocolatDeMarque, Stock>();
-		
+		stockMarque = new HashMap<ChocolatDeMarque, Stock>();
 	}
 
 	// auteur : AZZI Maxime
 	public double getStock(ChocolatDeMarque chocolat) {
-		Stock stock = stocks.get(chocolat);
+		Stock stock = stockMarque.get(chocolat);
 		if (stock != null) {
 			return stock.getQuantite();
 		}
@@ -31,10 +31,15 @@ public class StockGeneral {
 	//auteur: MOUDACHIROU Kayodé
 	public double getStockGlobal() {
 		double s=0;
-		for (Map.Entry mapentry : stocks.entrySet()) {
+		for (Map.Entry mapentry : stockMarque.entrySet()) {
 			s+=this.getStock((ChocolatDeMarque)mapentry.getKey());
 		}
 		return s;
+	}
+	
+	// auteur : AZZI Maxime
+	public void initStock(ChocolatDeMarque produit, double quantiteAjoutee) {
+		stockMarque.put(produit, new Stock(quantiteAjoutee));
 	}
 
 	// Autres méthodes pour gérer le stock général (ajouter, retirer, etc.)
@@ -42,14 +47,14 @@ public class StockGeneral {
 	public void ajouterAuStock(ChocolatDeMarque produit, double quantiteAjoutee) {
 		double stock = getStock(produit)+ quantiteAjoutee;
 		Stock S = new Stock(stock);
-		stocks.put(produit,S);
+		stockMarque.replace(produit,S);
 	}
 
 	// auteur : AZZI Maxime
 	public void retirerDuStock(ChocolatDeMarque produit, double quantiteRetiree) {
 		double stock = getStock(produit)- quantiteRetiree;
 		Stock S = new Stock(stock);
-		stocks.put(produit,S);
+		stockMarque.replace(produit,S);
 	}
 	
 	

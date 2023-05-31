@@ -1,10 +1,8 @@
 package abstraction.eq3Producteur3;
 
 import java.awt.Color;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
@@ -35,15 +33,15 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     }
 
     /**
-     * @author Corentin Caugant
+     * @author Corentin Caugant, Victor Dubus-Chanson
      */
     public void initialiser() {
         super.initialiser();
         this.superviseur = (SuperviseurVentesContratCadre)Filiere.LA_FILIERE.getActeur("Sup.CCadre");
 
         // Initialisation des HashMaps. Au début tous nos acheteurs ont la même fiabilité.
-        Double PRIX_DEPART_MQ = 10000.0;
-        Double PRIX_DEPART_HQ = 30000.0;
+        Double PRIX_DEPART_MQ = 5000.0; //10000 avant, mais des équipes ne negocient pas, donc fixe a un prix défini entre les producteurs et les transformateurs
+        Double PRIX_DEPART_HQ = 10000.0; //30000 avant, idem
 
         List<IAcheteurContratCadre> acheteurs = new LinkedList<IAcheteurContratCadre>();
 		List<IActeur> acteurs = Filiere.LA_FILIERE.getActeursSolvables();
@@ -126,18 +124,24 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
 
     /**
      * Returns the initial price we will propose to the buyer.
+     * Does not increase the price because some teams do not negotiate and will keep buying at the increased price, with prices not having an upper limit
      * @param acheteur The buyer we want to sell to
      * @param feve The type of beans we want to sell
      * @return The price we propose to the buyer, based on the type of beans and the buyer's last agreed price
-     * @author Corentin Caugant
+     * @author Corentin Caugant, Victor Dubus-Chanson
      */
     public double propositionPrixIntial(IAcheteurContratCadre acheteur, Feve feve) {
+        // ! Nous ferons toujours monter un peu le prix au début des négociations pour s'assurer que notre prix ne baisse pas inéxorablement.
         if (feve == Feve.F_MQ_BE) {
-            double price = Math.max(this.getPrixTonne() * 1.2, this.acheteursMQprix.get(acheteur) * 1.1);
+        	// No negotiation
+            // double price = Math.max(this.getPrixTonne() /** 1.2*/ , this.acheteursMQprix.get(acheteur) /** 1.1*/);
+        	double price = 5000;
             this.acheteursMQprix.put(acheteur, price);
             return price;
         } else {
-            double price = Math.max(this.getPrixTonne() * 1.4, this.acheteursHQprix.get(acheteur) * 1.3);
+        	// No negotiation
+            // double price = Math.max(this.getPrixTonne() /* * 1.4*/, this.acheteursHQprix.get(acheteur) /** 1.3*/);
+        	double price = 10000;
             this.acheteursHQprix.put(acheteur, price);
             return price;
         }
@@ -163,12 +167,12 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     }
 
     /**
-     * @author Corentin Caugant
+     * @author Corentin Caugant  
      */
     @Override
     public Lot livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
 
-        Lot lot = new Lot(produit);
+        Lot lot =  new Lot(produit);
 
         int oldestStep = Stock.getAge((Feve)produit);
         double currentQuantite;
@@ -186,7 +190,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
             }
         }
 
-        if (currentQuantite > 0) {
+        if (currentQuantite > 0.0) {
             lot.ajouter(oldestStep, currentQuantite);
         }
         
@@ -224,13 +228,13 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     @Override
     public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
         Echeancier echeancier = contrat.getEcheancier();
-        if (this.getAvailableQuantity((Feve)contrat.getProduit()) <= 0) {
+        if (this.getAvailableQuantity((Feve)contrat.getProduit()) <= 100) {
             return null;
         }
 
         // We rework the echeancier to fit the stock
         if (echeancier.getQuantiteTotale() > this.getAvailableQuantity((Feve)contrat.getProduit())) {
-            echeancier.ajouter(this.getAvailableQuantity((Feve)contrat.getProduit())/(echeancier.getStepFin() - echeancier.getStepDebut()));
+            echeancier = new Echeancier(echeancier.getStepDebut(), echeancier.getStepFin() - echeancier.getStepDebut(), this.getAvailableQuantity((Feve)contrat.getProduit())/(echeancier.getStepFin() - echeancier.getStepDebut()));
         }
 
         return echeancier;
@@ -309,7 +313,10 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
      */
     public void next() {
         super.next();
-
+        //Pour la suite, on abesoin de savoir les contrats qui ont ete effectue au step precedent
+        LinkedList<ExemplaireContratCadre> contraprecedent = new LinkedList<ExemplaireContratCadre>();
+        contraprecedent.addAll(this.contracts);
+        this.contractprecedent = contraprecedent;
         List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.contracts) {
 			if (contrat.getQuantiteRestantALivrer()<=0.0 && contrat.getMontantRestantARegler()<=0.0) {
@@ -336,7 +343,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
     /**
      * Returns the quantity of beans available for a given quality.
      * This method takes into account ongoing CCs and the stock to compute the quantity available for sale accurately.
-     * Corentin Caugant
+     * @author Corentin Caugant
      */
     public double getAvailableQuantity(Feve qualite) {
         double available = this.getStock().getQuantite(qualite);
@@ -349,6 +356,7 @@ public class Producteur3CC extends Producteur3Acteur implements IVendeurContratC
         }
         
         double SAFE_MARGIN = this.margeStockage.getValeur(); // Percentage of the stock we want to keep
-        return Math.min(Math.max(available * (1 - SAFE_MARGIN), 0.0), 100000);
+        available = Math.min(Math.max(available * (1 - SAFE_MARGIN), 0.0), 100000);
+        return available;
     }
 }

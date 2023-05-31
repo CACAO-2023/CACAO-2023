@@ -1,5 +1,6 @@
 package abstraction.eq3Producteur3;
 
+import java.util.HashMap;
 import java.util.Set;
 
 import abstraction.eqXRomu.bourseCacao.IVendeurBourse;
@@ -11,39 +12,26 @@ import abstraction.eqXRomu.produits.Lot;
  * @author Gabriel
  */
 public class Bourse3 extends Producteur3CC implements IVendeurBourse {
-	protected double quantiteVenduBourseB;
-	protected double quantiteVenduBourseM;
+	protected HashMap<Integer, Double> quantiteVenduBourseB;
+	protected HashMap<Integer, Double> quantiteVenduBourseM;
 	
 	/** 
-	 * @param s
+	 * @param s = quality of the feve
 	 * @author BOCQUET Gabriel
 	 */
-	public double getQuantiteVenduBourse(String s) {
-		if(s=="B"){
-			return this.quantiteVenduBourseB;
+	public double getQuantiteVenduBourse(String s, int step) {
+		if (step > -1 ) {
+		if(s=="B" && this.quantiteVenduBourseB.get(step) != null){
+			return this.quantiteVenduBourseB.get(step);
 		}
-		else if (s=="M") {
-			return this.quantiteVenduBourseM;
+		else if (s=="M" && this.quantiteVenduBourseM.get(step) != null) {
+			return this.quantiteVenduBourseM.get(step);
 		}
 		return 0.0;
+		}
+			return 0.0;
 	}
 	
-	public double getQuantiteVenduBourseB() {
-		return quantiteVenduBourseB;
-	}
-
-	public void setQuantiteVenduBourseB(double quantiteVenduBourseB) {
-		this.quantiteVenduBourseB = quantiteVenduBourseB;
-	}
-
-	public double getQuantiteVenduBourseM() {
-		return quantiteVenduBourseM;
-	}
-
-	public void setQuantiteVenduBourseM(double quantiteVenduBourseM) {
-		this.quantiteVenduBourseM = quantiteVenduBourseM;
-	}
-
 	/**
 	 * @author BOCQUET Gabriel
 	 */
@@ -70,7 +58,7 @@ public class Bourse3 extends Producteur3CC implements IVendeurBourse {
 		return quantite;
 	}
 
-	/** On va mettre en vente que des MQ et la bourse ne prend pas en compte le label
+	/** On va mettre en vente que   des MQ et la bourse ne prend pas en compte le label
 	 * @author BOCQUET Gabriel, Corentin Caugant
 	 */
 	public Lot notificationVente(Feve f, double quantiteEnT, double coursEnEuroParT) {
@@ -78,11 +66,11 @@ public class Bourse3 extends Producteur3CC implements IVendeurBourse {
 		l.ajouter(Filiere.LA_FILIERE.getEtape(), quantiteEnT);
 		Stock s = super.getStock();
 		if (f == Feve.F_MQ) {
-			this.setQuantiteVenduBourseM(quantiteEnT); 
+			this.quantiteVenduBourseM.put(Filiere.LA_FILIERE.getEtape(), quantiteEnT);
 		s.retirerVielleFeve(Feve.F_MQ_BE, quantiteEnT);
 		}
 		else if ( f==Feve.F_BQ) {
-			this.setQuantiteVenduBourseB(quantiteEnT);
+			       this.quantiteVenduBourseB.put(Filiere.LA_FILIERE.getEtape(), quantiteEnT);
 			s.retirerVielleFeve(Feve.F_BQ, quantiteEnT);
 		}
 

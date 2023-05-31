@@ -40,7 +40,7 @@ public class Stock extends Transformateur1Acteur{
 			
 		this.stockChocoMarque=new HashMap<ChocolatDeMarque,Double>();
 		for (ChocolatDeMarque c: Filiere.LA_FILIERE.getChocolatsProduits()) {
-			if (c.getMarque().equals("Vccotioi") || c.getMarque().equals("choco")) {
+			if (c.getMarque().equals("Vccotioi") || c.getMarque().equals("Yocttotoa")) {
 					this.stockChocoMarque.put(c, 1000.0);
 					this.totalStocksChocoMarque.ajouter(this, 1000.0, this.cryptogramme);
 					this.journal.ajouter("ajout de 1000 de "+c+" au stock de chocolat de marque "+c.getMarque() +" +--> total="+this.totalStocksFeves.getValeur(this.cryptogramme));
@@ -59,7 +59,8 @@ public class Stock extends Transformateur1Acteur{
 			}
 			this.totalStocksFeves.ajouter(this,quantite,this.cryptogramme);
 			}
-		else if(produit.getType().equals("ChocoDeMarque")) {
+		else if(produit.getType().equals("ChocolatDeMarque")) {
+
 			if (this.stockChocoMarque.keySet().contains(produit)) {
 				this.stockChocoMarque.put((ChocolatDeMarque)produit,this.stockChocoMarque.get((ChocolatDeMarque)produit)+quantite);
 				}
@@ -83,6 +84,8 @@ public class Stock extends Transformateur1Acteur{
 	
 	public void next() {
 		super.next();
+		System.out.println("stock de feves :" +this.stockFeves);
+		System.out.println("stock de choco :" +this.stockChocoMarque);
 		this.journal.ajouter("on a stockFeve : "+stockFeves);
 		this.journal.ajouter("=== STOCKS === ");
 		for (Feve f : this.stockFeves.keySet()) {

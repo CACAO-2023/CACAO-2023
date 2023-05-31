@@ -18,10 +18,13 @@ public class Producteur1Acteur implements IActeur {
 	protected int cryptogramme;
 	protected Variable coutreplantation = new Variable("Cout de replantation", "Cout de replantation pour un hectare, peu importe sa gamme", this, 1000); //choisi arbitrairement
 	protected Variable coutmaindoeuvre = new Variable("Cout de la main d'oeuvre", "Cout de la main d'oeuvre par hectare par step", this, 30);
+	protected Variable maxcontratBQ = new Variable("Max de CC BQ", "", this, 15);
+	protected Variable maxcontratMQ = new Variable("Max de CC MQ", "", this, 4);
 	protected Journal journal_evenements;
 	protected Journal journal_stocks;
 	protected Journal journal_ventes;
 	protected Journal journal_champs;
+	protected Journal journal_fidelite;
 	protected int step;
 	protected champ champBas;
 	protected champ champMoy;
@@ -35,6 +38,7 @@ public class Producteur1Acteur implements IActeur {
 		this.journal_stocks = new Journal("Journal : stocks"+this.getNom(), this);
 		this.journal_ventes = new Journal("Journal : ventes"+this.getNom(), this);
 		this.journal_champs = new Journal("Journal : champs"+this.getNom(), this);
+		this.journal_fidelite=new Journal("Journal: Fidélité"+this.getNom(), this);
 	}
 	
 	public void initialiser() { //elouan et charles
@@ -93,6 +97,8 @@ public class Producteur1Acteur implements IActeur {
 		List<Variable> res=new ArrayList<Variable>();
 		res.add(this.coutmaindoeuvre);
 		res.add(this.coutreplantation);
+		res.add(this.maxcontratBQ);
+		res.add(this.maxcontratMQ);
 		return res;
 	}
 
@@ -103,6 +109,7 @@ public class Producteur1Acteur implements IActeur {
 		res.add(this.journal_ventes);
 		res.add(this.journal_stocks);
 		res.add(this.journal_champs);
+		res.add(this.journal_fidelite);
 		return res;
 	}
 

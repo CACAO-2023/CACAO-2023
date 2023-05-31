@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
@@ -43,7 +44,6 @@ public class Producteur3Acteur implements IActeur {
 	public Variable StockFeveB;
 	public Variable tailleH;
 	public Variable tailleM;
-
 	public Variable coutMoyen;
 	public Variable coutEmployeStep;
 	public Variable coutSalaireTot;
@@ -77,8 +77,9 @@ public class Producteur3Acteur implements IActeur {
     protected HashMap<IAcheteurContratCadre, Double> acheteursMQprix;
     protected HashMap<IAcheteurContratCadre, Double> acheteursHQprix;
 	
-
+    protected int nbr_popup;
 	protected Champs fields;
+	protected LinkedList<ExemplaireContratCadre> contractprecedent; /*Cette variable corresponds aux contrats que l'on avait au step précedent
 
 	/**
 	 * @author BOCQUET Gabriel, Corentin Caugant
@@ -113,18 +114,19 @@ public class Producteur3Acteur implements IActeur {
 	this.coutMoyen = new Variable("Equipe3 Cout Moyen par tonne", "Correspond au cout depense par step par tonne de cacao ",this,this.CoutTonne);
 	this.coutEmployeStep = new Variable("Equipe3 Cout par Employe", "Correspond au salaire d'un employe par step ",this,220);
 	this.coutSalaireTot = new Variable("Equipe3 Cout Salaire", "Correspond au total des salaires que nous devons payer ",this,(this.fields.getTaille("M")+this.fields.getTaille("H"))*this.coutEmployeStep.getValeur());
-	this.BeneficeH =  new Variable("Equipe3 Benefice Feves Hautes Gamme", "Correspond au benefice fait sur les feves Hautes Gamme ",this,0);
-	this.BeneficeM = new Variable("Equipe3 Benefice Feves Moyennes  Gamme", "Correspond au benefice fait sur les feves Moyennes Gamme ",this,0);
-	this.BeneficeB = new Variable("Equipe3 Benefice Feves Bas de Gamme", "Correspond au benefice fait sur les feves Bas de Gamme ",this,0);
+	this.BeneficeH =  new Variable("Equipe3 Benefice Feves Hautes Gamme", "Correspond au benefice fait sur les feves Hautes Gamme au step precedent",this,0);
+	this.BeneficeM = new Variable("Equipe3 Benefice Feves Moyennes  Gamme", "Correspond au benefice fait sur les feves Moyennes Gamme au step precedent",this,0);
+	this.BeneficeB = new Variable("Equipe3 Benefice Feves Bas de Gamme", "Correspond au benefice fait sur les feves Bas de Gamme au step precedent",this,0);
 	this.dateLimiteVenteM = new Variable("Equipe3 Date limite vente Bouse Feve M", "Fixe la date limite de vente des feves M avant de les vendre en bouse ",this,10);
 	this.probaIncendiL = new Variable("Equipe3 Proba Incendi L", "Fixe la probabilite qu'un incendie de taille L arrive ",this,0.1);
 	this.probaIncendiM = new Variable("Equipe3 Proba Incendi M", "Fixe la probabilite qu'un incendie de taille M arrive ",this,0.05);
 	this.probaIncendiH = new Variable("Equipe3 Proba Incendi H", "Fixe la probabilite qu'un incendie de taille H arrive ",this,0.02);
-	this.probaCyclone = new Variable("Equipe3 Proba Cyclone", "Fixe la probabilite qu'un Cyclone arrive ",this,0);
+	this.probaCyclone = new Variable("Equipe3 Proba Cyclone", "Fixe la probabilite qu'un Cyclone arrive ",this,0.01);
 	this.probaGreve = new Variable("Equipe3 Proba Greve", "Fixe la probabilite qu'une Greve arrive ",this,0.02);
 	this.pourcentageGrevise = new Variable("Equipe3 Pourcentage Greviste", "Fixe la proportion d'ouvrier en Greve ",this,0.2);
 	this.quantiteBruleH = new Variable("Equipe3 Proportion Champs Brules Incendie H", "Fixe le pourcentage d'arbre brules suite a un incendie H ",this,0.5);
 	this.quantiteBruleM = new Variable("Equipe3 Proportion Champs Brules Incendie M", "Fixe le pourcentage d'arbre brules suite a un incendie M ",this,0.2);
+
 
 	this.quantiteBruleL = new Variable("Equipe3 Proportion Champs Brules Incendie L", "Fixe le pourcentage d'arbre brules suite a un incendie L ",this,0.1);
 	this.quantiteDetruiteCyclone = new Variable("Equipe3 Proportion Champs Detruits Cyclone Max", "Fixe le pourcentage maximum d'arbre detruits suite a un Cyclone",this,0.3);
@@ -218,6 +220,12 @@ public class Producteur3Acteur implements IActeur {
 		return this.journal_achats;
 	}
 	
+	public void setNbrpopup(int i) {
+		this.nbr_popup = i;
+	}
+	public int getNbrpopup() {
+		return this.nbr_popup;
+	}
 	protected Journal getJPlantation() {
 		return this.journal_plantation;
 	}
@@ -282,7 +290,7 @@ public class Producteur3Acteur implements IActeur {
 		res.add(quantiteBruleM);
 		res.add(quantiteBruleL);
 		res.add(quantiteDetruiteCyclone);
-		res.add(pourcentageGrevise);
+		res.add(this.pourcentageGrevise);
 
 		res.add(EsperanceGaussienneProduction);
 		res.add(EcartTypeGaussienneProduction);
@@ -318,6 +326,7 @@ public class Producteur3Acteur implements IActeur {
 	// afin de vous en informer.
 	public void notificationFaillite(IActeur acteur) {
 		if (this == acteur) {
+			this.nbr_popup +=1;
 			JFrame popup = new JFrame("L'equipe 3 a fait faillite...Triste");
 			popup.setLocation(300, 100);
 			double proba = Math.random();
