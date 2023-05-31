@@ -23,7 +23,7 @@ public class VendeurOA extends DistributeurChocolatDeMarque implements IVendeurO
 				if (offre.getChocolat().equals(c.getChocolat()) && (offre.getMarque()==null || offre.getMarque().equals(c.getMarque()))) { // type recherche
 					if (this.stockChocoMarque.get(c)>=offre.getQuantiteT()) {
 						this.journal_appel.ajouter(" "+this.stockChocoMarque.get(c)+" T en stock -> quantite suffisante");
-						return new PropositionVenteOA(offre, this, c, 200);
+						return new PropositionVenteOA(offre, this, c, 2000);
 					} else {
 						this.journal_appel.ajouter(" "+this.stockChocoMarque.get(c)+" T en stock -> quantite insuffisante");
 				}
@@ -37,10 +37,11 @@ public class VendeurOA extends DistributeurChocolatDeMarque implements IVendeurO
 		double nouveauStock = Math.max(0.0, this.stockChocoMarque.get(propositionRetenue.getChocolatDeMarque())-propositionRetenue.getOffre().getQuantiteT());
 		this.journal_appel.ajouter(" le stock de "+propositionRetenue.getChocolatDeMarque()+" passe a "+nouveauStock+" suite a la vente "+propositionRetenue);
 		this.stockChocoMarque.put(propositionRetenue.getChocolatDeMarque(), nouveauStock);
-	}
+		}
 
 	public void notifierPropositionNonRetenueOA(PropositionVenteOA propositionRefusee) {
 		this.journal_appel.ajouter(COLOR_LLGRAY, Color.BLUE, "  Proposition Refusée : "+propositionRefusee);
+		
 	}
 
 }

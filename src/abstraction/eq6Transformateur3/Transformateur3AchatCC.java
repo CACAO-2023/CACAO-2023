@@ -414,7 +414,7 @@ public class Transformateur3AchatCC extends Transformateur3Transformation  imple
 		this.getListeContratEnCoursA().removeAll(contratsObsoletes);
 		//if ((super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente+200000<this.quantBQMax 
 				//&& this.prioriteCCBG)
-		if ((super.totalStocksFeves.getValeur()+this.quantiteEnAttente+10000<80000 
+		if ((super.totalStocksFeves.getValeur()+this.quantiteEnAttente+10000<50000 
 				&& this.prioriteCCBG))
 				//|| super.stockFeveBG.getQuantiteTotale()+this.quantiteEnAttente<this.quantBQMin+10000) {
 		{this.chercheContrat(Feve.F_BQ);}
