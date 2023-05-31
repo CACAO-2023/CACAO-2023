@@ -7,20 +7,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import abstraction.eqXRomu.general.Courbe;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import controle.CtrlDecouvertAutorise;
 import presentation.FenetrePrincipale;
+import presentation.secondaire.FenetreGraphique;
 
 public class Banque implements IActeur, IAssermente {
+	public static final boolean AFFICHAGE_SOLDES = false;
 	public static final double SOLDE_MAX = 100000000000.0;
 	public static final double SOLDE_INITIAL = 10000000000.0;
 	private HashMap<IActeur, Variable> comptes; // Memorise le solde bancaire de chaque acteur
 	private HashMap<IActeur, Integer> decouvertsConsecutifs; // Memorise le nombre d'etapes consecutives a decouvert. Revient a 0 des que le solde redevient positif.  
 	private HashMap<IActeur, Integer> cryptogramme; // Nombre personnel a chaque acteur communique a chaque acteur lors de la creation de son compte
-	                                                // Les acteurs assermentes (Banque et Superviseurs) ont acces a ces cryptogrammes et s'en
-	                                                // servent lors d'operations sensibles (Transferts d'argent, acces a des informations) afin de
-	                                                // garantir qu'ils sont bien des acteurs asserments de la filiere.
+	// Les acteurs assermentes (Banque et Superviseurs) ont acces a ces cryptogrammes et s'en
+	// servent lors d'operations sensibles (Transferts d'argent, acces a des informations) afin de
+	// garantir qu'ils sont bien des acteurs asserments de la filiere.
 	private HashMap<IActeur, Boolean> faillites; // A true pour les acteurs ayant fait faillite
 
 	private Journal journalBanque;
@@ -31,7 +34,9 @@ public class Banque implements IActeur, IAssermente {
 	private Variable agiosDecouvertAutorise; // Agios applicables pour une solde debiteur de [decouvertAutorise, 0]
 	private Variable agiosDecouvertAuDela; // Agios applicables pour un solde debiteur allant au dela du decouvert autorise
 	private Variable seuilOperationsRefusees; // Aucune operation amenant le solde a un niveau inferieur n'est autorisee mis a part l'ajout d'agios 
-	
+	private FenetreGraphique graphiqueSoldes;
+	private HashMap<IActeur, Courbe> courbesSoldes;
+
 	public Banque() {
 		this.comptes = new HashMap<IActeur, Variable>();
 		this.decouvertsConsecutifs=new HashMap<IActeur, Integer>();
@@ -62,6 +67,15 @@ public class Banque implements IActeur, IAssermente {
 				((IAssermente)a).setCryptos(this.cryptogramme);
 			}
 		}
+		this.graphiqueSoldes=new FenetreGraphique("Soldes",600,400);
+		this.courbesSoldes=new HashMap<IActeur,Courbe>();
+		for (IActeur a : acteurs) {
+			if (!(a instanceof IAssermente)) {
+				this.courbesSoldes.put(a, new Courbe("Solde "+a.getNom())) ;
+				this.graphiqueSoldes.ajouter(this.courbesSoldes.get(a));
+			}
+		}
+
 		Filiere.LA_FILIERE.setCryptos(this.cryptogramme);
 		if (FenetrePrincipale.LA_FENETRE_PRINCIPALE!=null) {
 			FenetrePrincipale.LA_FENETRE_PRINCIPALE.setCryptos(this.cryptogramme);
@@ -74,6 +88,7 @@ public class Banque implements IActeur, IAssermente {
 	public void next() {
 		Set<IActeur> acteurs = comptes.keySet();
 		for (IActeur a : acteurs) {
+			if (!(a instanceof IAssermente)) this.courbesSoldes.get(a).ajouter(Filiere.LA_FILIERE.getEtape(),this.comptes.get(a).getValeur());
 			if (!aFaitFaillite(a)) {
 				if (comptes.get(a).getValeur()<0) {
 					int nbDecouverts = decouvertsConsecutifs.get(a)+1;
@@ -88,6 +103,8 @@ public class Banque implements IActeur, IAssermente {
 				}
 			}
 		}
+		this.graphiqueSoldes.setVisible(AFFICHAGE_SOLDES);
+
 	}
 
 	public void agios(IActeur a) {
@@ -197,21 +214,22 @@ public class Banque implements IActeur, IAssermente {
 		}
 		return crypto;
 	}
-	
+
 	public boolean verifier(IActeur acteur, long cryptogramme) {
 		return this.cryptogramme.get(acteur)==cryptogramme;
 	}
 
 	public void faireFaillite(IActeur acteur) {
-		this.journalBanque.ajouter(Journal.texteColore(acteur, "Faillite de "+acteur.getNom()));
-		this.faillites.put(acteur, true);
-		Filiere.LA_FILIERE.notificationFaillite(acteur);
-		for (IActeur a : this.comptes.keySet()) {
-			this.journalBanque.ajouter(Journal.texteColore(acteur, "- notification de Faillite de "+acteur.getNom())+Journal.texteColore(a, " a "+a.getNom()));
-			a.notificationFaillite(acteur);
+		if (!(acteur instanceof IAssermente)) { 
+			this.journalBanque.ajouter(Journal.texteColore(acteur, "Faillite de "+acteur.getNom()));
+			this.faillites.put(acteur, true);
+			Filiere.LA_FILIERE.notificationFaillite(acteur);
+			for (IActeur a : this.comptes.keySet()) {
+				this.journalBanque.ajouter(Journal.texteColore(acteur, "- notification de Faillite de "+acteur.getNom())+Journal.texteColore(a, " a "+a.getNom()));
+				a.notificationFaillite(acteur);
+			}
+			this.journalBanque.notifyObservers(); 
 		}
-		this.journalBanque.notifyObservers();
-
 	}
 
 	public boolean aFaitFaillite(IActeur acteur) {
