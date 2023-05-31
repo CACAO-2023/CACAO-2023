@@ -355,13 +355,13 @@ public class Transformateur3Stocks extends Transformateur3Acteur  {
   				this.stockFeveMG.getQuantiteTotale()+
   				this.stockFeveMGL.getQuantiteTotale());
   		super.journalStock.ajouter(" La quantité de feve BG est :"+ this.stockFeveBG.getQuantiteTotale() );
-  		this.graphFeveBG.setValeur(this, this.stockChocolatBG.getQuantiteTotale());
+  		this.graphFeveBG.setValeur(this, this.stockFeveBG.getQuantiteTotale());
   		super.journalStock.ajouter(" La quantité de feve MG est :"+ this.stockFeveMG.getQuantiteTotale() );
-  		this.graphFeveMG.setValeur(this, this.stockChocolatMG.getQuantiteTotale());
+  		this.graphFeveMG.setValeur(this, this.stockFeveMG.getQuantiteTotale());
   		super.journalStock.ajouter(" La quantité de feve MGL est :"+ this.stockFeveMGL.getQuantiteTotale() );
-  		this.graphFeveMGL.setValeur(this, this.stockChocolatMGL.getQuantiteTotale());
+  		this.graphFeveMGL.setValeur(this, this.stockFeveMGL.getQuantiteTotale());
   		super.journalStock.ajouter(" La quantité de feve HGL est :"+ this.stockFeveHGL.getQuantiteTotale() );
-  		this.graphFeveHGL.setValeur(this, this.stockChocolatHGL.getQuantiteTotale());
+  		this.graphFeveHGL.setValeur(this, this.stockFeveHGL.getQuantiteTotale());
   		super.journalStock.ajouter(" La quantité de Chocolat BG est :"+ this.stockChocolatBG.getQuantiteTotale() );
   		this.graphChocoBG.setValeur(this, this.stockChocolatBG.getQuantiteTotale());
   		super.journalStock.ajouter(" La quantité de Chocolat MG est :"+ this.stockChocolatMG.getQuantiteTotale() );
