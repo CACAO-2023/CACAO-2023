@@ -77,7 +77,6 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		double prix = 0.0;
 		IProduit produit = (IProduit)contrat.getProduit();
 		if ((produit instanceof ChocolatDeMarque)&&(stockChocoMarque.get(produit)!= null) ){ 
-			double stock = stockChocoMarque.get(produit);
 			if (((ChocolatDeMarque)produit).getMarque().equals("ChocoPop")) {
 				prix = (2800+1500)*1.2; }
 			else if (((ChocolatDeMarque)produit).getMarque().equals("Maison Doutre")) {
