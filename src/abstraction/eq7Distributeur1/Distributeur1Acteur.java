@@ -225,6 +225,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		cdepense.setCouleur(Color.red);
 		
 		for (ChocolatDeMarque cm : chocolatsDeMarquesProduits) {
+			
 			totalStocks.setValeur(this, totalStocks.getValeur()+valeur_stock_initial, this.cryptogramme);
 			nombre_achats.put(cm, 0);
 			journal_stock.ajouter("Stock de "+cm+" : "+ valeur_stock_initial +" T");
@@ -270,8 +271,8 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 			HashMap<ChocolatDeMarque,Double> prevtourperso = new HashMap<ChocolatDeMarque,Double>();
 			for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 				prevtour.put(marque, Filiere.LA_FILIERE.getVentes(marque, -(i+1)));
-				prevtourperso.put(marque, Filiere.LA_FILIERE.getVentes(marque, -(i+1))*0.5);
-				//Pour l'initialisation, on estime vendre 50% des ventes totales (choix arbitraire pour démarrer)
+				prevtourperso.put(marque, Filiere.LA_FILIERE.getVentes(marque, -(i+1))*0.33);
+				//Pour l'initialisation, on estime vendre 30% des ventes totales (choix arbitraire pour démarrer)
 			}
 			previsionsperso.put(24-(i+1), prevtourperso);
 		}
@@ -294,12 +295,11 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	 */
 	public void next() {
 		int etape = Filiere.LA_FILIERE.getEtape();
-		
-		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
-			actualiser_prevision_perso( marque,  etape);
-			
 
-			}
+		for (ChocolatDeMarque cm : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			actualiser_prevision_perso( cm,  etape);
+		}
+		
 		ventes.setValeur(this, vente_step);
 
 		this.cventes.ajouter(Filiere.LA_FILIERE.getEtape(), this.ventes.getValeur());
@@ -332,7 +332,7 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 		List<Variable> res = new ArrayList<Variable>();
 		res.add(cmSelectionnee);
 		res.add(afficher_vente_depense_courrant);
-		//res.add(afficher_prix); //pas encore réalisé
+		res.add(afficher_prix); 
 		res.add(totalStocks);
 		res.add(stock_HQ_BE);
 		res.add(stock_MQ_BE);
@@ -453,9 +453,9 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 	
 	public void afficher_graphique_prix(ChocolatDeMarque marque) {
 		this.graphique_Prix= new FenetreGraphique("comparaison des prix ", 500,400);
-		this.graphique.ajouter(cNotrePrix.get(marque));
-		this.graphique.ajouter(cPrixMoyen.get(marque));
-		this.graphique.setVisible(true);
+		this.graphique_Prix.ajouter(cNotrePrix.get(marque));
+		this.graphique_Prix.ajouter(cPrixMoyen.get(marque));
+		this.graphique_Prix.setVisible(true);
 	}
 	public void afficher_graphique() {
 		this.graphique= new FenetreGraphique("ventes et dépenses pendant le tour", 500,400);
