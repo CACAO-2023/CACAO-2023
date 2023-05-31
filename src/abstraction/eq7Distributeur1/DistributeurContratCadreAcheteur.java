@@ -54,18 +54,22 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	 * @author Ghaly
 	 */
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		if (Math.random()<0) {
+		
 			Echeancier e = contrat.getEcheancier();
+			int d = e.getNbEcheances();
+			ChocolatDeMarque marque = (ChocolatDeMarque) contrat.getProduit();
 			int stepdebut = e.getStepDebut();
 			for (int step = stepdebut; step < e.getStepFin()+1; step++) {
-				e.set(step, e.getQuantite(step)*0.95);
+				double q = quantite_besoin_cc ( d, marque)/d;
+				if(q>0) {
+				e.set(step, (e.getQuantite(step)+q)*0.5);
 			}
-			return e;
-		}
-		else {
-			return contrat.getEcheancier();
-		}
-	}
+				else {
+					e.set(step, e.getQuantite(step));
+				}
+		
+			}
+			return e;}
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		ChocolatDeMarque marque = (ChocolatDeMarque) contrat.getProduit();
@@ -140,7 +144,6 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 				if (cc != null) { //si le contrat est signé 
 			        mesContratEnTantQuAcheteur.add(cc);
 					notificationNouveauContratCadre(cc);
-					mesContratEnTantQuAcheteur.add(cc);
 					cc_vendus.put((IActeur)vendeur, (cc_vendus.containsKey(vendeur))? cc_vendus.get(vendeur)+1 : 1);
 					
 			    } 
@@ -164,10 +167,12 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	 * @param step : étape
 	 * @return la quantité totale de livraisons d'un produit devant se faire livrer jusqu'à l'étape step
 	 */
-	public double getLivraison_periode(IProduit produit, int step ) {
+	public double getLivraison_periode(ChocolatDeMarque produit, int step ) {
 		double somme = 0;
 		for (ExemplaireContratCadre contrat : mesContratEnTantQuAcheteur) {
+			
 			if (contrat.getProduit() == produit) {
+				
 				somme += contrat.getEcheancier().getQuantiteJusquA(step);
 			}
 		}
@@ -201,10 +206,10 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 				previsionannee += previsionsperso.get(numetape%24).get(marque);
 				}
 			
-			if(marque.getNom().equals("C_HQ_BE Vccotioi")) {
-				System.out.println(previsionsperso.get(5).get(marque));
-			}
-			return (previsionannee > get_valeur(Var_Stock_choco, marque)+getLivraison_periode(marque, step + d)+ quantite_min_cc);
+			
+			boolean b = (previsionannee > get_valeur(Var_Stock_choco, marque)+getLivraison_periode(marque, step + d)+ quantite_min_cc);
+			
+			return b;
 	};
 	/**
 	 * est appelée pour savoir si de combien on a besoin sur la durée d
@@ -229,10 +234,10 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	public Echeancier echeancier_strat(int stepDebut, int d, ChocolatDeMarque marque) {
 		Echeancier e = new Echeancier(stepDebut);
 		int delai_livraison = 1;
-		for (int etape = stepDebut+1; etape<stepDebut+d+1; etape++) {
+		for (int etape = stepDebut; etape<stepDebut+d; etape++) {
 			double q = 0.;
-			if ((delai_livraison > 0) && (etape < stepDebut+1+delai_livraison)) { //On prevoit une plus grosse premiere livraison pour anticiper et respecter le decalage
-				for (int i=stepDebut+1; i<stepDebut+1+delai_livraison; i++) {
+			if ((delai_livraison > 0) && (etape < stepDebut+delai_livraison)) { //On prevoit une plus grosse premiere livraison pour anticiper et respecter le decalage
+				for (int i=stepDebut; i<stepDebut+delai_livraison; i++) {
 					q += previsionsperso.get(i%24).get(marque) -getLivraisonEtape(marque, i) -get_valeur(Var_Stock_choco,marque)/d;
 				}
 			}
@@ -246,6 +251,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 				e.ajouter(0.);
 			}
 		}
+		//augmenter les quantités commandées si on est proche du seuil
 		if ((quantite_min_cc*0.9 < e.getQuantiteTotale()) && (e.getQuantiteTotale() < quantite_min_cc)) {
 			for (int i=0; i<d; i++) {
 				double qte = e.getQuantite(i);
@@ -268,10 +274,9 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 			for (Integer d : durees_CC) {
 				
 			if(besoin_de_CC ( d,marque)) {	//On va regarder si on a besoin d'un nouveau contrat cadre pour chaque marque
-							
-//				Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, d, quantite_besoin_cc(d, marque)/d);
-				Echeancier echeancier = echeancier_strat(Filiere.LA_FILIERE.getEtape()+1,d,marque);
 				
+				//Echeancier echeancier = new Echeancier(Filiere.LA_FILIERE.getEtape()+1, d, quantite_besoin_cc(d, marque)/d);
+				Echeancier echeancier = echeancier_strat(Filiere.LA_FILIERE.getEtape()+1,d,marque);
 				ExemplaireContratCadre cc = getContrat(marque,echeancier);
 				if (cc!=null) {
 					nombre_achats.replace(marque, nombre_achats.get(marque)+1);
@@ -310,7 +315,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 	 */
 	// A COMPLETER SI ASSEZ DE STOCK (appele si cc initie par vendeur)
 	public boolean achete(IProduit produit) {
-		if ((produit instanceof ChocolatDeMarque) && (besoin_de_CC (24,(ChocolatDeMarque)produit))) {
+		if ((produit instanceof ChocolatDeMarque) && (besoin_de_CC (durees_CC.get(0),(ChocolatDeMarque)produit))) {
 			return true;
 		}
 		return false;
@@ -420,7 +425,7 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 		if (nombre_achats.get((ChocolatDeMarque)(contrat.getProduit()))!=0) {
 			prix+=" ce qui equivaut à "+ Math.floor( contrat.getPrix()*100 /get_valeur(Var_Cout_Choco, (ChocolatDeMarque)( contrat.getProduit()))) + "% du prix de cout moyen ";
 		}
-		String message="contrat signé avec "+ contrat.getVendeur().getNom()+" pour "+contrat.getProduit().toString()+" à un prix de "+contrat.getPrix()+ prix+ " de durée "+contrat.getEcheancier();
+		String message="contrat signé avec "+ contrat.getVendeur().getNom()+" pour "+contrat.getProduit().toString()+" à un prix de "+contrat.getPrix()+ prix+ " de durée "+contrat.getEcheancier().getNbEcheances();
 		journal.ajouter(Color.GREEN, Color.BLACK,message);
 		journal_achat.ajouter(Color.GREEN, Color.BLACK,message);
 		journal_achat.ajouter(Color.white,Color.black,"--------------------------------------------------------------------------------");

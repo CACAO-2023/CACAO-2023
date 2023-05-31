@@ -37,6 +37,7 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 	
 	public void next() {
 		super.next();
+		int etape = Filiere.LA_FILIERE.getEtape();
 
 		for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 			mettre_a_jour(Var_Cout_Choco, marque, getCoutTotal(marque));

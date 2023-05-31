@@ -271,8 +271,8 @@ public class Distributeur1Acteur  implements IActeur, PropertyChangeListener {
 			HashMap<ChocolatDeMarque,Double> prevtourperso = new HashMap<ChocolatDeMarque,Double>();
 			for (ChocolatDeMarque marque : Filiere.LA_FILIERE.getChocolatsProduits()) {
 				prevtour.put(marque, Filiere.LA_FILIERE.getVentes(marque, -(i+1)));
-				prevtourperso.put(marque, Filiere.LA_FILIERE.getVentes(marque, -(i+1))*0.5);
-				//Pour l'initialisation, on estime vendre 50% des ventes totales (choix arbitraire pour démarrer)
+				prevtourperso.put(marque, Filiere.LA_FILIERE.getVentes(marque, -(i+1))*0.33);
+				//Pour l'initialisation, on estime vendre 30% des ventes totales (choix arbitraire pour démarrer)
 			}
 			previsionsperso.put(24-(i+1), prevtourperso);
 		}
