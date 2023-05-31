@@ -200,6 +200,10 @@ public class DistributeurContratCadreAcheteur extends Distributeur1Stock impleme
 			for (int numetape = step+1; numetape < step+d ; numetape++ ) {
 				previsionannee += previsionsperso.get(numetape%24).get(marque);
 				}
+			
+			if(marque.getNom().equals("C_HQ_BE Vccotioi")) {
+				System.out.println(previsionsperso.get(5).get(marque));
+			}
 			return (previsionannee > get_valeur(Var_Stock_choco, marque)+getLivraison_periode(marque, step + d)+ quantite_min_cc);
 	};
 	/**

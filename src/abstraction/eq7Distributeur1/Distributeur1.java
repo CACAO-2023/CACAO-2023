@@ -47,14 +47,15 @@ public class Distributeur1 extends Distributeur1AcheteurOA implements IDistribut
 			mettre_a_jour(Var_Cout_Choco, marque, getCoutTotal(marque));
 			mettre_a_jour(Var_Marge_Choco, marque, prix(marque)-get_valeur(Var_Cout_Choco,marque));
 
-//			Courbe courbe = cNotrePrix.get(marque);
-//			courbe.ajouter(etape, prix(marque));
-//			cNotrePrix.put(marque, courbe);
-//			
-//			Courbe courbePrixMoyen = cPrixMoyen.get(marque);
-//			courbePrixMoyen.ajouter(etape, Filiere.LA_FILIERE.prixMoyen(marque, etape-1));
-//			cPrixMoyen.put(marque, courbePrixMoyen);
-		}
+			if(etape>0) {
+			Courbe courbe = cNotrePrix.get(marque);
+			courbe.ajouter(etape, prix(marque));
+			cNotrePrix.put(marque, courbe);
+			
+			Courbe courbePrixMoyen = cPrixMoyen.get(marque);
+			courbePrixMoyen.ajouter(etape-1, Filiere.LA_FILIERE.prixMoyen(marque, etape-1));
+			cPrixMoyen.put(marque, courbePrixMoyen);
+		}}
 		
 		//Prise en compte des couts de main doeuvre
 		Double cout_total_mise_en_rayon = getTotalVentes() * Filiere.LA_FILIERE.getParametre("cout mise en rayon").getValeur();
