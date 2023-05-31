@@ -129,7 +129,7 @@ public class Distributeur3AcheteurOA extends Distributeur3AcheteurCC implements 
 			this.journal_OA.ajouter("Superviseur Offre d'Achat trouvé");
 			supOA =(SuperviseurVentesOA)(Filiere.LA_FILIERE.getActeur("Sup.OA"));
 		}
-		if (supOA!=null) { 
+		if (supOA!=null && acheter == true) { 
 			
 			
 			this.journal_OA.ajouter("Offre d'Achat initiée");

@@ -37,6 +37,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 	private double stockMQ;
 	private double stockMQBE;
 	private double stockHQ;
+	boolean acheter;
 	//faire une méthode qui connait le prix d'achat moyen d'un chocolat
 
 	public Distributeur3AcheteurCC() {//ChocolatDeMarque[] chocos, double[] stocks) {
@@ -106,7 +107,7 @@ public class Distributeur3AcheteurCC extends Distributeur3Acteur implements IAch
 			}}
 
 		SuperviseurVentesContratCadre supCCadre = (SuperviseurVentesContratCadre)(Filiere.LA_FILIERE.getActeur("Sup.CCadre"));
-		if (chocolats.size()>0) {
+		if (chocolats.size()>0 && this.acheter == true) {
 
 			for (int i=0; i<chocolats.size();i++) {
 				List<IVendeurContratCadre> vendeursChocolat = supCCadre.getVendeurs(chocolats.get(i));
@@ -441,7 +442,7 @@ public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 	prix = contrat.getPrix();
 	//System.out.println(" ajout du prix dans laprixencours "+contrat.getPrix());
 	prixEnCours.put(contrat.getVendeur(), contrat.getPrix());
-	if (pasAchete) {
+	if (pasAchete  && this.acheter == false) {
 		return 0.0;
 	}
 	journal_ventes.ajouter("4proposition d'achat du chocolat" + contrat.getProduit()+"au prix à la tonne de" + prix);
@@ -544,15 +545,15 @@ public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 
 		// marge de 80% sur HQ_BE
 		if(choco.getGamme() == Gamme.HQ)  {
-			prix_tonne_de_vente_contrat = prix*this.coef_prix_vente.get(0.0);
+			prix_tonne_de_vente_contrat = prix*5;
 		}
 		// marge de 67% sur MQ_BE
 		if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.MQ && ((ChocolatDeMarque)contrat.getProduit()).isBioEquitable()){
-			prix_tonne_de_vente_contrat = prix*this.coef_prix_vente.get(1.0);
+			prix_tonne_de_vente_contrat = prix*3;
 		}
 		// marge de 50% sur MQ
 		if(((ChocolatDeMarque)contrat.getProduit()).getGamme() == Gamme.MQ  && !((ChocolatDeMarque)contrat.getProduit()).isBioEquitable()) {
-			prix_tonne_de_vente_contrat = prix*this.coef_prix_vente.get(2.0);
+			prix_tonne_de_vente_contrat = prix*2;
 		}
 
 		double prix_tonne_de_vente_apres_achat = 0.0;
