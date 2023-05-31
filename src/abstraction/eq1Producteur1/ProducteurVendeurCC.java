@@ -105,10 +105,8 @@ public class ProducteurVendeurCC extends Producteur1Plantation implements IVende
 
 	@Override
 	public double propositionPrix(ExemplaireContratCadre c) {
-		double p= prixMinAvecMarge((Feve)c.getProduit(), 1)*1.3;
-		if (this.systemefidelite.get(c.getAcheteur())>=10) {
-			p=p*0.9;
-		}
+		double p= prixMinAvecMarge((Feve)c.getProduit(), 1)*2;
+		
 		return p;
 	}
 	
