@@ -45,11 +45,11 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 			}
 			return false;
 		} else {
-		if (((Feve) produit).getGamme().equals(Gamme.HQ) && (this.stockFeves.get(Feve.F_HQ_BE)<100000))  {
+		if (((Feve) produit).getGamme().equals(Gamme.HQ) && (this.stockFeves.get(Feve.F_HQ_BE)<50000))  {
 			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme acheter le produit "+produit);
 			return true;
 		}
-		if(((Feve) produit).getGamme().equals(Gamme.BQ) && this.stockFeves.get(Feve.F_BQ)<100000) {
+		if(((Feve) produit).getGamme().equals(Gamme.BQ) && this.stockFeves.get(Feve.F_BQ)<50000) {
 			this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLUE, "  CCA : j'affirme acheter le produit "+produit);
 			return true;
 		}
@@ -144,10 +144,10 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 		}
 		
 		return null;*/
-		if (contrat.getProduit().equals(Feve.F_BQ) && this.stockFeves.get(Feve.F_BQ)>100000) {
+		if (contrat.getProduit().equals(Feve.F_BQ) && this.stockFeves.get(Feve.F_BQ)>50000) {
 			return null;
 		}
-		if (contrat.getProduit().equals(Feve.F_HQ_BE) && this.stockFeves.get(Feve.F_HQ_BE)>100000) {
+		if (contrat.getProduit().equals(Feve.F_HQ_BE) && this.stockFeves.get(Feve.F_HQ_BE)>50000) {
 			return null;
 		}
 		return contrat.getEcheancier();
@@ -262,7 +262,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 				this.journal_CC_PROD.ajouter(COLOR_LLGRAY, Color.BLACK, " CCA : tentative d'achat de "+cm+" aupres de "+vendeurs);
 				for (IVendeurContratCadre vendeur : vendeurs) {
 					if (!vendeur.equals(this)) {
-						if (cm.getGamme().equals(Gamme.BQ) && this.stockFeves.get(Feve.F_BQ)<100000){
+						if (cm.getGamme().equals(Gamme.BQ) && this.stockFeves.get(Feve.F_BQ)<50000){
 							double quantite = 0;
 							if (ventetotB/2>100) {
 								quantite = ventetotB/2;
@@ -279,7 +279,7 @@ public class CC_producteur extends Transformateur1Transformateur implements IAch
 
 						}
 						}
-						if (cm.getGamme().equals(Gamme.HQ) && this.stockFeves.get(Feve.F_HQ_BE)<100000){
+						if (cm.getGamme().equals(Gamme.HQ) && this.stockFeves.get(Feve.F_HQ_BE)<50000){
 							double quantite2 = 0;
 							if (ventetotH/2>100) {
 								quantite2 = ventetotH/2;
