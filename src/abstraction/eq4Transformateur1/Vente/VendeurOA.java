@@ -37,10 +37,11 @@ public class VendeurOA extends DistributeurChocolatDeMarque implements IVendeurO
 		double nouveauStock = Math.max(0.0, this.stockChocoMarque.get(propositionRetenue.getChocolatDeMarque())-propositionRetenue.getOffre().getQuantiteT());
 		this.journal_appel.ajouter(" le stock de "+propositionRetenue.getChocolatDeMarque()+" passe a "+nouveauStock+" suite a la vente "+propositionRetenue);
 		this.stockChocoMarque.put(propositionRetenue.getChocolatDeMarque(), nouveauStock);
-	}
+		}
 
 	public void notifierPropositionNonRetenueOA(PropositionVenteOA propositionRefusee) {
 		this.journal_appel.ajouter(COLOR_LLGRAY, Color.BLUE, "  Proposition Refusée : "+propositionRefusee);
+		
 	}
 
 }
