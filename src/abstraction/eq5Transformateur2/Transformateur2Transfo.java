@@ -118,6 +118,9 @@ public class Transformateur2Transfo extends Transformateur2Stocks implements IFa
 			this.totalStocksChocoMarque.ajouter(this, ((qtefeve*proportion_marque)*this.pourcentageTransfo.get(f).get(c)), this.cryptogramme);
 			this.totalStocksChoco.ajouter(this, ((qtefeve*(1-proportion_marque))*this.pourcentageTransfo.get(f).get(c)), this.cryptogramme);
 		}}
+	/**
+	 * @author FERHOUT Adam
+	 */
 	
 	public void next() {
 		super.next();
