@@ -29,7 +29,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	protected int nbStepProposition = 8;
 	protected double facteurTolerance = 0.95; //Facteur de tolérance pour l'acceptation des ventes
 	protected HashMap<IActeur, HashMap<Integer, Boolean>> historiqueFidelite = new HashMap<IActeur, HashMap<Integer, Boolean>>();
-	protected HashMap<Feve, Integer> prxMax = new HashMap<Feve, Integer>(); //Limite des prix pour compenser l'absence de négociation
+	protected HashMap<Feve, Integer> prixMax = new HashMap<Feve, Integer>(); //Limite des prix pour compenser l'absence de négociation
 	
 	
 	public Producteur2ASPPVBVendeurCC() {
@@ -49,6 +49,8 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 		for(IAcheteurContratCadre ach : ((SuperviseurVentesContratCadre) Filiere.LA_FILIERE.getActeur("Sup."+"CCadre")).getAcheteurs(Feve.F_HQ_BE)) {
 			this.historiqueFidelite.put(ach, new HashMap<Integer, Boolean>());
 		}
+		this.prixMax.put(Feve.F_MQ_BE, 7500);
+		this.prixMax.put(Feve.F_HQ_BE, 15000);
 	}
 	
 	/**
@@ -198,7 +200,7 @@ public class Producteur2ASPPVBVendeurCC extends Producteur2ASPPVendeurBourse imp
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.tentativeVente.put((Feve) contrat.getProduit(), false);
 		this.nbEchecVentePrix.put((Feve) contrat.getProduit(), 0);
-		this.getPrixCC().get((Feve) contrat.getProduit()).setValeur(this, Math.max(this.getPrixCC((Feve) contrat.getProduit())*0.9 + contrat.getPrix()*0.1, this.prxMax.get(contrat.getProduit()))); //On essaye d'adapter nos prix
+		this.getPrixCC().get((Feve) contrat.getProduit()).setValeur(this, Math.max(this.getPrixCC((Feve) contrat.getProduit())*0.9 + contrat.getPrix()*0.1, this.prixMax.get(contrat.getProduit()))); //On essaye d'adapter nos prix
 		this.getContrats().add(contrat);
 		Echeancier ech = contrat.getEcheancier();
 		IActeur ach = contrat.getAcheteur();
