@@ -79,9 +79,9 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		if ((produit instanceof ChocolatDeMarque)&&(stockChocoMarque.get(produit)!= null) ){ 
 			double stock = stockChocoMarque.get(produit);
 			if (((ChocolatDeMarque)produit).getMarque().equals("ChocoPop")) {
-				prix = (2800+1500)*1.2*stock; }
+				prix = (2800+1500)*1.2; }
 			else if (((ChocolatDeMarque)produit).getMarque().equals("Maison Doutre")) {
-				prix = (2800+11800)*1.2*stock;	
+				prix = (2800+11800)*1.2;	
 			}
 		}
 		return prix;
@@ -92,20 +92,18 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		double stock = stockChocoMarque.get(contrat.getProduit());
 		IProduit produit = (IProduit)contrat.getProduit();
 		double prix = contrat.getPrix();
-		if (((ChocolatDeMarque)produit).getMarque().equals("ChocoPop")&&(contrat.getEcheancier().getQuantiteTotale()>0.35*stock)) {
-			prix = (2800+1500)*1.1*stock;}
-		else if (((ChocolatDeMarque)produit).getMarque().equals("Maison Doutre")&&(contrat.getEcheancier().getQuantiteTotale()>0.15)) {
-			prix = (2800+11800)*1.1*stock;	
+		if (((ChocolatDeMarque)produit).getMarque().equals("ChocoPop")) {
+			if(contrat.getEcheancier().getQuantiteTotale()>0.35*stock) {
+				prix = (2800+1500)*1.1;}
+			else { prix  = (2800+1500)*1.15; }}
+		else if (((ChocolatDeMarque)produit).getMarque().equals("Maison Doutre")) { 
+			if (contrat.getEcheancier().getQuantiteTotale()>0.15*stock) {
+				prix = (2800+11800)*1.1; }
+			else { prix = (2800+1500)*1.15;}
 		}
-		//double prix = contrat.getPrix();
+		return prix;}
 
-		//if(prix >= nvprix) {
-		//return prix;
-		//} 
-		//else {
-		return prix;
-	}
-//s
+	//s
 
 
 	//fait par yassine : on négocie en fonction des stocks
@@ -193,7 +191,6 @@ public class Transformateur2VendeurCC extends Transformateur2AcheteurCC implemen
 		IProduit produit= (IProduit)contrat.getProduit();
 		if (produit instanceof ChocolatDeMarque) {
 			this.journalVentes.ajouter(COLOR_LLGRAY, Color.MAGENTA, "  CCV : Nouveau CC conclu : PRODUIT ET QT TOTALE = "+contrat.getQuantiteTotale() +" "+contrat.getProduit()+", ACHETEUR = "+contrat.getAcheteur()+ ", PRIX = "+contrat.getPrix());
-System.out.println(((ChocolatDeMarque)produit).getMarque());
 			if (((ChocolatDeMarque)produit).getMarque() == "ChocoPop") {
 				this.ContratsVendeurMQ.add(contrat); 
 			}
@@ -221,7 +218,6 @@ System.out.println(((ChocolatDeMarque)produit).getMarque());
 		Double stock = stockChocoMarque.get(produit);
 		if ((stock != null)&&(stock>100)) {
 			double A = 0;
-			System.out.println(produit.getMarque());
 			if (produit.getMarque() == "Maison Doutre") {
 				A = 0.1; }
 			else if (produit.getMarque() == "ChocoPop") {

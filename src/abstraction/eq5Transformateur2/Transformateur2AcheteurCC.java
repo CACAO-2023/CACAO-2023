@@ -121,10 +121,12 @@ public class Transformateur2AcheteurCC extends Transformateur2Transfo implements
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		double prix = contrat.getPrix();
 		IProduit produit= (IProduit)contrat.getProduit();
-		if ((((Feve)produit).getGamme() == Gamme.MQ) &&(contrat.getEcheancier().getQuantiteTotale()>600)) {
-			prix = (2800+1500)*1.1*this.stockFeves.get(contrat.getProduit()); }
+		if ((((Feve)produit).getGamme() == Gamme.MQ) && (contrat.getEcheancier().getQuantiteTotale()>600)) {
+			prix = (2800+1500)*1.1;}
+				
 		else if ((((((Feve)produit).getGamme() == Gamme.HQ)&& (((Feve)produit).isBioEquitable()) && (contrat.getEcheancier().getQuantiteTotale()>200)))) {
-			prix = (2800+11800)*1.1*this.stockFeves.get(contrat.getProduit());}
+			prix = (2800+11800)*1.1;}
+				
 		return prix;}
 
 	/*double dernierPrix = contrat.getPrix();
