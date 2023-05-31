@@ -12,7 +12,6 @@ import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
-import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
 import abstraction.eqXRomu.produits.Lot;
 
@@ -206,7 +205,11 @@ public class Transformateur3Vente extends Transformateur3Stocks  implements IVen
 		Lot lot = new Lot(produit);
 		if (super.getLotChocolat(produit)!=null) {
 		double livre = Math.min(super.getLotChocolat(produit).getQuantiteTotale(), quantite);
-		super.journalVentes.ajouter("On livre : "+livre+"de : "+((ChocolatDeMarque)produit).getMarque());
+		if (livre==super.getLotChocolat(produit).getQuantiteTotale()) {
+			super.journalVentes.ajouter("On livre seulement : "+livre+"de : "+((ChocolatDeMarque)produit).getMarque());
+		}
+		else {super.journalVentes.ajouter("On livre : "+livre+"de : "+((ChocolatDeMarque)produit).getMarque());
+		}
 		if (livre>0.0) {
 			//if (super.estUnDeNosChoco((ChocolatDeMarque)produit)){
 			double res = super.retirerChocolat((ChocolatDeMarque)produit, livre);//Attention il faut que cela soit possible; verifier la quantité
