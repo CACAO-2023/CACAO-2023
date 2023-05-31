@@ -106,7 +106,7 @@ public class Producteur1Plantation extends Producteur1Acteur {
 
 	public void recolte(boolean greve) {
 		//===== Elouan =====
-		//cette methode est notre next V1, mais n'est pas toujours appele (en cas de greve par exemple)
+		//cette methode est notre next V1
 		this.journal_champs.ajouter("---> Qualite : Moy");
 		Lot lot_moy = this.getStockMoy();
 		Lot lot_moy_sec = this.getVraiStockM();
@@ -131,6 +131,8 @@ public class Producteur1Plantation extends Producteur1Acteur {
 						double random = ThreadLocalRandom.current().nextDouble(0.9, 1.1);
 						nb_tonnes = nb_tonnes * random ;
 						lot_moy.ajouter(step, nb_tonnes); //recolte
+						//gab
+						ajoutStockProduit(Feve.F_MQ, nb_tonnes) ;
 						if (quantiteFeveM.containsKey(step)) {
 							quantiteFeveM.replace(step, quantiteFeveM.get(step)+nb_tonnes);
 						} else {
@@ -185,6 +187,8 @@ public class Producteur1Plantation extends Producteur1Acteur {
 					double random = ThreadLocalRandom.current().nextDouble(0.9, 1.15);
 					nb_tonnes = nb_tonnes * random ;
 					stockFeveBas.ajouter(step, nb_tonnes); //recolte
+					//gab
+					ajoutStockProduit(Feve.F_BQ, nb_tonnes) ;
 
 					if (quantiteFeveB.containsKey(step)) {
 						quantiteFeveB.replace(step, quantiteFeveB.get(step)+nb_tonnes);
@@ -228,6 +232,13 @@ public class Producteur1Plantation extends Producteur1Acteur {
 		}
 		if (cb.getNbHectare()<200000) {
 			cb.ajouter(step, 200000-cb.getNbHectare());
+		}
+		
+		//gab : mise à jour des stocks annuels et suppression champs
+		enleveVieilleProduction() ;
+		
+		if (step==22) {
+			suppressionChamp() ;
 		}
 	}
 
@@ -312,7 +323,69 @@ public class Producteur1Plantation extends Producteur1Acteur {
 	}
 
 
+	HashMap<Integer,Double> produit_bas_annee = new HashMap<Integer,Double>() ;
+	HashMap<Integer,Double> produit_moy_annee = new HashMap<Integer,Double>() ;
+	
+	//méthode qui ajoute la quantité produit au step dans le hashmap de la production annuelle
+	public void ajoutStockProduit(IProduit produit, double quantite) {
+		if (produit==Feve.F_BQ) {
+			//ajout de la quantité ramassée au step présent
+			produit_bas_annee.put(step, quantite); 
 
+			
+		} else {
+			//ajout de la quantité ramassée au step présent
+			produit_moy_annee.put(step, quantite); 		
+		}
+		
+	}
+	
+	//méthode qui enlève la vieille production de la production annuelle
+	public void enleveVieilleProduction() {
+		//on enlève le stock ramassé il y a plus d'un an 
+		produit_bas_annee.remove(step-21) ;
+		produit_moy_annee.remove(step-21) ;
+	}
+	
+	//méthode qui renvoit la quantite produite sur l'année écoulée pour comparer à la demande globale
+	public double quantiteAnneeEcoulee(IProduit produit) {
+		double quantite = 0 ;
+		if (produit==Feve.F_BQ) {
+			for (Integer i : produit_bas_annee.keySet()) {
+				quantite = quantite + produit_bas_annee.get(i) ;
+			}
+		} else {
+			for (Integer i : produit_moy_annee.keySet()) {
+				quantite = quantite + produit_moy_annee.get(i) ;
+			}
+		}
+			
+		return quantite ;
+	}
+	
+	//méthode qui renvoit le production moyenne d'un certain produit par step sur l'année écoulée, pour les prévisions en CC
+	public double productionMoyenneParStep(IProduit produit) {
+		double production = quantiteAnneeEcoulee(produit) ;
+		return production/produit_bas_annee.size() ;
+	}
+	
+	//méthode qui supprime des champs si notre production est très supérieure à la demande globale
+	public void suppressionChamp() {
+		double production_annuelle ;
+		production_annuelle = (quantiteAnneeEcoulee(Feve.F_BQ) + quantiteAnneeEcoulee(Feve.F_MQ));
+		double rapport_production_annuelle ;
+		rapport_production_annuelle = production_annuelle/(0.7*Filiere.LA_FILIERE.getIndicateur("C.F. consommation annuelle").getValeur()/3) ; //qtté moyenne de cacao pur dans les produits finaux divisé par le nb de producteurs
+		if (rapport_production_annuelle>1.3 && 2>rapport_production_annuelle) {
+			this.getChampMoy().supprimer(this.getChampMoy().getNbHectare()*0.25);
+			this.getChampBas().supprimer(this.getChampBas().getNbHectare()*0.25);
+		}
+		
+		if (rapport_production_annuelle>=2) {
+			this.getChampMoy().supprimer(this.getChampMoy().getNbHectare()*0.5);
+			this.getChampBas().supprimer(this.getChampBas().getNbHectare()*0.5);
+		}
+	}
+		
 
 
 	//===== fin gab
